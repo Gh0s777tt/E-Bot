@@ -18,7 +18,7 @@ npm run smoke    # test: loguje się, potwierdza i wychodzi
 ## Zaproszenie bota na serwer
 Otwórz (uprawnienia: widok kanałów, wysyłanie, embedy, załączniki, historia, wzmianki):
 
-https://discord.com/oauth2/authorize?client_id=1512579486670127405&scope=bot+applications.commands&permissions=248832
+https://discord.com/oauth2/authorize?client_id=1512758748761030677&scope=bot+applications.commands&permissions=248832
 
 > Wskazówka: ustaw `DISCORD_DEV_GUILD_ID` w `.env` na ID swojego serwera testowego —
 > komendy pojawią się natychmiast (globalne propagują się do ~1h).
