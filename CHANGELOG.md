@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-54-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.23.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-55-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.24.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.24.0] — Faza 7 / F6.4: modmail · 🎉 Faza 6 zakończona
+
+- `[#055]` 📨 **Modmail — DM ↔ wątek obsługi:**
+  - Użytkownik pisze **DM do bota** → bot tworzy wątek na kanale obsługi i przekazuje wiadomość (embed: autor + treść + załączniki); przy pierwszym kontakcie wysyła konfigurowalne **powitanie** w DM.
+  - Odpowiedź obsługi **w wątku** trafia w DM użytkownika; <code>!close</code> kończy rozmowę (DM do usera + archiwizacja wątku). Reakcje-potwierdzenia (📨 odebrano / ✅ dostarczono).
+  - Bot: `bot/src/modmail.mts` (`startModmail`; relay inbound/outbound; mapowanie użytkownik↔wątek w `modmail_threads`). `index.mts`: **dodana intencja `DirectMessages`** (nieprivileged) + start. **Nowy SQL: `dashboard/scripts/f6-modmail-schema.sql`** (`modmail_threads`). Panel: `modmail_config` + `modmailSchema` + `/api/modmail` + `ModmailForm` + strona `/modmail` (nav „Modmail" Mails) + moduł w Centrum sterowania. 18 komend.
+  - 🎉 **Faza 6 (Bezpieczeństwo++) kompletna:** F6.1 kary/sprawy · F6.2 logi serwera · F6.3 weryfikacja + anti-raid · F6.4 modmail.
 
 ## [0.23.0] — Faza 7 / F6.3: weryfikacja + anti-raid
 

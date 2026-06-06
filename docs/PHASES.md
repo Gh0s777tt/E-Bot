@@ -84,11 +84,11 @@
 - [x] **F3** — Ekonomia serwera `/eco` (daily/work/rob/pay/bank/gamble/slots/shop/buy/top) + panel + sklep ról
 - [x] **F4** — Leveling++ (mnożniki XP, no‑XP, anti‑AFK voice, custom level‑up, stack ról, `/prestige`)
 - [x] **F5** — Tickety++ (`/ticketpanel` przycisk→modal, transkrypty HTML→log+DM, oceny ⭐)
-- [ ] **F6** — Bezpieczeństwo++ *(w toku)*
+- [x] **F6** — Bezpieczeństwo++
   - [x] **F6.1** — Kary + sprawy: `/mod kick|ban|tempban|unban|note`, `/case`, auto‑unban (`temp_bans`)
   - [x] **F6.2** — Logi serwera: zdarzenia (wiadomości/członkowie/bany/role/kanały/voice) → kanał, panel `/logging`
   - [x] **F6.3** — Weryfikacja (gate‑przycisk `/verifypanel` → rola) + anti‑raid (fala wejść → akcja, bramka wieku konta)
-  - [ ] F6.4 — Modmail (DM ↔ wątek na serwerze)
+  - [x] **F6.4** — Modmail (DM ↔ wątek na serwerze; relay obustronny, `!close`)
 - [ ] **F7** — Społeczność (sugestie, custom commands/autoresponder, ankiety, urodziny, highlighty, AFK, liczniki kanałów)
 - [ ] **F8** — AI++ (czat z pamięcią, `/imagine`, `/tldr`, `/translate`, AI‑moderacja)
 - [ ] **F9** — Gaming unikat (price‑tracking ITAD, free‑games feed, patch‑notes, backlog, Twitch sub→rola, donejty)

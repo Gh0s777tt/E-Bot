@@ -162,3 +162,24 @@ export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {
 export async function saveAntiRaidConfig(cfg: AntiRaidConfig): Promise<void> {
   await setRawSetting('antiraid_config', JSON.stringify(cfg));
 }
+
+// ── Modmail (Faza 7 / F6.4) ──
+export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
+export const MODMAIL_DEFAULT: ModmailConfig = {
+  enabled: false,
+  channelId: '',
+  greeting: 'Twoja wiadomość trafiła do obsługi. Odpiszemy najszybciej, jak to możliwe. 📨',
+};
+
+export async function getModmailConfig(): Promise<ModmailConfig> {
+  const raw = await getRawSetting('modmail_config');
+  if (!raw) return structuredClone(MODMAIL_DEFAULT);
+  try {
+    return { ...MODMAIL_DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) };
+  } catch {
+    return structuredClone(MODMAIL_DEFAULT);
+  }
+}
+export async function saveModmailConfig(cfg: ModmailConfig): Promise<void> {
+  await setRawSetting('modmail_config', JSON.stringify(cfg));
+}

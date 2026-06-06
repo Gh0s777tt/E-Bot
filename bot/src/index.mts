@@ -18,6 +18,7 @@ import { startTempVoice } from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
 import { startLeveling } from './leveling.mts';
 import { startNotifier } from './live/notifier.mts';
+import { startModmail } from './modmail.mts';
 import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
 import { startAntiRaid } from './security/antiraid.mts';
@@ -53,6 +54,7 @@ const intents = [
   GatewayIntentBits.GuildMessageReactions,
   GatewayIntentBits.MessageContent,
   GatewayIntentBits.GuildMembers,
+  GatewayIntentBits.DirectMessages, // Faza 7 / F6.4 — modmail (DM do bota)
 ];
 const client = new Client({
   intents,
@@ -92,6 +94,7 @@ client.once(Events.ClientReady, (c) => {
   startModeration(c); // Faza 7 / F6 — auto-unban tempbanów (poll Supabase)
   startServerLog(c); // Faza 7 / F6.2 — logi serwera (zdarzenia → kanał, config z panelu)
   startAntiRaid(c); // Faza 7 / F6.3 — anti-raid (fala wejść → akcja, config z panelu)
+  startModmail(c); // Faza 7 / F6.4 — modmail (DM ↔ wątek obsługi, config z panelu)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence

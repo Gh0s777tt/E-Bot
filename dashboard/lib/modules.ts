@@ -97,6 +97,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'tickets_config',
   },
   {
+    key: 'modmail',
+    label: 'Modmail',
+    group: 'Wsparcie',
+    href: '/modmail',
+    kind: 'json',
+    settingsKey: 'modmail_config',
+  },
+  {
     key: 'ai',
     label: 'Komendy AI',
     group: 'AI',

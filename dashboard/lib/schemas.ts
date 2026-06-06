@@ -195,6 +195,14 @@ export const antiraidSchema = z.object({
 });
 export type AntiRaidInput = z.infer<typeof antiraidSchema>;
 
+// ── Modmail (POST /api/modmail) ────────────────────────────
+export const modmailSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  greeting: z.string().max(1000),
+});
+export type ModmailInput = z.infer<typeof modmailSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),
