@@ -251,3 +251,29 @@ export async function getAiUsageSeries(days = 14): Promise<DayPoint[]> {
     return skeleton();
   }
 }
+
+// ───────────────────────── 🛡️ Historia moderacji (Faza 6 / B2) ─────────────────────────
+export type ModCase = {
+  id: string;
+  user_id: string;
+  username: string | null;
+  moderator_name: string | null;
+  action: string; // warn | timeout | clear | kick | ban
+  reason: string | null;
+  created_at: string;
+};
+
+export async function getModCases(limit = 30): Promise<ModCase[]> {
+  if (!hasSupabase) return [];
+  try {
+    const { data, error } = await supabase()
+      .from('mod_cases')
+      .select('id,user_id,username,moderator_name,action,reason,created_at')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as ModCase[];
+  } catch {
+    return []; // tabela jeszcze nie istnieje / brak danych
+  }
+}
