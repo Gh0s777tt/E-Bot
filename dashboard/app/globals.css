@@ -52,3 +52,19 @@ body::before {
 .text-glow {
   text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
 }
+
+/* Panel ze subtelną czerwoną poświatą w rogu (styl kart GHOST EMPIRE) */
+.panel-glow {
+  position: relative;
+  overflow: hidden;
+}
+.panel-glow::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -12%;
+  width: 50%;
+  height: 80%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.12), transparent 70%);
+}
