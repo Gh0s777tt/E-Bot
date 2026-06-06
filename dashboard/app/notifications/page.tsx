@@ -1,5 +1,6 @@
 import { getSettings } from '../../lib/data';
 import NotifSettingsForm from '../../components/NotifSettingsForm';
+import { Radio } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,12 @@ export default async function NotificationsPage() {
         przechodzi z offline na online, wysyła embed na wskazany kanał Discord. Zmiany zapisują się do bazy i bot
         stosuje je <strong>na żywo</strong>.
       </p>
-      <NotifSettingsForm initial={settings} />
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Radio size={16} className="text-accent" /> Powiadomienia live
+        </h2>
+        <NotifSettingsForm initial={settings} />
+      </section>
     </div>
   );
 }

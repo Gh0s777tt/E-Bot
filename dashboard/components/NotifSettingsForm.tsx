@@ -80,7 +80,7 @@ export default function NotifSettingsForm({ initial }: { initial: Settings }) {
       <div className="space-y-3">
         <label className="block text-sm font-semibold text-white/90">Platformy</label>
         {PLATFORMS.map((p) => (
-          <div key={p.key} className="flex items-center justify-between rounded-md border border-line bg-card px-4 py-3">
+          <div key={p.key} className="flex items-center justify-between rounded-md border border-line bg-bg/40 px-4 py-3">
             <span className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: p.color }} />
               {p.label}

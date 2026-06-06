@@ -73,7 +73,7 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
   return (
     <div className="space-y-6">
       {/* górny pasek: włącznik + zapis */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-line bg-card p-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex items-center gap-3">
           <Toggle on={c.enabled} onClick={() => setC((p) => ({ ...p, enabled: !p.enabled }))} />
           <div>
@@ -159,7 +159,7 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
           {Object.keys(PROT_LABELS).map((k) => {
             const p = c.protections[k] ?? { enabled: false, count: 3, windowSec: 10 };
             return (
-              <div key={k} className="flex flex-wrap items-center gap-3 rounded-md border border-line bg-card px-4 py-3">
+              <div key={k} className="flex flex-wrap items-center gap-3 rounded-md border border-line bg-bg/40 px-4 py-3">
                 <Toggle on={p.enabled} onClick={() => setProt(k, { enabled: !p.enabled })} />
                 <span className="min-w-[160px] flex-1 text-sm">{PROT_LABELS[k]}</span>
                 <label className="flex items-center gap-1 text-xs text-muted">
