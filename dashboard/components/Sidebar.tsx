@@ -19,9 +19,9 @@ export default function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-line bg-surface md:flex">
       <div className="flex h-16 items-center gap-2 border-b border-line px-5">
-        <span className="grid h-7 w-7 place-items-center rounded bg-accent text-sm font-black">B</span>
-        <span className="text-lg font-extrabold tracking-tight">
-          BOT<span className="text-accent">DC</span>
+        <span className="grid h-8 w-8 place-items-center rounded-md bg-accent font-display text-lg shadow-glow-sm">E</span>
+        <span className="font-display text-2xl tracking-wide text-glow">
+          E-<span className="text-accent">BOT</span>
         </span>
       </div>
       <nav className="flex-1 space-y-1 p-3">
@@ -32,7 +32,7 @@ export default function Sidebar() {
               key={href}
               href={href}
               className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition ${
-                active ? 'bg-accent text-white' : 'text-muted hover:bg-elevated hover:text-white'
+                active ? 'bg-accent text-white shadow-glow-sm' : 'text-muted hover:bg-elevated hover:text-white'
               }`}
             >
               <Icon size={18} />

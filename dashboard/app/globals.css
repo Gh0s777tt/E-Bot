@@ -6,10 +6,35 @@
   color-scheme: dark;
 }
 
+html {
+  background-color: #0a0a0a;
+}
 html,
 body {
-  background-color: #0b0b0b;
-  color: #fff;
+  color: #ededed;
+}
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* Nagłówki w mocnej, gamingowej czcionce (jak GH0ST EMPIRE) */
+h1,
+h2,
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* Czerwona poświata tła — sygnatura GH0ST EMPIRE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55vw 38vh at 82% -8%, rgba(229, 9, 20, 0.13), transparent 70%),
+    radial-gradient(45vw 38vh at -8% 108%, rgba(139, 0, 0, 0.1), transparent 70%);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -20,7 +45,10 @@ body {
   scrollbar-width: none;
 }
 
-/* delikatny gradient nagłówka sekcji */
-.section-fade {
-  background: radial-gradient(1200px 200px at 0% 0%, rgba(229, 9, 20, 0.08), transparent 60%);
+/* pomocnicze poświaty */
+.glow-red {
+  box-shadow: 0 0 25px rgba(229, 9, 20, 0.35);
+}
+.text-glow {
+  text-shadow: 0 0 12px rgba(229, 9, 20, 0.55);
 }

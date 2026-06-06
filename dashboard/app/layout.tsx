@@ -1,19 +1,23 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Oswald, Montserrat } from 'next/font/google';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 
+const display = Oswald({ subsets: ['latin', 'latin-ext'], weight: ['500', '600', '700'], variable: '--font-display' });
+const body = Montserrat({ subsets: ['latin', 'latin-ext'], weight: ['400', '600', '700'], variable: '--font-body' });
+
 export const metadata: Metadata = {
-  title: 'Bot DC — Dashboard',
-  description: 'Panel sterowania bota (gry, powiadomienia live, integracje)',
+  title: 'E-Bot — Dashboard',
+  description: 'Panel sterowania bota (gry, powiadomienia live, bezpieczeństwo)',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pl">
-      <body className="font-sans bg-bg text-white antialiased">
-        <div className="flex min-h-screen">
+    <html lang="pl" className={`${display.variable} ${body.variable}`}>
+      <body className="bg-bg font-sans text-text antialiased">
+        <div className="relative z-10 flex min-h-screen">
           <Sidebar />
           <div className="min-w-0 flex-1 md:pl-60">
             <Topbar />

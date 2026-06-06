@@ -11,11 +11,11 @@ export default function LoginPage({ searchParams }: { searchParams: { e?: string
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-bg px-4">
       <div className="w-full max-w-sm rounded-2xl border border-line bg-card p-8 text-center shadow-glow">
-        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-xl bg-accent text-2xl font-black">B</div>
-        <h1 className="text-2xl font-extrabold">
-          BOT<span className="text-accent">DC</span>
+        <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-xl bg-accent font-display text-2xl shadow-glow">E</div>
+        <h1 className="font-display text-3xl tracking-wide text-glow">
+          E-<span className="text-accent">BOT</span>
         </h1>
-        <p className="mt-1 text-sm text-muted">Panel sterowania bota</p>
+        <p className="mt-1 text-sm uppercase tracking-widest text-muted">Panel sterowania bota</p>
 
         {err && <p className="mt-4 rounded-md bg-accent/15 px-3 py-2 text-sm text-accent">{err}</p>}
 
