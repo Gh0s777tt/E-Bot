@@ -50,6 +50,18 @@ export const levelingSchema = z.object({
   cooldownSec: z.number().int().min(0).max(3600),
   announceChannelId: z.string().max(40),
   rewards: z.array(levelRewardSchema).max(100),
+  weekendBonus: z.number().min(1).max(10),
+  multipliers: z
+    .array(z.object({ roleId: z.string().max(40), factor: z.number().min(1).max(10) }))
+    .max(50),
+  noXpChannels: z.array(z.string().max(40)).max(100),
+  noXpRoles: z.array(z.string().max(40)).max(100),
+  voiceAntiAfk: z.boolean(),
+  stackRewards: z.boolean(),
+  levelUpMessage: z.string().max(1000),
+  prestigeEnabled: z.boolean(),
+  prestigeLevel: z.number().int().min(1).max(1000),
+  prestigeRoleId: z.string().max(40),
 });
 export type LevelingInput = z.infer<typeof levelingSchema>;
 

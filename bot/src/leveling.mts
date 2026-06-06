@@ -1,11 +1,12 @@
 // Leveling / XP — Faza 4 (strona bota).
 // Config czytamy z lokalnych settings (klucz 'leveling_config', synchronizowane z panelu przez
 // settings-sync). Dane piszemy do tabeli Supabase 'user_levels'. Panel czyta ranking z tej tabeli.
-import { type Client, Events, type Message, type VoiceState } from "discord.js";
-import { cloudSelect, cloudUpsert, hasCloud } from "./lib/cloud.mts";
-import { getSettings } from "./lib/db.mts";
+import { type Client, Events, type GuildMember, type Message } from 'discord.js';
+import { cloudSelect, cloudUpsert, hasCloud } from './lib/cloud.mts';
+import { getSettings } from './lib/db.mts';
 
 type Reward = { level: number; roleId: string };
+type Multiplier = { roleId: string; factor: number };
 type LevelingConfig = {
   enabled: boolean;
   xpPerMessage: number;
@@ -13,6 +14,17 @@ type LevelingConfig = {
   cooldownSec: number;
   announceChannelId: string;
   rewards: Reward[];
+  // Faza 7 / F4:
+  weekendBonus: number; // mnożnik w sob/niedz (1 = wyłączony)
+  multipliers: Multiplier[]; // mnożnik XP za rolę (brany najwyższy)
+  noXpChannels: string[];
+  noXpRoles: string[];
+  voiceAntiAfk: boolean; // wymagaj ≥2 osób + brak mute/deaf
+  stackRewards: boolean; // nadawaj wszystkie role ≤ poziom (zamiast tylko najwyższej)
+  levelUpMessage: string; // własny tekst awansu ({user}, {level}); pusty = domyślny
+  prestigeEnabled: boolean;
+  prestigeLevel: number; // poziom wymagany do prestiżu
+  prestigeRoleId: string; // rola za prestiż
 };
 
 const DEFAULT: LevelingConfig = {
@@ -20,14 +32,24 @@ const DEFAULT: LevelingConfig = {
   xpPerMessage: 15,
   xpPerVoiceMin: 10,
   cooldownSec: 60,
-  announceChannelId: "",
+  announceChannelId: '',
   rewards: [],
+  weekendBonus: 1,
+  multipliers: [],
+  noXpChannels: [],
+  noXpRoles: [],
+  voiceAntiAfk: true,
+  stackRewards: false,
+  levelUpMessage: '',
+  prestigeEnabled: false,
+  prestigeLevel: 100,
+  prestigeRoleId: '',
 };
 
 // ── Config (cache odświeżany z lokalnej bazy co 30 s, żeby nie otwierać SQLite na każdą wiadomość) ──
 let cfg: LevelingConfig = { ...DEFAULT };
 function refreshConfig(): void {
-  const raw = getSettings()["leveling_config"];
+  const raw = getSettings()['leveling_config'];
   if (!raw) {
     cfg = { ...DEFAULT };
     return;
@@ -53,6 +75,23 @@ function levelForXp(xp: number): number {
   return lvl;
 }
 
+// ── Faza 7 / F4 — mnożniki, wykluczenia ──
+function isWeekend(): boolean {
+  const d = new Date().getUTCDay();
+  return d === 0 || d === 6;
+}
+function effectiveXp(member: GuildMember, base: number): number {
+  let mult = 1;
+  for (const m of cfg.multipliers) {
+    if (m.roleId && member.roles.cache.has(m.roleId)) mult = Math.max(mult, m.factor || 1);
+  }
+  if (isWeekend() && cfg.weekendBonus > 1) mult *= cfg.weekendBonus;
+  return Math.max(0, Math.round(base * mult));
+}
+function noXpMember(member: GuildMember): boolean {
+  return cfg.noXpRoles.some((r) => r && member.roles.cache.has(r));
+}
+
 const cooldowns = new Map<string, number>();
 
 async function award(
@@ -65,7 +104,7 @@ async function award(
   if (!hasCloud() || amount <= 0) return;
   try {
     const rows = await cloudSelect<{ xp: number; level: number }>(
-      "user_levels",
+      'user_levels',
       `select=xp,level&guild_id=eq.${guildId}&user_id=eq.${encodeURIComponent(userId)}`,
     );
     const curXp = rows[0]?.xp ?? 0;
@@ -74,7 +113,7 @@ async function award(
     const newLevel = levelForXp(newXp);
 
     await cloudUpsert(
-      "user_levels",
+      'user_levels',
       [
         {
           guild_id: guildId,
@@ -85,12 +124,12 @@ async function award(
           last_grant: nowIso(),
         },
       ],
-      "guild_id,user_id",
+      'guild_id,user_id',
     );
 
     if (newLevel > curLevel) await onLevelUp(client, guildId, userId, newLevel);
   } catch (e) {
-    console.warn("[leveling]", (e as Error).message);
+    console.warn('[leveling]', (e as Error).message);
   }
 }
 
@@ -107,21 +146,26 @@ async function onLevelUp(
   const guild = client.guilds.cache.get(guildId);
   if (!guild) return;
 
-  // najwyższa rola-nagroda przysługująca na ten poziom
-  const reward = cfg.rewards
-    .filter((r) => r.level <= level && r.roleId)
-    .sort((a, b) => b.level - a.level)[0];
-  if (reward) {
+  // role-nagrody: stack (wszystkie ≤ poziom) lub tylko najwyższa
+  const eligible = cfg.rewards.filter((r) => r.level <= level && r.roleId);
+  if (eligible.length) {
     const member = await guild.members.fetch(userId).catch(() => null);
-    await member?.roles.add(reward.roleId).catch(() => {});
+    if (member) {
+      const sorted = [...eligible].sort((a, b) => b.level - a.level);
+      const toAdd = cfg.stackRewards ? sorted : [sorted[0]];
+      for (const r of toAdd) await member.roles.add(r.roleId).catch(() => {});
+    }
   }
 
   if (cfg.announceChannelId) {
     const ch = await guild.channels.fetch(cfg.announceChannelId).catch(() => null);
-    if (ch?.isTextBased() && "send" in ch) {
-      await ch
-        .send(`🏆 <@${userId}> awansował na **poziom ${level}**!`)
-        .catch(() => {});
+    if (ch?.isTextBased() && 'send' in ch) {
+      const text = cfg.levelUpMessage?.trim()
+        ? cfg.levelUpMessage
+            .replaceAll('{user}', `<@${userId}>`)
+            .replaceAll('{level}', String(level))
+        : `🏆 <@${userId}> awansował na **poziom ${level}**!`;
+      await ch.send(text).catch(() => {});
     }
   }
 }
@@ -133,11 +177,15 @@ export function startLeveling(client: Client): void {
   // XP za wiadomości (nie potrzebujemy treści → wystarczy intent GuildMessages)
   client.on(Events.MessageCreate, (msg: Message) => {
     if (!cfg.enabled || msg.author.bot || !msg.guild) return;
+    if (cfg.noXpChannels.includes(msg.channelId)) return;
+    const member = msg.member;
+    if (member && noXpMember(member)) return;
     const now = Date.now();
     const last = cooldowns.get(msg.author.id) ?? 0;
     if (now - last < cfg.cooldownSec * 1000) return;
     cooldowns.set(msg.author.id, now);
-    void award(client, msg.guild.id, msg.author.id, msg.author.username, cfg.xpPerMessage);
+    const amount = member ? effectiveXp(member, cfg.xpPerMessage) : cfg.xpPerMessage;
+    void award(client, msg.guild.id, msg.author.id, msg.author.username, amount);
   });
 
   // XP za voice — co 60 s dla każdego w kanale głosowym
@@ -146,15 +194,27 @@ export function startLeveling(client: Client): void {
     for (const guild of client.guilds.cache.values()) {
       for (const channel of guild.channels.cache.values()) {
         if (!channel.isVoiceBased() || channel.id === guild.afkChannelId) continue;
-        for (const [memberId, member] of channel.members) {
-          if (member.user.bot) continue;
-          const vs: VoiceState | null = member.voice;
-          if (vs?.serverDeaf) continue;
-          void award(client, guild.id, memberId, member.user.username, cfg.xpPerVoiceMin);
+        if (cfg.noXpChannels.includes(channel.id)) continue;
+        const humans = [...channel.members.values()].filter((m) => !m.user.bot);
+        for (const member of humans) {
+          if (noXpMember(member)) continue;
+          if (cfg.voiceAntiAfk) {
+            const v = member.voice;
+            if (humans.length < 2 || v.selfMute || v.selfDeaf || v.serverDeaf) continue;
+          }
+          void award(
+            client,
+            guild.id,
+            member.id,
+            member.user.username,
+            effectiveXp(member, cfg.xpPerVoiceMin),
+          );
         }
       }
     }
   }, 60_000);
 
-  console.log("[leveling] aktywny (XP za czat/voice; config z panelu, dane → Supabase user_levels).");
+  console.log(
+    '[leveling] aktywny (XP za czat/voice; config z panelu, dane → Supabase user_levels).',
+  );
 }

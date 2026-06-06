@@ -6,6 +6,7 @@ import { hasSupabase, supabase } from './supabase';
 
 // ───────────────────────── 🏆 Leveling ─────────────────────────
 export type LevelReward = { level: number; roleId: string };
+export type LevelMultiplier = { roleId: string; factor: number };
 export type LevelingConfig = {
   enabled: boolean;
   xpPerMessage: number;
@@ -13,6 +14,16 @@ export type LevelingConfig = {
   cooldownSec: number;
   announceChannelId: string;
   rewards: LevelReward[];
+  weekendBonus: number;
+  multipliers: LevelMultiplier[];
+  noXpChannels: string[];
+  noXpRoles: string[];
+  voiceAntiAfk: boolean;
+  stackRewards: boolean;
+  levelUpMessage: string;
+  prestigeEnabled: boolean;
+  prestigeLevel: number;
+  prestigeRoleId: string;
 };
 
 export const LEVELING_DEFAULT: LevelingConfig = {
@@ -22,6 +33,16 @@ export const LEVELING_DEFAULT: LevelingConfig = {
   cooldownSec: 60,
   announceChannelId: '',
   rewards: [],
+  weekendBonus: 1,
+  multipliers: [],
+  noXpChannels: [],
+  noXpRoles: [],
+  voiceAntiAfk: true,
+  stackRewards: false,
+  levelUpMessage: '',
+  prestigeEnabled: false,
+  prestigeLevel: 100,
+  prestigeRoleId: '',
 };
 
 export async function getLevelingConfig(): Promise<LevelingConfig> {

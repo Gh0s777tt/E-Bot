@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-49-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.18.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-50-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.19.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.19.0] — Faza 7 / F4: leveling++
+
+- `[#050]` 📈 **Rozbudowa levelingu** (konfigurowalne z panelu `/levels`):
+  - **Mnożniki XP** za rolę (np. ×2 dla VIP) + **bonus weekendowy**; **kanały i role bez XP**; **anti‑AFK voice** (liczy tylko gdy ≥2 osób i bez wyciszenia).
+  - **Własna wiadomość awansu** (edytor z F1: `{user}`/`{level}` + emoji/czcionki) i **kumulacja ról‑nagród** (wszystkie ≤ poziom vs tylko najwyższa).
+  - **Prestiż** — komenda `/prestige` resetuje XP w zamian za poziom prestiżu + rolę (konfig: poziom wymagany + rola). 15 komend. **Nowy SQL: `dashboard/scripts/f4-leveling-schema.sql`** (kolumna `prestige`).
+  - Bot: `leveling.mts` (effectiveXp/noXp/anti‑afk/stack/custom msg) + `commands/prestige.mts`. Panel: rozszerzony `LevelingForm` + `levelingSchema`.
+  - ℹ️ Sezonowe rankingi (miesięczny reset + hall of fame) zaplanowane do F10 (wymagają schedulera + archiwum).
 
 ## [0.18.0] — Faza 7 / F3: ekonomia serwera
 
