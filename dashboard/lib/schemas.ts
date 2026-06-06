@@ -63,6 +63,15 @@ export const ticketsConfigSchema = z.object({
 });
 export type TicketsConfigInput = z.infer<typeof ticketsConfigSchema>;
 
+// ── Komendy AI (POST /api/ai-config) ───────────────────────
+export const aiConfigSchema = z.object({
+  enabled: z.boolean(),
+  model: z.enum(['deepseek', 'openai']),
+  dailyRequestLimit: z.number().int().min(0).max(10_000),
+  dailyTokenLimit: z.number().int().min(0).max(10_000_000),
+});
+export type AiConfigInput = z.infer<typeof aiConfigSchema>;
+
 // Pomocnik: czyta JSON z requestu i waliduje; zwraca dane lub komunikat błędu.
 export async function parseBody<T>(
   request: Request,

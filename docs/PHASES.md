@@ -56,7 +56,7 @@
 - [x] Tickety — panel (config + lista) **+ bot** (`/ticket otwórz/zamknij`, prywatne wątki → Supabase)
 - [x] Leveling / XP — panel (config + ranking) **+ bot** (XP czat/voice, awanse, role‑nagrody → Supabase)
 - [ ] Reaction roles z edytora w panelu
-- [ ] Komendy AI (DeepSeek/OpenAI z twardym limitem kosztów)
+- [x] Komendy AI — `/ai` (DeepSeek/OpenAI) z twardym dziennym limitem (panel `/ai` + `ai_usage`)
 - [ ] Webhooki EventSub (zamiast pollingu) przez Cloudflare Tunnel
 - [ ] Statystyki/retencja + marketplace pluginów
 

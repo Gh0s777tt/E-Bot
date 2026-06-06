@@ -6,6 +6,7 @@ import {
   Radio,
   Settings,
   ShieldAlert,
+  Sparkles,
   TerminalSquare,
   Ticket,
   Trophy,
@@ -24,6 +25,7 @@ export const NAV_ITEMS = [
   { href: '/economy', label: 'Ekonomia', icon: Coins },
   { href: '/levels', label: 'Levele', icon: Trophy },
   { href: '/tickets', label: 'Tickety', icon: Ticket },
+  { href: '/ai', label: 'AI', icon: Sparkles },
   { href: '/profile', label: 'Profil', icon: User },
   { href: '/settings', label: 'Ustawienia', icon: Settings },
 ];

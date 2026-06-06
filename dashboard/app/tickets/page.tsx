@@ -1,5 +1,6 @@
 import { CheckCircle2, Hand, Inbox, Ticket } from 'lucide-react';
 import StatCard from '../../components/StatCard';
+import TicketCloseButton from '../../components/TicketCloseButton';
 import TicketsConfigForm from '../../components/TicketsConfigForm';
 import { getTickets, getTicketsConfig, ticketStats } from '../../lib/faza4';
 
@@ -58,7 +59,8 @@ export default async function TicketsPage() {
                   <th className="py-2 pr-3">Status</th>
                   <th className="py-2 pr-3">Użytkownik</th>
                   <th className="py-2 pr-3">Temat</th>
-                  <th className="py-2">Utworzono</th>
+                  <th className="py-2 pr-3">Utworzono</th>
+                  <th className="py-2">Akcje</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,8 +81,11 @@ export default async function TicketsPage() {
                     </td>
                     <td className="py-2 pr-3">{t.username ?? t.user_id}</td>
                     <td className="py-2 pr-3">{t.subject ?? '—'}</td>
-                    <td className="py-2 text-muted">
+                    <td className="py-2 pr-3 text-muted">
                       {new Date(t.created_at).toLocaleString('pl-PL')}
+                    </td>
+                    <td className="py-2">
+                      {t.status !== 'closed' && <TicketCloseButton id={t.id} />}
                     </td>
                   </tr>
                 ))}

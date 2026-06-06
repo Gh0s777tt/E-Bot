@@ -10,6 +10,7 @@ import { startHeartbeat } from './cloud/heartbeat.mts';
 import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startLeveling } from './leveling.mts';
+import { startTicketSync } from './cloud/ticket-sync.mts';
 
 loadEnv();
 
@@ -65,6 +66,7 @@ client.once(Events.ClientReady, (c) => {
   startPresenceSync(c);    // 'bot_presence' z panelu → setPresence
   startSettingsSync();     // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
   startLeveling(c);        // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
+  startTicketSync(c);      // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
   if (economyOn) {
     startEconomyConfigPolling();
     console.log('   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' + (process.env.GHOST_API_URL || 'default') + ')');

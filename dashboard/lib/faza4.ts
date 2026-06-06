@@ -119,3 +119,80 @@ export function ticketStats(rows: TicketRow[]): { open: number; claimed: number;
     closed: rows.filter((t) => t.status === 'closed').length,
   };
 }
+
+// Zamknięcie ticketu z panelu (bot zarchiwizuje wątek przez poller ticket-sync).
+export async function closeTicket(id: string): Promise<boolean> {
+  if (!hasSupabase) return false;
+  try {
+    const { error } = await supabase()
+      .from('tickets')
+      .update({ status: 'closed', closed_at: new Date().toISOString() })
+      .eq('id', id)
+      .neq('status', 'closed');
+    if (error) throw new Error(error.message);
+    return true;
+  } catch (e) {
+    console.warn('[faza4] closeTicket:', (e as Error).message);
+    return false;
+  }
+}
+
+// ───────────────────────── 🤖 Komendy AI ─────────────────────────
+export type AiConfig = {
+  enabled: boolean;
+  model: 'deepseek' | 'openai';
+  dailyRequestLimit: number;
+  dailyTokenLimit: number;
+};
+
+export const AI_DEFAULT: AiConfig = {
+  enabled: false,
+  model: 'deepseek',
+  dailyRequestLimit: 20,
+  dailyTokenLimit: 50_000,
+};
+
+export async function getAiConfig(): Promise<AiConfig> {
+  const raw = await getRawSetting('ai_config');
+  if (!raw) return structuredClone(AI_DEFAULT);
+  try {
+    return { ...AI_DEFAULT, ...(JSON.parse(raw) as Partial<AiConfig>) };
+  } catch {
+    return structuredClone(AI_DEFAULT);
+  }
+}
+
+export async function saveAiConfig(cfg: AiConfig): Promise<void> {
+  await setRawSetting('ai_config', JSON.stringify(cfg));
+}
+
+export type AiUsageStat = { user_id: string; tokens_used: number; requests: number };
+
+export async function getAiUsageToday(): Promise<{
+  totalTokens: number;
+  totalRequests: number;
+  users: number;
+  top: AiUsageStat[];
+}> {
+  const empty = { totalTokens: 0, totalRequests: 0, users: 0, top: [] as AiUsageStat[] };
+  if (!hasSupabase) return empty;
+  try {
+    const day = new Date().toISOString().slice(0, 10);
+    const { data, error } = await supabase()
+      .from('ai_usage')
+      .select('user_id,tokens_used,requests')
+      .eq('day', day)
+      .order('tokens_used', { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    const rows = (data ?? []) as AiUsageStat[];
+    return {
+      totalTokens: rows.reduce((a, r) => a + (r.tokens_used || 0), 0),
+      totalRequests: rows.reduce((a, r) => a + (r.requests || 0), 0),
+      users: rows.length,
+      top: rows.slice(0, 10),
+    };
+  } catch {
+    return empty;
+  }
+}
