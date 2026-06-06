@@ -8,9 +8,28 @@ Discord jako centrum, powiadomienia live (Kick / Twitch / YouTube / Rumble), ora
 ## Co już działa (zweryfikowane)
 - **Biblioteka gier** — 58 gier Steam + 121 tytułów PlayStation = **179** w SQLite, okładki/metadane z IGDB. (GOG dołączy automatycznie, gdy zainstalujesz GOG Galaxy.)
 - **Web UI (Netflix)** — `web/`: hero, półki, kafelki z hover, modal, proxy okładek. Półki „Najczęściej grane", „PlayStation", „Steam", po gatunkach.
-- **Bot Discord** — `bot/`: discord.js v14, komendy `/ping` i `/library`. Zalogowany jako `E-Bot#8722`.
+- **Bot Discord** — `bot/`: discord.js v14, komendy `/ping` · `/library` · `/link` · `/portal` · `/antinuke`. Zalogowany jako `E-Bot#8722`. **Ekonomia GH0ST EMPIRE** (GT za czat/voice + linkowanie kont) — patrz sekcja „Integracja GH0ST EMPIRE".
 - **Powiadomienia live** — polling Twitch/Kick/Rumble (YouTube opcjonalnie); embedy w kolorach platform.
 - **Panel ustawień** — `/settings`: kanał, wzmianka, przełączniki platform → zapis do bazy, **bot czyta na żywo**.
+
+## Integracja GH0ST EMPIRE — ekonomia Discord
+
+E-Bot jest **Discordowym ramieniem GH0ST EMPIRE** (Empire Bot ogarnia streaming: Twitch/Kick/YT/Rumble; E-Bot ogarnia Discord + społeczność). Przejmuje rolę dawnego `ghost-empire-bot`: nalicza **Ghost Tokens (GT)** za aktywność na Discordzie i łączy konta z portalem. Saldo GT żyje w portalu (Postgres) — E-Bot tylko woła jego API.
+
+- **`/link <kod>`** — wiąże Discord z profilem GH0ST EMPIRE (`bot/src/commands/link.mts`).
+- **`/portal`** — link do portalu + jak zarabiać GT (`bot/src/commands/portal.mts`).
+- **GT za wiadomości + voice** — `bot/src/empire/*` woła `POST /api/internal/award`; stawki konfiguruje się **na żywo** w portalu (`/admin#bot`, polling `/api/bot/config`).
+
+### Włączenie ekonomii (opt-in — domyślnie OFF, by nie ruszać reszty E-Bota)
+1. W głównym `.env` (repo Bot DC):
+   - `GHOST_ECONOMY=1`
+   - `GHOST_BOT_SECRET=<ten sam sekret co portal GE>` *(już ustawiony dla `/link`)*
+   - `GHOST_API_URL=https://ghost-empire-web.vercel.app` *(domyślny; już dla `/link`)*
+   - opcjonalnie: `DISCORD_GUILD_ID=<id serwera społeczności>` (zawęża naliczanie), oraz nadpisania nagród `GHOST_MESSAGE_REWARD` / `GHOST_MESSAGE_COOLDOWN_SECONDS` / `GHOST_VOICE_REWARD_PER_MINUTE` / `GHOST_VOICE_TICK_SECONDS` / `GHOST_AFK_GIVES_REWARD` / `GHOST_MUTED_GIVES_REWARD`.
+2. **Discord Dev Portal** (aplikacja E-Bot) → Bot → **Privileged Gateway Intents**: włącz **Message Content** i **Server Members**. ⚠️ Bez tego bot z `GHOST_ECONOMY=1` **nie zaloguje się** (brama odrzuci intencje).
+3. Zarejestruj nowe komendy: `cd bot && npm run deploy` (dodaje `/portal`).
+4. Restart bota. W logach pojawi się `💰 GH0ST EMPIRE economy: ON`.
+5. **Wyłącz stary `ghost-empire-bot`** (w repo `ghost-empire-phase1`) — jest już zastąpiony przez E-Bota.
 
 ## Uruchomienie
 ```bash
