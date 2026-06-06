@@ -10,7 +10,10 @@ function isOpen(pathname: string): boolean {
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/img') ||
     pathname.startsWith('/_next') ||
-    pathname === '/favicon.ico'
+    pathname === '/favicon.ico' ||
+    // pliki statyczne z public/ (logo, baner, favicon, fonty) — publiczne z natury,
+    // muszą działać też dla niezalogowanych (strona /login ich używa)
+    /\.(png|jpe?g|gif|webp|svg|ico|txt|xml|woff2?)$/.test(pathname)
   );
 }
 
