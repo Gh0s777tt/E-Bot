@@ -1,5 +1,6 @@
 import { getGames } from '../../lib/data';
 import GameCard from '../../components/GameCard';
+import { Gamepad2 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,8 +17,9 @@ export default async function LibraryPage() {
         const items = games.filter((g) => g.platform === p);
         return (
           <section key={p}>
-            <h2 className="mb-3 text-base font-semibold">
-              {PLATFORM_LABEL[p] ?? p} <span className="text-sm font-normal text-muted">· {items.length}</span>
+            <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+              <Gamepad2 size={16} className="text-accent" /> {PLATFORM_LABEL[p] ?? p}
+              <span className="text-sm font-normal normal-case text-muted">· {items.length}</span>
             </h2>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
               {items.map((g) => (
