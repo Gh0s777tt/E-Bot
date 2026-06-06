@@ -38,6 +38,16 @@ function timeout(ms = 10_000): AbortSignal {
   return AbortSignal.timeout(ms);
 }
 
+// Throttling ostrzeżeń — np. brak tabeli (404) przy pollerach nie spamuje logów co 30 s.
+const lastWarn = new Map<string, number>();
+function warnThrottled(key: string, msg: string): void {
+  const now = Date.now();
+  if ((lastWarn.get(key) ?? 0) + 600_000 < now) {
+    console.warn(msg);
+    lastWarn.set(key, now);
+  }
+}
+
 /** Pobiera wszystkie ustawienia z chmury jako mapę klucz→wartość. */
 export async function cloudGetAllSettings(): Promise<Record<string, string>> {
   if (!hasCloud()) return {};
@@ -84,7 +94,7 @@ export async function cloudSelect<T = Record<string, unknown>>(table: string, qs
     if (!r.ok) throw new Error(`${table} GET ${r.status}`);
     return (await r.json()) as T[];
   } catch (e) {
-    console.warn(`[cloud] select ${table}:`, (e as Error).message);
+    warnThrottled(`select:${table}`, `[cloud] select ${table}: ${(e as Error).message}`);
     return [];
   }
 }
