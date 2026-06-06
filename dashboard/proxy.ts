@@ -17,7 +17,8 @@ function isOpen(pathname: string): boolean {
   );
 }
 
-export async function middleware(req: NextRequest) {
+// Next 16: konwencja `proxy` zastępuje `middleware` (ten sam mechanizm: gating tras + redirect).
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (isOpen(pathname)) return NextResponse.next();
 
