@@ -9,10 +9,12 @@ import * as library from './library.mts';
 import * as link from './link.mts';
 import * as mod from './mod.mts';
 import * as ping from './ping.mts';
+import * as poll from './poll.mts';
 import * as portal from './portal.mts';
 import * as prestige from './prestige.mts';
 import * as rank from './rank.mts';
 import * as remind from './remind.mts';
+import * as suggest from './suggest.mts';
 import * as ticket from './ticket.mts';
 import * as ticketpanel from './ticketpanel.mts';
 import * as verifypanel from './verifypanel.mts';
@@ -42,4 +44,6 @@ export const commands: Command[] = [
   prestige,
   ticketpanel,
   verifypanel,
+  suggest,
+  poll,
 ];

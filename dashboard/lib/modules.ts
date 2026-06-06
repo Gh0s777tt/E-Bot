@@ -63,6 +63,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'leveling_config',
   },
   {
+    key: 'suggestions',
+    label: 'Sugestie',
+    group: 'Społeczność',
+    href: '/suggestions',
+    kind: 'json',
+    settingsKey: 'suggestions_config',
+  },
+  {
     key: 'starboard',
     label: 'Starboard',
     group: 'Społeczność',

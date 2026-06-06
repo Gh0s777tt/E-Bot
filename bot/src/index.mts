@@ -6,6 +6,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
 import { type Command, commands } from './commands/index.mts';
+import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
 import { setupMessageEarning } from './empire/messages.mts';
@@ -126,7 +127,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
       ? handleTicketButton(interaction)
       : id.startsWith('verify:')
         ? handleVerifyButton(interaction)
-        : handleButton(interaction);
+        : id.startsWith('sug:')
+          ? handleSuggestionButton(interaction)
+          : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }

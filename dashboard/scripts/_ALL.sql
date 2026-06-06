@@ -219,6 +219,24 @@ create index if not exists modmail_user on modmail_threads (guild_id, user_id, o
 create index if not exists modmail_channel on modmail_threads (channel_id);
 alter table modmail_threads enable row level security;
 
+
+-- ─────────────────────────────────────────────────────────────
+-- Faza 7 / F7.1 — sugestie serwera
+-- ─────────────────────────────────────────────────────────────
+create table if not exists suggestions (
+  id          uuid primary key default gen_random_uuid(),
+  guild_id    text not null,
+  user_id     text,
+  username    text,
+  content     text not null,
+  message_id  text,
+  status      text not null default 'open',  -- open | approved | denied | considered
+  created_at  timestamptz not null default now()
+);
+create index if not exists suggestions_recent on suggestions (guild_id, created_at desc);
+create index if not exists suggestions_msg on suggestions (message_id);
+alter table suggestions enable row level security;
+
 -- ═══════════════════════════════════════════════════════════════════════════
--- KONIEC. Po uruchomieniu wszystkie funkcje F3–F6 zapisują dane.
+-- KONIEC. Po uruchomieniu wszystkie funkcje F3–F7 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

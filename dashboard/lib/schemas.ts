@@ -203,6 +203,14 @@ export const modmailSchema = z.object({
 });
 export type ModmailInput = z.infer<typeof modmailSchema>;
 
+// ── Sugestie (POST /api/suggestions) ───────────────────────
+export const suggestionsSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  anonymous: z.boolean(),
+});
+export type SuggestionsInput = z.infer<typeof suggestionsSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

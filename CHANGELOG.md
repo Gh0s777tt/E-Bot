@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-55-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.24.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-56-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.25.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.25.0] — Faza 7 / F7.1: sugestie + ankiety
+
+- `[#056]` 💡 **Sugestie + ankiety** (panel `/suggestions`):
+  - **Sugestie** — `/suggest <treść>` publikuje embed na kanale sugestii z głosowaniem **👍/👎** (reakcje) + **przyciskami decyzji dla moderacji** (✅ Zatwierdź / ❌ Odrzuć / 🤔 Rozważ; perm ManageGuild — zmieniają kolor + status embeda i wpis w bazie). Opcja **anonimowa**. Dane w tabeli `suggestions`.
+  - **Ankiety** — `/poll <pytanie> [opcje oddzielone |]` → embed z reakcjami **1️⃣–🔟** (lub 👍/👎 bez opcji). Bez zapisu. **20 komend.**
+  - Bot: `community/suggestions.mts` (config + przyciski `sug:`) + `commands/suggest.mts` + `commands/poll.mts`; `index.mts` routuje przyciski `sug:`. Panel: `suggestions_config` + `getSuggestions` + `suggestionsSchema` + `/api/suggestions` + `SuggestionsForm` + strona `/suggestions` (lista ostatnich ze statusem) + nav „Sugestie" (Lightbulb) + moduł w Centrum sterowania. **Nowy SQL: `dashboard/scripts/f7-suggestions-schema.sql`** (dodany też do `_ALL.sql`).
 
 ## [0.24.0] — Faza 7 / F6.4: modmail · 🎉 Faza 6 zakończona
 

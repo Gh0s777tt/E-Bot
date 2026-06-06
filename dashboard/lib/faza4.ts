@@ -328,3 +328,28 @@ export async function getTempBans(limit = 50): Promise<TempBan[]> {
     return []; // tabela jeszcze nie istnieje (f6-moderation-schema.sql) / brak danych
   }
 }
+
+// Sugestie (Faza 7 / F7.1)
+export type Suggestion = {
+  id: string;
+  user_id: string | null;
+  username: string | null;
+  content: string;
+  status: string; // open | approved | denied | considered
+  created_at: string;
+};
+
+export async function getSuggestions(limit = 40): Promise<Suggestion[]> {
+  if (!hasSupabase) return [];
+  try {
+    const { data, error } = await supabase()
+      .from('suggestions')
+      .select('id,user_id,username,content,status,created_at')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as Suggestion[];
+  } catch {
+    return []; // tabela jeszcze nie istnieje (f7-suggestions-schema.sql) / brak danych
+  }
+}

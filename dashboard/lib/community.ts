@@ -183,3 +183,24 @@ export async function getModmailConfig(): Promise<ModmailConfig> {
 export async function saveModmailConfig(cfg: ModmailConfig): Promise<void> {
   await setRawSetting('modmail_config', JSON.stringify(cfg));
 }
+
+// ── Sugestie (Faza 7 / F7.1) ──
+export type SuggestionsConfig = { enabled: boolean; channelId: string; anonymous: boolean };
+export const SUGGESTIONS_DEFAULT: SuggestionsConfig = {
+  enabled: false,
+  channelId: '',
+  anonymous: false,
+};
+
+export async function getSuggestionsConfig(): Promise<SuggestionsConfig> {
+  const raw = await getRawSetting('suggestions_config');
+  if (!raw) return structuredClone(SUGGESTIONS_DEFAULT);
+  try {
+    return { ...SUGGESTIONS_DEFAULT, ...(JSON.parse(raw) as Partial<SuggestionsConfig>) };
+  } catch {
+    return structuredClone(SUGGESTIONS_DEFAULT);
+  }
+}
+export async function saveSuggestionsConfig(cfg: SuggestionsConfig): Promise<void> {
+  await setRawSetting('suggestions_config', JSON.stringify(cfg));
+}
