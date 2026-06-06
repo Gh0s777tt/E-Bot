@@ -31,6 +31,8 @@
 - [x] Supabase (schema + seed) — biblioteka w chmurze
 - [x] Deploy Vercel (`e‑bot‑dc.vercel.app`), branch‑aliasy
 - [x] GH0ST `/link` (łączenie kont)
+- [x] Utwardzenie repo: branch protection na `main`, Dependabot (alerty+auto‑fix), CodeQL, CODEOWNERS
+- [x] Pełna dokumentacja: README/ROADMAP/ARCHITECTURE/PHASES/CHANGELOG + **Wiki** (6 stron)
 
 ## ✅ Faza 2 — Pełny panel GH0ST
 - [x] Look GH0ST (czerwień/czerń, Oswald, poświaty)

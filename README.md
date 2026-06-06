@@ -10,7 +10,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.4.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.4.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -175,7 +175,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.4.0** — pełny panel GH0ST (live, ekonomia, personalizacja, motywy).
+Najnowsze: **v0.4.1** — Wiki projektu + utwardzenie repo (branch protection, Dependabot, szablony). Wcześniej **v0.4.0** — pełny panel GH0ST (live, ekonomia, personalizacja, motywy).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>
