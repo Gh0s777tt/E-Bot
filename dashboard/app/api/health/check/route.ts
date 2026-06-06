@@ -30,11 +30,13 @@ export async function GET(request: Request): Promise<Response> {
     }
   }
 
+  // „Żywy" = jest ŚWIEŻY puls (proces pisze heartbeat). Restart/redeploy pisze nowy puls < 3 min,
+  // więc nie wywołuje fałszywego alarmu; realny crash = brak jakiegokolwiek pulsu > 3 min.
   let online = false;
   try {
     const raw = await getRawSetting('bot_status');
-    const d = raw ? (JSON.parse(raw) as { online?: boolean; ts?: number }) : {};
-    online = typeof d.ts === 'number' && Date.now() - d.ts < DOWN_AFTER_MS && !!d.online;
+    const d = raw ? (JSON.parse(raw) as { ts?: number }) : {};
+    online = typeof d.ts === 'number' && Date.now() - d.ts < DOWN_AFTER_MS;
   } catch {
     /* brak pulsu → traktuj jako offline */
   }
