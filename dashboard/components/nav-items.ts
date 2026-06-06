@@ -12,6 +12,7 @@ import {
   Settings,
   ShieldAlert,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   Tags,
   TerminalSquare,
@@ -23,6 +24,7 @@ import {
 
 export const NAV_ITEMS = [
   { href: '/', label: 'Przegląd', icon: LayoutDashboard },
+  { href: '/modules', label: 'Centrum sterowania', icon: SlidersHorizontal },
   { href: '/library', label: 'Biblioteka', icon: Gamepad2 },
   { href: '/wishlist', label: 'Lista życzeń', icon: Heart },
   { href: '/notifications', label: 'Powiadomienia', icon: Radio },

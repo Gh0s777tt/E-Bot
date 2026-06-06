@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-46-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.15.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-47-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.16.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.16.0] — Faza 7 / F1: fundament personalizacji + Centrum sterowania
+
+- `[#047]` 🎛️ **Pełna personalizacja (fundament) + włącz/wyłącz każdy moduł:**
+  - **Centrum sterowania** (`/modules`) — master on/off każdego modułu z jednego miejsca (Automod, Powitania, Leveling, Starboard, Tickety, AI, Twórca, Powiadomienia live…). Zapis do settings → bot stosuje (settings-sync). `lib/modules.ts` (rejestr) + `lib/moduleState.ts` + `/api/modules`.
+  - **MessageEditor** — pełny edytor wiadomości: pasek markdown (pogrubienie/kursywa/podkr./przekr./kod/spoiler), **emoji**, **„czcionki" Unicode** (~12 stylów: 𝐛𝐨𝐥𝐝/𝓼𝓬𝓻𝓲𝓹𝓽/𝕕𝕠𝕦𝕓𝕝𝕖/Ⓒⓘⓡⓒⓛⓔⓓ/Ｆｕｌｌ…), zmienne (`{user}`…) i **live-preview** à la Discord. Wpięty w Powitania (pierwszy realny użytek).
+  - **Pickery kolorów** — `ColorField` (HEX + natywny picker + podgląd RGB) i `GradientField` (od/do/kąt + live-preview) — gradienty pod grafiki (F2). **Własny HEX akcentu** w motywie (poza presetami).
+  - ℹ️ Discord nie renderuje gradientów/dowolnych fontów w czacie — w tekście dajemy markdown + Unicode-czcionki + emoji; gradienty i prawdziwe fonty trafią do **obrazów** (karty rang/banery — F2) i panelu.
 
 ## [0.15.0] — Faza 6 / B7: infra + jakość (finał „zrób wszystko")
 

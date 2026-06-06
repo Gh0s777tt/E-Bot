@@ -2,12 +2,10 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import MessageEditor from './MessageEditor';
 import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = { enabled: boolean; channelId: string; message: string; autoroleId: string };
-
-const inputCls =
-  'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
 export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
   const [c, setC] = useState<Cfg>(initial);
@@ -60,18 +58,18 @@ export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: G
         </label>
       </div>
 
-      <label className="block space-y-1 text-sm">
+      <div className="space-y-1 text-sm">
         <span className="font-semibold text-white/90">Wiadomość powitalna</span>
-        <textarea
+        <MessageEditor
           value={c.message}
-          onChange={(e) => setC({ ...c, message: e.target.value })}
+          onChange={(v) => setC({ ...c, message: v })}
           rows={3}
-          className={inputCls}
+          placeholder="Witaj {user} na serwerze! 🎉"
+          variables={[
+            { token: '{user}', label: 'Nowy członek (oznaczenie)', sample: '@NowyGracz' },
+          ]}
         />
-        <span className="text-xs text-muted">
-          Użyj <code className="text-accent">{'{user}'}</code> = oznaczenie nowego członka.
-        </span>
-      </label>
+      </div>
 
       <div className="flex items-center gap-3">
         <button

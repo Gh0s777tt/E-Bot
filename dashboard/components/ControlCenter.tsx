@@ -1,0 +1,87 @@
+'use client';
+
+// Faza 7 / F1 — Centrum sterowania: master włącz/wyłącz każdego modułu (zapis do settings → bot stosuje).
+import Link from 'next/link';
+import { useState } from 'react';
+import type { ModuleView } from '../lib/modules';
+
+function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={on}
+      className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? 'bg-accent' : 'bg-white/20'}`}
+    >
+      <span
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`}
+      />
+    </button>
+  );
+}
+
+export default function ControlCenter({
+  modules,
+  initial,
+}: {
+  modules: ModuleView[];
+  initial: Record<string, boolean>;
+}) {
+  const [states, setStates] = useState<Record<string, boolean>>(initial);
+
+  async function flip(key: string) {
+    const next = !states[key];
+    setStates((s) => ({ ...s, [key]: next }));
+    try {
+      const r = await fetch('/api/modules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, enabled: next }),
+      });
+      if (!r.ok) throw new Error('fail');
+    } catch {
+      setStates((s) => ({ ...s, [key]: !next })); // revert
+    }
+  }
+
+  const groups = [...new Set(modules.map((m) => m.group))];
+  const onCount = Object.values(states).filter(Boolean).length;
+
+  return (
+    <div className="space-y-6">
+      <p className="text-xs uppercase tracking-wide text-muted">
+        Aktywne moduły: <span className="text-accent">{onCount}</span> / {modules.length}
+      </p>
+      {groups.map((g) => (
+        <section key={g} className="panel-glow rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-white/80">{g}</h2>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {modules
+              .filter((m) => m.group === g)
+              .map((m) => (
+                <div
+                  key={m.key}
+                  className="flex items-center justify-between rounded-md border border-line bg-bg/40 px-4 py-3"
+                >
+                  <span className="flex items-center gap-2 text-sm">
+                    <span className={states[m.key] ? 'text-white/90' : 'text-muted'}>
+                      {m.label}
+                    </span>
+                    {m.href && (
+                      <Link href={m.href} className="text-xs text-accent hover:underline">
+                        konfig
+                      </Link>
+                    )}
+                  </span>
+                  <Toggle on={!!states[m.key]} onClick={() => flip(m.key)} />
+                </div>
+              ))}
+          </div>
+        </section>
+      ))}
+      <p className="text-xs text-muted">
+        Zmiany zapisują się od razu (Supabase) i bot stosuje je na żywo (settings-sync ~60 s).
+      </p>
+    </div>
+  );
+}
