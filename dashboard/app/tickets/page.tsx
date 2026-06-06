@@ -65,6 +65,7 @@ export default async function TicketsPage() {
                   <th className="py-2 pr-3">Użytkownik</th>
                   <th className="py-2 pr-3">Temat</th>
                   <th className="py-2 pr-3">Utworzono</th>
+                  <th className="py-2 pr-3">Ocena</th>
                   <th className="py-2">Akcje</th>
                 </tr>
               </thead>
@@ -88,6 +89,9 @@ export default async function TicketsPage() {
                     <td className="py-2 pr-3">{t.subject ?? '—'}</td>
                     <td className="py-2 pr-3 text-muted">
                       {new Date(t.created_at).toLocaleString('pl-PL')}
+                    </td>
+                    <td className="py-2 pr-3 text-yellow-400">
+                      {t.rating ? '⭐'.repeat(t.rating) : '—'}
                     </td>
                     <td className="py-2">
                       {t.status !== 'closed' && <TicketCloseButton id={t.id} />}

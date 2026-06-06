@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-50-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.19.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-51-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.20.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.20.0] — Faza 7 / F5: tickety++
+
+- `[#051]` 🎫 **Tickety jak Ticket Tool:**
+  - **Panel z przyciskiem** — `/ticketpanel` publikuje wiadomość (konfigurowalną) z przyciskiem „Otwórz ticket" → **modal** pyta o temat → bot tworzy prywatny wątek (+ przycisk „Zamknij" w wątku).
+  - **Transkrypty** — przy zamknięciu (przycisk / `/ticket zamknij` / z panelu) bot generuje **transkrypt HTML** i wysyła na kanał logów oraz **w DM** do zgłaszającego.
+  - **Ocena obsługi** — po zamknięciu DM z przyciskami 1–5 ⭐ → zapis do `tickets.rating` (widoczne w panelu `/tickets`).
+  - Bot: `tickets/service.mts` (openTicket/closeTicket/transkrypt) + `tickets/interactions.mts` (przyciski/modal) + `/ticketpanel`; `index.mts` obsługuje `isModalSubmit` + routing `ticket:`. 16 komend. Panel: `tickets_config` + `panelMessage`/`ratingEnabled` w formularzu + kolumna „Ocena". **Nowy SQL: `dashboard/scripts/f5-tickets-schema.sql`** (kolumna `rating`).
 
 ## [0.19.0] — Faza 7 / F4: leveling++
 

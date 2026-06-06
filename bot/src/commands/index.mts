@@ -13,6 +13,7 @@ import * as prestige from './prestige.mts';
 import * as rank from './rank.mts';
 import * as remind from './remind.mts';
 import * as ticket from './ticket.mts';
+import * as ticketpanel from './ticketpanel.mts';
 import * as wishlist from './wishlist.mts';
 
 export type Command = {
@@ -36,4 +37,5 @@ export const commands: Command[] = [
   rank,
   economy,
   prestige,
+  ticketpanel,
 ];

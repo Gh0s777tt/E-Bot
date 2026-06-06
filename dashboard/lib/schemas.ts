@@ -72,6 +72,8 @@ export const ticketsConfigSchema = z.object({
   supportRoleId: z.string().max(40),
   welcome: z.string().max(500),
   logChannelId: z.string().max(40),
+  panelMessage: z.string().max(1000).optional().default('Masz sprawę? Otwórz ticket. 🎟️'),
+  ratingEnabled: z.boolean().optional().default(true),
 });
 export type TicketsConfigInput = z.infer<typeof ticketsConfigSchema>;
 

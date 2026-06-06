@@ -83,6 +83,8 @@ export type TicketsConfig = {
   supportRoleId: string;
   welcome: string;
   logChannelId: string;
+  panelMessage: string;
+  ratingEnabled: boolean;
 };
 
 export const TICKETS_DEFAULT: TicketsConfig = {
@@ -91,6 +93,8 @@ export const TICKETS_DEFAULT: TicketsConfig = {
   supportRoleId: '',
   welcome: 'Dzięki za zgłoszenie! Obsługa odezwie się wkrótce.',
   logChannelId: '',
+  panelMessage: 'Masz sprawę? Otwórz ticket — kliknij poniżej. 🎟️',
+  ratingEnabled: true,
 };
 
 export async function getTicketsConfig(): Promise<TicketsConfig> {
@@ -116,6 +120,7 @@ export type TicketRow = {
   claimed_by: string | null;
   created_at: string;
   closed_at: string | null;
+  rating: number | null;
 };
 
 export async function getTickets(limit = 100): Promise<TicketRow[]> {
@@ -123,7 +128,7 @@ export async function getTickets(limit = 100): Promise<TicketRow[]> {
   try {
     const { data, error } = await supabase()
       .from('tickets')
-      .select('id,user_id,username,subject,status,claimed_by,created_at,closed_at')
+      .select('id,user_id,username,subject,status,claimed_by,created_at,closed_at,rating')
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);

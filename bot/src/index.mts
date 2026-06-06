@@ -20,6 +20,7 @@ import { startLeveling } from './leveling.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
+import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
 import { startWelcome } from './welcome.mts';
 
 loadEnv();
@@ -110,7 +111,14 @@ client.once(Events.ClientReady, (c) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isButton()) {
-    await handleButton(interaction).catch((err) => console.error('button:', err));
+    const h = interaction.customId.startsWith('ticket:')
+      ? handleTicketButton(interaction)
+      : handleButton(interaction);
+    await h.catch((err) => console.error('button:', err));
+    return;
+  }
+  if (interaction.isModalSubmit()) {
+    await handleTicketModal(interaction).catch((err) => console.error('modal:', err));
     return;
   }
   if (!interaction.isChatInputCommand()) return;

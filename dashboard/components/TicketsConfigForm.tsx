@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import MessageEditor from './MessageEditor';
 import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = {
@@ -10,6 +11,8 @@ type Cfg = {
   supportRoleId: string;
   welcome: string;
   logChannelId: string;
+  panelMessage: string;
+  ratingEnabled: boolean;
 };
 
 const inputCls =
@@ -84,6 +87,30 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
         />
       </label>
 
+      <div className="space-y-1 text-sm">
+        <span className="font-semibold text-white/90">
+          Wiadomość panelu (komenda <code className="text-accent">/ticketpanel</code>)
+        </span>
+        <MessageEditor
+          value={c.panelMessage}
+          onChange={(v) => setC({ ...c, panelMessage: v })}
+          rows={2}
+          placeholder="Masz sprawę? Otwórz ticket poniżej. 🎟️"
+        />
+      </div>
+
+      <label className="flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={c.ratingEnabled}
+          onChange={(e) => setC({ ...c, ratingEnabled: e.target.checked })}
+          className="h-4 w-4 accent-accent"
+        />
+        <span className="font-semibold text-white/90">
+          Proś o ocenę obsługi po zamknięciu (1–5 ⭐)
+        </span>
+      </label>
+
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -97,8 +124,10 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
         {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
       </div>
       <p className="text-xs text-muted">
-        Otwieranie/zamykanie ticketów wykonuje bot (Faza 4 — strona bota). Panel zapisuje
-        konfigurację do Supabase i pokazuje listę zgłoszeń z bazy.
+        Bot otwiera ticket przez przycisk (komenda <code className="text-accent">/ticketpanel</code>
+        ) lub <code className="text-accent">/ticket otworz</code>; przy zamknięciu wysyła transkrypt
+        HTML na kanał logów i w DM do zgłaszającego. Ocena (jeśli włączona) wymaga{' '}
+        <code>f5-tickets-schema.sql</code>.
       </p>
     </div>
   );

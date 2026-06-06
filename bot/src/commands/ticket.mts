@@ -5,9 +5,10 @@ import {
   type ChatInputCommandInteraction,
   MessageFlags,
   SlashCommandBuilder,
-} from "discord.js";
-import { cloudInsert, cloudUpdate, hasCloud } from "../lib/cloud.mts";
-import { getSettings } from "../lib/db.mts";
+} from 'discord.js';
+import { cloudInsert, hasCloud } from '../lib/cloud.mts';
+import { getSettings } from '../lib/db.mts';
+import { closeTicket } from '../tickets/service.mts';
 
 type TicketsConfig = {
   enabled: boolean;
@@ -16,8 +17,12 @@ type TicketsConfig = {
 };
 
 function readConfig(): TicketsConfig {
-  const raw = getSettings()["tickets_config"];
-  const def: TicketsConfig = { enabled: false, supportRoleId: "", welcome: "Dzięki za zgłoszenie! Obsługa odezwie się wkrótce." };
+  const raw = getSettings()['tickets_config'];
+  const def: TicketsConfig = {
+    enabled: false,
+    supportRoleId: '',
+    welcome: 'Dzięki za zgłoszenie! Obsługa odezwie się wkrótce.',
+  };
   if (!raw) return def;
   try {
     return { ...def, ...(JSON.parse(raw) as Partial<TicketsConfig>) };
@@ -27,38 +32,45 @@ function readConfig(): TicketsConfig {
 }
 
 export const data = new SlashCommandBuilder()
-  .setName("ticket")
-  .setDescription("System zgłoszeń (tickety).")
+  .setName('ticket')
+  .setDescription('System zgłoszeń (tickety).')
   .addSubcommand((s) =>
     s
-      .setName("otworz")
-      .setDescription("Otwórz nowy ticket.")
+      .setName('otworz')
+      .setDescription('Otwórz nowy ticket.')
       .addStringOption((o) =>
-        o.setName("temat").setDescription("Czego dotyczy zgłoszenie?").setRequired(true).setMaxLength(200),
+        o
+          .setName('temat')
+          .setDescription('Czego dotyczy zgłoszenie?')
+          .setRequired(true)
+          .setMaxLength(200),
       ),
   )
   .addSubcommand((s) =>
-    s.setName("zamknij").setDescription("Zamknij ten ticket (użyj w wątku ticketu)."),
+    s.setName('zamknij').setDescription('Zamknij ten ticket (użyj w wątku ticketu).'),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const sub = interaction.options.getSubcommand();
   const cfg = readConfig();
 
-  if (sub === "otworz") {
+  if (sub === 'otworz') {
     if (!cfg.enabled) {
       await interaction.reply({
-        content: "🎟️ Tickety są wyłączone — włącz je w panelu.",
+        content: '🎟️ Tickety są wyłączone — włącz je w panelu.',
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
     const channel = interaction.channel;
-    if (!channel || !("threads" in channel)) {
-      await interaction.reply({ content: "Tu nie można otworzyć ticketu.", flags: MessageFlags.Ephemeral });
+    if (!channel || !('threads' in channel)) {
+      await interaction.reply({
+        content: 'Tu nie można otworzyć ticketu.',
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
-    const temat = interaction.options.getString("temat", true);
+    const temat = interaction.options.getString('temat', true);
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     try {
       const thread = await channel.threads.create({
@@ -67,22 +79,22 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         invitable: false,
       });
       await thread.members.add(interaction.user.id).catch(() => {});
-      const ping = cfg.supportRoleId ? `<@&${cfg.supportRoleId}> ` : "";
+      const ping = cfg.supportRoleId ? `<@&${cfg.supportRoleId}> ` : '';
       await thread
         .send(`${ping}${cfg.welcome}\n\n**Temat:** ${temat}\n— <@${interaction.user.id}>`)
         .catch(() => {});
 
       if (hasCloud()) {
-        await cloudInsert("tickets", [
+        await cloudInsert('tickets', [
           {
             guild_id: interaction.guildId,
             channel_id: thread.id,
             user_id: interaction.user.id,
             username: interaction.user.username,
             subject: temat,
-            status: "open",
+            status: 'open',
           },
-        ]).catch((e) => console.warn("[ticket]", (e as Error).message));
+        ]).catch((e) => console.warn('[ticket]', (e as Error).message));
       }
 
       await interaction.editReply(`✅ Otwarto ticket: <#${thread.id}>`);
@@ -96,17 +108,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   // zamknij
   const channel = interaction.channel;
-  if (!channel || !channel.isThread()) {
-    await interaction.reply({ content: "Użyj tej komendy w wątku ticketu.", flags: MessageFlags.Ephemeral });
+  if (!channel?.isThread()) {
+    await interaction.reply({
+      content: 'Użyj tej komendy w wątku ticketu.',
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
-  await interaction.reply("🔒 Zamykam ticket…");
-  if (hasCloud()) {
-    await cloudUpdate("tickets", `channel_id=eq.${channel.id}&status=neq.closed`, {
-      status: "closed",
-      closed_at: new Date().toISOString(),
-    }).catch((e) => console.warn("[ticket]", (e as Error).message));
-  }
-  await channel.setLocked(true).catch(() => {});
-  await channel.setArchived(true).catch(() => {});
+  await interaction.reply('🔒 Zamykam ticket (transkrypt w drodze)…');
+  await closeTicket(channel);
 }
