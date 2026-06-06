@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { LogOut } from 'lucide-react';
+import MobileNav from './MobileNav';
 
 const TITLES: Record<string, string> = {
   '/': 'Przegląd',
@@ -10,13 +11,15 @@ const TITLES: Record<string, string> = {
   '/security': 'Bezpieczeństwo (Anti-Nuke)',
   '/integrations': 'Integracje',
   '/commands': 'Komendy',
+  '/profile': 'Profil',
   '/settings': 'Ustawienia',
 };
 
 export default function Topbar() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center border-b border-line bg-bg/80 px-5 backdrop-blur md:px-8">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-bg/80 px-5 backdrop-blur md:px-8">
+      <MobileNav />
       <h1 className="font-display text-base font-semibold uppercase tracking-wide">{TITLES[pathname] ?? 'Dashboard'}</h1>
       <div className="ml-auto flex items-center gap-2 text-xs">
         <span className="flex items-center gap-1.5 rounded-full bg-elevated px-3 py-1">

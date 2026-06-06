@@ -22,7 +22,7 @@ async function hmacKey(secret: string): Promise<CryptoKey> {
   return crypto.subtle.importKey('raw', bs(enc.encode(secret)), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
 }
 
-export type Session = { uid: string; uname: string; exp: number };
+export type Session = { uid: string; uname: string; avatar?: string; exp: number };
 
 export async function signSession(payload: Session, secret: string): Promise<string> {
   const body = b64url(enc.encode(JSON.stringify(payload)));

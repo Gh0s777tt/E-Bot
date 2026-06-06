@@ -19,7 +19,8 @@ export default function CommandsPage() {
         <h2 className="flex items-center gap-2 border-b border-line px-5 py-4 text-base font-semibold uppercase tracking-wide">
           <TerminalSquare size={16} className="text-accent" /> Komendy
         </h2>
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[480px] text-sm">
           <thead className="text-left text-[11px] uppercase tracking-wide text-muted">
             <tr>
               <th className="px-5 py-3 font-medium">Komenda</th>
@@ -39,6 +40,7 @@ export default function CommandsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </section>
 
       <p className="text-xs text-muted">

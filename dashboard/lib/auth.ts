@@ -61,10 +61,12 @@ export async function exchangeCode(origin: string, code: string): Promise<{ acce
   return (await r.json()) as { access_token: string };
 }
 
-export async function fetchDiscordUser(accessToken: string): Promise<{ id: string; username: string; global_name?: string }> {
+export async function fetchDiscordUser(
+  accessToken: string,
+): Promise<{ id: string; username: string; global_name?: string; avatar?: string | null }> {
   const r = await fetch('https://discord.com/api/v10/users/@me', { headers: { Authorization: `Bearer ${accessToken}` } });
   if (!r.ok) throw new Error(`user fetch ${r.status}`);
-  return (await r.json()) as { id: string; username: string; global_name?: string };
+  return (await r.json()) as { id: string; username: string; global_name?: string; avatar?: string | null };
 }
 
 export function isAllowed(uid: string): boolean {

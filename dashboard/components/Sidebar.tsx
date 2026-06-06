@@ -2,17 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Gamepad2, Radio, ShieldAlert, Plug, TerminalSquare, Settings } from 'lucide-react';
-
-const items = [
-  { href: '/', label: 'Przegląd', icon: LayoutDashboard },
-  { href: '/library', label: 'Biblioteka', icon: Gamepad2 },
-  { href: '/notifications', label: 'Powiadomienia', icon: Radio },
-  { href: '/security', label: 'Bezpieczeństwo', icon: ShieldAlert },
-  { href: '/integrations', label: 'Integracje', icon: Plug },
-  { href: '/commands', label: 'Komendy', icon: TerminalSquare },
-  { href: '/settings', label: 'Ustawienia', icon: Settings },
-];
+import { NAV_ITEMS } from './nav-items';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -25,7 +15,7 @@ export default function Sidebar() {
         </span>
       </div>
       <nav className="flex-1 space-y-0.5 p-2.5">
-        {items.map(({ href, label, icon: Icon }) => {
+        {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
             <Link
@@ -41,7 +31,7 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <div className="border-t border-line p-4 text-[11px] text-muted/60">v0.1 · Netflix theme</div>
+      <div className="border-t border-line p-4 text-[11px] text-muted/60">v0.1 · GH0ST style</div>
     </aside>
   );
 }
