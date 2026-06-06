@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { THEME_PRESETS } from '../lib/themes';
 
 function apply(p: { rgb: string; hover: string; dark: string }) {
@@ -32,7 +32,10 @@ export default function ThemeSwitcher() {
             active === p.id ? 'border-white bg-white/5' : 'border-line hover:bg-elevated'
           }`}
         >
-          <span className="grid h-5 w-5 place-items-center rounded-full" style={{ background: `rgb(${p.rgb})` }}>
+          <span
+            className="grid h-5 w-5 place-items-center rounded-full"
+            style={{ background: `rgb(${p.rgb})` }}
+          >
             {active === p.id && <Check size={12} className="text-white" />}
           </span>
           {p.name}

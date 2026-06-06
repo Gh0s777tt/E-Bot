@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { verifySession } from './lib/session';
 
 const SESSION_COOKIE = 'ebot_session';

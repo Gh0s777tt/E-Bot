@@ -19,7 +19,13 @@ function fromB64url(s: string): Uint8Array {
   return out;
 }
 async function hmacKey(secret: string): Promise<CryptoKey> {
-  return crypto.subtle.importKey('raw', bs(enc.encode(secret)), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
+  return crypto.subtle.importKey(
+    'raw',
+    bs(enc.encode(secret)),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign', 'verify'],
+  );
 }
 
 export type Session = { uid: string; uname: string; avatar?: string; exp: number };
@@ -34,7 +40,12 @@ export async function verifySession(token: string, secret: string): Promise<Sess
   const [body, sig] = token.split('.');
   if (!body || !sig) return null;
   try {
-    const ok = await crypto.subtle.verify('HMAC', await hmacKey(secret), bs(fromB64url(sig)), bs(enc.encode(body)));
+    const ok = await crypto.subtle.verify(
+      'HMAC',
+      await hmacKey(secret),
+      bs(fromB64url(sig)),
+      bs(enc.encode(body)),
+    );
     if (!ok) return null;
     const payload = JSON.parse(dec.decode(fromB64url(body))) as Session;
     if (!payload.exp || payload.exp < Date.now()) return null;

@@ -19,10 +19,16 @@ export default function TopNav() {
       }`}
     >
       <div className="flex h-16 items-center gap-7 px-4 md:px-12">
-        <span className="text-2xl font-extrabold tracking-tight text-accent select-none">GAMEVAULT</span>
+        <span className="text-2xl font-extrabold tracking-tight text-accent select-none">
+          GAMEVAULT
+        </span>
         <nav className="hidden gap-5 text-sm text-white/80 md:flex">
-          <a className="transition hover:text-white" href="/">Biblioteka</a>
-          <a className="transition hover:text-white" href="/settings">Ustawienia</a>
+          <a className="transition hover:text-white" href="/">
+            Biblioteka
+          </a>
+          <a className="transition hover:text-white" href="/settings">
+            Ustawienia
+          </a>
         </nav>
         <div className="ml-auto flex items-center gap-4">
           <div className="hidden h-8 items-center rounded bg-white/10 px-3 text-xs text-white/70 sm:flex">

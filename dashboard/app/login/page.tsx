@@ -6,7 +6,11 @@ const ERRORS: Record<string, string> = {
   oauth: 'Błąd logowania przez Discord.',
 };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ e?: string }> }) {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ e?: string }>;
+}) {
   const sp = await searchParams;
   const err = sp?.e ? ERRORS[sp.e] : null;
   return (
@@ -14,11 +18,16 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       {/* poświaty GH0ST EMPIRE */}
       <div
         className="pointer-events-none absolute -top-48 left-1/2 h-[70vh] w-[90vw] -translate-x-1/2 rounded-full"
-        style={{ background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.25), transparent 70%)' }}
+        style={{
+          background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.25), transparent 70%)',
+        }}
       />
       <div
         className="pointer-events-none absolute -bottom-48 -right-24 h-[50vh] w-[50vw] rounded-full"
-        style={{ background: 'radial-gradient(circle, rgb(var(--accent-dark-rgb) / 0.22), transparent 70%)' }}
+        style={{
+          background:
+            'radial-gradient(circle, rgb(var(--accent-dark-rgb) / 0.22), transparent 70%)',
+        }}
       />
 
       <div className="relative w-full max-w-sm rounded-2xl border border-accent/30 bg-card/80 p-8 text-center shadow-glow backdrop-blur-md">
@@ -31,7 +40,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <p className="mt-2 text-xs uppercase tracking-[0.3em] text-muted">Panel sterowania</p>
 
         {err && (
-          <p className="mt-5 rounded-md border border-accent/40 bg-accent/15 px-3 py-2 text-sm text-accent">{err}</p>
+          <p className="mt-5 rounded-md border border-accent/40 bg-accent/15 px-3 py-2 text-sm text-accent">
+            {err}
+          </p>
         )}
 
         <a
@@ -43,10 +54,14 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           </svg>
           Zaloguj przez Discord
         </a>
-        <p className="mt-5 text-[11px] uppercase tracking-widest text-muted/50">Dostęp tylko dla właściciela</p>
+        <p className="mt-5 text-[11px] uppercase tracking-widest text-muted/50">
+          Dostęp tylko dla właściciela
+        </p>
       </div>
 
-      <div className="absolute bottom-5 text-[11px] uppercase tracking-[0.3em] text-muted/40">E-BOT · GH0ST EMPIRE</div>
+      <div className="absolute bottom-5 text-[11px] uppercase tracking-[0.3em] text-muted/40">
+        E-BOT · GH0ST EMPIRE
+      </div>
     </div>
   );
 }

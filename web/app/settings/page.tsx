@@ -1,6 +1,6 @@
-import { getSettings } from '../../lib/settings';
-import TopNav from '../../components/TopNav';
 import SettingsForm from '../../components/SettingsForm';
+import TopNav from '../../components/TopNav';
+import { getSettings } from '../../lib/settings';
 
 export const dynamic = 'force-dynamic';
 

@@ -4,7 +4,9 @@ import { z } from 'zod';
 // ── Presence bota (POST /api/bot/presence) ─────────────────
 export const presenceSchema = z.object({
   status: z.enum(['online', 'idle', 'dnd', 'invisible']).default('online'),
-  type: z.enum(['none', 'playing', 'streaming', 'listening', 'watching', 'competing', 'custom']).default('none'),
+  type: z
+    .enum(['none', 'playing', 'streaming', 'listening', 'watching', 'competing', 'custom'])
+    .default('none'),
   text: z.string().max(128).default(''),
   url: z.string().max(200).default(''),
 });
@@ -50,7 +52,10 @@ export async function parseBody<T>(
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
     const first = parsed.error.issues[0];
-    return { ok: false, error: first ? `${first.path.join('.') || 'body'}: ${first.message}` : 'Nieprawidłowe dane' };
+    return {
+      ok: false,
+      error: first ? `${first.path.join('.') || 'body'}: ${first.message}` : 'Nieprawidłowe dane',
+    };
   }
   return { ok: true, data: parsed.data };
 }

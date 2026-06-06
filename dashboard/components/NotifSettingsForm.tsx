@@ -26,7 +26,9 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       aria-pressed={on}
       className={`relative h-6 w-11 rounded-full transition-colors ${on ? 'bg-accent' : 'bg-white/20'}`}
     >
-      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`} />
+      <span
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`}
+      />
     </button>
   );
 }
@@ -64,7 +66,9 @@ export default function NotifSettingsForm({ initial }: { initial: Settings }) {
           placeholder="np. 123456789012345678"
           className="w-full rounded-md border border-line bg-elevated px-3 py-2 outline-none focus:border-accent"
         />
-        <p className="text-xs text-muted">Discord → tryb dewelopera → PPM na kanale → „Kopiuj ID".</p>
+        <p className="text-xs text-muted">
+          Discord → tryb dewelopera → PPM na kanale → „Kopiuj ID".
+        </p>
       </div>
 
       <div className="space-y-2">
@@ -80,7 +84,10 @@ export default function NotifSettingsForm({ initial }: { initial: Settings }) {
       <div className="space-y-3">
         <label className="block text-sm font-semibold text-white/90">Platformy</label>
         {PLATFORMS.map((p) => (
-          <div key={p.key} className="flex items-center justify-between rounded-md border border-line bg-bg/40 px-4 py-3">
+          <div
+            key={p.key}
+            className="flex items-center justify-between rounded-md border border-line bg-bg/40 px-4 py-3"
+          >
             <span className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: p.color }} />
               {p.label}
@@ -98,7 +105,9 @@ export default function NotifSettingsForm({ initial }: { initial: Settings }) {
         >
           {status === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
         </button>
-        {status === 'saved' && <span className="text-sm text-green-400">✓ Zapisano — bot zastosuje od razu</span>}
+        {status === 'saved' && (
+          <span className="text-sm text-green-400">✓ Zapisano — bot zastosuje od razu</span>
+        )}
         {status === 'error' && <span className="text-sm text-accent">Błąd zapisu</span>}
       </div>
     </div>

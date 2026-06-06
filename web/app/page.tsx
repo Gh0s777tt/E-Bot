@@ -1,8 +1,8 @@
-import { getGames } from '../lib/db';
-import type { Game, Shelf } from '../lib/types';
-import TopNav from '../components/TopNav';
 import Hero from '../components/Hero';
 import Row from '../components/Row';
+import TopNav from '../components/TopNav';
+import { getGames } from '../lib/db';
+import type { Game, Shelf } from '../lib/types';
 
 // Zawsze czytaj świeże dane z bazy (nie cache'uj na buildzie).
 export const dynamic = 'force-dynamic';
@@ -54,11 +54,7 @@ export default function Page() {
     <main className="min-h-screen bg-bg pb-24">
       <TopNav />
 
-      {featured ? (
-        <Hero game={featured} />
-      ) : (
-        <div className="h-16" />
-      )}
+      {featured ? <Hero game={featured} /> : <div className="h-16" />}
 
       <div className="relative z-10 -mt-20 md:-mt-28 space-y-1">
         {shelves.map((s) => (

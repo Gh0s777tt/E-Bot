@@ -1,6 +1,6 @@
-import { DatabaseSync } from 'node:sqlite';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 
 function dbPath(): string {
   if (process.env.DATABASE_PATH) return process.env.DATABASE_PATH;
@@ -43,7 +43,10 @@ const truthy = (v: string | undefined, def: boolean): boolean =>
 export function getSettings(): Settings {
   const db = open();
   try {
-    const rows = db.prepare('SELECT key, value FROM settings').all() as { key: string; value: string }[];
+    const rows = db.prepare('SELECT key, value FROM settings').all() as {
+      key: string;
+      value: string;
+    }[];
     const m = new Map(rows.map((r) => [r.key, r.value]));
     return {
       notify_channel_id: m.get('notify_channel_id') ?? DEFAULTS.notify_channel_id,
@@ -51,7 +54,10 @@ export function getSettings(): Settings {
       notify_enabled_twitch: truthy(m.get('notify_enabled_twitch'), DEFAULTS.notify_enabled_twitch),
       notify_enabled_kick: truthy(m.get('notify_enabled_kick'), DEFAULTS.notify_enabled_kick),
       notify_enabled_rumble: truthy(m.get('notify_enabled_rumble'), DEFAULTS.notify_enabled_rumble),
-      notify_enabled_youtube: truthy(m.get('notify_enabled_youtube'), DEFAULTS.notify_enabled_youtube),
+      notify_enabled_youtube: truthy(
+        m.get('notify_enabled_youtube'),
+        DEFAULTS.notify_enabled_youtube,
+      ),
     };
   } finally {
     db.close();

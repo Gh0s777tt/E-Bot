@@ -22,8 +22,11 @@ export async function GET(request: Request): Promise<Response> {
   if (target.protocol !== 'https:' || !ALLOW.has(target.hostname)) {
     return new Response('forbidden host', { status: 403 });
   }
-  const upstream = await fetch(target.toString(), { headers: { 'User-Agent': 'BotDC-Dashboard/0.1' } });
-  if (!upstream.ok || !upstream.body) return new Response(`upstream ${upstream.status}`, { status: 502 });
+  const upstream = await fetch(target.toString(), {
+    headers: { 'User-Agent': 'BotDC-Dashboard/0.1' },
+  });
+  if (!upstream.ok || !upstream.body)
+    return new Response(`upstream ${upstream.status}`, { status: 502 });
   return new Response(upstream.body, {
     status: 200,
     headers: {

@@ -14,36 +14,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  dashboard:
-    name: Dashboard · typecheck
+  quality:
+    name: Lint · Typecheck · Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: dashboard
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: dashboard/package-lock.json
-      - run: npm ci
-      - name: TypeScript
-        run: npx tsc --noEmit
 
-  web:
-    name: Web · typecheck
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node 26
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: web/package-lock.json
-      - run: npm ci
-      - name: TypeScript
-        run: npx tsc --noEmit
+          node-version: 26
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (Biome)
+        run: pnpm exec biome ci dashboard web
+
+      - name: Typecheck (dashboard + web)
+        run: |
+          pnpm --filter bot-dc-dashboard exec tsc --noEmit
+          pnpm --filter bot-dc-web exec tsc --noEmit
+
+      - name: Build (dashboard + web)
+        run: |
+          pnpm --filter bot-dc-dashboard build
+          pnpm --filter bot-dc-web build

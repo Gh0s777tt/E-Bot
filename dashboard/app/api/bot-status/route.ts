@@ -23,7 +23,11 @@ export async function GET(): Promise<Response> {
     if (raw) {
       const d = JSON.parse(raw) as { online?: boolean; guilds?: number; tag?: string; ts?: number };
       const fresh = typeof d.ts === 'number' && Date.now() - d.ts < 120_000;
-      return Response.json({ online: fresh ? !!d.online : false, guilds: d.guilds ?? null, tag: d.tag ?? 'E-Bot' });
+      return Response.json({
+        online: fresh ? !!d.online : false,
+        guilds: d.guilds ?? null,
+        tag: d.tag ?? 'E-Bot',
+      });
     }
   } catch {
     /* brak heartbeatu */

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, type ChangeEvent } from 'react';
 import { UploadCloud } from 'lucide-react';
+import { type ChangeEvent, useState } from 'react';
 
 type Profile = { username: string; avatarUrl: string | null };
 
@@ -9,12 +9,15 @@ export default function BotCustomizeForm({ initial }: { initial: Profile | null 
   const [username, setUsername] = useState(initial?.username ?? '');
   const [preview, setPreview] = useState<string | null>(initial?.avatarUrl ?? null);
   const [avatarData, setAvatarData] = useState<string | null>(null);
-  const [status, setStatus] = useState<{ t: 'idle' | 'saving' | 'ok' | 'err'; m?: string }>({ t: 'idle' });
+  const [status, setStatus] = useState<{ t: 'idle' | 'saving' | 'ok' | 'err'; m?: string }>({
+    t: 'idle',
+  });
 
   if (!initial) {
     return (
       <p className="text-sm text-muted">
-        Personalizacja niedostępna — brak <code className="text-accent">DISCORD_BOT_TOKEN</code> w środowisku panelu.
+        Personalizacja niedostępna — brak <code className="text-accent">DISCORD_BOT_TOKEN</code> w
+        środowisku panelu.
       </p>
     );
   }
@@ -68,15 +71,26 @@ export default function BotCustomizeForm({ initial }: { initial: Profile | null 
       <div className="flex items-center gap-4">
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="" className="h-20 w-20 rounded-2xl border border-line object-cover" />
+          <img
+            src={preview}
+            alt=""
+            className="h-20 w-20 rounded-2xl border border-line object-cover"
+          />
         ) : (
-          <div className="grid h-20 w-20 place-items-center rounded-2xl bg-accent font-display text-3xl">E</div>
+          <div className="grid h-20 w-20 place-items-center rounded-2xl bg-accent font-display text-3xl">
+            E
+          </div>
         )}
         <label className="cursor-pointer rounded-md border border-line px-4 py-2 text-sm transition hover:bg-elevated">
           <span className="flex items-center gap-2">
             <UploadCloud size={15} /> Zmień avatar
           </span>
-          <input type="file" accept="image/png,image/jpeg,image/gif" onChange={onFile} className="hidden" />
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/gif"
+            onChange={onFile}
+            className="hidden"
+          />
         </label>
       </div>
 
@@ -88,7 +102,9 @@ export default function BotCustomizeForm({ initial }: { initial: Profile | null 
           maxLength={32}
           className="block w-full max-w-sm rounded-md border border-line bg-elevated px-3 py-2 outline-none focus:border-accent"
         />
-        <span className="block text-xs text-muted">2–32 znaki. Discord pozwala zmienić nazwę bota maks. 2×/godz.</span>
+        <span className="block text-xs text-muted">
+          2–32 znaki. Discord pozwala zmienić nazwę bota maks. 2×/godz.
+        </span>
       </label>
 
       <div className="flex items-center gap-4">

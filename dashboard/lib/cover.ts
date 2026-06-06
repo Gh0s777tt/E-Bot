@@ -18,8 +18,14 @@ export function coverFallbacks(g: Game): string[] {
   const list: string[] = [];
   if (g.cover_url) list.push(proxied(g.cover_url));
   if (g.platform === 'steam') {
-    list.push(proxied(`https://cdn.cloudflare.steamstatic.com/steam/apps/${g.platform_app_id}/library_600x900_2x.jpg`));
-    list.push(proxied(`https://cdn.cloudflare.steamstatic.com/steam/apps/${g.platform_app_id}/header.jpg`));
+    list.push(
+      proxied(
+        `https://cdn.cloudflare.steamstatic.com/steam/apps/${g.platform_app_id}/library_600x900_2x.jpg`,
+      ),
+    );
+    list.push(
+      proxied(`https://cdn.cloudflare.steamstatic.com/steam/apps/${g.platform_app_id}/header.jpg`),
+    );
   }
   list.push(PLACEHOLDER);
   return [...new Set(list)];

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
 import { NAV_ITEMS } from './nav-items';
 
 export default function MobileNav() {
@@ -23,12 +23,19 @@ export default function MobileNav() {
       {open && (
         <div className="fixed inset-0 z-[60] md:hidden" onClick={() => setOpen(false)}>
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-          <aside className="absolute inset-y-0 left-0 w-64 border-r border-line bg-surface p-4" onClick={(e) => e.stopPropagation()}>
+          <aside
+            className="absolute inset-y-0 left-0 w-64 border-r border-line bg-surface p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mb-5 flex items-center justify-between">
               <span className="font-display text-xl tracking-wide text-glow">
                 E-<span className="text-accent">BOT</span>
               </span>
-              <button onClick={() => setOpen(false)} aria-label="Zamknij" className="text-muted hover:text-white">
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Zamknij"
+                className="text-muted hover:text-white"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -41,7 +48,9 @@ export default function MobileNav() {
                     href={href}
                     onClick={() => setOpen(false)}
                     className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-semibold uppercase tracking-wide ${
-                      active ? 'bg-accent text-white' : 'text-muted hover:bg-elevated hover:text-white'
+                      active
+                        ? 'bg-accent text-white'
+                        : 'text-muted hover:bg-elevated hover:text-white'
                     }`}
                   >
                     <Icon size={16} />

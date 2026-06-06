@@ -1,5 +1,5 @@
-import { getGames } from '../../lib/data';
 import LibraryBrowser from '../../components/LibraryBrowser';
+import { getGames } from '../../lib/data';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,7 +8,8 @@ export default async function LibraryPage() {
   if (!games.length) {
     return (
       <p className="text-muted">
-        Brak gier. Uruchom <code className="text-accent">node ingest/sync.mts</code> w katalogu głównym.
+        Brak gier. Uruchom <code className="text-accent">node ingest/sync.mts</code> w katalogu
+        głównym.
       </p>
     );
   }

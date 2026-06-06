@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'motion/react';
+import { useState } from 'react';
+import { proxied, steamHero } from '../lib/cover';
 import type { Game } from '../lib/types';
-import { steamHero, proxied } from '../lib/cover';
 
 function hours(min: number): string {
   const h = min / 60;
@@ -14,7 +14,9 @@ export default function Hero({ game }: { game: Game }) {
   const [src, setSrc] = useState(steamHero(game));
   const headerFallback =
     game.platform === 'steam'
-      ? proxied(`https://cdn.cloudflare.steamstatic.com/steam/apps/${game.platform_app_id}/header.jpg`)
+      ? proxied(
+          `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.platform_app_id}/header.jpg`,
+        )
       : game.cover_url
         ? proxied(game.cover_url)
         : '';
@@ -38,14 +40,18 @@ export default function Hero({ game }: { game: Game }) {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="relative z-10 max-w-2xl px-4 pt-36 md:px-12 md:pt-44"
       >
-        <span className="text-sm font-semibold uppercase tracking-widest text-accent">Najczęściej grane</span>
+        <span className="text-sm font-semibold uppercase tracking-widest text-accent">
+          Najczęściej grane
+        </span>
         <h1 className="mt-2 text-4xl font-extrabold drop-shadow-lg md:text-6xl">{game.title}</h1>
         <p className="mt-3 text-sm text-white/80">
           {game.release_year ? `${game.release_year} · ` : ''}
           {game.genres.slice(0, 3).join(' · ')}
           {game.playtime_min ? ` · ${hours(game.playtime_min)} w grze` : ''}
         </p>
-        {game.summary && <p className="mt-3 line-clamp-3 max-w-xl text-sm text-white/70">{game.summary}</p>}
+        {game.summary && (
+          <p className="mt-3 line-clamp-3 max-w-xl text-sm text-white/70">{game.summary}</p>
+        )}
         <div className="mt-6 flex gap-3">
           <a
             href={game.platform === 'steam' ? `steam://run/${game.platform_app_id}` : '#'}

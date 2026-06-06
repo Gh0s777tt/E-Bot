@@ -1,7 +1,7 @@
 'use client';
 
+import { CheckCircle2, Plug, Save, XCircle } from 'lucide-react';
 import { useState } from 'react';
-import { CheckCircle2, XCircle, Plug, Save } from 'lucide-react';
 import type { Integration, IntegrationConfig } from '../lib/integrations';
 
 export default function IntegrationsManager({
@@ -42,7 +42,8 @@ export default function IntegrationsManager({
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-muted">
-          Status = czy klucz/konfiguracja jest w env (sekrety zostają w env). Przełącznik = włącz/wyłącz (zapis w bazie).
+          Status = czy klucz/konfiguracja jest w env (sekrety zostają w env). Przełącznik =
+          włącz/wyłącz (zapis w bazie).
         </p>
         <button
           onClick={save}

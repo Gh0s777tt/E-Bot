@@ -1,6 +1,6 @@
-import { DatabaseSync } from 'node:sqlite';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 import type { Game } from './types';
 
 // Szukamy bazy odpornie na katalog startowy serwera (web/, root, itd.).

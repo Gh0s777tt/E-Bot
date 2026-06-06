@@ -1,13 +1,21 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { Montserrat, Oswald } from 'next/font/google';
 import type { ReactNode } from 'react';
-import { Oswald, Montserrat } from 'next/font/google';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 import { botInviteUrl } from '../lib/invite';
 
-const display = Oswald({ subsets: ['latin', 'latin-ext'], weight: ['500', '600', '700'], variable: '--font-display' });
-const body = Montserrat({ subsets: ['latin', 'latin-ext'], weight: ['400', '600', '700'], variable: '--font-body' });
+const display = Oswald({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['500', '600', '700'],
+  variable: '--font-display',
+});
+const body = Montserrat({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '600', '700'],
+  variable: '--font-body',
+});
 
 export const metadata: Metadata = {
   title: 'E-Bot — Dashboard',

@@ -9,7 +9,9 @@ export default function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-line bg-surface md:flex">
       <div className="flex h-14 items-center gap-2 border-b border-line px-4">
-        <span className="grid h-7 w-7 place-items-center rounded-md bg-accent font-display text-sm shadow-glow-sm">E</span>
+        <span className="grid h-7 w-7 place-items-center rounded-md bg-accent font-display text-sm shadow-glow-sm">
+          E
+        </span>
         <span className="font-display text-xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>
         </span>

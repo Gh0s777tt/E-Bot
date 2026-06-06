@@ -1,4 +1,8 @@
-import { getIntegrationConfig, saveIntegrationConfig, type IntegrationConfig } from '../../../lib/integrations';
+import {
+  getIntegrationConfig,
+  type IntegrationConfig,
+  saveIntegrationConfig,
+} from '../../../lib/integrations';
 
 export const dynamic = 'force-dynamic';
 

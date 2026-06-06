@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import {
+  authConfig,
   exchangeCode,
   fetchDiscordUser,
-  isAllowed,
   getOrigin,
+  isAllowed,
   parseCookie,
-  authConfig,
   SESSION_COOKIE,
   STATE_COOKIE,
 } from '../../../../lib/auth';
@@ -32,7 +32,12 @@ export async function GET(request: Request) {
       ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
       : undefined;
     const token = await signSession(
-      { uid: user.id, uname: user.global_name || user.username, avatar, exp: Date.now() + 7 * 24 * 3600 * 1000 },
+      {
+        uid: user.id,
+        uname: user.global_name || user.username,
+        avatar,
+        exp: Date.now() + 7 * 24 * 3600 * 1000,
+      },
       authConfig().secret,
     );
     const res = NextResponse.redirect(`${origin}/`);

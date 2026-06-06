@@ -1,11 +1,16 @@
 'use client';
 
+import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Game } from '../lib/data';
 import GameCard from './GameCard';
-import { Search } from 'lucide-react';
 
-const PLATFORM_LABEL: Record<string, string> = { steam: 'Steam', psn: 'PlayStation', gog: 'GOG', ubisoft: 'Ubisoft' };
+const PLATFORM_LABEL: Record<string, string> = {
+  steam: 'Steam',
+  psn: 'PlayStation',
+  gog: 'GOG',
+  ubisoft: 'Ubisoft',
+};
 
 export default function LibraryBrowser({ games }: { games: Game[] }) {
   const [q, setQ] = useState('');
@@ -15,7 +20,9 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
   const platforms = useMemo(() => [...new Set(games.map((g) => g.platform))], [games]);
   const genres = useMemo(() => {
     const s = new Set<string>();
-    games.forEach((g) => g.genres.forEach((x) => s.add(x)));
+    for (const g of games) {
+      for (const x of g.genres) s.add(x);
+    }
     return [...s].sort();
   }, [games]);
 
@@ -45,7 +52,11 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
             className="w-full rounded-md border border-line bg-elevated py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
           />
         </div>
-        <select value={platform} onChange={(e) => setPlatform(e.target.value)} className={selectCls}>
+        <select
+          value={platform}
+          onChange={(e) => setPlatform(e.target.value)}
+          className={selectCls}
+        >
           <option value="all">Wszystkie platformy</option>
           {platforms.map((p) => (
             <option key={p} value={p}>

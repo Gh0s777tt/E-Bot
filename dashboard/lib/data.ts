@@ -82,7 +82,9 @@ async function gamesFromSqlite(): Promise<Game[]> {
   const db = await sqliteDb();
   if (!db) return [];
   try {
-    return (db.prepare('SELECT * FROM games ORDER BY playtime_min DESC').all() as any[]).map(rowToGame);
+    return (db.prepare('SELECT * FROM games ORDER BY playtime_min DESC').all() as any[]).map(
+      rowToGame,
+    );
   } finally {
     db.close();
   }
@@ -91,9 +93,12 @@ async function gamesFromSqlite(): Promise<Game[]> {
 export async function getGames(): Promise<Game[]> {
   if (hasSupabase) {
     try {
-      const { data, error } = await supabase().from('games').select('*').order('playtime_min', { ascending: false });
+      const { data, error } = await supabase()
+        .from('games')
+        .select('*')
+        .order('playtime_min', { ascending: false });
       if (error) throw new Error(error.message);
-      if (data && data.length) return data.map(rowToGame);
+      if (data?.length) return data.map(rowToGame);
       // brak danych w chmurze -> spróbuj lokalnie (przydatne przed seedem)
       const local = await gamesFromSqlite();
       return local.length ? local : [];
@@ -177,7 +182,9 @@ export async function saveSettings(input: Record<string, string>): Promise<void>
   if (!db) return;
   try {
     db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
-    const stmt = db.prepare('INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value');
+    const stmt = db.prepare(
+      'INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
+    );
     for (const [k, v] of entries) stmt.run(k, String(v));
   } finally {
     db.close();
@@ -188,7 +195,11 @@ export async function saveSettings(input: Record<string, string>): Promise<void>
 async function rawGet(key: string): Promise<string | null> {
   if (hasSupabase) {
     try {
-      const { data, error } = await supabase().from('settings').select('value').eq('key', key).maybeSingle();
+      const { data, error } = await supabase()
+        .from('settings')
+        .select('value')
+        .eq('key', key)
+        .maybeSingle();
       if (error) throw new Error(error.message);
       if (data) return data.value as string;
     } catch {
@@ -199,7 +210,9 @@ async function rawGet(key: string): Promise<string | null> {
   if (!db) return null;
   try {
     db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
-    const r = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as { value: string } | undefined;
+    const r = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as
+      | { value: string }
+      | undefined;
     return r?.value ?? null;
   } finally {
     db.close();
@@ -219,7 +232,9 @@ async function rawSet(key: string, value: string): Promise<void> {
   if (!db) return;
   try {
     db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
-    db.prepare('INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(key, value);
+    db.prepare(
+      'INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
+    ).run(key, value);
   } finally {
     db.close();
   }
@@ -245,8 +260,15 @@ export type AntinukeConfig = {
 };
 
 export const ANTINUKE_PROTECTIONS = [
-  'channelDelete', 'channelCreate', 'roleDelete', 'roleCreate',
-  'ban', 'kick', 'webhookCreate', 'webhookDelete', 'botAdd',
+  'channelDelete',
+  'channelCreate',
+  'roleDelete',
+  'roleCreate',
+  'ban',
+  'kick',
+  'webhookCreate',
+  'webhookDelete',
+  'botAdd',
 ] as const;
 
 export const ANTINUKE_DEFAULT: AntinukeConfig = {
@@ -279,7 +301,8 @@ function mergeAnti(stored: Partial<AntinukeConfig>): AntinukeConfig {
   base.whitelistRoles = stored.whitelistRoles ?? [];
   if (stored.protections) {
     for (const k of ANTINUKE_PROTECTIONS) {
-      if (stored.protections[k]) base.protections[k] = { ...base.protections[k], ...stored.protections[k] };
+      if (stored.protections[k])
+        base.protections[k] = { ...base.protections[k], ...stored.protections[k] };
     }
   }
   return base;

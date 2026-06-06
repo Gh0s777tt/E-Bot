@@ -1,7 +1,7 @@
 'use client';
 
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import type { Game } from '../lib/types';
 import CoverImg from './CoverImg';
 
@@ -37,7 +37,9 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
           >
             ✕
           </button>
-          <h2 className="absolute bottom-3 left-5 right-5 text-3xl font-extrabold drop-shadow">{game.title}</h2>
+          <h2 className="absolute bottom-3 left-5 right-5 text-3xl font-extrabold drop-shadow">
+            {game.title}
+          </h2>
         </div>
         <div className="space-y-4 p-5">
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
@@ -48,7 +50,10 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
           {game.genres.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {game.genres.map((g) => (
-                <span key={g} className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/80">
+                <span
+                  key={g}
+                  className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/80"
+                >
                   {g}
                 </span>
               ))}
@@ -63,7 +68,11 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
               ▶ Graj
             </a>
             <a
-              href={game.platform === 'steam' ? `https://store.steampowered.com/app/${game.platform_app_id}` : '#'}
+              href={
+                game.platform === 'steam'
+                  ? `https://store.steampowered.com/app/${game.platform_app_id}`
+                  : '#'
+              }
               target="_blank"
               rel="noreferrer"
               className="rounded bg-white/15 px-6 py-2 font-semibold text-white transition hover:bg-white/25"
@@ -98,7 +107,9 @@ export default function Card({ game }: { game: Game }) {
         </div>
       </motion.button>
 
-      <AnimatePresence>{open && <Modal game={game} onClose={() => setOpen(false)} />}</AnimatePresence>
+      <AnimatePresence>
+        {open && <Modal game={game} onClose={() => setOpen(false)} />}
+      </AnimatePresence>
     </>
   );
 }

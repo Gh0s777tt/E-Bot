@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { ShieldAlert } from 'lucide-react';
+import { useState } from 'react';
 
 type Protection = { enabled: boolean; count: number; windowSec: number };
 type Config = {
@@ -41,19 +41,28 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       aria-pressed={on}
       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? 'bg-accent' : 'bg-white/20'}`}
     >
-      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`} />
+      <span
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`}
+      />
     </button>
   );
 }
 
-const ids = (s: string) => s.split(/[\s,]+/).map((x) => x.trim()).filter(Boolean);
+const ids = (s: string) =>
+  s
+    .split(/[\s,]+/)
+    .map((x) => x.trim())
+    .filter(Boolean);
 
 export default function AntinukeForm({ initial }: { initial: Config }) {
   const [c, setC] = useState<Config>(initial);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   const setProt = (k: string, patch: Partial<Protection>) =>
-    setC((p) => ({ ...p, protections: { ...p.protections, [k]: { ...p.protections[k], ...patch } } }));
+    setC((p) => ({
+      ...p,
+      protections: { ...p.protections, [k]: { ...p.protections[k], ...patch } },
+    }));
 
   async function save() {
     setStatus('saving');
@@ -78,7 +87,9 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
           <Toggle on={c.enabled} onClick={() => setC((p) => ({ ...p, enabled: !p.enabled }))} />
           <div>
             <div className="font-semibold">System Anti-Nuke</div>
-            <div className="text-xs text-muted">{c.enabled ? 'Aktywny — chroni serwer' : 'Wyłączony'}</div>
+            <div className="text-xs text-muted">
+              {c.enabled ? 'Aktywny — chroni serwer' : 'Wyłączony'}
+            </div>
           </div>
         </div>
         <button
@@ -89,7 +100,9 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
           {status === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
         </button>
       </div>
-      {status === 'saved' && <p className="text-sm text-green-400">✓ Zapisano — bot zastosuje w ciągu ~15 s</p>}
+      {status === 'saved' && (
+        <p className="text-sm text-green-400">✓ Zapisano — bot zastosuje w ciągu ~15 s</p>
+      )}
       {status === 'error' && <p className="text-sm text-accent">Błąd zapisu</p>}
 
       {/* ogólne */}
@@ -107,11 +120,15 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
           <span className="font-semibold text-white/90">Kara</span>
           <select
             value={c.punishment}
-            onChange={(e) => setC((p) => ({ ...p, punishment: e.target.value as Config['punishment'] }))}
+            onChange={(e) =>
+              setC((p) => ({ ...p, punishment: e.target.value as Config['punishment'] }))
+            }
             className="w-full rounded-md border border-line bg-elevated px-3 py-2 outline-none focus:border-accent"
           >
             {PUNISHMENTS.map((p) => (
-              <option key={p.v} value={p.v}>{p.l}</option>
+              <option key={p.v} value={p.v}>
+                {p.l}
+              </option>
             ))}
           </select>
         </label>
@@ -131,7 +148,9 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
       {/* whitelist */}
       <div className="grid gap-4 md:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Whitelist — użytkownicy (ID, po przecinku)</span>
+          <span className="font-semibold text-white/90">
+            Whitelist — użytkownicy (ID, po przecinku)
+          </span>
           <input
             value={c.whitelistUsers.join(', ')}
             onChange={(e) => setC((p) => ({ ...p, whitelistUsers: ids(e.target.value) }))}
@@ -159,7 +178,10 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
           {Object.keys(PROT_LABELS).map((k) => {
             const p = c.protections[k] ?? { enabled: false, count: 3, windowSec: 10 };
             return (
-              <div key={k} className="flex flex-wrap items-center gap-3 rounded-md border border-line bg-bg/40 px-4 py-3">
+              <div
+                key={k}
+                className="flex flex-wrap items-center gap-3 rounded-md border border-line bg-bg/40 px-4 py-3"
+              >
                 <Toggle on={p.enabled} onClick={() => setProt(k, { enabled: !p.enabled })} />
                 <span className="min-w-[160px] flex-1 text-sm">{PROT_LABELS[k]}</span>
                 <label className="flex items-center gap-1 text-xs text-muted">

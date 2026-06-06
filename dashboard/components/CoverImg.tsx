@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import type { Game } from '../lib/data';
 import { coverFallbacks } from '../lib/cover';
+import type { Game } from '../lib/data';
 
 export default function CoverImg({ game, className }: { game: Game; className?: string }) {
   const srcs = coverFallbacks(game);

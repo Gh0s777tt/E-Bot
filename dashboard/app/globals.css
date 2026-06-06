@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* ── Motyw (Tailwind 4, CSS-first) ─────────────────────────
    Kolory akcentu wskazują na runtime'owe zmienne --accent-rgb
@@ -57,7 +57,7 @@ h2,
 
 /* Poświata tła w kolorze akcentu */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -87,7 +87,7 @@ body::before {
   overflow: hidden;
 }
 .panel-glow::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -30%;
   right: -12%;

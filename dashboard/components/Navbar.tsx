@@ -1,8 +1,17 @@
 'use client';
 
+import {
+  Gamepad2,
+  LayoutDashboard,
+  LogOut,
+  Plug,
+  Radio,
+  Settings,
+  ShieldAlert,
+  TerminalSquare,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Gamepad2, Radio, ShieldAlert, Plug, TerminalSquare, Settings, LogOut } from 'lucide-react';
 
 const items = [
   { href: '/', label: 'Przegląd', icon: LayoutDashboard },
@@ -28,7 +37,9 @@ export default function Navbar() {
             <span className="block font-display text-lg tracking-wide">
               E-<span className="text-accent">BOT</span>
             </span>
-            <span className="block text-[9px] uppercase tracking-[0.25em] text-muted">Panel sterowania</span>
+            <span className="block text-[9px] uppercase tracking-[0.25em] text-muted">
+              Panel sterowania
+            </span>
           </span>
         </Link>
 

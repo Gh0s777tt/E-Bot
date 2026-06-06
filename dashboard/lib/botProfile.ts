@@ -13,7 +13,9 @@ export async function getBotProfile(): Promise<BotProfile | null> {
     return {
       id: d.id,
       username: d.username,
-      avatarUrl: d.avatar ? `https://cdn.discordapp.com/avatars/${d.id}/${d.avatar}.png?size=128` : null,
+      avatarUrl: d.avatar
+        ? `https://cdn.discordapp.com/avatars/${d.id}/${d.avatar}.png?size=128`
+        : null,
     };
   } catch {
     return null;

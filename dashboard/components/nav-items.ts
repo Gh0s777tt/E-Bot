@@ -1,4 +1,15 @@
-import { LayoutDashboard, Gamepad2, Radio, Tv, ShieldAlert, Plug, TerminalSquare, Coins, User, Settings } from 'lucide-react';
+import {
+  Coins,
+  Gamepad2,
+  LayoutDashboard,
+  Plug,
+  Radio,
+  Settings,
+  ShieldAlert,
+  TerminalSquare,
+  Tv,
+  User,
+} from 'lucide-react';
 
 export const NAV_ITEMS = [
   { href: '/', label: 'Przegląd', icon: LayoutDashboard },

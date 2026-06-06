@@ -43,7 +43,10 @@ export function authorizeUrl(origin: string, state: string): string {
   return `https://discord.com/oauth2/authorize?${params.toString()}`;
 }
 
-export async function exchangeCode(origin: string, code: string): Promise<{ access_token: string }> {
+export async function exchangeCode(
+  origin: string,
+  code: string,
+): Promise<{ access_token: string }> {
   const c = authConfig();
   const body = new URLSearchParams({
     client_id: c.clientId,
@@ -64,9 +67,16 @@ export async function exchangeCode(origin: string, code: string): Promise<{ acce
 export async function fetchDiscordUser(
   accessToken: string,
 ): Promise<{ id: string; username: string; global_name?: string; avatar?: string | null }> {
-  const r = await fetch('https://discord.com/api/v10/users/@me', { headers: { Authorization: `Bearer ${accessToken}` } });
+  const r = await fetch('https://discord.com/api/v10/users/@me', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
   if (!r.ok) throw new Error(`user fetch ${r.status}`);
-  return (await r.json()) as { id: string; username: string; global_name?: string; avatar?: string | null };
+  return (await r.json()) as {
+    id: string;
+    username: string;
+    global_name?: string;
+    avatar?: string | null;
+  };
 }
 
 export function isAllowed(uid: string): boolean {

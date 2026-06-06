@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { LogOut, UserPlus } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import MobileNav from './MobileNav';
 
 const TITLES: Record<string, string> = {
@@ -39,13 +39,16 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
     };
   }, []);
 
-  const dot = status.online === true ? 'bg-green-500' : status.online === false ? 'bg-accent' : 'bg-muted';
+  const dot =
+    status.online === true ? 'bg-green-500' : status.online === false ? 'bg-accent' : 'bg-muted';
   const stateText = status.online === true ? 'online' : status.online === false ? 'offline' : '—';
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-bg/80 px-5 backdrop-blur md:px-8">
       <MobileNav />
-      <h1 className="font-display text-base font-semibold uppercase tracking-wide">{TITLES[pathname] ?? 'Dashboard'}</h1>
+      <h1 className="font-display text-base font-semibold uppercase tracking-wide">
+        {TITLES[pathname] ?? 'Dashboard'}
+      </h1>
       <div className="ml-auto flex items-center gap-2 text-xs">
         <span className="hidden items-center gap-1.5 rounded-md border border-line px-3 py-1 sm:flex">
           <span className={`h-2 w-2 rounded-full ${dot}`} />

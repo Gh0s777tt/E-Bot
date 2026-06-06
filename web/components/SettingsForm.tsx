@@ -26,7 +26,9 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       className={`relative h-6 w-11 rounded-full transition-colors ${on ? 'bg-accent' : 'bg-white/20'}`}
       aria-pressed={on}
     >
-      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`} />
+      <span
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`}
+      />
     </button>
   );
 }
@@ -57,7 +59,9 @@ export default function SettingsForm({ initial }: { initial: Settings }) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-white/90">ID kanału Discord (na ogłoszenia „live")</label>
+        <label className="block text-sm font-semibold text-white/90">
+          ID kanału Discord (na ogłoszenia „live")
+        </label>
         <input
           value={s.notify_channel_id}
           onChange={(e) => set('notify_channel_id', e.target.value)}
@@ -80,7 +84,10 @@ export default function SettingsForm({ initial }: { initial: Settings }) {
       <div className="space-y-3">
         <label className="block text-sm font-semibold text-white/90">Platformy</label>
         {PLATFORMS.map((p) => (
-          <div key={p.key} className="flex items-center justify-between rounded-md bg-surface px-4 py-3">
+          <div
+            key={p.key}
+            className="flex items-center justify-between rounded-md bg-surface px-4 py-3"
+          >
             <span className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: p.color }} />
               {p.label}
@@ -98,7 +105,9 @@ export default function SettingsForm({ initial }: { initial: Settings }) {
         >
           {status === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
         </button>
-        {status === 'saved' && <span className="text-sm text-green-400">✓ Zapisano — bot zastosuje od razu</span>}
+        {status === 'saved' && (
+          <span className="text-sm text-green-400">✓ Zapisano — bot zastosuje od razu</span>
+        )}
         {status === 'error' && <span className="text-sm text-accent">Błąd zapisu</span>}
       </div>
     </div>

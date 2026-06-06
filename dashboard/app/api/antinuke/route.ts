@@ -1,5 +1,5 @@
-import { getAntinuke, saveAntinuke, type AntinukeConfig } from '../../../lib/data';
-import { parseBody, antinukeSchema } from '../../../lib/schemas';
+import { type AntinukeConfig, getAntinuke, saveAntinuke } from '../../../lib/data';
+import { antinukeSchema, parseBody } from '../../../lib/schemas';
 
 export const dynamic = 'force-dynamic';
 

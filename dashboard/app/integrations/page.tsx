@@ -1,5 +1,5 @@
-import { getIntegrations, getIntegrationConfig } from '../../lib/integrations';
 import IntegrationsManager from '../../components/IntegrationsManager';
+import { getIntegrationConfig, getIntegrations } from '../../lib/integrations';
 
 export const dynamic = 'force-dynamic';
 

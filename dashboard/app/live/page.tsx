@@ -1,5 +1,5 @@
-import { getLiveStatuses } from '../../lib/live';
 import LiveBoard from '../../components/LiveBoard';
+import { getLiveStatuses } from '../../lib/live';
 
 export const dynamic = 'force-dynamic';
 

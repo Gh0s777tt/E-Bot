@@ -1,4 +1,4 @@
-import { saveSettings, getSettings } from '../../../lib/settings';
+import { getSettings, saveSettings } from '../../../lib/settings';
 
 export const dynamic = 'force-dynamic';
 
