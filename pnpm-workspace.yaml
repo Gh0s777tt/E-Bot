@@ -1,0 +1,7 @@
+packages:
+  - 'dashboard'
+  - 'web'
+  - 'bot'
+  - 'ingest'
+minimumReleaseAgeExclude:
+  - '@types/node@25.9.2'

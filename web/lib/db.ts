@@ -24,7 +24,7 @@ export function getGames(): Game[] {
     const rows = db.prepare('SELECT * FROM games ORDER BY playtime_min DESC').all();
     return rows.map((r) => ({
       ...r,
-      genres: r.genres ? (JSON.parse(r.genres) as string[]) : [],
+      genres: r.genres ? (JSON.parse(String(r.genres)) as string[]) : [],
     })) as Game[];
   } finally {
     db.close();

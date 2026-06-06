@@ -7,6 +7,6 @@
     "sync": "node sync.mts"
   },
   "dependencies": {
-    "psn-api": "^2.13.0"
+    "psn-api": "^2.18.0"
   }
 }
