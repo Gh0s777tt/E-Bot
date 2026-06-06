@@ -104,3 +104,61 @@ export async function getLoggingConfig(): Promise<LoggingConfig> {
 export async function saveLoggingConfig(cfg: LoggingConfig): Promise<void> {
   await setRawSetting('logging_config', JSON.stringify(cfg));
 }
+
+// ── Weryfikacja (Faza 7 / F6.3) ──
+export type VerificationConfig = {
+  enabled: boolean;
+  roleId: string;
+  message: string;
+  buttonLabel: string;
+};
+export const VERIFICATION_DEFAULT: VerificationConfig = {
+  enabled: false,
+  roleId: '',
+  message: 'Kliknij poniżej, aby się zweryfikować i uzyskać dostęp do serwera. ✅',
+  buttonLabel: 'Zweryfikuj się',
+};
+
+export async function getVerificationConfig(): Promise<VerificationConfig> {
+  const raw = await getRawSetting('verification_config');
+  if (!raw) return structuredClone(VERIFICATION_DEFAULT);
+  try {
+    return { ...VERIFICATION_DEFAULT, ...(JSON.parse(raw) as Partial<VerificationConfig>) };
+  } catch {
+    return structuredClone(VERIFICATION_DEFAULT);
+  }
+}
+export async function saveVerificationConfig(cfg: VerificationConfig): Promise<void> {
+  await setRawSetting('verification_config', JSON.stringify(cfg));
+}
+
+// ── Anti-raid (Faza 7 / F6.3) ──
+export type AntiRaidConfig = {
+  enabled: boolean;
+  joinCount: number;
+  windowSec: number;
+  action: 'kick' | 'ban' | 'timeout';
+  alertChannelId: string;
+  minAccountAgeDays: number;
+};
+export const ANTIRAID_DEFAULT: AntiRaidConfig = {
+  enabled: false,
+  joinCount: 8,
+  windowSec: 10,
+  action: 'kick',
+  alertChannelId: '',
+  minAccountAgeDays: 0,
+};
+
+export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {
+  const raw = await getRawSetting('antiraid_config');
+  if (!raw) return structuredClone(ANTIRAID_DEFAULT);
+  try {
+    return { ...ANTIRAID_DEFAULT, ...(JSON.parse(raw) as Partial<AntiRaidConfig>) };
+  } catch {
+    return structuredClone(ANTIRAID_DEFAULT);
+  }
+}
+export async function saveAntiRaidConfig(cfg: AntiRaidConfig): Promise<void> {
+  await setRawSetting('antiraid_config', JSON.stringify(cfg));
+}

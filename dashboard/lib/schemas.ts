@@ -175,6 +175,26 @@ export const loggingSchema = z.object({
 });
 export type LoggingInput = z.infer<typeof loggingSchema>;
 
+// ── Weryfikacja (POST /api/verification) ───────────────────
+export const verificationSchema = z.object({
+  enabled: z.boolean(),
+  roleId: z.string().max(40),
+  message: z.string().max(1000),
+  buttonLabel: z.string().max(80),
+});
+export type VerificationInput = z.infer<typeof verificationSchema>;
+
+// ── Anti-raid (POST /api/antiraid) ─────────────────────────
+export const antiraidSchema = z.object({
+  enabled: z.boolean(),
+  joinCount: z.number().int().min(2).max(100),
+  windowSec: z.number().int().min(1).max(300),
+  action: z.enum(['kick', 'ban', 'timeout']),
+  alertChannelId: z.string().max(40),
+  minAccountAgeDays: z.number().int().min(0).max(365),
+});
+export type AntiRaidInput = z.infer<typeof antiraidSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

@@ -29,6 +29,22 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'logging_config',
   },
+  {
+    key: 'verification',
+    label: 'Weryfikacja',
+    group: 'Moderacja',
+    href: '/security',
+    kind: 'json',
+    settingsKey: 'verification_config',
+  },
+  {
+    key: 'antiraid',
+    label: 'Anti-raid',
+    group: 'Moderacja',
+    href: '/security',
+    kind: 'json',
+    settingsKey: 'antiraid_config',
+  },
   // Społeczność
   {
     key: 'welcome',

@@ -87,7 +87,7 @@
 - [ ] **F6** — Bezpieczeństwo++ *(w toku)*
   - [x] **F6.1** — Kary + sprawy: `/mod kick|ban|tempban|unban|note`, `/case`, auto‑unban (`temp_bans`)
   - [x] **F6.2** — Logi serwera: zdarzenia (wiadomości/członkowie/bany/role/kanały/voice) → kanał, panel `/logging`
-  - [ ] F6.3 — Weryfikacja (gate‑przycisk) + anti‑raid (fala wejść → akcja)
+  - [x] **F6.3** — Weryfikacja (gate‑przycisk `/verifypanel` → rola) + anti‑raid (fala wejść → akcja, bramka wieku konta)
   - [ ] F6.4 — Modmail (DM ↔ wątek na serwerze)
 - [ ] **F7** — Społeczność (sugestie, custom commands/autoresponder, ankiety, urodziny, highlighty, AFK, liczniki kanałów)
 - [ ] **F8** — AI++ (czat z pamięcią, `/imagine`, `/tldr`, `/translate`, AI‑moderacja)

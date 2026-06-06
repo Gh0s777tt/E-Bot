@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-53-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.22.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-54-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.23.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.23.0] — Faza 7 / F6.3: weryfikacja + anti-raid
+
+- `[#054]` 🛡️ **Brama weryfikacji + anti-raid** (panel `/security`):
+  - **Weryfikacja (gate)** — `/verifypanel` publikuje wiadomość z przyciskiem „Zweryfikuj się" → kliknięcie nadaje konfigurowalną **rolę dostępu**. Konfig: rola, treść panelu, etykieta przycisku. **18 komend.**
+  - **Anti-raid** — detektor **fali wejść** (N wejść w oknie M s) → tryb obronny: akcja (`kick`/`ban`/`timeout`) na całą falę + kolejne wejścia (do ~max(okno, 30 s)) + alert na kanał. Opcjonalna **bramka min. wieku konta** (młodsze konta dostają akcję od razu, też poza falą).
+  - Bot: `security/verification.mts` (przycisk `verify:go`) + `commands/verifypanel.mts` + `security/antiraid.mts` (`startAntiRaid`); `index.mts` routuje przyciski `verify:` i startuje anti-raid. **Bez nowych intencji ani SQL** (config w `settings`). Panel: `lib/community.ts` (VerificationConfig + AntiRaidConfig) + 2 schematy Zod + `/api/verification` + `/api/antiraid` + `VerificationForm` + `AntiRaidForm` + sekcje na `/security` + 2 moduły w Centrum sterowania.
 
 ## [0.22.0] — Faza 7 / F6.2: logi serwera
 

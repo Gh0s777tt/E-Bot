@@ -20,8 +20,10 @@ import { startLeveling } from './leveling.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
+import { startAntiRaid } from './security/antiraid.mts';
 import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
+import { handleVerifyButton } from './security/verification.mts';
 import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
 import { startWelcome } from './welcome.mts';
 
@@ -89,6 +91,7 @@ client.once(Events.ClientReady, (c) => {
   startAntiNuke(c);
   startModeration(c); // Faza 7 / F6 — auto-unban tempbanów (poll Supabase)
   startServerLog(c); // Faza 7 / F6.2 — logi serwera (zdarzenia → kanał, config z panelu)
+  startAntiRaid(c); // Faza 7 / F6.3 — anti-raid (fala wejść → akcja, config z panelu)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence
@@ -115,9 +118,12 @@ client.once(Events.ClientReady, (c) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isButton()) {
-    const h = interaction.customId.startsWith('ticket:')
+    const id = interaction.customId;
+    const h = id.startsWith('ticket:')
       ? handleTicketButton(interaction)
-      : handleButton(interaction);
+      : id.startsWith('verify:')
+        ? handleVerifyButton(interaction)
+        : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }
