@@ -1,18 +1,14 @@
-node_modules
+# Docker build context — wykluczamy ciężkie/sekrety, ALE zostawiamy wszystkie package.json
+# i kod (Dockerfile i tak kopiuje tylko to, czego potrzebuje → obraz pozostaje mały).
 **/node_modules
-.next
 **/.next
-dist
 **/dist
-data
-*.db
+.git
+.vercel
 .env
 .env.*
-.git
-.github
-docs
-web
-dashboard/app
-dashboard/components
-coverage
+!.env.example
+data/*.db
+data/cache
 *.log
+coverage
