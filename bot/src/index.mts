@@ -1,5 +1,6 @@
 import { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials } from 'discord.js';
 import { startAutomod } from './automod.mts';
+import { notifyError } from './cloud/alerts.mts';
 import { startHeartbeat } from './cloud/heartbeat.mts';
 import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
@@ -51,6 +52,16 @@ const intents = [
 const client = new Client({
   intents,
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+});
+
+// Faza 6 / B7 — globalne handlery błędów: log + alert na Discord (throttling), bez wywracania procesu.
+process.on('unhandledRejection', (reason) => {
+  console.error('unhandledRejection:', reason);
+  void notifyError(client, 'unhandledRejection', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException:', err);
+  void notifyError(client, 'uncaughtException', err);
 });
 
 // GT-earning listeners — registered only when the economy is enabled (no-op otherwise).

@@ -40,6 +40,9 @@ jobs:
           pnpm --filter bot-dc-dashboard exec tsc --noEmit
           pnpm --filter bot-dc-web exec tsc --noEmit
 
+      - name: Testy jednostkowe (Vitest)
+        run: pnpm exec vitest run
+
       - name: Build (dashboard + web)
         run: |
           pnpm --filter bot-dc-dashboard build

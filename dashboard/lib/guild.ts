@@ -32,7 +32,12 @@ export const getPrimaryGuildId = cache(async (): Promise<string> => {
   }
 });
 
+// Cache TTL w pamięci (60 s) — React cache() dedupuje tylko w obrębie jednego renderu;
+// to ogranicza realne wywołania Discord API między żądaniami (lekki odpowiednik Redisa).
+let memo: { at: number; data: GuildMeta } | null = null;
+
 export const getGuildMeta = cache(async (): Promise<GuildMeta> => {
+  if (memo && Date.now() - memo.at < 60_000) return memo.data;
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) return EMPTY;
   try {
@@ -59,7 +64,9 @@ export const getGuildMeta = cache(async (): Promise<GuildMeta> => {
       .map((c) => ({ id: c.id, name: c.name, type: c.type, position: c.position }))
       .sort((a, b) => a.position - b.position);
 
-    return { ok: true, roles, channels };
+    const data: GuildMeta = { ok: true, roles, channels };
+    memo = { at: Date.now(), data }; // cache tylko sukces (błąd → ponów następnym razem)
+    return data;
   } catch {
     return EMPTY; // brak tokenu / błąd API → formularze pokażą pola tekstowe (fallback na ID)
   }

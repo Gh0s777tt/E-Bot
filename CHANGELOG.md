@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-45-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.14.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-46-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.15.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.15.0] — Faza 6 / B7: infra + jakość (finał „zrób wszystko")
+
+- `[#046]` 🛡️ **Stabilność i jakość:**
+  - **Testy jednostkowe (Vitest)** — `vitest.config.ts` + 11 testów (parser czasu bota, schematy Zod). Skrypt `pnpm test` + krok w CI (GitHub Actions).
+  - **Alert „bot down"** — `/api/health` (publiczny healthcheck 200/503) + **Vercel Cron** `/api/health/check` co 5 min → przy zmianie stanu pulsu wysyła na Discord „⚠️ offline / ✅ online" (dedup w `bot_alert_state`, opcjonalny `CRON_SECRET`).
+  - **Globalne handlery błędów bota** — `process.on('unhandledRejection'|'uncaughtException')` → log + alert na Discord (`cloud/alerts.mts`, throttling 1/min, kanał `alert_channel_id`/`notify_channel_id`).
+  - **Cache TTL serwera** (60 s) w `lib/guild.ts` — mniej wywołań Discord API (lekki odpowiednik Redisa).
+  - **Live status** — pasek panelu (Topbar) już odświeża status bota pollingiem co 30 s.
+  - ℹ️ Sentry/Redis/Realtime: wpięte lekkie odpowiedniki bez zewnętrznych usług (DSN/instancja) — gotowe do podmiany, gdy dojdą.
 
 ## [0.14.0] — Faza 6 / B6: biblioteka + lista życzeń
 
