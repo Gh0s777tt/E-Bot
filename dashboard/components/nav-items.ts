@@ -1,4 +1,4 @@
-import { LayoutDashboard, Gamepad2, Radio, Tv, ShieldAlert, Plug, TerminalSquare, User, Settings } from 'lucide-react';
+import { LayoutDashboard, Gamepad2, Radio, Tv, ShieldAlert, Plug, TerminalSquare, Coins, User, Settings } from 'lucide-react';
 
 export const NAV_ITEMS = [
   { href: '/', label: 'Przegląd', icon: LayoutDashboard },
@@ -8,6 +8,7 @@ export const NAV_ITEMS = [
   { href: '/security', label: 'Bezpieczeństwo', icon: ShieldAlert },
   { href: '/integrations', label: 'Integracje', icon: Plug },
   { href: '/commands', label: 'Komendy', icon: TerminalSquare },
+  { href: '/economy', label: 'Ekonomia', icon: Coins },
   { href: '/profile', label: 'Profil', icon: User },
   { href: '/settings', label: 'Ustawienia', icon: Settings },
 ];

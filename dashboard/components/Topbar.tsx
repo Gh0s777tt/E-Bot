@@ -13,6 +13,7 @@ const TITLES: Record<string, string> = {
   '/security': 'Bezpieczeństwo (Anti-Nuke)',
   '/integrations': 'Integracje',
   '/commands': 'Komendy',
+  '/economy': 'Ekonomia GH0ST',
   '/profile': 'Profil',
   '/settings': 'Ustawienia',
 };
