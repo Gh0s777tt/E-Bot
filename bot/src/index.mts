@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Events, Collection, MessageFlags } from 'discord.js';
+import { Client, GatewayIntentBits, Events, Collection, MessageFlags, Partials } from 'discord.js';
 import { loadEnv } from './env.mts';
 import { commands, type Command } from './commands/index.mts';
 import { startNotifier } from './live/notifier.mts';
@@ -11,6 +11,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startLeveling } from './leveling.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
+import { startReactionRoles } from './reaction-roles.mts';
 
 loadEnv();
 
@@ -34,6 +35,7 @@ const intents = [
   GatewayIntentBits.GuildModeration,
   GatewayIntentBits.GuildMessages,
   GatewayIntentBits.GuildVoiceStates,
+  GatewayIntentBits.GuildMessageReactions,
 ];
 if (economyOn) {
   intents.push(
@@ -41,7 +43,10 @@ if (economyOn) {
     GatewayIntentBits.GuildMembers,      // PRIVILEGED — enable in Dev Portal
   );
 }
-const client = new Client({ intents });
+const client = new Client({
+  intents,
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+});
 
 // GT-earning listeners — registered only when the economy is enabled (no-op otherwise).
 if (economyOn) {
@@ -67,6 +72,7 @@ client.once(Events.ClientReady, (c) => {
   startSettingsSync();     // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
   startLeveling(c);        // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
   startTicketSync(c);      // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
+  startReactionRoles(c);   // Faza 4 — role za reakcje (config z panelu)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log('   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' + (process.env.GHOST_API_URL || 'default') + ')');

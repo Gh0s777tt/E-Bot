@@ -72,6 +72,20 @@ export const aiConfigSchema = z.object({
 });
 export type AiConfigInput = z.infer<typeof aiConfigSchema>;
 
+// ── Reaction roles (POST /api/reaction-roles) ──────────────
+export const reactionRolesSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        messageId: z.string().max(40),
+        emoji: z.string().min(1).max(100),
+        roleId: z.string().max(40),
+      }),
+    )
+    .max(100),
+});
+export type ReactionRolesInput = z.infer<typeof reactionRolesSchema>;
+
 // Pomocnik: czyta JSON z requestu i waliduje; zwraca dane lub komunikat błędu.
 export async function parseBody<T>(
   request: Request,

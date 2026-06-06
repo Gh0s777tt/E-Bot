@@ -55,7 +55,7 @@
 > 📋 Szczegółowy plan (architektura, model danych, podział bot↔panel): [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
 - [x] Tickety — panel (config + lista) **+ bot** (`/ticket otwórz/zamknij`, prywatne wątki → Supabase)
 - [x] Leveling / XP — panel (config + ranking) **+ bot** (XP czat/voice, awanse, role‑nagrody → Supabase)
-- [ ] Reaction roles z edytora w panelu
+- [x] Reaction roles — panel `/roles` + bot (role za reakcje, `GuildMessageReactions`)
 - [x] Komendy AI — `/ai` (DeepSeek/OpenAI) z twardym dziennym limitem (panel `/ai` + `ai_usage`)
 - [ ] Webhooki EventSub (zamiast pollingu) przez Cloudflare Tunnel
 - [ ] Statystyki/retencja + marketplace pluginów

@@ -196,3 +196,22 @@ export async function getAiUsageToday(): Promise<{
     return empty;
   }
 }
+
+// ───────────────────────── 🧩 Reaction roles ─────────────────────────
+// Config w settings (JSON) — bez nowej tabeli. Bot czyta zsynchronizowane settings i nadaje role.
+export type ReactionRole = { messageId: string; emoji: string; roleId: string };
+
+export async function getReactionRoles(): Promise<ReactionRole[]> {
+  const raw = await getRawSetting('reaction_roles');
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw) as unknown;
+    return Array.isArray(arr) ? (arr as ReactionRole[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveReactionRoles(list: ReactionRole[]): Promise<void> {
+  await setRawSetting('reaction_roles', JSON.stringify(list));
+}
