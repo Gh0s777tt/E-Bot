@@ -20,12 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Init CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
           queries: security-and-quality
       - name: Analyze
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           # Upload wyników do Code Scanning (zakładka Security) wymaga GitHub Advanced Security,
           # niedostępnego na repo prywatnym w planie Pro — bez tego upload zwraca błąd
