@@ -1,11 +1,13 @@
 import { activeSource, getStats } from '../../lib/data';
 import { hasSupabase } from '../../lib/supabase';
-import { Server, Cloud } from 'lucide-react';
+import { getBotProfile } from '../../lib/botProfile';
+import BotCustomizeForm from '../../components/BotCustomizeForm';
+import { Server, Cloud, Bot } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function SettingsPage() {
-  const [src, stats] = await Promise.all([activeSource(), getStats()]);
+  const [src, stats, botProfile] = await Promise.all([activeSource(), getStats(), getBotProfile()]);
 
   const rows: { label: string; value: string }[] = [
     { label: 'Aktywne źródło danych', value: src === 'supabase' ? 'Supabase (chmura)' : src === 'sqlite' ? 'SQLite (lokalnie)' : 'brak' },
@@ -16,6 +18,13 @@ export default async function SettingsPage() {
 
   return (
     <div className="max-w-2xl space-y-6">
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Bot size={16} className="text-accent" /> Personalizacja bota
+        </h2>
+        <BotCustomizeForm initial={botProfile} />
+      </section>
+
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Server size={16} className="text-accent" /> System
