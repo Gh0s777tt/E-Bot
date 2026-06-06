@@ -1,0 +1,21 @@
+# Normalizacja końców linii (eliminuje ostrzeżenia LF/CRLF)
+* text=auto eol=lf
+
+# Pliki binarne — bez diffów/konwersji
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.woff  binary
+*.woff2 binary
+*.db   binary
+
+# Pliki generowane — zwiń w diffach i statystykach języka
+package-lock.json -diff linguist-generated
+**/package-lock.json -diff linguist-generated
+
+# Dokumentacja / dane — klasyfikacja linguist
+*.md  linguist-documentation
+*.sql linguist-language=SQL

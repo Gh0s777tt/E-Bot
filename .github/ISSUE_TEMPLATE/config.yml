@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Wiki / Dokumentacja
+    url: https://github.com/Gh0s777tt/E-Bot/wiki
+    about: Najpierw sprawdź wiki i docs/.
+  - name: 🔐 Zgłoszenie podatności (prywatne)
+    url: https://github.com/Gh0s777tt/E-Bot/security/advisories/new
+    about: Nie zgłaszaj podatności w publicznych issue.

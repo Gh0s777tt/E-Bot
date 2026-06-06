@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /dashboard
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels: ['dependencies', 'dashboard']
+  - package-ecosystem: npm
+    directory: /bot
+    schedule:
+      interval: weekly
+    labels: ['dependencies', 'bot']
+  - package-ecosystem: npm
+    directory: /ingest
+    schedule:
+      interval: weekly
+    labels: ['dependencies', 'ingest']
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: weekly
+    labels: ['dependencies', 'web']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels: ['ci']

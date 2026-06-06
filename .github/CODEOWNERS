@@ -1,0 +1,9 @@
+# Właściciel całego repo — wymagany jako reviewer dla chronionych ścieżek.
+* @Gh0s777tt
+
+# Krytyczne obszary
+/.github/      @Gh0s777tt
+/bot/          @Gh0s777tt
+/dashboard/    @Gh0s777tt
+/docs/         @Gh0s777tt
+LICENSE        @Gh0s777tt
