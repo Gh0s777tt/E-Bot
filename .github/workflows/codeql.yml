@@ -9,7 +9,7 @@ on:
     - cron: '0 6 * * 1' # poniedziałek 06:00 UTC
 
 permissions:
-  actions: read # wymagane na repo prywatnym: CodeQL czyta dane przebiegu (get-a-workflow-run) przy uploadzie SARIF
+  actions: read # repo prywatne: pozwala CodeQL czytać dane przebiegu (get-a-workflow-run); bez tego "Resource not accessible by integration"
   contents: read
   security-events: write
 
@@ -26,3 +26,17 @@ jobs:
           queries: security-and-quality
       - name: Analyze
         uses: github/codeql-action/analyze@v3
+        with:
+          # Upload wyników do Code Scanning (zakładka Security) wymaga GitHub Advanced Security,
+          # niedostępnego na repo prywatnym w planie Pro — bez tego upload zwraca błąd
+          # "Code scanning is not enabled for this repository" i wywala cały job.
+          # Dlatego nie wysyłamy SARIF do GitHuba, tylko zapisujemy go jako artefakt (krok niżej).
+          # Po przejściu repo na public LUB włączeniu Code Scanning zmień na: always
+          upload: never
+          output: codeql-results
+      - name: Wyniki CodeQL (SARIF) jako artefakt
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-sarif
+          path: codeql-results
+          if-no-files-found: warn
