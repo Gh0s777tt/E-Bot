@@ -1,18 +1,23 @@
 // Faza 6 — config powitań/autorole + automod (w tabeli settings, bez nowej tabeli).
+import { type CardStyle, RANKCARD_DEFAULT } from './cardStyle';
 import { getRawSetting, setRawSetting } from './data';
 
-// ── Powitania + autorole ──
+// ── Powitania + autorole (+ baner-grafika Faza 7/F2) ──
 export type WelcomeConfig = {
   enabled: boolean;
   channelId: string;
   message: string;
   autoroleId: string;
+  cardEnabled: boolean;
+  card: CardStyle;
 };
 export const WELCOME_DEFAULT: WelcomeConfig = {
   enabled: false,
   channelId: '',
   message: 'Witaj {user} na serwerze GH0ST EMPIRE! 💀 Miłej zabawy!',
   autoroleId: '',
+  cardEnabled: false,
+  card: { ...RANKCARD_DEFAULT },
 };
 
 export async function getWelcomeConfig(): Promise<WelcomeConfig> {

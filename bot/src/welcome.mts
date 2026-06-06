@@ -1,14 +1,22 @@
-// Powitania + autorole (Faza 6). Config z panelu (settings 'welcome_config', synchronizowane).
-import { type Client, EmbedBuilder, Events, type GuildMember } from "discord.js";
-import { getSettings } from "./lib/db.mts";
+// Powitania + autorole (Faza 6) + baner-grafika (Faza 7/F2). Config z panelu ('welcome_config').
+import { AttachmentBuilder, type Client, EmbedBuilder, Events, type GuildMember } from 'discord.js';
+import { type CardStyle, renderWelcomeBanner } from './lib/cards.mts';
+import { getSettings } from './lib/db.mts';
 
-type WelcomeConfig = { enabled: boolean; channelId: string; message: string; autoroleId: string };
-let cfg: WelcomeConfig = { enabled: false, channelId: "", message: "", autoroleId: "" };
+type WelcomeConfig = {
+  enabled: boolean;
+  channelId: string;
+  message: string;
+  autoroleId: string;
+  cardEnabled?: boolean;
+  card?: Partial<CardStyle>;
+};
+let cfg: WelcomeConfig = { enabled: false, channelId: '', message: '', autoroleId: '' };
 
 function refresh(): void {
-  const raw = getSettings()["welcome_config"];
+  const raw = getSettings()['welcome_config'];
   if (!raw) {
-    cfg = { enabled: false, channelId: "", message: "", autoroleId: "" };
+    cfg = { enabled: false, channelId: '', message: '', autoroleId: '' };
     return;
   }
   try {
@@ -28,19 +36,43 @@ export function startWelcome(client: Client): void {
       if (cfg.autoroleId) await member.roles.add(cfg.autoroleId).catch(() => {});
       if (cfg.channelId && cfg.message) {
         const ch = await member.guild.channels.fetch(cfg.channelId).catch(() => null);
-        if (ch?.isTextBased() && "send" in ch) {
-          const text = cfg.message.replaceAll("{user}", `<@${member.id}>`);
+        if (ch?.isTextBased() && 'send' in ch) {
+          const text = cfg.message.replaceAll('{user}', `<@${member.id}>`);
           const embed = new EmbedBuilder()
             .setColor(0xe50914)
             .setDescription(text)
             .setThumbnail(member.user.displayAvatarURL());
+
+          // Baner-grafika (Faza 7/F2): gradient + czcionka z panelu
+          if (cfg.cardEnabled) {
+            try {
+              const buf = await renderWelcomeBanner({
+                username: member.user.username,
+                avatarUrl: member.user.displayAvatarURL({ extension: 'png', size: 256 }),
+                text:
+                  cfg.message.replaceAll('{user}', member.user.username).slice(0, 50) || 'Witaj!',
+                style: cfg.card,
+              });
+              embed.setImage('attachment://welcome.png');
+              await ch
+                .send({
+                  content: `<@${member.id}>`,
+                  embeds: [embed],
+                  files: [new AttachmentBuilder(buf, { name: 'welcome.png' })],
+                })
+                .catch(() => {});
+              return;
+            } catch (e) {
+              console.warn('[welcome] baner:', (e as Error).message);
+            }
+          }
           await ch.send({ content: `<@${member.id}>`, embeds: [embed] }).catch(() => {});
         }
       }
     } catch (e) {
-      console.warn("[welcome]", (e as Error).message);
+      console.warn('[welcome]', (e as Error).message);
     }
   });
 
-  console.log("[welcome] aktywny (powitania + autorole; config z panelu).");
+  console.log('[welcome] aktywny (powitania + autorole; config z panelu).');
 }

@@ -8,6 +8,7 @@ import * as link from './link.mts';
 import * as mod from './mod.mts';
 import * as ping from './ping.mts';
 import * as portal from './portal.mts';
+import * as rank from './rank.mts';
 import * as remind from './remind.mts';
 import * as ticket from './ticket.mts';
 import * as wishlist from './wishlist.mts';
@@ -30,4 +31,5 @@ export const commands: Command[] = [
   giveaway,
   buttonpanel,
   wishlist,
+  rank,
 ];

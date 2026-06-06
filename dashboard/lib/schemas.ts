@@ -86,12 +86,24 @@ export const reactionRolesSchema = z.object({
 });
 export type ReactionRolesInput = z.infer<typeof reactionRolesSchema>;
 
+// ── Styl kart/banerów (Faza 7/F2) ──────────────────────────
+export const cardStyleSchema = z.object({
+  from: z.string().max(20),
+  to: z.string().max(20),
+  angle: z.number().int().min(0).max(360),
+  font: z.string().max(40),
+  textColor: z.string().max(20),
+});
+export type CardStyleInput = z.infer<typeof cardStyleSchema>;
+
 // ── Powitania (POST /api/welcome) ──────────────────────────
 export const welcomeSchema = z.object({
   enabled: z.boolean(),
   channelId: z.string().max(40),
   message: z.string().max(1000),
   autoroleId: z.string().max(40),
+  cardEnabled: z.boolean().optional().default(false),
+  card: cardStyleSchema.optional(),
 });
 export type WelcomeInput = z.infer<typeof welcomeSchema>;
 

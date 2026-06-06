@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-47-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.16.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-48-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.17.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.17.0] — Faza 7 / F2: karty rang + grafiki (gradienty + czcionki)
+
+- `[#048]` 🖼️ **Prawdziwe gradienty i czcionki w obrazach** (`@napi-rs/canvas`):
+  - **`/rank`** — karta rangi jako obrazek (avatar, poziom, miejsce #, pasek XP) z konfigurowalnym **gradientem**, **czcionką** (5 rodzin: Poppins/Anton/Bebas Neue/Pacifico/Lobster) i kolorem; ranking liczony z `user_levels`. 13 komend.
+  - **Baner powitalny** — opcjonalna grafika w Powitaniach (avatar + tekst na gradiencie) — toggle + styl w `/welcome`.
+  - **Panel `/appearance`** — edytor wyglądu karty z **live‑preview** (prawdziwe webfonty), `GradientField`/`ColorField` z F1 w użyciu.
+  - Bot: `bot/src/lib/cards.mts` (renderRankCard/renderWelcomeBanner; czcionki w `bot/assets/fonts/`); Dockerfile kopiuje fonty, canvas instaluje binarkę linux. Panel: `lib/cardStyle.ts` (client-safe) + `lib/appearance.ts` + `cardStyleSchema` + `CardStyleEditor`/`RankCardForm` + nav „Wygląd grafik".
 
 ## [0.16.0] — Faza 7 / F1: fundament personalizacji + Centrum sterowania
 

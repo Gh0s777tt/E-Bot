@@ -1,11 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { type CardStyle, RANKCARD_DEFAULT } from '../lib/cardStyle';
 import type { GuildMeta } from '../lib/guild';
+import CardStyleEditor from './CardStyleEditor';
 import MessageEditor from './MessageEditor';
 import { ChannelSelect, RoleSelect } from './pickers';
 
-type Cfg = { enabled: boolean; channelId: string; message: string; autoroleId: string };
+type Cfg = {
+  enabled: boolean;
+  channelId: string;
+  message: string;
+  autoroleId: string;
+  cardEnabled: boolean;
+  card: CardStyle;
+};
 
 export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
   const [c, setC] = useState<Cfg>(initial);
@@ -69,6 +78,25 @@ export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: G
             { token: '{user}', label: 'Nowy członek (oznaczenie)', sample: '@NowyGracz' },
           ]}
         />
+      </div>
+
+      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.cardEnabled}
+            onChange={(e) => setC({ ...c, cardEnabled: e.target.checked })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">Baner powitalny (grafika)</span>
+        </label>
+        {c.cardEnabled && (
+          <CardStyleEditor
+            value={c.card ?? RANKCARD_DEFAULT}
+            onChange={(card) => setC({ ...c, card })}
+            previewText="Witaj!"
+          />
+        )}
       </div>
 
       <div className="flex items-center gap-3">
