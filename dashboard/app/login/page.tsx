@@ -15,6 +15,14 @@ export default async function LoginPage({
   const err = sp?.e ? ERRORS[sp.e] : null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-bg px-4">
+      {/* baner GH0ST jako tło */}
+      <img
+        src="/ghost-banner.jpg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-25"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-bg/70" />
       {/* poświaty GH0ST EMPIRE */}
       <div
         className="pointer-events-none absolute -top-48 left-1/2 h-[70vh] w-[90vw] -translate-x-1/2 rounded-full"
@@ -31,9 +39,11 @@ export default async function LoginPage({
       />
 
       <div className="relative w-full max-w-sm rounded-2xl border border-accent/30 bg-card/80 p-8 text-center shadow-glow backdrop-blur-md">
-        <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-accent font-display text-3xl shadow-glow">
-          E
-        </div>
+        <img
+          src="/ghost-skull.png"
+          alt="GH0ST"
+          className="mx-auto mb-5 h-20 w-20 object-contain drop-shadow-[0_0_18px_rgb(var(--accent-rgb)/0.5)]"
+        />
         <h1 className="font-display text-4xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>
         </h1>

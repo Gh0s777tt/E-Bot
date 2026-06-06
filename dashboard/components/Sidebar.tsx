@@ -9,9 +9,12 @@ export default function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-line bg-surface md:flex">
       <div className="flex h-14 items-center gap-2 border-b border-line px-4">
-        <span className="grid h-7 w-7 place-items-center rounded-md bg-accent font-display text-sm shadow-glow-sm">
-          E
-        </span>
+        {/* znak marki GH0ST */}
+        <img
+          src="/ghost-skull.png"
+          alt="GH0ST"
+          className="h-7 w-7 object-contain drop-shadow-[0_0_8px_rgb(var(--accent-rgb)/0.55)]"
+        />
         <span className="font-display text-xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>
         </span>
@@ -33,7 +36,7 @@ export default function Sidebar() {
           );
         })}
       </nav>
-      <div className="border-t border-line p-4 text-[11px] text-muted/60">v0.1 · GH0ST style</div>
+      <div className="border-t border-line p-4 text-[11px] text-muted/60">v0.7 · GH0ST EMPIRE</div>
     </aside>
   );
 }
