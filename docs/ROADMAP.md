@@ -2,8 +2,8 @@
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
 
-![Faza](https://img.shields.io/badge/aktualna_faza-3-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Postęp](https://img.shields.io/badge/fazy_0–2-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Faza](https://img.shields.io/badge/fazy_0–4-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 
 </div>
 
@@ -38,11 +38,16 @@ gantt
   Heartbeat bota → Supabase    :done, f3a, 2026-06-06, 1d
   Presence apply (status z panelu) :done, f3b, 2026-06-06, 1d
   Sync whitelisty/configu      :done, f3c, 2026-06-06, 1d
-  section Faza 4 · Wzrost
-  Tickety                      :     f4a, 2026-06-13, 5d
-  Leveling + XP                :     f4b, after f4a, 5d
-  Komendy AI (limit kosztów)   :     f4c, after f4b, 5d
-  Marketplace / efekt sieciowy :     f4d, after f4c, 7d
+  section Faza 4 · Funkcje społeczności
+  Leveling + role-nagrody      :done, f4a, 2026-06-06, 1d
+  Tickety (dwukierunkowo)      :done, f4b, 2026-06-06, 1d
+  Komendy AI (limit kosztów)   :done, f4c, 2026-06-06, 1d
+  Reaction roles               :done, f4d, 2026-06-06, 1d
+  Bot 24/7 (Railway)           :done, f4e, 2026-06-06, 1d
+  section Faza 5 · Wzrost (plan)
+  EventSub (webhooki live)     :     f5a, 2026-06-13, 5d
+  Statystyki / retencja        :     f5b, after f5a, 5d
+  Marketplace pluginów         :     f5c, after f5b, 7d
 ```
 
 ## 🧭 Fazy
@@ -52,29 +57,29 @@ gantt
 | **0** | Fundamenty: ingest, web, rdzeń bota, szkielet panelu | ✅ done |
 | **1** | OAuth, Anti‑Nuke, chmura (Supabase + Vercel), `/link` | ✅ done |
 | **2** | Pełny panel GH0ST: live, ekonomia, personalizacja, motywy | ✅ done |
-| **3** | Integracja bot↔chmura: heartbeat, presence apply, sync configu | 🟢 core ✓ |
-| **4** | Wzrost: tickety, leveling, komendy AI, marketplace | 🧭 plan |
+| **3** | Integracja bot↔chmura: heartbeat, presence, sync configu | ✅ done |
+| **4** | Funkcje: leveling, tickety, AI, reaction roles, link‑status, bot 24/7 | ✅ done |
+| **5** | Wzrost: EventSub, statystyki/retencja, marketplace | 🧭 plan |
 
-## 🎯 Najbliższe kroki (Faza 3)
+## ✅ Zrealizowane (Fazy 0–4) — wszystko LIVE
+
+Stack zmodernizowany (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler · pnpm · Biome · Zod), branding GH0ST (logo/baner/favicon/avatar bota), panel na Vercel (**e-bot-dc.vercel.app**), **bot 24/7 na Railway**, tabele Supabase, integracja GH0ST (`/link`, `link-status`). Funkcje: leveling + role‑nagrody, tickety (dwukierunkowo), komendy AI (z twardym limitem kosztów), reaction roles, anti‑nuke, powiadomienia live.
 
 ```mermaid
 flowchart LR
-  A[Panel zapisuje<br/>bot_status / bot_presence / config] --> B[(Supabase)]
-  B --> C[Bot czyta z Supabase]
-  C --> D[setPresence + heartbeat + anti-nuke/notif config na żywo]
-  D -.->|kropka online + status| A
+  P[🖥️ Panel] -->|config| SB[(Supabase)]
+  SB -->|settings-sync| B[🤖 Bot 24/7 Railway]
+  B -->|dane: levele / tickety / AI| SB
+  SB -->|ranking / listy / staty| P
+  B -->|akcje| DC[Discord]
+  P -->|link-status| GH[GH0ST EMPIRE]
 ```
 
-1. ✅ **Heartbeat** — bot pisze `settings['bot_status']` `{online,guilds,tag,ts}` co 60 s (panel czyta status na żywo; offline przy zamknięciu).
-2. ✅ **Presence apply** — bot czyta `settings['bot_presence']` i woła `client.user.setPresence` (sync co 60 s).
-3. ✅ **Sync configu** — `settings-sync` pobiera Supabase → lokalny SQLite; anti‑nuke/notify widzą zmiany z panelu, a zmiany z bota (`/antinuke`) wracają do panelu (mirror‑up).
-4. ⏳ **GH0ST link‑status** — endpoint po stronie GH0ST EMPIRE → realny status powiązania w Profilu *(do zrobienia w repo ghost-empire)*.
+## 🧭 Faza 5 — Wzrost (plan / opcjonalne)
 
-## 🧪 Pomysły / backlog (Faza 4+)
-
-- 🎟️ Tickety (panel + komendy) · 🏆 Leveling/XP + role nagrody · 🤖 Komendy AI (DeepSeek/OpenAI z limitem)
-- 🧩 Reaction roles z edytora · 🔔 Webhooki EventSub (zamiast pollingu) przez Cloudflare Tunnel
-- 📈 Statystyki/retencja w panelu · 🛒 Marketplace pluginów
+- 🔔 **EventSub** — webhooki Twitch zamiast pollingu (natychmiastowe powiadomienia live; wymaga publicznego endpointu + subskrypcji Twitch EventSub). *Polling już działa → niski priorytet.*
+- 📈 **Statystyki / retencja** — wykresy aktywności, XP w czasie, użycie AI (dane już w Supabase).
+- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -12,7 +12,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.6.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.9.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -183,7 +183,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.6.0** — modernizacja stacku: Next 16 + React 19 + Tailwind 4 + TS 6 + React Compiler, pnpm workspaces, Biome, Zod. Wcześniej **v0.5.0** — integracja bot↔chmura; **v0.4.1** — Wiki + utwardzenie repo.
+Najnowsze: **v0.9.1** — Faza 4 komplet (leveling, tickety dwukier., AI z limitem, reaction roles, link‑status) + **bot 24/7 na Railway**. Wcześniej **v0.6.0** — modernizacja stacku (Next 16 / React 19 / Tailwind 4 / TS 6).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>
