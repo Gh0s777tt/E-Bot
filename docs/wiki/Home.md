@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="ghost-skull.png" width="100" alt="GH0ST EMPIRE" />
+
 # 🎬 E‑BOT — Wiki
 
 ### _GH0ST EMPIRE · Discord bot · biblioteka gier w stylu Netflix · dashboard_
