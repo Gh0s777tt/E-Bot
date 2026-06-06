@@ -1,0 +1,12 @@
+{
+  "name": "bot-dc-ingest",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "sync": "node sync.mts"
+  },
+  "dependencies": {
+    "psn-api": "^2.13.0"
+  }
+}

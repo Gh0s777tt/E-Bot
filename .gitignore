@@ -1,0 +1,39 @@
+# ── Sekrety / środowisko ──────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ── Node / build ──────────────────────────────────────────
+node_modules/
+dist/
+build/
+.next/
+out/
+.turbo/
+coverage/
+*.tsbuildinfo
+
+# ── Dane lokalne (SQLite, cache, okładki) ─────────────────
+data/*.db
+data/*.db-*
+data/cache/
+*.sqlite
+*.sqlite3
+
+# ── Logi ──────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ── OS / IDE / agent ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.claude/
+.vercel/
