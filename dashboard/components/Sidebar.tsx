@@ -18,24 +18,24 @@ export default function Sidebar() {
   const pathname = usePathname();
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-line bg-surface md:flex">
-      <div className="flex h-16 items-center gap-2 border-b border-line px-5">
-        <span className="grid h-8 w-8 place-items-center rounded-md bg-accent font-display text-lg shadow-glow-sm">E</span>
-        <span className="font-display text-2xl tracking-wide text-glow">
+      <div className="flex h-14 items-center gap-2 border-b border-line px-4">
+        <span className="grid h-7 w-7 place-items-center rounded-md bg-accent font-display text-sm shadow-glow-sm">E</span>
+        <span className="font-display text-xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>
         </span>
       </div>
-      <nav className="flex-1 space-y-1 p-3">
+      <nav className="flex-1 space-y-0.5 p-2.5">
         {items.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition ${
-                active ? 'bg-accent text-white shadow-glow-sm' : 'text-muted hover:bg-elevated hover:text-white'
+              className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] transition ${
+                active ? 'bg-accent text-white' : 'text-muted hover:bg-elevated hover:text-white'
               }`}
             >
-              <Icon size={18} />
+              <Icon size={16} />
               {label}
             </Link>
           );

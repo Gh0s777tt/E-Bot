@@ -6,8 +6,10 @@
   color-scheme: dark;
 }
 
+/* Minimalistyczna skala — całość ~6% mniejsza (jak GH0ST EMPIRE) */
 html {
   background-color: #0a0a0a;
+  font-size: 15px;
 }
 html,
 body {
@@ -17,7 +19,6 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
-/* Nagłówki w mocnej, gamingowej czcionce (jak GH0ST EMPIRE) */
 h1,
 h2,
 .font-display {
@@ -25,7 +26,7 @@ h2,
   letter-spacing: 0.02em;
 }
 
-/* Czerwona poświata tła — sygnatura GH0ST EMPIRE */
+/* Subtelna czerwona poświata tła (delikatniejsza = bardziej minimalistycznie) */
 body::before {
   content: '';
   position: fixed;
@@ -33,8 +34,8 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(55vw 38vh at 82% -8%, rgba(229, 9, 20, 0.13), transparent 70%),
-    radial-gradient(45vw 38vh at -8% 108%, rgba(139, 0, 0, 0.1), transparent 70%);
+    radial-gradient(50vw 34vh at 84% -10%, rgba(229, 9, 20, 0.08), transparent 70%),
+    radial-gradient(42vw 34vh at -8% 110%, rgba(139, 0, 0, 0.06), transparent 70%);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -45,10 +46,9 @@ body::before {
   scrollbar-width: none;
 }
 
-/* pomocnicze poświaty */
 .glow-red {
-  box-shadow: 0 0 25px rgba(229, 9, 20, 0.35);
+  box-shadow: 0 0 18px rgba(229, 9, 20, 0.22);
 }
 .text-glow {
-  text-shadow: 0 0 12px rgba(229, 9, 20, 0.55);
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
 }

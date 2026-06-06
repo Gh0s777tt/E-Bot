@@ -26,8 +26,8 @@ export default {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        glow: '0 0 25px rgba(229,9,20,0.35)',
-        'glow-sm': '0 0 12px rgba(229,9,20,0.40)',
+        glow: '0 0 18px rgba(229,9,20,0.22)',
+        'glow-sm': '0 0 10px rgba(229,9,20,0.28)',
       },
     },
   },

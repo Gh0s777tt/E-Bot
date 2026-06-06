@@ -14,7 +14,7 @@ export default function IntegrationsPage() {
       </p>
       {groups.map((group) => (
         <section key={group}>
-          <h2 className="mb-3 text-lg font-semibold">{group}</h2>
+          <h2 className="mb-3 text-base font-semibold">{group}</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {integrations
               .filter((i) => i.group === group)
@@ -31,11 +31,11 @@ export default function IntegrationsPage() {
                   </div>
                   {i.ok ? (
                     <span className="flex items-center gap-1.5 text-sm text-green-400">
-                      <CheckCircle2 size={18} /> OK
+                      <CheckCircle2 size={16} /> OK
                     </span>
                   ) : (
                     <span className="flex items-center gap-1.5 text-sm text-accent">
-                      <XCircle size={18} /> brak
+                      <XCircle size={16} /> brak
                     </span>
                   )}
                 </div>

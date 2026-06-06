@@ -21,15 +21,15 @@ export default async function OverviewPage() {
   return (
     <div className="space-y-8">
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="Gry w bibliotece" value={stats.total} icon={<Gamepad2 size={16} />} accent />
-        <StatCard label="Platformy" value={stats.platforms} hint={Object.keys(stats.byPlatform).map((p) => PLATFORM_LABEL[p] ?? p).join(', ')} icon={<Layers size={16} />} />
-        <StatCard label="Łączny czas gry" value={`${stats.totalHours} h`} icon={<Clock size={16} />} />
-        <StatCard label="Źródło danych" value={src === 'supabase' ? 'Supabase' : src === 'sqlite' ? 'SQLite (lokalnie)' : 'brak'} hint={`${okCount}/${integrations.length} integracji OK`} icon={<Database size={16} />} />
+        <StatCard label="Gry w bibliotece" value={stats.total} icon={<Gamepad2 size={14} />} accent />
+        <StatCard label="Platformy" value={stats.platforms} hint={Object.keys(stats.byPlatform).map((p) => PLATFORM_LABEL[p] ?? p).join(', ')} icon={<Layers size={14} />} />
+        <StatCard label="Łączny czas gry" value={`${stats.totalHours} h`} icon={<Clock size={14} />} />
+        <StatCard label="Źródło danych" value={src === 'supabase' ? 'Supabase' : src === 'sqlite' ? 'SQLite (lokalnie)' : 'brak'} hint={`${okCount}/${integrations.length} integracji OK`} icon={<Database size={14} />} />
       </section>
 
       <section>
         <div className="mb-3 flex items-end justify-between">
-          <h2 className="text-lg font-semibold">Najczęściej grane</h2>
+          <h2 className="text-base font-semibold">Najczęściej grane</h2>
           <a href="/library" className="text-sm text-muted transition hover:text-white">
             Cała biblioteka →
           </a>
@@ -46,7 +46,7 @@ export default async function OverviewPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-semibold">Rozkład platform</h2>
+        <h2 className="mb-3 text-base font-semibold">Rozkład platform</h2>
         <div className="space-y-2">
           {Object.entries(stats.byPlatform).map(([p, n]) => (
             <div key={p} className="flex items-center gap-3">

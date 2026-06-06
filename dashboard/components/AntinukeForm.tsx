@@ -151,7 +151,7 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
 
       {/* ochrony */}
       <div>
-        <h2 className="mb-2 text-lg font-semibold">Ochrony</h2>
+        <h2 className="mb-2 text-base font-semibold">Ochrony</h2>
         <div className="space-y-2">
           {Object.keys(PROT_LABELS).map((k) => {
             const p = c.protections[k] ?? { enabled: false, count: 3, windowSec: 10 };
