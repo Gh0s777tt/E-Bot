@@ -86,6 +86,28 @@ export const reactionRolesSchema = z.object({
 });
 export type ReactionRolesInput = z.infer<typeof reactionRolesSchema>;
 
+// ── Powitania (POST /api/welcome) ──────────────────────────
+export const welcomeSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  message: z.string().max(1000),
+  autoroleId: z.string().max(40),
+});
+export type WelcomeInput = z.infer<typeof welcomeSchema>;
+
+// ── Automod (POST /api/automod) ────────────────────────────
+export const automodSchema = z.object({
+  enabled: z.boolean(),
+  blockInvites: z.boolean(),
+  blockLinks: z.boolean(),
+  maxMentions: z.number().int().min(0).max(50),
+  antiSpamCount: z.number().int().min(0).max(50),
+  antiSpamSec: z.number().int().min(1).max(60),
+  modlogChannelId: z.string().max(40),
+  exemptRoleId: z.string().max(40),
+});
+export type AutomodInput = z.infer<typeof automodSchema>;
+
 // Pomocnik: czyta JSON z requestu i waliduje; zwraca dane lub komunikat błędu.
 export async function parseBody<T>(
   request: Request,

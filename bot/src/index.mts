@@ -12,6 +12,8 @@ import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startLeveling } from './leveling.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
 import { startReactionRoles } from './reaction-roles.mts';
+import { startWelcome } from './welcome.mts';
+import { startAutomod } from './automod.mts';
 
 loadEnv();
 
@@ -29,20 +31,17 @@ if (!token) {
   process.exit(1);
 }
 
-// GuildMessages + GuildVoiceStates są nieprivileged i potrzebne też dla levelingu (Faza 4).
+// MessageContent + GuildMembers (privileged, włączone w Dev Portal) — wymagane przez automod (treść)
+// i powitania (guildMemberAdd); trzymamy w bazie niezależnie od ekonomii.
 const intents = [
   GatewayIntentBits.Guilds,
   GatewayIntentBits.GuildModeration,
   GatewayIntentBits.GuildMessages,
   GatewayIntentBits.GuildVoiceStates,
   GatewayIntentBits.GuildMessageReactions,
+  GatewayIntentBits.MessageContent,
+  GatewayIntentBits.GuildMembers,
 ];
-if (economyOn) {
-  intents.push(
-    GatewayIntentBits.MessageContent,    // PRIVILEGED — enable in Dev Portal
-    GatewayIntentBits.GuildMembers,      // PRIVILEGED — enable in Dev Portal
-  );
-}
 const client = new Client({
   intents,
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
@@ -73,6 +72,8 @@ client.once(Events.ClientReady, (c) => {
   startLeveling(c);        // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
   startTicketSync(c);      // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
   startReactionRoles(c);   // Faza 4 — role za reakcje (config z panelu)
+  startWelcome(c);         // Faza 6 — powitania + autorole
+  startAutomod(c);         // Faza 6 — automoderacja
   if (economyOn) {
     startEconomyConfigPolling();
     console.log('   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' + (process.env.GHOST_API_URL || 'default') + ')');
