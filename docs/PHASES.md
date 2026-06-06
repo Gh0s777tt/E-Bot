@@ -52,6 +52,7 @@
 - [ ] (opcjonalnie) endpoint zdrowia bota → `BOT_STATUS_URL`
 
 ## 🧭 Faza 4 — Wzrost *(plan)*
+> 📋 Szczegółowy plan (architektura, model danych, podział bot↔panel): [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
 - [ ] Tickety (panel + komendy)
 - [ ] Leveling / XP + role nagrody
 - [ ] Reaction roles z edytora w panelu
