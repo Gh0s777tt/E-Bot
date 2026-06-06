@@ -54,6 +54,15 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'tempvoice_config',
   },
+  // Ekonomia
+  {
+    key: 'economy',
+    label: 'Ekonomia serwera',
+    group: 'Społeczność',
+    href: '/eco',
+    kind: 'json',
+    settingsKey: 'economy_config',
+  },
   // Tickety & AI
   {
     key: 'tickets',

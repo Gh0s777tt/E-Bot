@@ -1,4 +1,5 @@
 import {
+  Banknote,
   BarChart3,
   Clapperboard,
   Coins,
@@ -36,7 +37,8 @@ export const NAV_ITEMS = [
   { href: '/welcome', label: 'Powitania', icon: DoorOpen },
   { href: '/integrations', label: 'Integracje', icon: Plug },
   { href: '/commands', label: 'Komendy', icon: TerminalSquare },
-  { href: '/economy', label: 'Ekonomia', icon: Coins },
+  { href: '/economy', label: 'Ekonomia GT', icon: Coins },
+  { href: '/eco', label: 'Ekonomia serwera', icon: Banknote },
   { href: '/levels', label: 'Levele', icon: Trophy },
   { href: '/appearance', label: 'Wygląd grafik', icon: Palette },
   { href: '/tickets', label: 'Tickety', icon: Ticket },

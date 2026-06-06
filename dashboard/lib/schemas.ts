@@ -86,6 +86,33 @@ export const reactionRolesSchema = z.object({
 });
 export type ReactionRolesInput = z.infer<typeof reactionRolesSchema>;
 
+// ── Ekonomia serwera (Faza 7/F3) ───────────────────────────
+export const economySchema = z.object({
+  enabled: z.boolean(),
+  currency: z.string().min(1).max(40),
+  startBalance: z.number().int().min(0).max(1_000_000),
+  dailyAmount: z.number().int().min(0).max(1_000_000),
+  dailyStreakBonus: z.number().int().min(0).max(100_000),
+  workMin: z.number().int().min(0).max(1_000_000),
+  workMax: z.number().int().min(0).max(1_000_000),
+  workCooldownMin: z.number().int().min(0).max(10_080),
+  robEnabled: z.boolean(),
+  robChance: z.number().int().min(0).max(100),
+  robCooldownMin: z.number().int().min(0).max(10_080),
+  robMaxPercent: z.number().int().min(1).max(100),
+  gambleEnabled: z.boolean(),
+  gambleMax: z.number().int().min(1).max(100_000_000),
+});
+export type EconomyInput = z.infer<typeof economySchema>;
+
+export const shopItemSchema = z.object({
+  name: z.string().min(1).max(80),
+  description: z.string().max(200).optional().default(''),
+  price: z.number().int().min(0).max(100_000_000),
+  role_id: z.string().max(40).optional().default(''),
+});
+export type ShopItemInput = z.infer<typeof shopItemSchema>;
+
 // ── Styl kart/banerów (Faza 7/F2) ──────────────────────────
 export const cardStyleSchema = z.object({
   from: z.string().max(20),

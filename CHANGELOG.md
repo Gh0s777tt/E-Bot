@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-48-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.17.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-49-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.18.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.18.0] — Faza 7 / F3: ekonomia serwera
+
+- `[#049]` 💰 **Pełna ekonomia serwera** (waluta natywna, osobno od GT z GH0ST) — komenda **`/eco`** (12 podkomend): `balance`, `daily` (ze streakiem), `work`, `rob`, `pay`, `deposit`/`withdraw` (bank), `gamble` (×2/strata), `slots` (jednoręki bandyta), `shop`, `buy` (kup rolę za walutę), `top` (ranking). 14 komend.
+  - Konfigurowalne z panelu **`/eco`** (osobno od „Ekonomia GT"): waluta, saldo startowe, kwoty daily/work, szanse i cooldowny rabunku, limit hazardu + **sklep ról** (dodawanie z pickerem roli). Włącznik w Centrum sterowania.
+  - Bot: `bot/src/economy/store.mts` + `commands/economy.mts`. Panel: `lib/serverEconomy.ts` + `economySchema`/`shopItemSchema` + `/api/economy` + `/api/economy/shop` + `EconomyForm`/`ShopManager`. **Nowy SQL: `dashboard/scripts/f3-economy-schema.sql`** (`economy_users` + `economy_shop`).
 
 ## [0.17.0] — Faza 7 / F2: karty rang + grafiki (gradienty + czcionki)
 

@@ -1,0 +1,148 @@
+'use client';
+
+import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import type { ShopItem } from '../lib/serverEconomy';
+import { RoleSelect } from './pickers';
+
+const inputCls =
+  'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
+
+export default function ShopManager({
+  initial,
+  guild,
+  currency,
+}: {
+  initial: ShopItem[];
+  guild: GuildMeta;
+  currency: string;
+}) {
+  const [items, setItems] = useState<ShopItem[]>(initial);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState(1000);
+  const [roleId, setRoleId] = useState('');
+  const [desc, setDesc] = useState('');
+  const [st, setSt] = useState<'idle' | 'saving' | 'err'>('idle');
+
+  async function add() {
+    if (!name.trim()) return;
+    setSt('saving');
+    try {
+      const r = await fetch('/api/economy/shop', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, price, role_id: roleId, description: desc }),
+      });
+      const j = (await r.json()) as { ok?: boolean; items?: ShopItem[] };
+      if (r.ok && j.items) {
+        setItems(j.items);
+        setName('');
+        setDesc('');
+        setRoleId('');
+        setPrice(1000);
+        setSt('idle');
+      } else {
+        setSt('err');
+      }
+    } catch {
+      setSt('err');
+    }
+  }
+
+  async function remove(id: string) {
+    setItems((p) => p.filter((i) => i.id !== id));
+    await fetch(`/api/economy/shop?id=${id}`, { method: 'DELETE' }).catch(() => {});
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nazwa przedmiotu"
+          className={inputCls}
+        />
+        <input
+          type="number"
+          value={price}
+          onChange={(e) => setPrice(Math.max(0, Math.floor(Number(e.target.value) || 0)))}
+          placeholder="Cena"
+          className={inputCls}
+        />
+        <RoleSelect
+          value={roleId}
+          onChange={setRoleId}
+          roles={guild.roles}
+          placeholder="— rola do nadania (opcjonalnie) —"
+        />
+        <input
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          placeholder="Opis (opcjonalnie)"
+          className={inputCls}
+        />
+      </div>
+      <button
+        type="button"
+        onClick={add}
+        disabled={st === 'saving' || !name.trim()}
+        className="rounded-md bg-accent px-5 py-2 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
+      >
+        {st === 'saving' ? 'Dodaję…' : 'Dodaj do sklepu'}
+      </button>
+      {st === 'err' && <span className="ml-3 text-sm text-accent">Błąd zapisu</span>}
+
+      {items.length === 0 ? (
+        <p className="text-sm text-muted">
+          Sklep pusty. Dodaj przedmioty powyżej (wymaga <code>f3-economy-schema.sql</code> w
+          Supabase).
+        </p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="text-xs uppercase tracking-wide text-muted">
+              <tr className="border-b border-line">
+                <th className="px-3 py-2">Nazwa</th>
+                <th className="px-3 py-2">Cena</th>
+                <th className="px-3 py-2">Rola</th>
+                <th className="px-3 py-2" />
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((i) => (
+                <tr key={i.id} className="border-b border-line/50">
+                  <td className="px-3 py-2">
+                    {i.name}
+                    {i.description ? (
+                      <span className="block text-xs text-muted">{i.description}</span>
+                    ) : null}
+                  </td>
+                  <td className="px-3 py-2 text-muted">
+                    {i.price.toLocaleString('pl-PL')} {currency}
+                  </td>
+                  <td className="px-3 py-2 text-muted">
+                    {i.role_id
+                      ? `@${guild.roles.find((r) => r.id === i.role_id)?.name ?? 'rola'}`
+                      : '—'}
+                  </td>
+                  <td className="px-3 py-2">
+                    <button
+                      type="button"
+                      onClick={() => remove(i.id)}
+                      className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
+                      aria-label="Usuń"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
