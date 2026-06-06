@@ -87,7 +87,10 @@ function tableUrl(table: string, qs = ''): string {
 }
 
 /** SELECT z tabeli (qs = surowy PostgREST query, np. 'select=*&id=eq.1'). [] gdy brak chmury/tabeli. */
-export async function cloudSelect<T = Record<string, unknown>>(table: string, qs = ''): Promise<T[]> {
+export async function cloudSelect<T = Record<string, unknown>>(
+  table: string,
+  qs = '',
+): Promise<T[]> {
   if (!hasCloud()) return [];
   try {
     const r = await fetch(tableUrl(table, qs), { headers: headers(), signal: timeout() });
@@ -112,7 +115,11 @@ export async function cloudInsert(table: string, rows: unknown[]): Promise<void>
 }
 
 /** UPSERT (wymaga on_conflict = kolumny PK/unique, np. 'guild_id,user_id'). */
-export async function cloudUpsert(table: string, rows: unknown[], onConflict?: string): Promise<void> {
+export async function cloudUpsert(
+  table: string,
+  rows: unknown[],
+  onConflict?: string,
+): Promise<void> {
   if (!hasCloud() || !rows.length) return;
   const qs = onConflict ? `on_conflict=${encodeURIComponent(onConflict)}` : '';
   const r = await fetch(tableUrl(table, qs), {
