@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { getRawSetting, setRawSetting } from './data';
 
 let envLoaded = false;
 function ensureEnv(): void {
@@ -40,4 +41,36 @@ export function getIntegrations(): Integration[] {
     },
     { name: 'Vercel', group: 'Infra', ok: has('VERCEL_TOKEN'), note: 'hosting' },
   ];
+}
+
+// ───────── Edytowalna konfiguracja integracji (sekrety zostają w env; tu tylko runtime) ─────────
+// Trzymane w Supabase `settings` pod kluczem 'integrations' (JSON), przez getRawSetting/setRawSetting.
+export type IntegrationConfig = {
+  enabled: Record<string, boolean>; // per nazwa integracji; brak wpisu = włączona
+  aiProvider: string;               // '' | 'openai' | 'deepseek'
+  aiModel: string;
+};
+
+const DEFAULT_INTEGRATION_CONFIG: IntegrationConfig = { enabled: {}, aiProvider: '', aiModel: '' };
+
+export async function getIntegrationConfig(): Promise<IntegrationConfig> {
+  const raw = await getRawSetting('integrations');
+  if (!raw) return { ...DEFAULT_INTEGRATION_CONFIG };
+  try {
+    const p = JSON.parse(raw) as Partial<IntegrationConfig>;
+    return { enabled: p.enabled ?? {}, aiProvider: p.aiProvider ?? '', aiModel: p.aiModel ?? '' };
+  } catch {
+    return { ...DEFAULT_INTEGRATION_CONFIG };
+  }
+}
+
+export async function saveIntegrationConfig(cfg: IntegrationConfig): Promise<void> {
+  await setRawSetting(
+    'integrations',
+    JSON.stringify({
+      enabled: cfg.enabled ?? {},
+      aiProvider: String(cfg.aiProvider ?? ''),
+      aiModel: String(cfg.aiModel ?? ''),
+    }),
+  );
 }
