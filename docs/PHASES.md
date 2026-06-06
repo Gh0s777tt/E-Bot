@@ -5,8 +5,10 @@
 ![Faza 0](https://img.shields.io/badge/Faza_0-✅-E50914?labelColor=0a0a0a)
 ![Faza 1](https://img.shields.io/badge/Faza_1-✅-E50914?labelColor=0a0a0a)
 ![Faza 2](https://img.shields.io/badge/Faza_2-✅-E50914?labelColor=0a0a0a)
-![Faza 3](https://img.shields.io/badge/Faza_3-🔄-E50914?labelColor=0a0a0a)
-![Faza 4](https://img.shields.io/badge/Faza_4-🧭-444?labelColor=0a0a0a)
+![Faza 3](https://img.shields.io/badge/Faza_3-✅-E50914?labelColor=0a0a0a)
+![Faza 4](https://img.shields.io/badge/Faza_4-✅-E50914?labelColor=0a0a0a)
+![Faza 5](https://img.shields.io/badge/Faza_5-✅-E50914?labelColor=0a0a0a)
+![Faza 6](https://img.shields.io/badge/Faza_6-✅-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -49,16 +51,31 @@
 - [x] Bot stosuje `bot_presence` (`setPresence`) — synchronizacja z panelu co 60 s
 - [x] Bot czyta whitelistę anti‑nuke + ustawienia powiadomień z Supabase (`settings-sync` → lokalny SQLite; zmiany z bota wracają mirror‑upem)
 - [x] Endpoint GH0ST `link-status` → realny status powiązania w Profilu (endpoint w ghost-empire + panel `/profile`)
-- [ ] (opcjonalnie) endpoint zdrowia bota → `BOT_STATUS_URL`
+- [x] Endpoint zdrowia bota → `/api/health` (+ alert „bot down" przez Vercel Cron) *(Faza 6/B7)*
 
-## 🧭 Faza 4 — Wzrost *(plan)*
+## ✅ Faza 4 — Wzrost
 > 📋 Szczegółowy plan (architektura, model danych, podział bot↔panel): [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
 - [x] Tickety — panel (config + lista) **+ bot** (`/ticket otwórz/zamknij`, prywatne wątki → Supabase)
 - [x] Leveling / XP — panel (config + ranking) **+ bot** (XP czat/voice, awanse, role‑nagrody → Supabase)
 - [x] Reaction roles — panel `/roles` + bot (role za reakcje, `GuildMessageReactions`)
 - [x] Komendy AI — `/ai` (DeepSeek/OpenAI) z twardym dziennym limitem (panel `/ai` + `ai_usage`)
-- [ ] Webhooki EventSub (zamiast pollingu) przez Cloudflare Tunnel
-- [ ] Statystyki/retencja + marketplace pluginów
+- [x] Webhooki EventSub (zamiast pollingu) — webhook na Vercel + subskrypcja `stream.online` *(Faza 5)*
+- [x] Statystyki — strona `/stats` (XP/AI/tickety/biblioteka) *(Faza 5)*
+
+## ✅ Faza 5 — Statystyki + EventSub
+- [x] Strona `/stats` — wykresy zużycia AI (14 dni), top XP, tickety, biblioteka (CSS/SVG)
+- [x] Twitch EventSub — webhook `/api/twitch/eventsub` (HMAC + challenge), subskrypcja `stream.online` → natychmiastowe ogłoszenie live
+- [x] Hosting bota 24/7 — Railway (Dockerfile, heartbeat zweryfikowany)
+
+## ✅ Faza 6 — „Zrób wszystko" (rozbudowa partiami B1–B7)
+- [x] **B1** — Powitania + autorole (`/welcome`) + Automod (`/moderation`)
+- [x] **B2** — Komendy moderacji `/mod warn|timeout|clear|warnings` + historia (`mod_cases`)
+- [x] **B3** — Pickery ról/kanałów w panelu (dropdowny zamiast ID)
+- [x] **B4** — Narzędzia twórcy (`/creator`): auto‑wydarzenie na live + relay klipów
+- [x] **B5** — Engagement: button‑role, `/remind`, `/giveaway`, starboard, temp‑voice
+- [x] **B6** — Biblioteka 2.0: lista życzeń (`/wishlist`) + ręczne dodawanie gier z IGDB
+- [x] **B7** — Infra/jakość: Vitest+CI, alert „bot down" (health+cron), handlery błędów, cache TTL
+- [ ] (przyszłość) pełny Sentry (DSN), Redis (instancja), Supabase Realtime, Playwright E2E
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
