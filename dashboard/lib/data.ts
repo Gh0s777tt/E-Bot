@@ -183,3 +183,110 @@ export async function saveSettings(input: Record<string, string>): Promise<void>
     db.close();
   }
 }
+
+// ───────────────────────── Anti-Nuke (klucz settings 'antinuke', JSON) ─────────────────────────
+async function rawGet(key: string): Promise<string | null> {
+  if (hasSupabase) {
+    try {
+      const { data, error } = await supabase().from('settings').select('value').eq('key', key).maybeSingle();
+      if (error) throw new Error(error.message);
+      if (data) return data.value as string;
+    } catch {
+      /* fallback */
+    }
+  }
+  const db = await sqliteDb();
+  if (!db) return null;
+  try {
+    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+    const r = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as { value: string } | undefined;
+    return r?.value ?? null;
+  } finally {
+    db.close();
+  }
+}
+async function rawSet(key: string, value: string): Promise<void> {
+  if (hasSupabase) {
+    try {
+      const { error } = await supabase().from('settings').upsert([{ key, value }]);
+      if (error) throw new Error(error.message);
+      return;
+    } catch {
+      /* fallback */
+    }
+  }
+  const db = await sqliteDb();
+  if (!db) return;
+  try {
+    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+    db.prepare('INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(key, value);
+  } finally {
+    db.close();
+  }
+}
+
+export type AntiProtection = { enabled: boolean; count: number; windowSec: number };
+export type AntinukeConfig = {
+  enabled: boolean;
+  logChannelId: string;
+  punishment: 'ban' | 'kick' | 'timeout' | 'strip' | 'quarantine';
+  quarantineRoleId: string;
+  whitelistUsers: string[];
+  whitelistRoles: string[];
+  protections: Record<string, AntiProtection>;
+};
+
+export const ANTINUKE_PROTECTIONS = [
+  'channelDelete', 'channelCreate', 'roleDelete', 'roleCreate',
+  'ban', 'kick', 'webhookCreate', 'webhookDelete', 'botAdd',
+] as const;
+
+export const ANTINUKE_DEFAULT: AntinukeConfig = {
+  enabled: false,
+  logChannelId: '',
+  punishment: 'ban',
+  quarantineRoleId: '',
+  whitelistUsers: [],
+  whitelistRoles: [],
+  protections: {
+    channelDelete: { enabled: true, count: 3, windowSec: 10 },
+    channelCreate: { enabled: true, count: 5, windowSec: 10 },
+    roleDelete: { enabled: true, count: 3, windowSec: 10 },
+    roleCreate: { enabled: true, count: 5, windowSec: 10 },
+    ban: { enabled: true, count: 3, windowSec: 15 },
+    kick: { enabled: true, count: 4, windowSec: 15 },
+    webhookCreate: { enabled: true, count: 3, windowSec: 10 },
+    webhookDelete: { enabled: true, count: 3, windowSec: 10 },
+    botAdd: { enabled: true, count: 1, windowSec: 60 },
+  },
+};
+
+function mergeAnti(stored: Partial<AntinukeConfig>): AntinukeConfig {
+  const base = structuredClone(ANTINUKE_DEFAULT);
+  base.enabled = stored.enabled ?? base.enabled;
+  base.logChannelId = stored.logChannelId ?? base.logChannelId;
+  base.punishment = (stored.punishment as AntinukeConfig['punishment']) ?? base.punishment;
+  base.quarantineRoleId = stored.quarantineRoleId ?? base.quarantineRoleId;
+  base.whitelistUsers = stored.whitelistUsers ?? [];
+  base.whitelistRoles = stored.whitelistRoles ?? [];
+  if (stored.protections) {
+    for (const k of ANTINUKE_PROTECTIONS) {
+      if (stored.protections[k]) base.protections[k] = { ...base.protections[k], ...stored.protections[k] };
+    }
+  }
+  return base;
+}
+
+export async function getAntinuke(): Promise<AntinukeConfig> {
+  const raw = await rawGet('antinuke');
+  if (!raw) return structuredClone(ANTINUKE_DEFAULT);
+  try {
+    return mergeAnti(JSON.parse(raw) as Partial<AntinukeConfig>);
+  } catch {
+    return structuredClone(ANTINUKE_DEFAULT);
+  }
+}
+
+export async function saveAntinuke(cfg: AntinukeConfig): Promise<void> {
+  await rawSet('antinuke', JSON.stringify(cfg));
+}

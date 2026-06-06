@@ -25,3 +25,13 @@ export function getSettings(): Record<string, string> {
     db.close();
   }
 }
+
+export function setSetting(key: string, value: string): void {
+  const db = new DatabaseSync(dbPath());
+  try {
+    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+    db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').run(key, value);
+  } finally {
+    db.close();
+  }
+}

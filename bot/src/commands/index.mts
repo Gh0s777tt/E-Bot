@@ -1,10 +1,11 @@
-import type { ChatInputCommandInteraction, SlashCommandOptionsOnlyBuilder, SlashCommandBuilder } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import * as ping from './ping.mts';
 import * as library from './library.mts';
+import * as antinuke from './antinuke.mts';
 
 export type Command = {
-  data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
+  data: { name: string; toJSON: () => unknown };
   execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 };
 
-export const commands: Command[] = [ping, library];
+export const commands: Command[] = [ping, library, antinuke];

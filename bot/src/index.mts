@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits, Events, Collection, MessageFlags } from 'dis
 import { loadEnv } from './env.mts';
 import { commands, type Command } from './commands/index.mts';
 import { startNotifier } from './live/notifier.mts';
+import { startAntiNuke } from './security/antinuke.mts';
 
 loadEnv();
 
@@ -11,7 +12,7 @@ if (!token) {
   process.exit(1);
 }
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildModeration] });
 
 const registry = new Collection<string, Command>();
 for (const c of commands) registry.set(c.data.name, c);
@@ -24,6 +25,7 @@ client.once(Events.ClientReady, (c) => {
     process.exit(0);
   }
   startNotifier(c);
+  startAntiNuke(c);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {

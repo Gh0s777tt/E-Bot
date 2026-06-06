@@ -7,6 +7,7 @@ const TITLES: Record<string, string> = {
   '/': 'Przegląd',
   '/library': 'Biblioteka gier',
   '/notifications': 'Powiadomienia live',
+  '/security': 'Bezpieczeństwo (Anti-Nuke)',
   '/integrations': 'Integracje',
   '/commands': 'Komendy',
   '/settings': 'Ustawienia',

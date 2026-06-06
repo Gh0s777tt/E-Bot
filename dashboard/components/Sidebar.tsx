@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Gamepad2, Radio, Plug, TerminalSquare, Settings } from 'lucide-react';
+import { LayoutDashboard, Gamepad2, Radio, ShieldAlert, Plug, TerminalSquare, Settings } from 'lucide-react';
 
 const items = [
   { href: '/', label: 'Przegląd', icon: LayoutDashboard },
   { href: '/library', label: 'Biblioteka', icon: Gamepad2 },
   { href: '/notifications', label: 'Powiadomienia', icon: Radio },
+  { href: '/security', label: 'Bezpieczeństwo', icon: ShieldAlert },
   { href: '/integrations', label: 'Integracje', icon: Plug },
   { href: '/commands', label: 'Komendy', icon: TerminalSquare },
   { href: '/settings', label: 'Ustawienia', icon: Settings },
