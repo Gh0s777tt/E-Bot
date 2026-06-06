@@ -6,8 +6,9 @@ const ERRORS: Record<string, string> = {
   oauth: 'Błąd logowania przez Discord.',
 };
 
-export default function LoginPage({ searchParams }: { searchParams: { e?: string } }) {
-  const err = searchParams?.e ? ERRORS[searchParams.e] : null;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ e?: string }> }) {
+  const sp = await searchParams;
+  const err = sp?.e ? ERRORS[sp.e] : null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-bg px-4">
       {/* poświaty GH0ST EMPIRE */}

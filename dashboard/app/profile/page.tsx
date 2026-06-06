@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 const GHOST_URL = 'https://ghost-empire-web.vercel.app';
 
 export default async function ProfilePage() {
-  const token = cookies().get('ebot_session')?.value;
+  const token = (await cookies()).get('ebot_session')?.value;
   const session = token ? await verifySession(token, process.env.AUTH_SECRET || 'dev-insecure-secret-change-me') : null;
   const initial = (session?.uname || '?').charAt(0).toUpperCase();
 
