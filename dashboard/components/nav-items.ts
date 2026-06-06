@@ -5,6 +5,7 @@ import {
   DoorOpen,
   Gamepad2,
   Gift,
+  Heart,
   LayoutDashboard,
   Plug,
   Radio,
@@ -23,6 +24,7 @@ import {
 export const NAV_ITEMS = [
   { href: '/', label: 'Przegląd', icon: LayoutDashboard },
   { href: '/library', label: 'Biblioteka', icon: Gamepad2 },
+  { href: '/wishlist', label: 'Lista życzeń', icon: Heart },
   { href: '/notifications', label: 'Powiadomienia', icon: Radio },
   { href: '/live', label: 'Na żywo', icon: Tv },
   { href: '/creator', label: 'Twórca', icon: Clapperboard },

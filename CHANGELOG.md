@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-44-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.13.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-45-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.14.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.14.0] — Faza 6 / B6: biblioteka + lista życzeń
+
+- `[#045]` 🎮 **Biblioteka 2.0** (panel + bot):
+  - **Lista życzeń** (`/wishlist` w panelu + komenda bota `/wishlist`) — wyszukiwarka **IGDB** z autouzupełnianiem okładek/roku, zapis do Supabase `wishlist`, usuwanie, podgląd okładek; bot wyświetla listę z chmury.
+  - **Ręczne dodawanie gier** do biblioteki (`/library` → „Dodaj grę") — wyszukaj w IGDB i dodaj z wyborem platformy (**Xbox / Epic / Ubisoft / dowolna**), z metadanymi i okładką → Supabase `games` (upsert). Pragmatyczna alternatywa dla kruchych scraperów sklepów bez oficjalnego API.
+  - Warstwa IGDB w panelu (`lib/igdb.ts`, fallback kluczy `IGDB_* → TWITCH_*` — działa na Vercel), `lib/wishlist.ts`, 2× Zod, `/api/igdb/search` + `/api/wishlist` + `/api/library/add`, komponenty `IgdbSearch`/`AddGameForm`/`WishlistManager`, nav „Lista życzeń". **Nowy SQL: `dashboard/scripts/b6-schema.sql`.**
+  - ℹ️ Steam/PSN/GOG nadal przez lokalny `ingest/sync.mts` (czyta lokalne źródła). Xbox/Epic/Ubisoft nie mają oficjalnego API biblioteki → dodawane ręcznie z metadanymi IGDB.
 
 ## [0.13.0] — Faza 6 / B5: engagement
 

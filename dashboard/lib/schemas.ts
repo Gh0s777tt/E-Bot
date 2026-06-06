@@ -141,6 +141,30 @@ export const tempvoiceSchema = z.object({
 });
 export type TempVoiceInput = z.infer<typeof tempvoiceSchema>;
 
+// ── Biblioteka: lista życzeń (POST /api/wishlist) ──────────
+export const wishlistAddSchema = z.object({
+  title: z.string().min(1).max(200),
+  cover_url: z.string().max(500).optional().default(''),
+  igdb_id: z.number().int().nullable().optional(),
+  store: z.string().max(20).optional().default(''),
+  url: z.string().max(500).optional().default(''),
+  release_year: z.number().int().nullable().optional(),
+  note: z.string().max(300).optional().default(''),
+});
+export type WishlistAddInput = z.infer<typeof wishlistAddSchema>;
+
+// ── Biblioteka: ręczne dodanie gry (POST /api/library/add) ──
+export const manualGameSchema = z.object({
+  title: z.string().min(1).max(200),
+  store: z.string().min(1).max(20),
+  igdb_id: z.number().int().nullable().optional(),
+  release_year: z.number().int().nullable().optional(),
+  genres: z.array(z.string().max(50)).max(20).optional().default([]),
+  cover_url: z.string().max(500).optional().default(''),
+  summary: z.string().max(2000).optional().default(''),
+});
+export type ManualGameInput = z.infer<typeof manualGameSchema>;
+
 // ── Narzędzia twórcy (POST /api/creator) ───────────────────
 export const creatorSchema = z.object({
   autoEvent: z.boolean(),

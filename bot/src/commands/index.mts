@@ -10,6 +10,7 @@ import * as ping from './ping.mts';
 import * as portal from './portal.mts';
 import * as remind from './remind.mts';
 import * as ticket from './ticket.mts';
+import * as wishlist from './wishlist.mts';
 
 export type Command = {
   data: { name: string; toJSON: () => unknown };
@@ -28,4 +29,5 @@ export const commands: Command[] = [
   remind,
   giveaway,
   buttonpanel,
+  wishlist,
 ];
