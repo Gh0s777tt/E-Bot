@@ -1,0 +1,10 @@
+{
+  "name": "bot-dc",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "sync": "node ingest/sync.mts",
+    "sync:cloud": "node ingest/sync.mts && node dashboard/scripts/seed-supabase.mts"
+  }
+}

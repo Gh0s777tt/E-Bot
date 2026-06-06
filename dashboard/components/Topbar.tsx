@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
 const TITLES: Record<string, string> = {
   '/': 'Przegląd',
@@ -21,6 +22,13 @@ export default function Topbar() {
           <span className="h-2 w-2 rounded-full bg-green-500" />
           Bot: <strong className="font-semibold">E-Bot</strong>
         </span>
+        <a
+          href="/api/auth/logout"
+          title="Wyloguj"
+          className="flex items-center gap-1.5 rounded-full bg-elevated px-3 py-1.5 text-muted transition hover:bg-accent hover:text-white"
+        >
+          <LogOut size={14} /> Wyloguj
+        </a>
       </div>
     </header>
   );

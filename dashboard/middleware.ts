@@ -1,0 +1,36 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { verifySession } from './lib/session';
+
+const SESSION_COOKIE = 'ebot_session';
+
+function isOpen(pathname: string): boolean {
+  return (
+    pathname === '/login' ||
+    pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/img') ||
+    pathname.startsWith('/_next') ||
+    pathname === '/favicon.ico'
+  );
+}
+
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  if (isOpen(pathname)) return NextResponse.next();
+
+  const secret = process.env.AUTH_SECRET || 'dev-insecure-secret-change-me';
+  const token = req.cookies.get(SESSION_COOKIE)?.value;
+  const session = token ? await verifySession(token, secret) : null;
+
+  if (!session) {
+    const url = req.nextUrl.clone();
+    url.pathname = '/login';
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+};
