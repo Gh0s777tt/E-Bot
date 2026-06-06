@@ -9,6 +9,11 @@ import { startClipRelay } from './creator/clips.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
 import { setupMessageEarning } from './empire/messages.mts';
 import { setupVoiceEarning } from './empire/voice.mts';
+import { handleButton } from './engagement/buttons.mts';
+import { startGiveaways } from './engagement/giveaways.mts';
+import { startReminders } from './engagement/reminders.mts';
+import { startStarboard } from './engagement/starboard.mts';
+import { startTempVoice } from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
 import { startLeveling } from './leveling.mts';
 import { startNotifier } from './live/notifier.mts';
@@ -78,6 +83,10 @@ client.once(Events.ClientReady, (c) => {
   startWelcome(c); // Faza 6 — powitania + autorole
   startAutomod(c); // Faza 6 — automoderacja
   startClipRelay(c); // Faza 6 — relay klipów Twitch (config z panelu /creator)
+  startReminders(c); // Faza 6 / B5 — przypomnienia /remind
+  startGiveaways(c); // Faza 6 / B5 — giveawaye /giveaway
+  startStarboard(c); // Faza 6 / B5 — starboard ⭐
+  startTempVoice(c); // Faza 6 / B5 — kanały głosowe na żądanie
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(
@@ -89,6 +98,10 @@ client.once(Events.ClientReady, (c) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isButton()) {
+    await handleButton(interaction).catch((err) => console.error('button:', err));
+    return;
+  }
   if (!interaction.isChatInputCommand()) return;
   const cmd = registry.get(interaction.commandName);
   if (!cmd) return;

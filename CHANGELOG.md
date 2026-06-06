@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-43-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.12.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-44-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.13.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.13.0] — Faza 6 / B5: engagement
+
+- `[#044]` 🎉 **Pakiet zaangażowania** (panel `/engagement` + komendy bota):
+  - **Role za przyciski** — `/buttonpanel` publikuje konfigurowalną wiadomość z przyciskami; klik przełącza rolę (dispatcher `role:<id>`).
+  - **`/remind`** `<czas> <treść>` — przypomnienia (parser `10m/2h/1d/1h30m`), zapis w `reminders`, poller wysyła gdy nadejdzie.
+  - **`/giveaway start`** `<czas> <zwycięzców> <nagroda>` — konkurs z przyciskiem „Wejdź" (wpisy w `giveaway_entries`), poller losuje zwycięzców (Fisher–Yates) po czasie.
+  - **Starboard** — reakcja ⭐ ≥ próg → repost wiadomości na kanał starboardu (config: kanał/próg/emoji).
+  - **Kanały głosowe na żądanie** — wejście na „hub" tworzy prywatny kanał i przenosi usera; pusty → usuwany.
+  - Bot: `engagement/{buttons,reminders,giveaways,starboard,tempvoice,buttonroles}.mts` + `lib/duration.mts`; obsługa `isButton()` w `index.mts`. Panel: `lib/engagement.ts` + 3× Zod + 3× API + 3 formularze + lista giveawayów. **Nowy SQL: `dashboard/scripts/b5-schema.sql`.**
 
 ## [0.12.0] — Faza 6 / B4: narzędzia twórcy
 

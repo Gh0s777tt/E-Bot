@@ -21,7 +21,7 @@ export function ChannelSelect({
   value: string;
   onChange: (v: string) => void;
   channels: GuildChannel[];
-  kind?: 'text' | 'category';
+  kind?: 'text' | 'category' | 'voice';
   placeholder?: string;
   className?: string;
 }) {
@@ -35,18 +35,24 @@ export function ChannelSelect({
       />
     );
   }
-  const list = channels.filter((c) => (kind === 'category' ? c.type === 4 : TEXTLIKE.has(c.type)));
+  const list = channels.filter((c) =>
+    kind === 'category' ? c.type === 4 : kind === 'voice' ? c.type === 2 : TEXTLIKE.has(c.type),
+  );
   const known = list.some((c) => c.id === value);
-  const prefix = kind === 'category' ? '🗂 ' : '# ';
+  const prefix = kind === 'category' ? '🗂 ' : kind === 'voice' ? '🔊 ' : '# ';
+  const defaultPh =
+    kind === 'category'
+      ? '— wybierz kategorię —'
+      : kind === 'voice'
+        ? '— wybierz kanał głosowy —'
+        : '— wybierz kanał —';
   return (
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className={`${cls} ${className}`}
     >
-      <option value="">
-        {placeholder ?? (kind === 'category' ? '— wybierz kategorię —' : '— wybierz kanał —')}
-      </option>
+      <option value="">{placeholder ?? defaultPh}</option>
       {list.map((c) => (
         <option key={c.id} value={c.id}>
           {prefix}

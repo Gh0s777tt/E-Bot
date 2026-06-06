@@ -108,6 +108,39 @@ export const automodSchema = z.object({
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 
+// ── Engagement: button-role (POST /api/buttonroles) ────────
+export const buttonRolesSchema = z.object({
+  message: z.string().max(500),
+  buttons: z
+    .array(
+      z.object({
+        label: z.string().max(80),
+        roleId: z.string().max(40),
+        emoji: z.string().max(64),
+      }),
+    )
+    .max(25),
+});
+export type ButtonRolesInput = z.infer<typeof buttonRolesSchema>;
+
+// ── Engagement: starboard (POST /api/starboard) ────────────
+export const starboardSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  threshold: z.number().int().min(1).max(50),
+  emoji: z.string().min(1).max(64),
+});
+export type StarboardInput = z.infer<typeof starboardSchema>;
+
+// ── Engagement: temp-voice (POST /api/tempvoice) ───────────
+export const tempvoiceSchema = z.object({
+  enabled: z.boolean(),
+  hubChannelId: z.string().max(40),
+  categoryId: z.string().max(40),
+  nameTemplate: z.string().max(100),
+});
+export type TempVoiceInput = z.infer<typeof tempvoiceSchema>;
+
 // ── Narzędzia twórcy (POST /api/creator) ───────────────────
 export const creatorSchema = z.object({
   autoEvent: z.boolean(),
