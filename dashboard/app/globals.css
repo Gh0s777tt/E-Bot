@@ -1,6 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* ── Motyw (Tailwind 4, CSS-first) ─────────────────────────
+   Kolory akcentu wskazują na runtime'owe zmienne --accent-rgb
+   (ustawiane przez ThemeSwitcher / skrypt w layout). */
+@theme {
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-card: #171717;
+  --color-elevated: #232323;
+  --color-accent: rgb(var(--accent-rgb));
+  --color-accent-hover: rgb(var(--accent-hover-rgb));
+  --color-accent-dark: rgb(var(--accent-dark-rgb));
+  --color-muted: #a0a0a0;
+  --color-line: #262626;
+  --color-text: #ededed;
+
+  /* akcenty platform (stałe) */
+  --color-discord: #5865f2;
+  --color-twitch: #9146ff;
+  --color-kick: #53fc18;
+  --color-youtube: #ff0000;
+
+  /* font-sans = czcionka body z next/font (--font-body); display obsługuje .font-display niżej */
+  --font-sans: var(--font-body), system-ui, 'Segoe UI', sans-serif;
+
+  --shadow-glow: 0 0 18px rgb(var(--accent-rgb) / 0.22);
+  --shadow-glow-sm: 0 0 10px rgb(var(--accent-rgb) / 0.28);
+}
 
 :root {
   color-scheme: dark;
