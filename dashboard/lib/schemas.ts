@@ -38,6 +38,31 @@ export const antinukeSchema = z.object({
 });
 export type AntinukeInput = z.infer<typeof antinukeSchema>;
 
+// ── Leveling (POST /api/leveling) ──────────────────────────
+export const levelRewardSchema = z.object({
+  level: z.number().int().min(1).max(1000),
+  roleId: z.string().max(40),
+});
+export const levelingSchema = z.object({
+  enabled: z.boolean(),
+  xpPerMessage: z.number().int().min(0).max(1000),
+  xpPerVoiceMin: z.number().int().min(0).max(1000),
+  cooldownSec: z.number().int().min(0).max(3600),
+  announceChannelId: z.string().max(40),
+  rewards: z.array(levelRewardSchema).max(100),
+});
+export type LevelingInput = z.infer<typeof levelingSchema>;
+
+// ── Tickety (POST /api/tickets) ────────────────────────────
+export const ticketsConfigSchema = z.object({
+  enabled: z.boolean(),
+  categoryId: z.string().max(40),
+  supportRoleId: z.string().max(40),
+  welcome: z.string().max(500),
+  logChannelId: z.string().max(40),
+});
+export type TicketsConfigInput = z.infer<typeof ticketsConfigSchema>;
+
 // Pomocnik: czyta JSON z requestu i waliduje; zwraca dane lub komunikat błędu.
 export async function parseBody<T>(
   request: Request,

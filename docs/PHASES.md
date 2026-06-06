@@ -53,8 +53,8 @@
 
 ## 🧭 Faza 4 — Wzrost *(plan)*
 > 📋 Szczegółowy plan (architektura, model danych, podział bot↔panel): [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
-- [ ] Tickety (panel + komendy)
-- [ ] Leveling / XP + role nagrody
+- [ ] Tickety — **panel ✓** (config + lista zgłoszeń); komendy/obsługa w bocie: TODO
+- [ ] Leveling / XP — **panel ✓** (config + ranking); naliczanie XP + role‑nagrody w bocie: TODO
 - [ ] Reaction roles z edytora w panelu
 - [ ] Komendy AI (DeepSeek/OpenAI z twardym limitem kosztów)
 - [ ] Webhooki EventSub (zamiast pollingu) przez Cloudflare Tunnel

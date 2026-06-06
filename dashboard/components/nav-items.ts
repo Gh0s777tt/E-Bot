@@ -7,6 +7,8 @@ import {
   Settings,
   ShieldAlert,
   TerminalSquare,
+  Ticket,
+  Trophy,
   Tv,
   User,
 } from 'lucide-react';
@@ -20,6 +22,8 @@ export const NAV_ITEMS = [
   { href: '/integrations', label: 'Integracje', icon: Plug },
   { href: '/commands', label: 'Komendy', icon: TerminalSquare },
   { href: '/economy', label: 'Ekonomia', icon: Coins },
+  { href: '/levels', label: 'Levele', icon: Trophy },
+  { href: '/tickets', label: 'Tickety', icon: Ticket },
   { href: '/profile', label: 'Profil', icon: User },
   { href: '/settings', label: 'Ustawienia', icon: Settings },
 ];
