@@ -1,16 +1,21 @@
-// /mod — komendy moderacji (warn / timeout / clear / warnings). Tylko dla moderatorów
-// (setDefaultMemberPermissions = ModerateMembers). Historia w Supabase 'mod_cases', mod-log z automod_config.
+// /mod — komendy moderacji. Gate komendy: ModerateMembers; akcje twarde (kick/ban/tempban/unban)
+// dodatkowo sprawdzają uprawnienia w runtime. Historia w Supabase 'mod_cases', tempbany w 'temp_bans'
+// (auto-unban przez security/moderation.mts). Mod-log: kanał z automod_config.modlogChannelId.
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
   MessageFlags,
   PermissionFlagsBits,
+  type PermissionResolvable,
   SlashCommandBuilder,
   type TextChannel,
   type User,
 } from 'discord.js';
-import { cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { cloudDelete, cloudInsert, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
+import { formatDuration, parseDuration } from '../lib/duration.mts';
+
+const MAX_TEMPBAN_MS = 365 * 86_400_000; // 1 rok
 
 function modlogChannelId(): string {
   const raw = getSettings()['automod_config'];
@@ -58,6 +63,14 @@ async function logCase(
   }
 }
 
+async function reply(interaction: ChatInputCommandInteraction, content: string): Promise<void> {
+  await interaction.reply({ content, flags: MessageFlags.Ephemeral });
+}
+
+function lacks(interaction: ChatInputCommandInteraction, perm: PermissionResolvable): boolean {
+  return !interaction.memberPermissions?.has(perm);
+}
+
 export const data = new SlashCommandBuilder()
   .setName('mod')
   .setDescription('Komendy moderacji.')
@@ -86,6 +99,55 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((s) =>
     s
+      .setName('kick')
+      .setDescription('Wyrzuć użytkownika z serwera')
+      .addUserOption((o) => o.setName('user').setDescription('Użytkownik').setRequired(true))
+      .addStringOption((o) => o.setName('reason').setDescription('Powód').setMaxLength(400)),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('ban')
+      .setDescription('Zbanuj użytkownika (na stałe)')
+      .addUserOption((o) => o.setName('user').setDescription('Użytkownik').setRequired(true))
+      .addStringOption((o) => o.setName('reason').setDescription('Powód').setMaxLength(400))
+      .addIntegerOption((o) =>
+        o
+          .setName('delete_days')
+          .setDescription('Usuń wiadomości z N dni (0–7)')
+          .setMinValue(0)
+          .setMaxValue(7),
+      ),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('tempban')
+      .setDescription('Ban tymczasowy (auto-unban po czasie)')
+      .addUserOption((o) => o.setName('user').setDescription('Użytkownik').setRequired(true))
+      .addStringOption((o) =>
+        o.setName('duration').setDescription('np. 1d, 12h, 30m, 1h30m').setRequired(true),
+      )
+      .addStringOption((o) => o.setName('reason').setDescription('Powód').setMaxLength(400)),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('unban')
+      .setDescription('Odbanuj użytkownika (po ID)')
+      .addStringOption((o) =>
+        o.setName('user_id').setDescription('ID użytkownika').setRequired(true),
+      )
+      .addStringOption((o) => o.setName('reason').setDescription('Powód').setMaxLength(400)),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('note')
+      .setDescription('Dodaj wewnętrzną notatkę (bez DM do użytkownika)')
+      .addUserOption((o) => o.setName('user').setDescription('Użytkownik').setRequired(true))
+      .addStringOption((o) =>
+        o.setName('text').setDescription('Treść notatki').setRequired(true).setMaxLength(400),
+      ),
+  )
+  .addSubcommand((s) =>
+    s
       .setName('clear')
       .setDescription('Usuń N ostatnich wiadomości')
       .addIntegerOption((o) =>
@@ -106,7 +168,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   if (!interaction.guild) {
-    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    await reply(interaction, 'Tylko na serwerze.');
     return;
   }
   const sub = interaction.options.getSubcommand();
@@ -120,10 +182,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         `⚠️ Otrzymałeś ostrzeżenie na **${interaction.guild.name}**: ${reason || '(brak powodu)'}`,
       )
       .catch(() => {});
-    await interaction.reply({
-      content: `⚠️ Ostrzeżono <@${user.id}>.`,
-      flags: MessageFlags.Ephemeral,
-    });
+    await reply(interaction, `⚠️ Ostrzeżono <@${user.id}>.`);
     return;
   }
 
@@ -133,25 +192,143 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const reason = interaction.options.getString('reason') ?? '';
     const member = await interaction.guild.members.fetch(user.id).catch(() => null);
     if (!member) {
-      await interaction.reply({
-        content: 'Nie znaleziono członka.',
-        flags: MessageFlags.Ephemeral,
-      });
+      await reply(interaction, 'Nie znaleziono członka.');
       return;
     }
     try {
       await member.timeout(minutes * 60_000, reason || undefined);
       await logCase(interaction, 'timeout', user, `${minutes} min · ${reason}`);
-      await interaction.reply({
-        content: `🔇 Timeout <@${user.id}> na ${minutes} min.`,
-        flags: MessageFlags.Ephemeral,
-      });
+      await reply(interaction, `🔇 Timeout <@${user.id}> na ${minutes} min.`);
     } catch (e) {
-      await interaction.reply({
-        content: `❌ ${(e as Error).message}`,
-        flags: MessageFlags.Ephemeral,
-      });
+      await reply(interaction, `❌ ${(e as Error).message}`);
     }
+    return;
+  }
+
+  if (sub === 'kick') {
+    if (lacks(interaction, PermissionFlagsBits.KickMembers)) {
+      await reply(interaction, '⛔ Potrzebujesz uprawnienia „Wyrzucanie członków".');
+      return;
+    }
+    const user = interaction.options.getUser('user', true);
+    const reason = interaction.options.getString('reason') ?? '';
+    const member = await interaction.guild.members.fetch(user.id).catch(() => null);
+    if (!member) {
+      await reply(interaction, 'Nie znaleziono członka.');
+      return;
+    }
+    try {
+      await member.kick(reason || undefined);
+      await logCase(interaction, 'kick', user, reason);
+      await reply(interaction, `👢 Wyrzucono <@${user.id}>.`);
+    } catch (e) {
+      await reply(interaction, `❌ ${(e as Error).message}`);
+    }
+    return;
+  }
+
+  if (sub === 'ban') {
+    if (lacks(interaction, PermissionFlagsBits.BanMembers)) {
+      await reply(interaction, '⛔ Potrzebujesz uprawnienia „Banowanie członków".');
+      return;
+    }
+    const user = interaction.options.getUser('user', true);
+    const reason = interaction.options.getString('reason') ?? '';
+    const days = interaction.options.getInteger('delete_days') ?? 0;
+    try {
+      await interaction.guild.bans.create(user.id, {
+        reason: reason || undefined,
+        deleteMessageSeconds: days * 86_400,
+      });
+      if (hasCloud()) {
+        await cloudDelete(
+          'temp_bans',
+          `guild_id=eq.${interaction.guildId}&user_id=eq.${user.id}`,
+        ).catch(() => {});
+      }
+      await logCase(interaction, 'ban', user, reason);
+      await reply(interaction, `🔨 Zbanowano <@${user.id}>.`);
+    } catch (e) {
+      await reply(interaction, `❌ ${(e as Error).message}`);
+    }
+    return;
+  }
+
+  if (sub === 'tempban') {
+    if (lacks(interaction, PermissionFlagsBits.BanMembers)) {
+      await reply(interaction, '⛔ Potrzebujesz uprawnienia „Banowanie członków".');
+      return;
+    }
+    const user = interaction.options.getUser('user', true);
+    const reason = interaction.options.getString('reason') ?? '';
+    const ms = parseDuration(interaction.options.getString('duration', true));
+    if (!ms || ms > MAX_TEMPBAN_MS) {
+      await reply(interaction, '❌ Zły czas. Użyj np. `1d`, `12h`, `30m`, `1h30m` (max 365d).');
+      return;
+    }
+    if (!hasCloud()) {
+      await reply(interaction, '❌ Tempban wymaga chmury (Supabase + f6-moderation-schema.sql).');
+      return;
+    }
+    const human = formatDuration(ms);
+    try {
+      await interaction.guild.bans.create(user.id, {
+        reason: `Tempban ${human} · ${reason}`.slice(0, 500),
+      });
+      await cloudUpsert(
+        'temp_bans',
+        [
+          {
+            guild_id: interaction.guildId,
+            user_id: user.id,
+            username: user.username,
+            reason: reason || null,
+            unban_at: new Date(Date.now() + ms).toISOString(),
+          },
+        ],
+        'guild_id,user_id',
+      ).catch((e) => console.warn('[mod]', (e as Error).message));
+      await logCase(interaction, 'tempban', user, `${human} · ${reason}`);
+      await reply(interaction, `⏳ Tempban <@${user.id}> na **${human}**.`);
+    } catch (e) {
+      await reply(interaction, `❌ ${(e as Error).message}`);
+    }
+    return;
+  }
+
+  if (sub === 'unban') {
+    if (lacks(interaction, PermissionFlagsBits.BanMembers)) {
+      await reply(interaction, '⛔ Potrzebujesz uprawnienia „Banowanie członków".');
+      return;
+    }
+    const userId = interaction.options.getString('user_id', true).trim();
+    if (!/^\d{15,25}$/.test(userId)) {
+      await reply(interaction, '❌ Podaj poprawne ID użytkownika (same cyfry).');
+      return;
+    }
+    const reason = interaction.options.getString('reason') ?? '';
+    try {
+      await interaction.guild.bans.remove(userId, reason || undefined);
+      if (hasCloud()) {
+        await cloudDelete(
+          'temp_bans',
+          `guild_id=eq.${interaction.guildId}&user_id=eq.${userId}`,
+        ).catch(() => {});
+      }
+      const user = await interaction.client.users.fetch(userId).catch(() => null);
+      await logCase(interaction, 'unban', user, reason);
+      await reply(interaction, `♻️ Odbanowano <@${userId}>.`);
+    } catch (e) {
+      await reply(interaction, `❌ ${(e as Error).message} (czy użytkownik jest zbanowany?)`);
+    }
+    return;
+  }
+
+  if (sub === 'note') {
+    const user = interaction.options.getUser('user', true);
+    const text = interaction.options.getString('text', true);
+    await logCase(interaction, 'note', user, text);
+    await reply(interaction, `📝 Zapisano notatkę o <@${user.id}>.`);
     return;
   }
 
@@ -159,21 +336,18 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const amount = interaction.options.getInteger('amount', true);
     const ch = interaction.channel;
     if (!ch || !('bulkDelete' in ch)) {
-      await interaction.reply({ content: 'Tu nie można czyścić.', flags: MessageFlags.Ephemeral });
+      await reply(interaction, 'Tu nie można czyścić.');
       return;
     }
     try {
       const deleted = await (ch as TextChannel).bulkDelete(amount, true);
       await logCase(interaction, 'clear', null, `${deleted.size} wiadomości w <#${ch.id}>`);
-      await interaction.reply({
-        content: `🧹 Usunięto ${deleted.size} wiadomości.`,
-        flags: MessageFlags.Ephemeral,
-      });
+      await reply(interaction, `🧹 Usunięto ${deleted.size} wiadomości.`);
     } catch (e) {
-      await interaction.reply({
-        content: `❌ ${(e as Error).message} (masowo nie usuwa się wiadomości starszych niż 14 dni).`,
-        flags: MessageFlags.Ephemeral,
-      });
+      await reply(
+        interaction,
+        `❌ ${(e as Error).message} (masowo nie usuwa się wiadomości starszych niż 14 dni).`,
+      );
     }
     return;
   }

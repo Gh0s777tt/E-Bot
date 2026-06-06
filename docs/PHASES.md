@@ -9,6 +9,7 @@
 ![Faza 4](https://img.shields.io/badge/Faza_4-✅-E50914?labelColor=0a0a0a)
 ![Faza 5](https://img.shields.io/badge/Faza_5-✅-E50914?labelColor=0a0a0a)
 ![Faza 6](https://img.shields.io/badge/Faza_6-✅-E50914?labelColor=0a0a0a)
+![Faza 7](https://img.shields.io/badge/Faza_7-🔄-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -76,6 +77,22 @@
 - [x] **B6** — Biblioteka 2.0: lista życzeń (`/wishlist`) + ręczne dodawanie gier z IGDB
 - [x] **B7** — Infra/jakość: Vitest+CI, alert „bot down" (health+cron), handlery błędów, cache TTL
 - [ ] (przyszłość) pełny Sentry (DSN), Redis (instancja), Supabase Realtime, Playwright E2E
+
+## 🔄 Faza 7 — „Wszystko + pełna personalizacja" (partiami F1–F10)
+- [x] **F1** — Centrum sterowania (`/modules` on/off) + MessageEditor (markdown/emoji/czcionki Unicode/zmienne/live‑preview) + ColorField/GradientField + własny HEX akcentu
+- [x] **F2** — Karty rang `/rank` (canvas: gradient + czcionka) + baner powitalny + panel `/appearance`
+- [x] **F3** — Ekonomia serwera `/eco` (daily/work/rob/pay/bank/gamble/slots/shop/buy/top) + panel + sklep ról
+- [x] **F4** — Leveling++ (mnożniki XP, no‑XP, anti‑AFK voice, custom level‑up, stack ról, `/prestige`)
+- [x] **F5** — Tickety++ (`/ticketpanel` przycisk→modal, transkrypty HTML→log+DM, oceny ⭐)
+- [ ] **F6** — Bezpieczeństwo++ *(w toku)*
+  - [x] **F6.1** — Kary + sprawy: `/mod kick|ban|tempban|unban|note`, `/case`, auto‑unban (`temp_bans`)
+  - [ ] F6.2 — Logi serwera (zdarzenia → kanał)
+  - [ ] F6.3 — Weryfikacja (gate‑przycisk) + anti‑raid (fala wejść → akcja)
+  - [ ] F6.4 — Modmail (DM ↔ wątek na serwerze)
+- [ ] **F7** — Społeczność (sugestie, custom commands/autoresponder, ankiety, urodziny, highlighty, AFK, liczniki kanałów)
+- [ ] **F8** — AI++ (czat z pamięcią, `/imagine`, `/tldr`, `/translate`, AI‑moderacja)
+- [ ] **F9** — Gaming unikat (price‑tracking ITAD, free‑games feed, patch‑notes, backlog, Twitch sub→rola, donejty)
+- [ ] **F10** — Analityka + Infra (wykresy aktywności, sezonowe rankingi levelingu, Realtime, Sentry z DSN, Playwright, i18n)
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

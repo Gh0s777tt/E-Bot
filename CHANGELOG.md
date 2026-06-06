@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-51-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.20.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-52-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.21.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.21.0] — Faza 7 / F6.1: kary & sprawy moderacyjne
+
+- `[#052]` 🛡️ **Pełna moderacja — kary + historia spraw:**
+  - **`/mod`** rozszerzone o `kick`, `ban` (opcja `delete_days` 0–7), `tempban` (czas: `1d`/`12h`/`1h30m`, max 365d), `unban` (po ID) oraz `note` (wewnętrzna notatka, bez DM). Akcje twarde sprawdzają uprawnienia moderatora **w runtime** (Kick/Ban Members) niezależnie od bramki komendy.
+  - **`/case`** — historia spraw: `user` (wszystkie akcje danej osoby + podsumowanie liczbowe) oraz `recent` (ostatnie na serwerze), z krótkim ID sprawy (`#xxxxxxxx`).
+  - **Tempban z auto‑unbanem** — `bot/src/security/moderation.mts` (poller co 60 s) zdejmuje bany po `unban_at` i loguje automatyczny `unban` jako „System". Dane w nowej tabeli `temp_bans`. **17 komend.**
+  - Panel **`/moderation`**: nowe style akcji (note/tempban/unban) + sekcja **„Aktywne tempbany"** (użytkownik, powód, czas auto‑unbanu, ile zostało).
+  - Bot: `commands/mod.mts` + `commands/case.mts` + `cloudDelete` w `lib/cloud.mts`; start pollera w `index.mts`. Panel: `getTempBans` w `lib/faza4.ts`. **Nowy SQL: `dashboard/scripts/f6-moderation-schema.sql`** (`temp_bans`).
 
 ## [0.20.0] — Faza 7 / F5: tickety++
 

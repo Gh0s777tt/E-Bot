@@ -20,6 +20,7 @@ import { startLeveling } from './leveling.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
+import { startModeration } from './security/moderation.mts';
 import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
 import { startWelcome } from './welcome.mts';
 
@@ -85,6 +86,7 @@ client.once(Events.ClientReady, (c) => {
   }
   startNotifier(c);
   startAntiNuke(c);
+  startModeration(c); // Faza 7 / F6 — auto-unban tempbanów (poll Supabase)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence

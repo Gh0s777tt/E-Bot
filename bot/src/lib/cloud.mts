@@ -142,3 +142,14 @@ export async function cloudUpdate(table: string, filterQs: string, patch: unknow
   });
   if (!r.ok) throw new Error(`${table} UPDATE ${r.status}: ${await r.text().catch(() => '')}`);
 }
+
+/** DELETE (filterQs = warunek PostgREST, np. 'id=eq.<uuid>'). UWAGA: zawsze podawaj filtr! */
+export async function cloudDelete(table: string, filterQs: string): Promise<void> {
+  if (!hasCloud() || !filterQs) return;
+  const r = await fetch(tableUrl(table, filterQs), {
+    method: 'DELETE',
+    headers: headers({ Prefer: 'return=minimal' }),
+    signal: timeout(),
+  });
+  if (!r.ok) throw new Error(`${table} DELETE ${r.status}: ${await r.text().catch(() => '')}`);
+}

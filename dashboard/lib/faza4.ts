@@ -303,3 +303,28 @@ export async function getModCases(limit = 30): Promise<ModCase[]> {
     return []; // tabela jeszcze nie istnieje / brak danych
   }
 }
+
+// Aktywne tempbany (Faza 7 / F6) — bot auto-zdejmuje je po unban_at (poller co 60 s).
+export type TempBan = {
+  id: string;
+  user_id: string;
+  username: string | null;
+  reason: string | null;
+  unban_at: string;
+  created_at: string;
+};
+
+export async function getTempBans(limit = 50): Promise<TempBan[]> {
+  if (!hasSupabase) return [];
+  try {
+    const { data, error } = await supabase()
+      .from('temp_bans')
+      .select('id,user_id,username,reason,unban_at,created_at')
+      .order('unban_at', { ascending: true })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as TempBan[];
+  } catch {
+    return []; // tabela jeszcze nie istnieje (f6-moderation-schema.sql) / brak danych
+  }
+}

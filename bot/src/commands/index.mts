@@ -2,6 +2,7 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 import * as ai from './ai.mts';
 import * as antinuke from './antinuke.mts';
 import * as buttonpanel from './buttonpanel.mts';
+import * as caseCmd from './case.mts';
 import * as economy from './economy.mts';
 import * as giveaway from './giveaway.mts';
 import * as library from './library.mts';
@@ -30,6 +31,7 @@ export const commands: Command[] = [
   ticket,
   ai,
   mod,
+  caseCmd,
   remind,
   giveaway,
   buttonpanel,
