@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = { enabled: boolean; channelId: string; message: string; autoroleId: string };
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function WelcomeForm({ initial }: { initial: Cfg }) {
+export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,21 +42,20 @@ export default function WelcomeForm({ initial }: { initial: Cfg }) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał powitań (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Kanał powitań</span>
+          <ChannelSelect
             value={c.channelId}
-            onChange={(e) => setC({ ...c, channelId: e.target.value })}
-            placeholder="ID kanału"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, channelId: v })}
+            channels={guild.channels}
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Autorole na wejście (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Autorole na wejście</span>
+          <RoleSelect
             value={c.autoroleId}
-            onChange={(e) => setC({ ...c, autoroleId: e.target.value })}
-            placeholder="ID roli (opcjonalnie)"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, autoroleId: v })}
+            roles={guild.roles}
+            placeholder="— bez autoroli —"
           />
         </label>
       </div>

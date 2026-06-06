@@ -2,6 +2,8 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import { RoleSelect } from './pickers';
 
 type RR = { messageId: string; emoji: string; roleId: string };
 type Row = RR & { k: string };
@@ -9,7 +11,7 @@ type Row = RR & { k: string };
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function ReactionRolesForm({ initial }: { initial: RR[] }) {
+export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; guild: GuildMeta }) {
   const idRef = useRef(0);
   const [rows, setRows] = useState<Row[]>(() =>
     initial.map((r) => ({ ...r, k: `r${idRef.current++}` })),
@@ -70,11 +72,10 @@ export default function ReactionRolesForm({ initial }: { initial: RR[] }) {
             placeholder="emoji"
             className={inputCls}
           />
-          <input
+          <RoleSelect
             value={r.roleId}
-            onChange={(e) => setRow(r.k, { roleId: e.target.value })}
-            placeholder="ID roli"
-            className={inputCls}
+            onChange={(v) => setRow(r.k, { roleId: v })}
+            roles={guild.roles}
           />
           <button
             type="button"

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import { ChannelSelect } from './pickers';
 
 type Settings = {
   notify_channel_id: string;
@@ -33,7 +35,13 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
   );
 }
 
-export default function NotifSettingsForm({ initial }: { initial: Settings }) {
+export default function NotifSettingsForm({
+  initial,
+  guild,
+}: {
+  initial: Settings;
+  guild: GuildMeta;
+}) {
   const [s, setS] = useState<Settings>(initial);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
@@ -59,15 +67,14 @@ export default function NotifSettingsForm({ initial }: { initial: Settings }) {
   return (
     <div className="max-w-2xl space-y-6">
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-white/90">ID kanału Discord</label>
-        <input
+        <label className="block text-sm font-semibold text-white/90">Kanał powiadomień</label>
+        <ChannelSelect
           value={s.notify_channel_id}
-          onChange={(e) => set('notify_channel_id', e.target.value)}
-          placeholder="np. 123456789012345678"
-          className="w-full rounded-md border border-line bg-elevated px-3 py-2 outline-none focus:border-accent"
+          onChange={(v) => set('notify_channel_id', v)}
+          channels={guild.channels}
         />
         <p className="text-xs text-muted">
-          Discord → tryb dewelopera → PPM na kanale → „Kopiuj ID".
+          Kanał, na który bot wyśle ogłoszenie o live. Lista pobierana z serwera.
         </p>
       </div>
 

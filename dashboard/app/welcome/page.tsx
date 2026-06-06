@@ -1,11 +1,12 @@
 import { DoorOpen } from 'lucide-react';
 import WelcomeForm from '../../components/WelcomeForm';
 import { getWelcomeConfig } from '../../lib/community';
+import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
 export default async function WelcomePage() {
-  const cfg = await getWelcomeConfig();
+  const [cfg, guild] = await Promise.all([getWelcomeConfig(), getGuildMeta()]);
   return (
     <div className="space-y-6">
       <p className="max-w-3xl text-sm text-muted">
@@ -21,7 +22,7 @@ export default async function WelcomePage() {
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <DoorOpen size={16} className="text-accent" /> Powitania + autorole
         </h2>
-        <WelcomeForm initial={cfg} />
+        <WelcomeForm initial={cfg} guild={guild} />
       </section>
     </div>
   );

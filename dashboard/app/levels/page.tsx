@@ -2,11 +2,16 @@ import { Award, Trophy, Users } from 'lucide-react';
 import LevelingForm from '../../components/LevelingForm';
 import StatCard from '../../components/StatCard';
 import { getLeaderboard, getLevelingConfig } from '../../lib/faza4';
+import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
 export default async function LevelsPage() {
-  const [cfg, board] = await Promise.all([getLevelingConfig(), getLeaderboard(50)]);
+  const [cfg, board, guild] = await Promise.all([
+    getLevelingConfig(),
+    getLeaderboard(50),
+    getGuildMeta(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -30,7 +35,7 @@ export default async function LevelsPage() {
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Trophy size={16} className="text-accent" /> Konfiguracja levelingu
         </h2>
-        <LevelingForm initial={cfg} />
+        <LevelingForm initial={cfg} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = {
   enabled: boolean;
@@ -13,7 +15,7 @@ type Cfg = {
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function TicketsConfigForm({ initial }: { initial: Cfg }) {
+export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -46,30 +48,28 @@ export default function TicketsConfigForm({ initial }: { initial: Cfg }) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kategoria kanałów (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Kategoria kanałów</span>
+          <ChannelSelect
             value={c.categoryId}
-            onChange={(e) => setC({ ...c, categoryId: e.target.value })}
-            placeholder="ID kategorii"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, categoryId: v })}
+            channels={guild.channels}
+            kind="category"
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Rola obsługi (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Rola obsługi</span>
+          <RoleSelect
             value={c.supportRoleId}
-            onChange={(e) => setC({ ...c, supportRoleId: e.target.value })}
-            placeholder="ID roli supportu"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, supportRoleId: v })}
+            roles={guild.roles}
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał logów (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Kanał logów</span>
+          <ChannelSelect
             value={c.logChannelId}
-            onChange={(e) => setC({ ...c, logChannelId: e.target.value })}
-            placeholder="ID kanału logów"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, logChannelId: v })}
+            channels={guild.channels}
           />
         </label>
       </div>

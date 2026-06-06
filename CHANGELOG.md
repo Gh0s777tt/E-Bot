@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-41-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.11.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-42-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.11.2-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.11.2] — Faza 6 / B3: pickery ról i kanałów (UX)
+
+- `[#042]` 🎛️ **Koniec wklejania ID** — formularze panelu (Powitania, Automod, Leveling, Tickety, Reaction‑roles, Powiadomienia) mają teraz **listy rozwijane** ról i kanałów pobierane z serwera (`lib/guild.ts` → Discord REST bot tokenem; guild ID z env lub auto‑wykrycie). Komponenty `ChannelSelect` (kanały tekstowe / kategorie) i `RoleSelect` (`components/pickers.tsx`) z bezpiecznym fallbackiem do pola tekstowego, gdy bot jest offline / brak tokenu. Stare ID nadal honorowane (auto‑dodane jako opcja).
 
 ## [0.11.1] — Faza 6 / B2: komendy moderacji + historia spraw
 

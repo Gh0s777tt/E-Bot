@@ -2,6 +2,8 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import { ChannelSelect, RoleSelect } from './pickers';
 
 type Reward = { level: number; roleId: string };
 type Cfg = {
@@ -18,7 +20,7 @@ const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 const num = (v: string): number => Math.max(0, Math.floor(Number(v) || 0));
 
-export default function LevelingForm({ initial }: { initial: Cfg }) {
+export default function LevelingForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
   const { rewards: initRewards, ...initBase } = initial;
   const [base, setBase] = useState(initBase);
   // Stabilne klucze wierszy przez licznik (deterministyczny SSR↔klient → brak hydration mismatch,
@@ -91,12 +93,12 @@ export default function LevelingForm({ initial }: { initial: Cfg }) {
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał ogłoszeń awansu (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Kanał ogłoszeń awansu</span>
+          <ChannelSelect
             value={base.announceChannelId}
-            onChange={(e) => setBase({ ...base, announceChannelId: e.target.value })}
-            placeholder="np. 1234567890"
-            className={inputCls}
+            onChange={(v) => setBase({ ...base, announceChannelId: v })}
+            channels={guild.channels}
+            placeholder="— ten sam kanał —"
           />
         </label>
       </div>
@@ -124,11 +126,10 @@ export default function LevelingForm({ initial }: { initial: Cfg }) {
               className={`${inputCls} w-24`}
               placeholder="poziom"
             />
-            <input
+            <RoleSelect
               value={r.roleId}
-              onChange={(e) => setRow(r.k, { roleId: e.target.value })}
-              className={inputCls}
-              placeholder="ID roli"
+              onChange={(v) => setRow(r.k, { roleId: v })}
+              roles={guild.roles}
             />
             <button
               type="button"

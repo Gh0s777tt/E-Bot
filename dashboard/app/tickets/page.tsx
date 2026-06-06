@@ -3,6 +3,7 @@ import StatCard from '../../components/StatCard';
 import TicketCloseButton from '../../components/TicketCloseButton';
 import TicketsConfigForm from '../../components/TicketsConfigForm';
 import { getTickets, getTicketsConfig, ticketStats } from '../../lib/faza4';
+import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +14,11 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export default async function TicketsPage() {
-  const [cfg, rows] = await Promise.all([getTicketsConfig(), getTickets(100)]);
+  const [cfg, rows, guild] = await Promise.all([
+    getTicketsConfig(),
+    getTickets(100),
+    getGuildMeta(),
+  ]);
   const stats = ticketStats(rows);
 
   return (
@@ -38,7 +43,7 @@ export default async function TicketsPage() {
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Ticket size={16} className="text-accent" /> Konfiguracja ticketów
         </h2>
-        <TicketsConfigForm initial={cfg} />
+        <TicketsConfigForm initial={cfg} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

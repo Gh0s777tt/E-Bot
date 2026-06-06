@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import type { GuildMeta } from '../lib/guild';
+import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = {
   enabled: boolean;
@@ -17,7 +19,7 @@ const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 const num = (v: string): number => Math.max(0, Math.floor(Number(v) || 0));
 
-export default function AutomodForm({ initial }: { initial: Cfg }) {
+export default function AutomodForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -88,21 +90,20 @@ export default function AutomodForm({ initial }: { initial: Cfg }) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał mod-log (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Kanał mod-log</span>
+          <ChannelSelect
             value={c.modlogChannelId}
-            onChange={(e) => setC({ ...c, modlogChannelId: e.target.value })}
-            placeholder="ID kanału logów"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, modlogChannelId: v })}
+            channels={guild.channels}
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Rola zwolniona z automodu (ID)</span>
-          <input
+          <span className="font-semibold text-white/90">Rola zwolniona z automodu</span>
+          <RoleSelect
             value={c.exemptRoleId}
-            onChange={(e) => setC({ ...c, exemptRoleId: e.target.value })}
-            placeholder="ID roli (opcjonalnie)"
-            className={inputCls}
+            onChange={(v) => setC({ ...c, exemptRoleId: v })}
+            roles={guild.roles}
+            placeholder="— brak —"
           />
         </label>
       </div>
