@@ -1,4 +1,5 @@
 import { getAntinuke, saveAntinuke, type AntinukeConfig } from '../../../lib/data';
+import { parseBody, antinukeSchema } from '../../../lib/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,11 +8,8 @@ export async function GET(): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  try {
-    const body = (await request.json()) as AntinukeConfig;
-    await saveAntinuke(body);
-    return Response.json({ ok: true, config: await getAntinuke() });
-  } catch (e) {
-    return Response.json({ ok: false, error: (e as Error).message }, { status: 400 });
-  }
+  const parsed = await parseBody(request, antinukeSchema);
+  if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  await saveAntinuke(parsed.data as AntinukeConfig);
+  return Response.json({ ok: true, config: await getAntinuke() });
 }

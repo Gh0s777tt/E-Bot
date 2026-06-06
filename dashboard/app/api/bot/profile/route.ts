@@ -1,4 +1,5 @@
 import { getBotProfile } from '../../../../lib/botProfile';
+import { parseBody, botProfileSchema } from '../../../../lib/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,17 +12,12 @@ export async function PATCH(request: Request): Promise<Response> {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) return Response.json({ ok: false, error: 'Brak DISCORD_BOT_TOKEN w panelu' }, { status: 503 });
 
-  let body: { username?: string; avatarDataUri?: string };
-  try {
-    body = (await request.json()) as { username?: string; avatarDataUri?: string };
-  } catch {
-    return Response.json({ ok: false, error: 'Złe dane' }, { status: 400 });
-  }
+  const parsed = await parseBody(request, botProfileSchema);
+  if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
 
   const payload: Record<string, string> = {};
-  if (body.username && body.username.trim()) payload.username = body.username.trim();
-  if (body.avatarDataUri && body.avatarDataUri.startsWith('data:image/')) payload.avatar = body.avatarDataUri;
-  if (!Object.keys(payload).length) return Response.json({ ok: false, error: 'Nic do zmiany' }, { status: 400 });
+  if (parsed.data.username) payload.username = parsed.data.username;
+  if (parsed.data.avatarDataUri) payload.avatar = parsed.data.avatarDataUri;
 
   const r = await fetch('https://discord.com/api/v10/users/@me', {
     method: 'PATCH',

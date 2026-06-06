@@ -1,0 +1,56 @@
+// Walidacja runtime wejść API przez Zod — twardy kontrakt zamiast `as T`.
+import { z } from 'zod';
+
+// ── Presence bota (POST /api/bot/presence) ─────────────────
+export const presenceSchema = z.object({
+  status: z.enum(['online', 'idle', 'dnd', 'invisible']).default('online'),
+  type: z.enum(['none', 'playing', 'streaming', 'listening', 'watching', 'competing', 'custom']).default('none'),
+  text: z.string().max(128).default(''),
+  url: z.string().max(200).default(''),
+});
+export type PresenceInput = z.infer<typeof presenceSchema>;
+
+// ── Profil bota (PATCH /api/bot/profile) ───────────────────
+export const botProfileSchema = z
+  .object({
+    username: z.string().trim().min(1).max(32).optional(),
+    avatarDataUri: z.string().startsWith('data:image/').max(2_000_000).optional(),
+  })
+  .refine((d) => d.username || d.avatarDataUri, { message: 'Nic do zmiany' });
+export type BotProfileInput = z.infer<typeof botProfileSchema>;
+
+// ── Konfiguracja Anti-Nuke (POST /api/antinuke) ────────────
+const protectionSchema = z.object({
+  enabled: z.boolean(),
+  count: z.number().int().min(1).max(1000),
+  windowSec: z.number().int().min(1).max(86_400),
+});
+export const antinukeSchema = z.object({
+  enabled: z.boolean(),
+  logChannelId: z.string().max(40),
+  punishment: z.enum(['ban', 'kick', 'timeout', 'strip', 'quarantine']),
+  quarantineRoleId: z.string().max(40),
+  whitelistUsers: z.array(z.string().max(40)).max(500),
+  whitelistRoles: z.array(z.string().max(40)).max(500),
+  protections: z.record(z.string(), protectionSchema),
+});
+export type AntinukeInput = z.infer<typeof antinukeSchema>;
+
+// Pomocnik: czyta JSON z requestu i waliduje; zwraca dane lub komunikat błędu.
+export async function parseBody<T>(
+  request: Request,
+  schema: z.ZodType<T>,
+): Promise<{ ok: true; data: T } | { ok: false; error: string }> {
+  let raw: unknown;
+  try {
+    raw = await request.json();
+  } catch {
+    return { ok: false, error: 'Body nie jest poprawnym JSON' };
+  }
+  const parsed = schema.safeParse(raw);
+  if (!parsed.success) {
+    const first = parsed.error.issues[0];
+    return { ok: false, error: first ? `${first.path.join('.') || 'body'}: ${first.message}` : 'Nieprawidłowe dane' };
+  }
+  return { ok: true, data: parsed.data };
+}

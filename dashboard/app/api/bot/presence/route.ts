@@ -1,4 +1,5 @@
 import { getRawSetting, setRawSetting } from '../../../../lib/data';
+import { parseBody, presenceSchema } from '../../../../lib/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,17 +19,8 @@ export async function GET(): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  try {
-    const b = (await request.json()) as { status?: string; type?: string; text?: string; url?: string };
-    const cfg = {
-      status: String(b.status || 'online'),
-      type: String(b.type || 'none'),
-      text: String(b.text || '').slice(0, 128),
-      url: String(b.url || '').slice(0, 200),
-    };
-    await setRawSetting('bot_presence', JSON.stringify(cfg));
-    return Response.json({ ok: true, presence: cfg });
-  } catch (e) {
-    return Response.json({ ok: false, error: (e as Error).message }, { status: 400 });
-  }
+  const parsed = await parseBody(request, presenceSchema);
+  if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  await setRawSetting('bot_presence', JSON.stringify(parsed.data));
+  return Response.json({ ok: true, presence: parsed.data });
 }
