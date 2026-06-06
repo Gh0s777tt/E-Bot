@@ -215,3 +215,39 @@ export async function getReactionRoles(): Promise<ReactionRole[]> {
 export async function saveReactionRoles(list: ReactionRole[]): Promise<void> {
   await setRawSetting('reaction_roles', JSON.stringify(list));
 }
+
+// ───────────────────────── 📊 Statystyki ─────────────────────────
+export type DayPoint = { day: string; tokens: number; requests: number };
+
+export async function getAiUsageSeries(days = 14): Promise<DayPoint[]> {
+  const skeleton = (): DayPoint[] => {
+    const out: DayPoint[] = [];
+    for (let i = days - 1; i >= 0; i--) {
+      out.push({
+        day: new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10),
+        tokens: 0,
+        requests: 0,
+      });
+    }
+    return out;
+  };
+  if (!hasSupabase) return skeleton();
+  try {
+    const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
+    const { data, error } = await supabase()
+      .from('ai_usage')
+      .select('day,tokens_used,requests')
+      .gte('day', since);
+    if (error) throw new Error(error.message);
+    const map = new Map<string, { tokens: number; requests: number }>();
+    for (const r of (data ?? []) as { day: string; tokens_used: number; requests: number }[]) {
+      const cur = map.get(r.day) ?? { tokens: 0, requests: 0 };
+      cur.tokens += r.tokens_used || 0;
+      cur.requests += r.requests || 0;
+      map.set(r.day, cur);
+    }
+    return skeleton().map((p) => ({ ...p, ...(map.get(p.day) ?? {}) }));
+  } catch {
+    return skeleton();
+  }
+}

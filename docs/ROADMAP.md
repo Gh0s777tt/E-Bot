@@ -44,10 +44,10 @@ gantt
   Komendy AI (limit kosztów)   :done, f4c, 2026-06-06, 1d
   Reaction roles               :done, f4d, 2026-06-06, 1d
   Bot 24/7 (Railway)           :done, f4e, 2026-06-06, 1d
-  section Faza 5 · Wzrost (plan)
-  EventSub (webhooki live)     :     f5a, 2026-06-13, 5d
-  Statystyki / retencja        :     f5b, after f5a, 5d
-  Marketplace pluginów         :     f5c, after f5b, 7d
+  section Faza 5 · Wzrost
+  EventSub (webhooki live)     :done, f5a, 2026-06-06, 1d
+  Statystyki (panel)           :done, f5b, 2026-06-06, 1d
+  Marketplace pluginów         :     f5c, 2026-06-20, 7d
 ```
 
 ## 🧭 Fazy
@@ -59,7 +59,7 @@ gantt
 | **2** | Pełny panel GH0ST: live, ekonomia, personalizacja, motywy | ✅ done |
 | **3** | Integracja bot↔chmura: heartbeat, presence, sync configu | ✅ done |
 | **4** | Funkcje: leveling, tickety, AI, reaction roles, link‑status, bot 24/7 | ✅ done |
-| **5** | Wzrost: EventSub, statystyki/retencja, marketplace | 🧭 plan |
+| **5** | Wzrost: EventSub ✓, statystyki ✓, marketplace | 🟢 w toku |
 
 ## ✅ Zrealizowane (Fazy 0–4) — wszystko LIVE
 
@@ -77,9 +77,10 @@ flowchart LR
 
 ## 🧭 Faza 5 — Wzrost (plan / opcjonalne)
 
-- 🔔 **EventSub** — webhooki Twitch zamiast pollingu (natychmiastowe powiadomienia live; wymaga publicznego endpointu + subskrypcji Twitch EventSub). *Polling już działa → niski priorytet.*
-- 📈 **Statystyki / retencja** — wykresy aktywności, XP w czasie, użycie AI (dane już w Supabase).
-- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild.
+- ✅ **EventSub** — webhooki Twitch (`/api/twitch/eventsub`) → natychmiastowe powiadomienia live.
+- ✅ **Statystyki** — panel `/stats` (AI 14 dni, top XP, tickety, biblioteka).
+- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild *(plan)*.
+- 📈 Retencja / więcej wykresów w czasie *(plan)*.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,153 @@
+import { BarChart3, Gamepad2, MessageSquare, Ticket, Trophy } from 'lucide-react';
+import StatCard from '../../components/StatCard';
+import { getStats } from '../../lib/data';
+import {
+  getAiUsageSeries,
+  getAiUsageToday,
+  getLeaderboard,
+  getTickets,
+  ticketStats,
+} from '../../lib/faza4';
+
+export const dynamic = 'force-dynamic';
+
+const PLATFORM_LABEL: Record<string, string> = {
+  steam: 'Steam',
+  psn: 'PlayStation',
+  gog: 'GOG',
+  ubisoft: 'Ubisoft',
+};
+
+export default async function StatsPage() {
+  const [stats, aiSeries, aiToday, board, tickets] = await Promise.all([
+    getStats(),
+    getAiUsageSeries(14),
+    getAiUsageToday(),
+    getLeaderboard(8),
+    getTickets(200),
+  ]);
+  const tk = ticketStats(tickets);
+  const aiMax = Math.max(1, ...aiSeries.map((p) => p.requests));
+  const xpMax = Math.max(1, ...board.map((u) => u.xp));
+
+  return (
+    <div className="space-y-6">
+      <p className="max-w-3xl text-sm text-muted">
+        Przegląd aktywności: zużycie AI, ranking XP, tickety i biblioteka — na podstawie danych z
+        Supabase. Odświeża się na bieżąco.
+      </p>
+
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatCard label="Gry" value={stats.total} icon={<Gamepad2 size={14} />} accent />
+        <StatCard
+          label="AI zapytań dziś"
+          value={aiToday.totalRequests}
+          icon={<MessageSquare size={14} />}
+        />
+        <StatCard label="W rankingu XP" value={board.length} icon={<Trophy size={14} />} />
+        <StatCard label="Tickety otwarte" value={tk.open} icon={<Ticket size={14} />} />
+      </div>
+
+      {/* AI — 14 dni */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <BarChart3 size={16} className="text-accent" /> Zużycie AI — ostatnie 14 dni (zapytania)
+        </h2>
+        <div className="flex h-40 items-end gap-1">
+          {aiSeries.map((p) => (
+            <div
+              key={p.day}
+              className="group flex flex-1 flex-col items-center justify-end"
+              title={`${p.day}: ${p.requests} zapytań · ${p.tokens.toLocaleString('pl-PL')} tokenów`}
+            >
+              <div
+                className="w-full rounded-t bg-accent/70 transition group-hover:bg-accent"
+                style={{ height: `${(p.requests / aiMax) * 100}%` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-1 flex justify-between text-[10px] text-muted">
+          <span>{aiSeries[0]?.day.slice(5)}</span>
+          <span>{aiSeries[aiSeries.length - 1]?.day.slice(5)}</span>
+        </div>
+        {aiToday.totalRequests === 0 && aiSeries.every((p) => p.requests === 0) && (
+          <p className="mt-2 text-xs text-muted">
+            Brak zużycia AI. Użyj `/ai` na Discordzie, by zobaczyć dane.
+          </p>
+        )}
+      </section>
+
+      {/* Top XP */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Trophy size={16} className="text-accent" /> Top XP
+        </h2>
+        {board.length === 0 ? (
+          <p className="text-sm text-muted">Brak danych. Włącz leveling i pisz na Discordzie.</p>
+        ) : (
+          <div className="space-y-2">
+            {board.map((u, i) => (
+              <div key={u.user_id} className="flex items-center gap-3">
+                <span className="w-6 text-right text-sm text-muted">{i + 1}</span>
+                <span className="w-40 truncate text-sm">{u.username ?? u.user_id}</span>
+                <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-elevated">
+                  <div
+                    className="h-full rounded-full bg-accent"
+                    style={{ width: `${(u.xp / xpMax) * 100}%` }}
+                  />
+                </div>
+                <span className="w-20 text-right text-sm">
+                  lvl {u.level} · {u.xp.toLocaleString('pl-PL')}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Tickety + biblioteka */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+            <Ticket size={16} className="text-accent" /> Tickety
+          </h2>
+          <ul className="space-y-2 text-sm">
+            <li>
+              🟥 Otwarte: <strong className="text-accent">{tk.open}</strong>
+            </li>
+            <li>
+              🟨 Przejęte: <strong>{tk.claimed}</strong>
+            </li>
+            <li>
+              ⬜ Zamknięte: <strong className="text-muted">{tk.closed}</strong>
+            </li>
+          </ul>
+        </section>
+
+        <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+            <Gamepad2 size={16} className="text-accent" /> Biblioteka wg platformy
+          </h2>
+          <div className="space-y-2">
+            {Object.entries(stats.byPlatform).map(([p, n]) => (
+              <div key={p} className="flex items-center gap-3">
+                <span className="w-24 text-sm text-muted">{PLATFORM_LABEL[p] ?? p}</span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-elevated">
+                  <div
+                    className="h-full rounded-full bg-accent"
+                    style={{ width: `${stats.total ? (n / stats.total) * 100 : 0}%` }}
+                  />
+                </div>
+                <span className="w-10 text-right text-sm">{n}</span>
+              </div>
+            ))}
+            {!Object.keys(stats.byPlatform).length && (
+              <p className="text-sm text-muted">Brak danych.</p>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   Coins,
   Gamepad2,
   LayoutDashboard,
@@ -28,6 +29,7 @@ export const NAV_ITEMS = [
   { href: '/tickets', label: 'Tickety', icon: Ticket },
   { href: '/ai', label: 'AI', icon: Sparkles },
   { href: '/roles', label: 'Role', icon: Tags },
+  { href: '/stats', label: 'Statystyki', icon: BarChart3 },
   { href: '/profile', label: 'Profil', icon: User },
   { href: '/settings', label: 'Ustawienia', icon: Settings },
 ];

@@ -9,6 +9,7 @@ function isOpen(pathname: string): boolean {
     pathname === '/login' ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/img') ||
+    pathname.startsWith('/api/twitch') || // webhook EventSub — Twitch woła bez sesji (auth = HMAC)
     pathname.startsWith('/_next') ||
     pathname === '/favicon.ico' ||
     // pliki statyczne z public/ (logo, baner, favicon, fonty) — publiczne z natury,
