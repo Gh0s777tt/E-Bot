@@ -15,7 +15,7 @@ export default async function OverviewPage() {
     activeSource(),
     Promise.resolve(getIntegrations()),
   ]);
-  const recent = games.slice(0, 12);
+  const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
 
   return (
@@ -35,7 +35,7 @@ export default async function OverviewPage() {
           </a>
         </div>
         {recent.length ? (
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6">
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
             {recent.map((g) => (
               <GameCard key={`${g.platform}-${g.platform_app_id}`} game={g} />
             ))}

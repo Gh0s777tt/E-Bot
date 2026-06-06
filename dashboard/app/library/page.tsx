@@ -19,7 +19,7 @@ export default async function LibraryPage() {
             <h2 className="mb-3 text-base font-semibold">
               {PLATFORM_LABEL[p] ?? p} <span className="text-sm font-normal text-muted">· {items.length}</span>
             </h2>
-            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
               {items.map((g) => (
                 <GameCard key={`${g.platform}-${g.platform_app_id}`} game={g} />
               ))}
