@@ -6,6 +6,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
 import { type Command, commands } from './commands/index.mts';
+import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
@@ -96,6 +97,7 @@ client.once(Events.ClientReady, (c) => {
   startServerLog(c); // Faza 7 / F6.2 — logi serwera (zdarzenia → kanał, config z panelu)
   startAntiRaid(c); // Faza 7 / F6.3 — anti-raid (fala wejść → akcja, config z panelu)
   startModmail(c); // Faza 7 / F6.4 — modmail (DM ↔ wątek obsługi, config z panelu)
+  startResponder(c); // Faza 7 / F7.2 — komendy własne + autoresponder (config z panelu)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence

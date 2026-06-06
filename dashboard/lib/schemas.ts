@@ -211,6 +211,25 @@ export const suggestionsSchema = z.object({
 });
 export type SuggestionsInput = z.infer<typeof suggestionsSchema>;
 
+// ── Komendy własne + autoresponder (POST /api/responder) ───
+export const responderSchema = z.object({
+  enabled: z.boolean(),
+  prefix: z.string().min(1).max(5),
+  commands: z
+    .array(z.object({ name: z.string().min(1).max(40), response: z.string().min(1).max(2000) }))
+    .max(100),
+  autoresponders: z
+    .array(
+      z.object({
+        trigger: z.string().min(1).max(100),
+        response: z.string().min(1).max(2000),
+        match: z.enum(['contains', 'exact', 'starts']),
+      }),
+    )
+    .max(100),
+});
+export type ResponderInput = z.infer<typeof responderSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

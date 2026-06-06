@@ -71,6 +71,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'suggestions_config',
   },
   {
+    key: 'responder',
+    label: 'Komendy własne + autoresponder',
+    group: 'Społeczność',
+    href: '/responder',
+    kind: 'json',
+    settingsKey: 'responder_config',
+  },
+  {
     key: 'starboard',
     label: 'Starboard',
     group: 'Społeczność',

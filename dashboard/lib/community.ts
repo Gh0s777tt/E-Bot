@@ -204,3 +204,36 @@ export async function getSuggestionsConfig(): Promise<SuggestionsConfig> {
 export async function saveSuggestionsConfig(cfg: SuggestionsConfig): Promise<void> {
   await setRawSetting('suggestions_config', JSON.stringify(cfg));
 }
+
+// ── Komendy własne + autoresponder (Faza 7 / F7.2) ──
+export type CustomCommand = { name: string; response: string };
+export type AutoResponder = {
+  trigger: string;
+  response: string;
+  match: 'contains' | 'exact' | 'starts';
+};
+export type ResponderConfig = {
+  enabled: boolean;
+  prefix: string;
+  commands: CustomCommand[];
+  autoresponders: AutoResponder[];
+};
+export const RESPONDER_DEFAULT: ResponderConfig = {
+  enabled: false,
+  prefix: '!',
+  commands: [],
+  autoresponders: [],
+};
+
+export async function getResponderConfig(): Promise<ResponderConfig> {
+  const raw = await getRawSetting('responder_config');
+  if (!raw) return structuredClone(RESPONDER_DEFAULT);
+  try {
+    return { ...RESPONDER_DEFAULT, ...(JSON.parse(raw) as Partial<ResponderConfig>) };
+  } catch {
+    return structuredClone(RESPONDER_DEFAULT);
+  }
+}
+export async function saveResponderConfig(cfg: ResponderConfig): Promise<void> {
+  await setRawSetting('responder_config', JSON.stringify(cfg));
+}

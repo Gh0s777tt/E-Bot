@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-56-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.25.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-57-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.26.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.26.0] — Faza 7 / F7.2: komendy własne + autoresponder
+
+- `[#057]` 💬 **Komendy własne + autoresponder** (panel `/responder`):
+  - **Komendy własne** — użytkownik pisze prefiks + nazwę (np. `!regulamin`) → bot odpowiada konfigurowalnym tekstem.
+  - **Autoresponder** — reaguje na słowa-klucze w zwykłych wiadomościach z trybem dopasowania **Zawiera / Dokładnie / Zaczyna się** → auto-odpowiedź.
+  - Zmienne w odpowiedziach: `{user}` (wzmianka), `{server}` (nazwa serwera). Bot: `bot/src/community/responder.mts` (`startResponder`, listener MessageCreate; odświeżanie configu ~30 s). **Bez SQL i bez komend slash** (czysto tekstowe, config w `settings`). Panel: `responder_config` + `responderSchema` + `/api/responder` + `ResponderForm` (2 dynamiczne listy: komendy i autorespondery) + strona `/responder` (nav „Komendy własne" MessageSquarePlus) + moduł w Centrum sterowania.
 
 ## [0.25.0] — Faza 7 / F7.1: sugestie + ankiety
 
