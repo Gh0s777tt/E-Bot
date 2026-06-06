@@ -7,6 +7,11 @@ FROM node:26-slim
 RUN npm i -g pnpm@11.5.2
 WORKDIR /app
 
+# Katalog na lokalny SQLite (settings-sync pobiera tu config z Supabase; bot czyta przez getSettings).
+# Bez tego: "unable to open database file" → pusty config leveling/tickety/ai/antinuke.
+RUN mkdir -p /app/data
+ENV DATABASE_PATH=/app/data/bot.db
+
 # Najpierw manifesty workspace (lepszy cache warstw Docker)
 COPY pnpm-workspace.yaml pnpm-lock.yaml .npmrc package.json ./
 COPY bot/package.json ./bot/
