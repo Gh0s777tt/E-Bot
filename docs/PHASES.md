@@ -92,7 +92,7 @@
 - [ ] **F7** — Społeczność *(w toku)*
   - [x] **F7.1** — Sugestie (`/suggest` + głosowanie + decyzje moderacji) + ankiety (`/poll`)
   - [x] **F7.2** — Komendy własne (prefiks → odpowiedź) + autoresponder (słowa-klucze)
-  - [ ] F7.3 — Urodziny + AFK + highlighty (funkcje per‑user)
+  - [x] **F7.3** — Urodziny (`/birthday`) + AFK (`/afk`) + highlighty (`/highlight`)
   - [ ] F7.4 — Liczniki kanałów (statystyki w nazwach)
 - [ ] **F8** — AI++ (czat z pamięcią, `/imagine`, `/tldr`, `/translate`, AI‑moderacja)
 - [ ] **F9** — Gaming unikat (price‑tracking ITAD, free‑games feed, patch‑notes, backlog, Twitch sub→rola, donejty)

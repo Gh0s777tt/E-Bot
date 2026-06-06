@@ -1,6 +1,7 @@
 import {
   Banknote,
   BarChart3,
+  Cake,
   Clapperboard,
   Coins,
   DoorOpen,
@@ -53,6 +54,7 @@ export const NAV_ITEMS = [
   { href: '/engagement', label: 'Engagement', icon: Gift },
   { href: '/suggestions', label: 'Sugestie', icon: Lightbulb },
   { href: '/responder', label: 'Komendy własne', icon: MessageSquarePlus },
+  { href: '/birthdays', label: 'Urodziny', icon: Cake },
   { href: '/stats', label: 'Statystyki', icon: BarChart3 },
   { href: '/profile', label: 'Profil', icon: User },
   { href: '/settings', label: 'Ustawienia', icon: Settings },

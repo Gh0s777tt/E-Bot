@@ -237,3 +237,30 @@ export async function getResponderConfig(): Promise<ResponderConfig> {
 export async function saveResponderConfig(cfg: ResponderConfig): Promise<void> {
   await setRawSetting('responder_config', JSON.stringify(cfg));
 }
+
+// ── Urodziny (Faza 7 / F7.3) ──
+export type BirthdayConfig = {
+  enabled: boolean;
+  channelId: string;
+  message: string;
+  roleId: string;
+};
+export const BIRTHDAY_DEFAULT: BirthdayConfig = {
+  enabled: false,
+  channelId: '',
+  message: '🎉 Dziś urodziny obchodzi {users}! Wszystkiego najlepszego! 🎂',
+  roleId: '',
+};
+
+export async function getBirthdayConfig(): Promise<BirthdayConfig> {
+  const raw = await getRawSetting('birthday_config');
+  if (!raw) return structuredClone(BIRTHDAY_DEFAULT);
+  try {
+    return { ...BIRTHDAY_DEFAULT, ...(JSON.parse(raw) as Partial<BirthdayConfig>) };
+  } catch {
+    return structuredClone(BIRTHDAY_DEFAULT);
+  }
+}
+export async function saveBirthdayConfig(cfg: BirthdayConfig): Promise<void> {
+  await setRawSetting('birthday_config', JSON.stringify(cfg));
+}

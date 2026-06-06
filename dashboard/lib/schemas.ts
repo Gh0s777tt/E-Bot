@@ -230,6 +230,15 @@ export const responderSchema = z.object({
 });
 export type ResponderInput = z.infer<typeof responderSchema>;
 
+// ── Urodziny (POST /api/birthday) ──────────────────────────
+export const birthdaySchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  message: z.string().max(1000),
+  roleId: z.string().max(40),
+});
+export type BirthdayInput = z.infer<typeof birthdaySchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

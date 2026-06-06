@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-57-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.26.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-58-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.27.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.27.0] — Faza 7 / F7.3: urodziny + AFK + highlighty
+
+- `[#058]` 🎂 **Funkcje osobiste — urodziny, AFK, highlighty:**
+  - **Urodziny** — `/birthday set|clear`; dzienny poller ogłasza solenizantów na wybranym kanale i (opcjonalnie) nadaje rolę na ten dzień (dedup po dacie). Panel `/birthdays` (kanał / wiadomość `{users}` / rola).
+  - **AFK** — `/afk [powód]`; powrót automatycznie czyści status, a wzmianka osoby AFK informuje rozmówcę (status trzymany w pamięci, bez tabeli).
+  - **Highlighty** — `/highlight add|remove|list`; bot wysyła **DM**, gdy Twoje słowo-klucz padnie w czacie (cache 60 s, cooldown 60 s/kanał, **sprawdzenie dostępu do kanału** by nie wyciekać treści). **23 komendy.**
+  - Bot: `community/birthdays.mts` (poller 1 h) + `community/afk.mts` + `community/highlights.mts` + komendy `birthday`/`afk`/`highlight`. Panel: BirthdayConfig + `/api/birthday` + `BirthdayForm` + strona `/birthdays` (nav Cake); AFK i Highlighty włączane w **Centrum sterowania** (3 nowe moduły, bez osobnych formularzy). **Nowy SQL: `dashboard/scripts/f7-personal-schema.sql`** (`birthdays`, `highlights`; dodany też do `_ALL.sql`).
 
 ## [0.26.0] — Faza 7 / F7.2: komendy własne + autoresponder
 

@@ -1,10 +1,13 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
+import * as afk from './afk.mts';
 import * as ai from './ai.mts';
 import * as antinuke from './antinuke.mts';
+import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
 import * as economy from './economy.mts';
 import * as giveaway from './giveaway.mts';
+import * as highlight from './highlight.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
 import * as mod from './mod.mts';
@@ -46,4 +49,7 @@ export const commands: Command[] = [
   verifypanel,
   suggest,
   poll,
+  birthday,
+  afk,
+  highlight,
 ];
