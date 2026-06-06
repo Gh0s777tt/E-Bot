@@ -44,11 +44,11 @@
 - [x] Status/aktywność (presence config) + motyw/kolor akcentu
 - [x] Strony loading/error/404 w stylu GH0ST
 
-## 🔄 Faza 3 — Integracja bot↔chmura *(w toku)*
-- [ ] Bot pisze heartbeat `bot_status` do Supabase (panel już czyta)
-- [ ] Bot stosuje `bot_presence` (`setPresence`)
-- [ ] Bot czyta whitelistę anti‑nuke + ustawienia powiadomień z Supabase
-- [ ] Endpoint GH0ST `link-status` → realny status powiązania w Profilu
+## 🔄 Faza 3 — Integracja bot↔chmura *(rdzeń gotowy)*
+- [x] Bot pisze heartbeat `bot_status` do Supabase (panel czyta status na żywo; offline przy zamknięciu)
+- [x] Bot stosuje `bot_presence` (`setPresence`) — synchronizacja z panelu co 60 s
+- [x] Bot czyta whitelistę anti‑nuke + ustawienia powiadomień z Supabase (`settings-sync` → lokalny SQLite; zmiany z bota wracają mirror‑upem)
+- [ ] Endpoint GH0ST `link-status` → realny status powiązania w Profilu *(po stronie ghost-empire)*
 - [ ] (opcjonalnie) endpoint zdrowia bota → `BOT_STATUS_URL`
 
 ## 🧭 Faza 4 — Wzrost *(plan)*

@@ -35,9 +35,9 @@ gantt
   Live + Ekonomia              :done,  f2b, 2026-06-06, 1d
   Personalizacja + motywy      :done,  f2c, 2026-06-06, 1d
   section Faza 3 · Integracja bot↔chmura
-  Heartbeat bota → Supabase    :active, f3a, 2026-06-07, 3d
-  Presence apply (status z panelu) :     f3b, after f3a, 3d
-  Sync whitelisty/configu      :     f3c, after f3b, 3d
+  Heartbeat bota → Supabase    :done, f3a, 2026-06-06, 1d
+  Presence apply (status z panelu) :done, f3b, 2026-06-06, 1d
+  Sync whitelisty/configu      :done, f3c, 2026-06-06, 1d
   section Faza 4 · Wzrost
   Tickety                      :     f4a, 2026-06-13, 5d
   Leveling + XP                :     f4b, after f4a, 5d
@@ -52,7 +52,7 @@ gantt
 | **0** | Fundamenty: ingest, web, rdzeń bota, szkielet panelu | ✅ done |
 | **1** | OAuth, Anti‑Nuke, chmura (Supabase + Vercel), `/link` | ✅ done |
 | **2** | Pełny panel GH0ST: live, ekonomia, personalizacja, motywy | ✅ done |
-| **3** | Integracja bot↔chmura: heartbeat, presence apply, sync configu | 🔄 w toku |
+| **3** | Integracja bot↔chmura: heartbeat, presence apply, sync configu | 🟢 core ✓ |
 | **4** | Wzrost: tickety, leveling, komendy AI, marketplace | 🧭 plan |
 
 ## 🎯 Najbliższe kroki (Faza 3)
@@ -65,9 +65,10 @@ flowchart LR
   D -.->|kropka online + status| A
 ```
 
-1. 🟢 **Heartbeat** — bot pisze `settings['bot_status']` `{online,guilds,tag,ts}` co ~60 s (panel już czyta).
-2. 🎭 **Presence apply** — bot czyta `settings['bot_presence']` i woła `client.user.setPresence`.
-3. 🔁 **Sync configu** — bot czyta z Supabase whitelistę anti‑nuke + ustawienia powiadomień (zamiast lokalnego SQLite).
+1. ✅ **Heartbeat** — bot pisze `settings['bot_status']` `{online,guilds,tag,ts}` co 60 s (panel czyta status na żywo; offline przy zamknięciu).
+2. ✅ **Presence apply** — bot czyta `settings['bot_presence']` i woła `client.user.setPresence` (sync co 60 s).
+3. ✅ **Sync configu** — `settings-sync` pobiera Supabase → lokalny SQLite; anti‑nuke/notify widzą zmiany z panelu, a zmiany z bota (`/antinuke`) wracają do panelu (mirror‑up).
+4. ⏳ **GH0ST link‑status** — endpoint po stronie GH0ST EMPIRE → realny status powiązania w Profilu *(do zrobienia w repo ghost-empire)*.
 
 ## 🧪 Pomysły / backlog (Faza 4+)
 

@@ -6,6 +6,9 @@ import { startAntiNuke } from './security/antinuke.mts';
 import { setupMessageEarning } from './empire/messages.mts';
 import { setupVoiceEarning } from './empire/voice.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
+import { startHeartbeat } from './cloud/heartbeat.mts';
+import { startPresenceSync } from './cloud/presence.mts';
+import { startSettingsSync } from './cloud/settings-sync.mts';
 
 loadEnv();
 
@@ -52,6 +55,10 @@ client.once(Events.ClientReady, (c) => {
   }
   startNotifier(c);
   startAntiNuke(c);
+  // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
+  startHeartbeat(c);       // puls 'bot_status' → panel
+  startPresenceSync(c);    // 'bot_presence' z panelu → setPresence
+  startSettingsSync();     // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log('   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' + (process.env.GHOST_API_URL || 'default') + ')');

@@ -2,6 +2,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { hasCloud, cloudSetSetting } from './cloud.mts';
 
 export function dbPath(): string {
   if (process.env.DATABASE_PATH) return process.env.DATABASE_PATH;
@@ -26,7 +27,9 @@ export function getSettings(): Record<string, string> {
   }
 }
 
-export function setSetting(key: string, value: string): void {
+// Zapis TYLKO do lokalnego SQLite (bez chmury). Używany m.in. przez settings-sync,
+// żeby pobieranie z chmury nie wywoływało mirror-up i nie tworzyło pętli.
+export function setSettingLocal(key: string, value: string): void {
   const db = new DatabaseSync(dbPath());
   try {
     db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
@@ -34,4 +37,19 @@ export function setSetting(key: string, value: string): void {
   } finally {
     db.close();
   }
+}
+
+// Mirror zmian lokalnych do Supabase (fire-and-forget) — by panel widział zmiany z bota (np. /antinuke).
+async function mirrorUp(key: string, value: string): Promise<void> {
+  try {
+    if (hasCloud()) await cloudSetSetting(key, value);
+  } catch (e) {
+    console.warn('[settings] mirror→cloud:', (e as Error).message);
+  }
+}
+
+// Domyślny setter dla kodu bota: zapis lokalnie + (jeśli skonfigurowano) do chmury.
+export function setSetting(key: string, value: string): void {
+  setSettingLocal(key, value);
+  void mirrorUp(key, value);
 }
