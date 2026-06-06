@@ -9,6 +9,7 @@ on:
     - cron: '0 6 * * 1' # poniedziałek 06:00 UTC
 
 permissions:
+  actions: read # wymagane na repo prywatnym: CodeQL czyta dane przebiegu (get-a-workflow-run) przy uploadzie SARIF
   contents: read
   security-events: write
 
