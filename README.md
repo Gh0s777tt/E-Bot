@@ -4,6 +4,8 @@
 
 <div align="center">
 
+<img src="dashboard/public/ghost-skull.png" width="120" alt="GH0ST EMPIRE" />
+
 # 🎬 E‑BOT &nbsp;·&nbsp; GH0ST EMPIRE
 
 ### ⟣ Discordowe ramię imperium · biblioteka gier „Netflix" · live · bezpieczeństwo ⟣

@@ -30,6 +30,12 @@ export default async function OverviewPage() {
     <div className="space-y-6">
       {/* ===== HERO / PROFIL ===== */}
       <section className="relative overflow-hidden rounded-2xl border border-line bg-card p-5">
+        <img
+          src="/ghost-banner.jpg"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12]"
+        />
         <div
           className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full"
           style={{
@@ -38,8 +44,12 @@ export default async function OverviewPage() {
         />
         <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">
-            <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-xl border-2 border-accent bg-bg font-display text-3xl text-accent shadow-glow">
-              E
+            <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-xl border-2 border-accent bg-bg shadow-glow">
+              <img
+                src="/ghost-skull.png"
+                alt="GH0ST"
+                className="h-14 w-14 rounded-lg object-cover"
+              />
               <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 rounded bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
                 BOT
               </span>
