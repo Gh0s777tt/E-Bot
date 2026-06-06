@@ -1,5 +1,6 @@
-import { ExternalLink, LogOut } from 'lucide-react';
+import { CheckCircle2, ExternalLink, LogOut } from 'lucide-react';
 import { cookies } from 'next/headers';
+import { getLinkStatus } from '../../lib/ghostLink';
 import { verifySession } from '../../lib/session';
 
 export const dynamic = 'force-dynamic';
@@ -12,6 +13,7 @@ export default async function ProfilePage() {
     ? await verifySession(token, process.env.AUTH_SECRET || 'dev-insecure-secret-change-me')
     : null;
   const initial = (session?.uname || '?').charAt(0).toUpperCase();
+  const link = await getLinkStatus(session?.uid);
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -45,11 +47,29 @@ export default async function ProfilePage() {
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-3 text-base font-semibold uppercase tracking-wide">Konto GH0ST EMPIRE</h2>
-        <p className="text-sm leading-relaxed text-muted">
-          Połącz Discord z profilem GH0ST EMPIRE: na portalu wygeneruj 6-znakowy kod, a potem na
-          Discordzie użyj <code className="text-accent">/link &lt;kod&gt;</code>. Wtedy zdobywasz
-          Ghost Tokens za aktywność (czat, voice).
-        </p>
+        {link?.linked ? (
+          <div className="mb-3 flex flex-wrap items-center gap-3 rounded-md border border-green-500/30 bg-green-500/10 px-3 py-2 text-sm">
+            <span className="inline-flex items-center gap-1.5 font-semibold text-green-400">
+              <CheckCircle2 size={15} /> Połączono
+            </span>
+            {link.username && (
+              <span className="text-muted">
+                jako <strong className="text-white">{link.username}</strong>
+              </span>
+            )}
+            {typeof link.tokens === 'number' && (
+              <span className="ml-auto rounded bg-accent/15 px-2 py-0.5 font-semibold text-accent">
+                {link.tokens} GT
+              </span>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm leading-relaxed text-muted">
+            Połącz Discord z profilem GH0ST EMPIRE: na portalu wygeneruj 6-znakowy kod, a potem na
+            Discordzie użyj <code className="text-accent">/link &lt;kod&gt;</code>. Wtedy zdobywasz
+            Ghost Tokens za aktywność (czat, voice).
+          </p>
+        )}
         <a
           href={GHOST_URL}
           target="_blank"

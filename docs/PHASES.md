@@ -48,13 +48,13 @@
 - [x] Bot pisze heartbeat `bot_status` do Supabase (panel czyta status na żywo; offline przy zamknięciu)
 - [x] Bot stosuje `bot_presence` (`setPresence`) — synchronizacja z panelu co 60 s
 - [x] Bot czyta whitelistę anti‑nuke + ustawienia powiadomień z Supabase (`settings-sync` → lokalny SQLite; zmiany z bota wracają mirror‑upem)
-- [ ] Endpoint GH0ST `link-status` → realny status powiązania w Profilu *(po stronie ghost-empire)*
+- [x] Endpoint GH0ST `link-status` → realny status powiązania w Profilu (endpoint w ghost-empire + panel `/profile`)
 - [ ] (opcjonalnie) endpoint zdrowia bota → `BOT_STATUS_URL`
 
 ## 🧭 Faza 4 — Wzrost *(plan)*
 > 📋 Szczegółowy plan (architektura, model danych, podział bot↔panel): [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
-- [ ] Tickety — **panel ✓** (config + lista zgłoszeń); komendy/obsługa w bocie: TODO
-- [ ] Leveling / XP — **panel ✓** (config + ranking); naliczanie XP + role‑nagrody w bocie: TODO
+- [x] Tickety — panel (config + lista) **+ bot** (`/ticket otwórz/zamknij`, prywatne wątki → Supabase)
+- [x] Leveling / XP — panel (config + ranking) **+ bot** (XP czat/voice, awanse, role‑nagrody → Supabase)
 - [ ] Reaction roles z edytora w panelu
 - [ ] Komendy AI (DeepSeek/OpenAI z twardym limitem kosztów)
 - [ ] Webhooki EventSub (zamiast pollingu) przez Cloudflare Tunnel
