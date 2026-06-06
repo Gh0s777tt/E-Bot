@@ -13,7 +13,7 @@ export default function Sidebar() {
         <img
           src="/ghost-skull.png"
           alt="GH0ST"
-          className="h-7 w-7 object-contain drop-shadow-[0_0_8px_rgb(var(--accent-rgb)/0.55)]"
+          className="h-7 w-7 rounded-md object-cover shadow-glow-sm ring-1 ring-accent/30"
         />
         <span className="font-display text-xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>

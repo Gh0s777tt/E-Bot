@@ -42,7 +42,7 @@ export default async function LoginPage({
         <img
           src="/ghost-skull.png"
           alt="GH0ST"
-          className="mx-auto mb-5 h-20 w-20 object-contain drop-shadow-[0_0_18px_rgb(var(--accent-rgb)/0.5)]"
+          className="mx-auto mb-5 h-20 w-20 rounded-2xl object-cover shadow-glow ring-1 ring-accent/30"
         />
         <h1 className="font-display text-4xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>
