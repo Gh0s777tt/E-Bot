@@ -9,6 +9,7 @@ import { startEconomyConfigPolling } from './empire/config.mts';
 import { startHeartbeat } from './cloud/heartbeat.mts';
 import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
+import { startLeveling } from './leveling.mts';
 
 loadEnv();
 
@@ -26,12 +27,16 @@ if (!token) {
   process.exit(1);
 }
 
-const intents = [GatewayIntentBits.Guilds, GatewayIntentBits.GuildModeration];
+// GuildMessages + GuildVoiceStates są nieprivileged i potrzebne też dla levelingu (Faza 4).
+const intents = [
+  GatewayIntentBits.Guilds,
+  GatewayIntentBits.GuildModeration,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.GuildVoiceStates,
+];
 if (economyOn) {
   intents.push(
-    GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,    // PRIVILEGED — enable in Dev Portal
-    GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMembers,      // PRIVILEGED — enable in Dev Portal
   );
 }
@@ -59,6 +64,7 @@ client.once(Events.ClientReady, (c) => {
   startHeartbeat(c);       // puls 'bot_status' → panel
   startPresenceSync(c);    // 'bot_presence' z panelu → setPresence
   startSettingsSync();     // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
+  startLeveling(c);        // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log('   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' + (process.env.GHOST_API_URL || 'default') + ')');
