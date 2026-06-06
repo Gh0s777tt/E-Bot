@@ -3,7 +3,12 @@
 // Trasa publiczna (proxy.ts przepuszcza /api/twitch) — Twitch musi móc ją wywołać bez sesji.
 import crypto from 'node:crypto';
 import { getRawSetting, setRawSetting } from '../../../../lib/data';
-import { eventsubSecret, getStreamInfo } from '../../../../lib/twitchEventsub';
+import { getPrimaryGuildId } from '../../../../lib/guild';
+import {
+  createLiveDiscordEvent,
+  eventsubSecret,
+  getStreamInfo,
+} from '../../../../lib/twitchEventsub';
 
 export const dynamic = 'force-dynamic';
 
@@ -82,4 +87,30 @@ async function announce(event: {
     headers: { Authorization: `Bot ${botToken}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ content: `${mention} ${url}`.trim() || undefined, embeds: [embed] }),
   });
+
+  // Faza 6 / B4 — auto-wydarzenie Discord (jeśli włączone w panelu /creator)
+  const creatorRaw = await getRawSetting('creator_config');
+  let autoEvent = false;
+  let eventName = '';
+  try {
+    const cc = creatorRaw
+      ? (JSON.parse(creatorRaw) as { autoEvent?: boolean; eventName?: string })
+      : {};
+    autoEvent = !!cc.autoEvent;
+    eventName = cc.eventName || '';
+  } catch {
+    /* zła konfiguracja → pomiń event */
+  }
+  if (autoEvent) {
+    const guildId = await getPrimaryGuildId();
+    if (guildId) {
+      const evName = (eventName || `🔴 {name} — LIVE`).replaceAll('{name}', name);
+      await createLiveDiscordEvent({
+        guildId,
+        name: evName,
+        url,
+        description: info?.title || '',
+      }).catch((e) => console.warn('[eventsub:event]', (e as Error).message));
+    }
+  }
 }

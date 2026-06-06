@@ -18,17 +18,25 @@ async function dfetch<T>(path: string, token: string): Promise<T> {
   return (await r.json()) as T;
 }
 
+// Główny serwer bota: jawny DISCORD_GUILD_ID (gdy to snowflake), inaczej auto-detekcja.
+export const getPrimaryGuildId = cache(async (): Promise<string> => {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) return '';
+  const envId = (process.env.DISCORD_GUILD_ID || '').trim();
+  if (/^\d{15,}$/.test(envId)) return envId;
+  try {
+    const guilds = await dfetch<{ id: string }[]>('/users/@me/guilds', token);
+    return guilds[0]?.id ?? '';
+  } catch {
+    return '';
+  }
+});
+
 export const getGuildMeta = cache(async (): Promise<GuildMeta> => {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) return EMPTY;
   try {
-    // Jawny override tylko gdy to prawdziwy snowflake (chroni przed placeholderem typu "#").
-    const envId = (process.env.DISCORD_GUILD_ID || '').trim();
-    let guildId = /^\d{15,}$/.test(envId) ? envId : '';
-    if (!guildId) {
-      const guilds = await dfetch<{ id: string }[]>('/users/@me/guilds', token);
-      guildId = guilds[0]?.id ?? '';
-    }
+    const guildId = await getPrimaryGuildId();
     if (!guildId) return EMPTY;
 
     const [rolesRaw, channelsRaw] = await Promise.all([

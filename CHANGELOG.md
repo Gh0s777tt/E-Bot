@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-42-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.11.2-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-43-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.12.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.12.0] — Faza 6 / B4: narzędzia twórcy
+
+- `[#043]` 🎬 **Narzędzia twórcy** (panel `/creator`):
+  - **Auto-wydarzenie Discord na live** — gdy Twitch EventSub wykryje `stream.online`, panel tworzy zewnętrzne wydarzenie Discord wskazujące na transmisję (`createLiveDiscordEvent`; szablon nazwy z `{name}`; wymaga uprawnienia bota „Zarządzanie wydarzeniami").
+  - **Relay klipów Twitch** — bot (24/7 na Railway) odpytuje Helix `/clips` i wrzuca **tylko nowe** klipy (dedup po `created_at`, stan w `creator_clips_last`) na wybrany kanał; interwał konfigurowalny (`bot/src/creator/clips.mts`).
+  - Config w settings `creator_config` (`lib/creator.ts` + Zod `creatorSchema` + `/api/creator` + nav „Twórca"). `getPrimaryGuildId()` wydzielone w `lib/guild.ts`.
 
 ## [0.11.2] — Faza 6 / B3: pickery ról i kanałów (UX)
 

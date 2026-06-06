@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Clapperboard,
   Coins,
   DoorOpen,
   Gamepad2,
@@ -23,6 +24,7 @@ export const NAV_ITEMS = [
   { href: '/library', label: 'Biblioteka', icon: Gamepad2 },
   { href: '/notifications', label: 'Powiadomienia', icon: Radio },
   { href: '/live', label: 'Na żywo', icon: Tv },
+  { href: '/creator', label: 'Twórca', icon: Clapperboard },
   { href: '/security', label: 'Bezpieczeństwo', icon: ShieldAlert },
   { href: '/moderation', label: 'Automod', icon: ShieldCheck },
   { href: '/welcome', label: 'Powitania', icon: DoorOpen },

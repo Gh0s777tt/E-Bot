@@ -1,19 +1,20 @@
-import { Client, GatewayIntentBits, Events, Collection, MessageFlags, Partials } from 'discord.js';
-import { loadEnv } from './env.mts';
-import { commands, type Command } from './commands/index.mts';
-import { startNotifier } from './live/notifier.mts';
-import { startAntiNuke } from './security/antinuke.mts';
-import { setupMessageEarning } from './empire/messages.mts';
-import { setupVoiceEarning } from './empire/voice.mts';
-import { startEconomyConfigPolling } from './empire/config.mts';
+import { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials } from 'discord.js';
+import { startAutomod } from './automod.mts';
 import { startHeartbeat } from './cloud/heartbeat.mts';
 import { startPresenceSync } from './cloud/presence.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
-import { startLeveling } from './leveling.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
+import { type Command, commands } from './commands/index.mts';
+import { startClipRelay } from './creator/clips.mts';
+import { startEconomyConfigPolling } from './empire/config.mts';
+import { setupMessageEarning } from './empire/messages.mts';
+import { setupVoiceEarning } from './empire/voice.mts';
+import { loadEnv } from './env.mts';
+import { startLeveling } from './leveling.mts';
+import { startNotifier } from './live/notifier.mts';
 import { startReactionRoles } from './reaction-roles.mts';
+import { startAntiNuke } from './security/antinuke.mts';
 import { startWelcome } from './welcome.mts';
-import { startAutomod } from './automod.mts';
 
 loadEnv();
 
@@ -57,7 +58,9 @@ const registry = new Collection<string, Command>();
 for (const c of commands) registry.set(c.data.name, c);
 
 client.once(Events.ClientReady, (c) => {
-  console.log(`✅ Zalogowano jako ${c.user.tag} (id ${c.user.id}) · serwery: ${c.guilds.cache.size}`);
+  console.log(
+    `✅ Zalogowano jako ${c.user.tag} (id ${c.user.id}) · serwery: ${c.guilds.cache.size}`,
+  );
   if (process.argv.includes('--smoke')) {
     console.log('🔎 smoke OK — połączenie z bramą działa, zamykam.');
     void client.destroy();
@@ -66,17 +69,22 @@ client.once(Events.ClientReady, (c) => {
   startNotifier(c);
   startAntiNuke(c);
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
-  startHeartbeat(c);       // puls 'bot_status' → panel
-  startPresenceSync(c);    // 'bot_presence' z panelu → setPresence
-  startSettingsSync();     // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
-  startLeveling(c);        // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
-  startTicketSync(c);      // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
-  startReactionRoles(c);   // Faza 4 — role za reakcje (config z panelu)
-  startWelcome(c);         // Faza 6 — powitania + autorole
-  startAutomod(c);         // Faza 6 — automoderacja
+  startHeartbeat(c); // puls 'bot_status' → panel
+  startPresenceSync(c); // 'bot_presence' z panelu → setPresence
+  startSettingsSync(); // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
+  startLeveling(c); // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
+  startTicketSync(c); // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
+  startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
+  startWelcome(c); // Faza 6 — powitania + autorole
+  startAutomod(c); // Faza 6 — automoderacja
+  startClipRelay(c); // Faza 6 — relay klipów Twitch (config z panelu /creator)
   if (economyOn) {
     startEconomyConfigPolling();
-    console.log('   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' + (process.env.GHOST_API_URL || 'default') + ')');
+    console.log(
+      '   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' +
+        (process.env.GHOST_API_URL || 'default') +
+        ')',
+    );
   }
 });
 
@@ -88,7 +96,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
     await cmd.execute(interaction);
   } catch (err) {
     console.error(`Błąd w /${interaction.commandName}:`, err);
-    const msg = { content: '😵 Wystąpił błąd przy wykonywaniu komendy.', flags: MessageFlags.Ephemeral as const };
+    const msg = {
+      content: '😵 Wystąpił błąd przy wykonywaniu komendy.',
+      flags: MessageFlags.Ephemeral as const,
+    };
     if (interaction.replied || interaction.deferred) await interaction.followUp(msg);
     else await interaction.reply(msg);
   }

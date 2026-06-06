@@ -108,6 +108,16 @@ export const automodSchema = z.object({
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 
+// ── Narzędzia twórcy (POST /api/creator) ───────────────────
+export const creatorSchema = z.object({
+  autoEvent: z.boolean(),
+  eventName: z.string().max(100),
+  clipRelay: z.boolean(),
+  clipChannelId: z.string().max(40),
+  pollMin: z.number().int().min(2).max(120),
+});
+export type CreatorInput = z.infer<typeof creatorSchema>;
+
 // Pomocnik: czyta JSON z requestu i waliduje; zwraca dane lub komunikat błędu.
 export async function parseBody<T>(
   request: Request,
