@@ -27,7 +27,7 @@ export default async function OverviewPage() {
       <section className="relative overflow-hidden rounded-2xl border border-line bg-card p-5">
         <div
           className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(229,9,20,0.16), transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.16), transparent 70%)' }}
         />
         <div className="relative flex flex-col gap-5 xl:flex-row xl:items-center">
           <div className="flex items-center gap-4">

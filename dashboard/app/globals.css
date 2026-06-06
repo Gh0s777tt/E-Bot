@@ -4,9 +4,12 @@
 
 :root {
   color-scheme: dark;
+  /* Domyślny akcent (czerwony GH0ST). Nadpisywany przez ThemeSwitcher / skrypt w layout. */
+  --accent-rgb: 229 9 20;
+  --accent-hover-rgb: 244 6 18;
+  --accent-dark-rgb: 139 0 0;
 }
 
-/* Minimalistyczna skala — całość ~6% mniejsza (jak GH0ST EMPIRE) */
 html {
   background-color: #0a0a0a;
   font-size: 15px;
@@ -26,7 +29,7 @@ h2,
   letter-spacing: 0.02em;
 }
 
-/* Subtelna czerwona poświata tła (delikatniejsza = bardziej minimalistycznie) */
+/* Poświata tła w kolorze akcentu */
 body::before {
   content: '';
   position: fixed;
@@ -34,8 +37,8 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(50vw 34vh at 84% -10%, rgba(229, 9, 20, 0.08), transparent 70%),
-    radial-gradient(42vw 34vh at -8% 110%, rgba(139, 0, 0, 0.06), transparent 70%);
+    radial-gradient(50vw 34vh at 84% -10%, rgb(var(--accent-rgb) / 0.08), transparent 70%),
+    radial-gradient(42vw 34vh at -8% 110%, rgb(var(--accent-dark-rgb) / 0.06), transparent 70%);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -47,13 +50,12 @@ body::before {
 }
 
 .glow-red {
-  box-shadow: 0 0 18px rgba(229, 9, 20, 0.22);
+  box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.22);
 }
 .text-glow {
-  text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
+  text-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.4);
 }
 
-/* Panel ze subtelną czerwoną poświatą w rogu (styl kart GHOST EMPIRE) */
 .panel-glow {
   position: relative;
   overflow: hidden;
@@ -66,5 +68,5 @@ body::before {
   width: 50%;
   height: 80%;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(229, 9, 20, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.12), transparent 70%);
 }

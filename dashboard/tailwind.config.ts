@@ -9,13 +9,13 @@ export default {
         surface: '#141414',
         card: '#171717',
         elevated: '#232323',
-        accent: '#E50914',
-        'accent-hover': '#F40612',
-        'accent-dark': '#8B0000',
+        accent: 'rgb(var(--accent-rgb) / <alpha-value>)',
+        'accent-hover': 'rgb(var(--accent-hover-rgb) / <alpha-value>)',
+        'accent-dark': 'rgb(var(--accent-dark-rgb) / <alpha-value>)',
         muted: '#a0a0a0',
         line: '#262626',
         text: '#ededed',
-        // akcenty platform (jak na GH0ST EMPIRE)
+        // akcenty platform (stałe)
         discord: '#5865F2',
         twitch: '#9146FF',
         kick: '#53FC18',
@@ -26,8 +26,8 @@ export default {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        glow: '0 0 18px rgba(229,9,20,0.22)',
-        'glow-sm': '0 0 10px rgba(229,9,20,0.28)',
+        glow: '0 0 18px rgb(var(--accent-rgb) / 0.22)',
+        'glow-sm': '0 0 10px rgb(var(--accent-rgb) / 0.28)',
       },
     },
   },

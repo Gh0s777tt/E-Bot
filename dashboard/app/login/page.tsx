@@ -13,11 +13,11 @@ export default function LoginPage({ searchParams }: { searchParams: { e?: string
       {/* poświaty GH0ST EMPIRE */}
       <div
         className="pointer-events-none absolute -top-48 left-1/2 h-[70vh] w-[90vw] -translate-x-1/2 rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(229,9,20,0.25), transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.25), transparent 70%)' }}
       />
       <div
         className="pointer-events-none absolute -bottom-48 -right-24 h-[50vh] w-[50vw] rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(139,0,0,0.22), transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgb(var(--accent-dark-rgb) / 0.22), transparent 70%)' }}
       />
 
       <div className="relative w-full max-w-sm rounded-2xl border border-accent/30 bg-card/80 p-8 text-center shadow-glow backdrop-blur-md">

@@ -225,9 +225,12 @@ async function rawSet(key: string, value: string): Promise<void> {
   }
 }
 
-// Surowy odczyt klucza settings (np. heartbeat bota 'bot_status').
+// Surowy odczyt/zapis klucza settings (np. heartbeat 'bot_status', 'bot_presence').
 export async function getRawSetting(key: string): Promise<string | null> {
   return rawGet(key);
+}
+export async function setRawSetting(key: string, value: string): Promise<void> {
+  return rawSet(key, value);
 }
 
 export type AntiProtection = { enabled: boolean; count: number; windowSec: number };
