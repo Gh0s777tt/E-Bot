@@ -1,6 +1,6 @@
 // Faza 6 / B3 — pobiera role i kanały serwera z Discord REST (bot token), aby panel
-// mógł oferować listy rozwijane zamiast wklejania ID. Guild ID: env DISCORD_GUILD_ID /
-// DISCORD_DEV_GUILD_ID, a jak brak — pierwszy serwer bota (E-Bot jest na 1 serwerze).
+// mógł oferować listy rozwijane zamiast wklejania ID. Guild ID: jawne DISCORD_GUILD_ID
+// (jeśli to poprawny snowflake), inaczej auto-detekcja pierwszego serwera bota (E-Bot jest na 1).
 import { cache } from 'react';
 
 export type GuildRole = { id: string; name: string; color: number; position: number };
@@ -22,7 +22,9 @@ export const getGuildMeta = cache(async (): Promise<GuildMeta> => {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) return EMPTY;
   try {
-    let guildId = process.env.DISCORD_GUILD_ID || process.env.DISCORD_DEV_GUILD_ID || '';
+    // Jawny override tylko gdy to prawdziwy snowflake (chroni przed placeholderem typu "#").
+    const envId = (process.env.DISCORD_GUILD_ID || '').trim();
+    let guildId = /^\d{15,}$/.test(envId) ? envId : '';
     if (!guildId) {
       const guilds = await dfetch<{ id: string }[]>('/users/@me/guilds', token);
       guildId = guilds[0]?.id ?? '';
