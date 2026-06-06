@@ -161,6 +161,20 @@ export const automodSchema = z.object({
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 
+// ── Logi serwera (POST /api/logging) ──────────────────────
+export const loggingSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  messages: z.boolean(),
+  members: z.boolean(),
+  memberUpdates: z.boolean(),
+  moderation: z.boolean(),
+  server: z.boolean(),
+  voice: z.boolean(),
+  ignoreChannels: z.array(z.string().max(40)).max(100),
+});
+export type LoggingInput = z.infer<typeof loggingSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-52-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.21.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-53-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.22.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.22.0] — Faza 7 / F6.2: logi serwera
+
+- `[#053]` 📋 **Dziennik zdarzeń serwera** (panel `/logging`):
+  - Bot loguje na wybrany kanał: **usunięcie/edycja/masowe usunięcie wiadomości**, **dołączenie/wyjście członków**, **zmiana nicku/ról**, **bany/unbany**, **tworzenie/usuwanie kanałów i ról**, **voice** (dołączenie/wyjście/przeniesienie). Każdą grupę włączasz osobno + lista **kanałów ignorowanych** (dla zdarzeń wiadomości); kanał logów sam się pomija.
+  - Embedy kolorowane wg typu (czerwień = usunięcie/ban/wyjście, zieleń = utworzenie/dołączenie/unban, bursztyn = edycja/zmiana), z czasem i ID użytkownika.
+  - Bot: `bot/src/security/serverlog.mts` (11 listenerów; config z settings `logging_config`, odświeżany na żywo ~30 s; **bez nowych intencji ani komend** — wykorzystuje istniejące). Panel: `lib/community.ts` (LoggingConfig) + `loggingSchema` + `/api/logging` + `LoggingForm` + strona `/logging` (nav „Logi serwera" ScrollText) + moduł w Centrum sterowania. **Bez nowego SQL** (config w `settings`).
 
 ## [0.21.0] — Faza 7 / F6.1: kary & sprawy moderacyjne
 

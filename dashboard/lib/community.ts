@@ -67,3 +67,40 @@ export async function getAutomodConfig(): Promise<AutomodConfig> {
 export async function saveAutomodConfig(cfg: AutomodConfig): Promise<void> {
   await setRawSetting('automod_config', JSON.stringify(cfg));
 }
+
+// ── Logi serwera (Faza 7 / F6.2) ──
+export type LoggingConfig = {
+  enabled: boolean;
+  channelId: string;
+  messages: boolean; // usunięcie / edycja / masowe usunięcie
+  members: boolean; // dołączenie / wyjście
+  memberUpdates: boolean; // zmiana nicku / ról
+  moderation: boolean; // ban / unban
+  server: boolean; // utworzenie / usunięcie kanału lub roli
+  voice: boolean; // dołączenie / wyjście / przeniesienie na voice
+  ignoreChannels: string[];
+};
+export const LOGGING_DEFAULT: LoggingConfig = {
+  enabled: false,
+  channelId: '',
+  messages: true,
+  members: true,
+  memberUpdates: false,
+  moderation: true,
+  server: true,
+  voice: false,
+  ignoreChannels: [],
+};
+
+export async function getLoggingConfig(): Promise<LoggingConfig> {
+  const raw = await getRawSetting('logging_config');
+  if (!raw) return structuredClone(LOGGING_DEFAULT);
+  try {
+    return { ...LOGGING_DEFAULT, ...(JSON.parse(raw) as Partial<LoggingConfig>) };
+  } catch {
+    return structuredClone(LOGGING_DEFAULT);
+  }
+}
+export async function saveLoggingConfig(cfg: LoggingConfig): Promise<void> {
+  await setRawSetting('logging_config', JSON.stringify(cfg));
+}

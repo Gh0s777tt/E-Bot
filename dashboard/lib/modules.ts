@@ -21,6 +21,14 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'automod_config',
   },
+  {
+    key: 'logging',
+    label: 'Logi serwera',
+    group: 'Moderacja',
+    href: '/logging',
+    kind: 'json',
+    settingsKey: 'logging_config',
+  },
   // Społeczność
   {
     key: 'welcome',
