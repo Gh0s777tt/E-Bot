@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { LogOut } from 'lucide-react';
+import { LogOut, UserPlus } from 'lucide-react';
 import MobileNav from './MobileNav';
 
 const TITLES: Record<string, string> = {
@@ -20,7 +20,7 @@ const TITLES: Record<string, string> = {
 
 type Status = { online: boolean | null; guilds?: number | null; tag?: string };
 
-export default function Topbar() {
+export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
   const pathname = usePathname();
   const [status, setStatus] = useState<Status>({ online: null, tag: 'E-Bot' });
 
@@ -55,6 +55,14 @@ export default function Topbar() {
             {status.guilds != null ? ` · ${status.guilds} serw.` : ''}
           </span>
         </span>
+        <a
+          href={inviteUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="hidden items-center gap-1.5 rounded-md bg-accent px-3 py-1 font-semibold uppercase tracking-wide text-white transition hover:bg-accent-hover sm:flex"
+        >
+          <UserPlus size={13} /> Zaproś bota
+        </a>
         <a
           href="/api/auth/logout"
           title="Wyloguj"

@@ -2,7 +2,8 @@ import { getStats, getGames, activeSource } from '../lib/data';
 import { getIntegrations } from '../lib/integrations';
 import StatCard from '../components/StatCard';
 import GameCard from '../components/GameCard';
-import { Gamepad2, Clock, Layers, Plug } from 'lucide-react';
+import { Gamepad2, Clock, Layers, Plug, UserPlus } from 'lucide-react';
+import { botInviteUrl } from '../lib/invite';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +19,7 @@ export default async function OverviewPage() {
   const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
   const coverPct = stats.total ? Math.round((stats.withCover / stats.total) * 100) : 0;
+  const inviteUrl = botInviteUrl();
 
   return (
     <div className="space-y-6">
@@ -42,6 +44,16 @@ export default async function OverviewPage() {
                 <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
                 {src === 'supabase' ? 'Supabase' : src === 'sqlite' ? 'SQLite' : 'brak danych'}
               </span>
+              <div className="mt-3">
+                <a
+                  href={inviteUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover"
+                >
+                  <UserPlus size={15} /> Zaproś bota na serwer
+                </a>
+              </div>
             </div>
           </div>
 

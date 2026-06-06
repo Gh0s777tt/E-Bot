@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { Oswald, Montserrat } from 'next/font/google';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
+import { botInviteUrl } from '../lib/invite';
 
 const display = Oswald({ subsets: ['latin', 'latin-ext'], weight: ['500', '600', '700'], variable: '--font-display' });
 const body = Montserrat({ subsets: ['latin', 'latin-ext'], weight: ['400', '600', '700'], variable: '--font-body' });
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="relative z-10 flex min-h-screen">
           <Sidebar />
           <div className="min-w-0 flex-1 md:pl-60">
-            <Topbar />
+            <Topbar inviteUrl={botInviteUrl()} />
             <main className="mx-auto max-w-7xl px-5 py-6 md:px-8">{children}</main>
           </div>
         </div>
