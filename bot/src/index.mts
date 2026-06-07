@@ -1,4 +1,12 @@
-import { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials } from 'discord.js';
+import {
+  Client,
+  Collection,
+  Events,
+  GatewayIntentBits,
+  MessageFlags,
+  Options,
+  Partials,
+} from 'discord.js';
 import { startActivity } from './analytics/activity.mts';
 import { startSeasons } from './analytics/seasons.mts';
 import { startAutomod } from './automod.mts';
@@ -32,6 +40,7 @@ import { startFreeGames } from './gaming/freegames.mts';
 import { startPatchNotes } from './gaming/patchnotes.mts';
 import { startPriceTracker } from './gaming/pricetracker.mts';
 import { startLeveling } from './leveling.mts';
+import { log } from './lib/log.mts';
 import { captureError } from './lib/sentry.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startModmail } from './modmail.mts';
@@ -76,16 +85,26 @@ const intents = [
 const client = new Client({
   intents,
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+  // Tor 5 — ograniczenie cache wiadomości + okresowe sprzątanie (mniej RAM na Railway).
+  // Bezpieczne: zdarzenia nadal działają, a brakujące wiadomości moduły dobierają fetchem.
+  makeCache: Options.cacheWithLimits({
+    ...Options.DefaultMakeCacheSettings,
+    MessageManager: 100,
+  }),
+  sweepers: {
+    ...Options.DefaultSweeperSettings,
+    messages: { interval: 3600, lifetime: 1800 },
+  },
 });
 
 // Faza 6 / B7 — globalne handlery błędów: log + alert na Discord (throttling), bez wywracania procesu.
 process.on('unhandledRejection', (reason) => {
-  console.error('unhandledRejection:', reason);
+  log.error('unhandledRejection', { err: reason });
   void captureError(reason, { label: 'unhandledRejection' }); // Faza 7 / F10.3 — Sentry (gdy DSN)
   void notifyError(client, 'unhandledRejection', reason);
 });
 process.on('uncaughtException', (err) => {
-  console.error('uncaughtException:', err);
+  log.error('uncaughtException', { err });
   void captureError(err, { label: 'uncaughtException' });
   void notifyError(client, 'uncaughtException', err);
 });
