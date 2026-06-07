@@ -1,4 +1,13 @@
-import { BarChart3, Gamepad2, MessageSquare, Mic, Ticket, Trophy } from 'lucide-react';
+import {
+  BarChart3,
+  Flame,
+  Gamepad2,
+  MessageSquare,
+  Mic,
+  Ticket,
+  Trophy,
+  Users,
+} from 'lucide-react';
 import DigestForm from '../../components/DigestForm';
 import StatCard from '../../components/StatCard';
 import { getDigestConfig } from '../../lib/community';
@@ -7,8 +16,10 @@ import {
   getActivitySeries,
   getAiUsageSeries,
   getAiUsageToday,
+  getHourlyActivity,
   getLeaderboard,
   getTickets,
+  getTopActiveUsers,
   ticketStats,
 } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
@@ -23,16 +34,21 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function StatsPage() {
-  const [stats, aiSeries, aiToday, board, tickets, activity, digest, guild] = await Promise.all([
-    getStats(),
-    getAiUsageSeries(14),
-    getAiUsageToday(),
-    getLeaderboard(8),
-    getTickets(200),
-    getActivitySeries(14),
-    getDigestConfig(),
-    getGuildMeta(),
-  ]);
+  const [stats, aiSeries, aiToday, board, tickets, activity, digest, guild, topUsers, hourly] =
+    await Promise.all([
+      getStats(),
+      getAiUsageSeries(14),
+      getAiUsageToday(),
+      getLeaderboard(8),
+      getTickets(200),
+      getActivitySeries(14),
+      getDigestConfig(),
+      getGuildMeta(),
+      getTopActiveUsers(14, 10),
+      getHourlyActivity(),
+    ]);
+  const hourMax = Math.max(1, ...hourly);
+  const heat = hourly.map((count, hour) => ({ hour, count }));
   const tk = ticketStats(tickets);
   const aiMax = Math.max(1, ...aiSeries.map((p) => p.requests));
   const xpMax = Math.max(1, ...board.map((u) => u.xp));
@@ -176,6 +192,62 @@ export default async function StatsPage() {
             ))}
           </div>
         )}
+      </section>
+
+      {/* Top aktywni — 14 dni */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Users size={16} className="text-accent" /> Top aktywni — 14 dni
+        </h2>
+        {topUsers.length === 0 ? (
+          <p className="text-sm text-muted">
+            Brak danych (wymaga <code>user_activity</code> w Supabase).
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {topUsers.map((u, i) => (
+              <div key={u.user_id} className="flex items-center gap-3 text-sm">
+                <span className="w-6 text-right text-muted">{i + 1}</span>
+                <span className="w-44 truncate">{u.username}</span>
+                <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-elevated">
+                  <div
+                    className="h-full rounded-full bg-accent"
+                    style={{ width: `${(u.messages / Math.max(1, topUsers[0].messages)) * 100}%` }}
+                  />
+                </div>
+                <span className="w-28 text-right text-muted">
+                  {u.messages} wiad · {u.voice_min}m
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Heatmapa godzinowa */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Flame size={16} className="text-accent" /> Aktywność wg godziny (UTC)
+        </h2>
+        <div className="flex h-32 items-end gap-1">
+          {heat.map((b) => (
+            <div
+              key={`hr-${b.hour}`}
+              className="group flex flex-1 flex-col items-center justify-end"
+              title={`${b.hour}:00 — ${b.count} wiad.`}
+            >
+              <div
+                className="w-full rounded-t bg-accent/70 transition group-hover:bg-accent"
+                style={{ height: `${(b.count / hourMax) * 100}%` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-1 flex justify-between text-[10px] text-muted">
+          <span>0h</span>
+          <span>12h</span>
+          <span>23h</span>
+        </div>
       </section>
 
       {/* Tickety + biblioteka */}

@@ -283,6 +283,52 @@ export async function getAiUsageSeries(days = 14): Promise<DayPoint[]> {
 }
 
 // ───────────────────────── 📈 Aktywność serwera (Faza 7 / F10.1) ─────────────────────────
+// Tor L — top aktywni + heatmapa godzinowa
+export type TopUser = { user_id: string; username: string; messages: number; voice_min: number };
+export async function getTopActiveUsers(days = 14, limit = 10): Promise<TopUser[]> {
+  if (!hasSupabase) return [];
+  try {
+    const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
+    const { data, error } = await supabase()
+      .from('user_activity')
+      .select('user_id,username,messages,voice_min')
+      .gte('day', since);
+    if (error) throw new Error(error.message);
+    type DbRow = { user_id: string; username?: string; messages?: number; voice_min?: number };
+    const map = new Map<string, TopUser>();
+    for (const r of (data ?? []) as DbRow[]) {
+      const cur = map.get(r.user_id) ?? {
+        user_id: r.user_id,
+        username: r.username || r.user_id,
+        messages: 0,
+        voice_min: 0,
+      };
+      cur.messages += r.messages || 0;
+      cur.voice_min += r.voice_min || 0;
+      if (r.username) cur.username = r.username;
+      map.set(r.user_id, cur);
+    }
+    return [...map.values()].sort((a, b) => b.messages - a.messages).slice(0, limit);
+  } catch {
+    return [];
+  }
+}
+export async function getHourlyActivity(): Promise<number[]> {
+  const out = new Array<number>(24).fill(0);
+  if (!hasSupabase) return out;
+  try {
+    const { data, error } = await supabase().from('activity_hourly').select('hour,messages');
+    if (error) throw new Error(error.message);
+    for (const r of (data ?? []) as { hour: number; messages?: number }[]) {
+      const h = Number(r.hour);
+      if (h >= 0 && h < 24) out[h] = r.messages || 0;
+    }
+    return out;
+  } catch {
+    return out;
+  }
+}
+
 export type ActivityPoint = {
   day: string;
   messages: number;

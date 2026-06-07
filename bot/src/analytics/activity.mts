@@ -1,24 +1,42 @@
-// Faza 7 / F10.1 + Tor E — analityka aktywności: wiadomości/wejścia/wyjścia + MINUTY VOICE per dzień
-// (UTC). Akumulacja w pamięci → flush co 5 min do Supabase 'activity_daily'. Zapis voice_minutes ma
-// fallback (gdyby kolumna jeszcze nie istniała przed ALTER — wtedy zapisujemy bez niej, bez regresji).
+// Faza 7 / F10.1 + Tor E + Tor L — analityka: per-serwer (messages/joins/leaves/voice) ORAZ
+// per-user (top aktywni) i per-godzina (heatmapa). Akumulacja w pamięci → flush co 5 min.
+// Zapisy per-user/per-hour i voice mają per-item try/catch (brak tabel/kolumn przed SQL = pomijane,
+// bez regresji dla głównych liczników).
 import type { Client, GuildMember, Message, PartialGuildMember } from 'discord.js';
 import { Events } from 'discord.js';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 
 type Delta = { messages: number; joins: number; leaves: number; voice: number };
 const deltas = new Map<string, Delta>();
+const perUser = new Map<string, { messages: number; voice: number; username: string }>(); // guild|user
+const perHour = new Map<string, number>(); // guild|hour
 
 function bump(guildId: string, k: keyof Delta, amount = 1): void {
   const d = deltas.get(guildId) ?? { messages: 0, joins: 0, leaves: 0, voice: 0 };
   d[k] += amount;
   deltas.set(guildId, d);
 }
+function bumpUser(
+  guildId: string,
+  userId: string,
+  username: string,
+  k: 'messages' | 'voice',
+  amount = 1,
+): void {
+  const key = `${guildId}|${userId}`;
+  const u = perUser.get(key) ?? { messages: 0, voice: 0, username };
+  u[k] += amount;
+  u.username = username;
+  perUser.set(key, u);
+}
+function bumpHour(guildId: string, hour: number): void {
+  const key = `${guildId}|${hour}`;
+  perHour.set(key, (perHour.get(key) ?? 0) + 1);
+}
 
 type Row = { messages?: number; joins?: number; leaves?: number; voice_minutes?: number };
 
-async function flush(): Promise<void> {
-  if (!hasCloud() || !deltas.size) return;
-  const day = new Date().toISOString().slice(0, 10);
+async function flushGuild(day: string): Promise<void> {
   const entries = [...deltas.entries()];
   deltas.clear();
   for (const [guildId, d] of entries) {
@@ -42,12 +60,72 @@ async function flush(): Promise<void> {
         'guild_id,day',
       );
     } catch {
-      // kolumna voice_minutes może jeszcze nie istnieć (przed ALTER) → zapis bez niej
       await cloudUpsert('activity_daily', [base], 'guild_id,day').catch((e) =>
         console.warn('[activity]', (e as Error).message),
       );
     }
   }
+}
+
+async function flushUsers(day: string): Promise<void> {
+  const ue = [...perUser.entries()];
+  perUser.clear();
+  for (const [key, u] of ue) {
+    if (!u.messages && !u.voice) continue;
+    const [g, uid] = key.split('|');
+    try {
+      const rows = await cloudSelect<{ messages?: number; voice_min?: number }>(
+        'user_activity',
+        `select=messages,voice_min&guild_id=eq.${g}&user_id=eq.${uid}&day=eq.${day}`,
+      ).catch(() => [] as { messages?: number; voice_min?: number }[]);
+      const cur = rows[0] ?? {};
+      await cloudUpsert(
+        'user_activity',
+        [
+          {
+            guild_id: g,
+            user_id: uid,
+            username: u.username,
+            day,
+            messages: (cur.messages ?? 0) + u.messages,
+            voice_min: (cur.voice_min ?? 0) + u.voice,
+          },
+        ],
+        'guild_id,user_id,day',
+      );
+    } catch {
+      /* tabela user_activity może nie istnieć przed SQL — pomiń */
+    }
+  }
+}
+
+async function flushHours(): Promise<void> {
+  const he = [...perHour.entries()];
+  perHour.clear();
+  for (const [key, n] of he) {
+    const [g, hr] = key.split('|');
+    try {
+      const rows = await cloudSelect<{ messages?: number }>(
+        'activity_hourly',
+        `select=messages&guild_id=eq.${g}&hour=eq.${hr}`,
+      ).catch(() => [] as { messages?: number }[]);
+      await cloudUpsert(
+        'activity_hourly',
+        [{ guild_id: g, hour: Number(hr), messages: (rows[0]?.messages ?? 0) + n }],
+        'guild_id,hour',
+      );
+    } catch {
+      /* tabela activity_hourly może nie istnieć przed SQL — pomiń */
+    }
+  }
+}
+
+async function flush(): Promise<void> {
+  if (!hasCloud()) return;
+  const day = new Date().toISOString().slice(0, 10);
+  await flushGuild(day);
+  await flushUsers(day);
+  await flushHours();
 }
 
 export function startActivity(client: Client): void {
@@ -56,23 +134,29 @@ export function startActivity(client: Client): void {
     return;
   }
   client.on(Events.MessageCreate, (m: Message) => {
-    if (m.guild && !m.author.bot) bump(m.guild.id, 'messages');
+    if (m.guild && !m.author.bot) {
+      bump(m.guild.id, 'messages');
+      bumpUser(m.guild.id, m.author.id, m.author.username, 'messages');
+      bumpHour(m.guild.id, new Date().getUTCHours());
+    }
   });
   client.on(Events.GuildMemberAdd, (m: GuildMember) => bump(m.guild.id, 'joins'));
   client.on(Events.GuildMemberRemove, (m: GuildMember | PartialGuildMember) =>
     bump(m.guild.id, 'leaves'),
   );
 
-  // Minuty voice — co 60 s dodaj liczbę ludzi w kanałach głosowych (poza AFK).
   setInterval(() => {
     for (const guild of client.guilds.cache.values()) {
-      let humans = 0;
       for (const ch of guild.channels.cache.values()) {
         if (ch.isVoiceBased() && ch.id !== guild.afkChannelId) {
-          humans += [...ch.members.values()].filter((mm) => !mm.user.bot).length;
+          for (const mm of ch.members.values()) {
+            if (!mm.user.bot) {
+              bump(guild.id, 'voice');
+              bumpUser(guild.id, mm.id, mm.user.username, 'voice');
+            }
+          }
         }
       }
-      if (humans) bump(guild.id, 'voice', humans);
     }
   }, 60_000);
 
@@ -80,5 +164,5 @@ export function startActivity(client: Client): void {
     () => void flush().catch((e) => console.warn('[activity]', (e as Error).message)),
     5 * 60_000,
   );
-  console.log('[activity] analityka aktywna (wiadomości/wejścia/wyjścia/voice; flush co 5 min).');
+  console.log('[activity] analityka aktywna (serwer + per-user + heatmapa; flush co 5 min).');
 }
