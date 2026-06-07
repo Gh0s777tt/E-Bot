@@ -37,7 +37,7 @@
 - [x] D — tickety: przejmowanie (claim) + auto-close SLA
 - [x] E — analityka: minuty voice + tygodniowy digest
 - [x] F — menu ról dropdown (`/rolemenu`) + zaplanowane ogłoszenia (`/schedule`)
-- [ ] (odłożone MVP-extras) skórki kart · loteria · dzienny AI-digest · aplikacje/Appy · heatmapy/retencja · publiczny web · Twitch sub→rola · automatyzacje IFTTT · giveaway++
+- [x] G giveaway++ · H loteria · I skórki kart · J dzienny AI-digest · K aplikacje/Appy · L analityka per-user (top+heatmapa) · M publiczny web · N Twitch sub→rola (kod; aktywacja = OAuth twórcy) · O automatyzacje IFTTT
 
 ## ✅ Faza 0 — Fundamenty
 - [x] Kolektor Steam (Web API, 58 gier)

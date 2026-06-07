@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-85-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.42.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-94-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.45.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,20 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.45.0] — Domknięcie odłożonych (9 torów G–O): giveaway++ · loteria · skórki · AI-digest · aplikacje · analityka per-user · web · Twitch · automatyzacje
+
+> **40 komend** (+`/lottery`, `/skins`, `/applypanel`, `/linktwitch`; `/giveaway` z `reroll`+wymaganiami). Nowe tabele → odpal `dashboard/scripts/_ALL.sql` w Supabase.
+
+- `[#094]` ⚡ **O — automatyzacje IFTTT-lite:** reguły event→akcja (dołączenie/słowo-klucz → wiadomość/rola/DM), builder w `/automations`. Bez SQL.
+- `[#093]` 📺 **N — Twitch sub→rola:** EventSub `channel.subscribe` → rola (link `/linktwitch`, tabela `twitch_links`), config w `/notifications`. **Aktywacja: OAuth twórcy `channel:read:subscriptions` + utworzenie EventSub-sub.**
+- `[#092]` 🌐 **M — publiczny web:** `/p/leaderboard` + `/p/u/[id]` **bez logowania** (`Shell` ukrywa chrom, `proxy` allowlist `/p/`).
+- `[#091]` 📊 **L — analityka per-user:** top aktywni + heatmapa godzinowa (`user_activity`, `activity_hourly`).
+- `[#090]` 📋 **K — aplikacje/rekrutacja (Appy):** `/applypanel` → modal → kolejka accept/deny → rola + DM. Bez SQL.
+- `[#089]` 🧠 **J — dzienny AI-digest** kanału (poller + panel `/ai`). Bez SQL.
+- `[#088]` 🎨 **I — skórki kart** rang/profilu (`/skins`, `user_card_skins`; `/rank` i `/profile` czytają skórkę).
+- `[#087]` 🎰 **H — loteria** serwerowa (`/lottery` buy/pool/draw, `lottery_tickets`).
+- `[#086]` 🎉 **G — giveaway++:** wymagania wejścia (rola/poziom/zaproszenia) + bonus-losy + `reroll` (ALTER `giveaways`/`giveaway_entries`).
 
 ## [0.42.0] — Rozbudowa „każda funkcja": profil · questy · ekonomia++ · AI · tickety · analityka · power-tools
 
