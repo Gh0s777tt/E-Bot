@@ -36,6 +36,21 @@ export async function signSession(payload: Session, secret: string): Promise<str
   return `${body}.${b64url(new Uint8Array(sig))}`;
 }
 
+// Sekret sesji — fail-closed w produkcji. Brak/krótki AUTH_SECRET = podrabialne cookie sesji,
+// więc zamiast publicznego fallbacku rzucamy błąd (lokalnie dopuszczamy dev-fallback z ostrzeżeniem).
+export function getAuthSecret(): string {
+  const s = process.env.AUTH_SECRET;
+  if (s && s.length >= 16) return s;
+  const isProd = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+  if (isProd) {
+    throw new Error(
+      'AUTH_SECRET brak lub za krótki (min 16 znaków) — odmawiam pracy z podrabialnym sekretem sesji.',
+    );
+  }
+  console.warn('[auth] AUTH_SECRET nieustawiony — używam dev-fallback (TYLKO lokalnie).');
+  return 'dev-insecure-secret-change-me';
+}
+
 export async function verifySession(token: string, secret: string): Promise<Session | null> {
   const [body, sig] = token.split('.');
   if (!body || !sig) return null;

@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { verifySession } from './lib/session';
+import { getAuthSecret, verifySession } from './lib/session';
 
 const SESSION_COOKIE = 'ebot_session';
 
@@ -27,7 +27,7 @@ export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (isOpen(pathname)) return NextResponse.next();
 
-  const secret = process.env.AUTH_SECRET || 'dev-insecure-secret-change-me';
+  const secret = getAuthSecret();
   const token = req.cookies.get(SESSION_COOKIE)?.value;
   const session = token ? await verifySession(token, secret) : null;
 

@@ -1,6 +1,15 @@
 // Webhook Ko-fi — Ko-fi POST-uje (form-urlencoded, pole `data` = JSON) przy donejcie/subskrypcji.
 // Trasa PUBLICZNA (proxy.ts przepuszcza dokładnie /api/kofi); autoryzacja = verification_token z configu.
+import { timingSafeEqual } from 'node:crypto';
 import { getKofiConfig } from '../../../lib/community';
+
+// Porównanie w czasie stałym — nie wycieka długości/treści tokenu przez timing.
+function safeEqual(a: string, b: string): boolean {
+  const ab = Buffer.from(a);
+  const bb = Buffer.from(b);
+  if (ab.length !== bb.length) return false;
+  return timingSafeEqual(ab, bb);
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +42,7 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const cfg = await getKofiConfig();
-  if (!cfg.verificationToken || d.verification_token !== cfg.verificationToken) {
+  if (!cfg.verificationToken || !safeEqual(d.verification_token ?? '', cfg.verificationToken)) {
     return new Response('forbidden', { status: 403 });
   }
   if (!cfg.enabled || !cfg.channelId) return new Response('ok', { status: 200 });

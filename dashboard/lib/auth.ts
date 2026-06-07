@@ -1,4 +1,6 @@
 // Discord OAuth2 (scope: identify) + whitelist właściciela.
+import { getAuthSecret } from './session';
+
 export const SESSION_COOKIE = 'ebot_session';
 export const STATE_COOKIE = 'ebot_oauth_state';
 
@@ -6,7 +8,7 @@ export function authConfig() {
   return {
     clientId: process.env.DISCORD_CLIENT_ID || '',
     clientSecret: process.env.DISCORD_CLIENT_SECRET || '',
-    secret: process.env.AUTH_SECRET || 'dev-insecure-secret-change-me',
+    secret: getAuthSecret(),
     owners: (process.env.DASHBOARD_OWNER_IDS || '')
       .split(',')
       .map((s) => s.trim())
@@ -81,5 +83,11 @@ export async function fetchDiscordUser(
 
 export function isAllowed(uid: string): boolean {
   const owners = authConfig().owners;
-  return owners.length === 0 ? true : owners.includes(uid);
+  // fail-closed: brak skonfigurowanych właścicieli = nikt nie wchodzi (zapobiega przypadkowo
+  // otwartemu panelowi, gdyby DASHBOARD_OWNER_IDS zniknął z env).
+  if (owners.length === 0) {
+    console.warn('[auth] DASHBOARD_OWNER_IDS nieustawiony — odmawiam dostępu (fail-closed).');
+    return false;
+  }
+  return owners.includes(uid);
 }

@@ -1,7 +1,7 @@
 import { CheckCircle2, ExternalLink, LogOut } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { getLinkStatus } from '../../lib/ghostLink';
-import { verifySession } from '../../lib/session';
+import { getAuthSecret, verifySession } from '../../lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,9 +9,7 @@ const GHOST_URL = 'https://ghost-empire-web.vercel.app';
 
 export default async function ProfilePage() {
   const token = (await cookies()).get('ebot_session')?.value;
-  const session = token
-    ? await verifySession(token, process.env.AUTH_SECRET || 'dev-insecure-secret-change-me')
-    : null;
+  const session = token ? await verifySession(token, getAuthSecret()) : null;
   const initial = (session?.uname || '?').charAt(0).toUpperCase();
   const link = await getLinkStatus(session?.uid);
 
