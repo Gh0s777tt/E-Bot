@@ -1,4 +1,5 @@
 import { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials } from 'discord.js';
+import { startActivity } from './analytics/activity.mts';
 import { startAutomod } from './automod.mts';
 import { notifyError } from './cloud/alerts.mts';
 import { startHeartbeat } from './cloud/heartbeat.mts';
@@ -112,6 +113,7 @@ client.once(Events.ClientReady, (c) => {
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
   startFreeGames(c); // Faza 7 / F9.1 — feed darmowych gier Epic (poll 6h)
   startPatchNotes(c); // Faza 7 / F9.1 — patch-notes Steam (poll 1h)
+  startActivity(c); // Faza 7 / F10.1 — analityka aktywności (flush co 5 min → activity_daily)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence

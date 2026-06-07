@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-65-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.34.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-66-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.35.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.35.0] — Faza 7 / F10.1: wykresy aktywności serwera
+
+- `[#066]` 📈 **Analityka aktywności** (panel `/stats`):
+  - Bot zlicza **wiadomości / wejścia / wyjścia** per dzień (UTC) — akumulacja w pamięci, **flush co 5 min** do tabeli `activity_daily` (zero zapisów per‑wiadomość; delta read‑add‑write odporne na restart). Na `/stats` doszedł **wykres 14‑dniowy** (słupki wiadomości) + sumy (💬 wiadomości / 📥 wejścia / 📤 wyjścia).
+  - Bot: `bot/src/analytics/activity.mts` (`startActivity`, zawsze aktywne przy chmurze). Panel: `getActivitySeries` w `lib/faza4.ts` + sekcja na `/stats`. **Nowy SQL: `dashboard/scripts/f10-activity-schema.sql`** (`activity_daily`; + w `_ALL.sql`). Bez komend.
 
 ## [0.34.0] — Faza 7 / F9.3: donejty Ko-fi · 🎉 F9 zakończona
 

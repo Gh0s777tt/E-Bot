@@ -278,6 +278,44 @@ export async function getAiUsageSeries(days = 14): Promise<DayPoint[]> {
   }
 }
 
+// ───────────────────────── 📈 Aktywność serwera (Faza 7 / F10.1) ─────────────────────────
+export type ActivityPoint = { day: string; messages: number; joins: number; leaves: number };
+
+export async function getActivitySeries(days = 14): Promise<ActivityPoint[]> {
+  const skeleton = (): ActivityPoint[] => {
+    const out: ActivityPoint[] = [];
+    for (let i = days - 1; i >= 0; i--) {
+      out.push({
+        day: new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10),
+        messages: 0,
+        joins: 0,
+        leaves: 0,
+      });
+    }
+    return out;
+  };
+  if (!hasSupabase) return skeleton();
+  try {
+    const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
+    const { data, error } = await supabase()
+      .from('activity_daily')
+      .select('day,messages,joins,leaves')
+      .gte('day', since);
+    if (error) throw new Error(error.message);
+    const map = new Map<string, { messages: number; joins: number; leaves: number }>();
+    for (const r of (data ?? []) as ActivityPoint[]) {
+      const cur = map.get(r.day) ?? { messages: 0, joins: 0, leaves: 0 };
+      cur.messages += r.messages || 0;
+      cur.joins += r.joins || 0;
+      cur.leaves += r.leaves || 0;
+      map.set(r.day, cur);
+    }
+    return skeleton().map((p) => ({ ...p, ...(map.get(p.day) ?? {}) }));
+  } catch {
+    return skeleton();
+  }
+}
+
 // ───────────────────────── 🛡️ Historia moderacji (Faza 6 / B2) ─────────────────────────
 export type ModCase = {
   id: string;

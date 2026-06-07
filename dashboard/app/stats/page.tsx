@@ -2,6 +2,7 @@ import { BarChart3, Gamepad2, MessageSquare, Ticket, Trophy } from 'lucide-react
 import StatCard from '../../components/StatCard';
 import { getStats } from '../../lib/data';
 import {
+  getActivitySeries,
   getAiUsageSeries,
   getAiUsageToday,
   getLeaderboard,
@@ -19,16 +20,26 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function StatsPage() {
-  const [stats, aiSeries, aiToday, board, tickets] = await Promise.all([
+  const [stats, aiSeries, aiToday, board, tickets, activity] = await Promise.all([
     getStats(),
     getAiUsageSeries(14),
     getAiUsageToday(),
     getLeaderboard(8),
     getTickets(200),
+    getActivitySeries(14),
   ]);
   const tk = ticketStats(tickets);
   const aiMax = Math.max(1, ...aiSeries.map((p) => p.requests));
   const xpMax = Math.max(1, ...board.map((u) => u.xp));
+  const actMax = Math.max(1, ...activity.map((p) => p.messages));
+  const actTotals = activity.reduce(
+    (a, p) => ({
+      messages: a.messages + p.messages,
+      joins: a.joins + p.joins,
+      leaves: a.leaves + p.leaves,
+    }),
+    { messages: 0, joins: 0, leaves: 0 },
+  );
 
   return (
     <div className="space-y-6">
@@ -74,6 +85,50 @@ export default async function StatsPage() {
         {aiToday.totalRequests === 0 && aiSeries.every((p) => p.requests === 0) && (
           <p className="mt-2 text-xs text-muted">
             Brak zużycia AI. Użyj `/ai` na Discordzie, by zobaczyć dane.
+          </p>
+        )}
+      </section>
+
+      {/* Aktywność serwera — 14 dni */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <BarChart3 size={16} className="text-accent" /> Aktywność serwera — ostatnie 14 dni
+          (wiadomości)
+        </h2>
+        <div className="flex h-40 items-end gap-1">
+          {activity.map((p) => (
+            <div
+              key={p.day}
+              className="group flex flex-1 flex-col items-center justify-end"
+              title={`${p.day}: ${p.messages} wiad. · +${p.joins} / -${p.leaves} osób`}
+            >
+              <div
+                className="w-full rounded-t bg-accent/70 transition group-hover:bg-accent"
+                style={{ height: `${(p.messages / actMax) * 100}%` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-1 flex justify-between text-[10px] text-muted">
+          <span>{activity[0]?.day.slice(5)}</span>
+          <span>{activity[activity.length - 1]?.day.slice(5)}</span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-4 text-sm">
+          <span>
+            💬 Wiadomości (14 dni):{' '}
+            <strong className="text-accent">{actTotals.messages.toLocaleString('pl-PL')}</strong>
+          </span>
+          <span>
+            📥 Wejścia: <strong className="text-green-400">{actTotals.joins}</strong>
+          </span>
+          <span>
+            📤 Wyjścia: <strong className="text-accent">{actTotals.leaves}</strong>
+          </span>
+        </div>
+        {actTotals.messages === 0 && (
+          <p className="mt-2 text-xs text-muted">
+            Brak danych aktywności. Pojawią się po aktywności na serwerze (wymaga{' '}
+            <code>_ALL.sql</code> w Supabase).
           </p>
         )}
       </section>

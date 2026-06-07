@@ -279,6 +279,21 @@ create table if not exists backlog (
 create index if not exists backlog_user on backlog (guild_id, user_id, status);
 alter table backlog enable row level security;
 
+
+-- ─────────────────────────────────────────────────────────────
+-- Faza 7 / F10.1 — dzienna aktywność serwera
+-- ─────────────────────────────────────────────────────────────
+create table if not exists activity_daily (
+  guild_id text not null,
+  day      date not null,
+  messages int  not null default 0,
+  joins    int  not null default 0,
+  leaves   int  not null default 0,
+  primary key (guild_id, day)
+);
+create index if not exists activity_recent on activity_daily (day desc);
+alter table activity_daily enable row level security;
+
 -- ═══════════════════════════════════════════════════════════════════════════
--- KONIEC. Po uruchomieniu wszystkie funkcje F3–F9 zapisują dane.
+-- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════
