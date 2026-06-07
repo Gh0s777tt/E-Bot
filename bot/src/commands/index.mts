@@ -9,6 +9,7 @@ import * as caseCmd from './case.mts';
 import * as economy from './economy.mts';
 import * as giveaway from './giveaway.mts';
 import * as highlight from './highlight.mts';
+import * as hof from './hof.mts';
 import * as imagine from './imagine.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
@@ -60,4 +61,5 @@ export const commands: Command[] = [
   translate,
   imagine,
   backlog,
+  hof,
 ];

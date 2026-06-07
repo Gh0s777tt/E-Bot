@@ -1,16 +1,22 @@
-import { Award, Trophy, Users } from 'lucide-react';
+import { Award, Crown, Trophy, Users } from 'lucide-react';
 import LevelingForm from '../../components/LevelingForm';
+import SeasonsForm from '../../components/SeasonsForm';
 import StatCard from '../../components/StatCard';
-import { getLeaderboard, getLevelingConfig } from '../../lib/faza4';
+import { getSeasonsConfig } from '../../lib/community';
+import { getHallOfFame, getLeaderboard, getLevelingConfig } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
+const MEDAL = ['🥇', '🥈', '🥉'];
+
 export default async function LevelsPage() {
-  const [cfg, board, guild] = await Promise.all([
+  const [cfg, board, guild, seasons, hof] = await Promise.all([
     getLevelingConfig(),
     getLeaderboard(50),
     getGuildMeta(),
+    getSeasonsConfig(),
+    getHallOfFame(10),
   ]);
 
   return (
@@ -36,6 +42,31 @@ export default async function LevelsPage() {
           <Trophy size={16} className="text-accent" /> Konfiguracja levelingu
         </h2>
         <LevelingForm initial={cfg} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Crown size={16} className="text-accent" /> Sezonowe rankingi (hall of fame)
+        </h2>
+        <SeasonsForm initial={seasons} guild={guild} />
+        {hof.length > 0 && (
+          <div className="mt-5 border-t border-line pt-4">
+            <h3 className="mb-2 text-sm font-semibold text-white/90">
+              Ostatni sezon: {hof[0]?.month}
+            </h3>
+            <div className="space-y-1 text-sm">
+              {hof.map((h) => (
+                <div key={`${h.month}-${h.rank}`} className="flex items-center gap-2">
+                  <span className="w-6">{MEDAL[h.rank - 1] ?? `${h.rank}.`}</span>
+                  <span className="flex-1 truncate">{h.username ?? h.user_id}</span>
+                  <span className="text-muted">
+                    lvl {h.level} · {h.xp.toLocaleString('pl-PL')} XP
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

@@ -104,7 +104,7 @@
   - [x] **F9.3** — Donejty Ko-fi (webhook → kanał). ℹ️ ITAD price‑tracking + Twitch sub→rola odłożone (wymagają klucza/OAuth)
 - [ ] **F10** — Analityka + Infra *(w toku)*
   - [x] **F10.1** — Wykresy aktywności serwera (`activity_daily` → `/stats`)
-  - [ ] F10.2 — Sezonowe rankingi levelingu (miesięczny hall of fame)
+  - [x] **F10.2** — Sezonowe rankingi levelingu (`/hof` + miesięczny hall of fame + opcjonalny reset)
   - [ ] F10.3 — Infra: Sentry (DSN), i18n, Playwright *(częściowo zależne od kluczy)*
 
 ```

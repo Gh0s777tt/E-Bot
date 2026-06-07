@@ -71,6 +71,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'leveling_config',
   },
   {
+    key: 'seasons',
+    label: 'Sezonowe rankingi',
+    group: 'Społeczność',
+    href: '/levels',
+    kind: 'json',
+    settingsKey: 'seasons_config',
+  },
+  {
     key: 'suggestions',
     label: 'Sugestie',
     group: 'Społeczność',

@@ -316,6 +316,40 @@ export async function getActivitySeries(days = 14): Promise<ActivityPoint[]> {
   }
 }
 
+// ───────────────────────── 🏆 Hall of Fame sezonów (Faza 7 / F10.2) ─────────────────────────
+export type HofEntry = {
+  month: string;
+  user_id: string;
+  username: string | null;
+  xp: number;
+  level: number;
+  rank: number;
+};
+
+export async function getHallOfFame(limit = 10): Promise<HofEntry[]> {
+  if (!hasSupabase) return [];
+  try {
+    const latest = await supabase()
+      .from('xp_hall_of_fame')
+      .select('month')
+      .order('month', { ascending: false })
+      .limit(1);
+    if (latest.error) throw new Error(latest.error.message);
+    const month = (latest.data?.[0] as { month?: string } | undefined)?.month;
+    if (!month) return [];
+    const { data, error } = await supabase()
+      .from('xp_hall_of_fame')
+      .select('month,user_id,username,xp,level,rank')
+      .eq('month', month)
+      .order('rank', { ascending: true })
+      .limit(limit);
+    if (error) throw new Error(error.message);
+    return (data ?? []) as HofEntry[];
+  } catch {
+    return [];
+  }
+}
+
 // ───────────────────────── 🛡️ Historia moderacji (Faza 6 / B2) ─────────────────────────
 export type ModCase = {
   id: string;

@@ -372,3 +372,25 @@ export async function getKofiConfig(): Promise<KofiConfig> {
 export async function saveKofiConfig(cfg: KofiConfig): Promise<void> {
   await setRawSetting('kofi_config', JSON.stringify(cfg));
 }
+
+// ── Sezonowe rankingi levelingu (Faza 7 / F10.2) ──
+export type SeasonsConfig = { enabled: boolean; channelId: string; top: number; reset: boolean };
+export const SEASONS_DEFAULT: SeasonsConfig = {
+  enabled: false,
+  channelId: '',
+  top: 10,
+  reset: false,
+};
+
+export async function getSeasonsConfig(): Promise<SeasonsConfig> {
+  const raw = await getRawSetting('seasons_config');
+  if (!raw) return structuredClone(SEASONS_DEFAULT);
+  try {
+    return { ...SEASONS_DEFAULT, ...(JSON.parse(raw) as Partial<SeasonsConfig>) };
+  } catch {
+    return structuredClone(SEASONS_DEFAULT);
+  }
+}
+export async function saveSeasonsConfig(cfg: SeasonsConfig): Promise<void> {
+  await setRawSetting('seasons_config', JSON.stringify(cfg));
+}

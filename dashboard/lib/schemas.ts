@@ -294,6 +294,15 @@ export const kofiSchema = z.object({
 });
 export type KofiInput = z.infer<typeof kofiSchema>;
 
+// ── Sezonowe rankingi (POST /api/seasons) ──────────────────
+export const seasonsSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  top: z.number().int().min(1).max(25),
+  reset: z.boolean(),
+});
+export type SeasonsInput = z.infer<typeof seasonsSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

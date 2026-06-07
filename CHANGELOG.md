@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-66-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.35.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-67-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.36.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.36.0] — Faza 7 / F10.2: sezonowe rankingi levelingu
+
+- `[#067]` 🏆 **Sezonowe rankingi — hall of fame** (panel `/levels`):
+  - Na **przełomie miesiąca** bot robi snapshot top XP → tabela `xp_hall_of_fame`, ogłasza zwycięzców na kanale i (opcjonalnie) **resetuje XP** sezonu (prestiż zostaje). Komenda **`/hof [RRRR-MM]`** pokazuje hall of fame. **28 komend.** (Domyka sezonowe rankingi odłożone z F4.)
+  - Bot: `bot/src/analytics/seasons.mts` (`startSeasons`, sprawdza co 6 h; dedup w `hof_last_month`; baseline przy pierwszym uruchomieniu) + `commands/hof.mts`. Panel: `seasons_config` + `getHallOfFame` + `seasonsSchema` + `/api/seasons` + `SeasonsForm` (z ostrzeżeniem o resecie) + sekcja na `/levels` (config + podgląd ostatniego sezonu) + moduł. **Nowy SQL: `dashboard/scripts/f10-seasons-schema.sql`** (`xp_hall_of_fame`; + w `_ALL.sql`).
 
 ## [0.35.0] — Faza 7 / F10.1: wykresy aktywności serwera
 
