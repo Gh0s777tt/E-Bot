@@ -10,6 +10,7 @@
 ![Faza 5](https://img.shields.io/badge/Faza_5-✅-E50914?labelColor=0a0a0a)
 ![Faza 6](https://img.shields.io/badge/Faza_6-✅-E50914?labelColor=0a0a0a)
 ![Faza 7](https://img.shields.io/badge/Faza_7-✅-E50914?labelColor=0a0a0a)
+![Ulepszenia](https://img.shields.io/badge/Ulepszenia_5×-✅-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -18,6 +19,14 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## ✅ Po Fazie 7 — 5 torów ulepszeń (analiza popularnych botów)
+- [x] Tor 1 — bezpieczeństwo: fail‑closed auth (`AUTH_SECRET`/właściciel) + `timingSafeEqual` Ko‑fi + audit log (`/audit`)
+- [x] Tor 2 — captcha obrazkowa + min. wiek konta + alt‑detection w anti‑raid
+- [x] Tor 3 — gra w liczenie + `/fun` + Invite Tracker (`/invites`)
+- [x] Tor 4 — ekonomia++: interaktywny blackjack + ekwipunek/itemy
+- [x] Tor 5 — infra: cache sweepers + zero‑dep logger strukturalny + detekcja zmian w sync
+- [ ] (opcjonalnie, odłożone) Realtime push (supabase‑js) · pino · i18n PL/EN · Playwright E2E
 
 ## ✅ Faza 0 — Fundamenty
 - [x] Kolektor Steam (Web API, 58 gier)

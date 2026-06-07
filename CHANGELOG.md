@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-71-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.38.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-77-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.40.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,17 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.40.0] — Ulepszenia 5‑torowe: bezpieczeństwo · captcha · engagement · ekonomia · infra
+
+> Inspirowane analizą popularnych botów (Wick/RaidProtect/Dyno, countr, Dank Memer/UnbelievaBoat, Invite Tracker, Statbot…). **30 komend** (+`/fun`, +`/invites`). Nowe tabele Supabase — patrz `dashboard/scripts/_ALL.sql`.
+
+- `[#077]` ⚡ **Tor 5 — wydajność/infra:** limit cache wiadomości (`makeCache` MessageManager=100) + sweeper (sprząta >30 min co h) = mniej RAM na Railway; **zero‑dep logger strukturalny** (`bot/src/lib/log.mts`, JSON‑lines, `LOG_LEVEL`) wpięty w globalne handlery błędów + settings‑sync; **detekcja zmian w settings‑sync** (pomija zapis niezmienionych kluczy). Realtime/pino świadomie pominięte (nowe zależności vs. ethos zero‑dep cloud).
+- `[#076]` 💰 **Tor 4 — ekonomia++:** interaktywny **blackjack** (`/eco blackjack`, przyciski Dobierz/Pas, krupier do 17, blackjack ×1.5) + **ekwipunek/itemy** (sklepowy przedmiot bez roli → `economy_inventory`; `/eco inventory`, `/eco use`). Bot: `economy/blackjack.mts`, `store.mts`. **Nowy SQL:** `tor4-economy-schema.sql`.
+- `[#075]` 🎮 **Tor 3 — engagement:** **gra w liczenie** (anti‑cheat „nie dwa razy z rzędu", rekord serwera, kamienie milowe) · **`/fun`** (prawda/wyzwanie/wolałbyś/8ball/kostka) · **Invite Tracker** (kto kogo zaprosił, fejki/odejścia, nagrody‑role, `/invites stats|top`). Intencja `GuildInvites`. Panel: sekcje na `/engagement` + 2 moduły. **Nowy SQL:** `tor3-engagement-schema.sql` (`counting_state`, `invites`).
+- `[#074]` 🛡️ **Tor 2 — captcha + alt‑detection:** weryfikacja zyskała tryb **captcha obrazkowa** (`@napi-rs/canvas`, modal z kodem) + bramkę **min. wieku konta**; anti‑raid zyskał **wykrywanie altów** (młode konto / brak avatara → alert lub kara). Panel: pola w `VerificationForm`/`AntiRaidForm`.
+- `[#073]` 🔒 **Tor 1 — audit log:** dziennik zmian konfiguracji (kto/co/kiedy/IP) — `dashboard/lib/audit.ts` wpięty w 9 tras security + strona **`/audit`**. **Nowy SQL:** `sec-audit-schema.sql` (`settings_audit`).
+- `[#072]` 🔒 **Tor 1 — hardening auth:** **fail‑closed** sekret sesji (`AUTH_SECRET` brak w prod → twardy błąd zamiast publicznego fallbacku) i autoryzacja właściciela (pusta lista = nikt); Ko‑fi token przez `crypto.timingSafeEqual`. (Env w prod potwierdzone — ochrona prewencyjna na wypadek złej konfiguracji.)
 
 ## [0.38.1] — Fix: zakładka „Komendy" dynamiczna
 
