@@ -1,18 +1,20 @@
-import { Coins, HelpCircle, MessageSquare, Sparkles, Users } from 'lucide-react';
+import { Coins, FileText, HelpCircle, MessageSquare, Sparkles, Users } from 'lucide-react';
 import AiConfigForm from '../../components/AiConfigForm';
+import AiDigestForm from '../../components/AiDigestForm';
 import AiHelpForm from '../../components/AiHelpForm';
 import StatCard from '../../components/StatCard';
-import { getAiHelpConfig } from '../../lib/community';
+import { getAiDigestConfig, getAiHelpConfig } from '../../lib/community';
 import { getAiConfig, getAiUsageToday } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AiPage() {
-  const [cfg, usage, aihelp, guild] = await Promise.all([
+  const [cfg, usage, aihelp, aidigest, guild] = await Promise.all([
     getAiConfig(),
     getAiUsageToday(),
     getAiHelpConfig(),
+    getAiDigestConfig(),
     getGuildMeta(),
   ]);
 
@@ -56,6 +58,13 @@ export default async function AiPage() {
           <HelpCircle size={16} className="text-accent" /> AI-pomoc (auto-odpowiedzi z FAQ)
         </h2>
         <AiHelpForm initial={aihelp} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <FileText size={16} className="text-accent" /> Dzienny AI-digest kanału
+        </h2>
+        <AiDigestForm initial={aidigest} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

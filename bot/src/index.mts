@@ -18,6 +18,7 @@ import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
 import { type Command, commands } from './commands/index.mts';
 import { startAfk } from './community/afk.mts';
+import { startAiDigest } from './community/aidigest.mts';
 import { startAiHelp } from './community/aihelp.mts';
 import { startAiMod } from './community/aimod.mts';
 import { startBirthdays } from './community/birthdays.mts';
@@ -149,6 +150,7 @@ client.once(Events.ClientReady, (c) => {
   startQuests(c); // Tor A2 — questy dzienne/tygodniowe (postęp w pamięci)
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
   startAiHelp(c); // Tor C — AI-pomoc (RAG-lite na wskazanym kanale)
+  startAiDigest(c); // Tor J — dzienny AI-digest kanału
   startFreeGames(c); // Faza 7 / F9.1 — feed darmowych gier Epic (poll 6h)
   startPatchNotes(c); // Faza 7 / F9.1 — patch-notes Steam (poll 1h)
   startPriceTracker(c); // Faza 7 / F9.3 — śledzenie cen ITAD z listy życzeń (poll 12h)

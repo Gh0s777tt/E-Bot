@@ -96,6 +96,15 @@ export const aihelpSchema = z.object({
 });
 export type AiHelpInput = z.infer<typeof aihelpSchema>;
 
+// ── Dzienny AI-digest (Tor J) ──
+export const aidigestSchema = z.object({
+  enabled: z.boolean(),
+  sourceChannelId: z.string().max(40),
+  targetChannelId: z.string().max(40),
+  hourUTC: z.number().int().min(0).max(23),
+});
+export type AiDigestInput = z.infer<typeof aidigestSchema>;
+
 // ── Tygodniowy digest (Tor E) ──
 export const digestSchema = z.object({
   enabled: z.boolean(),

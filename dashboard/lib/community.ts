@@ -207,6 +207,32 @@ export async function saveDigestConfig(cfg: DigestConfig): Promise<void> {
   await setRawSetting('digest_config', JSON.stringify(cfg));
 }
 
+// ── Dzienny AI-digest (Tor J) ──
+export type AiDigestConfig = {
+  enabled: boolean;
+  sourceChannelId: string;
+  targetChannelId: string;
+  hourUTC: number;
+};
+export const AIDIGEST_DEFAULT: AiDigestConfig = {
+  enabled: false,
+  sourceChannelId: '',
+  targetChannelId: '',
+  hourUTC: 18,
+};
+export async function getAiDigestConfig(): Promise<AiDigestConfig> {
+  const raw = await getRawSetting('aidigest_config');
+  if (!raw) return structuredClone(AIDIGEST_DEFAULT);
+  try {
+    return { ...AIDIGEST_DEFAULT, ...(JSON.parse(raw) as Partial<AiDigestConfig>) };
+  } catch {
+    return structuredClone(AIDIGEST_DEFAULT);
+  }
+}
+export async function saveAiDigestConfig(cfg: AiDigestConfig): Promise<void> {
+  await setRawSetting('aidigest_config', JSON.stringify(cfg));
+}
+
 // ── Modmail (Faza 7 / F6.4) ──
 export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 export const MODMAIL_DEFAULT: ModmailConfig = {
