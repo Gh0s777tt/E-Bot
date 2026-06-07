@@ -263,6 +263,28 @@ export const aimodSchema = z.object({
 });
 export type AiModInput = z.infer<typeof aimodSchema>;
 
+// ── Free-games feed (POST /api/freegames) ──────────────────
+export const freegamesSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+});
+export type FreeGamesInput = z.infer<typeof freegamesSchema>;
+
+// ── Patch-notes (POST /api/patchnotes) ─────────────────────
+export const patchnotesSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  apps: z
+    .array(
+      z.object({
+        appId: z.number().int().min(1).max(100_000_000),
+        name: z.string().min(1).max(80),
+      }),
+    )
+    .max(20),
+});
+export type PatchNotesInput = z.infer<typeof patchnotesSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

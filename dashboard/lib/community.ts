@@ -310,3 +310,38 @@ export async function getAiModConfig(): Promise<AiModConfig> {
 export async function saveAiModConfig(cfg: AiModConfig): Promise<void> {
   await setRawSetting('aimod_config', JSON.stringify(cfg));
 }
+
+// ── Free-games feed (Faza 7 / F9.1) ──
+export type FreeGamesConfig = { enabled: boolean; channelId: string };
+export const FREEGAMES_DEFAULT: FreeGamesConfig = { enabled: false, channelId: '' };
+
+export async function getFreeGamesConfig(): Promise<FreeGamesConfig> {
+  const raw = await getRawSetting('freegames_config');
+  if (!raw) return structuredClone(FREEGAMES_DEFAULT);
+  try {
+    return { ...FREEGAMES_DEFAULT, ...(JSON.parse(raw) as Partial<FreeGamesConfig>) };
+  } catch {
+    return structuredClone(FREEGAMES_DEFAULT);
+  }
+}
+export async function saveFreeGamesConfig(cfg: FreeGamesConfig): Promise<void> {
+  await setRawSetting('freegames_config', JSON.stringify(cfg));
+}
+
+// ── Patch-notes (Faza 7 / F9.1) ──
+export type PatchApp = { appId: number; name: string };
+export type PatchNotesConfig = { enabled: boolean; channelId: string; apps: PatchApp[] };
+export const PATCHNOTES_DEFAULT: PatchNotesConfig = { enabled: false, channelId: '', apps: [] };
+
+export async function getPatchNotesConfig(): Promise<PatchNotesConfig> {
+  const raw = await getRawSetting('patchnotes_config');
+  if (!raw) return structuredClone(PATCHNOTES_DEFAULT);
+  try {
+    return { ...PATCHNOTES_DEFAULT, ...(JSON.parse(raw) as Partial<PatchNotesConfig>) };
+  } catch {
+    return structuredClone(PATCHNOTES_DEFAULT);
+  }
+}
+export async function savePatchNotesConfig(cfg: PatchNotesConfig): Promise<void> {
+  await setRawSetting('patchnotes_config', JSON.stringify(cfg));
+}

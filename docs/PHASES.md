@@ -98,7 +98,10 @@
   - [x] **F8.1** — `/tldr` (podsumowanie kanału) + `/translate` (tłumaczenie) + wspólny `lib/ai.mts`
   - [x] **F8.2** — Czat z pamięcią (`/ai` + `nowa`) + `/imagine` (OpenAI dall-e-3)
   - [x] **F8.3** — AI‑moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
-- [ ] **F9** — Gaming unikat (price‑tracking ITAD, free‑games feed, patch‑notes, backlog, Twitch sub→rola, donejty)
+- [ ] **F9** — Gaming unikat *(w toku)*
+  - [x] **F9.1** — Free‑games feed (Epic) + patch‑notes (Steam news)
+  - [ ] F9.2 — Backlog gier (`/backlog`)
+  - [ ] F9.3 — Price‑tracking (ITAD) + Twitch sub→rola + donejty *(wymagają kluczy/decyzji)*
 - [ ] **F10** — Analityka + Infra (wykresy aktywności, sezonowe rankingi levelingu, Realtime, Sentry z DSN, Playwright, i18n)
 
 ```

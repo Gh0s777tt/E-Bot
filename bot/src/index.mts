@@ -23,6 +23,8 @@ import { startReminders } from './engagement/reminders.mts';
 import { startStarboard } from './engagement/starboard.mts';
 import { startTempVoice } from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
+import { startFreeGames } from './gaming/freegames.mts';
+import { startPatchNotes } from './gaming/patchnotes.mts';
 import { startLeveling } from './leveling.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startModmail } from './modmail.mts';
@@ -108,6 +110,8 @@ client.once(Events.ClientReady, (c) => {
   startHighlights(c); // Faza 7 / F7.3 — highlighty (DM na słowo-klucz)
   startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
+  startFreeGames(c); // Faza 7 / F9.1 — feed darmowych gier Epic (poll 6h)
+  startPatchNotes(c); // Faza 7 / F9.1 — patch-notes Steam (poll 1h)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence

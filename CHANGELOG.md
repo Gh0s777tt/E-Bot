@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-62-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.31.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-63-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.32.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.32.0] — Faza 7 / F9.1: free-games feed + patch-notes
+
+- `[#063]` 🎮 **Feedy gamingowe** (panel `/gaming`, publiczne API bez kluczy):
+  - **Free-games** — co ~6 h sprawdza darmowe gry w **Epic Games Store** i ogłasza nowe na kanale (embed z grafiką + czasem do odbioru).
+  - **Patch-notes** — co ~1 h pobiera aktualności **Steam** dla śledzonych gier (lista appID + nazwa) i ogłasza nowe wpisy.
+  - Bot: `bot/src/gaming/freegames.mts` + `bot/src/gaming/patchnotes.mts` (dedup w cloud settings `freegames_seen`/`patchnotes_seen`). Panel: 2 configi w `lib/community.ts` + 2 schematy + `/api/freegames` + `/api/patchnotes` + `FreeGamesForm` + `PatchNotesForm` + strona `/gaming` (nav „Gaming feed" Rss) + 2 moduły (grupa **Gaming**) w Centrum sterowania. **Bez SQL i bez komend slash.**
 
 ## [0.31.0] — Faza 7 / F8.3: AI-moderacja · 🎉 F8 zakończona
 

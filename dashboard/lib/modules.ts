@@ -143,6 +143,23 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'economy_config',
   },
+  // Gaming
+  {
+    key: 'freegames',
+    label: 'Feed darmowych gier (Epic)',
+    group: 'Gaming',
+    href: '/gaming',
+    kind: 'json',
+    settingsKey: 'freegames_config',
+  },
+  {
+    key: 'patchnotes',
+    label: 'Patch-notes (Steam)',
+    group: 'Gaming',
+    href: '/gaming',
+    kind: 'json',
+    settingsKey: 'patchnotes_config',
+  },
   // Tickety & AI
   {
     key: 'tickets',
