@@ -8,7 +8,7 @@ import { createCanvas, GlobalFonts, loadImage } from '@napi-rs/canvas';
 const FONT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'assets', 'fonts');
 
 let registered = false;
-function ensureFonts(): void {
+export function ensureFonts(): void {
   if (registered) return;
   const reg = (file: string, alias: string) => {
     const p = join(FONT_DIR, file);

@@ -111,12 +111,16 @@ export type VerificationConfig = {
   roleId: string;
   message: string;
   buttonLabel: string;
+  mode: 'button' | 'captcha';
+  minAccountAgeDays: number;
 };
 export const VERIFICATION_DEFAULT: VerificationConfig = {
   enabled: false,
   roleId: '',
   message: 'Kliknij poniżej, aby się zweryfikować i uzyskać dostęp do serwera. ✅',
   buttonLabel: 'Zweryfikuj się',
+  mode: 'button',
+  minAccountAgeDays: 0,
 };
 
 export async function getVerificationConfig(): Promise<VerificationConfig> {
@@ -140,6 +144,10 @@ export type AntiRaidConfig = {
   action: 'kick' | 'ban' | 'timeout';
   alertChannelId: string;
   minAccountAgeDays: number;
+  altDetect: boolean;
+  altMinAgeDays: number;
+  altNoAvatar: boolean;
+  altAction: 'alert' | 'kick' | 'ban' | 'timeout';
 };
 export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   enabled: false,
@@ -148,6 +156,10 @@ export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   action: 'kick',
   alertChannelId: '',
   minAccountAgeDays: 0,
+  altDetect: false,
+  altMinAgeDays: 7,
+  altNoAvatar: true,
+  altAction: 'alert',
 };
 
 export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {

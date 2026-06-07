@@ -181,6 +181,8 @@ export const verificationSchema = z.object({
   roleId: z.string().max(40),
   message: z.string().max(1000),
   buttonLabel: z.string().max(80),
+  mode: z.enum(['button', 'captcha']).optional().default('button'),
+  minAccountAgeDays: z.number().int().min(0).max(365).optional().default(0),
 });
 export type VerificationInput = z.infer<typeof verificationSchema>;
 
@@ -192,6 +194,10 @@ export const antiraidSchema = z.object({
   action: z.enum(['kick', 'ban', 'timeout']),
   alertChannelId: z.string().max(40),
   minAccountAgeDays: z.number().int().min(0).max(365),
+  altDetect: z.boolean().optional().default(false),
+  altMinAgeDays: z.number().int().min(0).max(365).optional().default(7),
+  altNoAvatar: z.boolean().optional().default(true),
+  altAction: z.enum(['alert', 'kick', 'ban', 'timeout']).optional().default('alert'),
 });
 export type AntiRaidInput = z.infer<typeof antiraidSchema>;
 

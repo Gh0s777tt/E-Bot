@@ -75,6 +75,34 @@ export default function VerificationForm({
         />
       </label>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">Tryb</span>
+          <select
+            value={c.mode}
+            onChange={(e) => setC({ ...c, mode: e.target.value as VerificationConfig['mode'] })}
+            className={inputCls}
+          >
+            <option value="button">Przycisk (1 klik)</option>
+            <option value="captcha">Captcha obrazkowa</option>
+          </select>
+        </label>
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">Min. wiek konta (dni, 0 = off)</span>
+          <input
+            type="number"
+            value={c.minAccountAgeDays}
+            onChange={(e) =>
+              setC({
+                ...c,
+                minAccountAgeDays: Math.max(0, Math.floor(Number(e.target.value) || 0)),
+              })
+            }
+            className={inputCls}
+          />
+        </label>
+      </div>
+
       <div className="flex items-center gap-3">
         <button
           type="button"

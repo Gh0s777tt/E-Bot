@@ -11,6 +11,11 @@ type AntiRaidConfig = {
   action: Action;
   alertChannelId: string;
   minAccountAgeDays: number;
+  // Alt-detection (miękki scoring → alert, opcjonalnie kara).
+  altDetect: boolean;
+  altMinAgeDays: number;
+  altNoAvatar: boolean;
+  altAction: 'alert' | Action;
 };
 
 const DEFAULT: AntiRaidConfig = {
@@ -20,6 +25,10 @@ const DEFAULT: AntiRaidConfig = {
   action: 'kick',
   alertChannelId: '',
   minAccountAgeDays: 0,
+  altDetect: false,
+  altMinAgeDays: 7,
+  altNoAvatar: true,
+  altAction: 'alert',
 };
 
 let cfg: AntiRaidConfig = { ...DEFAULT };
@@ -36,14 +45,17 @@ function refresh(): void {
 const recent: { m: GuildMember; at: number }[] = [];
 let raidUntil = 0;
 
-async function punish(member: GuildMember, reason: string): Promise<void> {
+async function punishWith(member: GuildMember, action: Action, reason: string): Promise<void> {
   try {
-    if (cfg.action === 'ban') await member.guild.bans.create(member.id, { reason });
-    else if (cfg.action === 'kick') await member.kick(reason);
+    if (action === 'ban') await member.guild.bans.create(member.id, { reason });
+    else if (action === 'kick') await member.kick(reason);
     else await member.timeout(10 * 60_000, reason);
   } catch {
     /* brak uprawnień / już wyszedł — ignoruj */
   }
+}
+async function punish(member: GuildMember, reason: string): Promise<void> {
+  await punishWith(member, cfg.action, reason);
 }
 
 async function alert(guild: Guild, text: string): Promise<void> {
@@ -70,6 +82,25 @@ export function startAntiRaid(client: Client): void {
           `🛡️ **Anti-raid:** <@${member.id}> — konto < ${cfg.minAccountAgeDays}d → ${cfg.action}.`,
         );
         return;
+      }
+    }
+
+    // Alt-detection — miękki scoring podejrzanych kont → alert (opcjonalnie kara).
+    if (cfg.altDetect) {
+      const reasons: string[] = [];
+      const ageDays = (now - member.user.createdTimestamp) / 86_400_000;
+      if (cfg.altMinAgeDays > 0 && ageDays < cfg.altMinAgeDays)
+        reasons.push(`konto ${Math.floor(ageDays)}d (< ${cfg.altMinAgeDays}d)`);
+      if (cfg.altNoAvatar && !member.user.avatar) reasons.push('brak avatara');
+      if (reasons.length) {
+        await alert(
+          member.guild,
+          `🕵️ **Możliwy alt:** <@${member.id}> (\`${member.user.tag}\`) — ${reasons.join(', ')}.${
+            cfg.altAction !== 'alert' ? ` → ${cfg.altAction}` : ''
+          }`,
+        );
+        if (cfg.altAction !== 'alert')
+          await punishWith(member, cfg.altAction, `Alt-detection: ${reasons.join(', ')}`);
       }
     }
 

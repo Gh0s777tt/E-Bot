@@ -106,6 +106,55 @@ export default function AntiRaidForm({
         />
       </label>
 
+      <div className="space-y-4 rounded-lg border border-line/60 bg-elevated/40 p-4">
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.altDetect}
+            onChange={(e) => setC({ ...c, altDetect: e.target.checked })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">
+            Wykrywanie altów (podejrzane dołączenia → kanał alertów)
+          </span>
+        </label>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <label className="space-y-1 text-sm">
+            <span className="font-semibold text-white/90">Podejrzany wiek (dni)</span>
+            <input
+              type="number"
+              value={c.altMinAgeDays}
+              onChange={(e) => setC({ ...c, altMinAgeDays: num(e.target.value) })}
+              className={inputCls}
+            />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span className="font-semibold text-white/90">Akcja</span>
+            <select
+              value={c.altAction}
+              onChange={(e) =>
+                setC({ ...c, altAction: e.target.value as AntiRaidConfig['altAction'] })
+              }
+              className={inputCls}
+            >
+              <option value="alert">Tylko alert</option>
+              <option value="kick">Kick</option>
+              <option value="ban">Ban</option>
+              <option value="timeout">Timeout</option>
+            </select>
+          </label>
+          <label className="flex items-center gap-2 pt-6 text-sm">
+            <input
+              type="checkbox"
+              checked={c.altNoAvatar}
+              onChange={(e) => setC({ ...c, altNoAvatar: e.target.checked })}
+              className="h-4 w-4 accent-accent"
+            />
+            <span className="font-semibold text-white/90">Brak avatara = podejrzany</span>
+          </label>
+        </div>
+      </div>
+
       <div className="flex items-center gap-3">
         <button
           type="button"

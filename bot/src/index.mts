@@ -37,7 +37,7 @@ import { startAntiNuke } from './security/antinuke.mts';
 import { startAntiRaid } from './security/antiraid.mts';
 import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
-import { handleVerifyButton } from './security/verification.mts';
+import { handleVerifyButton, handleVerifyModal } from './security/verification.mts';
 import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
 import { startWelcome } from './welcome.mts';
 
@@ -159,7 +159,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
     return;
   }
   if (interaction.isModalSubmit()) {
-    await handleTicketModal(interaction).catch((err) => console.error('modal:', err));
+    const h = interaction.customId.startsWith('verify:')
+      ? handleVerifyModal(interaction)
+      : handleTicketModal(interaction);
+    await h.catch((err) => console.error('modal:', err));
     return;
   }
   if (!interaction.isChatInputCommand()) return;
