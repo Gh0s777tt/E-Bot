@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-78-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.40.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-85-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.42.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,18 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.42.0] — Rozbudowa „każda funkcja": profil · questy · ekonomia++ · AI · tickety · analityka · power-tools
+
+> 7 torów (A–F) z analizy możliwości. **36 komend** (+`/profile`, `/quests`, `/market`, `/describe`, `/rolemenu`, `/schedule`). Nowe tabele/kolumny → odpal `dashboard/scripts/_ALL.sql` w Supabase.
+
+- `[#085]` 🎛️ **Tor F — power tools:** menu ról (dropdown — `/rolemenu` + select-menu, panel `/roles`) + zaplanowane/cykliczne ogłoszenia (`/schedule add|list|remove`, poller 60 s). **Nowy SQL:** `scheduled_messages`.
+- `[#084]` 📊 **Tor E — analityka:** śledzenie **minut voice** (`activity_daily.voice_minutes`, zapis z fallbackiem) + **tygodniowy auto-digest** serwera na kanał (poniedziałek). **SQL:** ALTER `activity_daily`.
+- `[#083]` 🎟️ **Tor D — tickety:** **przejmowanie (claim)** + **auto-close SLA** po bezczynności (panel: godziny). Bez nowych tabel.
+- `[#082]` 🤖 **Tor C — AI asystent:** **persona** `/ai` (własna osobowość) + **`/describe`** (vision, OpenAI) + **AI-pomoc RAG-lite** (auto-odpowiedzi z FAQ na wskazanym kanale).
+- `[#081]` 💰 **Tor B — ekonomia++:** **itemy z efektem** (XP-boost/tarcza/lootbox; sklep ma pole „efekt") + **marketplace** gracz↔gracz (`/market`) + **ruletka**. **Nowy SQL:** `market_listings`, ALTER `economy_shop`.
+- `[#080]` 🗺️ **Tor A2 — questy:** dzienne/tygodniowe (`/quests`, postęp liczony z eventów, odbiór przyciskiem) + **punkty sezonu**. **Nowy SQL:** `quest_claims`, `season_points`.
+- `[#079]` 🪪 **Tor A1 — profil:** **`/profile`** (karta canvas: poziom/saldo/zaproszenia/prestiż) + **silnik 13 odznak** (liczone z danych, utrwalane). **Nowy SQL:** `user_badges`.
 
 ## [0.40.1] — UX: zakładka „Komendy" pogrupowana w moduły
 

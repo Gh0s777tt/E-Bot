@@ -11,6 +11,7 @@
 ![Faza 6](https://img.shields.io/badge/Faza_6-✅-E50914?labelColor=0a0a0a)
 ![Faza 7](https://img.shields.io/badge/Faza_7-✅-E50914?labelColor=0a0a0a)
 ![Ulepszenia](https://img.shields.io/badge/Ulepszenia_5×-✅-E50914?labelColor=0a0a0a)
+![Rozbudowa](https://img.shields.io/badge/Rozbudowa_A–F-✅-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -27,6 +28,16 @@
 - [x] Tor 4 — ekonomia++: interaktywny blackjack + ekwipunek/itemy
 - [x] Tor 5 — infra: cache sweepers + zero‑dep logger strukturalny + detekcja zmian w sync
 - [ ] (opcjonalnie, odłożone) Realtime push (supabase‑js) · pino · i18n PL/EN · Playwright E2E
+
+## ✅ Rozbudowa „każda funkcja" — 7 torów (A–F)
+- [x] A1 — profil `/profile` (karta canvas) + silnik 13 odznak
+- [x] A2 — questy dzienne/tygodniowe (`/quests`) + punkty sezonu
+- [x] B — ekonomia++: itemy z efektem + marketplace (`/market`) + ruletka
+- [x] C — AI asystent: persona + vision (`/describe`) + RAG-lite pomoc
+- [x] D — tickety: przejmowanie (claim) + auto-close SLA
+- [x] E — analityka: minuty voice + tygodniowy digest
+- [x] F — menu ról dropdown (`/rolemenu`) + zaplanowane ogłoszenia (`/schedule`)
+- [ ] (odłożone MVP-extras) skórki kart · loteria · dzienny AI-digest · aplikacje/Appy · heatmapy/retencja · publiczny web · Twitch sub→rola · automatyzacje IFTTT · giveaway++
 
 ## ✅ Faza 0 — Fundamenty
 - [x] Kolektor Steam (Web API, 58 gier)
