@@ -1,7 +1,7 @@
 // Automod (Faza 6) — anti-invite / anti-link / limit wzmianek / anty-spam + mod-log.
 // Config z panelu (settings 'automod_config'). Wymaga intencji MessageContent (treść).
-import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from "discord.js";
-import { getSettings } from "./lib/db.mts";
+import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
+import { getSettings } from './lib/db.mts';
 
 type AutomodConfig = {
   enabled: boolean;
@@ -12,6 +12,10 @@ type AutomodConfig = {
   antiSpamSec: number;
   modlogChannelId: string;
   exemptRoleId: string;
+  bannedWords?: string[];
+  bannedRegex?: string[];
+  allowedLinks?: string[];
+  ignoreChannels?: string[];
 };
 const DEFAULT: AutomodConfig = {
   enabled: false,
@@ -20,14 +24,36 @@ const DEFAULT: AutomodConfig = {
   maxMentions: 6,
   antiSpamCount: 6,
   antiSpamSec: 5,
-  modlogChannelId: "",
-  exemptRoleId: "",
+  modlogChannelId: '',
+  exemptRoleId: '',
+  bannedWords: [],
+  bannedRegex: [],
+  allowedLinks: [],
+  ignoreChannels: [],
 };
 let cfg: AutomodConfig = { ...DEFAULT };
+let compiled: RegExp[] = [];
 
 function refresh(): void {
-  const raw = getSettings()["automod_config"];
+  const raw = getSettings()['automod_config'];
   cfg = raw ? { ...DEFAULT, ...(safeParse(raw) ?? {}) } : { ...DEFAULT };
+  compiled = (cfg.bannedRegex ?? [])
+    .map((p) => {
+      try {
+        return new RegExp(p, 'i');
+      } catch {
+        return null;
+      }
+    })
+    .filter((r): r is RegExp => r !== null);
+}
+
+// Gdy blockLinks: przepuść, jeśli wszystkie linki są w whiteliscie domen (allowedLinks).
+function linkNotAllowed(content: string): boolean {
+  const allowed = (cfg.allowedLinks ?? []).map((d) => d.toLowerCase()).filter(Boolean);
+  if (!allowed.length) return true;
+  const urls = content.match(/https?:\/\/[^\s]+/gi) ?? [];
+  return urls.some((u) => !allowed.some((d) => u.toLowerCase().includes(d)));
 }
 function safeParse(s: string): Partial<AutomodConfig> | null {
   try {
@@ -40,13 +66,10 @@ function safeParse(s: string): Partial<AutomodConfig> | null {
 const INVITE = /(discord\.gg|discord(app)?\.com\/invite)\/\S+/i;
 const LINK = /https?:\/\/\S+/i;
 const recent = new Map<string, number[]>();
-setInterval(
-  () => {
-    const cut = Date.now() - 60_000;
-    for (const [k, v] of recent) if (!v.some((t) => t > cut)) recent.delete(k);
-  },
-  5 * 60_000,
-);
+setInterval(() => {
+  const cut = Date.now() - 60_000;
+  for (const [k, v] of recent) if (!v.some((t) => t > cut)) recent.delete(k);
+}, 5 * 60_000);
 
 export function startAutomod(client: Client): void {
   refresh();
@@ -57,19 +80,27 @@ export function startAutomod(client: Client): void {
     const member = msg.member;
     if (member?.permissions.has(PermissionFlagsBits.ManageMessages)) return;
     if (cfg.exemptRoleId && member?.roles.cache.has(cfg.exemptRoleId)) return;
+    if (cfg.ignoreChannels?.includes(msg.channelId)) return;
 
-    const content = msg.content || "";
-    let reason = "";
-    if (cfg.blockInvites && INVITE.test(content)) reason = "zaproszenie Discord";
-    else if (cfg.blockLinks && LINK.test(content)) reason = "link";
-    else if (cfg.maxMentions > 0 && msg.mentions.users.size + msg.mentions.roles.size > cfg.maxMentions)
-      reason = "zbyt wiele wzmianek";
+    const content = msg.content || '';
+    const lc = content.toLowerCase();
+    let reason = '';
+    if (cfg.bannedWords?.length && cfg.bannedWords.some((w) => w && lc.includes(w.toLowerCase())))
+      reason = 'zakazane słowo';
+    else if (compiled.length && compiled.some((re) => re.test(content))) reason = 'wzorzec (regex)';
+    else if (cfg.blockInvites && INVITE.test(content)) reason = 'zaproszenie Discord';
+    else if (cfg.blockLinks && LINK.test(content) && linkNotAllowed(content)) reason = 'link';
+    else if (
+      cfg.maxMentions > 0 &&
+      msg.mentions.users.size + msg.mentions.roles.size > cfg.maxMentions
+    )
+      reason = 'zbyt wiele wzmianek';
     else if (cfg.antiSpamCount > 0) {
       const now = Date.now();
       const arr = (recent.get(msg.author.id) ?? []).filter((t) => now - t < cfg.antiSpamSec * 1000);
       arr.push(now);
       recent.set(msg.author.id, arr);
-      if (arr.length > cfg.antiSpamCount) reason = "spam";
+      if (arr.length > cfg.antiSpamCount) reason = 'spam';
     }
     if (!reason) return;
 
@@ -77,24 +108,24 @@ export function startAutomod(client: Client): void {
       await msg.delete().catch(() => {});
       if (cfg.modlogChannelId) {
         const ch = await msg.guild.channels.fetch(cfg.modlogChannelId).catch(() => null);
-        if (ch?.isTextBased() && "send" in ch) {
+        if (ch?.isTextBased() && 'send' in ch) {
           const embed = new EmbedBuilder()
             .setColor(0xe50914)
-            .setTitle("🛡️ Automod")
+            .setTitle('🛡️ Automod')
             .setDescription(`Usunięto wiadomość od <@${msg.author.id}>`)
             .addFields(
-              { name: "Powód", value: reason, inline: true },
-              { name: "Kanał", value: `<#${msg.channelId}>`, inline: true },
+              { name: 'Powód', value: reason, inline: true },
+              { name: 'Kanał', value: `<#${msg.channelId}>`, inline: true },
             )
             .setTimestamp(new Date());
-          if (content) embed.addFields({ name: "Treść", value: content.slice(0, 300) });
+          if (content) embed.addFields({ name: 'Treść', value: content.slice(0, 300) });
           await ch.send({ embeds: [embed] }).catch(() => {});
         }
       }
     } catch (e) {
-      console.warn("[automod]", (e as Error).message);
+      console.warn('[automod]', (e as Error).message);
     }
   });
 
-  console.log("[automod] aktywny (config z panelu).");
+  console.log('[automod] aktywny (config z panelu).');
 }

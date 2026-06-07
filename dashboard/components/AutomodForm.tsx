@@ -13,23 +13,50 @@ type Cfg = {
   antiSpamSec: number;
   modlogChannelId: string;
   exemptRoleId: string;
+  bannedWords: string[];
+  bannedRegex: string[];
+  allowedLinks: string[];
+  ignoreChannels: string[];
 };
+type ListKey = 'bannedWords' | 'bannedRegex' | 'allowedLinks' | 'ignoreChannels';
+type Init = Omit<Cfg, ListKey> & Partial<Pick<Cfg, ListKey>>;
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 const num = (v: string): number => Math.max(0, Math.floor(Number(v) || 0));
+const toLines = (a: string[]): string => a.join('\n');
+const fromLines = (s: string): string[] =>
+  s
+    .split('\n')
+    .map((x) => x.trim())
+    .filter(Boolean);
 
-export default function AutomodForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
-  const [c, setC] = useState<Cfg>(initial);
+export default function AutomodForm({ initial, guild }: { initial: Init; guild: GuildMeta }) {
+  const [c, setC] = useState<Cfg>({
+    ...initial,
+    bannedWords: initial.bannedWords ?? [],
+    bannedRegex: initial.bannedRegex ?? [],
+    allowedLinks: initial.allowedLinks ?? [],
+    ignoreChannels: initial.ignoreChannels ?? [],
+  });
+  const [wordsText, setWordsText] = useState(toLines(initial.bannedWords ?? []));
+  const [regexText, setRegexText] = useState(toLines(initial.bannedRegex ?? []));
+  const [linksText, setLinksText] = useState(toLines(initial.allowedLinks ?? []));
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
   async function save() {
     setSt('saving');
     try {
+      const payload: Cfg = {
+        ...c,
+        bannedWords: fromLines(wordsText),
+        bannedRegex: fromLines(regexText),
+        allowedLinks: fromLines(linksText),
+      };
       const r = await fetch('/api/automod', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
+        body: JSON.stringify(payload),
       });
       setSt(r.ok ? 'ok' : 'err');
     } catch {
@@ -49,6 +76,14 @@ export default function AutomodForm({ initial, guild }: { initial: Cfg; guild: G
       <span className="font-semibold text-white/90">{label}</span>
     </label>
   );
+
+  const channelName = (id: string) => guild.channels.find((ch) => ch.id === id)?.name ?? id;
+  const addIgnore = (id: string) => {
+    if (id && !c.ignoreChannels.includes(id))
+      setC({ ...c, ignoreChannels: [...c.ignoreChannels, id] });
+  };
+  const removeIgnore = (id: string) =>
+    setC({ ...c, ignoreChannels: c.ignoreChannels.filter((x) => x !== id) });
 
   return (
     <div className="max-w-xl space-y-4">
@@ -88,6 +123,70 @@ export default function AutomodForm({ initial, guild }: { initial: Cfg; guild: G
         </label>
       </div>
 
+      {/* Własne filtry (Faza 8) */}
+      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+        <span className="font-semibold text-white/90">Własne filtry treści</span>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="space-y-1 text-sm">
+            <span className="text-muted">Zakazane słowa/frazy (jedna na linię)</span>
+            <textarea
+              value={wordsText}
+              onChange={(e) => setWordsText(e.target.value)}
+              rows={4}
+              className={inputCls}
+              placeholder={'spam\nzakazane słowo\n...'}
+            />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span className="text-muted">Wzorce regex (zaawansowane, jedna na linię)</span>
+            <textarea
+              value={regexText}
+              onChange={(e) => setRegexText(e.target.value)}
+              rows={4}
+              className={`${inputCls} font-mono`}
+              placeholder={'(buy|sell).*nitro\\b\nh[a4]ck'}
+            />
+          </label>
+        </div>
+        <label className="block space-y-1 text-sm">
+          <span className="text-muted">
+            Dozwolone domeny linków (whitelist, gdy „Blokuj linki" — jedna na linię)
+          </span>
+          <textarea
+            value={linksText}
+            onChange={(e) => setLinksText(e.target.value)}
+            rows={2}
+            className={inputCls}
+            placeholder={'youtube.com\ntwitch.tv\ngh0st-empire.com'}
+          />
+        </label>
+
+        <div className="space-y-2">
+          <span className="text-sm text-muted">Kanały zwolnione z automodu</span>
+          <ChannelSelect
+            value=""
+            onChange={addIgnore}
+            channels={guild.channels}
+            placeholder="+ dodaj kanał"
+          />
+          {c.ignoreChannels.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {c.ignoreChannels.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => removeIgnore(id)}
+                  className="rounded-full border border-line px-2.5 py-0.5 text-xs text-muted transition hover:border-accent hover:text-accent"
+                  title="Kliknij, by usunąć"
+                >
+                  #{channelName(id)} ✕
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
           <span className="font-semibold text-white/90">Kanał mod-log</span>
@@ -121,8 +220,9 @@ export default function AutomodForm({ initial, guild }: { initial: Cfg; guild: G
         {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
       </div>
       <p className="text-xs text-muted">
-        Bot usuwa naruszenia + loguje na mod-log. Użytkownicy z uprawnieniem „Zarządzanie
-        wiadomościami" i rolą zwolnioną są pomijani. Wymaga włączonych intencji (są aktywne).
+        Bot usuwa naruszenia (zakazane słowa/regex, zaproszenia, linki spoza whitelisty, nadmiar
+        wzmianek, spam) + loguje na mod-log. Pomijani: „Zarządzanie wiadomościami", rola zwolniona,
+        kanały zwolnione.
       </p>
     </div>
   );

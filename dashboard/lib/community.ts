@@ -45,6 +45,10 @@ export type AutomodConfig = {
   antiSpamSec: number;
   modlogChannelId: string;
   exemptRoleId: string;
+  bannedWords?: string[];
+  bannedRegex?: string[];
+  allowedLinks?: string[];
+  ignoreChannels?: string[];
 };
 export const AUTOMOD_DEFAULT: AutomodConfig = {
   enabled: false,
@@ -55,6 +59,10 @@ export const AUTOMOD_DEFAULT: AutomodConfig = {
   antiSpamSec: 5,
   modlogChannelId: '',
   exemptRoleId: '',
+  bannedWords: [],
+  bannedRegex: [],
+  allowedLinks: [],
+  ignoreChannels: [],
 };
 
 export async function getAutomodConfig(): Promise<AutomodConfig> {

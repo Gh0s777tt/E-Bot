@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-103-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.50.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-104-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.51.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.51.0] — Faza 8 #6: Automod/Security 2.0 (własne filtry treści)
+
+- `[#104]` 🛡️ **Automod 2.0:** **własne listy zakazanych słów/fraz** + **wzorce regex** (pre-kompilowane przy odświeżeniu configu; błędna regex pomijana) + **whitelist domen** dla blokady linków + **kanały zwolnione** z automodu. Działa obok istniejących reguł (zaproszenia / linki / wzmianki / anty-spam). Edytor list w `/moderation` (textarea „jedna pozycja na linię" + chipy kanałów z pickera). Bez SQL, bez deploy-commands.
 
 ## [0.50.0] — Faza 8 #5: Reaction roles 2.0 (istniejąca wiadomość ALBO nowy embed)
 

@@ -285,6 +285,10 @@ export const automodSchema = z.object({
   antiSpamSec: z.number().int().min(1).max(60),
   modlogChannelId: z.string().max(40),
   exemptRoleId: z.string().max(40),
+  bannedWords: z.array(z.string().min(1).max(100)).max(300).optional().default([]),
+  bannedRegex: z.array(z.string().min(1).max(200)).max(20).optional().default([]),
+  allowedLinks: z.array(z.string().min(1).max(100)).max(50).optional().default([]),
+  ignoreChannels: z.array(z.string().max(40)).max(50).optional().default([]),
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 
