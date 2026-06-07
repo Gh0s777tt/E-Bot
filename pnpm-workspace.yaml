@@ -3,6 +3,11 @@ packages:
   - 'web'
   - 'bot'
   - 'ingest'
+overrides:
+  # Force Next.js' transitive postcss off the vulnerable 8.4.31 (GHSA XSS in CSS
+  # stringify, fixed in 8.5.10). Dedupes onto 8.5.15, already used directly by
+  # dashboard/web. pnpm 11 reads overrides here, not in package.json.
+  postcss: '^8.5.15'
 allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
