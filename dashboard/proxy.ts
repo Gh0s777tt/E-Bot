@@ -14,6 +14,7 @@ function isOpen(pathname: string): boolean {
     pathname === '/api/sentry' || // raport błędów z error-boundary — może renderować się dla niezalogowanych
     pathname.startsWith('/api/health') || // healthcheck + cron „bot down" — monitor/Vercel bez sesji
     pathname === '/api/bot-status' || // status bota dla paska (czytany przez Topbar)
+    pathname.startsWith('/p/') || // Tor M — publiczne profile/leaderboardy (bez logowania)
     pathname.startsWith('/_next') ||
     pathname === '/favicon.ico' ||
     // pliki statyczne z public/ (logo, baner, favicon, fonty) — publiczne z natury,

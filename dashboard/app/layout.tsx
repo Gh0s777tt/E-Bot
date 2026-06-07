@@ -2,8 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Montserrat, Oswald } from 'next/font/google';
 import type { ReactNode } from 'react';
-import Sidebar from '../components/Sidebar';
-import Topbar from '../components/Topbar';
+import Shell from '../components/Shell';
 import { botInviteUrl } from '../lib/invite';
 
 const display = Oswald({
@@ -33,13 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className="bg-bg font-sans text-text antialiased">
-        <div className="relative z-10 flex min-h-screen">
-          <Sidebar />
-          <div className="min-w-0 flex-1 md:pl-60">
-            <Topbar inviteUrl={botInviteUrl()} />
-            <main className="mx-auto max-w-7xl px-5 py-6 md:px-8">{children}</main>
-          </div>
-        </div>
+        <Shell inviteUrl={botInviteUrl()}>{children}</Shell>
       </body>
     </html>
   );
