@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-77-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.40.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-78-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.40.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.40.1] — UX: zakładka „Komendy" pogrupowana w moduły
+
+- `[#078]` 🧭 **Strona `/commands`** pokazywała wszystkie komendy jako jedną długą listę → teraz **pogrupowane w moduły** (Ogólne · Biblioteka & gry · Moderacja & bezpieczeństwo · Wsparcie · AI · Poziomy · Ekonomia · Społeczność · Zabawa & engagement), każda sekcja z ikoną i licznikiem. Mapowanie `komenda→moduł` w `dashboard/lib/commands.ts` (`groupCommands`); komendy spoza mapy → sekcja „Inne" (odporne na przyszłe komendy). Dane dalej na żywo z Discord API. Tylko panel.
 
 ## [0.40.0] — Ulepszenia 5‑torowe: bezpieczeństwo · captcha · engagement · ekonomia · infra
 

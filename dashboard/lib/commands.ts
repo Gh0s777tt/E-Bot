@@ -30,3 +30,39 @@ export async function getRegisteredCommands(): Promise<SlashCommand[]> {
     return [];
   }
 }
+
+// ── Grupowanie komend po modułach (Discord API nie zwraca kategorii → mapujemy tu) ──
+export type CommandGroup = { label: string; commands: SlashCommand[] };
+
+// Kolejność grup = kolejność wyświetlania. Komenda spoza mapy trafia do „Inne".
+const COMMAND_GROUPS: { label: string; names: string[] }[] = [
+  { label: 'Ogólne', names: ['ping', 'portal', 'link'] },
+  { label: 'Biblioteka & gry', names: ['library', 'wishlist', 'backlog'] },
+  { label: 'Moderacja & bezpieczeństwo', names: ['mod', 'case', 'antinuke', 'verifypanel'] },
+  { label: 'Wsparcie', names: ['ticket', 'ticketpanel'] },
+  { label: 'AI', names: ['ai', 'tldr', 'translate', 'imagine'] },
+  { label: 'Poziomy', names: ['rank', 'prestige', 'hof'] },
+  { label: 'Ekonomia', names: ['eco'] },
+  { label: 'Społeczność', names: ['suggest', 'poll', 'birthday', 'afk', 'highlight', 'invites'] },
+  { label: 'Zabawa & engagement', names: ['fun', 'remind', 'giveaway', 'buttonpanel'] },
+];
+
+export function groupCommands(commands: SlashCommand[]): CommandGroup[] {
+  const byName = new Map(commands.map((c) => [c.name, c]));
+  const used = new Set<string>();
+  const groups: CommandGroup[] = [];
+  for (const g of COMMAND_GROUPS) {
+    const cmds: SlashCommand[] = [];
+    for (const n of g.names) {
+      const c = byName.get(n);
+      if (c) {
+        cmds.push(c);
+        used.add(n);
+      }
+    }
+    if (cmds.length) groups.push({ label: g.label, commands: cmds });
+  }
+  const rest = commands.filter((c) => !used.has(c.name));
+  if (rest.length) groups.push({ label: 'Inne', commands: rest });
+  return groups;
+}
