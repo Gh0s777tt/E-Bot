@@ -186,3 +186,112 @@ export async function renderWelcomeBanner(o: {
 
   return c.toBuffer('image/png');
 }
+
+export async function renderProfileCard(o: {
+  username: string;
+  avatarUrl: string;
+  level: number;
+  rank: number;
+  prestige: number;
+  xpInto: number;
+  xpFor: number;
+  balance: string; // gotowy tekst (bez emoji — canvas nie renderuje emoji)
+  invites: number;
+  style?: Partial<CardStyle>;
+}): Promise<Buffer> {
+  ensureFonts();
+  const s = { ...CARD_STYLE_DEFAULT, ...o.style };
+  const font = safeFont(s.font);
+  const W = 900;
+  const H = 360;
+  const c = createCanvas(W, H);
+  const ctx = c.getContext('2d');
+
+  const [x0, y0, x1, y1] = gradientCoords(s.angle, W, H);
+  const g = ctx.createLinearGradient(x0, y0, x1, y1);
+  g.addColorStop(0, s.from);
+  g.addColorStop(1, s.to);
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, W, H, 28);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.beginPath();
+  ctx.roundRect(24, 24, W - 48, H - 48, 20);
+  ctx.fill();
+
+  const av = 150;
+  const ax = 56;
+  const ay = 50;
+  try {
+    const img = await loadImage(o.avatarUrl);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(ax + av / 2, ay + av / 2, av / 2, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img, ax, ay, av, av);
+    ctx.restore();
+  } catch {
+    /* brak avatara */
+  }
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = s.textColor;
+  ctx.beginPath();
+  ctx.arc(ax + av / 2, ay + av / 2, av / 2, 0, Math.PI * 2);
+  ctx.stroke();
+
+  const left = 240;
+  ctx.fillStyle = s.textColor;
+  ctx.font = `bold 44px ${font}`;
+  ctx.fillText(o.username.slice(0, 18), left, 96);
+  ctx.font = `26px ${font}`;
+  const prest = o.prestige > 0 ? `   •   Prestiż ${o.prestige}` : '';
+  ctx.fillText(`Poziom ${o.level}   •   #${o.rank}${prest}`, left, 138);
+
+  const barX = left;
+  const barY = 162;
+  const barW = W - left - 60;
+  const barH = 28;
+  const pct = o.xpFor > 0 ? Math.min(1, Math.max(0, o.xpInto / o.xpFor)) : 0;
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath();
+  ctx.roundRect(barX, barY, barW, barH, 14);
+  ctx.fill();
+  ctx.fillStyle = s.from;
+  ctx.beginPath();
+  ctx.roundRect(barX, barY, Math.max(barH, barW * pct), barH, 14);
+  ctx.fill();
+  ctx.fillStyle = s.textColor;
+  ctx.font = `18px ${font}`;
+  ctx.textAlign = 'right';
+  ctx.fillText(`${o.xpInto} / ${o.xpFor} XP`, barX + barW, barY + barH + 22);
+  ctx.textAlign = 'left';
+
+  // Kafelki statystyk
+  const tiles: [string, string][] = [
+    ['SALDO', o.balance],
+    ['ZAPROSZENIA', String(o.invites)],
+    ['PRESTIŻ', String(o.prestige)],
+  ];
+  const ty = 250;
+  const th = 74;
+  const gap = 16;
+  const tw = (W - 48 * 2 - gap * 2) / 3;
+  let tx = 48;
+  for (const [label, val] of tiles) {
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    ctx.roundRect(tx, ty, tw, th, 14);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = `16px ${font}`;
+    ctx.fillText(label, tx + 18, ty + 30);
+    ctx.fillStyle = s.textColor;
+    ctx.font = `bold 26px ${font}`;
+    ctx.fillText(val.slice(0, 14), tx + 18, ty + 60);
+    tx += tw + gap;
+  }
+
+  return c.toBuffer('image/png');
+}
