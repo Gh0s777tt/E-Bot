@@ -23,6 +23,7 @@ export default function ShopManager({
   const [price, setPrice] = useState(1000);
   const [roleId, setRoleId] = useState('');
   const [desc, setDesc] = useState('');
+  const [effect, setEffect] = useState('');
   const [st, setSt] = useState<'idle' | 'saving' | 'err'>('idle');
 
   async function add() {
@@ -32,7 +33,7 @@ export default function ShopManager({
       const r = await fetch('/api/economy/shop', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, price, role_id: roleId, description: desc }),
+        body: JSON.stringify({ name, price, role_id: roleId, description: desc, effect }),
       });
       const j = (await r.json()) as { ok?: boolean; items?: ShopItem[] };
       if (r.ok && j.items) {
@@ -40,6 +41,7 @@ export default function ShopManager({
         setName('');
         setDesc('');
         setRoleId('');
+        setEffect('');
         setPrice(1000);
         setSt('idle');
       } else {
@@ -83,6 +85,12 @@ export default function ShopManager({
           placeholder="Opis (opcjonalnie)"
           className={inputCls}
         />
+        <select value={effect} onChange={(e) => setEffect(e.target.value)} className={inputCls}>
+          <option value="">Bez efektu (kolekcjonerski / rola)</option>
+          <option value="xp2">⚡ Podwójne XP (1h)</option>
+          <option value="shield">🛡️ Tarcza anty-rabunek (24h)</option>
+          <option value="lootbox">🎁 Lootbox (losowa waluta)</option>
+        </select>
       </div>
       <button
         type="button"
@@ -115,6 +123,11 @@ export default function ShopManager({
                 <tr key={i.id} className="border-b border-line/50">
                   <td className="px-3 py-2">
                     {i.name}
+                    {i.effect ? (
+                      <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                        {i.effect}
+                      </span>
+                    ) : null}
                     {i.description ? (
                       <span className="block text-xs text-muted">{i.description}</span>
                     ) : null}

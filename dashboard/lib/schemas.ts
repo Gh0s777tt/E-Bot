@@ -124,6 +124,7 @@ export const shopItemSchema = z.object({
   description: z.string().max(200).optional().default(''),
   price: z.number().int().min(0).max(100_000_000),
   role_id: z.string().max(40).optional().default(''),
+  effect: z.enum(['', 'xp2', 'shield', 'lootbox']).optional().default(''),
 });
 export type ShopItemInput = z.infer<typeof shopItemSchema>;
 

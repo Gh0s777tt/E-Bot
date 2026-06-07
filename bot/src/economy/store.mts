@@ -98,6 +98,7 @@ export type ShopItem = {
   price: number;
   role_id: string | null;
   stock: number | null;
+  effect: string | null; // '', 'xp2', 'shield', 'lootbox' (Tor B — itemy z efektem)
 };
 
 export async function getShop(guildId: string): Promise<ShopItem[]> {

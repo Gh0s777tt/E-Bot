@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { bumpQuest } from '../community/quests.mts';
 import { startBlackjack } from '../economy/blackjack.mts';
+import { activateEffect, hasEffect } from '../economy/effects.mts';
 import {
   addInventory,
   ecoConfig,
@@ -88,6 +89,25 @@ export const data = new SlashCommandBuilder()
       .setDescription('Blackjack (oczko) — graj przyciskami')
       .addIntegerOption((o) =>
         o.setName('amount').setDescription('Stawka').setRequired(true).setMinValue(1),
+      ),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('roulette')
+      .setDescription('Ruletka — postaw na kolor')
+      .addIntegerOption((o) =>
+        o.setName('amount').setDescription('Stawka').setRequired(true).setMinValue(1),
+      )
+      .addStringOption((o) =>
+        o
+          .setName('kolor')
+          .setDescription('Na co stawiasz')
+          .setRequired(true)
+          .addChoices(
+            { name: 'Czerwone (×2)', value: 'red' },
+            { name: 'Czarne (×2)', value: 'black' },
+            { name: 'Zielone 0 (×14)', value: 'green' },
+          ),
       ),
   )
   .addSubcommand((s) => s.setName('shop').setDescription('Sklep serwera'))
@@ -226,6 +246,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const vic = await getUser(gid, victim.id);
     if (vic.wallet < 50) {
       await interaction.reply(eph('🪹 Ofiara ma pusty portfel.'));
+      return;
+    }
+    if (hasEffect(gid, victim.id, 'shield')) {
+      await saveUser({
+        guild_id: gid,
+        user_id: interaction.user.id,
+        username: interaction.user.username,
+        last_rob: new Date().toISOString(),
+      });
+      await interaction.reply(eph('🛡️ Ofiara ma aktywną tarczę anty-rabunek!'));
       return;
     }
     const success = Math.random() * 100 < cfg.robChance;
@@ -497,8 +527,67 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       await interaction.reply(eph('Nie masz takiego przedmiotu. Sprawdź `/eco inventory`.'));
       return;
     }
+    const shop = await getShop(gid);
+    const effect =
+      shop.find((i) => i.name.toLowerCase() === owned.item_name.toLowerCase())?.effect || '';
+    let extra = '';
+    if (effect === 'xp2') {
+      activateEffect(gid, interaction.user.id, 'xp2', 60 * 60_000);
+      extra = ' ⚡ Podwójne XP przez 1h!';
+    } else if (effect === 'shield') {
+      activateEffect(gid, interaction.user.id, 'shield', 24 * 60 * 60_000);
+      extra = ' 🛡️ Tarcza anty-rabunek na 24h!';
+    } else if (effect === 'lootbox') {
+      const loot = 100 + Math.floor(Math.random() * 1900);
+      const u = await getUser(gid, interaction.user.id);
+      await saveUser({
+        guild_id: gid,
+        user_id: interaction.user.id,
+        username: interaction.user.username,
+        wallet: u.wallet + loot,
+      });
+      extra = ` 🎁 Lootbox: +${fmt(loot, cur)}!`;
+    }
     await addInventory(gid, interaction.user.id, owned.item_name, -1);
-    await interaction.reply(`✨ Użyto **${owned.item_name}**. Zostało: ${owned.qty - 1}.`);
+    await interaction.reply(`✨ Użyto **${owned.item_name}**.${extra} Zostało: ${owned.qty - 1}.`);
+    return;
+  }
+
+  // ── roulette ──
+  if (sub === 'roulette') {
+    if (!cfg.gambleEnabled) {
+      await interaction.reply(eph('🚫 Hazard jest wyłączony.'));
+      return;
+    }
+    const amount = interaction.options.getInteger('amount', true);
+    if (amount > cfg.gambleMax) {
+      await interaction.reply(eph(`Maks. stawka to ${fmt(cfg.gambleMax, cur)}.`));
+      return;
+    }
+    const choice = interaction.options.getString('kolor', true);
+    const u = await getUser(gid, interaction.user.id);
+    if (u.wallet < amount) {
+      await interaction.reply(eph(`Masz za mało (${fmt(u.wallet, cur)}).`));
+      return;
+    }
+    const RED = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]);
+    const n = Math.floor(Math.random() * 37);
+    const color = n === 0 ? 'green' : RED.has(n) ? 'red' : 'black';
+    const won = choice === color;
+    const mult = choice === 'green' ? 14 : 2;
+    const delta = won ? amount * (mult - 1) : -amount;
+    bumpQuest(gid, interaction.user.id, 'games');
+    if (won) bumpQuest(gid, interaction.user.id, 'gamesWon');
+    await saveUser({
+      guild_id: gid,
+      user_id: interaction.user.id,
+      username: interaction.user.username,
+      wallet: u.wallet + delta,
+    });
+    const emoji = color === 'green' ? '🟢' : color === 'red' ? '🔴' : '⚫';
+    await interaction.reply(
+      `🎡 Wypadło **${n}** ${emoji}\n${won ? `Wygrana ×${mult}! +${fmt(amount * (mult - 1), cur)}` : `Pudło… -${fmt(amount, cur)}`} (saldo ${fmt(u.wallet + delta, cur)})`,
+    );
     return;
   }
 

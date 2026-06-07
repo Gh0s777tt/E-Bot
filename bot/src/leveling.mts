@@ -2,6 +2,7 @@
 // Config czytamy z lokalnych settings (klucz 'leveling_config', synchronizowane z panelu przez
 // settings-sync). Dane piszemy do tabeli Supabase 'user_levels'. Panel czyta ranking z tej tabeli.
 import { type Client, Events, type GuildMember, type Message } from 'discord.js';
+import { xpMultiplier } from './economy/effects.mts';
 import { cloudSelect, cloudUpsert, hasCloud } from './lib/cloud.mts';
 import { getSettings } from './lib/db.mts';
 
@@ -86,6 +87,7 @@ function effectiveXp(member: GuildMember, base: number): number {
     if (m.roleId && member.roles.cache.has(m.roleId)) mult = Math.max(mult, m.factor || 1);
   }
   if (isWeekend() && cfg.weekendBonus > 1) mult *= cfg.weekendBonus;
+  mult *= xpMultiplier(member.guild.id, member.id); // Tor B — item XP-boost
   return Math.max(0, Math.round(base * mult));
 }
 function noXpMember(member: GuildMember): boolean {
