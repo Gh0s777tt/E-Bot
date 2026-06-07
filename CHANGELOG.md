@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-95-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.45.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-97-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.45.2-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.45.2] — Jakość: E2E (Playwright) + naprawa pre-existing TS
+
+- `[#097]` 🧪 **E2E (Playwright):** suite `e2e/*.spec.ts` na poziomie roota — bramka `proxy` (redirect na `/login`), render `/login`, publiczne `/p/leaderboard` + `/p/u/[id]`, `GET /api/health`. Asercje na **szkielet** stron → zielone niezależnie od stanu danych (Supabase z danymi / pusto / down / CI bez env — wszystkie ścieżki defensywne). `pnpm test:e2e` auto-startuje dev-server na `:3101`. Vitest łapie tylko `*.test.*` → brak kolizji ze `*.spec.ts`.
+- `[#096]` 🐛 **Fix TS `ticket.mts`:** `'threads' in channel` rozszerzało typ na forum/media (gdzie `threads.create()` nie przyjmuje `type`/`invitable` → kolaps do `undefined`, TS2322). Zawężono do `ChannelType.GuildText` (prywatny wątek powstaje **tylko** tam) — **tsc bota czysty, zero pre-existing błędów.**
 
 ## [0.45.1] — Audyt: zakładka Komendy 40/40 + brakujące przełączniki
 

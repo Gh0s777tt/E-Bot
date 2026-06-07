@@ -16,6 +16,12 @@ out/
 coverage/
 *.tsbuildinfo
 
+# ── Playwright (E2E) ──────────────────────────────────────
+test-results/
+playwright-report/
+playwright/.cache/
+blob-report/
+
 # ── Dane lokalne (SQLite, cache, okładki) ─────────────────
 data/*.db
 data/*.db-*

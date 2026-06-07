@@ -96,7 +96,7 @@
 - [x] **B5** — Engagement: button‑role, `/remind`, `/giveaway`, starboard, temp‑voice
 - [x] **B6** — Biblioteka 2.0: lista życzeń (`/wishlist`) + ręczne dodawanie gier z IGDB
 - [x] **B7** — Infra/jakość: Vitest+CI, alert „bot down" (health+cron), handlery błędów, cache TTL
-- [ ] (przyszłość) pełny Sentry (DSN), Redis (instancja), Supabase Realtime, Playwright E2E
+- [x] **Playwright E2E** (0.45.2: proxy/login/`/p/*`/health) · [ ] (przyszłość) pełny Sentry (DSN), Redis (instancja), Supabase Realtime
 
 ## 🔄 Faza 7 — „Wszystko + pełna personalizacja" (partiami F1–F10)
 - [x] **F1** — Centrum sterowania (`/modules` on/off) + MessageEditor (markdown/emoji/czcionki Unicode/zmienne/live‑preview) + ColorField/GradientField + własny HEX akcentu
@@ -125,9 +125,9 @@
 - [x] **F10** — Analityka + Infra
   - [x] **F10.1** — Wykresy aktywności serwera (`activity_daily` → `/stats`)
   - [x] **F10.2** — Sezonowe rankingi levelingu (`/hof` + miesięczny hall of fame + opcjonalny reset)
-  - [x] **F10.3** — Sentry (zero‑dep, DSN‑gated) w bocie + panelu. ℹ️ i18n + Playwright pominięte (opcjonalne na przyszłość)
+  - [x] **F10.3** — Sentry (zero‑dep, DSN‑gated) w bocie + panelu. ✅ Playwright E2E dodane (0.45.2). ℹ️ i18n pominięte (opcjonalne na przyszłość)
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑06 · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑07 · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a></sub></div>

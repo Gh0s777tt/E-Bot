@@ -63,9 +63,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
     const channel = interaction.channel;
-    if (!channel || !('threads' in channel)) {
+    // Prywatny wątek powstaje TYLKO na zwykłym kanale tekstowym (GuildText). To zawężenie
+    // naprawia też typ: `'threads' in channel` obejmowało forum/media, gdzie threads.create()
+    // nie przyjmuje type/invitable → TS kolapsował te pola do `undefined` (TS2322).
+    if (!channel || channel.type !== ChannelType.GuildText) {
       await interaction.reply({
-        content: 'Tu nie można otworzyć ticketu.',
+        content: 'Tu nie można otworzyć ticketu — użyj na zwykłym kanale tekstowym.',
         flags: MessageFlags.Ephemeral,
       });
       return;
