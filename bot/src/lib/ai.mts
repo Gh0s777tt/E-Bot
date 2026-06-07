@@ -102,3 +102,29 @@ export async function bumpUsage(userId: string, u: Usage, addTokens: number): Pr
     'user_id,day',
   ).catch((e) => console.warn('[ai]', (e as Error).message));
 }
+
+/** Generuje obraz przez OpenAI (dall-e-3, 1024×1024) → PNG Buffer. Wymaga OPENAI_API_KEY. */
+export async function generateImage(prompt: string): Promise<Buffer> {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error('brak OPENAI_API_KEY (generowanie obrazów wymaga OpenAI)');
+  const r = await fetch('https://api.openai.com/v1/images/generations', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'dall-e-3',
+      prompt,
+      n: 1,
+      size: '1024x1024',
+      response_format: 'b64_json',
+    }),
+    signal: AbortSignal.timeout(60_000),
+  });
+  const d = (await r.json().catch(() => ({}))) as {
+    data?: { b64_json?: string }[];
+    error?: { message?: string };
+  };
+  if (!r.ok) throw new Error(d.error?.message || `HTTP ${r.status}`);
+  const b64 = d.data?.[0]?.b64_json;
+  if (!b64) throw new Error('brak obrazu w odpowiedzi');
+  return Buffer.from(b64, 'base64');
+}

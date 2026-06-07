@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-60-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.29.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-61-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.30.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.30.0] — Faza 7 / F8.2: czat z pamięcią + /imagine
+
+- `[#061]` 🧠 **AI z pamięcią kontekstu + generowanie obrazów:**
+  - **`/ai` pamięta rozmowę** — kontekst per użytkownik+kanał (in-memory, TTL 30 min bez aktywności, ostatnie 3 wymiany), z systemowym promptem (zwięźle, po polsku) + opcją **`nowa`** (czyści pamięć i zaczyna od zera).
+  - **`/imagine <opis>`** — generowanie obrazu z opisu przez **OpenAI dall-e-3** (1024×1024, b64 → załącznik PNG w embedzie). Pod wspólnym dziennym limitem (liczone jako request + proxy kosztu). **26 komend.**
+  - Bot: `generateImage()` w `lib/ai.mts` + `commands/imagine.mts` + pamięć (Map z TTL) w `commands/ai.mts`. **Bez SQL.** Wymaga `OPENAI_API_KEY` (jest w .env) — przy braku/limicie łagodny błąd.
 
 ## [0.29.0] — Faza 7 / F8.1: /tldr + /translate (AI)
 

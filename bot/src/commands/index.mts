@@ -8,6 +8,7 @@ import * as caseCmd from './case.mts';
 import * as economy from './economy.mts';
 import * as giveaway from './giveaway.mts';
 import * as highlight from './highlight.mts';
+import * as imagine from './imagine.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
 import * as mod from './mod.mts';
@@ -56,4 +57,5 @@ export const commands: Command[] = [
   highlight,
   tldr,
   translate,
+  imagine,
 ];
