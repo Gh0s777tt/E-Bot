@@ -1,12 +1,23 @@
-// Tor K — /applypanel: publikuje panel aplikacji (przycisk „Aplikuj") na bieżącym kanale.
+// Tor K / Faza 8 — /applypanel: publikuje panel aplikacji (embed z Message Studio + przycisk per aplikacja).
 import {
+  ActionRowBuilder,
+  type APIEmbed,
+  ButtonBuilder,
+  ButtonStyle,
   type ChatInputCommandInteraction,
   MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
   type TextChannel,
 } from 'discord.js';
-import { applyEnabled, applyPanelMessage, applyPanelRow } from '../community/applications.mts';
+import { applyEnabled, buildApplyPanel, resolveApps } from '../community/applications.mts';
+
+const STYLE = {
+  primary: ButtonStyle.Primary,
+  secondary: ButtonStyle.Secondary,
+  success: ButtonStyle.Success,
+  danger: ButtonStyle.Danger,
+} as const;
 
 export const data = new SlashCommandBuilder()
   .setName('applypanel')
@@ -29,9 +40,48 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     return;
   }
-  await (ch as TextChannel).send({ content: applyPanelMessage(), components: [applyPanelRow()] });
-  await interaction.reply({
-    content: '✅ Opublikowano panel aplikacji.',
-    flags: MessageFlags.Ephemeral,
-  });
+
+  const panel = buildApplyPanel();
+  const apps = resolveApps();
+  const rows: ActionRowBuilder<ButtonBuilder>[] = [];
+  for (let i = 0; i < apps.length; i += 5) {
+    const row = new ActionRowBuilder<ButtonBuilder>();
+    for (const app of apps.slice(i, i + 5)) {
+      const b = new ButtonBuilder()
+        .setCustomId(`app:start:${app.id}`)
+        .setLabel((app.label || 'Aplikuj').slice(0, 80))
+        .setStyle(STYLE[app.style] ?? ButtonStyle.Primary);
+      if (app.emoji) {
+        try {
+          b.setEmoji(app.emoji);
+        } catch {
+          /* nieprawidłowa emoji — pomiń */
+        }
+      }
+      row.addComponents(b);
+    }
+    rows.push(row);
+  }
+
+  const payload: {
+    content?: string;
+    embeds?: APIEmbed[];
+    components: ActionRowBuilder<ButtonBuilder>[];
+  } = { components: rows };
+  if (panel.embeds.length) payload.embeds = panel.embeds;
+  if (panel.content) payload.content = panel.content;
+  if (!panel.content && !panel.embeds.length) payload.content = '📋 Aplikuj poniżej.';
+
+  try {
+    await (ch as TextChannel).send(payload);
+    await interaction.reply({
+      content: '✅ Opublikowano panel aplikacji.',
+      flags: MessageFlags.Ephemeral,
+    });
+  } catch (e) {
+    await interaction.reply({
+      content: `❌ Nie udało się opublikować: ${(e as Error).message}`,
+      flags: MessageFlags.Ephemeral,
+    });
+  }
 }

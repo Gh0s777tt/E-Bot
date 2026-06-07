@@ -147,13 +147,24 @@ export const aidigestSchema = z.object({
 });
 export type AiDigestInput = z.infer<typeof aidigestSchema>;
 
-// ── Aplikacje / rekrutacja (Tor K) ──
+// ── Aplikacje / rekrutacja (Tor K / Faza 8: wiele aplikacji) ──
+export const applicationSchema = z.object({
+  id: z.string().max(20),
+  label: z.string().min(1).max(80),
+  emoji: z.string().max(64).optional().default(''),
+  style: z.enum(['primary', 'secondary', 'success', 'danger']).optional().default('primary'),
+  reviewChannelId: z.string().max(40).optional().default(''),
+  acceptRoleId: z.string().max(40).optional().default(''),
+  questions: z.array(z.string().min(1).max(200)).max(5).optional().default([]),
+});
 export const applicationsSchema = z.object({
   enabled: z.boolean(),
   reviewChannelId: z.string().max(40),
   roleId: z.string().max(40),
   panelMessage: z.string().max(500),
   questions: z.array(z.string().min(1).max(200)).max(5),
+  panelSpec: richMessageSchema.optional(),
+  applications: z.array(applicationSchema).max(10).optional().default([]),
 });
 export type ApplicationsInput = z.infer<typeof applicationsSchema>;
 

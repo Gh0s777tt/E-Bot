@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-101-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.48.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-102-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.49.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.49.0] — Faza 8 #4: Applications 2.0 (wiele aplikacji + panel z Message Studio)
+
+- `[#102]` 📋 **Applications 2.0:** wiele aplikacji naraz (np. Moderator / Builder / Helper), każda z własną **nazwą, emoji, kolorem przycisku, kanałem recenzji, rolą po akceptacji i pytaniami** (max 5 — limit modala Discorda). Panel (`/applypanel`) to teraz **embed z Message Studio**; przyciski generują się z aplikacji (`app:start:<id>` → modal `app:submit:<id>` → embed na kanał recenzji z `app:accept:<id>:<uid>` / `deny`, akceptacja nadaje rolę aplikacji + DM). **Wstecznie zgodne** — brak aplikacji = pojedynczy przycisk z pól legacy; stare 3-częściowe przyciski recenzji nadal działają. Bez SQL, bez deploy-commands. Manager aplikacji + pytań w `/applications`.
 
 ## [0.48.0] — Faza 8 #3: Tickety 2.0 (kategorie + panel z Message Studio)
 

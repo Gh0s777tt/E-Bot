@@ -235,13 +235,24 @@ export async function saveAiDigestConfig(cfg: AiDigestConfig): Promise<void> {
   await setRawSetting('aidigest_config', JSON.stringify(cfg));
 }
 
-// ── Aplikacje / rekrutacja (Tor K) ──
+// ── Aplikacje / rekrutacja (Tor K / Faza 8: wiele aplikacji) ──
+export type Application = {
+  id: string;
+  label: string;
+  emoji: string;
+  style: 'primary' | 'secondary' | 'success' | 'danger';
+  reviewChannelId: string;
+  acceptRoleId: string;
+  questions: string[];
+};
 export type ApplicationsConfig = {
   enabled: boolean;
   reviewChannelId: string;
   roleId: string;
   panelMessage: string;
   questions: string[];
+  panelSpec?: RichMessage;
+  applications?: Application[];
 };
 export const APPLICATIONS_DEFAULT: ApplicationsConfig = {
   enabled: false,
@@ -249,6 +260,7 @@ export const APPLICATIONS_DEFAULT: ApplicationsConfig = {
   roleId: '',
   panelMessage: '📋 Aplikuj do ekipy — kliknij poniżej.',
   questions: ['Dlaczego chcesz dołączyć?', 'Co możesz wnieść?'],
+  applications: [],
 };
 export async function getApplicationsConfig(): Promise<ApplicationsConfig> {
   const raw = await getRawSetting('applications_config');
