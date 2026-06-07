@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-70-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.38.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-71-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.38.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.38.1] — Fix: zakładka „Komendy" dynamiczna
+
+- `[#071]` 🛠️ **`/commands` pokazywało starą, stałą listę** (5 komend z Fazy 0) zamiast realnych 28. Teraz strona pobiera komendy **na żywo z Discord API** (`lib/commands.ts`, bot token) — zawsze aktualna, z liczbą łączną i **podkomendami** (np. `/mod`, `/case`, `/backlog`). Brak ręcznej listy do utrzymania. Fallback z instrukcją, gdy API niedostępne.
 
 ## [0.38.0] — Faza 7 / F9.3: śledzenie cen (ITAD)
 
