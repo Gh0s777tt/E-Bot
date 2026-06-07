@@ -19,6 +19,7 @@ export type TicketsConfig = {
   logChannelId: string;
   panelMessage: string;
   ratingEnabled: boolean;
+  slaHours: number; // Tor D — auto-close po bezczynności (0 = off)
 };
 
 export function ticketConfig(): TicketsConfig {
@@ -29,6 +30,7 @@ export function ticketConfig(): TicketsConfig {
     logChannelId: '',
     panelMessage: 'Masz sprawę? Otwórz ticket — kliknij poniżej. 🎟️',
     ratingEnabled: true,
+    slaHours: 0,
   };
   const raw = getSettings()['tickets_config'];
   try {
@@ -38,8 +40,13 @@ export function ticketConfig(): TicketsConfig {
   }
 }
 
-function closeRow(): ActionRowBuilder<ButtonBuilder> {
+function controlsRow(): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId('ticket:claim')
+      .setLabel('Przejmij')
+      .setEmoji('🙋')
+      .setStyle(ButtonStyle.Primary),
     new ButtonBuilder()
       .setCustomId('ticket:close')
       .setLabel('Zamknij ticket')
@@ -79,7 +86,7 @@ export async function openTicket(
     await thread
       .send({
         content: `${ping}${cfg.welcome}\n\n**Temat:** ${subject}\n— <@${user.id}>`,
-        components: [closeRow()],
+        components: [controlsRow()],
       })
       .catch(() => {});
     if (hasCloud()) {

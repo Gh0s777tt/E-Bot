@@ -74,6 +74,7 @@ export const ticketsConfigSchema = z.object({
   logChannelId: z.string().max(40),
   panelMessage: z.string().max(1000).optional().default('Masz sprawę? Otwórz ticket. 🎟️'),
   ratingEnabled: z.boolean().optional().default(true),
+  slaHours: z.number().int().min(0).max(720).optional().default(0),
 });
 export type TicketsConfigInput = z.infer<typeof ticketsConfigSchema>;
 

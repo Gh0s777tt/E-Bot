@@ -85,6 +85,7 @@ export type TicketsConfig = {
   logChannelId: string;
   panelMessage: string;
   ratingEnabled: boolean;
+  slaHours: number;
 };
 
 export const TICKETS_DEFAULT: TicketsConfig = {
@@ -95,6 +96,7 @@ export const TICKETS_DEFAULT: TicketsConfig = {
   logChannelId: '',
   panelMessage: 'Masz sprawę? Otwórz ticket — kliknij poniżej. 🎟️',
   ratingEnabled: true,
+  slaHours: 0,
 };
 
 export async function getTicketsConfig(): Promise<TicketsConfig> {

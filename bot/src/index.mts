@@ -53,6 +53,7 @@ import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
 import { handleVerifyButton, handleVerifyModal } from './security/verification.mts';
 import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
+import { startTicketSla } from './tickets/sla.mts';
 import { startWelcome } from './welcome.mts';
 
 loadEnv();
@@ -156,6 +157,7 @@ client.once(Events.ClientReady, (c) => {
   startSettingsSync(); // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
   startLeveling(c); // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
   startTicketSync(c); // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
+  startTicketSla(c); // Tor D — auto-close ticketów po bezczynności (SLA)
   startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
   startWelcome(c); // Faza 6 — powitania + autorole
   startAutomod(c); // Faza 6 — automoderacja

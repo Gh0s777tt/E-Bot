@@ -13,6 +13,7 @@ type Cfg = {
   logChannelId: string;
   panelMessage: string;
   ratingEnabled: boolean;
+  slaHours: number;
 };
 
 const inputCls =
@@ -98,6 +99,20 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
           placeholder="Masz sprawę? Otwórz ticket poniżej. 🎟️"
         />
       </div>
+
+      <label className="space-y-1 text-sm">
+        <span className="font-semibold text-white/90">
+          Auto-zamknij po bezczynności (godziny, 0 = wyłączone)
+        </span>
+        <input
+          type="number"
+          value={c.slaHours}
+          onChange={(e) =>
+            setC({ ...c, slaHours: Math.max(0, Math.floor(Number(e.target.value) || 0)) })
+          }
+          className={inputCls}
+        />
+      </label>
 
       <label className="flex items-center gap-3 text-sm">
         <input

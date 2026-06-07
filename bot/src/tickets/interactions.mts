@@ -5,6 +5,7 @@ import {
   MessageFlags,
   ModalBuilder,
   type ModalSubmitInteraction,
+  PermissionFlagsBits,
   type TextChannel,
   TextInputBuilder,
   TextInputStyle,
@@ -32,6 +33,37 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
       .setRequired(true);
     modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(input));
     await interaction.showModal(modal);
+    return;
+  }
+
+  if (id === 'ticket:claim') {
+    const ch = interaction.channel;
+    if (!ch?.isThread()) {
+      await interaction.reply({
+        content: 'To nie jest wątek ticketu.',
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+    const cfg = ticketConfig();
+    const gm = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
+    const allowed =
+      !!gm?.permissions.has(PermissionFlagsBits.ManageThreads) ||
+      (!!cfg.supportRoleId && !!gm?.roles.cache.has(cfg.supportRoleId));
+    if (!allowed) {
+      await interaction.reply({
+        content: '⛔ Tylko obsługa może przejąć ticket.',
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+    if (hasCloud()) {
+      await cloudUpdate('tickets', `channel_id=eq.${ch.id}`, {
+        claimed_by: interaction.user.id,
+        status: 'claimed',
+      }).catch(() => {});
+    }
+    await interaction.reply(`🙋 <@${interaction.user.id}> przejął(ęła) ten ticket.`);
     return;
   }
 
