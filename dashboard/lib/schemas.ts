@@ -115,6 +115,13 @@ export const applicationsSchema = z.object({
 });
 export type ApplicationsInput = z.infer<typeof applicationsSchema>;
 
+// ── Twitch sub → rola (Tor N) ──
+export const twitchSubSchema = z.object({
+  enabled: z.boolean(),
+  roleId: z.string().max(40),
+});
+export type TwitchSubInput = z.infer<typeof twitchSubSchema>;
+
 // ── Tygodniowy digest (Tor E) ──
 export const digestSchema = z.object({
   enabled: z.boolean(),

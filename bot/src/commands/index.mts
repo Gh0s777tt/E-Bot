@@ -17,6 +17,7 @@ import * as imagine from './imagine.mts';
 import * as invites from './invites.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
+import * as linktwitch from './linktwitch.mts';
 import * as lottery from './lottery.mts';
 import * as market from './market.mts';
 import * as mod from './mod.mts';
@@ -82,6 +83,7 @@ export const commands: Command[] = [
   hof,
   fun,
   invites,
+  linktwitch,
   lottery,
   market,
 ];

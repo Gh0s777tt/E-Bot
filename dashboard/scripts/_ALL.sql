@@ -496,6 +496,17 @@ create table if not exists activity_hourly (
 );
 alter table activity_hourly enable row level security;
 
+-- ─────────────────────────────────────────────────────────────
+-- Rozbudowa N — link Twitch↔Discord (rola za subskrypcję)
+-- ─────────────────────────────────────────────────────────────
+create table if not exists twitch_links (
+  discord_id   text primary key,
+  twitch_login text not null,
+  created_at   timestamptz not null default now()
+);
+create index if not exists twitch_links_login on twitch_links (twitch_login);
+alter table twitch_links enable row level security;
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

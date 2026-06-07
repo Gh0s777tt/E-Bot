@@ -4,6 +4,7 @@
 import crypto from 'node:crypto';
 import { getRawSetting, setRawSetting } from '../../../../lib/data';
 import { getPrimaryGuildId } from '../../../../lib/guild';
+import { supabase } from '../../../../lib/supabase';
 import {
   createLiveDiscordEvent,
   eventsubSecret,
@@ -37,7 +38,12 @@ export async function POST(request: Request): Promise<Response> {
   const payload = JSON.parse(body) as {
     challenge?: string;
     subscription?: { type?: string };
-    event?: { broadcaster_user_login?: string; broadcaster_user_name?: string };
+    event?: {
+      broadcaster_user_login?: string;
+      broadcaster_user_name?: string;
+      user_login?: string;
+      user_id?: string;
+    };
   };
 
   if (type === 'webhook_callback_verification') {
@@ -49,7 +55,49 @@ export async function POST(request: Request): Promise<Response> {
   if (type === 'notification' && payload.subscription?.type === 'stream.online' && payload.event) {
     await announce(payload.event).catch((e) => console.warn('[eventsub]', (e as Error).message));
   }
+  // Tor N — subskrypcja Twitch → rola Discord (przez link twitch↔discord)
+  if (
+    type === 'notification' &&
+    payload.subscription?.type === 'channel.subscribe' &&
+    payload.event
+  ) {
+    await assignSubRole(payload.event).catch((e) =>
+      console.warn('[eventsub:sub]', (e as Error).message),
+    );
+  }
   return new Response(null, { status: 204 });
+}
+
+async function assignSubRole(event: { user_login?: string; user_id?: string }): Promise<void> {
+  const cfgRaw = await getRawSetting('twitch_sub_config');
+  let enabled = false;
+  let roleId = '';
+  try {
+    const c = cfgRaw ? (JSON.parse(cfgRaw) as { enabled?: boolean; roleId?: string }) : {};
+    enabled = !!c.enabled;
+    roleId = String(c.roleId || '');
+  } catch {
+    return;
+  }
+  if (!enabled || !roleId) return;
+  const login = (event.user_login || '').toLowerCase();
+  if (!login) return;
+  const { data } = await supabase()
+    .from('twitch_links')
+    .select('discord_id')
+    .eq('twitch_login', login)
+    .maybeSingle();
+  const discordId = (data as { discord_id?: string } | null)?.discord_id;
+  const guildId = await getPrimaryGuildId();
+  const botToken = process.env.DISCORD_BOT_TOKEN;
+  if (!discordId || !guildId || !botToken) return;
+  await fetch(
+    `https://discord.com/api/v10/guilds/${guildId}/members/${discordId}/roles/${roleId}`,
+    {
+      method: 'PUT',
+      headers: { Authorization: `Bot ${botToken}`, 'X-Audit-Log-Reason': 'Subskrypcja Twitch' },
+    },
+  ).catch(() => {});
 }
 
 async function announce(event: {

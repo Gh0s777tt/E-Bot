@@ -261,6 +261,22 @@ export async function saveApplicationsConfig(cfg: ApplicationsConfig): Promise<v
   await setRawSetting('applications_config', JSON.stringify(cfg));
 }
 
+// ── Twitch sub → rola (Tor N) ──
+export type TwitchSubConfig = { enabled: boolean; roleId: string };
+export const TWITCHSUB_DEFAULT: TwitchSubConfig = { enabled: false, roleId: '' };
+export async function getTwitchSubConfig(): Promise<TwitchSubConfig> {
+  const raw = await getRawSetting('twitch_sub_config');
+  if (!raw) return structuredClone(TWITCHSUB_DEFAULT);
+  try {
+    return { ...TWITCHSUB_DEFAULT, ...(JSON.parse(raw) as Partial<TwitchSubConfig>) };
+  } catch {
+    return structuredClone(TWITCHSUB_DEFAULT);
+  }
+}
+export async function saveTwitchSubConfig(cfg: TwitchSubConfig): Promise<void> {
+  await setRawSetting('twitch_sub_config', JSON.stringify(cfg));
+}
+
 // ── Modmail (Faza 7 / F6.4) ──
 export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 export const MODMAIL_DEFAULT: ModmailConfig = {
