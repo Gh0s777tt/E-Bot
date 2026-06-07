@@ -7,6 +7,7 @@ type Cfg = {
   model: 'deepseek' | 'openai';
   dailyRequestLimit: number;
   dailyTokenLimit: number;
+  persona: string;
 };
 
 const inputCls =
@@ -75,6 +76,18 @@ export default function AiConfigForm({ initial }: { initial: Cfg }) {
           />
         </label>
       </div>
+
+      <label className="block space-y-1 text-sm">
+        <span className="font-semibold text-white/90">Persona — osobowość /ai (opcjonalnie)</span>
+        <textarea
+          value={c.persona}
+          onChange={(e) => setC({ ...c, persona: e.target.value })}
+          rows={3}
+          maxLength={1000}
+          placeholder="np. Jesteś zadziornym, dowcipnym botem gamingowym serwera GH0ST…"
+          className={inputCls}
+        />
+      </label>
 
       <div className="flex items-center gap-3">
         <button

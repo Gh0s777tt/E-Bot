@@ -3,10 +3,7 @@
 import { type ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { aiConfig, bumpUsage, type ChatMsg, callModel, checkUsage } from '../lib/ai.mts';
 
-const SYSTEM: ChatMsg = {
-  role: 'system',
-  content: 'Jesteś pomocnym asystentem serwera Discord. Odpowiadaj zwięźle i po polsku.',
-};
+const BASE_SYSTEM = 'Jesteś pomocnym asystentem serwera Discord. Odpowiadaj zwięźle i po polsku.';
 const MEM_TTL = 30 * 60_000; // 30 min bez aktywności = reset
 const MEM_MAX = 6; // ostatnie 6 wiadomości (3 wymiany)
 const memory = new Map<string, { msgs: ChatMsg[]; ts: number }>();
@@ -64,7 +61,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
 
   try {
-    const messages = [SYSTEM, ...history(key), { role: 'user' as const, content: prompt }];
+    const sys: ChatMsg = {
+      role: 'system',
+      content: cfg.persona?.trim() ? `${cfg.persona.trim()}\n${BASE_SYSTEM}` : BASE_SYSTEM,
+    };
+    const messages = [sys, ...history(key), { role: 'user' as const, content: prompt }];
     const { text, tokens } = await callModel(cfg.model, messages);
     await bumpUsage(interaction.user.id, usage, tokens);
     if (text) remember(key, prompt, text);

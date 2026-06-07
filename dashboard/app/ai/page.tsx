@@ -1,12 +1,20 @@
-import { Coins, MessageSquare, Sparkles, Users } from 'lucide-react';
+import { Coins, HelpCircle, MessageSquare, Sparkles, Users } from 'lucide-react';
 import AiConfigForm from '../../components/AiConfigForm';
+import AiHelpForm from '../../components/AiHelpForm';
 import StatCard from '../../components/StatCard';
+import { getAiHelpConfig } from '../../lib/community';
 import { getAiConfig, getAiUsageToday } from '../../lib/faza4';
+import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AiPage() {
-  const [cfg, usage] = await Promise.all([getAiConfig(), getAiUsageToday()]);
+  const [cfg, usage, aihelp, guild] = await Promise.all([
+    getAiConfig(),
+    getAiUsageToday(),
+    getAiHelpConfig(),
+    getGuildMeta(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -41,6 +49,13 @@ export default async function AiPage() {
           <Sparkles size={16} className="text-accent" /> Konfiguracja AI
         </h2>
         <AiConfigForm initial={cfg} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <HelpCircle size={16} className="text-accent" /> AI-pomoc (auto-odpowiedzi z FAQ)
+        </h2>
+        <AiHelpForm initial={aihelp} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

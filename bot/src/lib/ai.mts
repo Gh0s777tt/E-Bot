@@ -9,12 +9,14 @@ export type AiConfig = {
   model: AiModel;
   dailyRequestLimit: number;
   dailyTokenLimit: number;
+  persona: string; // Tor C — własna osobowość bota (prefiks system-promptu /ai)
 };
 const DEFAULT: AiConfig = {
   enabled: false,
   model: 'deepseek',
   dailyRequestLimit: 20,
   dailyTokenLimit: 50_000,
+  persona: '',
 };
 
 export function aiConfig(): AiConfig {
@@ -153,4 +155,38 @@ export async function moderateText(
         .map(([k]) => k)
     : [];
   return { flagged: !!res?.flagged, categories };
+}
+
+/** Tor C — opis obrazka (vision). Wymaga OPENAI_API_KEY (gpt-4o-mini z wejściem image_url). */
+export async function describeImage(
+  imageUrl: string,
+  prompt: string,
+): Promise<{ text: string; tokens: number }> {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error('brak OPENAI_API_KEY (analiza obrazów wymaga OpenAI)');
+  const r = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      max_tokens: 500,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            { type: 'image_url', image_url: { url: imageUrl } },
+          ],
+        },
+      ],
+    }),
+    signal: AbortSignal.timeout(40_000),
+  });
+  const d = (await r.json().catch(() => ({}))) as {
+    choices?: { message?: { content?: string } }[];
+    usage?: { total_tokens?: number };
+    error?: { message?: string };
+  };
+  if (!r.ok) throw new Error(d.error?.message || `HTTP ${r.status}`);
+  return { text: d.choices?.[0]?.message?.content ?? '', tokens: d.usage?.total_tokens ?? 0 };
 }

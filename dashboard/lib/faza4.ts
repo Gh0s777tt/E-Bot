@@ -169,6 +169,7 @@ export type AiConfig = {
   model: 'deepseek' | 'openai';
   dailyRequestLimit: number;
   dailyTokenLimit: number;
+  persona: string;
 };
 
 export const AI_DEFAULT: AiConfig = {
@@ -176,6 +177,7 @@ export const AI_DEFAULT: AiConfig = {
   model: 'deepseek',
   dailyRequestLimit: 20,
   dailyTokenLimit: 50_000,
+  persona: '',
 };
 
 export async function getAiConfig(): Promise<AiConfig> {

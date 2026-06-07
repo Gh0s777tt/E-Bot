@@ -175,6 +175,22 @@ export async function saveAntiRaidConfig(cfg: AntiRaidConfig): Promise<void> {
   await setRawSetting('antiraid_config', JSON.stringify(cfg));
 }
 
+// ── AI-pomoc (RAG-lite, Tor C) ──
+export type AiHelpConfig = { enabled: boolean; channelId: string; knowledge: string };
+export const AIHELP_DEFAULT: AiHelpConfig = { enabled: false, channelId: '', knowledge: '' };
+export async function getAiHelpConfig(): Promise<AiHelpConfig> {
+  const raw = await getRawSetting('aihelp_config');
+  if (!raw) return structuredClone(AIHELP_DEFAULT);
+  try {
+    return { ...AIHELP_DEFAULT, ...(JSON.parse(raw) as Partial<AiHelpConfig>) };
+  } catch {
+    return structuredClone(AIHELP_DEFAULT);
+  }
+}
+export async function saveAiHelpConfig(cfg: AiHelpConfig): Promise<void> {
+  await setRawSetting('aihelp_config', JSON.stringify(cfg));
+}
+
 // ── Modmail (Faza 7 / F6.4) ──
 export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 export const MODMAIL_DEFAULT: ModmailConfig = {

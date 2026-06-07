@@ -225,6 +225,14 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'ai_config',
   },
+  {
+    key: 'aihelp',
+    label: 'AI-pomoc (FAQ)',
+    group: 'AI',
+    href: '/ai',
+    kind: 'json',
+    settingsKey: 'aihelp_config',
+  },
   // Twórca
   {
     key: 'kofi',

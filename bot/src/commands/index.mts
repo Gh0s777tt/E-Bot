@@ -6,6 +6,7 @@ import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
+import * as describe from './describe.mts';
 import * as economy from './economy.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
@@ -48,6 +49,7 @@ export const commands: Command[] = [
   ai,
   mod,
   caseCmd,
+  describe,
   remind,
   giveaway,
   buttonpanel,

@@ -83,8 +83,17 @@ export const aiConfigSchema = z.object({
   model: z.enum(['deepseek', 'openai']),
   dailyRequestLimit: z.number().int().min(0).max(10_000),
   dailyTokenLimit: z.number().int().min(0).max(10_000_000),
+  persona: z.string().max(1000).optional().default(''),
 });
 export type AiConfigInput = z.infer<typeof aiConfigSchema>;
+
+// ── AI-pomoc (RAG-lite, Tor C) ──
+export const aihelpSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  knowledge: z.string().max(6000),
+});
+export type AiHelpInput = z.infer<typeof aihelpSchema>;
 
 // ── Reaction roles (POST /api/reaction-roles) ──────────────
 export const reactionRolesSchema = z.object({
