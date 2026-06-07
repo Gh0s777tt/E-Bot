@@ -1,5 +1,5 @@
 // Faza 7 / F3 — warstwa danych ekonomii serwera (Supabase economy_users + economy_shop).
-import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { cloudDelete, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
 
 export type EcoConfig = {
@@ -112,4 +112,39 @@ export function fmt(n: number, cur: string): string {
 export function minutesSince(iso: string | null): number {
   if (!iso) return Number.POSITIVE_INFINITY;
   return (Date.now() - Date.parse(iso)) / 60_000;
+}
+
+// ── Inwentarz (Tor 4) — przedmioty sklepowe BEZ roli trafiają tu zamiast nadawać rolę ──
+export type InvRow = { item_name: string; qty: number };
+
+export async function getInventory(guildId: string, userId: string): Promise<InvRow[]> {
+  if (!hasCloud()) return [];
+  return cloudSelect<InvRow>(
+    'economy_inventory',
+    `select=item_name,qty&guild_id=eq.${guildId}&user_id=eq.${userId}&order=item_name.asc`,
+  );
+}
+
+// Zmienia ilość przedmiotu o `delta` (read-modify-write). qty<=0 → usuwa wiersz.
+export async function addInventory(
+  guildId: string,
+  userId: string,
+  itemName: string,
+  delta = 1,
+): Promise<void> {
+  if (!hasCloud()) return;
+  const rows = await getInventory(guildId, userId);
+  const qty = (rows.find((r) => r.item_name === itemName)?.qty ?? 0) + delta;
+  if (qty <= 0) {
+    await cloudDelete(
+      'economy_inventory',
+      `guild_id=eq.${guildId}&user_id=eq.${userId}&item_name=eq.${encodeURIComponent(itemName)}`,
+    );
+    return;
+  }
+  await cloudUpsert(
+    'economy_inventory',
+    [{ guild_id: guildId, user_id: userId, item_name: itemName, qty }],
+    'guild_id,user_id,item_name',
+  );
 }

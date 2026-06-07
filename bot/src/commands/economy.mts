@@ -7,7 +7,17 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
-import { ecoConfig, fmt, getShop, getUser, minutesSince, saveUser } from '../economy/store.mts';
+import { startBlackjack } from '../economy/blackjack.mts';
+import {
+  addInventory,
+  ecoConfig,
+  fmt,
+  getInventory,
+  getShop,
+  getUser,
+  minutesSince,
+  saveUser,
+} from '../economy/store.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
@@ -71,11 +81,28 @@ export const data = new SlashCommandBuilder()
         o.setName('amount').setDescription('Stawka').setRequired(true).setMinValue(1),
       ),
   )
+  .addSubcommand((s) =>
+    s
+      .setName('blackjack')
+      .setDescription('Blackjack (oczko) — graj przyciskami')
+      .addIntegerOption((o) =>
+        o.setName('amount').setDescription('Stawka').setRequired(true).setMinValue(1),
+      ),
+  )
   .addSubcommand((s) => s.setName('shop').setDescription('Sklep serwera'))
   .addSubcommand((s) =>
     s
       .setName('buy')
       .setDescription('Kup przedmiot ze sklepu')
+      .addStringOption((o) =>
+        o.setName('item').setDescription('Nazwa przedmiotu').setRequired(true),
+      ),
+  )
+  .addSubcommand((s) => s.setName('inventory').setDescription('Twój ekwipunek'))
+  .addSubcommand((s) =>
+    s
+      .setName('use')
+      .setDescription('Użyj przedmiotu z ekwipunku')
       .addStringOption((o) =>
         o.setName('item').setDescription('Nazwa przedmiotu').setRequired(true),
       ),
@@ -399,6 +426,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         await interaction.reply(eph('❌ Nie mogłem nadać roli (uprawnienia/hierarchia bota).'));
         return;
       }
+    } else {
+      // przedmiot bez roli → trafia do ekwipunku
+      await addInventory(gid, interaction.user.id, item.name, 1);
     }
     await saveUser({
       guild_id: gid,
@@ -406,7 +436,63 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       username: interaction.user.username,
       wallet: u.wallet - item.price,
     });
-    await interaction.reply(`✅ Kupiono **${item.name}** za ${fmt(item.price, cur)}.`);
+    await interaction.reply(
+      `✅ Kupiono **${item.name}** za ${fmt(item.price, cur)}.${
+        item.role_id ? '' : ' Dodano do ekwipunku — `/eco inventory`.'
+      }`,
+    );
+    return;
+  }
+
+  // ── blackjack ──
+  if (sub === 'blackjack') {
+    if (!cfg.gambleEnabled) {
+      await interaction.reply(eph('🚫 Hazard jest wyłączony.'));
+      return;
+    }
+    const amount = interaction.options.getInteger('amount', true);
+    if (amount > cfg.gambleMax) {
+      await interaction.reply(eph(`Maks. stawka to ${fmt(cfg.gambleMax, cur)}.`));
+      return;
+    }
+    await startBlackjack(interaction, gid, amount);
+    return;
+  }
+
+  // ── inventory ──
+  if (sub === 'inventory') {
+    const inv = await getInventory(gid, interaction.user.id);
+    if (!inv.length) {
+      await interaction.reply(eph('🎒 Twój ekwipunek jest pusty. Kup coś w `/eco shop`.'));
+      return;
+    }
+    const embed = new EmbedBuilder()
+      .setColor(ACCENT)
+      .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
+      .setTitle('🎒 Ekwipunek')
+      .setDescription(
+        inv
+          .map((i) => `**${i.item_name}** ×${i.qty}`)
+          .join('\n')
+          .slice(0, 4000),
+      );
+    await interaction.reply({ embeds: [embed] });
+    return;
+  }
+
+  // ── use ──
+  if (sub === 'use') {
+    const query = interaction.options.getString('item', true).toLowerCase();
+    const inv = await getInventory(gid, interaction.user.id);
+    const owned =
+      inv.find((i) => i.item_name.toLowerCase() === query) ??
+      inv.find((i) => i.item_name.toLowerCase().includes(query));
+    if (!owned) {
+      await interaction.reply(eph('Nie masz takiego przedmiotu. Sprawdź `/eco inventory`.'));
+      return;
+    }
+    await addInventory(gid, interaction.user.id, owned.item_name, -1);
+    await interaction.reply(`✨ Użyto **${owned.item_name}**. Zostało: ${owned.qty - 1}.`);
     return;
   }
 

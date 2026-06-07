@@ -18,6 +18,7 @@ import { startInvites } from './community/invites.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
+import { handleBlackjackButton } from './economy/blackjack.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
 import { setupMessageEarning } from './empire/messages.mts';
 import { setupVoiceEarning } from './empire/voice.mts';
@@ -159,7 +160,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
         ? handleVerifyButton(interaction)
         : id.startsWith('sug:')
           ? handleSuggestionButton(interaction)
-          : handleButton(interaction);
+          : id.startsWith('bj:')
+            ? handleBlackjackButton(interaction)
+            : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }
