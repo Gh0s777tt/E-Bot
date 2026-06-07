@@ -28,6 +28,7 @@ import * as prestige from './prestige.mts';
 import * as profile from './profile.mts';
 import * as quests from './quests.mts';
 import * as rank from './rank.mts';
+import * as reactionpanel from './reactionpanel.mts';
 import * as remind from './remind.mts';
 import * as rolemenu from './rolemenu.mts';
 import * as schedule from './schedule.mts';
@@ -59,6 +60,7 @@ export const commands: Command[] = [
   describe,
   remind,
   rolemenu,
+  reactionpanel,
   schedule,
   skins,
   giveaway,

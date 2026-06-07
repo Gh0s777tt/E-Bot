@@ -1,15 +1,17 @@
-import { ListChecks, Tags } from 'lucide-react';
+import { ListChecks, Tags, Wand2 } from 'lucide-react';
+import ReactionRolePanelForm from '../../components/ReactionRolePanelForm';
 import ReactionRolesForm from '../../components/ReactionRolesForm';
 import RoleMenuForm from '../../components/RoleMenuForm';
 import { getRoleMenu } from '../../lib/engagement';
-import { getReactionRoles } from '../../lib/faza4';
+import { getReactionPanel, getReactionRoles } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
 export default async function RolesPage() {
-  const [items, rolemenu, guild] = await Promise.all([
+  const [items, panel, rolemenu, guild] = await Promise.all([
     getReactionRoles(),
+    getReactionPanel(),
     getRoleMenu(),
     getGuildMeta(),
   ]);
@@ -28,6 +30,13 @@ export default async function RolesPage() {
           <Tags size={16} className="text-accent" /> Reaction roles
         </h2>
         <ReactionRolesForm initial={items} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Wand2 size={16} className="text-accent" /> Reaction roles — utwórz panel (embed)
+        </h2>
+        <ReactionRolePanelForm initial={panel} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

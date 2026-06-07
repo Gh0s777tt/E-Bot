@@ -214,6 +214,17 @@ export const reactionRolesSchema = z.object({
 });
 export type ReactionRolesInput = z.infer<typeof reactionRolesSchema>;
 
+// ── Reaction-role panel (Faza 8: utwórz embed + pary emoji→rola) ──
+export const reactionPanelSchema = z.object({
+  panelSpec: richMessageSchema.optional(),
+  pairs: z
+    .array(z.object({ emoji: z.string().min(1).max(64), roleId: z.string().max(40) }))
+    .max(20)
+    .optional()
+    .default([]),
+});
+export type ReactionPanelInput = z.infer<typeof reactionPanelSchema>;
+
 // ── Ekonomia serwera (Faza 7/F3) ───────────────────────────
 export const economySchema = z.object({
   enabled: z.boolean(),

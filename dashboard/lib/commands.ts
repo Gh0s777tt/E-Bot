@@ -45,7 +45,17 @@ const COMMAND_GROUPS: { label: string; names: string[] }[] = [
   { label: 'Ekonomia', names: ['eco', 'market', 'lottery', 'skins'] },
   {
     label: 'Społeczność',
-    names: ['suggest', 'poll', 'birthday', 'afk', 'highlight', 'invites', 'rolemenu', 'linktwitch'],
+    names: [
+      'suggest',
+      'poll',
+      'birthday',
+      'afk',
+      'highlight',
+      'invites',
+      'rolemenu',
+      'reactionpanel',
+      'linktwitch',
+    ],
   },
   { label: 'Zabawa & engagement', names: ['fun', 'remind', 'giveaway', 'buttonpanel', 'schedule'] },
 ];

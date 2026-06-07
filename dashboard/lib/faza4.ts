@@ -258,6 +258,22 @@ export async function saveReactionRoles(list: ReactionRole[]): Promise<void> {
   await setRawSetting('reaction_roles', JSON.stringify(list));
 }
 
+// Panel reaction-role utworzony przez bota (Faza 8): embed (Message Studio) + pary emoji→rola.
+export type ReactionPanel = { panelSpec?: RichMessage; pairs: { emoji: string; roleId: string }[] };
+export async function getReactionPanel(): Promise<ReactionPanel> {
+  const raw = await getRawSetting('reaction_role_panel');
+  if (!raw) return { pairs: [] };
+  try {
+    const o = JSON.parse(raw) as Partial<ReactionPanel>;
+    return { panelSpec: o.panelSpec, pairs: Array.isArray(o.pairs) ? o.pairs : [] };
+  } catch {
+    return { pairs: [] };
+  }
+}
+export async function saveReactionPanel(p: ReactionPanel): Promise<void> {
+  await setRawSetting('reaction_role_panel', JSON.stringify(p));
+}
+
 // ───────────────────────── 📊 Statystyki ─────────────────────────
 export type DayPoint = { day: string; tokens: number; requests: number };
 

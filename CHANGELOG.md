@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-102-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.49.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-103-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.50.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.50.0] — Faza 8 #5: Reaction roles 2.0 (istniejąca wiadomość ALBO nowy embed)
+
+- `[#103]` 🧩 **Reaction roles 2.0:** dwa tryby do wyboru. (1) **Istniejąca wiadomość** po ID — jak dotąd (`reaction_roles` items emoji→rola). (2) **Utwórz panel w bocie** — embed z **Message Studio** + pary emoji→rola; nowa komenda **`/reactionpanel`** publikuje go na bieżącym kanale i **sam dodaje reakcje**, a `MessageReactionAdd/Remove` nadaje/odbiera role. Addytywne (osobne klucze `reaction_role_panel` + `reaction_role_panel_msg`; handler czyta oba) → **zero regresji**. **41 komend.** Bez SQL. Sekcja „utwórz panel" w `/roles`.
 
 ## [0.49.0] — Faza 8 #4: Applications 2.0 (wiele aplikacji + panel z Message Studio)
 
