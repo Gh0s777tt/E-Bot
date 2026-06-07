@@ -312,6 +312,21 @@ create table if not exists xp_hall_of_fame (
 create index if not exists hof_lookup on xp_hall_of_fame (guild_id, month, rank);
 alter table xp_hall_of_fame enable row level security;
 
+-- ─────────────────────────────────────────────────────────────
+-- Bezpieczeństwo — audit log zmian konfiguracji panelu (kto/co/kiedy/IP)
+-- ─────────────────────────────────────────────────────────────
+create table if not exists settings_audit (
+  id         uuid primary key default gen_random_uuid(),
+  uid        text,
+  uname      text,
+  area       text not null,
+  detail     text,
+  ip         text,
+  created_at timestamptz not null default now()
+);
+create index if not exists settings_audit_recent on settings_audit (created_at desc);
+alter table settings_audit enable row level security;
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

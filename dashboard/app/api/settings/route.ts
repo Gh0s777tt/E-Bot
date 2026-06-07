@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getSettings, saveSettings } from '../../../lib/data';
 
 export const dynamic = 'force-dynamic';
@@ -14,6 +15,7 @@ export async function POST(request: Request): Promise<Response> {
       flat[k] = typeof v === 'boolean' ? (v ? '1' : '0') : String(v ?? '');
     }
     await saveSettings(flat);
+    await recordAudit(request, 'settings');
     return Response.json({ ok: true, settings: await getSettings() });
   } catch (e) {
     return Response.json({ ok: false, error: (e as Error).message }, { status: 400 });

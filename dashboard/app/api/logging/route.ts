@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getLoggingConfig, type LoggingConfig, saveLoggingConfig } from '../../../lib/community';
 import { loggingSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, loggingSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveLoggingConfig(parsed.data as LoggingConfig);
+  await recordAudit(request, 'logging');
   return Response.json({ ok: true, config: await getLoggingConfig() });
 }

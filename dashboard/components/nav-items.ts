@@ -10,6 +10,7 @@ import {
   Gamepad2,
   Gift,
   Heart,
+  History,
   LayoutDashboard,
   Lightbulb,
   type LucideIcon,
@@ -53,6 +54,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/security', label: 'Bezpieczeństwo', icon: ShieldAlert },
       { href: '/moderation', label: 'Automod', icon: ShieldCheck },
       { href: '/logging', label: 'Logi serwera', icon: ScrollText },
+      { href: '/audit', label: 'Dziennik zmian', icon: History },
     ],
   },
   {

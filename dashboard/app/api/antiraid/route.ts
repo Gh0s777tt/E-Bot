@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type AntiRaidConfig, getAntiRaidConfig, saveAntiRaidConfig } from '../../../lib/community';
 import { antiraidSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, antiraidSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveAntiRaidConfig(parsed.data as AntiRaidConfig);
+  await recordAudit(request, 'antiraid');
   return Response.json({ ok: true, config: await getAntiRaidConfig() });
 }
