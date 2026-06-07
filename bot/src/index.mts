@@ -36,6 +36,8 @@ import { setupVoiceEarning } from './empire/voice.mts';
 import { handleButton } from './engagement/buttons.mts';
 import { startGiveaways } from './engagement/giveaways.mts';
 import { startReminders } from './engagement/reminders.mts';
+import { handleRoleMenu } from './engagement/rolemenu.mts';
+import { startScheduler } from './engagement/scheduler.mts';
 import { startStarboard } from './engagement/starboard.mts';
 import { startTempVoice } from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
@@ -165,6 +167,7 @@ client.once(Events.ClientReady, (c) => {
   startAutomod(c); // Faza 6 — automoderacja
   startClipRelay(c); // Faza 6 — relay klipów Twitch (config z panelu /creator)
   startReminders(c); // Faza 6 / B5 — przypomnienia /remind
+  startScheduler(c); // Tor F — zaplanowane/cykliczne ogłoszenia (/schedule)
   startGiveaways(c); // Faza 6 / B5 — giveawaye /giveaway
   startStarboard(c); // Faza 6 / B5 — starboard ⭐
   startTempVoice(c); // Faza 6 / B5 — kanały głosowe na żądanie
@@ -200,6 +203,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
       ? handleVerifyModal(interaction)
       : handleTicketModal(interaction);
     await h.catch((err) => console.error('modal:', err));
+    return;
+  }
+  if (interaction.isStringSelectMenu()) {
+    await handleRoleMenu(interaction).catch((err) => console.error('select:', err));
     return;
   }
   if (!interaction.isChatInputCommand()) return;

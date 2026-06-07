@@ -130,6 +130,27 @@ export async function saveInvitesConfig(cfg: InvitesConfig): Promise<void> {
   await setRawSetting('invites_config', JSON.stringify(cfg));
 }
 
+// ── Menu ról (dropdown, Tor F) ──
+export type RoleMenuOption = { label: string; roleId: string; description: string; emoji: string };
+export type RoleMenuConfig = { message: string; placeholder: string; options: RoleMenuOption[] };
+export const ROLEMENU_DEFAULT: RoleMenuConfig = {
+  message: '🎭 Wybierz swoje role:',
+  placeholder: 'Wybierz role…',
+  options: [],
+};
+export async function getRoleMenu(): Promise<RoleMenuConfig> {
+  const raw = await getRawSetting('rolemenu_config');
+  if (!raw) return structuredClone(ROLEMENU_DEFAULT);
+  try {
+    return { ...ROLEMENU_DEFAULT, ...(JSON.parse(raw) as Partial<RoleMenuConfig>) };
+  } catch {
+    return structuredClone(ROLEMENU_DEFAULT);
+  }
+}
+export async function saveRoleMenu(cfg: RoleMenuConfig): Promise<void> {
+  await setRawSetting('rolemenu_config', JSON.stringify(cfg));
+}
+
 // ── Lista giveawayów (read) ──
 export type GiveawayRow = {
   id: string;

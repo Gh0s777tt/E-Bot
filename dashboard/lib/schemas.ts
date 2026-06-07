@@ -349,6 +349,23 @@ export const buttonRolesSchema = z.object({
 });
 export type ButtonRolesInput = z.infer<typeof buttonRolesSchema>;
 
+// ── Engagement: menu ról (dropdown, Tor F) ──
+export const roleMenuSchema = z.object({
+  message: z.string().max(500),
+  placeholder: z.string().max(150),
+  options: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(80),
+        roleId: z.string().max(40),
+        description: z.string().max(100).optional().default(''),
+        emoji: z.string().max(64).optional().default(''),
+      }),
+    )
+    .max(25),
+});
+export type RoleMenuInput = z.infer<typeof roleMenuSchema>;
+
 // ── Engagement: starboard (POST /api/starboard) ────────────
 export const starboardSchema = z.object({
   enabled: z.boolean(),

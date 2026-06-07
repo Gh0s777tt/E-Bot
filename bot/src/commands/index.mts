@@ -26,6 +26,8 @@ import * as profile from './profile.mts';
 import * as quests from './quests.mts';
 import * as rank from './rank.mts';
 import * as remind from './remind.mts';
+import * as rolemenu from './rolemenu.mts';
+import * as schedule from './schedule.mts';
 import * as suggest from './suggest.mts';
 import * as ticket from './ticket.mts';
 import * as ticketpanel from './ticketpanel.mts';
@@ -51,6 +53,8 @@ export const commands: Command[] = [
   caseCmd,
   describe,
   remind,
+  rolemenu,
+  schedule,
   giveaway,
   buttonpanel,
   wishlist,
