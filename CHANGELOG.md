@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-94-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.45.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-95-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.45.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.45.1] — Audyt: zakładka Komendy 40/40 + brakujące przełączniki
+
+- `[#095]` 🧭 **Strona `/commands`:** 10 nowych komend wpadało do „Inne" (`profile, quests, market, describe, rolemenu, schedule, lottery, skins, applypanel, linktwitch`) — uzupełniono mapowanie `komenda→moduł`, teraz **wszystkie 40 w modułach, „Inne" puste**. **Centrum sterowania:** dodano 3 brakujące przełączniki (tygodniowy digest, dzienny AI-digest, Twitch sub→rola).
 
 ## [0.45.0] — Domknięcie odłożonych (9 torów G–O): giveaway++ · loteria · skórki · AI-digest · aplikacje · analityka per-user · web · Twitch · automatyzacje
 

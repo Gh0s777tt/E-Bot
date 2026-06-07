@@ -39,12 +39,15 @@ const COMMAND_GROUPS: { label: string; names: string[] }[] = [
   { label: 'Ogólne', names: ['ping', 'portal', 'link'] },
   { label: 'Biblioteka & gry', names: ['library', 'wishlist', 'backlog'] },
   { label: 'Moderacja & bezpieczeństwo', names: ['mod', 'case', 'antinuke', 'verifypanel'] },
-  { label: 'Wsparcie', names: ['ticket', 'ticketpanel'] },
-  { label: 'AI', names: ['ai', 'tldr', 'translate', 'imagine'] },
-  { label: 'Poziomy', names: ['rank', 'prestige', 'hof'] },
-  { label: 'Ekonomia', names: ['eco'] },
-  { label: 'Społeczność', names: ['suggest', 'poll', 'birthday', 'afk', 'highlight', 'invites'] },
-  { label: 'Zabawa & engagement', names: ['fun', 'remind', 'giveaway', 'buttonpanel'] },
+  { label: 'Wsparcie', names: ['ticket', 'ticketpanel', 'applypanel'] },
+  { label: 'AI', names: ['ai', 'tldr', 'translate', 'imagine', 'describe'] },
+  { label: 'Poziomy', names: ['profile', 'rank', 'prestige', 'hof', 'quests'] },
+  { label: 'Ekonomia', names: ['eco', 'market', 'lottery', 'skins'] },
+  {
+    label: 'Społeczność',
+    names: ['suggest', 'poll', 'birthday', 'afk', 'highlight', 'invites', 'rolemenu', 'linktwitch'],
+  },
+  { label: 'Zabawa & engagement', names: ['fun', 'remind', 'giveaway', 'buttonpanel', 'schedule'] },
 ];
 
 export function groupCommands(commands: SlashCommand[]): CommandGroup[] {

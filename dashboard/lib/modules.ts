@@ -127,6 +127,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'counters_config',
   },
   {
+    key: 'digest',
+    label: 'Tygodniowy digest',
+    group: 'Społeczność',
+    href: '/stats',
+    kind: 'json',
+    settingsKey: 'digest_config',
+  },
+  {
     key: 'automations',
     label: 'Automatyzacje (IFTTT)',
     group: 'Społeczność',
@@ -249,6 +257,14 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'aihelp_config',
   },
+  {
+    key: 'aidigest',
+    label: 'Dzienny AI-digest',
+    group: 'AI',
+    href: '/ai',
+    kind: 'json',
+    settingsKey: 'aidigest_config',
+  },
   // Twórca
   {
     key: 'kofi',
@@ -277,6 +293,14 @@ export const MODULES: ModuleDef[] = [
     path: 'clipRelay',
   },
   // Powiadomienia live
+  {
+    key: 'twitchSub',
+    label: 'Twitch sub → rola',
+    group: 'Powiadomienia live',
+    href: '/notifications',
+    kind: 'json',
+    settingsKey: 'twitch_sub_config',
+  },
   {
     key: 'notifyTwitch',
     label: 'Live: Twitch',
