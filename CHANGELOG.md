@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-68-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.37.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-69-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.37.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.37.1] — UX: boczny pasek w sekcjach (akordeon)
+
+- `[#069]` 🧭 **Pogrupowana nawigacja** — boczny pasek (urósł do ~31 pozycji) podzielony na **8 zwijanych sekcji**: Ogólne · Moderacja · Wsparcie & AI · Społeczność · Ekonomia · Twórca & live · Biblioteka & gry · System. Sekcja aktualnej strony rozwija się automatycznie, reszta zwinięta — bez przewijania/oddalania. Stan rozwinięcia zapisywany w `localStorage`. `nav-items.ts` → `NAV_GROUPS` (+ płaskie `NAV_ITEMS` dla kompatybilności); `Sidebar` = akordeon (chevron), `MobileNav` = te same grupy z nagłówkami. Zmiana wyłącznie w panelu.
 
 ## [0.37.0] — Faza 7 / F10.3: Sentry · 🎉 FAZA 7 ZAKOŃCZONA
 

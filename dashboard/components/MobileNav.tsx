@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { NAV_ITEMS } from './nav-items';
+import { NAV_GROUPS } from './nav-items';
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -24,10 +24,10 @@ export default function MobileNav() {
         <div className="fixed inset-0 z-[60] md:hidden" onClick={() => setOpen(false)}>
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
           <aside
-            className="absolute inset-y-0 left-0 w-64 border-r border-line bg-surface p-4"
+            className="absolute inset-y-0 left-0 flex w-64 flex-col border-r border-line bg-surface"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-5 flex items-center justify-between">
+            <div className="flex shrink-0 items-center justify-between border-b border-line p-4">
               <span className="font-display text-xl tracking-wide text-glow">
                 E-<span className="text-accent">BOT</span>
               </span>
@@ -39,25 +39,34 @@ export default function MobileNav() {
                 <X size={20} />
               </button>
             </div>
-            <nav className="space-y-1">
-              {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-                const active = pathname === href;
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-semibold uppercase tracking-wide ${
-                      active
-                        ? 'bg-accent text-white'
-                        : 'text-muted hover:bg-elevated hover:text-white'
-                    }`}
-                  >
-                    <Icon size={16} />
-                    {label}
-                  </Link>
-                );
-              })}
+            <nav className="flex-1 space-y-3 overflow-y-auto p-3">
+              {NAV_GROUPS.map((group) => (
+                <div key={group.label}>
+                  <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted/60">
+                    {group.label}
+                  </div>
+                  <div className="space-y-0.5">
+                    {group.items.map(({ href, label, icon: Icon }) => {
+                      const active = pathname === href;
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={() => setOpen(false)}
+                          className={`flex items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] ${
+                            active
+                              ? 'bg-accent text-white'
+                              : 'text-muted hover:bg-elevated hover:text-white'
+                          }`}
+                        >
+                          <Icon size={16} />
+                          {label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </nav>
           </aside>
         </div>
