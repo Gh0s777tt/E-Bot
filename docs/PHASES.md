@@ -89,11 +89,11 @@
   - [x] **F6.2** — Logi serwera: zdarzenia (wiadomości/członkowie/bany/role/kanały/voice) → kanał, panel `/logging`
   - [x] **F6.3** — Weryfikacja (gate‑przycisk `/verifypanel` → rola) + anti‑raid (fala wejść → akcja, bramka wieku konta)
   - [x] **F6.4** — Modmail (DM ↔ wątek na serwerze; relay obustronny, `!close`)
-- [ ] **F7** — Społeczność *(w toku)*
+- [x] **F7** — Społeczność
   - [x] **F7.1** — Sugestie (`/suggest` + głosowanie + decyzje moderacji) + ankiety (`/poll`)
   - [x] **F7.2** — Komendy własne (prefiks → odpowiedź) + autoresponder (słowa-klucze)
   - [x] **F7.3** — Urodziny (`/birthday`) + AFK (`/afk`) + highlighty (`/highlight`)
-  - [ ] F7.4 — Liczniki kanałów (statystyki w nazwach)
+  - [x] **F7.4** — Liczniki kanałów (`/counters`: członkowie/boosty/kanały/role w nazwach)
 - [ ] **F8** — AI++ (czat z pamięcią, `/imagine`, `/tldr`, `/translate`, AI‑moderacja)
 - [ ] **F9** — Gaming unikat (price‑tracking ITAD, free‑games feed, patch‑notes, backlog, Twitch sub→rola, donejty)
 - [ ] **F10** — Analityka + Infra (wykresy aktywności, sezonowe rankingi levelingu, Realtime, Sentry z DSN, Playwright, i18n)

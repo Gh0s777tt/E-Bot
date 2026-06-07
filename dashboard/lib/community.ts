@@ -264,3 +264,22 @@ export async function getBirthdayConfig(): Promise<BirthdayConfig> {
 export async function saveBirthdayConfig(cfg: BirthdayConfig): Promise<void> {
   await setRawSetting('birthday_config', JSON.stringify(cfg));
 }
+
+// ── Liczniki kanałów (Faza 7 / F7.4) ──
+export type CounterType = 'members' | 'boosts' | 'channels' | 'roles';
+export type CounterItem = { channelId: string; type: CounterType; template: string };
+export type CountersConfig = { enabled: boolean; items: CounterItem[] };
+export const COUNTERS_DEFAULT: CountersConfig = { enabled: false, items: [] };
+
+export async function getCountersConfig(): Promise<CountersConfig> {
+  const raw = await getRawSetting('counters_config');
+  if (!raw) return structuredClone(COUNTERS_DEFAULT);
+  try {
+    return { ...COUNTERS_DEFAULT, ...(JSON.parse(raw) as Partial<CountersConfig>) };
+  } catch {
+    return structuredClone(COUNTERS_DEFAULT);
+  }
+}
+export async function saveCountersConfig(cfg: CountersConfig): Promise<void> {
+  await setRawSetting('counters_config', JSON.stringify(cfg));
+}

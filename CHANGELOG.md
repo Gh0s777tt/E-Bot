@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-58-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.27.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-59-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.28.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.28.0] — Faza 7 / F7.4: liczniki kanałów · 🎉 F7 zakończona
+
+- `[#059]` 📊 **Liczniki kanałów** (panel `/counters`):
+  - Nazwy wybranych kanałów (zwykle zablokowanych głosowych) pokazują statystyki serwera: **członkowie / boosty / kanały / role**. Szablon ze zmienną `{count}` (np. `👥 Członków: {count}`). Bot odświeża co ~10 min (limit Discorda na zmianę nazwy kanału = 2/10 min).
+  - Bot: `bot/src/community/counters.mts` (`startCounters`, poller 10 min; liczone tanio z gateway/cache — `memberCount`, `premiumSubscriptionCount`, `channels.cache`, `roles.cache`, bez fetchowania członków; pomija edycję, gdy nazwa bez zmian). Panel: `counters_config` + `countersSchema` + `/api/counters` + `CountersForm` (lista: kanał głosowy + typ + szablon) + strona `/counters` (nav „Liczniki" Activity) + moduł w Centrum sterowania. **Bez SQL i bez komend slash.**
+  - 🎉 **Faza 7 / F7 (Społeczność) kompletna:** F7.1 sugestie + ankiety · F7.2 komendy własne + autoresponder · F7.3 urodziny + AFK + highlighty · F7.4 liczniki kanałów.
 
 ## [0.27.0] — Faza 7 / F7.3: urodziny + AFK + highlighty
 

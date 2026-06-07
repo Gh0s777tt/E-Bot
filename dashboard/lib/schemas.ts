@@ -239,6 +239,21 @@ export const birthdaySchema = z.object({
 });
 export type BirthdayInput = z.infer<typeof birthdaySchema>;
 
+// ── Liczniki kanałów (POST /api/counters) ──────────────────
+export const countersSchema = z.object({
+  enabled: z.boolean(),
+  items: z
+    .array(
+      z.object({
+        channelId: z.string().max(40),
+        type: z.enum(['members', 'boosts', 'channels', 'roles']),
+        template: z.string().min(1).max(100),
+      }),
+    )
+    .max(20),
+});
+export type CountersInput = z.infer<typeof countersSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

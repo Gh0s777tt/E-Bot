@@ -103,6 +103,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'highlights_config',
   },
   {
+    key: 'counters',
+    label: 'Liczniki kanałów',
+    group: 'Społeczność',
+    href: '/counters',
+    kind: 'json',
+    settingsKey: 'counters_config',
+  },
+  {
     key: 'starboard',
     label: 'Starboard',
     group: 'Społeczność',

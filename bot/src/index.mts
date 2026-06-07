@@ -8,6 +8,7 @@ import { startTicketSync } from './cloud/ticket-sync.mts';
 import { type Command, commands } from './commands/index.mts';
 import { startAfk } from './community/afk.mts';
 import { startBirthdays } from './community/birthdays.mts';
+import { startCounters } from './community/counters.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
@@ -104,6 +105,7 @@ client.once(Events.ClientReady, (c) => {
   startBirthdays(c); // Faza 7 / F7.3 — urodziny (dzienny poller, config z panelu)
   startAfk(c); // Faza 7 / F7.3 — AFK (status w pamięci, mention-reply)
   startHighlights(c); // Faza 7 / F7.3 — highlighty (DM na słowo-klucz)
+  startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence
