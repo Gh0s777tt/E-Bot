@@ -7,6 +7,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { syncBadges } from '../community/badges.mts';
+import { getEquippedStyle } from '../economy/skins.mts';
 import { getUser } from '../economy/store.mts';
 import { type CardStyle, renderProfileCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
@@ -109,7 +110,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       xpFor,
       balance: total.toLocaleString('pl-PL'),
       invites,
-      style: rankStyle(),
+      style: (await getEquippedStyle(gid, user.id)) ?? rankStyle(),
     });
 
     const embed = new EmbedBuilder()

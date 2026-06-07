@@ -29,6 +29,7 @@ import * as rank from './rank.mts';
 import * as remind from './remind.mts';
 import * as rolemenu from './rolemenu.mts';
 import * as schedule from './schedule.mts';
+import * as skins from './skins.mts';
 import * as suggest from './suggest.mts';
 import * as ticket from './ticket.mts';
 import * as ticketpanel from './ticketpanel.mts';
@@ -56,6 +57,7 @@ export const commands: Command[] = [
   remind,
   rolemenu,
   schedule,
+  skins,
   giveaway,
   buttonpanel,
   wishlist,

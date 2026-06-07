@@ -5,6 +5,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { getEquippedStyle } from '../economy/skins.mts';
 import { type CardStyle, renderRankCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
@@ -65,6 +66,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       `select=user_id&guild_id=eq.${interaction.guildId}&xp=gt.${xp}`,
     );
     const { level, xpInto, xpFor } = levelInfo(xp);
+    const userStyle = await getEquippedStyle(interaction.guild.id, user.id);
     const buf = await renderRankCard({
       username: user.username,
       avatarUrl: user.displayAvatarURL({ extension: 'png', size: 256 }),
@@ -72,7 +74,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       rank: above.length + 1,
       xpInto,
       xpFor,
-      style: rankStyle(),
+      style: userStyle ?? rankStyle(),
     });
     await interaction.editReply({ files: [new AttachmentBuilder(buf, { name: 'rank.png' })] });
   } catch (e) {

@@ -460,6 +460,19 @@ create table if not exists lottery_tickets (
 create index if not exists lottery_by_guild on lottery_tickets (guild_id);
 alter table lottery_tickets enable row level security;
 
+-- ─────────────────────────────────────────────────────────────
+-- Rozbudowa I — skórki kart rang/profilu
+-- ─────────────────────────────────────────────────────────────
+create table if not exists user_card_skins (
+  guild_id   text not null,
+  user_id    text not null,
+  skin_id    text not null,
+  equipped   boolean not null default false,
+  created_at timestamptz not null default now(),
+  primary key (guild_id, user_id, skin_id)
+);
+alter table user_card_skins enable row level security;
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════
