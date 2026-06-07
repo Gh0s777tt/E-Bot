@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-61-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.30.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-62-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.31.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.31.0] — Faza 7 / F8.3: AI-moderacja · 🎉 F8 zakończona
+
+- `[#062]` 🤖 **AI-moderacja** (panel `/moderation` → sekcja AI-moderacja):
+  - Skanuje wiadomości **darmowym** endpointem moderacji OpenAI (`omni-moderation-latest`) i stosuje akcję: **usuń / ostrzeż / loguj**. Pomija moderatorów (Zarządzanie wiadomościami) i rolę zwolnioną; loguje kategorie naruszenia na wybrany kanał.
+  - Bot: `moderateText()` w `lib/ai.mts` + `bot/src/community/aimod.mts` (`startAiMod`, listener MessageCreate, throttled-warn przy braku klucza). Panel: `aimod_config` + `aimodSchema` + `/api/aimod` + `AiModForm` (akcja/kanał logów/rola zwolniona) + sekcja na `/moderation` + moduł w Centrum sterowania. **Bez SQL i bez komend slash.** Wymaga `OPENAI_API_KEY`.
+  - 🎉 **Faza 7 / F8 (AI++) kompletna:** F8.1 `/tldr`+`/translate` · F8.2 pamięć + `/imagine` · F8.3 AI-moderacja.
 
 ## [0.30.0] — Faza 7 / F8.2: czat z pamięcią + /imagine
 

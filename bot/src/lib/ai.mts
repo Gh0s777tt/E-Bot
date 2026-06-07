@@ -128,3 +128,29 @@ export async function generateImage(prompt: string): Promise<Buffer> {
   if (!b64) throw new Error('brak obrazu w odpowiedzi');
   return Buffer.from(b64, 'base64');
 }
+
+/** Moderacja treści przez DARMOWY endpoint OpenAI (omni-moderation-latest). Wymaga OPENAI_API_KEY. */
+export async function moderateText(
+  text: string,
+): Promise<{ flagged: boolean; categories: string[] }> {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error('brak OPENAI_API_KEY (moderacja AI wymaga OpenAI)');
+  const r = await fetch('https://api.openai.com/v1/moderations', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'omni-moderation-latest', input: text }),
+    signal: AbortSignal.timeout(15_000),
+  });
+  const d = (await r.json().catch(() => ({}))) as {
+    results?: { flagged?: boolean; categories?: Record<string, boolean> }[];
+    error?: { message?: string };
+  };
+  if (!r.ok) throw new Error(d.error?.message || `HTTP ${r.status}`);
+  const res = d.results?.[0];
+  const categories = res?.categories
+    ? Object.entries(res.categories)
+        .filter(([, v]) => v)
+        .map(([k]) => k)
+    : [];
+  return { flagged: !!res?.flagged, categories };
+}

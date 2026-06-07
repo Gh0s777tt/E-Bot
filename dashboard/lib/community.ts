@@ -283,3 +283,30 @@ export async function getCountersConfig(): Promise<CountersConfig> {
 export async function saveCountersConfig(cfg: CountersConfig): Promise<void> {
   await setRawSetting('counters_config', JSON.stringify(cfg));
 }
+
+// ── AI-moderacja (Faza 7 / F8.3) ──
+export type AiModConfig = {
+  enabled: boolean;
+  action: 'delete' | 'warn' | 'log';
+  logChannelId: string;
+  exemptRoleId: string;
+};
+export const AIMOD_DEFAULT: AiModConfig = {
+  enabled: false,
+  action: 'delete',
+  logChannelId: '',
+  exemptRoleId: '',
+};
+
+export async function getAiModConfig(): Promise<AiModConfig> {
+  const raw = await getRawSetting('aimod_config');
+  if (!raw) return structuredClone(AIMOD_DEFAULT);
+  try {
+    return { ...AIMOD_DEFAULT, ...(JSON.parse(raw) as Partial<AiModConfig>) };
+  } catch {
+    return structuredClone(AIMOD_DEFAULT);
+  }
+}
+export async function saveAiModConfig(cfg: AiModConfig): Promise<void> {
+  await setRawSetting('aimod_config', JSON.stringify(cfg));
+}

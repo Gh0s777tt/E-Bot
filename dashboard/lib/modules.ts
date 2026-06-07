@@ -30,6 +30,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'logging_config',
   },
   {
+    key: 'aimod',
+    label: 'AI-moderacja',
+    group: 'Moderacja',
+    href: '/moderation',
+    kind: 'json',
+    settingsKey: 'aimod_config',
+  },
+  {
     key: 'verification',
     label: 'Weryfikacja',
     group: 'Moderacja',

@@ -254,6 +254,15 @@ export const countersSchema = z.object({
 });
 export type CountersInput = z.infer<typeof countersSchema>;
 
+// ── AI-moderacja (POST /api/aimod) ─────────────────────────
+export const aimodSchema = z.object({
+  enabled: z.boolean(),
+  action: z.enum(['delete', 'warn', 'log']),
+  logChannelId: z.string().max(40),
+  exemptRoleId: z.string().max(40),
+});
+export type AiModInput = z.infer<typeof aimodSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

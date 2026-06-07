@@ -7,6 +7,7 @@ import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
 import { type Command, commands } from './commands/index.mts';
 import { startAfk } from './community/afk.mts';
+import { startAiMod } from './community/aimod.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
 import { startHighlights } from './community/highlights.mts';
@@ -106,6 +107,7 @@ client.once(Events.ClientReady, (c) => {
   startAfk(c); // Faza 7 / F7.3 — AFK (status w pamięci, mention-reply)
   startHighlights(c); // Faza 7 / F7.3 — highlighty (DM na słowo-klucz)
   startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
+  startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence
