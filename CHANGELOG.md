@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-97-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.45.2-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-98-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.46.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.46.0] — Faza 8 (Fundament customizacji) #1: inline toggle modułów
+
+- `[#098]` 🎚️ **Inline toggle modułów:** każda strona funkcji ma teraz **auto-pasek „Moduły tej strony"** z przełącznikami on/off — koniec skakania do Centrum sterowania, by coś włączyć. Komponent `ModuleBar` dobiera moduły po `href === pathname` z rejestru `MODULE_VIEWS` i zapisuje przez to samo `/api/modules` (`setModuleEnabled`) co Centrum → **jedno źródło prawdy**, optymistyczny zapis z rewertem. Wstrzyknięty raz w `Shell` (nad treścią), zero edycji ~20 stron; na stronach bez modułów renderuje `null`. Start **Fazy 8** (fundament pod maks. customizację: Message Studio, pickery/emoji wszędzie, smallcaps, compact UI).
 
 ## [0.45.2] — Jakość: E2E (Playwright) + naprawa pre-existing TS
 

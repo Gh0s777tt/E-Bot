@@ -127,6 +127,14 @@
   - [x] **F10.2** — Sezonowe rankingi levelingu (`/hof` + miesięczny hall of fame + opcjonalny reset)
   - [x] **F10.3** — Sentry (zero‑dep, DSN‑gated) w bocie + panelu. ✅ Playwright E2E dodane (0.45.2). ℹ️ i18n pominięte (opcjonalne na przyszłość)
 
+## 🔜 Faza 8 — Fundament customizacji + pogłębienie (partiami)
+> Cel: maks. customizacja każdej funkcji, zaawansowany edytor wszędzie, lepszy UX + jakość.
+- [x] **Inline toggle modułów** — włącz/wyłącz na stronie funkcji (auto-pasek `ModuleBar`; źródło prawdy = Centrum sterowania) *(0.46.0, [#098])*
+- [ ] **Message Studio** — uniwersalny edytor embed+tekst (live-preview 1:1, licznik znaków, smallcaps/fonty, emoji+custom emoji, szablony)
+- [ ] **Pickery wszędzie** + EmojiSelect (kanały/role/emoji z listy)
+- [ ] **Smallcaps + fonty w całym panelu** · **Compact UI** (mniej scrollowania)
+- [ ] Epiki: Tickets 2.0 · Applications 2.0 · Automod/Security 2.0 · Reaction roles 2.0 · Creator+Social · Notifications 2.0 · Donate 2.0 · Levels 2.0 · AI 2.0 · Game Library 2.0 · Integracje
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
