@@ -9,7 +9,7 @@
 ![Faza 4](https://img.shields.io/badge/Faza_4-✅-E50914?labelColor=0a0a0a)
 ![Faza 5](https://img.shields.io/badge/Faza_5-✅-E50914?labelColor=0a0a0a)
 ![Faza 6](https://img.shields.io/badge/Faza_6-✅-E50914?labelColor=0a0a0a)
-![Faza 7](https://img.shields.io/badge/Faza_7-🔄-E50914?labelColor=0a0a0a)
+![Faza 7](https://img.shields.io/badge/Faza_7-✅-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -102,10 +102,10 @@
   - [x] **F9.1** — Free‑games feed (Epic) + patch‑notes (Steam news)
   - [x] **F9.2** — Backlog gier (`/backlog add|list|set|remove`)
   - [x] **F9.3** — Donejty Ko-fi (webhook → kanał). ℹ️ ITAD price‑tracking + Twitch sub→rola odłożone (wymagają klucza/OAuth)
-- [ ] **F10** — Analityka + Infra *(w toku)*
+- [x] **F10** — Analityka + Infra
   - [x] **F10.1** — Wykresy aktywności serwera (`activity_daily` → `/stats`)
   - [x] **F10.2** — Sezonowe rankingi levelingu (`/hof` + miesięczny hall of fame + opcjonalny reset)
-  - [ ] F10.3 — Infra: Sentry (DSN), i18n, Playwright *(częściowo zależne od kluczy)*
+  - [x] **F10.3** — Sentry (zero‑dep, DSN‑gated) w bocie + panelu. ℹ️ i18n + Playwright pominięte (opcjonalne na przyszłość)
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

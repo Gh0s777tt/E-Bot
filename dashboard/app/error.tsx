@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 export default function ErrorPage({
   error,
   reset,
@@ -7,6 +9,15 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // Faza 7 / F10.3 — zgłoś błąd do Sentry (server-side, no-op gdy brak SENTRY_DSN).
+  useEffect(() => {
+    void fetch('/api/sentry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: error.message, stack: error.stack, digest: error.digest }),
+    }).catch(() => {});
+  }, [error]);
+
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
       <div className="grid h-14 w-14 place-items-center rounded-2xl bg-accent font-display text-2xl shadow-glow">

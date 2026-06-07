@@ -28,6 +28,7 @@ import { loadEnv } from './env.mts';
 import { startFreeGames } from './gaming/freegames.mts';
 import { startPatchNotes } from './gaming/patchnotes.mts';
 import { startLeveling } from './leveling.mts';
+import { captureError } from './lib/sentry.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startModmail } from './modmail.mts';
 import { startReactionRoles } from './reaction-roles.mts';
@@ -75,10 +76,12 @@ const client = new Client({
 // Faza 6 / B7 — globalne handlery błędów: log + alert na Discord (throttling), bez wywracania procesu.
 process.on('unhandledRejection', (reason) => {
   console.error('unhandledRejection:', reason);
+  void captureError(reason, { label: 'unhandledRejection' }); // Faza 7 / F10.3 — Sentry (gdy DSN)
   void notifyError(client, 'unhandledRejection', reason);
 });
 process.on('uncaughtException', (err) => {
   console.error('uncaughtException:', err);
+  void captureError(err, { label: 'uncaughtException' });
   void notifyError(client, 'uncaughtException', err);
 });
 

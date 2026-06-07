@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-67-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.36.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-68-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.37.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.37.0] — Faza 7 / F10.3: Sentry · 🎉 FAZA 7 ZAKOŃCZONA
+
+- `[#068]` 🐛 **Sentry (śledzenie błędów) — zero‑dep, DSN‑gated:**
+  - **Bot:** `bot/src/lib/sentry.mts` — wysyłka „envelope" przez natywny fetch (bez `@sentry/node`), wpięta w globalne handlery `unhandledRejection`/`uncaughtException` (obok alertu na Discord).
+  - **Panel:** `dashboard/lib/sentry.ts` (server‑side) + publiczny `/api/sentry` + zgłaszanie z error‑boundary (`app/error.tsx` → POST). DSN trzymany server‑side.
+  - Aktywuje się po ustawieniu **`SENTRY_DSN`** (`.env`/Railway + Vercel); bez DSN całkowicie **uśpione** (zero efektu). Dodane do `.env.example`. i18n + Playwright świadomie pominięte (niska wartość dla solo‑projektu PL / ciężki setup; zostają jako opcjonalne na przyszłość).
+  - 🎉 **F10 (Analityka + Infra) i CAŁA FAZA 7 zakończone** — F1 centrum · F2 karty · F3 ekonomia · F4 leveling++ · F5 tickety++ · F6 bezpieczeństwo++ · F7 społeczność · F8 AI++ · F9 gaming · F10 analityka+infra. **28 komend.**
 
 ## [0.36.0] — Faza 7 / F10.2: sezonowe rankingi levelingu
 
