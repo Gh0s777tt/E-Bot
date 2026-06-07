@@ -11,13 +11,24 @@ import {
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
+import type { RichMessage } from '../lib/richMessage.mts';
 
+export type TicketCategory = {
+  id: string;
+  label: string;
+  emoji: string;
+  style: 'primary' | 'secondary' | 'success' | 'danger';
+  supportRoleId: string;
+  welcome: string;
+};
 export type TicketsConfig = {
   enabled: boolean;
   supportRoleId: string;
   welcome: string;
   logChannelId: string;
   panelMessage: string;
+  panelSpec?: RichMessage;
+  categories?: TicketCategory[];
   ratingEnabled: boolean;
   slaHours: number; // Tor D — auto-close po bezczynności (0 = off)
 };
@@ -29,6 +40,7 @@ export function ticketConfig(): TicketsConfig {
     welcome: 'Dzięki za zgłoszenie! Obsługa odezwie się wkrótce.',
     logChannelId: '',
     panelMessage: 'Masz sprawę? Otwórz ticket — kliknij poniżej. 🎟️',
+    categories: [],
     ratingEnabled: true,
     slaHours: 0,
   };
@@ -73,19 +85,27 @@ export async function openTicket(
   channel: TextChannel,
   user: User,
   subject: string,
+  catId?: string,
 ): Promise<ThreadChannel | null> {
   const cfg = ticketConfig();
+  const cat = (cfg.categories ?? []).find((c) => c.id === catId);
+  const roleId = cat?.supportRoleId || cfg.supportRoleId;
+  const welcomeRaw = (cat?.welcome || cfg.welcome || '').trim();
+  const labeledSubject = cat ? `[${cat.label}] ${subject}` : subject;
   try {
     const thread = await channel.threads.create({
-      name: `ticket-${user.username}`.slice(0, 90),
+      name: `ticket-${cat ? `${cat.label}-` : ''}${user.username}`.slice(0, 90),
       type: ChannelType.PrivateThread,
       invitable: false,
     });
     await thread.members.add(user.id).catch(() => {});
-    const ping = cfg.supportRoleId ? `<@&${cfg.supportRoleId}> ` : '';
+    const ping = roleId ? `<@&${roleId}> ` : '';
+    const welcome = welcomeRaw
+      .replaceAll('{user}', `<@${user.id}>`)
+      .replaceAll('{subject}', subject);
     await thread
       .send({
-        content: `${ping}${cfg.welcome}\n\n**Temat:** ${subject}\n— <@${user.id}>`,
+        content: `${ping}${welcome}\n\n**Temat:** ${subject}\n— <@${user.id}>`,
         components: [controlsRow()],
       })
       .catch(() => {});
@@ -96,7 +116,7 @@ export async function openTicket(
           channel_id: thread.id,
           user_id: user.id,
           username: user.username,
-          subject,
+          subject: labeledSubject,
           status: 'open',
         },
       ]).catch((e) => console.warn('[ticket]', (e as Error).message));

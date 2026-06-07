@@ -65,7 +65,47 @@ export const levelingSchema = z.object({
 });
 export type LevelingInput = z.infer<typeof levelingSchema>;
 
+// ── Bogata wiadomość / embed (Message Studio, Faza 8) ──────
+export const richEmbedSchema = z.object({
+  title: z.string().max(256).default(''),
+  url: z.string().max(500).default(''),
+  description: z.string().max(4096).default(''),
+  color: z.string().max(20).default(''),
+  authorName: z.string().max(256).default(''),
+  authorIcon: z.string().max(500).default(''),
+  authorUrl: z.string().max(500).default(''),
+  thumbnailUrl: z.string().max(500).default(''),
+  imageUrl: z.string().max(500).default(''),
+  footerText: z.string().max(2048).default(''),
+  footerIcon: z.string().max(500).default(''),
+  timestamp: z.boolean().default(false),
+  fields: z
+    .array(
+      z.object({
+        name: z.string().max(256),
+        value: z.string().max(1024),
+        inline: z.boolean().default(false),
+      }),
+    )
+    .max(25)
+    .default([]),
+});
+export const richMessageSchema = z.object({
+  content: z.string().max(2000).default(''),
+  useEmbed: z.boolean().default(false),
+  embed: richEmbedSchema.optional(),
+});
+export type RichMessageInput = z.infer<typeof richMessageSchema>;
+
 // ── Tickety (POST /api/tickets) ────────────────────────────
+export const ticketCategorySchema = z.object({
+  id: z.string().max(20),
+  label: z.string().min(1).max(80),
+  emoji: z.string().max(64).optional().default(''),
+  style: z.enum(['primary', 'secondary', 'success', 'danger']).optional().default('primary'),
+  supportRoleId: z.string().max(40).optional().default(''),
+  welcome: z.string().max(1000).optional().default(''),
+});
 export const ticketsConfigSchema = z.object({
   enabled: z.boolean(),
   categoryId: z.string().max(40),
@@ -73,6 +113,8 @@ export const ticketsConfigSchema = z.object({
   welcome: z.string().max(500),
   logChannelId: z.string().max(40),
   panelMessage: z.string().max(1000).optional().default('Masz sprawę? Otwórz ticket. 🎟️'),
+  panelSpec: richMessageSchema.optional(),
+  categories: z.array(ticketCategorySchema).max(10).optional().default([]),
   ratingEnabled: z.boolean().optional().default(true),
   slaHours: z.number().int().min(0).max(720).optional().default(0),
 });
@@ -198,38 +240,6 @@ export const cardStyleSchema = z.object({
   textColor: z.string().max(20),
 });
 export type CardStyleInput = z.infer<typeof cardStyleSchema>;
-
-// ── Bogata wiadomość / embed (Message Studio, Faza 8) ──────
-export const richEmbedSchema = z.object({
-  title: z.string().max(256).default(''),
-  url: z.string().max(500).default(''),
-  description: z.string().max(4096).default(''),
-  color: z.string().max(20).default(''),
-  authorName: z.string().max(256).default(''),
-  authorIcon: z.string().max(500).default(''),
-  authorUrl: z.string().max(500).default(''),
-  thumbnailUrl: z.string().max(500).default(''),
-  imageUrl: z.string().max(500).default(''),
-  footerText: z.string().max(2048).default(''),
-  footerIcon: z.string().max(500).default(''),
-  timestamp: z.boolean().default(false),
-  fields: z
-    .array(
-      z.object({
-        name: z.string().max(256),
-        value: z.string().max(1024),
-        inline: z.boolean().default(false),
-      }),
-    )
-    .max(25)
-    .default([]),
-});
-export const richMessageSchema = z.object({
-  content: z.string().max(2000).default(''),
-  useEmbed: z.boolean().default(false),
-  embed: richEmbedSchema.optional(),
-});
-export type RichMessageInput = z.infer<typeof richMessageSchema>;
 
 // ── Powitania (POST /api/welcome) ──────────────────────────
 export const welcomeSchema = z.object({

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-100-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.47.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-101-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.48.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.48.0] — Faza 8 #3: Tickety 2.0 (kategorie + panel z Message Studio)
+
+- `[#101]` 🎟️ **Tickety 2.0:** wielokategoryjne tickety — **wiele przycisków** (np. Pomoc / IT / Nagrody), każdy z własną **nazwą, emoji, kolorem, rolą obsługi i powitaniem**. Panel (`/ticketpanel`) to teraz **embed z Message Studio** (pełny edytor), a przyciski generują się z kategorii (do 10, max 5/rząd). Bot: `ticket:new:<kategoria>` → modal → `openTicket(catId)` z rolą i powitaniem kategorii (prefiks `[Kategoria]` w temacie); „Przejmij" działa też dla ról kategorii. **Wstecznie zgodne** — brak kategorii = klasyczny pojedynczy przycisk; stary `panelMessage` migruje do edytora. Bez SQL. Manager kategorii w `/tickets`.
 
 ## [0.47.0] — Faza 8 #2: Message Studio (uniwersalny edytor embed + smallcaps)
 

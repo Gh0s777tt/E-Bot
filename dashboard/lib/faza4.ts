@@ -2,6 +2,7 @@
 // Config trzymamy w tabeli `settings` (JSON, jak antinuke/presence) — działa od razu.
 // Dane (ranking, tickety) czytamy z nowych tabel (faza4-schema.sql); brak tabeli → pusto.
 import { getRawSetting, setRawSetting } from './data';
+import type { RichMessage } from './richMessage';
 import { hasSupabase, supabase } from './supabase';
 
 // ───────────────────────── 🏆 Leveling ─────────────────────────
@@ -77,6 +78,14 @@ export async function getLeaderboard(limit = 50): Promise<LevelRow[]> {
 }
 
 // ───────────────────────── 🎟️ Tickety ─────────────────────────
+export type TicketCategory = {
+  id: string;
+  label: string;
+  emoji: string;
+  style: 'primary' | 'secondary' | 'success' | 'danger';
+  supportRoleId: string;
+  welcome: string;
+};
 export type TicketsConfig = {
   enabled: boolean;
   categoryId: string;
@@ -84,6 +93,8 @@ export type TicketsConfig = {
   welcome: string;
   logChannelId: string;
   panelMessage: string;
+  panelSpec?: RichMessage;
+  categories?: TicketCategory[];
   ratingEnabled: boolean;
   slaHours: number;
 };
@@ -95,6 +106,7 @@ export const TICKETS_DEFAULT: TicketsConfig = {
   welcome: 'Dzięki za zgłoszenie! Obsługa odezwie się wkrótce.',
   logChannelId: '',
   panelMessage: 'Masz sprawę? Otwórz ticket — kliknij poniżej. 🎟️',
+  categories: [],
   ratingEnabled: true,
   slaHours: 0,
 };

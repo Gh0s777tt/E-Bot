@@ -16,7 +16,7 @@ import { closeTicket, openTicket, ticketConfig } from './service.mts';
 export async function handleTicketButton(interaction: ButtonInteraction): Promise<void> {
   const id = interaction.customId;
 
-  if (id === 'ticket:new') {
+  if (id === 'ticket:new' || id.startsWith('ticket:new:')) {
     if (!ticketConfig().enabled) {
       await interaction.reply({
         content: '🎟️ Tickety są wyłączone.',
@@ -24,7 +24,10 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
       });
       return;
     }
-    const modal = new ModalBuilder().setCustomId('ticketModal').setTitle('Nowy ticket');
+    const catId = id.startsWith('ticket:new:') ? id.slice('ticket:new:'.length) : '';
+    const modal = new ModalBuilder()
+      .setCustomId(catId ? `ticketModal:${catId}` : 'ticketModal')
+      .setTitle('Nowy ticket');
     const input = new TextInputBuilder()
       .setCustomId('subject')
       .setLabel('Czego dotyczy zgłoszenie?')
@@ -47,9 +50,13 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
     }
     const cfg = ticketConfig();
     const gm = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
+    const supportRoleIds = [
+      cfg.supportRoleId,
+      ...(cfg.categories ?? []).map((c) => c.supportRoleId),
+    ].filter(Boolean);
     const allowed =
       !!gm?.permissions.has(PermissionFlagsBits.ManageThreads) ||
-      (!!cfg.supportRoleId && !!gm?.roles.cache.has(cfg.supportRoleId));
+      supportRoleIds.some((rid) => !!gm?.roles.cache.has(rid));
     if (!allowed) {
       await interaction.reply({
         content: '⛔ Tylko obsługa może przejąć ticket.',
@@ -96,7 +103,10 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
 }
 
 export async function handleTicketModal(interaction: ModalSubmitInteraction): Promise<void> {
-  if (interaction.customId !== 'ticketModal') return;
+  if (!interaction.customId.startsWith('ticketModal')) return;
+  const catId = interaction.customId.startsWith('ticketModal:')
+    ? interaction.customId.slice('ticketModal:'.length)
+    : '';
   const subject = interaction.fields.getTextInputValue('subject');
   const ch = interaction.channel;
   if (!ch || !('threads' in ch)) {
@@ -107,7 +117,7 @@ export async function handleTicketModal(interaction: ModalSubmitInteraction): Pr
     return;
   }
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-  const thread = await openTicket(ch as TextChannel, interaction.user, subject);
+  const thread = await openTicket(ch as TextChannel, interaction.user, subject, catId || undefined);
   await interaction.editReply(
     thread ? `✅ Otwarto ticket: <#${thread.id}>` : '❌ Nie udało się otworzyć ticketu.',
   );

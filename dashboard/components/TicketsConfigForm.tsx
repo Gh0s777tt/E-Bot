@@ -1,8 +1,11 @@
 'use client';
 
+import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import type { TicketCategory } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
-import MessageEditor from './MessageEditor';
+import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
+import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = {
@@ -12,15 +15,35 @@ type Cfg = {
   welcome: string;
   logChannelId: string;
   panelMessage: string;
+  panelSpec: RichMessage;
+  categories: TicketCategory[];
   ratingEnabled: boolean;
   slaHours: number;
+};
+
+type Init = Omit<Cfg, 'panelSpec' | 'categories'> & {
+  panelSpec?: RichMessage;
+  categories?: TicketCategory[];
 };
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
-  const [c, setC] = useState<Cfg>(initial);
+const STYLES: { value: TicketCategory['style']; label: string }[] = [
+  { value: 'primary', label: 'Niebieski' },
+  { value: 'secondary', label: 'Szary' },
+  { value: 'success', label: 'Zielony' },
+  { value: 'danger', label: 'Czerwony' },
+];
+
+export default function TicketsConfigForm({ initial, guild }: { initial: Init; guild: GuildMeta }) {
+  const [c, setC] = useState<Cfg>({
+    ...initial,
+    panelSpec: initial.panelSpec
+      ? normalizeRich(initial.panelSpec)
+      : fromLegacy(initial.panelMessage),
+    categories: initial.categories ?? [],
+  });
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
   async function save() {
@@ -29,7 +52,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
       const r = await fetch('/api/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
+        body: JSON.stringify({ ...c, panelMessage: c.panelSpec.content || c.panelMessage }),
       });
       setSt(r.ok ? 'ok' : 'err');
     } catch {
@@ -38,8 +61,26 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
     setTimeout(() => setSt('idle'), 2500);
   }
 
+  function addCategory() {
+    if (c.categories.length >= 10) return;
+    const id = crypto.randomUUID().slice(0, 8);
+    setC({
+      ...c,
+      categories: [
+        ...c.categories,
+        { id, label: '', emoji: '', style: 'primary', supportRoleId: '', welcome: '' },
+      ],
+    });
+  }
+  function setCategory(id: string, patch: Partial<TicketCategory>) {
+    setC({ ...c, categories: c.categories.map((x) => (x.id === id ? { ...x, ...patch } : x)) });
+  }
+  function removeCategory(id: string) {
+    setC({ ...c, categories: c.categories.filter((x) => x.id !== id) });
+  }
+
   return (
-    <div className="max-w-xl space-y-4">
+    <div className="max-w-2xl space-y-5">
       <label className="flex items-center gap-3 text-sm">
         <input
           type="checkbox"
@@ -52,7 +93,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kategoria kanałów</span>
+          <span className="font-semibold text-white/90">Kategoria kanałów (Discord)</span>
           <ChannelSelect
             value={c.categoryId}
             onChange={(v) => setC({ ...c, categoryId: v })}
@@ -61,7 +102,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Rola obsługi</span>
+          <span className="font-semibold text-white/90">Domyślna rola obsługi</span>
           <RoleSelect
             value={c.supportRoleId}
             onChange={(v) => setC({ ...c, supportRoleId: v })}
@@ -79,52 +120,135 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
       </div>
 
       <label className="block space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Wiadomość powitalna ticketu</span>
+        <span className="font-semibold text-white/90">
+          Domyślna wiadomość powitalna w ticketcie
+        </span>
         <textarea
           value={c.welcome}
           onChange={(e) => setC({ ...c, welcome: e.target.value })}
-          rows={3}
+          rows={2}
           className={inputCls}
+          placeholder="Dzięki za zgłoszenie! {user} — obsługa odezwie się wkrótce."
         />
+        <span className="text-xs text-muted">
+          Zmienne: {'{user}'}, {'{subject}'}. Używana, gdy kategoria nie ma własnej.
+        </span>
       </label>
 
       <div className="space-y-1 text-sm">
         <span className="font-semibold text-white/90">
           Wiadomość panelu (komenda <code className="text-accent">/ticketpanel</code>)
         </span>
-        <MessageEditor
-          value={c.panelMessage}
-          onChange={(v) => setC({ ...c, panelMessage: v })}
-          rows={2}
-          placeholder="Masz sprawę? Otwórz ticket poniżej. 🎟️"
+        <MessageStudio
+          value={c.panelSpec}
+          onChange={(panelSpec) => setC({ ...c, panelSpec })}
+          emojis={guild.emojis}
         />
       </div>
 
-      <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">
-          Auto-zamknij po bezczynności (godziny, 0 = wyłączone)
-        </span>
-        <input
-          type="number"
-          value={c.slaHours}
-          onChange={(e) =>
-            setC({ ...c, slaHours: Math.max(0, Math.floor(Number(e.target.value) || 0)) })
-          }
-          className={inputCls}
-        />
-      </label>
+      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <span className="font-semibold text-white/90">
+              Kategorie ticketów (przyciski panelu)
+            </span>
+            <p className="text-xs text-muted">
+              Każda kategoria = osobny przycisk (np. Pomoc, IT, Nagrody) z własną rolą i powitaniem.
+              Brak kategorii = jeden przycisk „Otwórz ticket".
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={addCategory}
+            className="flex shrink-0 items-center gap-1 rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated"
+          >
+            <Plus size={13} /> Dodaj
+          </button>
+        </div>
+        {c.categories.map((cat) => (
+          <div key={cat.id} className="space-y-2 rounded-md border border-line bg-elevated/40 p-3">
+            <div className="grid gap-2 sm:grid-cols-[1fr_6rem_8rem]">
+              <input
+                value={cat.label}
+                onChange={(e) => setCategory(cat.id, { label: e.target.value })}
+                placeholder="Nazwa przycisku (np. Pomoc)"
+                className={inputCls}
+                maxLength={80}
+              />
+              <input
+                value={cat.emoji}
+                onChange={(e) => setCategory(cat.id, { emoji: e.target.value })}
+                placeholder="Emoji"
+                className={inputCls}
+                maxLength={64}
+              />
+              <select
+                value={cat.style}
+                onChange={(e) =>
+                  setCategory(cat.id, { style: e.target.value as TicketCategory['style'] })
+                }
+                className="rounded-md border border-line bg-elevated px-2 py-2 text-sm outline-none focus:border-accent"
+              >
+                {STYLES.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <RoleSelect
+                value={cat.supportRoleId}
+                onChange={(v) => setCategory(cat.id, { supportRoleId: v })}
+                roles={guild.roles}
+                placeholder="— rola obsługi kategorii —"
+              />
+              <div className="flex gap-2">
+                <input
+                  value={cat.welcome}
+                  onChange={(e) => setCategory(cat.id, { welcome: e.target.value })}
+                  placeholder="Powitanie (opcjonalne, {user}/{subject})"
+                  className={inputCls}
+                  maxLength={1000}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeCategory(cat.id)}
+                  className="rounded-md border border-line px-2 text-muted transition hover:border-accent hover:text-accent"
+                  title="Usuń kategorię"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-      <label className="flex items-center gap-3 text-sm">
-        <input
-          type="checkbox"
-          checked={c.ratingEnabled}
-          onChange={(e) => setC({ ...c, ratingEnabled: e.target.checked })}
-          className="h-4 w-4 accent-accent"
-        />
-        <span className="font-semibold text-white/90">
-          Proś o ocenę obsługi po zamknięciu (1–5 ⭐)
-        </span>
-      </label>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">
+            Auto-zamknij po bezczynności (godziny, 0 = off)
+          </span>
+          <input
+            type="number"
+            value={c.slaHours}
+            onChange={(e) =>
+              setC({ ...c, slaHours: Math.max(0, Math.floor(Number(e.target.value) || 0)) })
+            }
+            className={inputCls}
+          />
+        </label>
+        <label className="flex items-center gap-3 pt-6 text-sm">
+          <input
+            type="checkbox"
+            checked={c.ratingEnabled}
+            onChange={(e) => setC({ ...c, ratingEnabled: e.target.checked })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">Proś o ocenę (1–5 ⭐)</span>
+        </label>
+      </div>
 
       <div className="flex items-center gap-3">
         <button
@@ -139,10 +263,8 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Cfg; gu
         {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
       </div>
       <p className="text-xs text-muted">
-        Bot otwiera ticket przez przycisk (komenda <code className="text-accent">/ticketpanel</code>
-        ) lub <code className="text-accent">/ticket otworz</code>; przy zamknięciu wysyła transkrypt
-        HTML na kanał logów i w DM do zgłaszającego. Ocena (jeśli włączona) wymaga{' '}
-        <code>f5-tickets-schema.sql</code>.
+        Po zapisie wyślij/odśwież panel komendą <code className="text-accent">/ticketpanel</code> na
+        docelowym kanale. Ocena wymaga <code>f5-tickets-schema.sql</code>.
       </p>
     </div>
   );
