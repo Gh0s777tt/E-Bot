@@ -55,6 +55,7 @@ const COMMAND_GROUPS: { label: string; names: string[] }[] = [
       'rolemenu',
       'reactionpanel',
       'linktwitch',
+      'donate',
     ],
   },
   { label: 'Zabawa & engagement', names: ['fun', 'remind', 'giveaway', 'buttonpanel', 'schedule'] },

@@ -8,6 +8,7 @@ import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
 import * as describe from './describe.mts';
+import * as donate from './donate.mts';
 import * as economy from './economy.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
@@ -58,6 +59,7 @@ export const commands: Command[] = [
   mod,
   caseCmd,
   describe,
+  donate,
   remind,
   rolemenu,
   reactionpanel,

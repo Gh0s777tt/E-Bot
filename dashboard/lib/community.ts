@@ -533,6 +533,33 @@ export async function saveKofiConfig(cfg: KofiConfig): Promise<void> {
   await setRawSetting('kofi_config', JSON.stringify(cfg));
 }
 
+// ── Donejty: linki wsparcia (Faza 8) — PayPal / Buy Me a Coffee / Patreon / Ko-fi / własne ──
+export type DonateProvider = { label: string; url: string; emoji: string };
+export type DonateConfig = {
+  enabled: boolean;
+  title: string;
+  description: string;
+  providers: DonateProvider[];
+};
+export const DONATE_DEFAULT: DonateConfig = {
+  enabled: false,
+  title: '💖 Wesprzyj nas',
+  description: 'Dziękujemy za wsparcie! Wybierz sposób poniżej:',
+  providers: [],
+};
+export async function getDonateConfig(): Promise<DonateConfig> {
+  const raw = await getRawSetting('donate_config');
+  if (!raw) return structuredClone(DONATE_DEFAULT);
+  try {
+    return { ...DONATE_DEFAULT, ...(JSON.parse(raw) as Partial<DonateConfig>) };
+  } catch {
+    return structuredClone(DONATE_DEFAULT);
+  }
+}
+export async function saveDonateConfig(cfg: DonateConfig): Promise<void> {
+  await setRawSetting('donate_config', JSON.stringify(cfg));
+}
+
 // ── Sezonowe rankingi levelingu (Faza 7 / F10.2) ──
 export type SeasonsConfig = { enabled: boolean; channelId: string; top: number; reset: boolean };
 export const SEASONS_DEFAULT: SeasonsConfig = {

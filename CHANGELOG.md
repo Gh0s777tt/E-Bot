@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-104-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.51.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-105-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.52.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.52.0] — Faza 8 #7: Donate 2.0 (PayPal / BMC / Patreon / Ko-fi + /donate)
+
+- `[#105]` 💖 **Donate 2.0:** konfigurowalna lista linków wsparcia — **PayPal, Buy Me a Coffee, Patreon, Ko-fi + własne** (do 10, z presetami). Komenda **`/donate`** pokazuje embed z **przyciskami-linkami** do skonfigurowanych miejsc. Istniejący webhook Ko-fi (alerty donejtów na kanał) działa bez zmian. **42 komendy.** Edytor w `/donations`. Bez SQL.
 
 ## [0.51.0] — Faza 8 #6: Automod/Security 2.0 (własne filtry treści)
 

@@ -431,6 +431,25 @@ export const kofiSchema = z.object({
 });
 export type KofiInput = z.infer<typeof kofiSchema>;
 
+// ── Donejty: linki wsparcia (Faza 8: PayPal/BMC/Patreon/…) ──
+export const donateSchema = z.object({
+  enabled: z.boolean(),
+  title: z.string().max(256).optional().default('💖 Wesprzyj nas'),
+  description: z.string().max(2000).optional().default(''),
+  providers: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(80),
+        url: z.string().min(1).max(300),
+        emoji: z.string().max(64).optional().default(''),
+      }),
+    )
+    .max(10)
+    .optional()
+    .default([]),
+});
+export type DonateInput = z.infer<typeof donateSchema>;
+
 // ── Sezonowe rankingi (POST /api/seasons) ──────────────────
 export const seasonsSchema = z.object({
   enabled: z.boolean(),
