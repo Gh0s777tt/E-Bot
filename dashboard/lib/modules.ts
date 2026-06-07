@@ -160,6 +160,14 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'patchnotes_config',
   },
+  {
+    key: 'backlog',
+    label: 'Backlog gier (/backlog)',
+    group: 'Gaming',
+    href: '/gaming',
+    kind: 'json',
+    settingsKey: 'backlog_config',
+  },
   // Tickety & AI
   {
     key: 'tickets',

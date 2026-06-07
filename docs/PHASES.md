@@ -100,7 +100,7 @@
   - [x] **F8.3** — AI‑moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
 - [ ] **F9** — Gaming unikat *(w toku)*
   - [x] **F9.1** — Free‑games feed (Epic) + patch‑notes (Steam news)
-  - [ ] F9.2 — Backlog gier (`/backlog`)
+  - [x] **F9.2** — Backlog gier (`/backlog add|list|set|remove`)
   - [ ] F9.3 — Price‑tracking (ITAD) + Twitch sub→rola + donejty *(wymagają kluczy/decyzji)*
 - [ ] **F10** — Analityka + Infra (wykresy aktywności, sezonowe rankingi levelingu, Realtime, Sentry z DSN, Playwright, i18n)
 

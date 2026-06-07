@@ -263,6 +263,22 @@ create index if not exists highlights_lookup on highlights (guild_id, user_id);
 alter table birthdays  enable row level security;
 alter table highlights enable row level security;
 
+
+-- ─────────────────────────────────────────────────────────────
+-- Faza 7 / F9.2 — osobisty backlog gier
+-- ─────────────────────────────────────────────────────────────
+create table if not exists backlog (
+  id         uuid primary key default gen_random_uuid(),
+  guild_id   text not null,
+  user_id    text not null,
+  username   text,
+  title      text not null,
+  status     text not null default 'todo',  -- todo | playing | done | dropped
+  created_at timestamptz not null default now()
+);
+create index if not exists backlog_user on backlog (guild_id, user_id, status);
+alter table backlog enable row level security;
+
 -- ═══════════════════════════════════════════════════════════════════════════
--- KONIEC. Po uruchomieniu wszystkie funkcje F3–F7 zapisują dane.
+-- KONIEC. Po uruchomieniu wszystkie funkcje F3–F9 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

@@ -34,6 +34,18 @@ export default async function GamingPage() {
         </h2>
         <PatchNotesForm initial={patch} guild={guild} />
       </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5 text-sm text-muted">
+        <h2 className="mb-3 text-base font-semibold uppercase tracking-wide text-white/90">
+          Backlog gier
+        </h2>
+        <p>
+          Osobista lista „do ogrania" — komenda <code className="text-accent">/backlog</code> (add ·
+          list · set · remove) ze statusami: do ogrania / w trakcie / ukończone / porzucone. Włącz
+          moduł <strong>Backlog gier</strong> w Centrum sterowania (wymaga <code>_ALL.sql</code> w
+          Supabase).
+        </p>
+      </section>
     </div>
   );
 }

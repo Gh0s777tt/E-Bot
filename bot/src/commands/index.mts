@@ -2,6 +2,7 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 import * as afk from './afk.mts';
 import * as ai from './ai.mts';
 import * as antinuke from './antinuke.mts';
+import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
@@ -58,4 +59,5 @@ export const commands: Command[] = [
   tldr,
   translate,
   imagine,
+  backlog,
 ];

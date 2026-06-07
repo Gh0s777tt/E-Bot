@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-63-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.32.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-64-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.33.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.33.0] — Faza 7 / F9.2: backlog gier
+
+- `[#064]` 📋 **Backlog gier** — `/backlog add|list|set|remove`: osobista lista „do ogrania" ze statusami (📥 do ogrania / 🎮 w trakcie / ✅ ukończone / 🗑️ porzucone). Per‑użytkownik, dane w tabeli `backlog`; `list` grupuje po statusie. Toggle w Centrum sterowania (grupa Gaming), bez osobnego formularza. **27 komend. Nowy SQL: `dashboard/scripts/f9-backlog-schema.sql`** (+ w `_ALL.sql`).
 
 ## [0.32.0] — Faza 7 / F9.1: free-games feed + patch-notes
 
