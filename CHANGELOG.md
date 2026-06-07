@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-59-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.28.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-60-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.29.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.29.0] — Faza 7 / F8.1: /tldr + /translate (AI)
+
+- `[#060]` 🤖 **Narzędzia AI — `/tldr` + `/translate`:**
+  - **`/tldr [ile]`** — AI podsumowuje ostatnie N wiadomości kanału (10–100, domyślnie 40) w 3–6 punktach.
+  - **`/translate <tekst> <język>`** — tłumaczenie tekstu na dowolny język.
+  - Wydzielona wspólna warstwa **`bot/src/lib/ai.mts`** (`aiConfig` + `callModel` + `checkUsage`/`bumpUsage` = dzienne limity `ai_usage`); `/ai` zrefaktorowany na nią (zachowanie identyczne). Obie nowe komendy korzystają z tego samego `ai_config` (DeepSeek/OpenAI) i limitów. **25 komend.** Bez nowego SQL. Panel `/ai` opisuje teraz 3 komendy.
 
 ## [0.28.0] — Faza 7 / F7.4: liczniki kanałów · 🎉 F7 zakończona
 

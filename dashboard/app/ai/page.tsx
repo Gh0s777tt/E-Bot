@@ -11,9 +11,11 @@ export default async function AiPage() {
   return (
     <div className="space-y-6">
       <p className="max-w-3xl text-sm text-muted">
-        Komenda <code className="text-accent">/ai</code> na Discordzie (DeepSeek/OpenAI) z{' '}
-        <strong>twardym limitem kosztów</strong> per użytkownik/dzień. Konfigurację zapisujesz tu
-        (Supabase), bot stosuje ją na żywo.{' '}
+        Komendy AI na Discordzie (DeepSeek/OpenAI) z <strong>twardym limitem kosztów</strong> per
+        użytkownik/dzień: <code className="text-accent">/ai</code> (pytanie),{' '}
+        <code className="text-accent">/tldr</code> (podsumowanie kanału),{' '}
+        <code className="text-accent">/translate</code> (tłumaczenie). Wszystkie dzielą poniższą
+        konfigurację i limity. Bot stosuje ją na żywo.{' '}
         {cfg.enabled ? (
           <span className="font-semibold text-green-400">AI: WŁĄCZONE</span>
         ) : (

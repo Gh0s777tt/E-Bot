@@ -94,7 +94,10 @@
   - [x] **F7.2** — Komendy własne (prefiks → odpowiedź) + autoresponder (słowa-klucze)
   - [x] **F7.3** — Urodziny (`/birthday`) + AFK (`/afk`) + highlighty (`/highlight`)
   - [x] **F7.4** — Liczniki kanałów (`/counters`: członkowie/boosty/kanały/role w nazwach)
-- [ ] **F8** — AI++ (czat z pamięcią, `/imagine`, `/tldr`, `/translate`, AI‑moderacja)
+- [ ] **F8** — AI++ *(w toku)*
+  - [x] **F8.1** — `/tldr` (podsumowanie kanału) + `/translate` (tłumaczenie) + wspólny `lib/ai.mts`
+  - [ ] F8.2 — Czat z pamięcią + `/imagine` (generowanie obrazów)
+  - [ ] F8.3 — AI‑moderacja (wykrywanie toksyczności → akcja)
 - [ ] **F9** — Gaming unikat (price‑tracking ITAD, free‑games feed, patch‑notes, backlog, Twitch sub→rola, donejty)
 - [ ] **F10** — Analityka + Infra (wykresy aktywności, sezonowe rankingi levelingu, Realtime, Sentry z DSN, Playwright, i18n)
 

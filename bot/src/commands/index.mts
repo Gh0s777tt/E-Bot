@@ -20,6 +20,8 @@ import * as remind from './remind.mts';
 import * as suggest from './suggest.mts';
 import * as ticket from './ticket.mts';
 import * as ticketpanel from './ticketpanel.mts';
+import * as tldr from './tldr.mts';
+import * as translate from './translate.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
 
@@ -52,4 +54,6 @@ export const commands: Command[] = [
   birthday,
   afk,
   highlight,
+  tldr,
+  translate,
 ];
