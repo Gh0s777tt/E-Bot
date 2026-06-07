@@ -199,6 +199,38 @@ export const cardStyleSchema = z.object({
 });
 export type CardStyleInput = z.infer<typeof cardStyleSchema>;
 
+// ── Bogata wiadomość / embed (Message Studio, Faza 8) ──────
+export const richEmbedSchema = z.object({
+  title: z.string().max(256).default(''),
+  url: z.string().max(500).default(''),
+  description: z.string().max(4096).default(''),
+  color: z.string().max(20).default(''),
+  authorName: z.string().max(256).default(''),
+  authorIcon: z.string().max(500).default(''),
+  authorUrl: z.string().max(500).default(''),
+  thumbnailUrl: z.string().max(500).default(''),
+  imageUrl: z.string().max(500).default(''),
+  footerText: z.string().max(2048).default(''),
+  footerIcon: z.string().max(500).default(''),
+  timestamp: z.boolean().default(false),
+  fields: z
+    .array(
+      z.object({
+        name: z.string().max(256),
+        value: z.string().max(1024),
+        inline: z.boolean().default(false),
+      }),
+    )
+    .max(25)
+    .default([]),
+});
+export const richMessageSchema = z.object({
+  content: z.string().max(2000).default(''),
+  useEmbed: z.boolean().default(false),
+  embed: richEmbedSchema.optional(),
+});
+export type RichMessageInput = z.infer<typeof richMessageSchema>;
+
 // ── Powitania (POST /api/welcome) ──────────────────────────
 export const welcomeSchema = z.object({
   enabled: z.boolean(),
@@ -207,6 +239,7 @@ export const welcomeSchema = z.object({
   autoroleId: z.string().max(40),
   cardEnabled: z.boolean().optional().default(false),
   card: cardStyleSchema.optional(),
+  messageSpec: richMessageSchema.optional(),
 });
 export type WelcomeInput = z.infer<typeof welcomeSchema>;
 

@@ -5,9 +5,15 @@ import { cache } from 'react';
 
 export type GuildRole = { id: string; name: string; color: number; position: number };
 export type GuildChannel = { id: string; name: string; type: number; position: number };
-export type GuildMeta = { ok: boolean; roles: GuildRole[]; channels: GuildChannel[] };
+export type GuildEmoji = { id: string; name: string; animated: boolean };
+export type GuildMeta = {
+  ok: boolean;
+  roles: GuildRole[];
+  channels: GuildChannel[];
+  emojis: GuildEmoji[];
+};
 
-const EMPTY: GuildMeta = { ok: false, roles: [], channels: [] };
+const EMPTY: GuildMeta = { ok: false, roles: [], channels: [], emojis: [] };
 
 async function dfetch<T>(path: string, token: string): Promise<T> {
   const r = await fetch(`https://discord.com/api/v10${path}`, {
@@ -54,6 +60,11 @@ export const getGuildMeta = cache(async (): Promise<GuildMeta> => {
         token,
       ),
     ]);
+    // Emoji serwera — tolerancyjnie (błąd nie wywala ról/kanałów; picker emoji w Message Studio).
+    const emojisRaw = await dfetch<{ id: string; name: string; animated?: boolean }[]>(
+      `/guilds/${guildId}/emojis`,
+      token,
+    ).catch(() => [] as { id: string; name: string; animated?: boolean }[]);
 
     const roles = rolesRaw
       .filter((r) => r.id !== guildId && !r.managed && r.name !== '@everyone')
@@ -64,7 +75,11 @@ export const getGuildMeta = cache(async (): Promise<GuildMeta> => {
       .map((c) => ({ id: c.id, name: c.name, type: c.type, position: c.position }))
       .sort((a, b) => a.position - b.position);
 
-    const data: GuildMeta = { ok: true, roles, channels };
+    const emojis = (emojisRaw ?? [])
+      .filter((e) => e.id && e.name)
+      .map((e) => ({ id: e.id, name: e.name, animated: !!e.animated }));
+
+    const data: GuildMeta = { ok: true, roles, channels, emojis };
     memo = { at: Date.now(), data }; // cache tylko sukces (błąd → ponów następnym razem)
     return data;
   } catch {

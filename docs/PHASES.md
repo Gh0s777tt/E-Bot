@@ -130,9 +130,9 @@
 ## 🔜 Faza 8 — Fundament customizacji + pogłębienie (partiami)
 > Cel: maks. customizacja każdej funkcji, zaawansowany edytor wszędzie, lepszy UX + jakość.
 - [x] **Inline toggle modułów** — włącz/wyłącz na stronie funkcji (auto-pasek `ModuleBar`; źródło prawdy = Centrum sterowania) *(0.46.0, [#098])*
-- [ ] **Message Studio** — uniwersalny edytor embed+tekst (live-preview 1:1, licznik znaków, smallcaps/fonty, emoji+custom emoji, szablony)
-- [ ] **Pickery wszędzie** + EmojiSelect (kanały/role/emoji z listy)
-- [ ] **Smallcaps + fonty w całym panelu** · **Compact UI** (mniej scrollowania)
+- [x] **Message Studio** — uniwersalny edytor embed+tekst (live-preview 1:1, licznik znaków, smallcaps/fonty, emoji+custom emoji, szablony) *(0.47.0, [#100]; 1. odbiorca: Powitania)*
+- [ ] **Pickery/emoji wszędzie** — emoji (std + serwerowe) w Studio + `getGuildMeta.emojis` ✅ (0.47.0); rozszerzanie na pozostałe formularze w toku
+- [x] **Smallcaps** (+ czcionki Unicode) w edytorze *(0.47.0)* · [ ] fonty w całym UI · [ ] **Compact UI** (mniej scrollowania)
 - [ ] Epiki: Tickets 2.0 · Applications 2.0 · Automod/Security 2.0 · Reaction roles 2.0 · Creator+Social · Notifications 2.0 · Donate 2.0 · Levels 2.0 · AI 2.0 · Game Library 2.0 · Integracje
 
 ```

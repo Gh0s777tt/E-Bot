@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { type CardStyle, RANKCARD_DEFAULT } from '../lib/cardStyle';
 import type { GuildMeta } from '../lib/guild';
+import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
 import CardStyleEditor from './CardStyleEditor';
-import MessageEditor from './MessageEditor';
+import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
 
 type Cfg = {
@@ -14,10 +15,22 @@ type Cfg = {
   autoroleId: string;
   cardEnabled: boolean;
   card: CardStyle;
+  messageSpec: RichMessage;
 };
 
-export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
-  const [c, setC] = useState<Cfg>(initial);
+export default function WelcomeForm({
+  initial,
+  guild,
+}: {
+  initial: Omit<Cfg, 'messageSpec'> & { messageSpec?: RichMessage };
+  guild: GuildMeta;
+}) {
+  const [c, setC] = useState<Cfg>({
+    ...initial,
+    messageSpec: initial.messageSpec
+      ? normalizeRich(initial.messageSpec)
+      : fromLegacy(initial.message),
+  });
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
   async function save() {
@@ -69,13 +82,14 @@ export default function WelcomeForm({ initial, guild }: { initial: Cfg; guild: G
 
       <div className="space-y-1 text-sm">
         <span className="font-semibold text-white/90">Wiadomość powitalna</span>
-        <MessageEditor
-          value={c.message}
-          onChange={(v) => setC({ ...c, message: v })}
-          rows={3}
-          placeholder="Witaj {user} na serwerze! 🎉"
+        <MessageStudio
+          value={c.messageSpec}
+          onChange={(messageSpec) => setC({ ...c, messageSpec, message: messageSpec.content })}
+          emojis={guild.emojis}
           variables={[
             { token: '{user}', label: 'Nowy członek (oznaczenie)', sample: '@NowyGracz' },
+            { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
+            { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
           ]}
         />
       </div>

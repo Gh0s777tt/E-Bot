@@ -46,6 +46,36 @@ const dsExceptions: Record<string, string> = {
   Z: 'ℤ',
 };
 
+// Small caps — wymaga mapy wyjątków (znaki rozsiane po Unicode, brak ciągłego bloku).
+const smallCapsMap: Record<string, string> = {
+  a: 'ᴀ',
+  b: 'ʙ',
+  c: 'ᴄ',
+  d: 'ᴅ',
+  e: 'ᴇ',
+  f: 'ꜰ',
+  g: 'ɢ',
+  h: 'ʜ',
+  i: 'ɪ',
+  j: 'ᴊ',
+  k: 'ᴋ',
+  l: 'ʟ',
+  m: 'ᴍ',
+  n: 'ɴ',
+  o: 'ᴏ',
+  p: 'ᴘ',
+  q: 'ꞯ',
+  r: 'ʀ',
+  s: 'ꜱ',
+  t: 'ᴛ',
+  u: 'ᴜ',
+  v: 'ᴠ',
+  w: 'ᴡ',
+  x: 'x',
+  y: 'ʏ',
+  z: 'ᴢ',
+};
+
 const MAPPERS: Record<string, Mapper> = {
   bold: mapper(0x1d400, 0x1d41a, 0x1d7ce),
   italic: mapper(0x1d434, 0x1d44e, null, { h: 'ℎ' }),
@@ -59,6 +89,7 @@ const MAPPERS: Record<string, Mapper> = {
   mono: mapper(0x1d670, 0x1d68a, 0x1d7f6),
   fullwidth: mapper(0xff21, 0xff41, 0xff10),
   circled: mapper(0x24b6, 0x24d0, null, circledDigits),
+  smallCaps: mapper(65, 97, null, smallCapsMap), // wielkie litery bez zmian, małe → small caps
 };
 
 export type FontKey = keyof typeof MAPPERS | 'normal';
@@ -77,6 +108,7 @@ export const FONTS: { key: FontKey; label: string }[] = [
   { key: 'mono', label: '𝙼𝚘𝚗𝚘' },
   { key: 'fullwidth', label: 'Ｆｕｌｌｗｉｄｔｈ' },
   { key: 'circled', label: 'Ⓒⓘⓡⓒⓛⓔⓓ' },
+  { key: 'smallCaps', label: 'Sᴍᴀʟʟ Cᴀᴘs' },
 ];
 
 export function applyFont(text: string, key: FontKey): string {

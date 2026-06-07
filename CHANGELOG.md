@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-98-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.46.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-100-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.47.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -14,8 +14,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+## [0.47.0] — Faza 8 #2: Message Studio (uniwersalny edytor embed + smallcaps)
+
+- `[#100]` 🎛️ **Message Studio:** uniwersalny edytor wiadomości — **treść + pełny embed** (tytuł/opis/autor/stopka/kolor/thumbnail/obraz/timestamp + do 25 pól) z **podglądem 1:1 jak Discord**, **licznikami znaków wg limitów** (256/4096/1024/6000), paskiem formatowania, **czcionkami Unicode w tym `Sᴍᴀʟʟ Cᴀᴘs`**, **pickerem emoji standardowych i customowych z serwera**, zmiennymi (`{user}`/`{server}`/`{memberCount}`) i **biblioteką szablonów** (zapisz raz → użyj wszędzie). Wspólny format `RichMessage` (`lib/richMessage.ts` + Zod `richMessageSchema`) renderowany przez `bot/src/lib/richMessage.mts` (`buildRichMessage` → payload discord.js). **Pierwszy odbiorca: Powitania** (`/welcome` dostaje pełny edytor; embed customowy gdy włączony, inaczej klasyczny wygląd — wstecznie zgodne). `getGuildMeta` pobiera teraz też emoji serwera.
+
 ## [0.46.0] — Faza 8 (Fundament customizacji) #1: inline toggle modułów
 
+- `[#099]` 🔒 **Bezpieczeństwo zależności:** override tranzytywnego `postcss` → `^8.5.15` (łatka Dependabot, moderate — XSS w CSS stringify) przez `pnpm-workspace.yaml` `overrides`; bez zmian runtime.
 - `[#098]` 🎚️ **Inline toggle modułów:** każda strona funkcji ma teraz **auto-pasek „Moduły tej strony"** z przełącznikami on/off — koniec skakania do Centrum sterowania, by coś włączyć. Komponent `ModuleBar` dobiera moduły po `href === pathname` z rejestru `MODULE_VIEWS` i zapisuje przez to samo `/api/modules` (`setModuleEnabled`) co Centrum → **jedno źródło prawdy**, optymistyczny zapis z rewertem. Wstrzyknięty raz w `Shell` (nad treścią), zero edycji ~20 stron; na stronach bez modułów renderuje `null`. Start **Fazy 8** (fundament pod maks. customizację: Message Studio, pickery/emoji wszędzie, smallcaps, compact UI).
 
 ## [0.45.2] — Jakość: E2E (Playwright) + naprawa pre-existing TS
