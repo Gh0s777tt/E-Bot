@@ -7,6 +7,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { bumpQuest } from '../community/quests.mts';
 import { startBlackjack } from '../economy/blackjack.mts';
 import {
   addInventory,
@@ -188,6 +189,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       wallet: u.wallet + earned,
       last_work: new Date().toISOString(),
     });
+    bumpQuest(gid, interaction.user.id, 'work');
     const jobs = [
       'dostarczyłeś paczki',
       'streamowałeś na Twitchu',
@@ -341,6 +343,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (sub === 'gamble') {
       const win = Math.random() < 0.5;
       const delta = win ? amount : -amount;
+      bumpQuest(gid, interaction.user.id, 'games');
+      if (win) bumpQuest(gid, interaction.user.id, 'gamesWon');
       await saveUser({
         guild_id: gid,
         user_id: interaction.user.id,
@@ -359,6 +363,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       if (r[0] === r[1] && r[1] === r[2]) mult = 5;
       else if (r[0] === r[1] || r[1] === r[2] || r[0] === r[2]) mult = 2;
       const delta = mult > 0 ? amount * (mult - 1) : -amount;
+      bumpQuest(gid, interaction.user.id, 'games');
+      if (mult > 0) bumpQuest(gid, interaction.user.id, 'gamesWon');
       await saveUser({
         guild_id: gid,
         user_id: interaction.user.id,

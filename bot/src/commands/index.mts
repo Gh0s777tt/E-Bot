@@ -21,6 +21,7 @@ import * as poll from './poll.mts';
 import * as portal from './portal.mts';
 import * as prestige from './prestige.mts';
 import * as profile from './profile.mts';
+import * as quests from './quests.mts';
 import * as rank from './rank.mts';
 import * as remind from './remind.mts';
 import * as suggest from './suggest.mts';
@@ -54,6 +55,7 @@ export const commands: Command[] = [
   economy,
   prestige,
   profile,
+  quests,
   ticketpanel,
   verifypanel,
   suggest,

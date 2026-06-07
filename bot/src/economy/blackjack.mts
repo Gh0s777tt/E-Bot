@@ -9,6 +9,7 @@ import {
   EmbedBuilder,
   MessageFlags,
 } from 'discord.js';
+import { bumpQuest } from '../community/quests.mts';
 import { ecoConfig, fmt, getUser, saveUser } from './store.mts';
 
 const ACCENT = 0xe50914;
@@ -104,6 +105,7 @@ export async function startBlackjack(
     username: interaction.user.username,
     wallet: u.wallet - bet,
   });
+  bumpQuest(gid, interaction.user.id, 'games');
 
   const deck = freshDeck();
   const g: Game = {
@@ -124,6 +126,7 @@ export async function startBlackjack(
       username: interaction.user.username,
       wallet: nu.wallet + bet + winBonus,
     });
+    bumpQuest(gid, interaction.user.id, 'gamesWon');
     await interaction.reply({
       embeds: [view(g, true, `🃏 **Blackjack!** Wygrywasz ${fmt(winBonus, cur)}.`)],
     });
@@ -177,6 +180,7 @@ export async function handleBlackjackButton(interaction: ButtonInteraction): Pro
   if (dv > 21 || pv > dv) {
     payout = g.bet * 2;
     result = `✅ Wygrywasz ${fmt(g.bet, cur)}!`;
+    bumpQuest(gid, interaction.user.id, 'gamesWon');
   } else if (pv === dv) {
     payout = g.bet;
     result = '🤝 Remis — zwrot stawki.';

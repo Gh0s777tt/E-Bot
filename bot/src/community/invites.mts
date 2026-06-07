@@ -11,6 +11,7 @@ import {
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
+import { bumpQuest } from './quests.mts';
 
 type Reward = { count: number; roleId: string };
 type Cfg = { on: boolean; logChannelId: string; fakeMinAgeDays: number; rewards: Reward[] };
@@ -111,6 +112,8 @@ export function startInvites(client: Client): void {
             .catch(() => {});
         }
       }
+
+      if (inviterId && !fake) bumpQuest(member.guild.id, inviterId, 'invites');
 
       // nagrody za realne zaproszenia
       if (inviterId && !fake && c.rewards.length && hasCloud()) {

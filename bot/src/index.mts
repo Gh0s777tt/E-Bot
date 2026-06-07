@@ -23,6 +23,7 @@ import { startCounters } from './community/counters.mts';
 import { startCounting } from './community/counting.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startInvites } from './community/invites.mts';
+import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
@@ -140,6 +141,7 @@ client.once(Events.ClientReady, (c) => {
   startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
   startCounting(c); // Tor 3 — gra w liczenie (config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)
+  startQuests(c); // Tor A2 — questy dzienne/tygodniowe (postęp w pamięci)
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
   startFreeGames(c); // Faza 7 / F9.1 — feed darmowych gier Epic (poll 6h)
   startPatchNotes(c); // Faza 7 / F9.1 — patch-notes Steam (poll 1h)
@@ -181,7 +183,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
           ? handleSuggestionButton(interaction)
           : id.startsWith('bj:')
             ? handleBlackjackButton(interaction)
-            : handleButton(interaction);
+            : id.startsWith('quest:')
+              ? handleQuestButton(interaction)
+              : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }
