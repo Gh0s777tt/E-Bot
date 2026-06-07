@@ -77,6 +77,59 @@ export async function saveTempVoice(cfg: TempVoiceConfig): Promise<void> {
   await setRawSetting('tempvoice_config', JSON.stringify(cfg));
 }
 
+// ── Counting (Tor 3) ──
+export type CountingConfig = {
+  enabled: boolean;
+  channelId: string;
+  allowSameUser: boolean;
+  resetOnFail: boolean;
+};
+export const COUNTING_DEFAULT: CountingConfig = {
+  enabled: false,
+  channelId: '',
+  allowSameUser: false,
+  resetOnFail: true,
+};
+export async function getCounting(): Promise<CountingConfig> {
+  const raw = await getRawSetting('counting_config');
+  if (!raw) return structuredClone(COUNTING_DEFAULT);
+  try {
+    return { ...COUNTING_DEFAULT, ...(JSON.parse(raw) as Partial<CountingConfig>) };
+  } catch {
+    return structuredClone(COUNTING_DEFAULT);
+  }
+}
+export async function saveCounting(cfg: CountingConfig): Promise<void> {
+  await setRawSetting('counting_config', JSON.stringify(cfg));
+}
+
+// ── Invite Tracker (Tor 3) ──
+export type InviteReward = { count: number; roleId: string };
+export type InvitesConfig = {
+  enabled: boolean;
+  logChannelId: string;
+  fakeMinAgeDays: number;
+  rewards: InviteReward[];
+};
+export const INVITES_DEFAULT: InvitesConfig = {
+  enabled: false,
+  logChannelId: '',
+  fakeMinAgeDays: 7,
+  rewards: [],
+};
+export async function getInvitesConfig(): Promise<InvitesConfig> {
+  const raw = await getRawSetting('invites_config');
+  if (!raw) return structuredClone(INVITES_DEFAULT);
+  try {
+    return { ...INVITES_DEFAULT, ...(JSON.parse(raw) as Partial<InvitesConfig>) };
+  } catch {
+    return structuredClone(INVITES_DEFAULT);
+  }
+}
+export async function saveInvitesConfig(cfg: InvitesConfig): Promise<void> {
+  await setRawSetting('invites_config', JSON.stringify(cfg));
+}
+
 // ── Lista giveawayów (read) ──
 export type GiveawayRow = {
   id: string;

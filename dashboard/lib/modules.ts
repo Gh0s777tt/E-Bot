@@ -142,6 +142,22 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'tempvoice_config',
   },
+  {
+    key: 'counting',
+    label: 'Gra w liczenie',
+    group: 'Społeczność',
+    href: '/engagement',
+    kind: 'json',
+    settingsKey: 'counting_config',
+  },
+  {
+    key: 'invites',
+    label: 'Śledzenie zaproszeń',
+    group: 'Społeczność',
+    href: '/engagement',
+    kind: 'json',
+    settingsKey: 'invites_config',
+  },
   // Ekonomia
   {
     key: 'economy',

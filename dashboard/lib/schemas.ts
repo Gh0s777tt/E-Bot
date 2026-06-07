@@ -349,6 +349,26 @@ export const tempvoiceSchema = z.object({
 });
 export type TempVoiceInput = z.infer<typeof tempvoiceSchema>;
 
+// ── Engagement: counting (Tor 3) ──
+export const countingSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  allowSameUser: z.boolean(),
+  resetOnFail: z.boolean(),
+});
+export type CountingInput = z.infer<typeof countingSchema>;
+
+// ── Engagement: invite tracker (Tor 3) ──
+export const invitesSchema = z.object({
+  enabled: z.boolean(),
+  logChannelId: z.string().max(40),
+  fakeMinAgeDays: z.number().int().min(0).max(365),
+  rewards: z
+    .array(z.object({ count: z.number().int().min(1).max(100_000), roleId: z.string().max(40) }))
+    .max(20),
+});
+export type InvitesInput = z.infer<typeof invitesSchema>;
+
 // ── Biblioteka: lista życzeń (POST /api/wishlist) ──────────
 export const wishlistAddSchema = z.object({
   title: z.string().min(1).max(200),

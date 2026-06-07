@@ -1,0 +1,148 @@
+// Tor 3 — Invite Tracker: kto kogo zaprosił (diff snapshotów zaproszeń), fejki (młode konta),
+// odejścia, nagrody-role za progi. Config 'invites_config'; dane w Supabase 'invites'.
+// Wymaga intencji GuildInvites + uprawnienia bota „Zarządzanie serwerem" (do odczytu zaproszeń).
+import {
+  type Client,
+  Events,
+  type Guild,
+  type GuildMember,
+  type PartialGuildMember,
+  type TextChannel,
+} from 'discord.js';
+import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
+import { getSettings } from '../lib/db.mts';
+
+type Reward = { count: number; roleId: string };
+type Cfg = { on: boolean; logChannelId: string; fakeMinAgeDays: number; rewards: Reward[] };
+function cfg(): Cfg {
+  const raw = getSettings()['invites_config'];
+  try {
+    const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+    return {
+      on: !!c.enabled,
+      logChannelId: String(c.logChannelId || ''),
+      fakeMinAgeDays: Number(c.fakeMinAgeDays) || 0,
+      rewards: Array.isArray(c.rewards) ? (c.rewards as Reward[]) : [],
+    };
+  } catch {
+    return { on: false, logChannelId: '', fakeMinAgeDays: 0, rewards: [] };
+  }
+}
+
+// guildId → (kod → liczba użyć)
+const cache = new Map<string, Map<string, number>>();
+
+async function snapshot(guild: Guild): Promise<Map<string, number>> {
+  const m = new Map<string, number>();
+  try {
+    const invites = await guild.invites.fetch();
+    for (const inv of invites.values()) m.set(inv.code, inv.uses ?? 0);
+  } catch {
+    /* brak uprawnienia „Zarządzanie serwerem" — degradacja do „nieznane źródło" */
+  }
+  return m;
+}
+
+export function startInvites(client: Client): void {
+  console.log('[invites] aktywny (config z panelu).');
+
+  // wstępny snapshot (startInvites wołane już po ClientReady)
+  void (async () => {
+    for (const guild of client.guilds.cache.values()) cache.set(guild.id, await snapshot(guild));
+  })();
+
+  client.on(Events.InviteCreate, (inv) => {
+    if (!inv.guild) return;
+    const m = cache.get(inv.guild.id) ?? new Map<string, number>();
+    m.set(inv.code, inv.uses ?? 0);
+    cache.set(inv.guild.id, m);
+  });
+  client.on(Events.InviteDelete, (inv) => {
+    if (inv.guild) cache.get(inv.guild.id)?.delete(inv.code);
+  });
+
+  client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
+    try {
+      const c = cfg();
+      if (!c.on) return;
+      const before = cache.get(member.guild.id) ?? new Map<string, number>();
+      const after = await snapshot(member.guild);
+      cache.set(member.guild.id, after);
+
+      // które zaproszenie zyskało użycie?
+      let usedCode = '';
+      for (const [code, uses] of after) {
+        if (uses > (before.get(code) ?? 0)) {
+          usedCode = code;
+          break;
+        }
+      }
+      let inviterId = '';
+      if (usedCode) {
+        const invites = await member.guild.invites.fetch().catch(() => null);
+        inviterId = invites?.get(usedCode)?.inviter?.id ?? '';
+      }
+
+      const ageDays = (Date.now() - member.user.createdTimestamp) / 86_400_000;
+      const fake = c.fakeMinAgeDays > 0 && ageDays < c.fakeMinAgeDays;
+
+      if (hasCloud()) {
+        await cloudInsert('invites', [
+          {
+            guild_id: member.guild.id,
+            inviter_id: inviterId,
+            invited_id: member.id,
+            invited_name: member.user.username,
+            code: usedCode,
+            fake,
+            has_left: false,
+          },
+        ]).catch((e) => console.warn('[invites]', (e as Error).message));
+      }
+
+      if (c.logChannelId) {
+        const ch = await member.guild.channels.fetch(c.logChannelId).catch(() => null);
+        if (ch?.isTextBased() && 'send' in ch) {
+          const who = inviterId ? `<@${inviterId}>` : '*nieznane źródło*';
+          await (ch as TextChannel)
+            .send(
+              `📥 <@${member.id}> dołączył(a) — zaproszenie od ${who}${fake ? ' ⚠️ *(podejrzane: młode konto)*' : ''}.`,
+            )
+            .catch(() => {});
+        }
+      }
+
+      // nagrody za realne zaproszenia
+      if (inviterId && !fake && c.rewards.length && hasCloud()) {
+        const rows = await cloudSelect<{ invited_id: string }>(
+          'invites',
+          `select=invited_id&guild_id=eq.${member.guild.id}&inviter_id=eq.${inviterId}&fake=eq.false&has_left=eq.false`,
+        ).catch(() => [] as { invited_id: string }[]);
+        const real = rows.length;
+        const inviterMember = await member.guild.members.fetch(inviterId).catch(() => null);
+        if (inviterMember) {
+          for (const r of c.rewards) {
+            if (real >= r.count && r.roleId && !inviterMember.roles.cache.has(r.roleId)) {
+              await inviterMember.roles
+                .add(r.roleId, `Nagroda za ${r.count} zaproszeń`)
+                .catch(() => {});
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[invites]', (e as Error).message);
+    }
+  });
+
+  client.on(Events.GuildMemberRemove, async (member: GuildMember | PartialGuildMember) => {
+    try {
+      if (!cfg().on || !hasCloud()) return;
+      await cloudUpdate('invites', `guild_id=eq.${member.guild.id}&invited_id=eq.${member.id}`, {
+        has_left: true,
+      }).catch(() => {});
+    } catch (e) {
+      console.warn('[invites]', (e as Error).message);
+    }
+  });
+}

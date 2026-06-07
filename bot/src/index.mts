@@ -12,7 +12,9 @@ import { startAfk } from './community/afk.mts';
 import { startAiMod } from './community/aimod.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
+import { startCounting } from './community/counting.mts';
 import { startHighlights } from './community/highlights.mts';
+import { startInvites } from './community/invites.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
@@ -67,6 +69,7 @@ const intents = [
   GatewayIntentBits.GuildMessageReactions,
   GatewayIntentBits.MessageContent,
   GatewayIntentBits.GuildMembers,
+  GatewayIntentBits.GuildInvites, // Tor 3 — Invite Tracker (śledzenie zaproszeń)
   GatewayIntentBits.DirectMessages, // Faza 7 / F6.4 — modmail (DM do bota)
 ];
 const client = new Client({
@@ -115,6 +118,8 @@ client.once(Events.ClientReady, (c) => {
   startAfk(c); // Faza 7 / F7.3 — AFK (status w pamięci, mention-reply)
   startHighlights(c); // Faza 7 / F7.3 — highlighty (DM na słowo-klucz)
   startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
+  startCounting(c); // Tor 3 — gra w liczenie (config z panelu)
+  startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
   startFreeGames(c); // Faza 7 / F9.1 — feed darmowych gier Epic (poll 6h)
   startPatchNotes(c); // Faza 7 / F9.1 — patch-notes Steam (poll 1h)

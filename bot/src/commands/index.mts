@@ -7,10 +7,12 @@ import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
 import * as economy from './economy.mts';
+import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
 import * as highlight from './highlight.mts';
 import * as hof from './hof.mts';
 import * as imagine from './imagine.mts';
+import * as invites from './invites.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
 import * as mod from './mod.mts';
@@ -62,4 +64,6 @@ export const commands: Command[] = [
   imagine,
   backlog,
   hof,
+  fun,
+  invites,
 ];
