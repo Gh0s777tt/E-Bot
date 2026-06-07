@@ -101,7 +101,7 @@
 - [x] **F9** — Gaming unikat
   - [x] **F9.1** — Free‑games feed (Epic) + patch‑notes (Steam news)
   - [x] **F9.2** — Backlog gier (`/backlog add|list|set|remove`)
-  - [x] **F9.3** — Donejty Ko-fi (webhook → kanał). ℹ️ ITAD price‑tracking + Twitch sub→rola odłożone (wymagają klucza/OAuth)
+  - [x] **F9.3** — Donejty Ko-fi (webhook → kanał) + price‑tracking ITAD (lista życzeń → alerty promocji). ℹ️ Twitch sub→rola odłożone (OAuth twórcy)
 - [x] **F10** — Analityka + Infra
   - [x] **F10.1** — Wykresy aktywności serwera (`activity_daily` → `/stats`)
   - [x] **F10.2** — Sezonowe rankingi levelingu (`/hof` + miesięczny hall of fame + opcjonalny reset)

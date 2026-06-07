@@ -303,6 +303,13 @@ export const seasonsSchema = z.object({
 });
 export type SeasonsInput = z.infer<typeof seasonsSchema>;
 
+// ── Śledzenie cen ITAD (POST /api/pricetracker) ────────────
+export const pricetrackerSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+});
+export type PriceTrackerInput = z.infer<typeof pricetrackerSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

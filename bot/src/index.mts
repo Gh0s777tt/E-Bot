@@ -27,6 +27,7 @@ import { startTempVoice } from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
 import { startFreeGames } from './gaming/freegames.mts';
 import { startPatchNotes } from './gaming/patchnotes.mts';
+import { startPriceTracker } from './gaming/pricetracker.mts';
 import { startLeveling } from './leveling.mts';
 import { captureError } from './lib/sentry.mts';
 import { startNotifier } from './live/notifier.mts';
@@ -117,6 +118,7 @@ client.once(Events.ClientReady, (c) => {
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
   startFreeGames(c); // Faza 7 / F9.1 — feed darmowych gier Epic (poll 6h)
   startPatchNotes(c); // Faza 7 / F9.1 — patch-notes Steam (poll 1h)
+  startPriceTracker(c); // Faza 7 / F9.3 — śledzenie cen ITAD z listy życzeń (poll 12h)
   startActivity(c); // Faza 7 / F10.1 — analityka aktywności (flush co 5 min → activity_daily)
   startSeasons(c); // Faza 7 / F10.2 — sezonowe rankingi (miesięczny hall of fame, sprawdza co 6h)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):

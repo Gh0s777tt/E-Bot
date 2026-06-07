@@ -176,6 +176,14 @@ export const MODULES: ModuleDef[] = [
     kind: 'json',
     settingsKey: 'backlog_config',
   },
+  {
+    key: 'pricetracker',
+    label: 'Śledzenie cen (ITAD)',
+    group: 'Gaming',
+    href: '/gaming',
+    kind: 'json',
+    settingsKey: 'pricetracker_config',
+  },
   // Tickety & AI
   {
     key: 'tickets',

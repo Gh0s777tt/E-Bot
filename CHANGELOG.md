@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-69-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.37.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-70-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.38.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.38.0] — Faza 7 / F9.3: śledzenie cen (ITAD)
+
+- `[#070]` 💰 **Price-tracking IsThereAnyDeal** (panel `/gaming`):
+  - Bot co ~12 h sprawdza w ITAD ceny gier z **Listy życzeń** i ogłasza **nowe promocje** (najniższa bieżąca cena + sklep + zniżka % + historyczne minimum). Dedup po `pricetracker_seen`.
+  - Bot: `bot/src/gaming/pricetracker.mts` (lookup `tytuł→id` `games/lookup/v1` + `games/prices/v3`; klucz `ITAD_API_KEY` z env). Panel: `pricetracker_config` + `pricetrackerSchema` + `/api/pricetracker` + `PriceTrackerForm` + sekcja na `/gaming` + moduł (grupa Gaming). **Bez SQL** (czyta tabelę `wishlist`). **Klucz `ITAD_API_KEY` ustawiony w env Railway** (przez API) — moduł gotowy po włączeniu w Centrum sterowania + wskazaniu kanału.
 
 ## [0.37.1] — UX: boczny pasek w sekcjach (akordeon)
 

@@ -394,3 +394,20 @@ export async function getSeasonsConfig(): Promise<SeasonsConfig> {
 export async function saveSeasonsConfig(cfg: SeasonsConfig): Promise<void> {
   await setRawSetting('seasons_config', JSON.stringify(cfg));
 }
+
+// ── Śledzenie cen ITAD (Faza 7 / F9.3) ──
+export type PriceTrackerConfig = { enabled: boolean; channelId: string };
+export const PRICETRACKER_DEFAULT: PriceTrackerConfig = { enabled: false, channelId: '' };
+
+export async function getPriceTrackerConfig(): Promise<PriceTrackerConfig> {
+  const raw = await getRawSetting('pricetracker_config');
+  if (!raw) return structuredClone(PRICETRACKER_DEFAULT);
+  try {
+    return { ...PRICETRACKER_DEFAULT, ...(JSON.parse(raw) as Partial<PriceTrackerConfig>) };
+  } catch {
+    return structuredClone(PRICETRACKER_DEFAULT);
+  }
+}
+export async function savePriceTrackerConfig(cfg: PriceTrackerConfig): Promise<void> {
+  await setRawSetting('pricetracker_config', JSON.stringify(cfg));
+}
