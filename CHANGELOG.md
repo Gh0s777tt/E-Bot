@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-64-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.33.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-65-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.34.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.34.0] — Faza 7 / F9.3: donejty Ko-fi · 🎉 F9 zakończona
+
+- `[#065]` 🤝 **Donejty Ko-fi** (panel `/donations`):
+  - **Webhook** `/api/kofi` (publiczny; autoryzacja = `verification_token` z Ko-fi) → ogłoszenie wsparcia na wybranym kanale (przez bot‑token REST, jak EventSub). Konfigurowalna wiadomość ze zmiennymi `{name}`/`{amount}`/`{currency}`/`{message}`/`{type}`. **Bez kluczy API** — wystarczy URL webhooka + token wklejony w Ko-fi.
+  - Dashboard‑only: `proxy.ts` otwiera **dokładnie** `/api/kofi` (config `/api/kofi-config` zostaje za auth), `KofiForm` (z URL webhooka) + strona `/donations` (nav „Donejty" Coffee) + moduł (grupa Twórca). **Bez SQL, bez komend, bez zmian w bocie** (deploy tylko dashboard).
+  - 🎉 **Faza 7 / F9 (Gaming unikat) zakończona:** F9.1 free‑games + patch‑notes · F9.2 backlog · F9.3 donejty Ko-fi. ℹ️ Price‑tracking ITAD i Twitch sub→rola świadomie **odłożone** (wymagają klucza ITAD / OAuth twórcy).
 
 ## [0.33.0] — Faza 7 / F9.2: backlog gier
 

@@ -285,6 +285,15 @@ export const patchnotesSchema = z.object({
 });
 export type PatchNotesInput = z.infer<typeof patchnotesSchema>;
 
+// ── Donejty Ko-fi (POST /api/kofi-config) ──────────────────
+export const kofiSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  verificationToken: z.string().max(100),
+  message: z.string().max(1000),
+});
+export type KofiInput = z.infer<typeof kofiSchema>;
+
 // ── Engagement: button-role (POST /api/buttonroles) ────────
 export const buttonRolesSchema = z.object({
   message: z.string().max(500),

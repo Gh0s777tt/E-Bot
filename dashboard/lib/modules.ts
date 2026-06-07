@@ -195,6 +195,14 @@ export const MODULES: ModuleDef[] = [
   },
   // Twórca
   {
+    key: 'kofi',
+    label: 'Donejty (Ko-fi)',
+    group: 'Twórca',
+    href: '/donations',
+    kind: 'json',
+    settingsKey: 'kofi_config',
+  },
+  {
     key: 'creatorEvent',
     label: 'Auto-wydarzenie na live',
     group: 'Twórca',

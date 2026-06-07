@@ -345,3 +345,30 @@ export async function getPatchNotesConfig(): Promise<PatchNotesConfig> {
 export async function savePatchNotesConfig(cfg: PatchNotesConfig): Promise<void> {
   await setRawSetting('patchnotes_config', JSON.stringify(cfg));
 }
+
+// ── Donejty Ko-fi (Faza 7 / F9.3) ──
+export type KofiConfig = {
+  enabled: boolean;
+  channelId: string;
+  verificationToken: string;
+  message: string;
+};
+export const KOFI_DEFAULT: KofiConfig = {
+  enabled: false,
+  channelId: '',
+  verificationToken: '',
+  message: '🤝 **{name}** wsparł(a) nas za **{amount} {currency}**! {message}',
+};
+
+export async function getKofiConfig(): Promise<KofiConfig> {
+  const raw = await getRawSetting('kofi_config');
+  if (!raw) return structuredClone(KOFI_DEFAULT);
+  try {
+    return { ...KOFI_DEFAULT, ...(JSON.parse(raw) as Partial<KofiConfig>) };
+  } catch {
+    return structuredClone(KOFI_DEFAULT);
+  }
+}
+export async function saveKofiConfig(cfg: KofiConfig): Promise<void> {
+  await setRawSetting('kofi_config', JSON.stringify(cfg));
+}

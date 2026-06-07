@@ -10,6 +10,7 @@ function isOpen(pathname: string): boolean {
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/img') ||
     pathname.startsWith('/api/twitch') || // webhook EventSub — Twitch woła bez sesji (auth = HMAC)
+    pathname === '/api/kofi' || // webhook Ko-fi — woła bez sesji (auth = verification_token); EXACT, nie prefix (by nie otworzyć /api/kofi-config)
     pathname.startsWith('/api/health') || // healthcheck + cron „bot down" — monitor/Vercel bez sesji
     pathname === '/api/bot-status' || // status bota dla paska (czytany przez Topbar)
     pathname.startsWith('/_next') ||
