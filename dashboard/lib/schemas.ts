@@ -105,6 +105,16 @@ export const aidigestSchema = z.object({
 });
 export type AiDigestInput = z.infer<typeof aidigestSchema>;
 
+// ── Aplikacje / rekrutacja (Tor K) ──
+export const applicationsSchema = z.object({
+  enabled: z.boolean(),
+  reviewChannelId: z.string().max(40),
+  roleId: z.string().max(40),
+  panelMessage: z.string().max(500),
+  questions: z.array(z.string().min(1).max(200)).max(5),
+});
+export type ApplicationsInput = z.infer<typeof applicationsSchema>;
+
 // ── Tygodniowy digest (Tor E) ──
 export const digestSchema = z.object({
   enabled: z.boolean(),

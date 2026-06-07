@@ -21,6 +21,7 @@ import { startAfk } from './community/afk.mts';
 import { startAiDigest } from './community/aidigest.mts';
 import { startAiHelp } from './community/aihelp.mts';
 import { startAiMod } from './community/aimod.mts';
+import { handleApplicationButton, handleApplicationModal } from './community/applications.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
 import { startCounting } from './community/counting.mts';
@@ -196,14 +197,18 @@ client.on(Events.InteractionCreate, async (interaction) => {
             ? handleBlackjackButton(interaction)
             : id.startsWith('quest:')
               ? handleQuestButton(interaction)
-              : handleButton(interaction);
+              : id.startsWith('app:')
+                ? handleApplicationButton(interaction)
+                : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }
   if (interaction.isModalSubmit()) {
     const h = interaction.customId.startsWith('verify:')
       ? handleVerifyModal(interaction)
-      : handleTicketModal(interaction);
+      : interaction.customId.startsWith('app:')
+        ? handleApplicationModal(interaction)
+        : handleTicketModal(interaction);
     await h.catch((err) => console.error('modal:', err));
     return;
   }

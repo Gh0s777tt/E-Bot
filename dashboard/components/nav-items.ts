@@ -4,6 +4,7 @@ import {
   BarChart3,
   Cake,
   Clapperboard,
+  ClipboardList,
   Coffee,
   Coins,
   DoorOpen,
@@ -62,6 +63,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/tickets', label: 'Tickety', icon: Ticket },
       { href: '/modmail', label: 'Modmail', icon: Mails },
+      { href: '/applications', label: 'Aplikacje', icon: ClipboardList },
       { href: '/ai', label: 'AI', icon: Sparkles },
     ],
   },

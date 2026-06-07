@@ -233,6 +233,34 @@ export async function saveAiDigestConfig(cfg: AiDigestConfig): Promise<void> {
   await setRawSetting('aidigest_config', JSON.stringify(cfg));
 }
 
+// ── Aplikacje / rekrutacja (Tor K) ──
+export type ApplicationsConfig = {
+  enabled: boolean;
+  reviewChannelId: string;
+  roleId: string;
+  panelMessage: string;
+  questions: string[];
+};
+export const APPLICATIONS_DEFAULT: ApplicationsConfig = {
+  enabled: false,
+  reviewChannelId: '',
+  roleId: '',
+  panelMessage: '📋 Aplikuj do ekipy — kliknij poniżej.',
+  questions: ['Dlaczego chcesz dołączyć?', 'Co możesz wnieść?'],
+};
+export async function getApplicationsConfig(): Promise<ApplicationsConfig> {
+  const raw = await getRawSetting('applications_config');
+  if (!raw) return structuredClone(APPLICATIONS_DEFAULT);
+  try {
+    return { ...APPLICATIONS_DEFAULT, ...(JSON.parse(raw) as Partial<ApplicationsConfig>) };
+  } catch {
+    return structuredClone(APPLICATIONS_DEFAULT);
+  }
+}
+export async function saveApplicationsConfig(cfg: ApplicationsConfig): Promise<void> {
+  await setRawSetting('applications_config', JSON.stringify(cfg));
+}
+
 // ── Modmail (Faza 7 / F6.4) ──
 export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 export const MODMAIL_DEFAULT: ModmailConfig = {

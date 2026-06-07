@@ -218,6 +218,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'modmail_config',
   },
   {
+    key: 'applications',
+    label: 'Aplikacje / rekrutacja',
+    group: 'Wsparcie',
+    href: '/applications',
+    kind: 'json',
+    settingsKey: 'applications_config',
+  },
+  {
     key: 'ai',
     label: 'Komendy AI',
     group: 'AI',

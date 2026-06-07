@@ -2,6 +2,7 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 import * as afk from './afk.mts';
 import * as ai from './ai.mts';
 import * as antinuke from './antinuke.mts';
+import * as applypanel from './applypanel.mts';
 import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
@@ -47,6 +48,7 @@ export const commands: Command[] = [
   ping,
   library,
   antinuke,
+  applypanel,
   link,
   portal,
   ticket,
