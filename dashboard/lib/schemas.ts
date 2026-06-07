@@ -96,6 +96,13 @@ export const aihelpSchema = z.object({
 });
 export type AiHelpInput = z.infer<typeof aihelpSchema>;
 
+// ── Tygodniowy digest (Tor E) ──
+export const digestSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+});
+export type DigestInput = z.infer<typeof digestSchema>;
+
 // ── Reaction roles (POST /api/reaction-roles) ──────────────
 export const reactionRolesSchema = z.object({
   items: z

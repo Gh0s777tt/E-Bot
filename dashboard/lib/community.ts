@@ -191,6 +191,22 @@ export async function saveAiHelpConfig(cfg: AiHelpConfig): Promise<void> {
   await setRawSetting('aihelp_config', JSON.stringify(cfg));
 }
 
+// ── Tygodniowy digest serwera (Tor E) ──
+export type DigestConfig = { enabled: boolean; channelId: string };
+export const DIGEST_DEFAULT: DigestConfig = { enabled: false, channelId: '' };
+export async function getDigestConfig(): Promise<DigestConfig> {
+  const raw = await getRawSetting('digest_config');
+  if (!raw) return structuredClone(DIGEST_DEFAULT);
+  try {
+    return { ...DIGEST_DEFAULT, ...(JSON.parse(raw) as Partial<DigestConfig>) };
+  } catch {
+    return structuredClone(DIGEST_DEFAULT);
+  }
+}
+export async function saveDigestConfig(cfg: DigestConfig): Promise<void> {
+  await setRawSetting('digest_config', JSON.stringify(cfg));
+}
+
 // ── Modmail (Faza 7 / F6.4) ──
 export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 export const MODMAIL_DEFAULT: ModmailConfig = {

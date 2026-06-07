@@ -1,5 +1,7 @@
-import { BarChart3, Gamepad2, MessageSquare, Ticket, Trophy } from 'lucide-react';
+import { BarChart3, Gamepad2, MessageSquare, Mic, Ticket, Trophy } from 'lucide-react';
+import DigestForm from '../../components/DigestForm';
 import StatCard from '../../components/StatCard';
+import { getDigestConfig } from '../../lib/community';
 import { getStats } from '../../lib/data';
 import {
   getActivitySeries,
@@ -9,6 +11,7 @@ import {
   getTickets,
   ticketStats,
 } from '../../lib/faza4';
+import { getGuildMeta } from '../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,13 +23,15 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function StatsPage() {
-  const [stats, aiSeries, aiToday, board, tickets, activity] = await Promise.all([
+  const [stats, aiSeries, aiToday, board, tickets, activity, digest, guild] = await Promise.all([
     getStats(),
     getAiUsageSeries(14),
     getAiUsageToday(),
     getLeaderboard(8),
     getTickets(200),
     getActivitySeries(14),
+    getDigestConfig(),
+    getGuildMeta(),
   ]);
   const tk = ticketStats(tickets);
   const aiMax = Math.max(1, ...aiSeries.map((p) => p.requests));
@@ -37,8 +42,9 @@ export default async function StatsPage() {
       messages: a.messages + p.messages,
       joins: a.joins + p.joins,
       leaves: a.leaves + p.leaves,
+      voice: a.voice + p.voice,
     }),
-    { messages: 0, joins: 0, leaves: 0 },
+    { messages: 0, joins: 0, leaves: 0, voice: 0 },
   );
 
   return (
@@ -124,6 +130,10 @@ export default async function StatsPage() {
           <span>
             📤 Wyjścia: <strong className="text-accent">{actTotals.leaves}</strong>
           </span>
+          <span>
+            🎙️ Voice (min):{' '}
+            <strong className="text-accent">{actTotals.voice.toLocaleString('pl-PL')}</strong>
+          </span>
         </div>
         {actTotals.messages === 0 && (
           <p className="mt-2 text-xs text-muted">
@@ -131,6 +141,13 @@ export default async function StatsPage() {
             <code>_ALL.sql</code> w Supabase).
           </p>
         )}
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Mic size={16} className="text-accent" /> Tygodniowy digest
+        </h2>
+        <DigestForm initial={digest} guild={guild} />
       </section>
 
       {/* Top XP */}

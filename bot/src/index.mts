@@ -8,6 +8,7 @@ import {
   Partials,
 } from 'discord.js';
 import { startActivity } from './analytics/activity.mts';
+import { startDigest } from './analytics/digest.mts';
 import { startSeasons } from './analytics/seasons.mts';
 import { startAutomod } from './automod.mts';
 import { notifyError } from './cloud/alerts.mts';
@@ -151,6 +152,7 @@ client.once(Events.ClientReady, (c) => {
   startPriceTracker(c); // Faza 7 / F9.3 — śledzenie cen ITAD z listy życzeń (poll 12h)
   startActivity(c); // Faza 7 / F10.1 — analityka aktywności (flush co 5 min → activity_daily)
   startSeasons(c); // Faza 7 / F10.2 — sezonowe rankingi (miesięczny hall of fame, sprawdza co 6h)
+  startDigest(c); // Tor E — tygodniowy digest serwera (poniedziałek, config z panelu)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
   startPresenceSync(c); // 'bot_presence' z panelu → setPresence

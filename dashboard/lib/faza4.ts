@@ -283,7 +283,13 @@ export async function getAiUsageSeries(days = 14): Promise<DayPoint[]> {
 }
 
 // ───────────────────────── 📈 Aktywność serwera (Faza 7 / F10.1) ─────────────────────────
-export type ActivityPoint = { day: string; messages: number; joins: number; leaves: number };
+export type ActivityPoint = {
+  day: string;
+  messages: number;
+  joins: number;
+  leaves: number;
+  voice: number;
+};
 
 export async function getActivitySeries(days = 14): Promise<ActivityPoint[]> {
   const skeleton = (): ActivityPoint[] => {
@@ -294,6 +300,7 @@ export async function getActivitySeries(days = 14): Promise<ActivityPoint[]> {
         messages: 0,
         joins: 0,
         leaves: 0,
+        voice: 0,
       });
     }
     return out;
@@ -301,17 +308,25 @@ export async function getActivitySeries(days = 14): Promise<ActivityPoint[]> {
   if (!hasSupabase) return skeleton();
   try {
     const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
-    const { data, error } = await supabase()
-      .from('activity_daily')
-      .select('day,messages,joins,leaves')
-      .gte('day', since);
+    const { data, error } = await supabase().from('activity_daily').select('*').gte('day', since);
     if (error) throw new Error(error.message);
-    const map = new Map<string, { messages: number; joins: number; leaves: number }>();
-    for (const r of (data ?? []) as ActivityPoint[]) {
-      const cur = map.get(r.day) ?? { messages: 0, joins: 0, leaves: 0 };
+    type DbRow = {
+      day: string;
+      messages?: number;
+      joins?: number;
+      leaves?: number;
+      voice_minutes?: number;
+    };
+    const map = new Map<
+      string,
+      { messages: number; joins: number; leaves: number; voice: number }
+    >();
+    for (const r of (data ?? []) as DbRow[]) {
+      const cur = map.get(r.day) ?? { messages: 0, joins: 0, leaves: 0, voice: 0 };
       cur.messages += r.messages || 0;
       cur.joins += r.joins || 0;
       cur.leaves += r.leaves || 0;
+      cur.voice += r.voice_minutes || 0;
       map.set(r.day, cur);
     }
     return skeleton().map((p) => ({ ...p, ...(map.get(p.day) ?? {}) }));

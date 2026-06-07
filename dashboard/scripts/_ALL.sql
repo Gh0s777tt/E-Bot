@@ -417,6 +417,11 @@ create table if not exists market_listings (
 create index if not exists market_by_guild on market_listings (guild_id, price);
 alter table market_listings enable row level security;
 
+-- ─────────────────────────────────────────────────────────────
+-- Rozbudowa E — analityka: minuty voice
+-- ─────────────────────────────────────────────────────────────
+alter table activity_daily add column if not exists voice_minutes integer not null default 0;
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════
