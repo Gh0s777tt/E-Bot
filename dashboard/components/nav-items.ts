@@ -33,6 +33,7 @@ import {
   Trophy,
   Tv,
   User,
+  Zap,
 } from 'lucide-react';
 
 export type NavItem = { href: string; label: string; icon: LucideIcon };
@@ -78,6 +79,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/responder', label: 'Komendy własne', icon: MessageSquarePlus },
       { href: '/birthdays', label: 'Urodziny', icon: Cake },
       { href: '/counters', label: 'Liczniki', icon: Activity },
+      { href: '/automations', label: 'Automatyzacje', icon: Zap },
     ],
   },
   {

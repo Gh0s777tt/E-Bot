@@ -277,6 +277,30 @@ export async function saveTwitchSubConfig(cfg: TwitchSubConfig): Promise<void> {
   await setRawSetting('twitch_sub_config', JSON.stringify(cfg));
 }
 
+// ── Automatyzacje IFTTT-lite (Tor O) ──
+export type AutomationRule = {
+  event: 'join' | 'keyword';
+  keyword: string;
+  action: 'message' | 'role' | 'dm';
+  channelId: string;
+  roleId: string;
+  text: string;
+};
+export type AutomationsConfig = { enabled: boolean; rules: AutomationRule[] };
+export const AUTOMATIONS_DEFAULT: AutomationsConfig = { enabled: false, rules: [] };
+export async function getAutomationsConfig(): Promise<AutomationsConfig> {
+  const raw = await getRawSetting('automations_config');
+  if (!raw) return structuredClone(AUTOMATIONS_DEFAULT);
+  try {
+    return { ...AUTOMATIONS_DEFAULT, ...(JSON.parse(raw) as Partial<AutomationsConfig>) };
+  } catch {
+    return structuredClone(AUTOMATIONS_DEFAULT);
+  }
+}
+export async function saveAutomationsConfig(cfg: AutomationsConfig): Promise<void> {
+  await setRawSetting('automations_config', JSON.stringify(cfg));
+}
+
 // ── Modmail (Faza 7 / F6.4) ──
 export type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 export const MODMAIL_DEFAULT: ModmailConfig = {

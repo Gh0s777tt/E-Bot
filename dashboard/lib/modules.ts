@@ -127,6 +127,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'counters_config',
   },
   {
+    key: 'automations',
+    label: 'Automatyzacje (IFTTT)',
+    group: 'Społeczność',
+    href: '/automations',
+    kind: 'json',
+    settingsKey: 'automations_config',
+  },
+  {
     key: 'starboard',
     label: 'Starboard',
     group: 'Społeczność',

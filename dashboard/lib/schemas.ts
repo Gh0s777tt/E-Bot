@@ -122,6 +122,24 @@ export const twitchSubSchema = z.object({
 });
 export type TwitchSubInput = z.infer<typeof twitchSubSchema>;
 
+// ── Automatyzacje IFTTT-lite (Tor O) ──
+export const automationsSchema = z.object({
+  enabled: z.boolean(),
+  rules: z
+    .array(
+      z.object({
+        event: z.enum(['join', 'keyword']),
+        keyword: z.string().max(100).optional().default(''),
+        action: z.enum(['message', 'role', 'dm']),
+        channelId: z.string().max(40).optional().default(''),
+        roleId: z.string().max(40).optional().default(''),
+        text: z.string().max(1500).optional().default(''),
+      }),
+    )
+    .max(20),
+});
+export type AutomationsInput = z.infer<typeof automationsSchema>;
+
 // ── Tygodniowy digest (Tor E) ──
 export const digestSchema = z.object({
   enabled: z.boolean(),
