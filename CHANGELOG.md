@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-140-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.73.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-141-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.73.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.73.1] — Komendy slash: cooldown per-komenda
+
+- `[#141]` ⏳ **Cooldown na własnych komendach** — opcjonalny limit „raz na N sekund na użytkownika" (anty-spam). Przy zbyt szybkim ponownym użyciu bot odpowiada ephemeralnie, ile sekund zostało. Konfiguracja per-komenda w `/custom-commands` (0 = brak). Rejestr w pamięci, czyszczony co 30 min.
 
 ## [0.73.0] — Komendy slash: typy odpowiedzi (losowa / rola)
 

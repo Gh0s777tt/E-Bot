@@ -16,6 +16,7 @@ export type CustomCommand = {
   type?: 'message' | 'random' | 'role';
   randomLines?: string[];
   roleId?: string;
+  cooldownSec?: number;
 };
 
 export async function getCustomCommands(): Promise<CustomCommand[]> {

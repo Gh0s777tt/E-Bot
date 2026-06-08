@@ -14,6 +14,7 @@ type CustomCommand = {
   type?: 'message' | 'random' | 'role';
   randomLines?: string[];
   roleId?: string;
+  cooldownSec?: number;
 };
 
 function load(): CustomCommand[] {
@@ -26,11 +27,33 @@ function load(): CustomCommand[] {
   }
 }
 
+// Cooldown per komenda+user (anty-spam). Czyszczenie starych wpisów co 30 min.
+const cooldowns = new Map<string, number>();
+setInterval(() => {
+  const cut = Date.now() - 60 * 60_000;
+  for (const [k, t] of cooldowns) if (t < cut) cooldowns.delete(k);
+}, 30 * 60_000);
+
 export async function handleCustomCommand(
   interaction: ChatInputCommandInteraction,
 ): Promise<boolean> {
   const cmd = load().find((c) => c.name === interaction.commandName);
   if (!cmd) return false;
+
+  const cd = cmd.cooldownSec ?? 0;
+  if (cd > 0) {
+    const key = `${cmd.name}:${interaction.user.id}`;
+    const now = Date.now();
+    const remain = Math.ceil(((cooldowns.get(key) ?? 0) + cd * 1000 - now) / 1000);
+    if (remain > 0) {
+      await interaction.reply({
+        content: `⏳ Poczekaj jeszcze ${remain}s przed ponownym użyciem **/${cmd.name}**.`,
+        flags: MessageFlags.Ephemeral,
+      });
+      return true;
+    }
+    cooldowns.set(key, now);
+  }
 
   const guild = interaction.guild;
   const vars: Record<string, string> = {
