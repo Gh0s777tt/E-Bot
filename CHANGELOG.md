@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-149-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.81.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-150-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.82.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.82.0] — Pulpit: wykres wzrostu serwera + alarm anti-raid
+
+- `[#150]` Dwa nowe wglądy na pulpicie (z „rozwiń wszystko"):
+  - 📈 **Wzrost serwera** — wykres członków w czasie + zmiana („+N / X dni") i bieżące boosty/kanały. Bot zapisuje **dzienną migawkę** rozmiaru serwera co 30 min do `server_history` (ostatnie 90 dni). Krzywa narasta z czasem (świeży serwer pokaże ją po kilku dniach).
+  - 🛡️ **Alarm anti-raid** — czerwony baner gdy wykryto **falę wejść w ostatniej dobie** + historia ostatnich zdarzeń (fala / możliwy alt / młode konto) z czasem względnym. Bot loguje zdarzenia do `antiraid_state` (detektor był „cichy" — teraz widać go w panelu).
+  - ℹ️ **Sezonowe rankingi** z listy życzeń **już działają** w bocie (`/hof`, miesięczny Hall of Fame z resetem) — w tej partii skupiłem się na dwóch brakujących wglądach.
 
 ## [0.81.0] — Liczniki Twitch + Kick (suby / followy / widzowie)
 

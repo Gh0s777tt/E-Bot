@@ -1,6 +1,7 @@
 // Faza 7 / F6.3 — anti-raid: detektor fali wejść (N w oknie M s) → akcja na falę + alert.
 // Opcjonalnie: bramka minimalnego wieku konta (młodsze konta = akcja). Config 'antiraid_config'.
 import { type Client, Events, type Guild, type GuildMember, type TextChannel } from 'discord.js';
+import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
 
 type Action = 'kick' | 'ban' | 'timeout';
@@ -45,6 +46,41 @@ function refresh(): void {
 const recent: { m: GuildMember; at: number }[] = [];
 let raidUntil = 0;
 
+// ── Log zdarzeń do chmury ('antiraid_state') → panel pokazuje alarm + historię ──
+type RaidEvent = { ts: number; type: 'raid' | 'alt' | 'young'; detail: string; count: number };
+let events: RaidEvent[] = [];
+let lastRaidAt = 0;
+let evLoaded = false;
+
+async function loadEvents(): Promise<void> {
+  if (evLoaded) return;
+  evLoaded = true;
+  if (!hasCloud()) return;
+  try {
+    const raw = await cloudGetSetting('antiraid_state');
+    if (raw) {
+      const d = JSON.parse(raw) as { events?: RaidEvent[]; lastRaidAt?: number };
+      events = d.events ?? [];
+      lastRaidAt = d.lastRaidAt ?? 0;
+    }
+  } catch {
+    /* brak / błąd → puste */
+  }
+}
+
+async function record(type: RaidEvent['type'], detail: string, count = 1): Promise<void> {
+  if (!hasCloud()) return;
+  await loadEvents();
+  events.unshift({ ts: Date.now(), type, detail, count });
+  if (events.length > 30) events = events.slice(0, 30);
+  if (type === 'raid') lastRaidAt = Date.now();
+  try {
+    await cloudSetSetting('antiraid_state', JSON.stringify({ events, lastRaidAt }));
+  } catch {
+    /* trudno — kolejne zdarzenie spróbuje ponownie */
+  }
+}
+
 async function punishWith(member: GuildMember, action: Action, reason: string): Promise<void> {
   try {
     if (action === 'ban') await member.guild.bans.create(member.id, { reason });
@@ -81,6 +117,10 @@ export function startAntiRaid(client: Client): void {
           member.guild,
           `🛡️ **Anti-raid:** <@${member.id}> — konto < ${cfg.minAccountAgeDays}d → ${cfg.action}.`,
         );
+        void record(
+          'young',
+          `${member.user.tag} — konto < ${cfg.minAccountAgeDays}d → ${cfg.action}`,
+        );
         return;
       }
     }
@@ -101,6 +141,7 @@ export function startAntiRaid(client: Client): void {
         );
         if (cfg.altAction !== 'alert')
           await punishWith(member, cfg.altAction, `Alt-detection: ${reasons.join(', ')}`);
+        void record('alt', `${member.user.tag} — ${reasons.join(', ')}`);
       }
     }
 
@@ -123,6 +164,7 @@ export function startAntiRaid(client: Client): void {
         member.guild,
         `🚨 **Anti-raid:** ${count} wejść w ${cfg.windowSec}s — tryb obronny (${cfg.action}) na ~${Math.round((raidUntil - now) / 1000)}s.`,
       );
+      void record('raid', `${count} wejść w ${cfg.windowSec}s → ${cfg.action}`, count);
       const wave = [...recent];
       recent.length = 0;
       for (const r of wave) await punish(r.m, 'Anti-raid (fala wejść)');

@@ -1,9 +1,12 @@
 import { Clock, Gamepad2, Layers, Plug, UserPlus } from 'lucide-react';
+import AntiraidAlarm from '../components/AntiraidAlarm';
 import GameCard from '../components/GameCard';
 import LiveServerTiles from '../components/LiveServerTiles';
+import ServerGrowthCard from '../components/ServerGrowthCard';
 import SetupChecklist from '../components/SetupChecklist';
 import StatCard from '../components/StatCard';
 import { activeSource, getGames, getSetupChecklist, getStats } from '../lib/data';
+import { getAntiraidState, getServerHistory } from '../lib/insights';
 import { getIntegrations } from '../lib/integrations';
 import { botInviteUrl } from '../lib/invite';
 
@@ -17,12 +20,14 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function OverviewPage() {
-  const [stats, games, src, integrations, checklist] = await Promise.all([
+  const [stats, games, src, integrations, checklist, history, antiraid] = await Promise.all([
     getStats(),
     getGames(),
     activeSource(),
     Promise.resolve(getIntegrations()),
     getSetupChecklist(),
+    getServerHistory(),
+    getAntiraidState(),
   ]);
   const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
@@ -120,6 +125,12 @@ export default async function OverviewPage() {
 
       {/* ===== SERWER NA ŻYWO (heartbeat bota) ===== */}
       <LiveServerTiles />
+
+      {/* ===== WZROST SERWERA + ALARM ANTI-RAID ===== */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ServerGrowthCard history={history} />
+        <AntiraidAlarm state={antiraid} />
+      </div>
 
       {/* ===== PIERWSZE KROKI (checklist konfiguracji) ===== */}
       <SetupChecklist items={checklist} />
