@@ -1,3 +1,4 @@
+import { BADGE_COUNT, resolveBadges } from '../lib/badges';
 import type { ProfileCardData } from '../lib/public';
 
 // Karta profilu w dashboardzie — odpowiednik karty z serwera, wzbogacona o ekonomię i aktywność.
@@ -13,13 +14,15 @@ export default function ProfileCard({
   const pct = data.forLevel ? Math.min(100, Math.round((data.inLevel / data.forLevel) * 100)) : 0;
   const vh = Math.floor(data.voiceMin / 60);
   const vm = data.voiceMin % 60;
+  const netWorth = data.wallet + data.bank;
+  const earned = resolveBadges(data.badgeIds);
   const tiles: { label: string; value: string | number }[] = [
     { label: 'Wiadomości', value: data.messages.toLocaleString('pl-PL') },
     { label: 'Czas na voice', value: vh ? `${vh}h ${vm}m` : `${vm}m` },
     { label: 'Portfel', value: data.wallet.toLocaleString('pl-PL') },
     { label: 'Bank', value: data.bank.toLocaleString('pl-PL') },
+    { label: 'Majątek', value: netWorth.toLocaleString('pl-PL') },
     { label: 'Zaproszenia', value: data.invites },
-    { label: 'Odznaki', value: data.badges },
   ];
 
   return (
@@ -79,6 +82,33 @@ export default function ProfileCard({
             <div className="mt-0.5 font-display text-lg font-bold">{t.value}</div>
           </div>
         ))}
+      </div>
+
+      <div className="relative mt-4">
+        <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-wide text-muted">
+          <span>Odznaki</span>
+          <span className="font-semibold text-accent">
+            {data.badges}/{BADGE_COUNT}
+          </span>
+        </div>
+        {earned.length ? (
+          <div className="flex flex-wrap gap-1.5">
+            {earned.map((b) => (
+              <span
+                key={b.id}
+                title={b.name}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-medium text-white/90 transition hover:border-accent/60 hover:bg-accent/20"
+              >
+                <span className="text-sm leading-none">{b.emoji}</span>
+                <span className="truncate">{b.name.split(' — ')[0]}</span>
+              </span>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-muted">
+            Brak odznak — zdobywaj poziomy, ekonomię i zapraszaj znajomych, a pojawią się tutaj.
+          </p>
+        )}
       </div>
 
       {!data.found && (

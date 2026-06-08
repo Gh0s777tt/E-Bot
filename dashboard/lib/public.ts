@@ -47,6 +47,43 @@ export async function topEco(limit = 15): Promise<LbRow[]> {
   }
 }
 
+// Top aktywni (suma wiadomości w oknie N dni; voice w podpisie). Agregacja po user_id.
+export async function topActive(limit = 15, days = 30): Promise<LbRow[]> {
+  if (!hasSupabase) return [];
+  try {
+    const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
+    const { data, error } = await supabase()
+      .from('user_activity')
+      .select('user_id,username,messages,voice_min')
+      .gte('day', since);
+    if (error) throw new Error(error.message);
+    type DbRow = { user_id: string; username?: string; messages?: number; voice_min?: number };
+    const map = new Map<string, { username: string; messages: number; voice: number }>();
+    for (const r of (data ?? []) as DbRow[]) {
+      const cur = map.get(r.user_id) ?? {
+        username: r.username || r.user_id,
+        messages: 0,
+        voice: 0,
+      };
+      cur.messages += r.messages || 0;
+      cur.voice += r.voice_min || 0;
+      if (r.username) cur.username = r.username;
+      map.set(r.user_id, cur);
+    }
+    return [...map.entries()]
+      .map(([user_id, v]) => ({
+        user_id,
+        username: v.username,
+        value: v.messages,
+        sub: v.voice >= 60 ? `${Math.floor(v.voice / 60)}h voice` : `${v.voice}m voice`,
+      }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, limit);
+  } catch {
+    return [];
+  }
+}
+
 export type PublicProfile = {
   found: boolean;
   username: string;
@@ -127,6 +164,7 @@ export type ProfileCardData = {
   voiceMin: number;
   invites: number;
   badges: number;
+  badgeIds: string[];
 };
 
 export async function profileCard(uid: string): Promise<ProfileCardData> {
@@ -144,6 +182,7 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
     voiceMin: 0,
     invites: 0,
     badges: 0,
+    badgeIds: [],
   };
   if (!hasSupabase) return empty;
   try {
@@ -187,6 +226,7 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
       voiceMin: actRows.reduce((s, r) => s + (r.voice_min || 0), 0),
       invites: (inv.data ?? []).length,
       badges: (badges.data ?? []).length,
+      badgeIds: ((badges.data ?? []) as { badge_id: string }[]).map((b) => b.badge_id),
     };
   } catch {
     return empty;

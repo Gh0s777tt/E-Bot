@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-144-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.76.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-145-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.77.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.77.0] — Profil & ranking: glow-up (1/4 z „rozwiń wszystko")
+
+- `[#145]` Pierwsza partia z większego pakietu. Trzy rzeczy:
+  - 🏅 **Realne odznaki na karcie profilu** — zamiast samej liczby karta pokazuje **żetony z emoji + nazwą** każdej zdobytej odznaki (katalog 13 odznak, lustro `bot/src/community/badges.mts`) oraz licznik `x/13`. Doszedł też kafelek **Majątek** (portfel + bank).
+  - 🌐 **Publiczna karta profilu** (`/p/u/<id>`) — sharowalny link pokazuje tę samą bogatą kartę co w panelu (poziom, pasek XP, ranking, statystyki, ekonomia, odznaki). Bez logowania.
+  - 🏆 **Ranking w stylu kart** — nowa strona **`/leaderboard`** w panelu (Społeczność → Ranking): **Top XP**, **Top ekonomia**, **Najaktywniejsi** (wiadomości + voice). Podium 🥇🥈🥉 dla top‑3, paski postępu, a **kliknięcie gracza otwiera jego publiczną kartę**. Publiczny `/p/leaderboard` dostał ten sam wygląd + tablicę aktywnych.
 
 ## [0.76.0] — Więcej liczników + karta profilu w panelu
 

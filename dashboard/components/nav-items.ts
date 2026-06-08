@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Coffee,
   Coins,
+  Crown,
   DoorOpen,
   Gamepad2,
   Gift,
@@ -74,6 +75,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/welcome', label: 'Powitania', icon: DoorOpen },
       { href: '/levels', label: 'Levele', icon: Trophy },
+      { href: '/leaderboard', label: 'Ranking', icon: Crown },
       { href: '/roles', label: 'Role', icon: Tags },
       { href: '/engagement', label: 'Engagement', icon: Gift },
       { href: '/suggestions', label: 'Sugestie', icon: Lightbulb },
