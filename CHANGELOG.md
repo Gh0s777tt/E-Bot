@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-136-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.71.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-137-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.71.2-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.71.2] — Statystyki: gładkie wykresy area (SVG)
+
+- `[#137]` 📈 **Premium data-viz** — wykresy zużycia AI i aktywności serwera (14 dni) zmienione z blokowych słupków na **gładkie wykresy area**: czysty SVG, wypełnienie gradientem czerwieni, ostra linia (`non-scaling-stroke`), zero zależności. Komponent `AreaChart` do reużycia.
 
 ## [0.71.1] — Spójny hero-nagłówek na każdej stronie
 

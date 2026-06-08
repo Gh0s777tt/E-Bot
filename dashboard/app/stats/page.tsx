@@ -8,6 +8,7 @@ import {
   Trophy,
   Users,
 } from 'lucide-react';
+import AreaChart from '../../components/AreaChart';
 import DigestForm from '../../components/DigestForm';
 import StatCard from '../../components/StatCard';
 import { getDigestConfig } from '../../lib/community';
@@ -50,9 +51,7 @@ export default async function StatsPage() {
   const hourMax = Math.max(1, ...hourly);
   const heat = hourly.map((count, hour) => ({ hour, count }));
   const tk = ticketStats(tickets);
-  const aiMax = Math.max(1, ...aiSeries.map((p) => p.requests));
   const xpMax = Math.max(1, ...board.map((u) => u.xp));
-  const actMax = Math.max(1, ...activity.map((p) => p.messages));
   const actTotals = activity.reduce(
     (a, p) => ({
       messages: a.messages + p.messages,
@@ -86,20 +85,7 @@ export default async function StatsPage() {
         <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <BarChart3 size={16} className="text-accent" /> Zużycie AI — ostatnie 14 dni (zapytania)
         </h2>
-        <div className="flex h-40 items-end gap-1">
-          {aiSeries.map((p) => (
-            <div
-              key={p.day}
-              className="group flex flex-1 flex-col items-center justify-end"
-              title={`${p.day}: ${p.requests} zapytań · ${p.tokens.toLocaleString('pl-PL')} tokenów`}
-            >
-              <div
-                className="w-full rounded-t bg-accent/70 transition group-hover:bg-accent"
-                style={{ height: `${(p.requests / aiMax) * 100}%` }}
-              />
-            </div>
-          ))}
-        </div>
+        <AreaChart values={aiSeries.map((p) => p.requests)} height={150} />
         <div className="mt-1 flex justify-between text-[10px] text-muted">
           <span>{aiSeries[0]?.day.slice(5)}</span>
           <span>{aiSeries[aiSeries.length - 1]?.day.slice(5)}</span>
@@ -117,20 +103,7 @@ export default async function StatsPage() {
           <BarChart3 size={16} className="text-accent" /> Aktywność serwera — ostatnie 14 dni
           (wiadomości)
         </h2>
-        <div className="flex h-40 items-end gap-1">
-          {activity.map((p) => (
-            <div
-              key={p.day}
-              className="group flex flex-1 flex-col items-center justify-end"
-              title={`${p.day}: ${p.messages} wiad. · +${p.joins} / -${p.leaves} osób`}
-            >
-              <div
-                className="w-full rounded-t bg-accent/70 transition group-hover:bg-accent"
-                style={{ height: `${(p.messages / actMax) * 100}%` }}
-              />
-            </div>
-          ))}
-        </div>
+        <AreaChart values={activity.map((p) => p.messages)} height={150} />
         <div className="mt-1 flex justify-between text-[10px] text-muted">
           <span>{activity[0]?.day.slice(5)}</span>
           <span>{activity[activity.length - 1]?.day.slice(5)}</span>
