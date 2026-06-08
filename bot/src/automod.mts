@@ -19,6 +19,8 @@ type AutomodConfig = {
   ignoreChannels?: string[];
   antiScam?: { enabled: boolean; customDomains?: string[] };
   pii?: { enabled: boolean; types?: PiiOpts };
+  action?: 'delete' | 'timeout' | 'kick' | 'ban';
+  timeoutMinutes?: number;
 };
 const DEFAULT: AutomodConfig = {
   enabled: false,
@@ -38,6 +40,8 @@ const DEFAULT: AutomodConfig = {
     enabled: false,
     types: { creditCard: true, pesel: true, idCard: true, iban: true, email: true, phone: false },
   },
+  action: 'delete',
+  timeoutMinutes: 10,
 };
 let cfg: AutomodConfig = { ...DEFAULT };
 let compiled: RegExp[] = [];
@@ -149,13 +153,37 @@ export function startAutomod(client: Client): void {
 
     try {
       await msg.delete().catch(() => {});
+
+      // Eskalacja (opcjonalna): timeout / kick / ban — po usunięciu, z checkiem uprawnień bota.
+      let actionTaken = 'usunięto wiadomość';
+      const act = cfg.action ?? 'delete';
+      if (member && act !== 'delete') {
+        try {
+          if (act === 'timeout' && member.moderatable) {
+            await member.timeout(
+              Math.max(1, cfg.timeoutMinutes ?? 10) * 60_000,
+              `automod: ${reason}`,
+            );
+            actionTaken = `usunięto + timeout ${cfg.timeoutMinutes ?? 10} min`;
+          } else if (act === 'kick' && member.kickable) {
+            await member.kick(`automod: ${reason}`);
+            actionTaken = 'usunięto + wyrzucono';
+          } else if (act === 'ban' && member.bannable) {
+            await member.ban({ reason: `automod: ${reason}` });
+            actionTaken = 'usunięto + ban';
+          }
+        } catch {
+          /* brak uprawnień / wyższa rola — zostaje samo usunięcie */
+        }
+      }
+
       if (cfg.modlogChannelId) {
         const ch = await msg.guild.channels.fetch(cfg.modlogChannelId).catch(() => null);
         if (ch?.isTextBased() && 'send' in ch) {
           const embed = new EmbedBuilder()
             .setColor(0xe50914)
             .setTitle('🛡️ Automod')
-            .setDescription(`Usunięto wiadomość od <@${msg.author.id}>`)
+            .setDescription(`${actionTaken} — <@${msg.author.id}>`)
             .addFields(
               { name: 'Powód', value: reason, inline: true },
               { name: 'Kanał', value: `<#${msg.channelId}>`, inline: true },

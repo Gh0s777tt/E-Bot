@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-128-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.68.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-129-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.69.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.69.0] — Automod: konfigurowalne akcje (timeout / kick / ban)
+
+- `[#129]` ⚖️ **Akcja przy naruszeniu** — automod oprócz usunięcia wiadomości może (opcjonalnie) nadać **timeout** (na X min), **wyrzucić** albo **zbanować** sprawcę. Wybór w `/moderation`; domyślnie samo usunięcie (zero zmiany zachowania). Z checkiem uprawnień bota (`moderatable`/`kickable`/`bannable` — przy braku zostaje samo usunięcie) i akcją odnotowaną w mod-logu. Dotyczy wszystkich reguł automoda (scam / PII / słowa / regex / spam / wzmianki).
 
 ## [0.68.1] — Komendy slash z argumentami
 

@@ -61,6 +61,8 @@ export type AutomodConfig = {
       phone?: boolean;
     };
   };
+  action?: 'delete' | 'timeout' | 'kick' | 'ban';
+  timeoutMinutes?: number;
 };
 export const AUTOMOD_DEFAULT: AutomodConfig = {
   enabled: false,
@@ -80,6 +82,8 @@ export const AUTOMOD_DEFAULT: AutomodConfig = {
     enabled: false,
     types: { creditCard: true, pesel: true, idCard: true, iban: true, email: true, phone: false },
   },
+  action: 'delete',
+  timeoutMinutes: 10,
 };
 
 export async function getAutomodConfig(): Promise<AutomodConfig> {

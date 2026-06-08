@@ -43,12 +43,16 @@ type Cfg = {
   ignoreChannels: string[];
   antiScam: { enabled: boolean; customDomains: string[] };
   pii: { enabled: boolean; types: PiiTypes };
+  action: 'delete' | 'timeout' | 'kick' | 'ban';
+  timeoutMinutes: number;
 };
 type ListKey = 'bannedWords' | 'bannedRegex' | 'allowedLinks' | 'ignoreChannels';
-type Init = Omit<Cfg, ListKey | 'antiScam' | 'pii'> &
+type Init = Omit<Cfg, ListKey | 'antiScam' | 'pii' | 'action' | 'timeoutMinutes'> &
   Partial<Pick<Cfg, ListKey>> & {
     antiScam?: { enabled?: boolean; customDomains?: string[] };
     pii?: { enabled?: boolean; types?: Partial<PiiTypes> };
+    action?: Cfg['action'];
+    timeoutMinutes?: number;
   };
 
 const inputCls =
@@ -76,6 +80,8 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
       enabled: initial.pii?.enabled ?? false,
       types: { ...PII_DEF, ...(initial.pii?.types ?? {}) },
     },
+    action: initial.action ?? 'delete',
+    timeoutMinutes: initial.timeoutMinutes ?? 10,
   });
   const [wordsText, setWordsText] = useState(toLines(initial.bannedWords ?? []));
   const [regexText, setRegexText] = useState(toLines(initial.bannedRegex ?? []));
@@ -162,6 +168,40 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
           />
         </label>
       </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">Akcja przy naruszeniu</span>
+          <select
+            value={c.action}
+            onChange={(e) => setC({ ...c, action: e.target.value as Cfg['action'] })}
+            className={inputCls}
+          >
+            <option value="delete">Usuń wiadomość</option>
+            <option value="timeout">Usuń + timeout</option>
+            <option value="kick">Usuń + wyrzuć</option>
+            <option value="ban">Usuń + ban</option>
+          </select>
+        </label>
+        {c.action === 'timeout' && (
+          <label className="space-y-1 text-sm">
+            <span className="font-semibold text-white/90">Czas timeoutu (minuty)</span>
+            <input
+              type="number"
+              value={c.timeoutMinutes}
+              onChange={(e) => setC({ ...c, timeoutMinutes: Math.max(1, num(e.target.value)) })}
+              className={inputCls}
+            />
+          </label>
+        )}
+      </div>
+      {c.action !== 'delete' && (
+        <p className="text-xs text-amber-300/80">
+          Uwaga: akcja „{c.action}" dotyczy <strong>każdego</strong> naruszenia automoda (też
+          drobnych jak nadmiar wzmianek). Bot potrzebuje odpowiednich uprawnień; przy ich braku
+          zostaje samo usunięcie wiadomości.
+        </p>
+      )}
 
       {/* Własne filtry (Faza 8) */}
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
