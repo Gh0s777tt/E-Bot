@@ -12,6 +12,7 @@ import * as confess from './confess.mts';
 import * as describe from './describe.mts';
 import * as donate from './donate.mts';
 import * as economy from './economy.mts';
+import * as event from './event.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
 import * as highlight from './highlight.mts';
@@ -104,4 +105,5 @@ export const commands: Command[] = [
   rep,
   confess,
   xpevent,
+  event,
 ];

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-157-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.89.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-158-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.90.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.90.0] — Interakcje (4/4): Wydarzenia /event (RSVP)
+
+- `[#158]` 📅 **`/event`** — ogłoszenie wydarzenia z **zapisami (RSVP)**: tytuł, kiedy, opcjonalny opis → ładny embed, bot dodaje reakcje **✅ Idę / 🤔 Może / ❌ Nie**. Zliczanie natywne reakcjami (przeżywa restart, zero dodatkowego stanu). Domyka kierunek **Nowe interakcje**: `/trivia`, `/rep`, `/confess`, `/xpevent`, `/event`.
 
 ## [0.89.0] — Interakcje (3/?): Double-XP event /xpevent
 
