@@ -165,6 +165,8 @@ export type ProfileCardData = {
   invites: number;
   badges: number;
   badgeIds: string[];
+  dailyStreak: number;
+  items: number;
 };
 
 export async function profileCard(uid: string): Promise<ProfileCardData> {
@@ -183,13 +185,19 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
     invites: 0,
     badges: 0,
     badgeIds: [],
+    dailyStreak: 0,
+    items: 0,
   };
   if (!hasSupabase) return empty;
   try {
     const sb = supabase();
-    const [lvl, eco, act, inv, badges] = await Promise.all([
+    const [lvl, eco, act, inv, badges, invtory] = await Promise.all([
       sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
-      sb.from('economy_users').select('username,wallet,bank').eq('user_id', uid).maybeSingle(),
+      sb
+        .from('economy_users')
+        .select('username,wallet,bank,daily_streak')
+        .eq('user_id', uid)
+        .maybeSingle(),
       sb.from('user_activity').select('messages,voice_min').eq('user_id', uid),
       sb
         .from('invites')
@@ -198,9 +206,15 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
         .eq('fake', false)
         .eq('has_left', false),
       sb.from('user_badges').select('badge_id').eq('user_id', uid),
+      sb.from('economy_inventory').select('qty').eq('user_id', uid),
     ]);
     const l = (lvl.data ?? null) as { username?: string; xp?: number; level?: number } | null;
-    const e = (eco.data ?? null) as { username?: string; wallet?: number; bank?: number } | null;
+    const e = (eco.data ?? null) as {
+      username?: string;
+      wallet?: number;
+      bank?: number;
+      daily_streak?: number;
+    } | null;
     const xp = l?.xp ?? 0;
     const prog = levelProgress(xp);
     const actRows = (act.data ?? []) as { messages?: number; voice_min?: number }[];
@@ -227,6 +241,8 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
       invites: (inv.data ?? []).length,
       badges: (badges.data ?? []).length,
       badgeIds: ((badges.data ?? []) as { badge_id: string }[]).map((b) => b.badge_id),
+      dailyStreak: e?.daily_streak ?? 0,
+      items: ((invtory.data ?? []) as { qty?: number }[]).reduce((s, r) => s + (r.qty || 0), 0),
     };
   } catch {
     return empty;

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-147-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.79.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-148-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.80.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.80.0] — Ekonomia na karcie profilu (4/4 z „rozwiń wszystko")
+
+- `[#148]` 💰 **Wzbogacona ekonomia na karcie profilu** — karta (panel `/profile` i publiczna `/p/u/<id>`) dostała dwa nowe kafelki: **🔥 Streak** (dni z rzędu z `daily`) i **🎒 Przedmioty** (suma sztuk w ekwipunku). Razem z istniejącymi (portfel, bank, **majątek**) daje pełniejszy obraz stanu ekonomii — wszystko z danych, które bot już zbiera (zero nowych tabel, działa od ręki).
+  - ℹ️ **Pełna historia transakcji** (każde +/− waluty z osią czasu) wymaga osobnej tabeli logów i haków w ~15 miejscach ekonomii — to świadomie zostawione jako następny krok (większa, schema'owa zmiana), do włączenia na życzenie.
 
 ## [0.79.0] — Liczniki YouTube: suby / wyświetlenia / filmy (3/4 z „rozwiń wszystko")
 

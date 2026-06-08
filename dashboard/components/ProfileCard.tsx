@@ -22,6 +22,8 @@ export default function ProfileCard({
     { label: 'Portfel', value: data.wallet.toLocaleString('pl-PL') },
     { label: 'Bank', value: data.bank.toLocaleString('pl-PL') },
     { label: 'Majątek', value: netWorth.toLocaleString('pl-PL') },
+    { label: '🔥 Streak', value: data.dailyStreak ? `${data.dailyStreak} dni` : '—' },
+    { label: '🎒 Przedmioty', value: data.items },
     { label: 'Zaproszenia', value: data.invites },
   ];
 
@@ -75,7 +77,7 @@ export default function ProfileCard({
         </div>
       </div>
 
-      <div className="relative mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+      <div className="relative mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {tiles.map((t) => (
           <div key={t.label} className="rounded-xl border border-line bg-bg/40 p-3">
             <div className="text-[10px] uppercase tracking-wide text-muted">{t.label}</div>
