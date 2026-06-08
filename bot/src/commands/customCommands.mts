@@ -11,6 +11,9 @@ type CustomCommand = {
   response: RichMessage;
   ephemeral?: boolean;
   options?: { name: string; description?: string; required?: boolean }[];
+  type?: 'message' | 'random' | 'role';
+  randomLines?: string[];
+  roleId?: string;
 };
 
 function load(): CustomCommand[] {
@@ -41,6 +44,50 @@ export async function handleCustomCommand(
   for (const opt of cmd.options ?? []) {
     if (opt?.name) vars[`{${opt.name}}`] = interaction.options.getString(opt.name) ?? '';
   }
+
+  const type = cmd.type ?? 'message';
+
+  // Self-role: nadaj/zdejmij rolę wywołującemu
+  if (type === 'role' && cmd.roleId && guild) {
+    const member = await guild.members.fetch(interaction.user.id).catch(() => null);
+    if (!member) {
+      await interaction.reply({
+        content: 'Nie udało się pobrać profilu.',
+        flags: MessageFlags.Ephemeral,
+      });
+      return true;
+    }
+    const has = member.roles.cache.has(cmd.roleId);
+    try {
+      if (has) await member.roles.remove(cmd.roleId);
+      else await member.roles.add(cmd.roleId);
+      await interaction.reply({
+        content: has ? `➖ Zabrano rolę <@&${cmd.roleId}>` : `➕ Nadano rolę <@&${cmd.roleId}>`,
+        flags: MessageFlags.Ephemeral,
+        allowedMentions: { parse: [] },
+      });
+    } catch {
+      await interaction.reply({
+        content: '❌ Nie mogę zmienić tej roli (uprawnienia / hierarchia bota).',
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+    return true;
+  }
+
+  // Losowa odpowiedź z listy
+  if (type === 'random' && cmd.randomLines?.length) {
+    const pick = cmd.randomLines[Math.floor(Math.random() * cmd.randomLines.length)] ?? '';
+    let out = pick;
+    for (const [k, v] of Object.entries(vars)) out = out.split(k).join(v);
+    await interaction.reply(
+      cmd.ephemeral
+        ? { content: out.slice(0, 2000), flags: MessageFlags.Ephemeral }
+        : { content: out.slice(0, 2000) },
+    );
+    return true;
+  }
+
   const payload = buildRichMessage(cmd.response, vars);
   if (!payload.content && !payload.embeds.length) {
     await interaction.reply({ content: '(pusta odpowiedź)', flags: MessageFlags.Ephemeral });

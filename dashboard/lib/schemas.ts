@@ -121,6 +121,9 @@ export const customCommandSchema = z.object({
     .max(25)
     .optional()
     .default([]),
+  type: z.enum(['message', 'random', 'role']).optional().default('message'),
+  randomLines: z.array(z.string().min(1).max(2000)).max(50).optional().default([]),
+  roleId: z.string().max(40).optional().default(''),
 });
 export const customCommandsSchema = z.object({
   commands: z.array(customCommandSchema).max(25),

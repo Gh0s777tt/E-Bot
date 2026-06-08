@@ -13,6 +13,9 @@ export type CustomCommand = {
   response: RichMessage;
   ephemeral: boolean;
   options?: CommandOption[];
+  type?: 'message' | 'random' | 'role';
+  randomLines?: string[];
+  roleId?: string;
 };
 
 export async function getCustomCommands(): Promise<CustomCommand[]> {

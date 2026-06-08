@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-139-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.72.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-140-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.73.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.73.0] — Komendy slash: typy odpowiedzi (losowa / rola)
+
+- `[#140]` 🎲 **Typy odpowiedzi w komendach slash** — oprócz wiadomości/embedu komenda może teraz: **losować odpowiedź** z listy (np. `/cytat`, `/8ball`) albo działać jak **self-role** (nadaje rolę, ponowne użycie ją zdejmuje — np. `/rola-gracz`). Wybór typu w `/custom-commands`; rola przez picker, zmienne nadal działają. Self-role z checkiem uprawnień bota, odpowiedzi ephemeralne.
 
 ## [0.72.0] — Automod: eskalacja recydywy (progi ostrzeżeń)
 

@@ -6,6 +6,7 @@ import type { CustomCommand } from '../lib/customCommands';
 import type { GuildMeta } from '../lib/guild';
 import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
 import MessageStudio from './MessageStudio';
+import { RoleSelect } from './pickers';
 
 const inp =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -60,10 +61,14 @@ export default function CustomCommandsForm({
     setSt('saving');
     setMsg('');
     try {
+      const clean = cmds.map((c) => ({
+        ...c,
+        randomLines: (c.randomLines ?? []).map((s) => s.trim()).filter(Boolean),
+      }));
       const r = await fetch('/api/custom-commands', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ commands: cmds }),
+        body: JSON.stringify({ commands: clean }),
       });
       const j = (await r.json()) as { ok?: boolean; error?: string; registered?: number };
       if (r.ok && j.ok) {
@@ -238,27 +243,75 @@ export default function CustomCommandsForm({
                   ))}
                 </div>
 
-                <div className="space-y-1 text-sm">
-                  <span className="font-semibold text-white/90">Odpowiedź</span>
-                  <MessageStudio
-                    value={c.response}
-                    onChange={(response: RichMessage) => update(i, { response })}
-                    emojis={guild.emojis}
-                    variables={[
-                      { token: '{user}', label: 'Wywołujący (oznaczenie)', sample: '@Gracz' },
-                      { token: '{username}', label: 'Nazwa wywołującego', sample: 'Gracz' },
-                      { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
-                      { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
-                      ...(c.options ?? [])
-                        .filter((o) => o.name)
-                        .map((o) => ({
-                          token: `{${o.name}}`,
-                          label: `Argument: ${o.name}`,
-                          sample: o.description || o.name,
-                        })),
-                    ]}
-                  />
-                </div>
+                <label className="space-y-1 text-sm">
+                  <span className="font-semibold text-white/90">Typ odpowiedzi</span>
+                  <select
+                    value={c.type ?? 'message'}
+                    onChange={(e) => update(i, { type: e.target.value as CustomCommand['type'] })}
+                    className={inp}
+                  >
+                    <option value="message">Wiadomość / embed</option>
+                    <option value="random">Losowa z listy</option>
+                    <option value="role">Nadanie / zdjęcie roli</option>
+                  </select>
+                </label>
+
+                {(c.type ?? 'message') === 'message' && (
+                  <div className="space-y-1 text-sm">
+                    <span className="font-semibold text-white/90">Odpowiedź</span>
+                    <MessageStudio
+                      value={c.response}
+                      onChange={(response: RichMessage) => update(i, { response })}
+                      emojis={guild.emojis}
+                      variables={[
+                        { token: '{user}', label: 'Wywołujący (oznaczenie)', sample: '@Gracz' },
+                        { token: '{username}', label: 'Nazwa wywołującego', sample: 'Gracz' },
+                        { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
+                        { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
+                        ...(c.options ?? [])
+                          .filter((o) => o.name)
+                          .map((o) => ({
+                            token: `{${o.name}}`,
+                            label: `Argument: ${o.name}`,
+                            sample: o.description || o.name,
+                          })),
+                      ]}
+                    />
+                  </div>
+                )}
+
+                {c.type === 'random' && (
+                  <label className="space-y-1 text-sm">
+                    <span className="font-semibold text-white/90">
+                      Losowe odpowiedzi (jedna na linię)
+                    </span>
+                    <textarea
+                      value={(c.randomLines ?? []).join('\n')}
+                      onChange={(e) => update(i, { randomLines: e.target.value.split('\n') })}
+                      rows={4}
+                      placeholder={'Pierwsza odpowiedź\nDruga odpowiedź\n…'}
+                      className={inp}
+                    />
+                    <span className="text-[11px] text-muted">
+                      Bot wylosuje jedną. Działają zmienne ({'{user}'}, {'{server}'}…).
+                    </span>
+                  </label>
+                )}
+
+                {c.type === 'role' && (
+                  <label className="space-y-1 text-sm">
+                    <span className="font-semibold text-white/90">Rola do nadania / zdjęcia</span>
+                    <RoleSelect
+                      value={c.roleId ?? ''}
+                      onChange={(v) => update(i, { roleId: v })}
+                      roles={guild.roles}
+                      placeholder="— wybierz rolę —"
+                    />
+                    <span className="text-[11px] text-muted">
+                      Self-role: pierwsze użycie nadaje rolę, kolejne ją zdejmuje.
+                    </span>
+                  </label>
+                )}
               </div>
             )}
           </div>
