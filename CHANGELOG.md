@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-112-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.59.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-114-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.60.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.60.0] — Pozostałości #1: Profil 2.0 + Smallcaps w UI
+
+- `[#114]` 🔠 **Smallcaps w całym UI:** przełącznik **„Aa"** w Topbarze — `html.smallcaps` renderuje nagłówki panelu jako kapitaliki (`font-variant-caps: small-caps`, reguły poza warstwami Tailwind). Opt-in (localStorage, bez flasha), domyślnie OFF.
+- `[#113]` 👤 **Profil 2.0:** zakładka `/profile` pokazuje teraz **Twój profil serwerowy** (poziom, XP, saldo, zaproszenia, odznaki) z `publicProfile(uid)` — obok danych konta właściciela i linku GH0ST. Dashboard-only, bez SQL.
 
 ## [0.59.0] — Faza 8 #14: Integracje (generic incoming webhook) → 🎉 KONIEC FAZY 8
 

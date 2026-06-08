@@ -119,3 +119,13 @@ html.compact .space-y-5 > * + * {
 html.compact h2 {
   margin-bottom: 0.6rem;
 }
+
+/* ── Smallcaps w UI (opt-in przez html.smallcaps) — nagłówki w kapitalikach ──────── */
+html.smallcaps h1,
+html.smallcaps h2,
+html.smallcaps h3,
+html.smallcaps .font-display {
+  font-variant-caps: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}

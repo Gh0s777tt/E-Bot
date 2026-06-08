@@ -1,17 +1,28 @@
 import { CheckCircle2, ExternalLink, LogOut } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { getLinkStatus } from '../../lib/ghostLink';
+import { publicProfile } from '../../lib/public';
 import { getAuthSecret, verifySession } from '../../lib/session';
 
 export const dynamic = 'force-dynamic';
 
 const GHOST_URL = 'https://ghost-empire-web.vercel.app';
 
+function Stat({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="rounded-xl border border-line bg-elevated/40 p-4">
+      <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
+      <div className="mt-1 font-display text-2xl text-accent">{value}</div>
+    </div>
+  );
+}
+
 export default async function ProfilePage() {
   const token = (await cookies()).get('ebot_session')?.value;
   const session = token ? await verifySession(token, getAuthSecret()) : null;
   const initial = (session?.uname || '?').charAt(0).toUpperCase();
   const link = await getLinkStatus(session?.uid);
+  const prof = session?.uid ? await publicProfile(session.uid) : null;
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -42,6 +53,28 @@ export default async function ProfilePage() {
           </a>
         </div>
       </section>
+
+      {prof && (
+        <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-4 text-base font-semibold uppercase tracking-wide">
+            Twój profil serwerowy
+          </h2>
+          {prof.found ? (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <Stat label="Poziom" value={prof.level} />
+              <Stat label="XP" value={prof.xp.toLocaleString('pl-PL')} />
+              <Stat label="Saldo" value={prof.total.toLocaleString('pl-PL')} />
+              <Stat label="Zaproszenia" value={prof.invites} />
+              <Stat label="Odznaki" value={`${prof.badges}/13`} />
+            </div>
+          ) : (
+            <p className="text-sm text-muted">
+              Brak danych — zdobywaj XP i ekonomię aktywnością na serwerze, a tu pojawią się Twoje
+              statystyki. Pełną kartę pokaże komenda <code className="text-accent">/profile</code>.
+            </p>
+          )}
+        </section>
+      )}
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-3 text-base font-semibold uppercase tracking-wide">Konto GH0ST EMPIRE</h2>

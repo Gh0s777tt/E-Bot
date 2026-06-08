@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, Minimize2, UserPlus } from 'lucide-react';
+import { LogOut, Minimize2, Type, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MobileNav from './MobileNav';
@@ -24,6 +24,7 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
   const pathname = usePathname();
   const [status, setStatus] = useState<Status>({ online: null, tag: 'E-Bot' });
   const [compact, setCompact] = useState(false);
+  const [smallcaps, setSmallcaps] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -54,6 +55,20 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
     setCompact(next);
   }
 
+  useEffect(() => {
+    setSmallcaps(document.documentElement.classList.contains('smallcaps'));
+  }, []);
+  function toggleSmallcaps() {
+    const next = !document.documentElement.classList.contains('smallcaps');
+    document.documentElement.classList.toggle('smallcaps', next);
+    try {
+      localStorage.setItem('smallcaps', next ? '1' : '0');
+    } catch {
+      /* brak localStorage */
+    }
+    setSmallcaps(next);
+  }
+
   const dot =
     status.online === true ? 'bg-green-500' : status.online === false ? 'bg-accent' : 'bg-muted';
   const stateText = status.online === true ? 'online' : status.online === false ? 'offline' : '—';
@@ -80,6 +95,14 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
           className="hidden items-center gap-1.5 rounded-md border border-line px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex"
         >
           <Minimize2 size={13} /> {compact ? 'Normalny' : 'Kompakt'}
+        </button>
+        <button
+          type="button"
+          onClick={toggleSmallcaps}
+          title="Kapitaliki (small caps) w nagłówkach"
+          className={`hidden items-center gap-1.5 rounded-md border px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex ${smallcaps ? 'border-accent text-accent' : 'border-line'}`}
+        >
+          <Type size={13} /> Aa
         </button>
         <a
           href={inviteUrl}
