@@ -38,10 +38,13 @@ export type CommandGroup = { label: string; commands: SlashCommand[] };
 const COMMAND_GROUPS: { label: string; names: string[] }[] = [
   { label: 'Ogólne', names: ['ping', 'portal', 'link'] },
   { label: 'Biblioteka & gry', names: ['library', 'wishlist', 'backlog'] },
-  { label: 'Moderacja & bezpieczeństwo', names: ['mod', 'case', 'antinuke', 'verifypanel'] },
+  {
+    label: 'Moderacja & bezpieczeństwo',
+    names: ['mod', 'case', 'antinuke', 'verifypanel', 'lockdown'],
+  },
   { label: 'Wsparcie', names: ['ticket', 'ticketpanel', 'applypanel'] },
   { label: 'AI', names: ['ai', 'ask', 'rewrite', 'tldr', 'translate', 'imagine', 'describe'] },
-  { label: 'Poziomy', names: ['profile', 'rank', 'prestige', 'hof', 'quests', 'xp'] },
+  { label: 'Poziomy', names: ['profile', 'rank', 'prestige', 'hof', 'quests', 'xp', 'xpevent'] },
   { label: 'Ekonomia', names: ['eco', 'market', 'lottery', 'skins'] },
   {
     label: 'Społeczność',
@@ -56,9 +59,14 @@ const COMMAND_GROUPS: { label: string; names: string[] }[] = [
       'reactionpanel',
       'linktwitch',
       'donate',
+      'rep',
+      'confess',
     ],
   },
-  { label: 'Zabawa & engagement', names: ['fun', 'remind', 'giveaway', 'buttonpanel', 'schedule'] },
+  {
+    label: 'Zabawa & engagement',
+    names: ['fun', 'remind', 'giveaway', 'buttonpanel', 'schedule', 'trivia', 'event'],
+  },
 ];
 
 export function groupCommands(commands: SlashCommand[]): CommandGroup[] {

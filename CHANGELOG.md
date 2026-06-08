@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-167-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.99.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-168-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.99.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.99.1] — Zakładka Komendy: kategorie dla nowych komend
+
+- `[#168]` 🗂️ Zakładka **Komendy** (lista pobierana na żywo z API Discorda — zawsze aktualna) miała 6 najnowszych komend w grupie „Inne". Dograłem je do właściwych kategorii: **lockdown** → Moderacja, **xpevent** → Poziomy, **rep/confess** → Społeczność, **trivia/event** → Zabawa & engagement. Liczba 51 to realna liczba slash-komend (np. `/eco` czy `/rep` mieszczą wiele subkomend — licząc je, bot ma ~160 akcji).
 
 ## [0.99.0] — Sezon ekonomii z wypłatą
 
