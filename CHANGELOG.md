@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-154-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.86.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-155-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.87.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.87.0] — Interakcje (1/?): Quiz /trivia
+
+- `[#155]` 🧠 **`/trivia`** — quiz na żywo: pytanie + **4 przyciski (A–D)**, pierwsza poprawna odpowiedź w 25 s **wygrywa nagrodę w ekonomii** (trafia też do historii transakcji jako „trivia"). Kategorie: **Ogólna / Gaming / Film/Seriale / Nauka / Polska** (lub losowa). Każdy odpowiada raz, na końcu odsłaniana poprawna odpowiedź i zwycięzca. Bank ~30 pytań PL. Start kierunku **Nowe interakcje**.
 
 ## [0.86.0] — Onboarding (2/?): Kreator startowy z presetami
 

@@ -41,6 +41,7 @@ import * as ticket from './ticket.mts';
 import * as ticketpanel from './ticketpanel.mts';
 import * as tldr from './tldr.mts';
 import * as translate from './translate.mts';
+import * as trivia from './trivia.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
 import * as xp from './xp.mts';
@@ -96,4 +97,5 @@ export const commands: Command[] = [
   xp,
   ask,
   rewrite,
+  trivia,
 ];
