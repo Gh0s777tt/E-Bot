@@ -3,7 +3,13 @@
 // settings-sync). Dane piszemy do tabeli Supabase 'user_levels'. Panel czyta ranking z tej tabeli.
 import { type Client, Events, type GuildMember, type Message } from 'discord.js';
 import { xpMultiplier } from './economy/effects.mts';
-import { cloudSelect, cloudUpsert, hasCloud } from './lib/cloud.mts';
+import {
+  cloudGetSetting,
+  cloudSelect,
+  cloudSetSetting,
+  cloudUpsert,
+  hasCloud,
+} from './lib/cloud.mts';
 import { getSettings } from './lib/db.mts';
 
 type Reward = { level: number; roleId: string };
@@ -78,6 +84,37 @@ export function levelForXp(xp: number): number {
   return lvl;
 }
 
+// ── Double-XP event (czasowy mnożnik globalny) — stan w pamięci + cloud key 'xp_event' ──
+let xpEvent = { mult: 1, until: 0 };
+export function getXpEvent(): { mult: number; until: number } {
+  return xpEvent;
+}
+export async function setXpEvent(mult: number, minutes: number): Promise<void> {
+  xpEvent =
+    minutes > 0 && mult > 1
+      ? { mult, until: Date.now() + minutes * 60_000 }
+      : { mult: 1, until: 0 };
+  if (hasCloud()) {
+    try {
+      await cloudSetSetting('xp_event', JSON.stringify(xpEvent));
+    } catch {
+      /* trudno */
+    }
+  }
+}
+async function loadXpEvent(): Promise<void> {
+  if (!hasCloud()) return;
+  try {
+    const raw = await cloudGetSetting('xp_event');
+    if (raw) xpEvent = JSON.parse(raw) as { mult: number; until: number };
+  } catch {
+    /* brak */
+  }
+}
+function eventMult(): number {
+  return xpEvent.until > Date.now() && xpEvent.mult > 1 ? xpEvent.mult : 1;
+}
+
 // ── Faza 7 / F4 — mnożniki, wykluczenia ──
 function isWeekend(): boolean {
   const d = new Date().getUTCDay();
@@ -90,6 +127,7 @@ function effectiveXp(member: GuildMember, base: number): number {
   }
   if (isWeekend() && cfg.weekendBonus > 1) mult *= cfg.weekendBonus;
   mult *= xpMultiplier(member.guild.id, member.id); // Tor B — item XP-boost
+  mult *= eventMult(); // Double-XP event (globalny, czasowy)
   return Math.max(0, Math.round(base * mult));
 }
 function noXpMember(member: GuildMember): boolean {
@@ -182,6 +220,7 @@ async function onLevelUp(
 export function startLeveling(client: Client): void {
   refreshConfig();
   setInterval(refreshConfig, 30_000);
+  void loadXpEvent();
 
   // XP za wiadomości (nie potrzebujemy treści → wystarczy intent GuildMessages)
   client.on(Events.MessageCreate, (msg: Message) => {

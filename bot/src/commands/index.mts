@@ -47,6 +47,7 @@ import * as trivia from './trivia.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
 import * as xp from './xp.mts';
+import * as xpevent from './xpevent.mts';
 
 export type Command = {
   data: { name: string; toJSON: () => unknown };
@@ -102,4 +103,5 @@ export const commands: Command[] = [
   trivia,
   rep,
   confess,
+  xpevent,
 ];

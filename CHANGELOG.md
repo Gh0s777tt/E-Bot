@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-156-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.88.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-157-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.89.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.89.0] — Interakcje (3/?): Double-XP event /xpevent
+
+- `[#157]` ⚡ **Event podwójnego XP** — admin komendą **`/xpevent start`** (x2/x3, 1–1440 min) włącza globalny mnożnik XP za czat i voice; `stop` / `status`. Mnożnik wpina się w istniejący system levelingu (obok bonusu weekendowego i boostów per-rola). Stan przeżywa restart bota (cloud key `xp_event`). Świetne na „happy hour" aktywności.
 
 ## [0.88.0] — Interakcje (2/?): Reputacja /rep + Confessions /confess
 
