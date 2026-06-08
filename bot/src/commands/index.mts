@@ -3,6 +3,7 @@ import * as afk from './afk.mts';
 import * as ai from './ai.mts';
 import * as antinuke from './antinuke.mts';
 import * as applypanel from './applypanel.mts';
+import * as ask from './ask.mts';
 import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
@@ -31,6 +32,7 @@ import * as quests from './quests.mts';
 import * as rank from './rank.mts';
 import * as reactionpanel from './reactionpanel.mts';
 import * as remind from './remind.mts';
+import * as rewrite from './rewrite.mts';
 import * as rolemenu from './rolemenu.mts';
 import * as schedule from './schedule.mts';
 import * as skins from './skins.mts';
@@ -92,4 +94,6 @@ export const commands: Command[] = [
   lottery,
   market,
   xp,
+  ask,
+  rewrite,
 ];

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-108-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.55.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-109-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.56.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.56.0] — Faza 8 #11: AI 2.0 (/ask + /rewrite)
+
+- `[#109]` 🧠 **AI 2.0:** dwa nowe narzędzia — **`/ask`** (jednorazowe pytanie do AI, z personą, bez pamięci) i **`/rewrite`** (przepisz tekst w stylu: formalny / luźny / zwięzły / poprawny językowo / uprzejmy). Wspólna warstwa `lib/ai.mts` (DeepSeek/OpenAI) + dzienne limity `ai_usage`. **45 komend.** Bez SQL.
 
 ## [0.55.0] — Faza 8 #10: Levels 2.0 (/xp admin + DM przy awansie)
 

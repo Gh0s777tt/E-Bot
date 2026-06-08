@@ -40,7 +40,7 @@ const COMMAND_GROUPS: { label: string; names: string[] }[] = [
   { label: 'Biblioteka & gry', names: ['library', 'wishlist', 'backlog'] },
   { label: 'Moderacja & bezpieczeństwo', names: ['mod', 'case', 'antinuke', 'verifypanel'] },
   { label: 'Wsparcie', names: ['ticket', 'ticketpanel', 'applypanel'] },
-  { label: 'AI', names: ['ai', 'tldr', 'translate', 'imagine', 'describe'] },
+  { label: 'AI', names: ['ai', 'ask', 'rewrite', 'tldr', 'translate', 'imagine', 'describe'] },
   { label: 'Poziomy', names: ['profile', 'rank', 'prestige', 'hof', 'quests', 'xp'] },
   { label: 'Ekonomia', names: ['eco', 'market', 'lottery', 'skins'] },
   {
