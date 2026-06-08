@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-109-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.56.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-110-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.57.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.57.0] — Faza 8 #12: Game Library 2.0 (klikalne gry → szczegóły)
+
+- `[#110]` 🎮 **Game Library 2.0:** karty gier w `/library` są teraz **klikalne** → modal ze szczegółami (okładka, platforma, rok, gatunki, czas gry, ostatnio grane, opis) + **link do sklepu Steam** (dla gier Steam). Dashboard-only, bez SQL. (Serwerowe alerty cen/patch-notes pokrywają moduły ITAD/patchnotes; pełna ing-data „PatchBot" per-gra — dalsza rozbudowa.)
 
 ## [0.56.0] — Faza 8 #11: AI 2.0 (/ask + /rewrite)
 

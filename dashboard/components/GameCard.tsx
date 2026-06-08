@@ -8,10 +8,14 @@ const PLATFORM_BADGE: Record<string, string> = {
   ubisoft: 'Ubi',
 };
 
-export default function GameCard({ game }: { game: Game }) {
+export default function GameCard({ game, onClick }: { game: Game; onClick?: () => void }) {
   const hours = game.playtime_min ? Math.round(game.playtime_min / 60) : 0;
   return (
-    <div className="group relative aspect-[2/3] overflow-hidden rounded-lg bg-elevated shadow-lg transition hover:ring-2 hover:ring-accent">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative block aspect-[2/3] w-full overflow-hidden rounded-lg bg-elevated text-left shadow-lg transition hover:ring-2 hover:ring-accent"
+    >
       <CoverImg
         game={game}
         className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
@@ -26,6 +30,6 @@ export default function GameCard({ game }: { game: Game }) {
           {hours ? ` · ${hours} h` : ''}
         </p>
       </div>
-    </div>
+    </button>
   );
 }

@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Game } from '../lib/data';
 import GameCard from './GameCard';
+import GameDetailModal from './GameDetailModal';
 
 const PLATFORM_LABEL: Record<string, string> = {
   steam: 'Steam',
@@ -16,6 +17,7 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
   const [q, setQ] = useState('');
   const [platform, setPlatform] = useState('all');
   const [genre, setGenre] = useState('all');
+  const [selected, setSelected] = useState<Game | null>(null);
 
   const platforms = useMemo(() => [...new Set(games.map((g) => g.platform))], [games]);
   const genres = useMemo(() => {
@@ -81,12 +83,18 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
       {filtered.length ? (
         <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10">
           {filtered.map((g) => (
-            <GameCard key={`${g.platform}-${g.platform_app_id}`} game={g} />
+            <GameCard
+              key={`${g.platform}-${g.platform_app_id}`}
+              game={g}
+              onClick={() => setSelected(g)}
+            />
           ))}
         </div>
       ) : (
         <p className="py-10 text-center text-muted">Brak wyników dla wybranych filtrów.</p>
       )}
+
+      <GameDetailModal game={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }
