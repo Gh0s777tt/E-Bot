@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-142-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.74.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-143-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.75.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.75.0] — Kategorie komend · live-status · autorola z opóźnieniem
+
+- `[#143]` Trzy usprawnienia naraz:
+  - 🗂️ **Kategorie komend** — własne komendy można pogrupować (pole „Kategoria"); `/pomoc` listuje je w sekcjach (embed-fields wg kategorii).
+  - 🔴 **Live-status na pulpicie** — pasek górny odświeża status bota co **12 s** (zamiast 30 s), **pauzuje** gdy karta w tle i odświeża **natychmiast po powrocie** (Page Visibility API).
+  - 🧹 **Autorola z opóźnieniem (anty-raid)** — w powitaniach ustawiasz opóźnienie nadania autoroli; bot nada ją po N s i **tylko jeśli osoba nadal jest na serwerze** (raid-boty znikające szybciej nie dostaną roli).
 
 ## [0.74.0] — Komenda /pomoc (auto-lista komend custom)
 

@@ -30,16 +30,23 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
 
   useEffect(() => {
     let alive = true;
-    const load = () =>
+    const load = () => {
+      if (typeof document !== 'undefined' && document.hidden) return; // pauza, gdy karta w tle
       fetch('/api/bot-status')
         .then((r) => r.json())
         .then((d) => alive && setStatus(d))
         .catch(() => {});
+    };
     load();
-    const id = setInterval(load, 30_000);
+    const id = setInterval(load, 12_000); // „live" — szybkie odświeżanie statusu
+    const onVis = () => {
+      if (!document.hidden) load(); // natychmiast po powrocie do karty
+    };
+    document.addEventListener('visibilitychange', onVis);
     return () => {
       alive = false;
       clearInterval(id);
+      document.removeEventListener('visibilitychange', onVis);
     };
   }, []);
 

@@ -15,6 +15,7 @@ type CustomCommand = {
   randomLines?: string[];
   roleId?: string;
   cooldownSec?: number;
+  category?: string;
 };
 
 function load(): CustomCommand[] {
@@ -100,14 +101,21 @@ export async function handleCustomCommand(
 
   // Lista komend (/pomoc) — dynamicznie z wszystkich komend custom
   if (type === 'help') {
-    const list = load()
-      .filter((c) => c.type !== 'help')
-      .map((c) => `**/${c.name}** — ${c.description || '—'}`)
-      .join('\n');
+    const groups = new Map<string, string[]>();
+    for (const c of load()) {
+      if (c.type === 'help') continue;
+      const cat = (c.category || 'Ogólne').trim() || 'Ogólne';
+      const arr = groups.get(cat) ?? [];
+      arr.push(`**/${c.name}** — ${c.description || '—'}`);
+      groups.set(cat, arr);
+    }
+    const fields = [...groups.entries()]
+      .map(([name, lines]) => ({ name, value: lines.join('\n').slice(0, 1024) }))
+      .slice(0, 25);
     const embed = {
       title: '📜 Dostępne komendy',
-      description: (list || 'Brak własnych komend.').slice(0, 4000),
       color: 0xe50914,
+      fields: fields.length ? fields : [{ name: 'Brak', value: 'Brak własnych komend.' }],
     };
     await interaction.reply(
       cmd.ephemeral ? { embeds: [embed], flags: MessageFlags.Ephemeral } : { embeds: [embed] },

@@ -125,6 +125,7 @@ export const customCommandSchema = z.object({
   randomLines: z.array(z.string().min(1).max(2000)).max(50).optional().default([]),
   roleId: z.string().max(40).optional().default(''),
   cooldownSec: z.number().int().min(0).max(86400).optional().default(0),
+  category: z.string().max(40).optional().default(''),
 });
 export const customCommandsSchema = z.object({
   commands: z.array(customCommandSchema).max(25),
@@ -320,6 +321,7 @@ export const welcomeSchema = z.object({
   cardEnabled: z.boolean().optional().default(false),
   card: cardStyleSchema.optional(),
   messageSpec: richMessageSchema.optional(),
+  autoroleDelaySec: z.number().int().min(0).max(3600).optional().default(0),
 });
 export type WelcomeInput = z.infer<typeof welcomeSchema>;
 

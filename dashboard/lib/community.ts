@@ -12,6 +12,7 @@ export type WelcomeConfig = {
   cardEnabled: boolean;
   card: CardStyle;
   messageSpec?: RichMessage;
+  autoroleDelaySec?: number;
 };
 export const WELCOME_DEFAULT: WelcomeConfig = {
   enabled: false,
@@ -20,6 +21,7 @@ export const WELCOME_DEFAULT: WelcomeConfig = {
   autoroleId: '',
   cardEnabled: false,
   card: { ...RANKCARD_DEFAULT },
+  autoroleDelaySec: 0,
 };
 
 export async function getWelcomeConfig(): Promise<WelcomeConfig> {

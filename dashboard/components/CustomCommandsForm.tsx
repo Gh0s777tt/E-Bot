@@ -164,19 +164,31 @@ export default function CustomCommandsForm({
                   Odpowiedź widoczna tylko dla wywołującego (ephemeral)
                 </label>
 
-                <label className="flex flex-wrap items-center gap-2 text-sm text-muted">
-                  <span>Cooldown na użytkownika (sekundy, 0 = brak):</span>
-                  <input
-                    type="number"
-                    value={c.cooldownSec ?? 0}
-                    onChange={(e) =>
-                      update(i, {
-                        cooldownSec: Math.max(0, Math.floor(Number(e.target.value) || 0)),
-                      })
-                    }
-                    className="w-24 rounded-md border border-line bg-elevated px-3 py-1.5 text-sm outline-none focus:border-accent"
-                  />
-                </label>
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
+                  <label className="flex items-center gap-2">
+                    <span>Cooldown / użytkownika (s, 0 = brak):</span>
+                    <input
+                      type="number"
+                      value={c.cooldownSec ?? 0}
+                      onChange={(e) =>
+                        update(i, {
+                          cooldownSec: Math.max(0, Math.floor(Number(e.target.value) || 0)),
+                        })
+                      }
+                      className="w-20 rounded-md border border-line bg-elevated px-3 py-1.5 text-sm outline-none focus:border-accent"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <span>Kategoria (grupy w /pomoc):</span>
+                    <input
+                      value={c.category ?? ''}
+                      onChange={(e) => update(i, { category: e.target.value })}
+                      placeholder="np. Zabawa"
+                      maxLength={40}
+                      className="w-36 rounded-md border border-line bg-elevated px-3 py-1.5 text-sm outline-none focus:border-accent"
+                    />
+                  </label>
+                </div>
 
                 {/* Argumenty komendy — wartości wstawisz w odpowiedzi jako {nazwa} */}
                 <div className="space-y-2 rounded-lg border border-line/60 bg-bg/30 p-2.5">

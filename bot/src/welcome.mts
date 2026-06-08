@@ -23,6 +23,7 @@ type WelcomeConfig = {
   cardEnabled?: boolean;
   card?: Partial<CardStyle>;
   messageSpec?: RichMessage;
+  autoroleDelaySec?: number;
 };
 let cfg: WelcomeConfig = { enabled: false, channelId: '', message: '', autoroleId: '' };
 
@@ -46,7 +47,21 @@ export function startWelcome(client: Client): void {
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     if (!cfg.enabled) return;
     try {
-      if (cfg.autoroleId) await member.roles.add(cfg.autoroleId).catch(() => {});
+      if (cfg.autoroleId) {
+        const roleId = cfg.autoroleId;
+        const delay = Math.max(0, cfg.autoroleDelaySec ?? 0);
+        if (delay > 0) {
+          // Anty-raid: nadaj rolę dopiero po opóźnieniu i tylko, jeśli członek nadal jest na serwerze.
+          setTimeout(() => {
+            void member.guild.members
+              .fetch(member.id)
+              .then((m) => m.roles.add(roleId))
+              .catch(() => {});
+          }, delay * 1000);
+        } else {
+          await member.roles.add(roleId).catch(() => {});
+        }
+      }
       if (!cfg.channelId) return;
       const hasContent = !!cfg.message || hasRich(cfg.messageSpec);
       if (!hasContent && !cfg.cardEnabled) return;

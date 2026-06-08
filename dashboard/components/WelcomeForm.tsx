@@ -16,6 +16,7 @@ type Cfg = {
   cardEnabled: boolean;
   card: CardStyle;
   messageSpec: RichMessage;
+  autoroleDelaySec?: number;
 };
 
 export default function WelcomeForm({
@@ -79,6 +80,26 @@ export default function WelcomeForm({
           />
         </label>
       </div>
+
+      {c.autoroleId && (
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">
+            Opóźnienie autoroli (sekundy, anty-raid)
+          </span>
+          <input
+            type="number"
+            value={c.autoroleDelaySec ?? 0}
+            onChange={(e) =>
+              setC({ ...c, autoroleDelaySec: Math.max(0, Math.floor(Number(e.target.value) || 0)) })
+            }
+            className="w-full max-w-[200px] rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
+          />
+          <span className="block text-[11px] text-muted">
+            0 = od razu. Większa wartość = bot nada rolę dopiero po N s i tylko, jeśli osoba nadal
+            jest na serwerze (raid-boty znikające szybciej nie dostaną roli).
+          </span>
+        </label>
+      )}
 
       <div className="space-y-1 text-sm">
         <span className="font-semibold text-white/90">Wiadomość powitalna</span>
