@@ -412,6 +412,7 @@ export const antiraidSchema = z.object({
   altMinAgeDays: z.number().int().min(0).max(365).optional().default(7),
   altNoAvatar: z.boolean().optional().default(true),
   altAction: z.enum(['alert', 'kick', 'ban', 'timeout']).optional().default('alert'),
+  autoLockdown: z.boolean().optional().default(false),
 });
 export type AntiRaidInput = z.infer<typeof antiraidSchema>;
 

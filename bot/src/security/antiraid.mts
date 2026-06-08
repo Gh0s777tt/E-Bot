@@ -1,6 +1,7 @@
 // Faza 7 / F6.3 — anti-raid: detektor fali wejść (N w oknie M s) → akcja na falę + alert.
 // Opcjonalnie: bramka minimalnego wieku konta (młodsze konta = akcja). Config 'antiraid_config'.
 import { type Client, Events, type Guild, type GuildMember, type TextChannel } from 'discord.js';
+import { applyLockdown } from '../commands/lockdown.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
 
@@ -17,6 +18,7 @@ type AntiRaidConfig = {
   altMinAgeDays: number;
   altNoAvatar: boolean;
   altAction: 'alert' | Action;
+  autoLockdown: boolean; // przy wykryciu fali → automatyczna blokada serwera (/lockdown)
 };
 
 const DEFAULT: AntiRaidConfig = {
@@ -30,6 +32,7 @@ const DEFAULT: AntiRaidConfig = {
   altMinAgeDays: 7,
   altNoAvatar: true,
   altAction: 'alert',
+  autoLockdown: false,
 };
 
 let cfg: AntiRaidConfig = { ...DEFAULT };
@@ -165,6 +168,13 @@ export function startAntiRaid(client: Client): void {
         `🚨 **Anti-raid:** ${count} wejść w ${cfg.windowSec}s — tryb obronny (${cfg.action}) na ~${Math.round((raidUntil - now) / 1000)}s.`,
       );
       void record('raid', `${count} wejść w ${cfg.windowSec}s → ${cfg.action}`, count);
+      if (cfg.autoLockdown) {
+        const locked = await applyLockdown(member.guild, true, 'Auto anti-raid: fala wejść');
+        await alert(
+          member.guild,
+          `🔒 **Auto-lockdown:** zablokowano ${locked} kanałów. Zdejmij ręcznie: \`/lockdown off\``,
+        );
+      }
       const wave = [...recent];
       recent.length = 0;
       for (const r of wave) await punish(r.m, 'Anti-raid (fala wejść)');

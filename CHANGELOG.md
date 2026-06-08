@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-162-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.94.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-163-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.95.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.95.0] — Ogon (1): auto-lockdown przy raidzie
+
+- `[#163]` 🔒 **Auto-lockdown** — anti-raid spięty z `/lockdown`: gdy bot wykryje **falę wejść**, może **automatycznie zablokować pisanie na całym serwerze** (opcja w panelu → Bezpieczeństwo → „Auto-lockdown przy wykryciu fali"). Po opanowaniu sytuacji zdejmujesz ręcznie `/lockdown off`. Logika blokady wyniesiona do współdzielonej funkcji (`applyLockdown`).
 
 ## [0.94.0] — Ekonomia głębiej: pasywny dochód (odsetki bankowe)
 

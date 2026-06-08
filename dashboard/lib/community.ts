@@ -201,6 +201,7 @@ export type AntiRaidConfig = {
   altMinAgeDays: number;
   altNoAvatar: boolean;
   altAction: 'alert' | 'kick' | 'ban' | 'timeout';
+  autoLockdown: boolean;
 };
 export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   enabled: false,
@@ -213,6 +214,7 @@ export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   altMinAgeDays: 7,
   altNoAvatar: true,
   altAction: 'alert',
+  autoLockdown: false,
 };
 
 export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {

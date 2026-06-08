@@ -155,6 +155,22 @@ export default function AntiRaidForm({
         </div>
       </div>
 
+      <label className="flex items-center gap-2.5 rounded-xl border border-line bg-bg/40 p-3 text-sm">
+        <input
+          type="checkbox"
+          checked={c.autoLockdown}
+          onChange={(e) => setC({ ...c, autoLockdown: e.target.checked })}
+          className="h-4 w-4 accent-accent"
+        />
+        <span>
+          <span className="font-semibold text-white/90">🔒 Auto-lockdown przy wykryciu fali</span>
+          <span className="ml-1 text-muted">
+            — automatycznie blokuje pisanie na całym serwerze (zdejmiesz przez{' '}
+            <code>/lockdown off</code>).
+          </span>
+        </span>
+      </label>
+
       <div className="flex items-center gap-3">
         <button
           type="button"
