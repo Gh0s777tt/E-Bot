@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-170-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.101.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-171-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.102.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.102.0] — 🏗️ Architekt Serwera (3/?): AI-kreator (opis → blueprint)
+
+- `[#171]` 🤖 **AI-kreator** — wpisujesz jednym zdaniem do czego jest serwer (np. „streamer Fortnite ze sklepem za punkty"), a AI dobiera **sugerowany preset + bloki struktury** (zaznacza je automatycznie). Wystarczy kliknąć „Utwórz strukturę". Woła LLM server-side (DeepSeek lub OpenAI), waliduje odpowiedź do dozwolonych wartości. _Uwaga:_ wymaga `DEEPSEEK_API_KEY` lub `OPENAI_API_KEY` w **env panelu na Vercel** (nie tylko bota).
 
 ## [0.101.0] — 🏗️ Architekt Serwera (2/?): twórz + POŁĄCZ (auto-wpinanie)
 

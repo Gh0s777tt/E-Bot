@@ -1,15 +1,46 @@
 'use client';
 
-import { Check, Hammer, Loader2, X } from 'lucide-react';
+import { Check, Hammer, Loader2, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 import { PROV_BLOCKS, type ProvBlock } from '../lib/setup';
 
 type LogItem = { label: string; ok: boolean; detail?: string };
+const PRESET_LABEL: Record<string, string> = {
+  streamer: 'Serwer streamera',
+  gaming: 'Serwer gamingowy',
+  community: 'Społeczność',
+};
 
 export default function ServerArchitect() {
   const [sel, setSel] = useState<Set<ProvBlock>>(new Set());
   const [st, setSt] = useState<'idle' | 'working' | 'done' | 'err'>('idle');
   const [log, setLog] = useState<LogItem[]>([]);
+  const [desc, setDesc] = useState('');
+  const [aiSt, setAiSt] = useState<'idle' | 'thinking' | 'err'>('idle');
+  const [aiPreset, setAiPreset] = useState<string | null>(null);
+
+  async function aiSuggest() {
+    if (desc.trim().length < 3) return;
+    setAiSt('thinking');
+    setAiPreset(null);
+    try {
+      const r = await fetch('/api/setup/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: desc.trim() }),
+      });
+      const d = (await r.json()) as { ok?: boolean; preset?: string | null; blocks?: ProvBlock[] };
+      if (!r.ok || !d.ok) {
+        setAiSt('err');
+        return;
+      }
+      setSel(new Set(d.blocks ?? []));
+      setAiPreset(d.preset ?? null);
+      setAiSt('idle');
+    } catch {
+      setAiSt('err');
+    }
+  }
 
   function toggle(b: ProvBlock) {
     setSel((s) => {
@@ -62,6 +93,44 @@ export default function ServerArchitect() {
         logi serwera, liczniki → moduł liczników). Wymaga uprawnień bota{' '}
         <em>Zarządzanie kanałami</em> i <em>Zarządzanie rolami</em>.
       </p>
+
+      <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">
+        <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white/90">
+          <Sparkles size={16} className="text-accent" /> AI-kreator — opisz serwer, dobiorę bloki
+        </div>
+        <textarea
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          placeholder="np. serwer dla streamera Fortnite z aktywną społecznością i sklepem za punkty"
+          rows={2}
+          className="w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
+        />
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={aiSuggest}
+            disabled={aiSt === 'thinking' || desc.trim().length < 3}
+            className="inline-flex items-center gap-2 rounded-md border border-accent/50 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent hover:text-white disabled:opacity-50"
+          >
+            {aiSt === 'thinking' ? (
+              <Loader2 size={15} className="animate-spin" />
+            ) : (
+              <Sparkles size={15} />
+            )}
+            {aiSt === 'thinking' ? 'Myślę…' : 'Zaproponuj (AI)'}
+          </button>
+          {aiPreset && (
+            <span className="text-sm text-muted">
+              Sugerowany preset:{' '}
+              <strong className="text-white">{PRESET_LABEL[aiPreset] ?? aiPreset}</strong> — bloki
+              zaznaczyłem niżej.
+            </span>
+          )}
+          {aiSt === 'err' && (
+            <span className="text-sm text-accent">AI niedostępne — sprawdź klucz w env.</span>
+          )}
+        </div>
+      </div>
 
       <div className="grid gap-2 sm:grid-cols-2">
         {PROV_BLOCKS.map((b) => {

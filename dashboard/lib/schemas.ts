@@ -521,6 +521,12 @@ export const provisionSchema = z.object({
 });
 export type ProvisionInput = z.infer<typeof provisionSchema>;
 
+// ── Architekt serwera — AI-kreator (POST /api/setup/ai) ──
+export const aiSetupSchema = z.object({
+  description: z.string().min(3).max(500),
+});
+export type AiSetupInput = z.infer<typeof aiSetupSchema>;
+
 // ── AI-moderacja (POST /api/aimod) ─────────────────────────
 export const aimodSchema = z.object({
   enabled: z.boolean(),
