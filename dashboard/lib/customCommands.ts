@@ -6,11 +6,13 @@ import { getRawSetting, setRawSetting } from './data';
 import { getPrimaryGuildId } from './guild';
 import { normalizeRich, type RichMessage } from './richMessage';
 
+export type CommandOption = { name: string; description: string; required: boolean };
 export type CustomCommand = {
   name: string;
   description: string;
   response: RichMessage;
   ephemeral: boolean;
+  options?: CommandOption[];
 };
 
 export async function getCustomCommands(): Promise<CustomCommand[]> {
@@ -91,9 +93,25 @@ export async function saveCustomCommands(commands: CustomCommand[]): Promise<Syn
 
   let registered = 0;
   for (const c of commands) {
+    // opcje (typ 3 = STRING); Discord wymaga: wymagane PRZED opcjonalnymi
+    const options = (c.options ?? [])
+      .filter((o) => o.name)
+      .slice(0, 25)
+      .map((o) => ({
+        type: 3,
+        name: o.name,
+        description: o.description || o.name,
+        required: !!o.required,
+      }))
+      .sort((a, b) => Number(b.required) - Number(a.required));
     const r = await dfetch(base, {
       method: 'POST',
-      body: JSON.stringify({ name: c.name, description: c.description || c.name, type: 1 }),
+      body: JSON.stringify({
+        name: c.name,
+        description: c.description || c.name,
+        type: 1,
+        ...(options.length ? { options } : {}),
+      }),
     });
     if (r?.ok) registered++;
   }

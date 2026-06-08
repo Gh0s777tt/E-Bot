@@ -10,6 +10,7 @@ type CustomCommand = {
   description?: string;
   response: RichMessage;
   ephemeral?: boolean;
+  options?: { name: string; description?: string; required?: boolean }[];
 };
 
 function load(): CustomCommand[] {
@@ -36,6 +37,10 @@ export async function handleCustomCommand(
     '{guild}': guild?.name ?? '',
     '{memberCount}': String(guild?.memberCount ?? ''),
   };
+  // wartości argumentów komendy → {nazwa_argumentu} w odpowiedzi
+  for (const opt of cmd.options ?? []) {
+    if (opt?.name) vars[`{${opt.name}}`] = interaction.options.getString(opt.name) ?? '';
+  }
   const payload = buildRichMessage(cmd.response, vars);
   if (!payload.content && !payload.embeds.length) {
     await interaction.reply({ content: '(pusta odpowiedź)', flags: MessageFlags.Ephemeral });

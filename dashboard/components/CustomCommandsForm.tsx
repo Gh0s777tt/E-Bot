@@ -159,6 +159,85 @@ export default function CustomCommandsForm({
                   Odpowiedź widoczna tylko dla wywołującego (ephemeral)
                 </label>
 
+                {/* Argumenty komendy — wartości wstawisz w odpowiedzi jako {nazwa} */}
+                <div className="space-y-2 rounded-lg border border-line/60 bg-bg/30 p-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-muted">
+                      Argumenty (użyj {'{nazwa}'} w odpowiedzi)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        update(i, {
+                          options: [
+                            ...(c.options ?? []),
+                            { name: '', description: '', required: false },
+                          ],
+                        })
+                      }
+                      className="rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated"
+                    >
+                      + argument
+                    </button>
+                  </div>
+                  {(c.options ?? []).map((o, oi) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: proste wiersze argumentów bez stanu wewnętrznego
+                    <div key={oi} className="flex flex-wrap items-center gap-2">
+                      <input
+                        value={o.name}
+                        onChange={(e) =>
+                          update(i, {
+                            options: (c.options ?? []).map((x, xi) =>
+                              xi === oi ? { ...x, name: sanitizeName(e.target.value) } : x,
+                            ),
+                          })
+                        }
+                        placeholder="nazwa"
+                        className={`${inp} w-28 font-mono`}
+                        maxLength={32}
+                      />
+                      <input
+                        value={o.description}
+                        onChange={(e) =>
+                          update(i, {
+                            options: (c.options ?? []).map((x, xi) =>
+                              xi === oi ? { ...x, description: e.target.value } : x,
+                            ),
+                          })
+                        }
+                        placeholder="opis (dla użytkownika)"
+                        className={`${inp} flex-1`}
+                        maxLength={100}
+                      />
+                      <label className="flex items-center gap-1 text-xs text-muted">
+                        <input
+                          type="checkbox"
+                          checked={o.required}
+                          onChange={(e) =>
+                            update(i, {
+                              options: (c.options ?? []).map((x, xi) =>
+                                xi === oi ? { ...x, required: e.target.checked } : x,
+                              ),
+                            })
+                          }
+                          className="h-3.5 w-3.5 accent-accent"
+                        />
+                        wymagany
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          update(i, { options: (c.options ?? []).filter((_, xi) => xi !== oi) })
+                        }
+                        className="rounded-md border border-line px-2 py-1.5 text-muted transition hover:border-accent hover:text-accent"
+                        title="Usuń argument"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
                 <div className="space-y-1 text-sm">
                   <span className="font-semibold text-white/90">Odpowiedź</span>
                   <MessageStudio
@@ -170,6 +249,13 @@ export default function CustomCommandsForm({
                       { token: '{username}', label: 'Nazwa wywołującego', sample: 'Gracz' },
                       { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
                       { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
+                      ...(c.options ?? [])
+                        .filter((o) => o.name)
+                        .map((o) => ({
+                          token: `{${o.name}}`,
+                          label: `Argument: ${o.name}`,
+                          sample: o.description || o.name,
+                        })),
                     ]}
                   />
                 </div>

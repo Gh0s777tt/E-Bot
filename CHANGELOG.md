@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-127-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.68.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-128-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.68.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.68.1] — Komendy slash z argumentami
+
+- `[#128]` 🧩 **Argumenty w no-code komendach slash** — każda własna komenda może mieć argumenty (nazwa, opis, „wymagany"), rejestrowane w Discordzie jako opcje STRING. Wartości podstawiasz w odpowiedzi jako `{nazwa}` (gotowe chipy w Message Studio). Wymagane argumenty rejestrowane przed opcjonalnymi (wymóg Discorda). Bot czyta wartości przy wywołaniu i wstawia do treści/embedu.
 
 ## [0.68.0] — Ochrona: anti-scam / phishing + dane osobowe (PII)
 

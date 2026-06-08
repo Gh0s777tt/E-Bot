@@ -110,6 +110,17 @@ export const customCommandSchema = z.object({
   description: z.string().min(1).max(100),
   response: richMessageSchema,
   ephemeral: z.boolean().default(false),
+  options: z
+    .array(
+      z.object({
+        name: z.string().regex(/^[a-z0-9_-]{1,32}$/),
+        description: z.string().max(100).default(''),
+        required: z.boolean().default(false),
+      }),
+    )
+    .max(25)
+    .optional()
+    .default([]),
 });
 export const customCommandsSchema = z.object({
   commands: z.array(customCommandSchema).max(25),
