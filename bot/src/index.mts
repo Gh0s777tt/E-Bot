@@ -65,6 +65,7 @@ import { startAntiRaid } from './security/antiraid.mts';
 import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
 import { handleVerifyButton, handleVerifyModal } from './security/verification.mts';
+import { startProvision } from './setup/provision.mts';
 import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
 import { startTicketSla } from './tickets/sla.mts';
 import { startWelcome } from './welcome.mts';
@@ -149,6 +150,7 @@ client.once(Events.ClientReady, (c) => {
   startServerLog(c); // Faza 7 / F6.2 — logi serwera (zdarzenia → kanał, config z panelu)
   startAntiRaid(c); // Faza 7 / F6.3 — anti-raid (fala wejść → akcja, config z panelu)
   startModmail(c); // Faza 7 / F6.4 — modmail (DM ↔ wątek obsługi, config z panelu)
+  startProvision(c); // Architekt serwera — provisioning kanałów/ról na zlecenie z panelu
   startResponder(c); // Faza 7 / F7.2 — komendy własne + autoresponder (config z panelu)
   startBirthdays(c); // Faza 7 / F7.3 — urodziny (dzienny poller, config z panelu)
   startAfk(c); // Faza 7 / F7.3 — AFK (status w pamięci, mention-reply)

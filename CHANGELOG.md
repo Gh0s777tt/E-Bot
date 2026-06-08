@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-168-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.99.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-169-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.100.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.100.0] — 🏗️ Architekt Serwera (1/?): silnik provisioningu
+
+- `[#169]` Pierwsza faza zaawansowanego kreatora. **Bot tworzy strukturę serwera na zlecenie z panelu** — kanały, kategorie i role jednym kliknięciem, **idempotentnie** (pomija istniejące po nazwie) i **na żywo** (log sukces/błąd dla każdego elementu).
+  - 🧱 Bot: `setup/provision.mts` — poll zleceń co 4 s (cloud key `setup_provision` → wykonanie → `setup_provision_result`), dedup po id (przeżywa restart). Wymaga uprawnień bota *Zarządzanie kanałami/rolami*.
+  - 🎛️ Panel: `/setup` → sekcja **„Architekt struktury"** z blokami do wyboru (powitania, ogłoszenia, logi, tickety, liczniki [kategoria + 2 zablokowane voice], rola Muted, role poziomów) + przycisk i **log na żywo**.
+  - 🔌 Most panel↔bot przez istniejący mechanizm Supabase (zero nowej infrastruktury). Kolejne fazy: AI-kreator (opis → blueprint), auto-wpinanie kanałów w moduły, blueprinty + eksport/import, live-podglądy.
 
 ## [0.99.1] — Zakładka Komendy: kategorie dla nowych komend
 

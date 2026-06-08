@@ -1,8 +1,9 @@
 'use client';
 
-import { ArrowRight, Check, Sparkles, Wand2 } from 'lucide-react';
+import { ArrowRight, Check, Hammer, Sparkles, Wand2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import ServerArchitect from '../../components/ServerArchitect';
 import { PRESETS, type PresetId } from '../../lib/setup';
 
 export default function SetupPage() {
@@ -141,6 +142,16 @@ export default function SetupPage() {
         {st === 'err' && <span className="text-sm text-accent">Błąd — spróbuj ponownie.</span>}
         {!sel && <span className="text-sm text-muted">Wybierz preset powyżej.</span>}
       </div>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-6">
+        <h2 className="mb-1 flex items-center gap-2 font-display text-2xl tracking-wide">
+          <Hammer className="text-accent" size={22} /> Architekt struktury
+        </h2>
+        <p className="mb-4 text-sm text-muted">
+          Zbuduj szkielet serwera jednym kliknięciem — bot utworzy wybrane kanały, kategorie i role.
+        </p>
+        <ServerArchitect />
+      </section>
     </div>
   );
 }
