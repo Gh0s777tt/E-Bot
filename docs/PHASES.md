@@ -132,7 +132,7 @@
 - [x] **Inline toggle modułów** — włącz/wyłącz na stronie funkcji (auto-pasek `ModuleBar`; źródło prawdy = Centrum sterowania) *(0.46.0, [#098])*
 - [x] **Message Studio** — uniwersalny edytor embed+tekst (live-preview 1:1, licznik znaków, smallcaps/fonty, emoji+custom emoji, szablony) *(0.47.0, [#100]; 1. odbiorca: Powitania)*
 - [ ] **Pickery/emoji wszędzie** — emoji (std + serwerowe) w Studio + `getGuildMeta.emojis` ✅ (0.47.0); rozszerzanie na pozostałe formularze w toku
-- [x] **Smallcaps** (+ czcionki Unicode) w edytorze *(0.47.0)* · [ ] fonty w całym UI · [ ] **Compact UI** (mniej scrollowania)
+- [x] **Smallcaps** (+ czcionki Unicode) w edytorze *(0.47.0)* · [ ] fonty w całym UI · [x] **Compact UI** (0.58.0, [#111])
 - [ ] Epiki: ✅ **Tickets 2.0** (0.48.0, [#101]) · ✅ **Applications 2.0** (0.49.0, [#102]) · ✅ **Reaction roles 2.0** (0.50.0, [#103]) · ✅ **Automod/Security 2.0** (0.51.0, [#104]) · ✅ **Creator + Social** (0.53.0, [#106]) · ✅ **Notifications 2.0** (0.54.0, [#107]) · ✅ **Donate 2.0** (0.52.0, [#105]) · ✅ **Levels 2.0** (0.55.0, [#108]) · ✅ **AI 2.0** (0.56.0, [#109]) · ✅ **Game Library 2.0** (0.57.0, [#110]) · Integracje
 
 ```

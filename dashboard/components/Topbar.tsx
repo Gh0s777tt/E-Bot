@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, UserPlus } from 'lucide-react';
+import { LogOut, Minimize2, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MobileNav from './MobileNav';
@@ -23,6 +23,7 @@ type Status = { online: boolean | null; guilds?: number | null; tag?: string };
 export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
   const pathname = usePathname();
   const [status, setStatus] = useState<Status>({ online: null, tag: 'E-Bot' });
+  const [compact, setCompact] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -38,6 +39,20 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
       clearInterval(id);
     };
   }, []);
+
+  useEffect(() => {
+    setCompact(document.documentElement.classList.contains('compact'));
+  }, []);
+  function toggleCompact() {
+    const next = !document.documentElement.classList.contains('compact');
+    document.documentElement.classList.toggle('compact', next);
+    try {
+      localStorage.setItem('compact', next ? '1' : '0');
+    } catch {
+      /* brak localStorage */
+    }
+    setCompact(next);
+  }
 
   const dot =
     status.online === true ? 'bg-green-500' : status.online === false ? 'bg-accent' : 'bg-muted';
@@ -58,6 +73,14 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
             {status.guilds != null ? ` · ${status.guilds} serw.` : ''}
           </span>
         </span>
+        <button
+          type="button"
+          onClick={toggleCompact}
+          title={compact ? 'Przełącz na tryb normalny' : 'Przełącz na tryb kompaktowy'}
+          className="hidden items-center gap-1.5 rounded-md border border-line px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex"
+        >
+          <Minimize2 size={13} /> {compact ? 'Normalny' : 'Kompakt'}
+        </button>
         <a
           href={inviteUrl}
           target="_blank"

@@ -96,3 +96,26 @@ body::before {
   pointer-events: none;
   background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.12), transparent 70%);
 }
+
+/* ── Tryb kompaktowy (opt-in przez html.compact) — gęściej, mniej scrollowania ──────
+   Reguły są poza warstwami (unlayered), więc wygrywają z utility Tailwind, a aktywują
+   się tylko gdy <html class="compact"> (domyślnie OFF → zero regresji). */
+html.compact {
+  font-size: 13.5px;
+}
+html.compact main {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+html.compact .panel-glow {
+  padding: 0.9rem;
+}
+html.compact .space-y-6 > * + * {
+  margin-top: 1rem;
+}
+html.compact .space-y-5 > * + * {
+  margin-top: 0.85rem;
+}
+html.compact h2 {
+  margin-bottom: 0.6rem;
+}

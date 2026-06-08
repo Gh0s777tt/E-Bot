@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-110-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.57.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-111-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.58.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.58.0] — Faza 8 #13: Compact UI (tryb kompaktowy)
+
+- `[#111]` 📐 **Compact UI:** przełącznik **„Kompakt"** w Topbarze — `html.compact` zmniejsza bazowy rozmiar fontu, padding paneli i odstępy sekcji → mniej scrollowania. Opt-in (zapis w `localStorage`, ładowany bez flasha w inline-skrypcie layoutu), domyślnie OFF → zero regresji. Reguły poza warstwami Tailwind (wygrywają z utility). Dashboard-only.
 
 ## [0.57.0] — Faza 8 #12: Game Library 2.0 (klikalne gry → szczegóły)
 
