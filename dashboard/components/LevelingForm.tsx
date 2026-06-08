@@ -153,6 +153,15 @@ export default function LevelingForm({
           />
           <span className="font-semibold text-white/90">Kumuluj role‑nagrody</span>
         </label>
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={b.levelUpDm}
+            onChange={(e) => setB({ ...b, levelUpDm: e.target.checked })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">DM do użytkownika przy awansie</span>
+        </label>
       </div>
 
       <div className="space-y-1 text-sm">

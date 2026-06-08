@@ -22,6 +22,7 @@ export type LevelingConfig = {
   voiceAntiAfk: boolean;
   stackRewards: boolean;
   levelUpMessage: string;
+  levelUpDm: boolean;
   prestigeEnabled: boolean;
   prestigeLevel: number;
   prestigeRoleId: string;
@@ -41,6 +42,7 @@ export const LEVELING_DEFAULT: LevelingConfig = {
   voiceAntiAfk: true,
   stackRewards: false,
   levelUpMessage: '',
+  levelUpDm: false,
   prestigeEnabled: false,
   prestigeLevel: 100,
   prestigeRoleId: '',

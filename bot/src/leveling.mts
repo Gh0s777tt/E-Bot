@@ -23,6 +23,7 @@ type LevelingConfig = {
   voiceAntiAfk: boolean; // wymagaj ≥2 osób + brak mute/deaf
   stackRewards: boolean; // nadawaj wszystkie role ≤ poziom (zamiast tylko najwyższej)
   levelUpMessage: string; // własny tekst awansu ({user}, {level}); pusty = domyślny
+  levelUpDm: boolean; // wyślij też DM do użytkownika przy awansie
   prestigeEnabled: boolean;
   prestigeLevel: number; // poziom wymagany do prestiżu
   prestigeRoleId: string; // rola za prestiż
@@ -42,6 +43,7 @@ const DEFAULT: LevelingConfig = {
   voiceAntiAfk: true,
   stackRewards: false,
   levelUpMessage: '',
+  levelUpDm: false,
   prestigeEnabled: false,
   prestigeLevel: 100,
   prestigeRoleId: '',
@@ -66,7 +68,7 @@ function refreshConfig(): void {
 function xpToNext(level: number): number {
   return 5 * level * level + 50 * level + 100;
 }
-function levelForXp(xp: number): number {
+export function levelForXp(xp: number): number {
   let lvl = 0;
   let acc = 0;
   while (lvl < 1000 && acc + xpToNext(lvl) <= xp) {
@@ -169,6 +171,11 @@ async function onLevelUp(
         : `🏆 <@${userId}> awansował na **poziom ${level}**!`;
       await ch.send(text).catch(() => {});
     }
+  }
+
+  if (cfg.levelUpDm) {
+    const u = await client.users.fetch(userId).catch(() => null);
+    if (u) await u.send(`🏆 Awansowałeś na **poziom ${level}** na ${guild.name}!`).catch(() => {});
   }
 }
 

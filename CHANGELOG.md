@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-107-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.54.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-108-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.55.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.55.0] — Faza 8 #10: Levels 2.0 (/xp admin + DM przy awansie)
+
+- `[#108]` 📈 **Levels 2.0:** nowa komenda **`/xp`** (admin: `give` / `remove` / `set` / `reset` XP użytkownika — poziom przeliczany tą samą formułą, zapis do `user_levels`) + opcja **DM do użytkownika przy awansie** (`levelUpDm`). **43 komendy.** Bez SQL.
 
 ## [0.54.0] — Faza 8 #9: Notifications 2.0 (customowe wiadomości live)
 

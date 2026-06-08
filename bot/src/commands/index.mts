@@ -41,6 +41,7 @@ import * as tldr from './tldr.mts';
 import * as translate from './translate.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
+import * as xp from './xp.mts';
 
 export type Command = {
   data: { name: string; toJSON: () => unknown };
@@ -90,4 +91,5 @@ export const commands: Command[] = [
   linktwitch,
   lottery,
   market,
+  xp,
 ];
