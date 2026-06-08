@@ -450,6 +450,24 @@ export const donateSchema = z.object({
 });
 export type DonateInput = z.infer<typeof donateSchema>;
 
+// ── Powiadomienia social (RSS) — Faza 8 ──
+export const socialFeedsSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  message: z.string().max(2000),
+  feeds: z
+    .array(
+      z.object({
+        url: z.string().min(1).max(500),
+        label: z.string().max(60).optional().default(''),
+      }),
+    )
+    .max(15)
+    .optional()
+    .default([]),
+});
+export type SocialFeedsInput = z.infer<typeof socialFeedsSchema>;
+
 // ── Sezonowe rankingi (POST /api/seasons) ──────────────────
 export const seasonsSchema = z.object({
   enabled: z.boolean(),

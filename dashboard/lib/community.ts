@@ -560,6 +560,33 @@ export async function saveDonateConfig(cfg: DonateConfig): Promise<void> {
   await setRawSetting('donate_config', JSON.stringify(cfg));
 }
 
+// ── Powiadomienia social (RSS) — Faza 8 (TikTok/IG/FB/Threads/X/YouTube/blog przez URL RSS) ──
+export type SocialFeed = { url: string; label: string };
+export type SocialFeedsConfig = {
+  enabled: boolean;
+  channelId: string;
+  message: string;
+  feeds: SocialFeed[];
+};
+export const SOCIAL_FEEDS_DEFAULT: SocialFeedsConfig = {
+  enabled: false,
+  channelId: '',
+  message: '📣 Nowy post od **{label}**: {title}\n{link}',
+  feeds: [],
+};
+export async function getSocialFeedsConfig(): Promise<SocialFeedsConfig> {
+  const raw = await getRawSetting('social_feeds_config');
+  if (!raw) return structuredClone(SOCIAL_FEEDS_DEFAULT);
+  try {
+    return { ...SOCIAL_FEEDS_DEFAULT, ...(JSON.parse(raw) as Partial<SocialFeedsConfig>) };
+  } catch {
+    return structuredClone(SOCIAL_FEEDS_DEFAULT);
+  }
+}
+export async function saveSocialFeedsConfig(cfg: SocialFeedsConfig): Promise<void> {
+  await setRawSetting('social_feeds_config', JSON.stringify(cfg));
+}
+
 // ── Sezonowe rankingi levelingu (Faza 7 / F10.2) ──
 export type SeasonsConfig = { enabled: boolean; channelId: string; top: number; reset: boolean };
 export const SEASONS_DEFAULT: SeasonsConfig = {

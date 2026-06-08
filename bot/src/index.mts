@@ -32,6 +32,7 @@ import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
+import { startSocialFeeds } from './creator/social.mts';
 import { handleBlackjackButton } from './economy/blackjack.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
 import { setupMessageEarning } from './empire/messages.mts';
@@ -171,6 +172,7 @@ client.once(Events.ClientReady, (c) => {
   startWelcome(c); // Faza 6 — powitania + autorole
   startAutomod(c); // Faza 6 — automoderacja
   startClipRelay(c); // Faza 6 — relay klipów Twitch (config z panelu /creator)
+  startSocialFeeds(c); // Faza 8 — powiadomienia o nowych postach social (RSS), config /creator
   startReminders(c); // Faza 6 / B5 — przypomnienia /remind
   startScheduler(c); // Tor F — zaplanowane/cykliczne ogłoszenia (/schedule)
   startGiveaways(c); // Faza 6 / B5 — giveawaye /giveaway

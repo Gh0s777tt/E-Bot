@@ -292,6 +292,14 @@ export const MODULES: ModuleDef[] = [
     settingsKey: 'creator_config',
     path: 'clipRelay',
   },
+  {
+    key: 'socialFeeds',
+    label: 'Powiadomienia social (RSS)',
+    group: 'Twórca',
+    href: '/creator',
+    kind: 'json',
+    settingsKey: 'social_feeds_config',
+  },
   // Powiadomienia live
   {
     key: 'twitchSub',

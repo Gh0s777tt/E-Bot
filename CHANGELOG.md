@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-105-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.52.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-106-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.53.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.53.0] — Faza 8 #8: Creator + Social (powiadomienia o nowych postach przez RSS)
+
+- `[#106]` 📡 **Powiadomienia social (RSS):** TikTok / Instagram / Facebook / Threads / X / YouTube / blog — bot pollinguje skonfigurowane **źródła RSS/Atom** (co 10 min) i ogłasza nowe wpisy customową wiadomością (`{label}`/`{title}`/`{link}`). Dedup w chmurze; pierwszy przebieg feedu = tylko seed (bez spamu historią). Sekcja w `/creator` + moduł w Centrum sterowania. **Realia:** te platformy nie mają darmowego API „nowy post" → uniwersalnie przez mostek RSS (rss.app / RSSHub; YouTube ma natywny RSS). Bez SQL, bez deploy-commands.
 
 ## [0.52.0] — Faza 8 #7: Donate 2.0 (PayPal / BMC / Patreon / Ko-fi + /donate)
 
