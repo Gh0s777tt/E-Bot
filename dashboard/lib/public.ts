@@ -97,3 +97,98 @@ export async function publicProfile(uid: string): Promise<PublicProfile> {
     return empty;
   }
 }
+
+// ── Karta profilu (dashboard) — bogatsza: poziom + pasek XP, ranking, ekonomia, wiadomości, voice ──
+// Krzywa XP musi zgadzać się z bot/src/leveling.mts: do awansu z L na L+1 trzeba 5L²+50L+100 XP.
+function xpToNextLevel(level: number): number {
+  return 5 * level * level + 50 * level + 100;
+}
+function levelProgress(totalXp: number): { level: number; inLevel: number; forLevel: number } {
+  let lvl = 0;
+  let acc = 0;
+  while (lvl < 1000 && acc + xpToNextLevel(lvl) <= totalXp) {
+    acc += xpToNextLevel(lvl);
+    lvl++;
+  }
+  return { level: lvl, inLevel: Math.max(0, totalXp - acc), forLevel: xpToNextLevel(lvl) };
+}
+
+export type ProfileCardData = {
+  found: boolean;
+  username: string;
+  level: number;
+  xp: number;
+  inLevel: number;
+  forLevel: number;
+  rank: number;
+  wallet: number;
+  bank: number;
+  messages: number;
+  voiceMin: number;
+  invites: number;
+  badges: number;
+};
+
+export async function profileCard(uid: string): Promise<ProfileCardData> {
+  const empty: ProfileCardData = {
+    found: false,
+    username: uid,
+    level: 0,
+    xp: 0,
+    inLevel: 0,
+    forLevel: xpToNextLevel(0),
+    rank: 0,
+    wallet: 0,
+    bank: 0,
+    messages: 0,
+    voiceMin: 0,
+    invites: 0,
+    badges: 0,
+  };
+  if (!hasSupabase) return empty;
+  try {
+    const sb = supabase();
+    const [lvl, eco, act, inv, badges] = await Promise.all([
+      sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
+      sb.from('economy_users').select('username,wallet,bank').eq('user_id', uid).maybeSingle(),
+      sb.from('user_activity').select('messages,voice_min').eq('user_id', uid),
+      sb
+        .from('invites')
+        .select('invited_id')
+        .eq('inviter_id', uid)
+        .eq('fake', false)
+        .eq('has_left', false),
+      sb.from('user_badges').select('badge_id').eq('user_id', uid),
+    ]);
+    const l = (lvl.data ?? null) as { username?: string; xp?: number; level?: number } | null;
+    const e = (eco.data ?? null) as { username?: string; wallet?: number; bank?: number } | null;
+    const xp = l?.xp ?? 0;
+    const prog = levelProgress(xp);
+    const actRows = (act.data ?? []) as { messages?: number; voice_min?: number }[];
+    let rank = 0;
+    if (xp > 0) {
+      const { count } = await sb
+        .from('user_levels')
+        .select('user_id', { count: 'exact', head: true })
+        .gt('xp', xp);
+      rank = (count ?? 0) + 1;
+    }
+    return {
+      found: Boolean(l || e),
+      username: l?.username || e?.username || uid,
+      level: l?.level ?? prog.level,
+      xp,
+      inLevel: prog.inLevel,
+      forLevel: prog.forLevel,
+      rank,
+      wallet: e?.wallet ?? 0,
+      bank: e?.bank ?? 0,
+      messages: actRows.reduce((s, r) => s + (r.messages || 0), 0),
+      voiceMin: actRows.reduce((s, r) => s + (r.voice_min || 0), 0),
+      invites: (inv.data ?? []).length,
+      badges: (badges.data ?? []).length,
+    };
+  } catch {
+    return empty;
+  }
+}

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-143-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.75.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-144-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.76.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.76.0] — Więcej liczników + karta profilu w panelu
+
+- `[#144]` Dwie rzeczy:
+  - 📊 **Więcej liczników kanałów** — doszły: **ludzie** (bez botów), **boty**, **poziom boost**, **emoji**, **naklejki**, **osoby na voice (teraz)**. Razem z dotychczasowymi (członkowie, boosty, kanały, role) = **10 typów**. Liczone z cache (humans/bots dociągają listę członków raz na cykl). _Suby/followy Twitch wymagają OAuth twórcy (osobny temat) — niedostępne bez tego._
+  - 🪪 **Karta profilu w dashboardzie** (`/profile`) — odpowiednik karty z serwera, bogatsza: avatar, poziom + **pasek XP** (krzywa zgodna z botem), **pozycja w rankingu**, plus statystyki/ekonomia: **liczba wiadomości, czas na voice, portfel, bank, zaproszenia, odznaki**.
 
 ## [0.75.0] — Kategorie komend · live-status · autorola z opóźnieniem
 

@@ -469,7 +469,17 @@ export async function saveBirthdayConfig(cfg: BirthdayConfig): Promise<void> {
 }
 
 // ── Liczniki kanałów (Faza 7 / F7.4) ──
-export type CounterType = 'members' | 'boosts' | 'channels' | 'roles';
+export type CounterType =
+  | 'members'
+  | 'humans'
+  | 'bots'
+  | 'boosts'
+  | 'boostTier'
+  | 'channels'
+  | 'roles'
+  | 'emojis'
+  | 'stickers'
+  | 'voice';
 export type CounterItem = { channelId: string; type: CounterType; template: string };
 export type CountersConfig = { enabled: boolean; items: CounterItem[] };
 export const COUNTERS_DEFAULT: CountersConfig = { enabled: false, items: [] };

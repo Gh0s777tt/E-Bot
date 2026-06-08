@@ -13,9 +13,15 @@ const inputCls =
 
 const TYPES: { v: CounterType; l: string; tpl: string }[] = [
   { v: 'members', l: 'Członkowie', tpl: '👥 Członków: {count}' },
+  { v: 'humans', l: 'Ludzie (bez botów)', tpl: '🧑 Ludzi: {count}' },
+  { v: 'bots', l: 'Boty', tpl: '🤖 Botów: {count}' },
   { v: 'boosts', l: 'Boosty', tpl: '🚀 Boostów: {count}' },
+  { v: 'boostTier', l: 'Poziom boost', tpl: '💜 Poziom: {count}' },
   { v: 'channels', l: 'Kanały', tpl: '📁 Kanałów: {count}' },
   { v: 'roles', l: 'Role', tpl: '🏷️ Ról: {count}' },
+  { v: 'emojis', l: 'Emoji', tpl: '😀 Emoji: {count}' },
+  { v: 'stickers', l: 'Naklejki', tpl: '🏷️ Naklejek: {count}' },
+  { v: 'voice', l: 'Na voice (teraz)', tpl: '🎙️ Na voice: {count}' },
 ];
 
 export default function CountersForm({

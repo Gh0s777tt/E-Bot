@@ -465,7 +465,18 @@ export const countersSchema = z.object({
     .array(
       z.object({
         channelId: z.string().max(40),
-        type: z.enum(['members', 'boosts', 'channels', 'roles']),
+        type: z.enum([
+          'members',
+          'humans',
+          'bots',
+          'boosts',
+          'boostTier',
+          'channels',
+          'roles',
+          'emojis',
+          'stickers',
+          'voice',
+        ]),
         template: z.string().min(1).max(100),
       }),
     )
