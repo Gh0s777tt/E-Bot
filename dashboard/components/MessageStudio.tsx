@@ -427,15 +427,31 @@ export default function MessageStudio({
     setEmbed({ fields: embed.fields.filter((_, idx) => idx !== i) });
   }
 
-  // Szablony (localStorage — write once, reuse).
+  // Szablony — współdzielone (settings 'studio_templates'); localStorage jako cache/fallback offline.
   const [tplName, setTplName] = useState('');
   const [tpls, setTpls] = useState<{ name: string; msg: RichMessage }[]>([]);
   useEffect(() => {
     try {
-      setTpls(JSON.parse(localStorage.getItem('msgStudioTemplates') || '[]'));
+      const cached = JSON.parse(localStorage.getItem('msgStudioTemplates') || '[]');
+      if (Array.isArray(cached) && cached.length) setTpls(cached);
     } catch {
       /* brak / uszkodzone */
     }
+    fetch('/api/studio/templates')
+      .then((r) => r.json())
+      .then((j: { templates?: { name: string; msg: RichMessage }[] }) => {
+        if (Array.isArray(j.templates)) {
+          setTpls(j.templates);
+          try {
+            localStorage.setItem('msgStudioTemplates', JSON.stringify(j.templates));
+          } catch {
+            /* quota */
+          }
+        }
+      })
+      .catch(() => {
+        /* offline — zostaje cache */
+      });
   }, []);
   function persistTpls(next: { name: string; msg: RichMessage }[]) {
     setTpls(next);
@@ -444,6 +460,13 @@ export default function MessageStudio({
     } catch {
       /* quota / brak dostępu */
     }
+    void fetch('/api/studio/templates', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ templates: next }),
+    }).catch(() => {
+      /* offline — zapis tylko lokalny */
+    });
   }
   function saveTpl() {
     const name = tplName.trim();

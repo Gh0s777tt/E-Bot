@@ -98,6 +98,12 @@ export const richMessageSchema = z.object({
 });
 export type RichMessageInput = z.infer<typeof richMessageSchema>;
 
+// ── Szablony Message Studio (POST /api/studio/templates) ───
+export const studioTemplatesSchema = z.object({
+  templates: z.array(z.object({ name: z.string().min(1).max(60), msg: richMessageSchema })).max(50),
+});
+export type StudioTemplatesInput = z.infer<typeof studioTemplatesSchema>;
+
 // ── Tickety (POST /api/tickets) ────────────────────────────
 export const ticketCategorySchema = z.object({
   id: z.string().max(20),

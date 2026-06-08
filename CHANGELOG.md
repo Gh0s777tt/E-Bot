@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-120-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.64.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-121-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.64.2-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.64.2] — Message Studio: szablony współdzielone (server-side)
+
+- `[#121]` 🧩 **Szablony Message Studio server-side** — zapisywane w `settings 'studio_templates'` (nie tylko `localStorage`): te same szablony dostępne we **wszystkich modułach** i na **każdym urządzeniu**. `localStorage` zostaje jako cache / fallback offline. Route `/api/studio/templates` (GET/POST), walidacja Zod.
 
 ## [0.64.1] — Pulpit: checklist „Pierwsze kroki"
 
