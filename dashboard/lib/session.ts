@@ -28,7 +28,14 @@ async function hmacKey(secret: string): Promise<CryptoKey> {
   );
 }
 
-export type Session = { uid: string; uname: string; avatar?: string; exp: number };
+export type PanelRole = 'admin' | 'editor' | 'viewer';
+export type Session = {
+  uid: string;
+  uname: string;
+  avatar?: string;
+  role?: PanelRole; // brak (legacy sesja właściciela) → traktujemy jak 'admin'
+  exp: number;
+};
 
 export async function signSession(payload: Session, secret: string): Promise<string> {
   const body = b64url(enc.encode(JSON.stringify(payload)));

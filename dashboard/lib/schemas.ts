@@ -116,6 +116,20 @@ export const customCommandsSchema = z.object({
 });
 export type CustomCommandsInput = z.infer<typeof customCommandsSchema>;
 
+// ── Użytkownicy panelu / role (POST /api/panel-staff) ──────
+export const panelStaffSchema = z.object({
+  staff: z
+    .array(
+      z.object({
+        uid: z.string().regex(/^\d{15,25}$/, 'Discord ID (15–25 cyfr)'),
+        label: z.string().max(60).default(''),
+        role: z.enum(['admin', 'editor', 'viewer']),
+      }),
+    )
+    .max(50),
+});
+export type PanelStaffInput = z.infer<typeof panelStaffSchema>;
+
 // ── Tickety (POST /api/tickets) ────────────────────────────
 export const ticketCategorySchema = z.object({
   id: z.string().max(20),

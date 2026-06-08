@@ -4,11 +4,11 @@ import {
   exchangeCode,
   fetchDiscordUser,
   getOrigin,
-  isAllowed,
   parseCookie,
   SESSION_COOKIE,
   STATE_COOKIE,
 } from '../../../../lib/auth';
+import { resolveRole } from '../../../../lib/panelRoles';
 import { signSession } from '../../../../lib/session';
 
 export const dynamic = 'force-dynamic';
@@ -26,7 +26,8 @@ export async function GET(request: Request) {
   try {
     const tok = await exchangeCode(origin, code);
     const user = await fetchDiscordUser(tok.access_token);
-    if (!isAllowed(user.id)) return NextResponse.redirect(`${origin}/login?e=denied`);
+    const role = await resolveRole(user.id);
+    if (!role) return NextResponse.redirect(`${origin}/login?e=denied`);
 
     const avatar = user.avatar
       ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
@@ -36,6 +37,7 @@ export async function GET(request: Request) {
         uid: user.id,
         uname: user.global_name || user.username,
         avatar,
+        role,
         exp: Date.now() + 7 * 24 * 3600 * 1000,
       },
       authConfig().secret,

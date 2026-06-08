@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-123-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.66.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-124-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.67.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.67.0] — Uprawnienia panelu: role admin / editor / viewer (multi-user)
+
+- `[#124]` 👥 **Role i wielu użytkowników panelu** — oprócz właścicieli (env `DASHBOARD_OWNER_IDS`, zawsze admin) możesz dodać współpracowników po **Discord ID** z rolą **admin / editor / viewer** (Ustawienia → „Użytkownicy panelu", sekcja tylko dla admina). Sesja niesie rolę; egzekwowanie centralnie w `proxy`: **viewer = tryb tylko-do-odczytu** (mutacje API → 403), zarządzanie użytkownikami i przywracanie konfiguracji = tylko admin. **Zero ryzyka lockoutu** — właściciele z env są zawsze adminami (sprawdzani przed chmurą), a istniejące sesje bez pola roli traktowane jak admin. Config w `settings 'panel_staff'`, bez nowego SQL.
 
 ## [0.66.0] — No-code komendy slash + diagnostyka Realtime
 

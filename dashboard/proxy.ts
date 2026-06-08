@@ -39,6 +39,22 @@ export async function proxy(req: NextRequest) {
     url.search = '';
     return NextResponse.redirect(url);
   }
+
+  // Role: brak pola (legacy/owner sesja) → admin. Admin = pełen dostęp.
+  // viewer = tylko odczyt (blokuj mutacje API). Sekcje adminowe = tylko admin.
+  const role = session.role ?? 'admin';
+  if (role !== 'admin') {
+    const method = req.method.toUpperCase();
+    const isMutation =
+      method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE';
+    const adminOnly = pathname.startsWith('/api/panel-staff') || pathname === '/api/config/import';
+    if (adminOnly) {
+      return new NextResponse('Brak uprawnień (tylko admin).', { status: 403 });
+    }
+    if (role === 'viewer' && isMutation && pathname.startsWith('/api/')) {
+      return new NextResponse('Tryb tylko do odczytu (rola: viewer).', { status: 403 });
+    }
+  }
   return NextResponse.next();
 }
 
