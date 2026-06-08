@@ -25,9 +25,30 @@ const TYPES: { v: CounterType; l: string; tpl: string }[] = [
   { v: 'ytSubs', l: '▶️ YouTube — suby', tpl: '▶️ Subów: {count}' },
   { v: 'ytViews', l: '▶️ YouTube — wyświetlenia', tpl: '👁️ Wyświetleń: {count}' },
   { v: 'ytVideos', l: '▶️ YouTube — filmy', tpl: '🎬 Filmów: {count}' },
+  { v: 'twFollowers', l: '🟣 Twitch — followy', tpl: '🟣 Followów: {count}' },
+  { v: 'twSubs', l: '🟣 Twitch — suby', tpl: '🟣 Subów: {count}' },
+  { v: 'twViewers', l: '🟣 Twitch — widzowie (live)', tpl: '🟣 Widzów: {count}' },
+  { v: 'kickFollowers', l: '🟢 Kick — followy', tpl: '🟢 Followów: {count}' },
+  { v: 'kickViewers', l: '🟢 Kick — widzowie (live)', tpl: '🟢 Widzów: {count}' },
 ];
 
-const isYt = (t: CounterType) => t === 'ytSubs' || t === 'ytViews' || t === 'ytVideos';
+const ARG_TYPES = new Set<CounterType>([
+  'ytSubs',
+  'ytViews',
+  'ytVideos',
+  'twFollowers',
+  'twSubs',
+  'twViewers',
+  'kickFollowers',
+  'kickViewers',
+]);
+const needsArg = (t: CounterType) => ARG_TYPES.has(t);
+const argPlaceholder = (t: CounterType) =>
+  t.startsWith('yt')
+    ? 'ID kanału YouTube (UC…) lub @handle — puste = domyślny z env bota'
+    : t.startsWith('kick')
+      ? 'Slug kanału Kick (np. xqc) — puste = domyślny z env bota'
+      : 'Login Twitch (np. xqc) — puste = domyślny z env bota';
 
 export default function CountersForm({
   initial,
@@ -140,13 +161,13 @@ export default function CountersForm({
                 <Trash2 size={14} />
               </button>
             </div>
-            {isYt(r.type) && (
+            {needsArg(r.type) && (
               <input
                 value={r.arg ?? ''}
                 onChange={(e) =>
                   setRows(rows.map((x) => (x.k === r.k ? { ...x, arg: e.target.value } : x)))
                 }
-                placeholder="ID kanału YouTube (UC…) lub @handle — puste = domyślny z konfiguracji bota"
+                placeholder={argPlaceholder(r.type)}
                 className={inputCls}
               />
             )}
@@ -173,11 +194,18 @@ export default function CountersForm({
       </p>
       <p className="text-xs text-muted">
         ▶️ <strong>YouTube</strong> (suby / wyświetlenia / filmy) — wymaga klucza{' '}
-        <code>YOUTUBE_API_KEY</code> w konfiguracji bota. W polu pod licznikiem wpisz{' '}
-        <strong>ID kanału</strong> (zaczyna się od <code>UC…</code>) albo <code>@handle</code> —
-        puste = domyślny kanał z env. <em>Uwaga:</em> YouTube podaje subskrybentów publicznie
-        zaokrąglone (np. 12,3 tys.). Suby/followy <strong>Twitch</strong> nadal wymagają OAuth
-        twórcy (niedostępne).
+        <code>YOUTUBE_API_KEY</code>. W polu pod licznikiem wpisz <strong>ID kanału</strong> (
+        <code>UC…</code>) albo <code>@handle</code>. <em>Uwaga:</em> YouTube podaje subskrybentów
+        zaokrąglone (np. 12,3 tys.).
+      </p>
+      <p className="text-xs text-muted">
+        🟣 <strong>Twitch</strong> / 🟢 <strong>Kick</strong> — w polu wpisz{' '}
+        <strong>login Twitch</strong> lub <strong>slug Kick</strong> (puste = z env bota). Od ręki
+        (token aplikacyjny): <strong>widzowie na żywo</strong> (Twitch i Kick) oraz{' '}
+        <strong>followy Kick</strong>. <strong>Followy/suby Twitch</strong> wymagają tokena twórcy{' '}
+        <code>TWITCH_USER_TOKEN</code> (scope <code>moderator:read:followers</code> /{' '}
+        <code>channel:read:subscriptions</code>) — bez niego są pomijane. Suby Kick nie są
+        publicznie dostępne.
       </p>
     </div>
   );

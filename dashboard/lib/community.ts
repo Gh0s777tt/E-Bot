@@ -482,7 +482,12 @@ export type CounterType =
   | 'voice'
   | 'ytSubs'
   | 'ytViews'
-  | 'ytVideos';
+  | 'ytVideos'
+  | 'twFollowers'
+  | 'twSubs'
+  | 'twViewers'
+  | 'kickFollowers'
+  | 'kickViewers';
 export type CounterItem = { channelId: string; type: CounterType; template: string; arg?: string };
 export type CountersConfig = { enabled: boolean; items: CounterItem[] };
 export const COUNTERS_DEFAULT: CountersConfig = { enabled: false, items: [] };

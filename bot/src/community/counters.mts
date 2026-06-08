@@ -3,6 +3,7 @@
 // Liczone tanio z gateway/cache (bez fetchowania członków): members/boosts/channels/roles.
 import type { Client, Guild } from 'discord.js';
 import { getSettings } from '../lib/db.mts';
+import { STREAMER_TYPES, type StreamerType, streamerCount } from './streamerStats.mts';
 
 type CounterType =
   | 'members'
@@ -17,7 +18,12 @@ type CounterType =
   | 'voice'
   | 'ytSubs'
   | 'ytViews'
-  | 'ytVideos';
+  | 'ytVideos'
+  | 'twFollowers'
+  | 'twSubs'
+  | 'twViewers'
+  | 'kickFollowers'
+  | 'kickViewers';
 // `arg` = ID kanału YouTube (UC…) lub handle (@nazwa); puste → env YOUTUBE_LIVE_CHANNEL_ID/CHANNEL.
 type Item = { channelId: string; type: CounterType; template: string; arg?: string };
 type CountersConfig = { enabled: boolean; items: Item[] };
@@ -126,6 +132,9 @@ async function tick(client: Client): Promise<void> {
     if (YT_TYPES.has(it.type)) {
       count = await ytCountOf(it.type, it.arg);
       if (count === null) continue; // brak klucza/danych YouTube → nie zeruj nazwy
+    } else if (STREAMER_TYPES.has(it.type as StreamerType)) {
+      count = await streamerCount(it.type as StreamerType, it.arg);
+      if (count === null) continue; // brak tokena/danych Twitch/Kick → nie zeruj nazwy
     } else {
       count = countOf(ch.guild, it.type);
     }

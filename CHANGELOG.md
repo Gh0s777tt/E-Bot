@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-148-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.80.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-149-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.81.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.81.0] — Liczniki Twitch + Kick (suby / followy / widzowie)
+
+- `[#149]` 🟣🟢 **Liczniki streamerów** — 5 nowych typów liczników kanałów obok YouTube:
+  - 🟣 **Twitch:** followy, suby, widzowie na żywo · 🟢 **Kick:** followy, widzowie na żywo.
+  - **Działa od ręki** (token aplikacyjny, już używany do powiadomień live): **widzowie Twitch/Kick** + **followy Kick** (oficjalne API `followers_count`).
+  - **Followy/suby Twitch** wymagają jednorazowego **tokena twórcy** w env `TWITCH_USER_TOKEN` (scope `moderator:read:followers` / `channel:read:subscriptions`) — Twitch nie udostępnia tych liczb bez tokena właściciela. Bez tokena te 2 liczniki są po prostu pomijane (nazwa kanału nietknięta).
+  - 🧱 Nowy moduł `streamerStats.mts` z cache (5 min) i degradacją przy błędzie (trzyma ostatnią dobrą wartość). W panelu `/counters` dochodzą pozycje + pole na **login Twitch / slug Kick** (puste = z env bota).
+  - ⚠️ **Suby Kick** nie są publicznie dostępne (brak drogi bez prywatnego OAuth) — celowo pominięte.
 
 ## [0.80.0] — Ekonomia na karcie profilu (4/4 z „rozwiń wszystko")
 
