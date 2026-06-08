@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-151-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.83.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-152-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.84.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,23 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.84.0] — Historia ekonomii na karcie profilu (log transakcji)
+
+- `[#152]` 📜 **Log transakcji ekonomii** — bot zapisuje każdy realny ruch waluty do tabeli `economy_tx`, a karta profilu (panel `/profile` i publiczna `/p/u/<id>`) pokazuje **ostatnie transakcje** (z czasem względnym i kolorem +/−). Objęte zdarzenia: **dzienna, praca, rabunek/okradziono, mandat, przelew, zakład, sloty, sklep, lootbox, ruletka**. Blackjack (interaktywny) celowo na razie pominięty.
+  - 🧱 Zapis jest **bezpieczny**: bez tabeli/chmury to **no-op** (nic się nie psuje). Historia zacznie się wypełniać po utworzeniu tabeli.
+  - 🛠️ **Jednorazowo w Supabase (SQL Editor):**
+    ```sql
+    create table if not exists economy_tx (
+      id          bigint generated always as identity primary key,
+      guild_id    text        not null,
+      user_id     text        not null,
+      delta       bigint      not null,
+      reason      text        not null,
+      created_at  timestamptz not null default now()
+    );
+    create index if not exists economy_tx_user_idx on economy_tx (user_id, created_at desc);
+    ```
 
 ## [0.83.0] — Obrazek podglądu profilu (OG-image) + meta
 

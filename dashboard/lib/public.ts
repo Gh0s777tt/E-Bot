@@ -167,6 +167,7 @@ export type ProfileCardData = {
   badgeIds: string[];
   dailyStreak: number;
   items: number;
+  history: { delta: number; reason: string; ts: number }[];
 };
 
 export async function profileCard(uid: string): Promise<ProfileCardData> {
@@ -187,11 +188,12 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
     badgeIds: [],
     dailyStreak: 0,
     items: 0,
+    history: [],
   };
   if (!hasSupabase) return empty;
   try {
     const sb = supabase();
-    const [lvl, eco, act, inv, badges, invtory] = await Promise.all([
+    const [lvl, eco, act, inv, badges, invtory, tx] = await Promise.all([
       sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
       sb
         .from('economy_users')
@@ -207,6 +209,12 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
         .eq('has_left', false),
       sb.from('user_badges').select('badge_id').eq('user_id', uid),
       sb.from('economy_inventory').select('qty').eq('user_id', uid),
+      sb
+        .from('economy_tx')
+        .select('delta,reason,created_at')
+        .eq('user_id', uid)
+        .order('created_at', { ascending: false })
+        .limit(8),
     ]);
     const l = (lvl.data ?? null) as { username?: string; xp?: number; level?: number } | null;
     const e = (eco.data ?? null) as {
@@ -243,6 +251,13 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
       badgeIds: ((badges.data ?? []) as { badge_id: string }[]).map((b) => b.badge_id),
       dailyStreak: e?.daily_streak ?? 0,
       items: ((invtory.data ?? []) as { qty?: number }[]).reduce((s, r) => s + (r.qty || 0), 0),
+      history: ((tx.data ?? []) as { delta?: number; reason?: string; created_at?: string }[]).map(
+        (r) => ({
+          delta: r.delta ?? 0,
+          reason: r.reason ?? '',
+          ts: r.created_at ? Date.parse(r.created_at) : 0,
+        }),
+      ),
     };
   } catch {
     return empty;

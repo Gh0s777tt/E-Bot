@@ -20,6 +20,7 @@ import {
   minutesSince,
   saveUser,
 } from '../economy/store.mts';
+import { logTx } from '../economy/txlog.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
@@ -185,6 +186,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       daily_streak: streak,
       last_daily: new Date().toISOString(),
     });
+    logTx(gid, interaction.user.id, reward, 'daily');
     await interaction.reply(`💸 Odebrano ${fmt(reward, cur)} (streak ${streak}🔥).`);
     return;
   }
@@ -209,6 +211,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       wallet: u.wallet + earned,
       last_work: new Date().toISOString(),
     });
+    logTx(gid, interaction.user.id, earned, 'praca');
     bumpQuest(gid, interaction.user.id, 'work');
     const jobs = [
       'dostarczyłeś paczki',
@@ -275,6 +278,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         username: victim.username,
         wallet: vic.wallet - loot,
       });
+      logTx(gid, interaction.user.id, loot, 'rabunek');
+      logTx(gid, victim.id, -loot, 'okradziono');
       await interaction.reply(`🦹 Okradłeś <@${victim.id}> na ${fmt(loot, cur)}!`);
     } else {
       const fine = Math.min(me.wallet, Math.floor(cfg.workMax / 2));
@@ -285,6 +290,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         wallet: me.wallet - fine,
         last_rob: stamp,
       });
+      logTx(gid, interaction.user.id, -fine, 'mandat');
       await interaction.reply(`🚓 Wpadłeś! Mandat ${fmt(fine, cur)}.`);
     }
     return;
@@ -316,6 +322,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       username: to.username,
       wallet: rec.wallet + amount,
     });
+    logTx(gid, interaction.user.id, -amount, 'przelew');
+    logTx(gid, to.id, amount, 'przelew');
     await interaction.reply(`🤝 Przelano ${fmt(amount, cur)} dla <@${to.id}>.`);
     return;
   }
@@ -381,6 +389,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         username: interaction.user.username,
         wallet: u.wallet + delta,
       });
+      logTx(gid, interaction.user.id, delta, 'gamble');
       await interaction.reply(
         win
           ? `🎲 Wygrana! +${fmt(amount, cur)} (saldo ${fmt(u.wallet + delta, cur)}).`
@@ -401,6 +410,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         username: interaction.user.username,
         wallet: u.wallet + delta,
       });
+      logTx(gid, interaction.user.id, delta, 'slots');
       await interaction.reply(
         `🎰 ${r.join(' | ')}\n${mult > 0 ? `Wygrana ×${mult}! +${fmt(amount * (mult - 1), cur)}` : `Pudło… -${fmt(amount, cur)}`} (saldo ${fmt(u.wallet + delta, cur)})`,
       );
@@ -472,6 +482,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       username: interaction.user.username,
       wallet: u.wallet - item.price,
     });
+    logTx(gid, interaction.user.id, -item.price, 'sklep');
     await interaction.reply(
       `✅ Kupiono **${item.name}** za ${fmt(item.price, cur)}.${
         item.role_id ? '' : ' Dodano do ekwipunku — `/eco inventory`.'
@@ -546,6 +557,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         username: interaction.user.username,
         wallet: u.wallet + loot,
       });
+      logTx(gid, interaction.user.id, loot, 'lootbox');
       extra = ` 🎁 Lootbox: +${fmt(loot, cur)}!`;
     }
     await addInventory(gid, interaction.user.id, owned.item_name, -1);
@@ -584,6 +596,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       username: interaction.user.username,
       wallet: u.wallet + delta,
     });
+    logTx(gid, interaction.user.id, delta, 'ruletka');
     const emoji = color === 'green' ? '🟢' : color === 'red' ? '🔴' : '⚫';
     await interaction.reply(
       `🎡 Wypadło **${n}** ${emoji}\n${won ? `Wygrana ×${mult}! +${fmt(amount * (mult - 1), cur)}` : `Pudło… -${fmt(amount, cur)}`} (saldo ${fmt(u.wallet + delta, cur)})`,

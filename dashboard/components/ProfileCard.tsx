@@ -1,5 +1,20 @@
 import { BADGE_COUNT, resolveBadges } from '../lib/badges';
+import { relTime } from '../lib/insights';
 import type { ProfileCardData } from '../lib/public';
+
+const TX_LABEL: Record<string, string> = {
+  daily: '💸 Dzienna',
+  praca: '💼 Praca',
+  rabunek: '🦹 Rabunek',
+  okradziono: '😱 Okradziono',
+  mandat: '🚓 Mandat',
+  przelew: '🤝 Przelew',
+  gamble: '🎲 Zakład',
+  slots: '🎰 Sloty',
+  sklep: '🛒 Sklep',
+  lootbox: '🎁 Lootbox',
+  ruletka: '🎡 Ruletka',
+};
 
 // Karta profilu w dashboardzie — odpowiednik karty z serwera, wzbogacona o ekonomię i aktywność.
 export default function ProfileCard({
@@ -16,6 +31,7 @@ export default function ProfileCard({
   const vm = data.voiceMin % 60;
   const netWorth = data.wallet + data.bank;
   const earned = resolveBadges(data.badgeIds);
+  const now = Date.now();
   const tiles: { label: string; value: string | number }[] = [
     { label: 'Wiadomości', value: data.messages.toLocaleString('pl-PL') },
     { label: 'Czas na voice', value: vh ? `${vh}h ${vm}m` : `${vm}m` },
@@ -112,6 +128,28 @@ export default function ProfileCard({
           </p>
         )}
       </div>
+
+      {data.history.length > 0 && (
+        <div className="relative mt-4">
+          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
+            Historia ekonomii
+          </div>
+          <ul className="space-y-1">
+            {data.history.map((h) => (
+              <li key={`${h.ts}-${h.reason}`} className="flex items-center gap-2 text-sm">
+                <span className="min-w-0 flex-1 truncate">{TX_LABEL[h.reason] ?? h.reason}</span>
+                <span className="shrink-0 text-[11px] text-muted">{relTime(h.ts, now)}</span>
+                <span
+                  className={`w-24 shrink-0 text-right font-semibold tabular-nums ${h.delta >= 0 ? 'text-green-400' : 'text-accent'}`}
+                >
+                  {h.delta >= 0 ? '+' : ''}
+                  {h.delta.toLocaleString('pl-PL')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {!data.found && (
         <p className="relative mt-3 text-xs text-muted">
