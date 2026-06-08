@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import CountUp from './CountUp';
 
 export default function StatCard({
   label,
@@ -21,7 +22,9 @@ export default function StatCard({
         <span>{label}</span>
         <span className="text-accent/70 transition group-hover:text-accent">{icon}</span>
       </div>
-      <div className="mt-1.5 font-display text-2xl font-bold">{value}</div>
+      <div className="mt-1.5 font-display text-2xl font-bold">
+        {typeof value === 'number' ? <CountUp value={value} /> : value}
+      </div>
       {hint && <div className="mt-1 text-xs text-muted">{hint}</div>}
     </div>
   );

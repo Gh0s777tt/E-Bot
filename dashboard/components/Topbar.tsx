@@ -71,12 +71,27 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
     setSmallcaps(next);
   }
 
+  // „Glass" + cień gdy strona przewinięta
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 6);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const dot =
     status.online === true ? 'bg-green-500' : status.online === false ? 'bg-accent' : 'bg-muted';
   const stateText = status.online === true ? 'online' : status.online === false ? 'offline' : '—';
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-bg/80 px-5 backdrop-blur md:px-8">
+    <header
+      className={`sticky top-0 z-30 flex h-14 items-center gap-3 border-b px-5 backdrop-blur transition-all md:px-8 ${
+        scrolled
+          ? 'border-line/80 bg-bg/85 shadow-[0_10px_30px_-16px_rgba(0,0,0,0.9)] backdrop-blur-xl'
+          : 'border-transparent bg-bg/50'
+      }`}
+    >
       <MobileNav />
       <h1 className="font-display text-base font-semibold uppercase tracking-wide">
         {TITLES[pathname] ?? 'Dashboard'}

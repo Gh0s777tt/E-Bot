@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-133-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.70.2-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-134-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.70.3-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.70.3] — Polish UI: liczniki + glass topbar
+
+- `[#134]` ✨ **Animowane liczniki** (count-up, easeOutCubic) na kartach statystyk pulpitu + **„glass" pasek górny** — silniejszy blur i cień pojawiają się przy przewijaniu (płynne przejście). Respektuje `prefers-reduced-motion`.
 
 ## [0.70.2] — Nowy wygląd: ekran logowania (3/3)
 
