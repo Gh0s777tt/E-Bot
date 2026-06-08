@@ -99,6 +99,19 @@ export async function saveAutomodConfig(cfg: AutomodConfig): Promise<void> {
   await setRawSetting('automod_config', JSON.stringify(cfg));
 }
 
+// Statystyki automoda zliczane przez bota (cloud 'automod_stats': { 'YYYY-MM-DD': { kat: liczba } }).
+export type AutomodStats = Record<string, Record<string, number>>;
+export async function getAutomodStats(): Promise<AutomodStats> {
+  const raw = await getRawSetting('automod_stats');
+  if (!raw) return {};
+  try {
+    const o = JSON.parse(raw) as AutomodStats;
+    return o && typeof o === 'object' && !Array.isArray(o) ? o : {};
+  } catch {
+    return {};
+  }
+}
+
 // ── Logi serwera (Faza 7 / F6.2) ──
 export type LoggingConfig = {
   enabled: boolean;

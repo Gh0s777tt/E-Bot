@@ -1,6 +1,7 @@
 // Automod (Faza 6) — anti-invite / anti-link / limit wzmianek / anty-spam + mod-log.
 // Config z panelu (settings 'automod_config'). Wymaga intencji MessageContent (treść).
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
+import { cloudGetSetting, cloudSetSetting, hasCloud } from './lib/cloud.mts';
 import { findPII, type PiiOpts, piiLabel, scanScam } from './lib/contentScan.mts';
 import { getSettings } from './lib/db.mts';
 
@@ -107,9 +108,54 @@ setInterval(() => {
   for (const [k, v] of recent) if (!v.some((t) => t > cut)) recent.delete(k);
 }, 5 * 60_000);
 
+// ── Statystyki moderacji (cloud 'automod_stats': { 'YYYY-MM-DD': { kategoria: liczba } }) ──
+type ModStats = Record<string, Record<string, number>>;
+let stats: ModStats = {};
+let statsDirty = false;
+
+function categoryOf(reason: string): string {
+  if (reason.startsWith('scam')) return 'scam';
+  if (reason.startsWith('dane osobowe')) return 'pii';
+  if (reason === 'zakazane słowo') return 'word';
+  if (reason === 'wzorzec (regex)') return 'regex';
+  if (reason === 'zaproszenie Discord') return 'invite';
+  if (reason === 'link') return 'link';
+  if (reason === 'zbyt wiele wzmianek') return 'mention';
+  if (reason === 'spam') return 'spam';
+  return 'inne';
+}
+function bumpStat(reason: string): void {
+  const day = new Date().toISOString().slice(0, 10);
+  const bucket = stats[day] ?? {};
+  stats[day] = bucket;
+  const cat = categoryOf(reason);
+  bucket[cat] = (bucket[cat] ?? 0) + 1;
+  statsDirty = true;
+}
+async function loadStats(): Promise<void> {
+  if (!hasCloud()) return;
+  try {
+    stats = (JSON.parse((await cloudGetSetting('automod_stats')) || '{}') as ModStats) || {};
+  } catch {
+    stats = {};
+  }
+}
+async function flushStats(): Promise<void> {
+  if (!statsDirty || !hasCloud()) return;
+  statsDirty = false;
+  const days = Object.keys(stats).sort();
+  while (days.length > 30) {
+    const oldest = days.shift();
+    if (oldest) delete stats[oldest];
+  }
+  await cloudSetSetting('automod_stats', JSON.stringify(stats)).catch(() => {});
+}
+
 export function startAutomod(client: Client): void {
   refresh();
   setInterval(refresh, 30_000);
+  void loadStats();
+  setInterval(() => void flushStats(), 120_000);
 
   client.on(Events.MessageCreate, async (msg: Message) => {
     if (!cfg.enabled || msg.author.bot || !msg.guild) return;
@@ -153,6 +199,7 @@ export function startAutomod(client: Client): void {
 
     try {
       await msg.delete().catch(() => {});
+      bumpStat(reason);
 
       // Eskalacja (opcjonalna): timeout / kick / ban — po usunięciu, z checkiem uprawnień bota.
       let actionTaken = 'usunięto wiadomość';

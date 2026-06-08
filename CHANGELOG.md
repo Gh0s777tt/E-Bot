@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-129-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.69.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-130-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.69.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.69.1] — Statystyki ochrony w panelu
+
+- `[#130]` 📊 **Statystyki automoda** — bot zlicza usunięcia wg kategorii (scam / PII / słowa / regex / zaproszenia / linki / wzmianki / spam) do cloud-key `automod_stats` (flush co 2 min, 30 dni historii, klucz bot-owned). Panel `/moderation` → karta „Statystyki ochrony (7 dni)" z paskami i sumą. Bez nowego SQL.
 
 ## [0.69.0] — Automod: konfigurowalne akcje (timeout / kick / ban)
 

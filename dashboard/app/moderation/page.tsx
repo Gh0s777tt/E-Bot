@@ -1,7 +1,8 @@
 import { Bot, Gavel, Hourglass, ShieldCheck } from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
 import AutomodForm from '../../components/AutomodForm';
-import { getAiModConfig, getAutomodConfig } from '../../lib/community';
+import AutomodStats from '../../components/AutomodStats';
+import { getAiModConfig, getAutomodConfig, getAutomodStats } from '../../lib/community';
 import { getModCases, getTempBans } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
 
@@ -40,12 +41,13 @@ function remaining(iso: string): string {
 }
 
 export default async function ModerationPage() {
-  const [cfg, aimod, cases, tempbans, guild] = await Promise.all([
+  const [cfg, aimod, cases, tempbans, guild, stats] = await Promise.all([
     getAutomodConfig(),
     getAiModConfig(),
     getModCases(30),
     getTempBans(50),
     getGuildMeta(),
+    getAutomodStats(),
   ]);
   return (
     <div className="space-y-6">
@@ -69,6 +71,8 @@ export default async function ModerationPage() {
         </h2>
         <AutomodForm initial={cfg} guild={guild} />
       </section>
+
+      <AutomodStats stats={stats} />
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
