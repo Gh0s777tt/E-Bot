@@ -2,7 +2,8 @@
 // Fallback w t(): locale → en → pl → klucz. Dla nowych komunikatów dokładać min. pl+en
 // (reszta dziedziczy do czasu przetłumaczenia). Namespacy: ping, common, error, afk, remind,
 // donate, rep, confess. Placeholdery {x} interpolowane przez t(locale, key, vars).
-import type { Locale } from './locales.mts';
+import { LOCALES, type Locale } from './locales.mts';
+import { ECO_STRINGS } from './strings.eco.mts';
 
 type Dict = Record<string, string>;
 
@@ -379,3 +380,6 @@ export const DICTS: Record<Locale, Dict> = {
   ar,
   id,
 };
+
+// Dołącz słownik /eco (osobny plik strings.eco.mts) do każdego języka — mniej szumu w tym pliku.
+for (const l of LOCALES) Object.assign(DICTS[l], ECO_STRINGS[l]);

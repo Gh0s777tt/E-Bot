@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-177-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.108.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-178-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.109.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.109.0] — 🌍 Wielojęzyczność (4/?): cała ekonomia /eco na t() (15 podkomend × 14 jęz.)
+
+- `[#178]` 🌍 **Tłumaczenia — fala ekonomii.** Cała komenda **`/eco`** (15 podkomend: balance / daily / work / rob / pay / deposit / withdraw / gamble / slots / blackjack / roulette / shop / buy / inventory / use / top) zlokalizowana na **14 języków** — **56 kluczy** z interpolacją kwot, streaków, wzmianek `<@…>` i flavor-textu (5 prac, np. „streamowałeś na Twitchu"). Słownik wydzielony do `strings.eco.mts` (mergowany do `DICTS`). **Logika pieniędzy bez zmian — tylko teksty.** Przy okazji `error.guildOnly` dociągnięty do 14 jęz. (reużywalny). _Blackjack-UI (osobny plik, gra przyciskami) → kolejna fala._
 
 ## [0.108.0] — 🌍 Wielojęzyczność (3/?): pierwsza fala komend na t() (5 komend × 14 jęz.)
 

@@ -21,6 +21,7 @@ import {
   saveUser,
 } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
@@ -132,19 +133,18 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((s) => s.setName('top').setDescription('Ranking najbogatszych'));
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   if (!interaction.guildId) {
-    await interaction.reply(eph('Tylko na serwerze.'));
+    await interaction.reply(eph(t(locale, 'error.guildOnly')));
     return;
   }
   const cfg = ecoConfig();
   if (!cfg.enabled) {
-    await interaction.reply(
-      eph('💤 Ekonomia jest wyłączona (włącz w panelu → Centrum sterowania).'),
-    );
+    await interaction.reply(eph(t(locale, 'eco.disabled')));
     return;
   }
   if (!hasCloud()) {
-    await interaction.reply(eph('❌ Ekonomia wymaga chmury (Supabase).'));
+    await interaction.reply(eph(t(locale, 'eco.needCloud')));
     return;
   }
   const gid = interaction.guildId;
@@ -159,9 +159,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .setColor(ACCENT)
       .setAuthor({ name: target.username, iconURL: target.displayAvatarURL() })
       .addFields(
-        { name: 'Portfel', value: fmt(u.wallet, cur), inline: true },
-        { name: 'Bank', value: fmt(u.bank, cur), inline: true },
-        { name: 'Razem', value: fmt(u.wallet + u.bank, cur), inline: true },
+        { name: t(locale, 'eco.fWallet'), value: fmt(u.wallet, cur), inline: true },
+        { name: t(locale, 'eco.fBank'), value: fmt(u.bank, cur), inline: true },
+        { name: t(locale, 'eco.fTotal'), value: fmt(u.wallet + u.bank, cur), inline: true },
       );
     await interaction.reply({ embeds: [embed] });
     return;
@@ -172,7 +172,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const u = await getUser(gid, interaction.user.id);
     if (minutesSince(u.last_daily) < 20 * 60) {
       const left = Math.ceil(20 * 60 - minutesSince(u.last_daily));
-      await interaction.reply(eph(`⏳ Następna dzienna za ~${Math.ceil(left / 60)} h.`));
+      await interaction.reply(eph(t(locale, 'eco.dailyCd', { h: Math.ceil(left / 60) })));
       return;
     }
     const continued = minutesSince(u.last_daily) < 48 * 60;
@@ -187,7 +187,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       last_daily: new Date().toISOString(),
     });
     logTx(gid, interaction.user.id, reward, 'daily');
-    await interaction.reply(`💸 Odebrano ${fmt(reward, cur)} (streak ${streak}🔥).`);
+    await interaction.reply(t(locale, 'eco.dailyOk', { reward: fmt(reward, cur), streak }));
     return;
   }
 
@@ -197,7 +197,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (minutesSince(u.last_work) < cfg.workCooldownMin) {
       await interaction.reply(
         eph(
-          `⏳ Odpocznij jeszcze ~${Math.ceil(cfg.workCooldownMin - minutesSince(u.last_work))} min.`,
+          t(locale, 'eco.workCd', {
+            min: Math.ceil(cfg.workCooldownMin - minutesSince(u.last_work)),
+          }),
         ),
       );
       return;
@@ -214,14 +216,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     logTx(gid, interaction.user.id, earned, 'praca');
     bumpQuest(gid, interaction.user.id, 'work');
     const jobs = [
-      'dostarczyłeś paczki',
-      'streamowałeś na Twitchu',
-      'naprawiłeś bota',
-      'sprzedałeś skiny',
-      'wygrałeś turniej',
+      t(locale, 'eco.job1'),
+      t(locale, 'eco.job2'),
+      t(locale, 'eco.job3'),
+      t(locale, 'eco.job4'),
+      t(locale, 'eco.job5'),
     ];
     await interaction.reply(
-      `💼 ${jobs[Math.floor(Math.random() * jobs.length)]} i zarobiłeś ${fmt(earned, cur)}.`,
+      t(locale, 'eco.workOk', {
+        job: jobs[Math.floor(Math.random() * jobs.length)],
+        earned: fmt(earned, cur),
+      }),
     );
     return;
   }
@@ -229,26 +234,28 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   // ── rob ──
   if (sub === 'rob') {
     if (!cfg.robEnabled) {
-      await interaction.reply(eph('🚫 Rabunki są wyłączone.'));
+      await interaction.reply(eph(t(locale, 'eco.robOff')));
       return;
     }
     const victim = interaction.options.getUser('user', true);
     if (victim.id === interaction.user.id || victim.bot) {
-      await interaction.reply(eph('Nie możesz okraść tej osoby.'));
+      await interaction.reply(eph(t(locale, 'eco.robBad')));
       return;
     }
     const me = await getUser(gid, interaction.user.id);
     if (minutesSince(me.last_rob) < cfg.robCooldownMin) {
       await interaction.reply(
         eph(
-          `⏳ Za gorąco — spróbuj za ~${Math.ceil(cfg.robCooldownMin - minutesSince(me.last_rob))} min.`,
+          t(locale, 'eco.robCd', {
+            min: Math.ceil(cfg.robCooldownMin - minutesSince(me.last_rob)),
+          }),
         ),
       );
       return;
     }
     const vic = await getUser(gid, victim.id);
     if (vic.wallet < 50) {
-      await interaction.reply(eph('🪹 Ofiara ma pusty portfel.'));
+      await interaction.reply(eph(t(locale, 'eco.robEmpty')));
       return;
     }
     if (hasEffect(gid, victim.id, 'shield')) {
@@ -258,7 +265,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         username: interaction.user.username,
         last_rob: new Date().toISOString(),
       });
-      await interaction.reply(eph('🛡️ Ofiara ma aktywną tarczę anty-rabunek!'));
+      await interaction.reply(eph(t(locale, 'eco.robShield')));
       return;
     }
     const success = Math.random() * 100 < cfg.robChance;
@@ -280,7 +287,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       });
       logTx(gid, interaction.user.id, loot, 'rabunek');
       logTx(gid, victim.id, -loot, 'okradziono');
-      await interaction.reply(`🦹 Okradłeś <@${victim.id}> na ${fmt(loot, cur)}!`);
+      await interaction.reply(t(locale, 'eco.robOk', { victim: victim.id, loot: fmt(loot, cur) }));
     } else {
       const fine = Math.min(me.wallet, Math.floor(cfg.workMax / 2));
       await saveUser({
@@ -291,7 +298,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         last_rob: stamp,
       });
       logTx(gid, interaction.user.id, -fine, 'mandat');
-      await interaction.reply(`🚓 Wpadłeś! Mandat ${fmt(fine, cur)}.`);
+      await interaction.reply(t(locale, 'eco.robCaught', { fine: fmt(fine, cur) }));
     }
     return;
   }
@@ -301,12 +308,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const to = interaction.options.getUser('user', true);
     const amount = interaction.options.getInteger('amount', true);
     if (to.id === interaction.user.id || to.bot) {
-      await interaction.reply(eph('Nieprawidłowy odbiorca.'));
+      await interaction.reply(eph(t(locale, 'eco.payBad')));
       return;
     }
     const me = await getUser(gid, interaction.user.id);
     if (me.wallet < amount) {
-      await interaction.reply(eph(`Masz za mało (portfel: ${fmt(me.wallet, cur)}).`));
+      await interaction.reply(eph(t(locale, 'eco.payLow', { wallet: fmt(me.wallet, cur) })));
       return;
     }
     const rec = await getUser(gid, to.id);
@@ -324,7 +331,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     logTx(gid, interaction.user.id, -amount, 'przelew');
     logTx(gid, to.id, amount, 'przelew');
-    await interaction.reply(`🤝 Przelano ${fmt(amount, cur)} dla <@${to.id}>.`);
+    await interaction.reply(t(locale, 'eco.payOk', { amount: fmt(amount, cur), to: to.id }));
     return;
   }
 
@@ -334,7 +341,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const u = await getUser(gid, interaction.user.id);
     if (sub === 'deposit') {
       if (u.wallet < amount) {
-        await interaction.reply(eph(`Masz za mało w portfelu (${fmt(u.wallet, cur)}).`));
+        await interaction.reply(eph(t(locale, 'eco.depLow', { wallet: fmt(u.wallet, cur) })));
         return;
       }
       await saveUser({
@@ -344,10 +351,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         wallet: u.wallet - amount,
         bank: u.bank + amount,
       });
-      await interaction.reply(`🏦 Wpłacono ${fmt(amount, cur)} do banku.`);
+      await interaction.reply(t(locale, 'eco.depOk', { amount: fmt(amount, cur) }));
     } else {
       if (u.bank < amount) {
-        await interaction.reply(eph(`Masz za mało w banku (${fmt(u.bank, cur)}).`));
+        await interaction.reply(eph(t(locale, 'eco.wdLow', { bank: fmt(u.bank, cur) })));
         return;
       }
       await saveUser({
@@ -357,7 +364,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         wallet: u.wallet + amount,
         bank: u.bank - amount,
       });
-      await interaction.reply(`🏧 Wypłacono ${fmt(amount, cur)} z banku.`);
+      await interaction.reply(t(locale, 'eco.wdOk', { amount: fmt(amount, cur) }));
     }
     return;
   }
@@ -365,17 +372,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   // ── gamble / slots ──
   if (sub === 'gamble' || sub === 'slots') {
     if (!cfg.gambleEnabled) {
-      await interaction.reply(eph('🚫 Hazard jest wyłączony.'));
+      await interaction.reply(eph(t(locale, 'eco.gambleOff')));
       return;
     }
     const amount = interaction.options.getInteger('amount', true);
     if (amount > cfg.gambleMax) {
-      await interaction.reply(eph(`Maks. stawka to ${fmt(cfg.gambleMax, cur)}.`));
+      await interaction.reply(eph(t(locale, 'eco.maxBet', { max: fmt(cfg.gambleMax, cur) })));
       return;
     }
     const u = await getUser(gid, interaction.user.id);
     if (u.wallet < amount) {
-      await interaction.reply(eph(`Masz za mało (${fmt(u.wallet, cur)}).`));
+      await interaction.reply(eph(t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) })));
       return;
     }
     if (sub === 'gamble') {
@@ -392,8 +399,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       logTx(gid, interaction.user.id, delta, 'gamble');
       await interaction.reply(
         win
-          ? `🎲 Wygrana! +${fmt(amount, cur)} (saldo ${fmt(u.wallet + delta, cur)}).`
-          : `🎲 Przegrana… -${fmt(amount, cur)} (saldo ${fmt(u.wallet + delta, cur)}).`,
+          ? t(locale, 'eco.gWin', { amount: fmt(amount, cur), balance: fmt(u.wallet + delta, cur) })
+          : t(locale, 'eco.gLose', {
+              amount: fmt(amount, cur),
+              balance: fmt(u.wallet + delta, cur),
+            }),
       );
     } else {
       const reels = ['🍒', '🍋', '🔔', '💎', '7️⃣'];
@@ -411,8 +421,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         wallet: u.wallet + delta,
       });
       logTx(gid, interaction.user.id, delta, 'slots');
+      const outcome =
+        mult > 0
+          ? t(locale, 'eco.win', { mult, amount: fmt(amount * (mult - 1), cur) })
+          : t(locale, 'eco.lose', { amount: fmt(amount, cur) });
       await interaction.reply(
-        `🎰 ${r.join(' | ')}\n${mult > 0 ? `Wygrana ×${mult}! +${fmt(amount * (mult - 1), cur)}` : `Pudło… -${fmt(amount, cur)}`} (saldo ${fmt(u.wallet + delta, cur)})`,
+        t(locale, 'eco.slots', {
+          reels: r.join(' | '),
+          outcome,
+          balance: fmt(u.wallet + delta, cur),
+        }),
       );
     }
     return;
@@ -422,12 +440,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   if (sub === 'shop') {
     const items = await getShop(gid);
     if (!items.length) {
-      await interaction.reply(eph('🛒 Sklep jest pusty. Dodaj przedmioty w panelu → Ekonomia.'));
+      await interaction.reply(eph(t(locale, 'eco.shopEmpty')));
       return;
     }
     const embed = new EmbedBuilder()
       .setColor(ACCENT)
-      .setTitle('🛒 Sklep serwera')
+      .setTitle(t(locale, 'eco.shopTitle'))
       .setDescription(
         items
           .map(
@@ -437,7 +455,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
           .join('\n\n')
           .slice(0, 4000),
       )
-      .setFooter({ text: 'Kup: /eco buy <nazwa>' });
+      .setFooter({ text: t(locale, 'eco.shopFooter') });
     await interaction.reply({ embeds: [embed] });
     return;
   }
@@ -450,26 +468,26 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       items.find((i) => i.name.toLowerCase() === query) ??
       items.find((i) => i.name.toLowerCase().includes(query));
     if (!item) {
-      await interaction.reply(eph('Nie znaleziono przedmiotu. Sprawdź `/eco shop`.'));
+      await interaction.reply(eph(t(locale, 'eco.buyNF')));
       return;
     }
     const u = await getUser(gid, interaction.user.id);
     if (u.wallet < item.price) {
       await interaction.reply(
-        eph(`Masz za mało (cena ${fmt(item.price, cur)}, portfel ${fmt(u.wallet, cur)}).`),
+        eph(t(locale, 'eco.buyLow', { price: fmt(item.price, cur), wallet: fmt(u.wallet, cur) })),
       );
       return;
     }
     if (item.role_id) {
       const member = interaction.member as GuildMember | null;
       if (member?.roles.cache.has(item.role_id)) {
-        await interaction.reply(eph('Masz już tę rolę.'));
+        await interaction.reply(eph(t(locale, 'eco.buyHasRole')));
         return;
       }
       try {
         await member?.roles.add(item.role_id);
       } catch {
-        await interaction.reply(eph('❌ Nie mogłem nadać roli (uprawnienia/hierarchia bota).'));
+        await interaction.reply(eph(t(locale, 'eco.buyRoleFail')));
         return;
       }
     } else {
@@ -484,9 +502,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     logTx(gid, interaction.user.id, -item.price, 'sklep');
     await interaction.reply(
-      `✅ Kupiono **${item.name}** za ${fmt(item.price, cur)}.${
-        item.role_id ? '' : ' Dodano do ekwipunku — `/eco inventory`.'
-      }`,
+      t(locale, 'eco.buyOk', { name: item.name, price: fmt(item.price, cur) }) +
+        (item.role_id ? '' : ` ${t(locale, 'eco.buyInv')}`),
     );
     return;
   }
@@ -494,12 +511,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   // ── blackjack ──
   if (sub === 'blackjack') {
     if (!cfg.gambleEnabled) {
-      await interaction.reply(eph('🚫 Hazard jest wyłączony.'));
+      await interaction.reply(eph(t(locale, 'eco.gambleOff')));
       return;
     }
     const amount = interaction.options.getInteger('amount', true);
     if (amount > cfg.gambleMax) {
-      await interaction.reply(eph(`Maks. stawka to ${fmt(cfg.gambleMax, cur)}.`));
+      await interaction.reply(eph(t(locale, 'eco.maxBet', { max: fmt(cfg.gambleMax, cur) })));
       return;
     }
     await startBlackjack(interaction, gid, amount);
@@ -510,13 +527,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   if (sub === 'inventory') {
     const inv = await getInventory(gid, interaction.user.id);
     if (!inv.length) {
-      await interaction.reply(eph('🎒 Twój ekwipunek jest pusty. Kup coś w `/eco shop`.'));
+      await interaction.reply(eph(t(locale, 'eco.invEmpty')));
       return;
     }
     const embed = new EmbedBuilder()
       .setColor(ACCENT)
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
-      .setTitle('🎒 Ekwipunek')
+      .setTitle(t(locale, 'eco.invTitle'))
       .setDescription(
         inv
           .map((i) => `**${i.item_name}** ×${i.qty}`)
@@ -535,7 +552,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       inv.find((i) => i.item_name.toLowerCase() === query) ??
       inv.find((i) => i.item_name.toLowerCase().includes(query));
     if (!owned) {
-      await interaction.reply(eph('Nie masz takiego przedmiotu. Sprawdź `/eco inventory`.'));
+      await interaction.reply(eph(t(locale, 'eco.useNF')));
       return;
     }
     const shop = await getShop(gid);
@@ -544,10 +561,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     let extra = '';
     if (effect === 'xp2') {
       activateEffect(gid, interaction.user.id, 'xp2', 60 * 60_000);
-      extra = ' ⚡ Podwójne XP przez 1h!';
+      extra = ` ${t(locale, 'eco.useXp2')}`;
     } else if (effect === 'shield') {
       activateEffect(gid, interaction.user.id, 'shield', 24 * 60 * 60_000);
-      extra = ' 🛡️ Tarcza anty-rabunek na 24h!';
+      extra = ` ${t(locale, 'eco.useShield')}`;
     } else if (effect === 'lootbox') {
       const loot = 100 + Math.floor(Math.random() * 1900);
       const u = await getUser(gid, interaction.user.id);
@@ -558,28 +575,30 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         wallet: u.wallet + loot,
       });
       logTx(gid, interaction.user.id, loot, 'lootbox');
-      extra = ` 🎁 Lootbox: +${fmt(loot, cur)}!`;
+      extra = ` ${t(locale, 'eco.useLoot', { loot: fmt(loot, cur) })}`;
     }
     await addInventory(gid, interaction.user.id, owned.item_name, -1);
-    await interaction.reply(`✨ Użyto **${owned.item_name}**.${extra} Zostało: ${owned.qty - 1}.`);
+    await interaction.reply(
+      t(locale, 'eco.useOk', { name: owned.item_name, extra, qty: owned.qty - 1 }),
+    );
     return;
   }
 
   // ── roulette ──
   if (sub === 'roulette') {
     if (!cfg.gambleEnabled) {
-      await interaction.reply(eph('🚫 Hazard jest wyłączony.'));
+      await interaction.reply(eph(t(locale, 'eco.gambleOff')));
       return;
     }
     const amount = interaction.options.getInteger('amount', true);
     if (amount > cfg.gambleMax) {
-      await interaction.reply(eph(`Maks. stawka to ${fmt(cfg.gambleMax, cur)}.`));
+      await interaction.reply(eph(t(locale, 'eco.maxBet', { max: fmt(cfg.gambleMax, cur) })));
       return;
     }
     const choice = interaction.options.getString('kolor', true);
     const u = await getUser(gid, interaction.user.id);
     if (u.wallet < amount) {
-      await interaction.reply(eph(`Masz za mało (${fmt(u.wallet, cur)}).`));
+      await interaction.reply(eph(t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) })));
       return;
     }
     const RED = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]);
@@ -598,8 +617,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     logTx(gid, interaction.user.id, delta, 'ruletka');
     const emoji = color === 'green' ? '🟢' : color === 'red' ? '🔴' : '⚫';
+    const outcome = won
+      ? t(locale, 'eco.win', { mult, amount: fmt(amount * (mult - 1), cur) })
+      : t(locale, 'eco.lose', { amount: fmt(amount, cur) });
     await interaction.reply(
-      `🎡 Wypadło **${n}** ${emoji}\n${won ? `Wygrana ×${mult}! +${fmt(amount * (mult - 1), cur)}` : `Pudło… -${fmt(amount, cur)}`} (saldo ${fmt(u.wallet + delta, cur)})`,
+      t(locale, 'eco.roulette', { n, emoji, outcome, balance: fmt(u.wallet + delta, cur) }),
     );
     return;
   }
@@ -621,12 +643,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .sort((a, b) => b.total - a.total)
       .slice(0, 10);
     if (!sorted.length) {
-      await interaction.reply(eph('Brak danych ekonomii.'));
+      await interaction.reply(eph(t(locale, 'eco.topEmpty')));
       return;
     }
     const embed = new EmbedBuilder()
       .setColor(ACCENT)
-      .setTitle('🏆 Najbogatsi')
+      .setTitle(t(locale, 'eco.topTitle'))
       .setDescription(
         sorted
           .map((r, i) => `${i + 1}. **${r.username || r.user_id}** — ${fmt(r.total, cur)}`)
