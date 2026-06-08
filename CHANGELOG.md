@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-160-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.92.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-161-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.93.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.93.0] — Moderacja głębiej (1/?): /lockdown (panic button)
+
+- `[#161]` 🔒 **`/lockdown on/off`** — awaryjny „panic button" dla adminów: jednym poleceniem **blokuje pisanie na wszystkich kanałach** (tekst/ogłoszenia/forum: `@everyone` SendMessages=false) i `off` przywraca. Idealne przy raidzie/wycieku. Wymaga uprawnienia bota *Zarządzanie kanałami*. Start kierunku **Pogłębienie moderacji & ekonomii**.
 
 ## [0.92.0] — Wow (2/?): bogatszy tygodniowy recap
 
