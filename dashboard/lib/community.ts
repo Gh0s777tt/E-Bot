@@ -63,6 +63,12 @@ export type AutomodConfig = {
   };
   action?: 'delete' | 'timeout' | 'kick' | 'ban';
   timeoutMinutes?: number;
+  escalation?: {
+    enabled: boolean;
+    threshold: number;
+    windowMin: number;
+    action: 'timeout' | 'kick' | 'ban';
+  };
 };
 export const AUTOMOD_DEFAULT: AutomodConfig = {
   enabled: false,
@@ -84,6 +90,7 @@ export const AUTOMOD_DEFAULT: AutomodConfig = {
   },
   action: 'delete',
   timeoutMinutes: 10,
+  escalation: { enabled: false, threshold: 3, windowMin: 10, action: 'timeout' },
 };
 
 export async function getAutomodConfig(): Promise<AutomodConfig> {

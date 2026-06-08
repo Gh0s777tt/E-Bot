@@ -22,6 +22,12 @@ type AutomodConfig = {
   pii?: { enabled: boolean; types?: PiiOpts };
   action?: 'delete' | 'timeout' | 'kick' | 'ban';
   timeoutMinutes?: number;
+  escalation?: {
+    enabled: boolean;
+    threshold: number;
+    windowMin: number;
+    action: 'timeout' | 'kick' | 'ban';
+  };
 };
 const DEFAULT: AutomodConfig = {
   enabled: false,
@@ -43,6 +49,7 @@ const DEFAULT: AutomodConfig = {
   },
   action: 'delete',
   timeoutMinutes: 10,
+  escalation: { enabled: false, threshold: 3, windowMin: 10, action: 'timeout' },
 };
 let cfg: AutomodConfig = { ...DEFAULT };
 let compiled: RegExp[] = [];
@@ -107,6 +114,13 @@ setInterval(() => {
   const cut = Date.now() - 60_000;
   for (const [k, v] of recent) if (!v.some((t) => t > cut)) recent.delete(k);
 }, 5 * 60_000);
+
+// Recydywa: znaczniki czasu naruszeń per-user (okno do eskalacji akcji).
+const violations = new Map<string, number[]>();
+setInterval(() => {
+  const cut = Date.now() - 60 * 60_000;
+  for (const [k, v] of violations) if (!v.some((t) => t > cut)) violations.delete(k);
+}, 10 * 60_000);
 
 // ── Statystyki moderacji (cloud 'automod_stats': { 'YYYY-MM-DD': { kategoria: liczba } }) ──
 type ModStats = Record<string, Record<string, number>>;
@@ -201,23 +215,37 @@ export function startAutomod(client: Client): void {
       await msg.delete().catch(() => {});
       bumpStat(reason);
 
-      // Eskalacja (opcjonalna): timeout / kick / ban — po usunięciu, z checkiem uprawnień bota.
+      // Akcja bazowa (delete/timeout/kick/ban) + eskalacja recydywy: po N naruszeniach w oknie
+      // czasowym automatycznie mocniejsza akcja, nawet gdy bazowa to samo „usuń".
+      let act = cfg.action ?? 'delete';
+      let note = '';
+      if (member && cfg.escalation?.enabled) {
+        const now = Date.now();
+        const winMs = Math.max(1, cfg.escalation.windowMin ?? 10) * 60_000;
+        const arr = (violations.get(msg.author.id) ?? []).filter((t) => now - t < winMs);
+        arr.push(now);
+        violations.set(msg.author.id, arr);
+        if (arr.length >= Math.max(2, cfg.escalation.threshold ?? 3)) {
+          act = cfg.escalation.action ?? 'timeout';
+          note = ` (recydywa ${arr.length}×)`;
+        }
+      }
+
       let actionTaken = 'usunięto wiadomość';
-      const act = cfg.action ?? 'delete';
       if (member && act !== 'delete') {
         try {
           if (act === 'timeout' && member.moderatable) {
             await member.timeout(
               Math.max(1, cfg.timeoutMinutes ?? 10) * 60_000,
-              `automod: ${reason}`,
+              `automod: ${reason}${note}`,
             );
-            actionTaken = `usunięto + timeout ${cfg.timeoutMinutes ?? 10} min`;
+            actionTaken = `usunięto + timeout ${cfg.timeoutMinutes ?? 10} min${note}`;
           } else if (act === 'kick' && member.kickable) {
-            await member.kick(`automod: ${reason}`);
-            actionTaken = 'usunięto + wyrzucono';
+            await member.kick(`automod: ${reason}${note}`);
+            actionTaken = `usunięto + wyrzucono${note}`;
           } else if (act === 'ban' && member.bannable) {
-            await member.ban({ reason: `automod: ${reason}` });
-            actionTaken = 'usunięto + ban';
+            await member.ban({ reason: `automod: ${reason}${note}` });
+            actionTaken = `usunięto + ban${note}`;
           }
         } catch {
           /* brak uprawnień / wyższa rola — zostaje samo usunięcie */

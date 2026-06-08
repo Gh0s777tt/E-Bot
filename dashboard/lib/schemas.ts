@@ -357,6 +357,14 @@ export const automodSchema = z.object({
     .optional(),
   action: z.enum(['delete', 'timeout', 'kick', 'ban']).optional().default('delete'),
   timeoutMinutes: z.number().int().min(1).max(40320).optional().default(10),
+  escalation: z
+    .object({
+      enabled: z.boolean(),
+      threshold: z.number().int().min(2).max(20),
+      windowMin: z.number().int().min(1).max(120),
+      action: z.enum(['timeout', 'kick', 'ban']),
+    })
+    .optional(),
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 

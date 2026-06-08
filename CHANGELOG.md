@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-138-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.71.3-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-139-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.72.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.72.0] — Automod: eskalacja recydywy (progi ostrzeżeń)
+
+- `[#139]` ⚠️ **Eskalacja recydywy** — automod śledzi powtarzające się naruszenia per-użytkownik w oknie czasowym; po przekroczeniu progu (np. **3 naruszenia / 10 min**) automatycznie stosuje mocniejszą akcję (**timeout / kick / ban**), nawet gdy akcja bazowa to tylko „usuń". Konfiguracja w `/moderation` (próg, okno, akcja). Check uprawnień bota; powód w mod-logu zawiera „(recydywa N×)". Rejestr w pamięci, okno czyszczone co 10 min.
 
 ## [0.71.3] — Trend moderacji (14 dni) na wykresie
 

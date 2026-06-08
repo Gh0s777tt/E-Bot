@@ -45,14 +45,21 @@ type Cfg = {
   pii: { enabled: boolean; types: PiiTypes };
   action: 'delete' | 'timeout' | 'kick' | 'ban';
   timeoutMinutes: number;
+  escalation: {
+    enabled: boolean;
+    threshold: number;
+    windowMin: number;
+    action: 'timeout' | 'kick' | 'ban';
+  };
 };
 type ListKey = 'bannedWords' | 'bannedRegex' | 'allowedLinks' | 'ignoreChannels';
-type Init = Omit<Cfg, ListKey | 'antiScam' | 'pii' | 'action' | 'timeoutMinutes'> &
+type Init = Omit<Cfg, ListKey | 'antiScam' | 'pii' | 'action' | 'timeoutMinutes' | 'escalation'> &
   Partial<Pick<Cfg, ListKey>> & {
     antiScam?: { enabled?: boolean; customDomains?: string[] };
     pii?: { enabled?: boolean; types?: Partial<PiiTypes> };
     action?: Cfg['action'];
     timeoutMinutes?: number;
+    escalation?: Partial<Cfg['escalation']>;
   };
 
 const inputCls =
@@ -82,6 +89,12 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
     },
     action: initial.action ?? 'delete',
     timeoutMinutes: initial.timeoutMinutes ?? 10,
+    escalation: {
+      enabled: initial.escalation?.enabled ?? false,
+      threshold: initial.escalation?.threshold ?? 3,
+      windowMin: initial.escalation?.windowMin ?? 10,
+      action: initial.escalation?.action ?? 'timeout',
+    },
   });
   const [wordsText, setWordsText] = useState(toLines(initial.bannedWords ?? []));
   const [regexText, setRegexText] = useState(toLines(initial.bannedRegex ?? []));
@@ -202,6 +215,82 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
           zostaje samo usunięcie wiadomości.
         </p>
       )}
+
+      {/* Eskalacja recydywy */}
+      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.escalation.enabled}
+            onChange={(e) =>
+              setC({ ...c, escalation: { ...c.escalation, enabled: e.target.checked } })
+            }
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">Eskalacja recydywy</span>
+          <span className="hidden text-xs text-muted sm:inline">
+            (powtarzające się naruszenia → mocniejsza akcja)
+          </span>
+        </label>
+        {c.escalation.enabled && (
+          <>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <label className="space-y-1 text-sm">
+                <span className="text-muted">Po ilu naruszeniach</span>
+                <input
+                  type="number"
+                  value={c.escalation.threshold}
+                  onChange={(e) =>
+                    setC({
+                      ...c,
+                      escalation: { ...c.escalation, threshold: Math.max(2, num(e.target.value)) },
+                    })
+                  }
+                  className={inputCls}
+                />
+              </label>
+              <label className="space-y-1 text-sm">
+                <span className="text-muted">W oknie (min)</span>
+                <input
+                  type="number"
+                  value={c.escalation.windowMin}
+                  onChange={(e) =>
+                    setC({
+                      ...c,
+                      escalation: { ...c.escalation, windowMin: Math.max(1, num(e.target.value)) },
+                    })
+                  }
+                  className={inputCls}
+                />
+              </label>
+              <label className="space-y-1 text-sm">
+                <span className="text-muted">Akcja eskalacji</span>
+                <select
+                  value={c.escalation.action}
+                  onChange={(e) =>
+                    setC({
+                      ...c,
+                      escalation: {
+                        ...c.escalation,
+                        action: e.target.value as Cfg['escalation']['action'],
+                      },
+                    })
+                  }
+                  className={inputCls}
+                >
+                  <option value="timeout">Timeout</option>
+                  <option value="kick">Wyrzuć</option>
+                  <option value="ban">Ban</option>
+                </select>
+              </label>
+            </div>
+            <p className="text-xs text-muted">
+              Np. {c.escalation.threshold} naruszenia w {c.escalation.windowMin} min → automatycznie
+              „{c.escalation.action}" (nawet gdy akcja bazowa to „usuń").
+            </p>
+          </>
+        )}
+      </div>
 
       {/* Własne filtry (Faza 8) */}
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
