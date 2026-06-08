@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-175-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.106.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-176-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.107.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.107.0] — 👥 Lista dostępu do panelu (kto ma jaką rangę)
+
+- `[#176]` 👥 **Roster dostępu do panelu** w **Ustawieniach** — czytelna lista **wszystkich** osób z dostępem do dashboardu i ich rangą: **👑 Właściciel** (z `DASHBOARD_OWNER_IDS` — dotąd niewidoczni w panelu, mimo że mają pełnego admina), **🛡️ Admin / ✏️ Editor / 👁️ Viewer** (staff z panelu). Z **nazwami i avatarami** rozwiązanymi z Discord ID (bot token; fallback na samo ID), znacznikiem **„Ty"** i sortowaniem wg rangi. Widoczna dla każdego zalogowanego; zarządzanie staffem (dodawanie/role) zostaje adminowe niżej. Nowe `lib/panelAccess.ts` + komponent `PanelAccessList` (memo profilu 60 s, by nie odpytywać Discord API przy każdym renderze).
 
 ## [0.106.0] — 🌍 Wielojęzyczność (2/?): przełącznik języka w panelu + błędy bota w 14 językach
 
