@@ -97,3 +97,30 @@ export async function saveIntegrationConfig(cfg: IntegrationConfig): Promise<voi
     }),
   );
 }
+
+// ───────── Generic incoming webhook (Faza 8) — zewnętrzny POST → wiadomość na kanał ─────────
+// Pozwala wpiąć dowolny serwis (Zapier/Make/GitHub/IFTTT…). Auth = token z configu.
+export type WebhookRelayConfig = {
+  enabled: boolean;
+  token: string;
+  channelId: string;
+  message: string; // szablon: {content} {title} {url}
+};
+const WEBHOOK_RELAY_DEFAULT: WebhookRelayConfig = {
+  enabled: false,
+  token: '',
+  channelId: '',
+  message: '{content}',
+};
+export async function getWebhookRelay(): Promise<WebhookRelayConfig> {
+  const raw = await getRawSetting('webhook_relay');
+  if (!raw) return { ...WEBHOOK_RELAY_DEFAULT };
+  try {
+    return { ...WEBHOOK_RELAY_DEFAULT, ...(JSON.parse(raw) as Partial<WebhookRelayConfig>) };
+  } catch {
+    return { ...WEBHOOK_RELAY_DEFAULT };
+  }
+}
+export async function saveWebhookRelay(cfg: WebhookRelayConfig): Promise<void> {
+  await setRawSetting('webhook_relay', JSON.stringify(cfg));
+}

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-111-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.58.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-112-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.59.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.59.0] — Faza 8 #14: Integracje (generic incoming webhook) → 🎉 KONIEC FAZY 8
+
+- `[#112]` 🔌 **Integracje — webhook przychodzący:** publiczny endpoint `/api/hook` (auth tokenem) → bot wysyła wiadomość na skonfigurowany kanał wg szablonu (`{content}`/`{title}`/`{url}`). Pozwala wpiąć dowolny serwis (Zapier / Make / GitHub / IFTTT…). Token generowany w `/integrations`; `proxy` otwiera `/api/hook`. Bez SQL. **Faza 8 (fundament + 14 epików rozbudowy) ZAKOŃCZONA.**
 
 ## [0.58.0] — Faza 8 #13: Compact UI (tryb kompaktowy)
 

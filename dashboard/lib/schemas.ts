@@ -469,6 +469,15 @@ export const socialFeedsSchema = z.object({
 });
 export type SocialFeedsInput = z.infer<typeof socialFeedsSchema>;
 
+// ── Generic incoming webhook (Faza 8) ──
+export const webhookRelaySchema = z.object({
+  enabled: z.boolean(),
+  token: z.string().max(100),
+  channelId: z.string().max(40),
+  message: z.string().max(2000),
+});
+export type WebhookRelayInput = z.infer<typeof webhookRelaySchema>;
+
 // ── Sezonowe rankingi (POST /api/seasons) ──────────────────
 export const seasonsSchema = z.object({
   enabled: z.boolean(),

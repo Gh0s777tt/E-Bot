@@ -11,6 +11,7 @@ function isOpen(pathname: string): boolean {
     pathname.startsWith('/api/img') ||
     pathname.startsWith('/api/twitch') || // webhook EventSub — Twitch woła bez sesji (auth = HMAC)
     pathname === '/api/kofi' || // webhook Ko-fi — woła bez sesji (auth = verification_token); EXACT, nie prefix (by nie otworzyć /api/kofi-config)
+    pathname === '/api/hook' || // generic incoming webhook — zewnętrzny serwis woła bez sesji (auth = token)
     pathname === '/api/sentry' || // raport błędów z error-boundary — może renderować się dla niezalogowanych
     pathname.startsWith('/api/health') || // healthcheck + cron „bot down" — monitor/Vercel bez sesji
     pathname === '/api/bot-status' || // status bota dla paska (czytany przez Topbar)
