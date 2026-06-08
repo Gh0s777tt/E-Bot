@@ -4,6 +4,30 @@ import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
 import { ChannelSelect, RoleSelect } from './pickers';
 
+type PiiTypes = {
+  creditCard: boolean;
+  pesel: boolean;
+  idCard: boolean;
+  iban: boolean;
+  email: boolean;
+  phone: boolean;
+};
+const PII_DEF: PiiTypes = {
+  creditCard: true,
+  pesel: true,
+  idCard: true,
+  iban: true,
+  email: true,
+  phone: false,
+};
+const PII_FIELDS: { key: keyof PiiTypes; label: string }[] = [
+  { key: 'creditCard', label: 'Karty płatnicze' },
+  { key: 'pesel', label: 'PESEL' },
+  { key: 'idCard', label: 'Nr dowodu' },
+  { key: 'iban', label: 'IBAN / konto' },
+  { key: 'email', label: 'E-mail' },
+  { key: 'phone', label: 'Telefon (PL)' },
+];
 type Cfg = {
   enabled: boolean;
   blockInvites: boolean;
@@ -17,9 +41,15 @@ type Cfg = {
   bannedRegex: string[];
   allowedLinks: string[];
   ignoreChannels: string[];
+  antiScam: { enabled: boolean; customDomains: string[] };
+  pii: { enabled: boolean; types: PiiTypes };
 };
 type ListKey = 'bannedWords' | 'bannedRegex' | 'allowedLinks' | 'ignoreChannels';
-type Init = Omit<Cfg, ListKey> & Partial<Pick<Cfg, ListKey>>;
+type Init = Omit<Cfg, ListKey | 'antiScam' | 'pii'> &
+  Partial<Pick<Cfg, ListKey>> & {
+    antiScam?: { enabled?: boolean; customDomains?: string[] };
+    pii?: { enabled?: boolean; types?: Partial<PiiTypes> };
+  };
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -38,10 +68,19 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
     bannedRegex: initial.bannedRegex ?? [],
     allowedLinks: initial.allowedLinks ?? [],
     ignoreChannels: initial.ignoreChannels ?? [],
+    antiScam: {
+      enabled: initial.antiScam?.enabled ?? false,
+      customDomains: initial.antiScam?.customDomains ?? [],
+    },
+    pii: {
+      enabled: initial.pii?.enabled ?? false,
+      types: { ...PII_DEF, ...(initial.pii?.types ?? {}) },
+    },
   });
   const [wordsText, setWordsText] = useState(toLines(initial.bannedWords ?? []));
   const [regexText, setRegexText] = useState(toLines(initial.bannedRegex ?? []));
   const [linksText, setLinksText] = useState(toLines(initial.allowedLinks ?? []));
+  const [scamText, setScamText] = useState(toLines(initial.antiScam?.customDomains ?? []));
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
   async function save() {
@@ -52,6 +91,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
         bannedWords: fromLines(wordsText),
         bannedRegex: fromLines(regexText),
         allowedLinks: fromLines(linksText),
+        antiScam: { enabled: c.antiScam.enabled, customDomains: fromLines(scamText) },
       };
       const r = await fetch('/api/automod', {
         method: 'POST',
@@ -185,6 +225,72 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
             </div>
           )}
         </div>
+      </div>
+
+      {/* Ochrona: anti-scam + PII */}
+      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+        <span className="font-semibold text-white/90">
+          Ochrona przed oszustwami i danymi osobowymi
+        </span>
+
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.antiScam.enabled}
+            onChange={(e) => setC({ ...c, antiScam: { ...c.antiScam, enabled: e.target.checked } })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">Anti-scam / phishing</span>
+          <span className="hidden text-xs text-muted sm:inline">
+            (podrabiany Discord/Steam, „darmowe nitro/gift", linki na IP)
+          </span>
+        </label>
+        {c.antiScam.enabled && (
+          <label className="block space-y-1 text-sm">
+            <span className="text-muted">Dodatkowe domeny do blokady (jedna na linię)</span>
+            <textarea
+              value={scamText}
+              onChange={(e) => setScamText(e.target.value)}
+              rows={2}
+              className={`${inputCls} font-mono`}
+              placeholder={'zly-scam.example\nfake-gift.ru'}
+            />
+          </label>
+        )}
+
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.pii.enabled}
+            onChange={(e) => setC({ ...c, pii: { ...c.pii, enabled: e.target.checked } })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">Ochrona danych osobowych (PII)</span>
+        </label>
+        {c.pii.enabled && (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {PII_FIELDS.map((f) => (
+              <label key={f.key} className="flex items-center gap-2 text-sm text-muted">
+                <input
+                  type="checkbox"
+                  checked={c.pii.types[f.key]}
+                  onChange={(e) =>
+                    setC({
+                      ...c,
+                      pii: { ...c.pii, types: { ...c.pii.types, [f.key]: e.target.checked } },
+                    })
+                  }
+                  className="h-4 w-4 accent-accent"
+                />
+                {f.label}
+              </label>
+            ))}
+          </div>
+        )}
+        <p className="text-xs text-muted">
+          Wiadomości z oszustwem lub danymi osobowymi są usuwane; do mod-logu <strong>nie</strong>{' '}
+          trafia treść z danymi (zero wtórnego wycieku). Autor dostaje krótkie wyjaśnienie w DM.
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

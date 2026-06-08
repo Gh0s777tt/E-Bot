@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-126-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.67.2-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-127-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.68.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.68.0] — Ochrona: anti-scam / phishing + dane osobowe (PII)
+
+- `[#127]` 🛡️ **Anti-scam + ochrona danych osobowych w automodzie** — bot wykrywa i usuwa:
+  - **Scam / phishing**: podrabiane domeny Discord/Steam, oferty „darmowe nitro/gift", linki na adres IP, plus własna lista domen.
+  - **Dane osobowe (PII)**: karty płatnicze (Luhn), PESEL (suma kontrolna), nr dowodu (checksum), IBAN (mod-97), e-mail, telefon PL — każdy typ włączany osobno (domyślnie telefon OFF — najwięcej fałszywych trafień).
+  Treść zawierająca PII **nigdy** nie trafia do mod-logu (zero wtórnego wycieku danych); autor dostaje krótkie wyjaśnienie w DM. Detekcja w czystej, **przetestowanej** bibliotece `bot/src/lib/contentScan.mts` (**+24 testy → 46 łącznie**). Konfiguracja w automodzie (`/moderation`), bez nowego SQL. Uwaga: wykrywanie dowolnych imion/nazwisk pominięte świadomie (zbyt wiele fałszywych trafień bez NLP) — skupiamy się na strukturalnym PII, które łapiemy pewnie.
 
 ## [0.67.2] — Realtime: re-subskrypcja + czystsze logi
 

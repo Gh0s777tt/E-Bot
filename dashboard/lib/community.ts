@@ -49,6 +49,18 @@ export type AutomodConfig = {
   bannedRegex?: string[];
   allowedLinks?: string[];
   ignoreChannels?: string[];
+  antiScam?: { enabled: boolean; customDomains?: string[] };
+  pii?: {
+    enabled: boolean;
+    types?: {
+      creditCard?: boolean;
+      pesel?: boolean;
+      idCard?: boolean;
+      iban?: boolean;
+      email?: boolean;
+      phone?: boolean;
+    };
+  };
 };
 export const AUTOMOD_DEFAULT: AutomodConfig = {
   enabled: false,
@@ -63,6 +75,11 @@ export const AUTOMOD_DEFAULT: AutomodConfig = {
   bannedRegex: [],
   allowedLinks: [],
   ignoreChannels: [],
+  antiScam: { enabled: false, customDomains: [] },
+  pii: {
+    enabled: false,
+    types: { creditCard: true, pesel: true, idCard: true, iban: true, email: true, phone: false },
+  },
 };
 
 export async function getAutomodConfig(): Promise<AutomodConfig> {

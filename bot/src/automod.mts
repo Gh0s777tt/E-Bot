@@ -1,6 +1,7 @@
 // Automod (Faza 6) — anti-invite / anti-link / limit wzmianek / anty-spam + mod-log.
 // Config z panelu (settings 'automod_config'). Wymaga intencji MessageContent (treść).
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
+import { findPII, type PiiOpts, piiLabel, scanScam } from './lib/contentScan.mts';
 import { getSettings } from './lib/db.mts';
 
 type AutomodConfig = {
@@ -16,6 +17,8 @@ type AutomodConfig = {
   bannedRegex?: string[];
   allowedLinks?: string[];
   ignoreChannels?: string[];
+  antiScam?: { enabled: boolean; customDomains?: string[] };
+  pii?: { enabled: boolean; types?: PiiOpts };
 };
 const DEFAULT: AutomodConfig = {
   enabled: false,
@@ -30,6 +33,11 @@ const DEFAULT: AutomodConfig = {
   bannedRegex: [],
   allowedLinks: [],
   ignoreChannels: [],
+  antiScam: { enabled: false, customDomains: [] },
+  pii: {
+    enabled: false,
+    types: { creditCard: true, pesel: true, idCard: true, iban: true, email: true, phone: false },
+  },
 };
 let cfg: AutomodConfig = { ...DEFAULT };
 let compiled: RegExp[] = [];
@@ -108,6 +116,9 @@ export function startAutomod(client: Client): void {
 
     const content = msg.content || '';
     const nContent = normalizeText(content);
+    const scam = cfg.antiScam?.enabled ? scanScam(content, cfg.antiScam.customDomains ?? []) : null;
+    const piiTypes = cfg.pii?.enabled ? findPII(content, cfg.pii.types ?? {}) : [];
+
     let reason = '';
     if (
       cfg.bannedWords?.length &&
@@ -115,6 +126,8 @@ export function startAutomod(client: Client): void {
     )
       reason = 'zakazane słowo';
     else if (compiled.length && compiled.some((re) => re.test(content))) reason = 'wzorzec (regex)';
+    else if (scam) reason = scam;
+    else if (piiTypes.length) reason = `dane osobowe: ${piiTypes.map(piiLabel).join(', ')}`;
     else if (cfg.blockInvites && INVITE.test(content)) reason = 'zaproszenie Discord';
     else if (cfg.blockLinks && LINK.test(content) && linkNotAllowed(content)) reason = 'link';
     else if (
@@ -131,6 +144,9 @@ export function startAutomod(client: Client): void {
     }
     if (!reason) return;
 
+    // Gdy wykryto PII — NIGDY nie kopiuj treści do kanału logów (uniknij wtórnego wycieku danych).
+    const logContent = piiTypes.length === 0;
+
     try {
       await msg.delete().catch(() => {});
       if (cfg.modlogChannelId) {
@@ -145,9 +161,20 @@ export function startAutomod(client: Client): void {
               { name: 'Kanał', value: `<#${msg.channelId}>`, inline: true },
             )
             .setTimestamp(new Date());
-          if (content) embed.addFields({ name: 'Treść', value: content.slice(0, 300) });
+          if (content && logContent)
+            embed.addFields({ name: 'Treść', value: content.slice(0, 300) });
           await ch.send({ embeds: [embed] }).catch(() => {});
         }
+      }
+      // Edukacyjny DM przy scamie / PII (cicha porażka, gdy DM zamknięte).
+      if (piiTypes.length || scam) {
+        await msg.author
+          .send(
+            piiTypes.length
+              ? `🔒 Twoja wiadomość na **${msg.guild.name}** została usunięta — wykryto dane osobowe (${piiTypes.map(piiLabel).join(', ')}). Dla bezpieczeństwa nie udostępniaj ich publicznie.`
+              : `🛡️ Twoja wiadomość na **${msg.guild.name}** została usunięta — wykryto podejrzany/oszukańczy link. Uważaj na oszustwa.`,
+          )
+          .catch(() => {});
       }
     } catch (e) {
       console.warn('[automod]', (e as Error).message);

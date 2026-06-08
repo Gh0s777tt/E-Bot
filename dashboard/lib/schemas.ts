@@ -322,6 +322,28 @@ export const automodSchema = z.object({
   bannedRegex: z.array(z.string().min(1).max(200)).max(20).optional().default([]),
   allowedLinks: z.array(z.string().min(1).max(100)).max(50).optional().default([]),
   ignoreChannels: z.array(z.string().max(40)).max(50).optional().default([]),
+  antiScam: z
+    .object({
+      enabled: z.boolean(),
+      customDomains: z.array(z.string().min(1).max(120)).max(200).optional().default([]),
+    })
+    .optional(),
+  pii: z
+    .object({
+      enabled: z.boolean(),
+      types: z
+        .object({
+          creditCard: z.boolean(),
+          pesel: z.boolean(),
+          idCard: z.boolean(),
+          iban: z.boolean(),
+          email: z.boolean(),
+          phone: z.boolean(),
+        })
+        .partial()
+        .optional(),
+    })
+    .optional(),
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 
