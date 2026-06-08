@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-164-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.96.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-165-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.97.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.97.0] — Ogon (3): tester wzorców regex w panelu
+
+- `[#165]` 🧪 **Tester wzorców (regex)** na stronie Automod — wklejasz wzorzec + przykładową wiadomość i od razu widzisz, czy (i co) by dopasował, zanim zapiszesz regułę. Czysto klienckie, domyślnie flaga `i` (jak automod), błędny wzorzec pokazuje komunikat zamiast się wywalać.
 
 ## [0.96.0] — Ogon (2): wykres ≈salda na karcie profilu
 
