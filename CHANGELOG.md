@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-169-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.100.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-170-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.101.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.101.0] — 🏗️ Architekt Serwera (2/?): twórz + POŁĄCZ (auto-wpinanie)
+
+- `[#170]` 🔗 **Auto-wpinanie** — po utworzeniu struktury bot **od razu podłącza** nowe kanały do modułów: `#powitania` → moduł powitań (+ włącza), `#logi-serwera` → logi serwera, voice-liczniki → moduł liczników (członkowie + boosty, włączone). Koniec z ręcznym wskazywaniem kanałów po scaffoldingu — „od pustego serwera do działającej konfiguracji" naprawdę jednym kliknięciem. Log pokazuje też powiązania.
 
 ## [0.100.0] — 🏗️ Architekt Serwera (1/?): silnik provisioningu
 

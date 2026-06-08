@@ -58,8 +58,9 @@ export default function ServerArchitect() {
     <div className="space-y-4">
       <p className="text-sm text-muted">
         Zaznacz, co utworzyć — bot doda kanały, kategorie i role na serwerze (pomija to, co już
-        istnieje). Wymaga uprawnień bota <em>Zarządzanie kanałami</em> i <em>Zarządzanie rolami</em>
-        .
+        istnieje) i <strong>od razu wpina je w moduły</strong> (powitania → kanał powitań, logi →
+        logi serwera, liczniki → moduł liczników). Wymaga uprawnień bota{' '}
+        <em>Zarządzanie kanałami</em> i <em>Zarządzanie rolami</em>.
       </p>
 
       <div className="grid gap-2 sm:grid-cols-2">

@@ -10,6 +10,7 @@ import {
   PermissionFlagsBits,
 } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
+import { getSettings } from '../lib/db.mts';
 
 type Role = { name: string; color?: number; hoist?: boolean };
 type Category = { key: string; name: string };
@@ -109,6 +110,64 @@ async function execute(guild: Guild, plan: Plan): Promise<LogItem[]> {
   return log;
 }
 
+function findId(log: LogItem[], label: string): string | undefined {
+  return log.find((l) => l.label === label && l.ok && l.id)?.id;
+}
+
+async function mergeConfig(key: string, patch: Record<string, unknown>): Promise<void> {
+  let cur: Record<string, unknown> = {};
+  try {
+    const raw = getSettings()[key];
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p && typeof p === 'object' && !Array.isArray(p)) cur = p as Record<string, unknown>;
+    }
+  } catch {
+    /* domyślnie pusty */
+  }
+  await cloudSetSetting(key, JSON.stringify({ ...cur, ...patch })).catch(() => {});
+}
+
+type CounterItem = { channelId: string; type: string; template: string };
+async function wireCounters(memberId?: string, boostId?: string): Promise<void> {
+  let cur: { enabled?: boolean; items?: CounterItem[] } = {};
+  try {
+    const raw = getSettings().counters_config;
+    if (raw) cur = JSON.parse(raw) as { enabled?: boolean; items?: CounterItem[] };
+  } catch {
+    /* pusty */
+  }
+  const items = Array.isArray(cur.items) ? cur.items : [];
+  const have = new Set(items.map((i) => i.channelId));
+  if (memberId && !have.has(memberId))
+    items.push({ channelId: memberId, type: 'members', template: '👥 Członków: {count}' });
+  if (boostId && !have.has(boostId))
+    items.push({ channelId: boostId, type: 'boosts', template: '🚀 Boostów: {count}' });
+  await cloudSetSetting('counters_config', JSON.stringify({ ...cur, enabled: true, items })).catch(
+    () => {},
+  );
+}
+
+// Auto-wpinanie utworzonych kanałów w configi modułów („twórz + połącz").
+async function autowire(log: LogItem[]): Promise<void> {
+  const welcome = findId(log, 'Kanał: powitania');
+  if (welcome) {
+    await mergeConfig('welcome_config', { channelId: welcome, enabled: true });
+    log.push({ label: 'Powiązano: powitania → moduł powitań', ok: true });
+  }
+  const logs = findId(log, 'Kanał: logi-serwera');
+  if (logs) {
+    await mergeConfig('logging_config', { channelId: logs, enabled: true });
+    log.push({ label: 'Powiązano: logi → logi serwera', ok: true });
+  }
+  const mem = findId(log, 'Kanał: 📊 Członkowie');
+  const boo = findId(log, 'Kanał: 🚀 Boosty');
+  if (mem || boo) {
+    await wireCounters(mem, boo);
+    log.push({ label: 'Powiązano: liczniki → moduł liczników', ok: true });
+  }
+}
+
 async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const raw = await cloudGetSetting('setup_provision').catch(() => null);
@@ -140,6 +199,7 @@ async function tick(client: Client): Promise<void> {
   const log = await execute(guild, plan).catch((e) => [
     { label: 'Provisioning', ok: false, detail: (e as Error).message },
   ]);
+  await autowire(log).catch(() => {});
   await cloudSetSetting(
     'setup_provision_result',
     JSON.stringify({ id: plan.id, done: true, log, ts: Date.now() }),
