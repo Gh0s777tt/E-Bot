@@ -5,6 +5,13 @@ import { profileCard } from '../../../../lib/public';
 
 export const dynamic = 'force-dynamic';
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const c = await profileCard(id);
+  const desc = `Poziom ${c.level}${c.rank ? ` · #${c.rank} w rankingu XP` : ''} · ${c.messages.toLocaleString('pl-PL')} wiadomości · ${c.badges}/13 odznak`;
+  return { title: `${c.username} — profil E-Bot`, description: desc };
+}
+
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const card = await profileCard(id);

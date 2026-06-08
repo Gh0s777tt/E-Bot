@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-150-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.82.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-151-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.83.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.83.0] — Obrazek podglądu profilu (OG-image) + meta
+
+- `[#151]` 🖼️ **Dynamiczny obrazek podglądu** publicznej karty profilu (`/p/u/<id>`) — gdy wkleisz link na Discordzie/X/itp., pokaże się **ładny baner 1200×630** w stylu Obsidian/Crimson: inicjał w czerwonej ramce, nazwa, poziom + ranking i kafelki (Poziom, Czat, Voice, Saldo, Odznaki). Generowany w locie przez `next/og` (Satori). Doszły też **tytuł i opis** podglądu (`generateMetadata`).
 
 ## [0.82.0] — Pulpit: wykres wzrostu serwera + alarm anti-raid
 
