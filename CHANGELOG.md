@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-116-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.61.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-117-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.62.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.62.0] — Ulepszenia #2: Bezpieczeństwo (automod anty-bypass + hartowanie webhooka)
+
+- `[#117]` 🛡️ **Bezpieczeństwo+:** (1) **Automod anty-bypass** — zakazane słowa dopasowywane po normalizacji: `toLowerCase` + NFKD (zdejmij diakrytyki `\p{M}`), usuń zero-width/bidi (`\p{Cf}`), leet (`0→o`, `3→e`, `@→o`, `$→s`…), kolaps powtórzeń (`heeej→heej`). Łapie obejścia typu „h​3jt", „ｈ３ｊｔ", „héjt". (2) **Webhook `/api/hook`** — cap rozmiaru body **16 KB → 413** (czyta `request.text()` przed parsowaniem) + best-effort **rate-limit 20/min na token → 429** (mapa w pamięci per-instancja). Twardsza powierzchnia publicznego endpointu.
 
 ## [0.61.1] — Ulepszenia #1: hartowanie (testy + czysty parser RSS)
 

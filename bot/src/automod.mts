@@ -55,6 +55,30 @@ function linkNotAllowed(content: string): boolean {
   const urls = content.match(/https?:\/\/[^\s]+/gi) ?? [];
   return urls.some((u) => !allowed.some((d) => u.toLowerCase().includes(d)));
 }
+
+// Normalizacja anty-bypass dla zakazanych słów: lowercase + NFKD (diakrytyki) + usuń zero-width/bidi
+// + leet (0→o, 3→e, …) + kolaps powtórzeń (heeello→heello). Łapie obejścia typu „h​ejt", „h3jt".
+const LEET: Record<string, string> = {
+  '0': 'o',
+  '@': 'o',
+  '1': 'i',
+  '!': 'i',
+  '|': 'i',
+  '3': 'e',
+  '4': 'a',
+  '5': 's',
+  $: 's',
+  '7': 't',
+};
+function normalizeText(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/\p{Cf}/gu, '')
+    .replace(/[0@1!|345$7]/g, (c) => LEET[c] ?? c)
+    .replace(/(.)\1{2,}/g, '$1$1');
+}
 function safeParse(s: string): Partial<AutomodConfig> | null {
   try {
     return JSON.parse(s) as Partial<AutomodConfig>;
@@ -83,9 +107,12 @@ export function startAutomod(client: Client): void {
     if (cfg.ignoreChannels?.includes(msg.channelId)) return;
 
     const content = msg.content || '';
-    const lc = content.toLowerCase();
+    const nContent = normalizeText(content);
     let reason = '';
-    if (cfg.bannedWords?.length && cfg.bannedWords.some((w) => w && lc.includes(w.toLowerCase())))
+    if (
+      cfg.bannedWords?.length &&
+      cfg.bannedWords.some((w) => w && nContent.includes(normalizeText(w)))
+    )
       reason = 'zakazane słowo';
     else if (compiled.length && compiled.some((re) => re.test(content))) reason = 'wzorzec (regex)';
     else if (cfg.blockInvites && INVITE.test(content)) reason = 'zaproszenie Discord';
