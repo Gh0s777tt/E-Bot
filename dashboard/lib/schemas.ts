@@ -493,6 +493,12 @@ export const countersSchema = z.object({
 });
 export type CountersInput = z.infer<typeof countersSchema>;
 
+// ── Kreator startowy (POST /api/setup) ────────────────────
+export const setupSchema = z.object({
+  preset: z.enum(['streamer', 'gaming', 'community']),
+});
+export type SetupInput = z.infer<typeof setupSchema>;
+
 // ── AI-moderacja (POST /api/aimod) ─────────────────────────
 export const aimodSchema = z.object({
   enabled: z.boolean(),

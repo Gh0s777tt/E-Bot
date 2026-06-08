@@ -36,6 +36,7 @@ import {
   Trophy,
   Tv,
   User,
+  Wand2,
   Zap,
 } from 'lucide-react';
 
@@ -49,6 +50,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Ogólne',
     items: [
       { href: '/', label: 'Przegląd', icon: LayoutDashboard },
+      { href: '/setup', label: 'Kreator startowy', icon: Wand2 },
       { href: '/modules', label: 'Centrum sterowania', icon: SlidersHorizontal },
       { href: '/stats', label: 'Statystyki', icon: BarChart3 },
       { href: '/diagnostics', label: 'Diagnostyka', icon: Stethoscope },

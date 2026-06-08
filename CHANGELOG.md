@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-153-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.85.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-154-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.86.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.86.0] — Onboarding (2/?): Kreator startowy z presetami
+
+- `[#154]` 🧙 **Kreator startowy** (`/setup`) — wybierasz typ serwera (**🔴 Streamer / 🎮 Gaming / 💬 Społeczność**) i jednym kliknięciem włączam pasujący zestaw modułów (powitania, poziomy, ekonomia, automod, tickety, weryfikacja, liczniki — zależnie od presetu). Bezpieczny **merge `enabled:true`** w istniejące configi (nic nie kasuje, nie nadpisuje innych pól). Po zastosowaniu kieruje do **Diagnostyki**, by dokończyć szczegóły. W nawigacji: Ogólne → Kreator startowy.
 
 ## [0.85.0] — Onboarding (1/?): strona Diagnostyka
 
