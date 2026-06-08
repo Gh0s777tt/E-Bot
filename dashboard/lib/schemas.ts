@@ -527,6 +527,29 @@ export const aiSetupSchema = z.object({
 });
 export type AiSetupInput = z.infer<typeof aiSetupSchema>;
 
+// ── Architekt serwera — blueprint (POST /api/setup/blueprint) ──
+export const blueprintSchema = z
+  .object({
+    modules: z
+      .array(
+        z.enum([
+          'welcome_config',
+          'leveling_config',
+          'economy_config',
+          'automod_config',
+          'tickets_config',
+          'verification_config',
+          'counters_config',
+        ]),
+      )
+      .max(10),
+    blocks: z
+      .array(z.enum(['welcome', 'logs', 'tickets', 'announce', 'counters', 'muted', 'levelRoles']))
+      .max(7),
+  })
+  .refine((d) => d.modules.length > 0 || d.blocks.length > 0, 'Pusty blueprint');
+export type BlueprintInput = z.infer<typeof blueprintSchema>;
+
 // ── AI-moderacja (POST /api/aimod) ─────────────────────────
 export const aimodSchema = z.object({
   enabled: z.boolean(),

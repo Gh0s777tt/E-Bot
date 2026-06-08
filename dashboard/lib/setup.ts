@@ -81,6 +81,111 @@ export const PROV_BLOCKS: { id: ProvBlock; emoji: string; label: string; desc: s
   { id: 'levelRoles', emoji: '🏅', label: 'Role poziomów', desc: 'Aktywny / Bywalec / Weteran' },
 ];
 
+// ── Blueprinty — pełne szablony serwera: włącz moduły + utwórz strukturę jednym kliknięciem ──
+export const BLUEPRINT_MODULES = [
+  'welcome_config',
+  'leveling_config',
+  'economy_config',
+  'automod_config',
+  'tickets_config',
+  'verification_config',
+  'counters_config',
+] as const;
+
+export type Blueprint = {
+  id: string;
+  emoji: string;
+  name: string;
+  desc: string;
+  modules: string[];
+  blocks: ProvBlock[];
+};
+
+export const BLUEPRINTS: Blueprint[] = [
+  {
+    id: 'streamerPro',
+    emoji: '🔴',
+    name: 'Streamer Pro',
+    desc: 'Powitania, poziomy, ekonomia, liczniki + kanały ogłoszeń i role poziomów.',
+    modules: ['welcome_config', 'leveling_config', 'economy_config', 'counters_config'],
+    blocks: ['welcome', 'announce', 'counters', 'levelRoles'],
+  },
+  {
+    id: 'gamingHub',
+    emoji: '🎮',
+    name: 'Gaming Hub',
+    desc: 'Rywalizacja + porządek: poziomy, ekonomia, automod, liczniki, logi, Muted.',
+    modules: [
+      'welcome_config',
+      'leveling_config',
+      'economy_config',
+      'automod_config',
+      'counters_config',
+    ],
+    blocks: ['welcome', 'announce', 'logs', 'counters', 'levelRoles', 'muted'],
+  },
+  {
+    id: 'communityXL',
+    emoji: '💬',
+    name: 'Społeczność XL',
+    desc: 'Bezpiecznie i z obsługą: automod, tickety, weryfikacja, logi, powitania.',
+    modules: [
+      'welcome_config',
+      'leveling_config',
+      'automod_config',
+      'tickets_config',
+      'verification_config',
+    ],
+    blocks: ['welcome', 'announce', 'logs', 'tickets', 'muted'],
+  },
+  {
+    id: 'shop',
+    emoji: '🛒',
+    name: 'Sklep / Ekonomia',
+    desc: 'Pod ekonomię i nagrody: ekonomia, poziomy, powitania + role poziomów.',
+    modules: ['economy_config', 'leveling_config', 'welcome_config'],
+    blocks: ['welcome', 'announce', 'levelRoles'],
+  },
+  {
+    id: 'minimal',
+    emoji: '🌱',
+    name: 'Minimalny',
+    desc: 'Tylko podstawy: powitania + automod + logi.',
+    modules: ['welcome_config', 'automod_config'],
+    blocks: ['welcome', 'logs'],
+  },
+];
+
+export type Recipe = { modules: string[]; blocks: ProvBlock[] };
+
+// Recepta → kod (base64) do udostępniania / przenoszenia setupu i z powrotem.
+// btoa/atob są globalne i w przeglądarce, i w Node 18+ (panel) — bez Buffera w bundlu klienta.
+export function encodeRecipe(r: Recipe): string {
+  return btoa(JSON.stringify({ m: r.modules, b: r.blocks }));
+}
+export function decodeRecipe(code: string): Recipe | null {
+  try {
+    const json = atob(code.trim());
+    const p = JSON.parse(json) as { m?: unknown; b?: unknown };
+    const modules = Array.isArray(p.m)
+      ? p.m.filter(
+          (x): x is string =>
+            typeof x === 'string' && (BLUEPRINT_MODULES as readonly string[]).includes(x),
+        )
+      : [];
+    const allBlocks = PROV_BLOCKS.map((x) => x.id) as string[];
+    const blocks = Array.isArray(p.b)
+      ? (p.b.filter(
+          (x): x is ProvBlock => typeof x === 'string' && allBlocks.includes(x),
+        ) as ProvBlock[])
+      : [];
+    if (!modules.length && !blocks.length) return null;
+    return { modules, blocks };
+  } catch {
+    return null;
+  }
+}
+
 type ProvRole = { name: string; color?: number; hoist?: boolean };
 type ProvCategory = { key: string; name: string };
 type ProvChannel = {

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-171-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.102.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-172-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.103.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.103.0] — 🏗️ Architekt Serwera (4/?): Blueprinty + eksport/import
+
+- `[#172]` 📦 **Blueprinty** — pełne szablony serwera (**Streamer Pro / Gaming Hub / Społeczność XL / Sklep / Minimalny**): jedno kliknięcie **włącza pakiet modułów ORAZ tworzy strukturę** (przez silnik provisioningu) z logiem na żywo. Plus **kod recepty (base64)** — eksportujesz setup jednego serwera i wklejasz na innym (`/api/setup/blueprint`). Bezpieczna walidacja modułów/bloków do dozwolonej listy.
 
 ## [0.102.0] — 🏗️ Architekt Serwera (3/?): AI-kreator (opis → blueprint)
 
