@@ -8,6 +8,7 @@ import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
+import * as confess from './confess.mts';
 import * as describe from './describe.mts';
 import * as donate from './donate.mts';
 import * as economy from './economy.mts';
@@ -32,6 +33,7 @@ import * as quests from './quests.mts';
 import * as rank from './rank.mts';
 import * as reactionpanel from './reactionpanel.mts';
 import * as remind from './remind.mts';
+import * as rep from './rep.mts';
 import * as rewrite from './rewrite.mts';
 import * as rolemenu from './rolemenu.mts';
 import * as schedule from './schedule.mts';
@@ -98,4 +100,6 @@ export const commands: Command[] = [
   ask,
   rewrite,
   trivia,
+  rep,
+  confess,
 ];

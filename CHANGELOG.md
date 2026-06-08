@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-155-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.87.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-156-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.88.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.88.0] — Interakcje (2/?): Reputacja /rep + Confessions /confess
+
+- `[#156]` Dwie nowe komendy społecznościowe (bez nowych tabel SQL):
+  - ⭐ **`/rep`** — reputacja: `daj` (punkt dla pomocnej osoby, raz na 12 h per osoba), `profil` (ile masz + pozycja), `ranking` (top 10). Punkty w cloud key `reputation`.
+  - 🤫 **`/confess`** — anonimowe wyznanie na bieżącym kanale (autor ukryty, potwierdzenie tylko dla Ciebie). **Filtr bezpieczeństwa**: odrzuca scam-linki i dane osobowe (karta/PESEL/dowód/IBAN) — reużyte detektory z automoda.
 
 ## [0.87.0] — Interakcje (1/?): Quiz /trivia
 
