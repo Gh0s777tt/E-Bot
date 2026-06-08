@@ -32,9 +32,11 @@ let heartbeat: ReturnType<typeof setInterval> | null = null;
 let ref = 1;
 let backoff = 2_000;
 let attempts = 0;
+let subscribed = false;
 
 function connect(): void {
   if (!WSCtor) return;
+  subscribed = false;
   const { url } = creds();
   const { apikey, token } = realtimeKeys();
   if (!url || !apikey) return;
@@ -90,7 +92,7 @@ function connect(): void {
   });
 
   socket.addEventListener('message', (ev) => {
-    let msg: { event?: string; payload?: { status?: string; response?: unknown } };
+    let msg: { topic?: string; event?: string; payload?: { status?: string; response?: unknown } };
     try {
       msg = JSON.parse(String(ev.data)) as typeof msg;
     } catch {
@@ -98,10 +100,14 @@ function connect(): void {
     }
     if (msg.event === 'postgres_changes') {
       syncSettingsNow(); // zmiana w tabeli settings → natychmiastowy sync
-    } else if (msg.event === 'phx_reply' && msg.payload?.status === 'ok') {
-      log.info('realtime: subskrypcja settings aktywna');
-    } else if (msg.event === 'phx_reply' && msg.payload?.status === 'error') {
-      log.warn('realtime: serwer odrzucił subskrypcję', { resp: msg.payload?.response });
+    } else if (msg.topic === TOPIC && msg.event === 'phx_reply') {
+      // tylko odpowiedź na nasz join (nie na heartbeat z topicu "phoenix")
+      if (msg.payload?.status === 'ok' && !subscribed) {
+        subscribed = true;
+        log.info('realtime: subskrypcja settings aktywna');
+      } else if (msg.payload?.status === 'error') {
+        log.warn('realtime: serwer odrzucił subskrypcję', { resp: msg.payload?.response });
+      }
     }
   });
 

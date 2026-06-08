@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-125-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.67.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-126-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.67.2-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.67.2] — Realtime: re-subskrypcja + czystsze logi
+
+- `[#126]` ⚡ Realtime loguje „subskrypcja aktywna" **raz** (nie na każdy heartbeat 25 s; rozróżnia phx_reply join od topicu `phoenix`). Po dodaniu tabeli `settings` do publikacji `supabase_realtime` konieczny był restart bota, by zasubskrybować ją na nowo — ten deploy go wykonuje.
 
 ## [0.67.1] — Porządki: lint gate w 100% czysty
 
