@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-161-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.93.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-162-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.94.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.94.0] — Ekonomia głębiej: pasywny dochód (odsetki bankowe)
+
+- `[#162]` 💰 **Odsetki bankowe** — pasywny dochód: bot raz dziennie dolicza ustawiony **% do salda w banku** każdej osoby (zachęta do trzymania kasy w banku zamiast portfela). Ustawiasz w panelu `/eco` („Odsetki bank / dzień (%)", 0 = wyłączone). Trafia do **historii transakcji** jako „odsetki". Bezpieczne: bez chmury/zerowej stawki = no-op.
 
 ## [0.93.0] — Moderacja głębiej (1/?): /lockdown (panic button)
 

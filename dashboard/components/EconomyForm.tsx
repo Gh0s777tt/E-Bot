@@ -74,7 +74,12 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
           {N('Cooldown pracy (min)', 'workCooldownMin')}
           {N('Praca: min', 'workMin')}
           {N('Praca: max', 'workMax')}
+          {N('Odsetki bank / dzień (%)', 'bankInterestPct')}
         </div>
+        <p className="mt-2 text-xs text-muted">
+          💰 <strong>Odsetki bankowe</strong> — co dzień dolicza ten % do salda w banku każdej osoby
+          (pasywny dochód). 0 = wyłączone. Trafia też do historii transakcji jako „odsetki".
+        </p>
       </div>
 
       <div className="rounded-xl border border-line bg-bg/40 p-4 space-y-3">

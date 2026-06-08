@@ -17,6 +17,7 @@ export type EcoConfig = {
   robMaxPercent: number; // % portfela ofiary
   gambleEnabled: boolean;
   gambleMax: number;
+  bankInterestPct: number; // dzienne odsetki od salda w banku (% , 0 = wyłączone)
 };
 
 export const ECO_DEFAULT: EcoConfig = {
@@ -34,6 +35,7 @@ export const ECO_DEFAULT: EcoConfig = {
   robMaxPercent: 30,
   gambleEnabled: true,
   gambleMax: 10000,
+  bankInterestPct: 0,
 };
 
 export function ecoConfig(): EcoConfig {

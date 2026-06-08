@@ -19,6 +19,7 @@ export type EconomyConfig = {
   robMaxPercent: number;
   gambleEnabled: boolean;
   gambleMax: number;
+  bankInterestPct: number;
 };
 
 export const ECONOMY_DEFAULT: EconomyConfig = {
@@ -36,6 +37,7 @@ export const ECONOMY_DEFAULT: EconomyConfig = {
   robMaxPercent: 30,
   gambleEnabled: true,
   gambleMax: 10000,
+  bankInterestPct: 0,
 };
 
 export async function getServerEconomy(): Promise<EconomyConfig> {

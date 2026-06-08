@@ -37,6 +37,7 @@ import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
 import { startSocialFeeds } from './creator/social.mts';
 import { handleBlackjackButton } from './economy/blackjack.mts';
+import { startEcoInterest } from './economy/interest.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
 import { setupMessageEarning } from './empire/messages.mts';
 import { setupVoiceEarning } from './empire/voice.mts';
@@ -164,6 +165,7 @@ client.once(Events.ClientReady, (c) => {
   startPriceTracker(c); // Faza 7 / F9.3 — śledzenie cen ITAD z listy życzeń (poll 12h)
   startActivity(c); // Faza 7 / F10.1 — analityka aktywności (flush co 5 min → activity_daily)
   startServerHistory(c); // snapshot rozmiaru serwera co 30 min → server_history (wykres wzrostu)
+  startEcoInterest(c); // pasywny dochód — dzienne odsetki bankowe (jeśli włączone w configu eko)
   startSeasons(c); // Faza 7 / F10.2 — sezonowe rankingi (miesięczny hall of fame, sprawdza co 6h)
   startDigest(c); // Tor E — tygodniowy digest serwera (poniedziałek, config z panelu)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
