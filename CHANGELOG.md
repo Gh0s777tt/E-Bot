@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-141-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.73.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-142-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.74.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.74.0] — Komenda /pomoc (auto-lista komend custom)
+
+- `[#142]` 📜 Nowy typ odpowiedzi **„Lista komend (/pomoc)"** — komenda tego typu automatycznie listuje wszystkie Twoje komendy custom (nazwa + opis) w embedzie. Samo-aktualizująca się ściąga dla użytkowników — dodajesz komendę i od razu jest w `/pomoc`. Konfiguracja w `/custom-commands`.
 
 ## [0.73.1] — Komendy slash: cooldown per-komenda
 

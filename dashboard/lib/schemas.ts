@@ -121,7 +121,7 @@ export const customCommandSchema = z.object({
     .max(25)
     .optional()
     .default([]),
-  type: z.enum(['message', 'random', 'role']).optional().default('message'),
+  type: z.enum(['message', 'random', 'role', 'help']).optional().default('message'),
   randomLines: z.array(z.string().min(1).max(2000)).max(50).optional().default([]),
   roleId: z.string().max(40).optional().default(''),
   cooldownSec: z.number().int().min(0).max(86400).optional().default(0),

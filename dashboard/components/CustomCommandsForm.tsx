@@ -267,6 +267,7 @@ export default function CustomCommandsForm({
                     <option value="message">Wiadomość / embed</option>
                     <option value="random">Losowa z listy</option>
                     <option value="role">Nadanie / zdjęcie roli</option>
+                    <option value="help">Lista komend (/pomoc)</option>
                   </select>
                 </label>
 
@@ -325,6 +326,13 @@ export default function CustomCommandsForm({
                       Self-role: pierwsze użycie nadaje rolę, kolejne ją zdejmuje.
                     </span>
                   </label>
+                )}
+
+                {c.type === 'help' && (
+                  <p className="rounded-lg border border-line/60 bg-bg/30 p-2.5 text-[11px] text-muted">
+                    Bot automatycznie wylistuje wszystkie Twoje komendy (nazwa + opis) w embedzie.
+                    Nazwij tę komendę np. <code>pomoc</code> lub <code>komendy</code>.
+                  </p>
                 )}
               </div>
             )}

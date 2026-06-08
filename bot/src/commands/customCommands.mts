@@ -11,7 +11,7 @@ type CustomCommand = {
   response: RichMessage;
   ephemeral?: boolean;
   options?: { name: string; description?: string; required?: boolean }[];
-  type?: 'message' | 'random' | 'role';
+  type?: 'message' | 'random' | 'role' | 'help';
   randomLines?: string[];
   roleId?: string;
   cooldownSec?: number;
@@ -95,6 +95,23 @@ export async function handleCustomCommand(
         flags: MessageFlags.Ephemeral,
       });
     }
+    return true;
+  }
+
+  // Lista komend (/pomoc) — dynamicznie z wszystkich komend custom
+  if (type === 'help') {
+    const list = load()
+      .filter((c) => c.type !== 'help')
+      .map((c) => `**/${c.name}** — ${c.description || '—'}`)
+      .join('\n');
+    const embed = {
+      title: '📜 Dostępne komendy',
+      description: (list || 'Brak własnych komend.').slice(0, 4000),
+      color: 0xe50914,
+    };
+    await interaction.reply(
+      cmd.ephemeral ? { embeds: [embed], flags: MessageFlags.Ephemeral } : { embeds: [embed] },
+    );
     return true;
   }
 

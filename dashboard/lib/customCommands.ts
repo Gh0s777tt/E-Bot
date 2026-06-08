@@ -13,7 +13,7 @@ export type CustomCommand = {
   response: RichMessage;
   ephemeral: boolean;
   options?: CommandOption[];
-  type?: 'message' | 'random' | 'role';
+  type?: 'message' | 'random' | 'role' | 'help';
   randomLines?: string[];
   roleId?: string;
   cooldownSec?: number;
