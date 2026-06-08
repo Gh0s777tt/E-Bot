@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-132-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.70.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-133-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.70.2-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.70.2] — Nowy wygląd: ekran logowania (3/3)
+
+- `[#133]` ✨ **Hero logowania** — animowana **aurora** (dryfujące poświaty deep-red), karta wjeżdża (fade-up + scale), unoszący się logotyp. Premium pierwsze wrażenie na jedynym publicznym widoku. Respektuje `prefers-reduced-motion`.
 
 ## [0.70.1] — Nowy wygląd: mikro-interakcje (2/3)
 

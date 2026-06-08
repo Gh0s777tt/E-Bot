@@ -25,24 +25,24 @@ export default async function LoginPage({
       <div className="pointer-events-none absolute inset-0 bg-bg/70" />
       {/* poświaty GH0ST EMPIRE */}
       <div
-        className="pointer-events-none absolute -top-48 left-1/2 h-[70vh] w-[90vw] -translate-x-1/2 rounded-full"
+        className="anim-aurora pointer-events-none absolute -top-48 left-1/2 h-[70vh] w-[90vw] -translate-x-1/2 rounded-full"
         style={{
           background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.25), transparent 70%)',
         }}
       />
       <div
-        className="pointer-events-none absolute -bottom-48 -right-24 h-[50vh] w-[50vw] rounded-full"
+        className="anim-aurora-2 pointer-events-none absolute -bottom-48 -right-24 h-[50vh] w-[50vw] rounded-full"
         style={{
           background:
             'radial-gradient(circle, rgb(var(--accent-dark-rgb) / 0.22), transparent 70%)',
         }}
       />
 
-      <div className="relative w-full max-w-sm rounded-2xl border border-accent/30 bg-card/80 p-8 text-center shadow-glow backdrop-blur-md">
+      <div className="anim-pop relative w-full max-w-sm rounded-2xl border border-accent/30 bg-card/80 p-8 text-center shadow-glow backdrop-blur-md">
         <img
           src="/ghost-skull.png"
           alt="GH0ST"
-          className="mx-auto mb-5 h-20 w-20 rounded-2xl object-cover shadow-glow ring-1 ring-accent/30"
+          className="anim-float mx-auto mb-5 h-20 w-20 rounded-2xl object-cover shadow-glow ring-1 ring-accent/30"
         />
         <h1 className="font-display text-4xl tracking-wide text-glow">
           E-<span className="text-accent">BOT</span>
