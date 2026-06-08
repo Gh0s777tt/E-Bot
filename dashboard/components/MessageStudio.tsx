@@ -4,9 +4,19 @@
 // Wynik to RichMessage (JSON), bot renderuje przez bot/src/lib/richMessage.mts.
 // Live-preview ~jak Discord, liczniki znaków wg limitów, smallcaps/fonty Unicode,
 // emoji standardowe + customowe z serwera, zmienne, szablony (localStorage).
-import { Bold, Code, Italic, Plus, Smile, Strikethrough, Trash2, Underline } from 'lucide-react';
+import {
+  Bold,
+  Code,
+  Italic,
+  Plus,
+  Send,
+  Smile,
+  Strikethrough,
+  Trash2,
+  Underline,
+} from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import type { GuildEmoji } from '../lib/guild';
+import type { GuildChannel, GuildEmoji } from '../lib/guild';
 import {
   embedHasContent,
   embedTotal,
@@ -18,6 +28,7 @@ import {
 import { applyFont, FONTS, type FontKey } from '../lib/unicodeFonts';
 import ColorField from './ColorField';
 import type { EditorVar } from './MessageEditor';
+import { ChannelSelect } from './pickers';
 
 const EMOJIS = [
   '😀',
@@ -282,6 +293,97 @@ function RichTextArea({
       {limit !== undefined && (
         <div className="flex justify-end">
           <Counter len={value.length} limit={limit} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Panel „Wyślij testowo" — lazy-load kanałów z /api/guild, wysyłka bieżącego RichMessage na wybrany
+// kanał. Uniwersalny: działa wszędzie, gdzie używany jest Message Studio (bez przepinania propsów).
+function StudioTest({ message }: { message: RichMessage }) {
+  const [open, setOpen] = useState(false);
+  const [channels, setChannels] = useState<GuildChannel[] | null>(null);
+  const [channelId, setChannelId] = useState('');
+  const [st, setSt] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle');
+  const [err, setErr] = useState('');
+
+  async function expand() {
+    const next = !open;
+    setOpen(next);
+    if (next && channels === null) {
+      try {
+        const g = (await fetch('/api/guild').then((r) => r.json())) as {
+          channels?: GuildChannel[];
+        };
+        setChannels((g.channels ?? []).filter((c) => c.type === 0 || c.type === 5));
+      } catch {
+        setChannels([]);
+      }
+    }
+  }
+
+  async function send() {
+    if (!channelId) {
+      setErr('Wybierz kanał.');
+      setSt('err');
+      return;
+    }
+    setSt('sending');
+    setErr('');
+    try {
+      const r = await fetch('/api/studio/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channelId, message }),
+      });
+      const j = (await r.json()) as { ok?: boolean; error?: string };
+      if (!r.ok || !j.ok) {
+        setErr(j.error || 'Błąd wysyłki');
+        setSt('err');
+      } else setSt('ok');
+    } catch {
+      setErr('Błąd sieci');
+      setSt('err');
+    }
+    setTimeout(() => setSt('idle'), 3000);
+  }
+
+  return (
+    <div className="rounded-xl border border-line bg-bg/40 p-3">
+      <button
+        type="button"
+        onClick={expand}
+        className="flex items-center gap-2 text-sm font-semibold text-white/90"
+      >
+        <Send size={14} className="text-accent" /> Wyślij testowo {open ? '▾' : '▸'}
+      </button>
+      {open && (
+        <div className="mt-3 space-y-2">
+          {channels === null ? (
+            <p className="text-xs text-muted">Ładowanie kanałów…</p>
+          ) : channels.length === 0 ? (
+            <p className="text-xs text-muted">Brak dostępnych kanałów (sprawdź token bota).</p>
+          ) : (
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="min-w-[220px]">
+                <ChannelSelect value={channelId} onChange={setChannelId} channels={channels} />
+              </div>
+              <button
+                type="button"
+                onClick={send}
+                disabled={st === 'sending'}
+                className="rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover disabled:opacity-50"
+              >
+                {st === 'sending' ? 'Wysyłanie…' : 'Wyślij'}
+              </button>
+              {st === 'ok' && <span className="text-sm text-green-400">✓ Wysłano</span>}
+              {st === 'err' && <span className="text-sm text-accent">{err}</span>}
+            </div>
+          )}
+          <p className="text-[11px] text-muted">
+            Zmienne (np. {'{user}'}) podstawiamy przykładowymi wartościami; pingi wyłączone.
+          </p>
         </div>
       )}
     </div>
@@ -606,6 +708,9 @@ export default function MessageStudio({
           </button>
         )}
       </div>
+
+      {/* Wyślij testowo */}
+      <StudioTest message={value} />
 
       {/* Podgląd 1:1 jak Discord */}
       <div className="rounded-xl border border-line bg-[#313338] p-4">

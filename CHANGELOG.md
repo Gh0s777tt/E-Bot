@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-117-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.62.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-118-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.63.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.63.0] — Ulepszenia #3: UX + nowe funkcje (kopia configu, paleta Ctrl-K, test wysyłki)
+
+- `[#118]` 🎛️ **Trzy usprawnienia naraz:**
+  - 💾 **Kopia / przywracanie konfiguracji** (Ustawienia) — eksport wszystkich ustawień bota do jednego pliku JSON i import z **podglądem różnic** (`+` nowe / `~` zmienione / `=` bez zmian). Upsert (nie kasuje kluczy spoza kopii), limit 1 MB / 500 kluczy. Disaster recovery + migracja serwera, **bez nowego SQL**.
+  - ⌨️ **Paleta poleceń (Ctrl/⌘+K)** — globalna wyszukiwarka stron i akcji (dopasowanie rozmyte), pełna nawigacja klawiaturą, skok do dowolnego modułu + szybkie akcje (kompakt, kapitaliki, przewiń na górę). Przycisk-skrót w pasku górnym.
+  - 📨 **„Wyślij testowo" w Message Studio** — wyślij bieżącą treść/embed na wybrany kanał (picker z `/api/guild`), zmienne podstawiane próbkami, pingi wyłączone (`parse: []`). Działa w **każdym** module z edytorem.
 
 ## [0.62.0] — Ulepszenia #2: Bezpieczeństwo (automod anty-bypass + hartowanie webhooka)
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, Minimize2, Type, UserPlus } from 'lucide-react';
+import { LogOut, Minimize2, Search, Type, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MobileNav from './MobileNav';
@@ -88,6 +88,15 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
             {status.guilds != null ? ` · ${status.guilds} serw.` : ''}
           </span>
         </span>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('cmdk:open'))}
+          title="Szukaj / paleta poleceń (Ctrl+K)"
+          className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 uppercase tracking-wide transition hover:border-accent"
+        >
+          <Search size={13} />
+          <kbd className="hidden font-sans text-[10px] text-muted sm:inline">Ctrl K</kbd>
+        </button>
         <button
           type="button"
           onClick={toggleCompact}

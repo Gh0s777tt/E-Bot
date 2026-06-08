@@ -254,6 +254,69 @@ export async function setRawSetting(key: string, value: string): Promise<void> {
   return rawSet(key, value);
 }
 
+// ───────────── Backup / Restore całej konfiguracji (wszystkie klucze tabeli settings) ─────────────
+// Eksport = pełna kopia configu (disaster recovery / migracja serwera). Import = upsert (nigdy nie
+// kasuje kluczy spoza kopii — bezpieczniej). Klucze gier/danych bota są w osobnych tabelach.
+export async function getAllSettings(): Promise<Record<string, string>> {
+  if (hasSupabase) {
+    try {
+      const { data, error } = await supabase().from('settings').select('key,value');
+      if (error) throw new Error(error.message);
+      const out: Record<string, string> = {};
+      for (const r of (data ?? []) as { key: string; value: string }[]) out[r.key] = r.value ?? '';
+      return out;
+    } catch (e) {
+      console.warn('[data] getAllSettings -> fallback SQLite:', (e as Error).message);
+    }
+  }
+  const db = await sqliteDb();
+  if (!db) return {};
+  try {
+    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+    const rows = db.prepare('SELECT key,value FROM settings').all() as {
+      key: string;
+      value: string;
+    }[];
+    const out: Record<string, string> = {};
+    for (const r of rows) out[r.key] = r.value;
+    return out;
+  } finally {
+    db.close();
+  }
+}
+
+export async function restoreSettings(input: Record<string, unknown>): Promise<number> {
+  const entries = Object.entries(input)
+    .filter(
+      ([k, v]) => typeof k === 'string' && k.length > 0 && k.length <= 128 && typeof v === 'string',
+    )
+    .slice(0, 500) as [string, string][];
+  if (!entries.length) return 0;
+
+  if (hasSupabase) {
+    try {
+      const rows = entries.map(([key, value]) => ({ key, value: String(value) }));
+      const { error } = await supabase().from('settings').upsert(rows);
+      if (error) throw new Error(error.message);
+      return rows.length;
+    } catch (e) {
+      console.warn('[data] restoreSettings -> fallback SQLite:', (e as Error).message);
+    }
+  }
+  const db = await sqliteDb();
+  if (!db) return 0;
+  try {
+    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+    const stmt = db.prepare(
+      'INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
+    );
+    for (const [k, v] of entries) stmt.run(k, String(v));
+    return entries.length;
+  } finally {
+    db.close();
+  }
+}
+
 export type AntiProtection = { enabled: boolean; count: number; windowSec: number };
 export type AntinukeConfig = {
   enabled: boolean;

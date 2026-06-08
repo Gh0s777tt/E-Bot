@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import CommandPalette from './CommandPalette';
 import ModuleBar from './ModuleBar';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
@@ -12,6 +13,7 @@ export default function Shell({ children, inviteUrl }: { children: ReactNode; in
   if (pathname.startsWith('/p/')) return <main className="min-h-screen">{children}</main>;
   return (
     <div className="relative z-10 flex min-h-screen">
+      <CommandPalette />
       <Sidebar />
       <div className="min-w-0 flex-1 md:pl-60">
         <Topbar inviteUrl={inviteUrl} />
