@@ -11,6 +11,8 @@ type Settings = {
   notify_enabled_kick: boolean;
   notify_enabled_rumble: boolean;
   notify_enabled_youtube: boolean;
+  notify_message: string;
+  notify_title: string;
 };
 
 const PLATFORMS: { key: keyof Settings; label: string; color: string }[] = [
@@ -85,6 +87,28 @@ export default function NotifSettingsForm({
           onChange={(e) => set('notify_mention', e.target.value)}
           placeholder="@here lub <@&ID_ROLI>"
           className="w-full rounded-md border border-line bg-elevated px-3 py-2 outline-none focus:border-accent"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-white/90">
+          Treść ogłoszenia ({'{mention}'} {'{streamer}'} {'{platform}'} {'{title}'} {'{url}'}{' '}
+          {'{game}'})
+        </label>
+        <textarea
+          value={s.notify_message}
+          onChange={(e) => set('notify_message', e.target.value)}
+          rows={2}
+          className="w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-white/90">Tytuł embeda</label>
+        <input
+          value={s.notify_title}
+          onChange={(e) => set('notify_title', e.target.value)}
+          className="w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
         />
       </div>
 

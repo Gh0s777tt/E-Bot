@@ -23,6 +23,8 @@ export type Settings = {
   notify_enabled_kick: boolean;
   notify_enabled_rumble: boolean;
   notify_enabled_youtube: boolean;
+  notify_message: string;
+  notify_title: string;
 };
 
 export type DataSource = 'supabase' | 'sqlite' | 'none';
@@ -34,6 +36,8 @@ const DEFAULT_SETTINGS: Settings = {
   notify_enabled_kick: true,
   notify_enabled_rumble: true,
   notify_enabled_youtube: false,
+  notify_message: '{mention} 🔴 **{streamer}** jest teraz LIVE na {platform}! {url}',
+  notify_title: '🔴 {streamer} jest teraz na żywo!',
 };
 
 function sqlitePath(): string | null {
@@ -135,6 +139,8 @@ function settingsFromMap(map: Map<string, string>): Settings {
     notify_enabled_kick: b('notify_enabled_kick', true),
     notify_enabled_rumble: b('notify_enabled_rumble', true),
     notify_enabled_youtube: b('notify_enabled_youtube', false),
+    notify_message: map.get('notify_message') ?? DEFAULT_SETTINGS.notify_message,
+    notify_title: map.get('notify_title') ?? DEFAULT_SETTINGS.notify_title,
   };
 }
 

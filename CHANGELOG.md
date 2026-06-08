@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-106-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.53.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-107-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.54.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.54.0] — Faza 8 #9: Notifications 2.0 (customowe wiadomości live)
+
+- `[#107]` 🔔 **Notifications 2.0:** customowa **treść ogłoszenia** + **tytuł embeda** dla powiadomień live (Twitch/Kick/YouTube/Rumble) ze zmiennymi `{mention}` `{streamer}` `{platform}` `{title}` `{url}` `{game}` `{viewers}`. Edytor w `/notifications`; bot stosuje szablony w `notifier` (fallback do dotychczasowego formatu, gdy puste). Bez SQL, bez deploy-commands.
 
 ## [0.53.0] — Faza 8 #8: Creator + Social (powiadomienia o nowych postach przez RSS)
 
