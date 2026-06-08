@@ -1,4 +1,4 @@
-import { BADGE_COUNT, resolveBadges } from '../lib/badges';
+import { BADGE_COUNT, nextBadges, resolveBadges } from '../lib/badges';
 import { relTime } from '../lib/insights';
 import type { ProfileCardData } from '../lib/public';
 
@@ -32,6 +32,12 @@ export default function ProfileCard({
   const netWorth = data.wallet + data.bank;
   const earned = resolveBadges(data.badgeIds);
   const now = Date.now();
+  const upcoming = nextBadges(data.badgeIds, {
+    level: data.level,
+    total: netWorth,
+    streak: data.dailyStreak,
+    invites: data.invites,
+  });
   const tiles: { label: string; value: string | number }[] = [
     { label: 'Wiadomości', value: data.messages.toLocaleString('pl-PL') },
     { label: 'Czas na voice', value: vh ? `${vh}h ${vm}m` : `${vm}m` },
@@ -128,6 +134,34 @@ export default function ProfileCard({
           </p>
         )}
       </div>
+
+      {upcoming.length > 0 && (
+        <div className="relative mt-4">
+          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
+            Najbliższe odznaki
+          </div>
+          <div className="space-y-2">
+            {upcoming.map((u) => (
+              <div key={u.id}>
+                <div className="mb-0.5 flex items-center justify-between text-xs">
+                  <span className="truncate">
+                    {u.emoji} {u.name.split(' — ')[0]}
+                  </span>
+                  <span className="shrink-0 text-muted">
+                    {u.cur.toLocaleString('pl-PL')}/{u.need.toLocaleString('pl-PL')}
+                  </span>
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-elevated">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-accent to-accent-dark"
+                    style={{ width: `${u.pct}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {data.history.length > 0 && (
         <div className="relative mt-4">

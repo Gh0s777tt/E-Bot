@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-158-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.90.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-159-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.91.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.91.0] — Wow (1/?): progres odznak na karcie profilu
+
+- `[#159]` 🎯 **Najbliższe odznaki** — karta profilu (panel i publiczna) pokazuje teraz **3 odznaki najbliższe zdobycia** z paskiem postępu i licznikiem (np. „Rekruter 3/5"). Liczone z danych karty (poziom, majątek, streak, zaproszenia) — od razu wiadomo, co robić dalej. Start kierunku **Spięcie obecnego w „wow"**.
 
 ## [0.90.0] — Interakcje (4/4): Wydarzenia /event (RSVP)
 
