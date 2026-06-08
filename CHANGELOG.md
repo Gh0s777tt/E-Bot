@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-174-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.105.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-175-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.106.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.106.0] — 🌍 Wielojęzyczność (2/?): przełącznik języka w panelu + błędy bota w 14 językach
+
+- `[#175]` 🌍 **Tłumaczenia — Partia 2.**
+  - 🎛️ **Przełącznik „Język bota"** w panelu (**Ustawienia → Język bota**) — wybierasz **`Auto`** (każdy użytkownik widzi odpowiedzi w języku swojego klienta Discord) albo **wymuszasz 1 z 14 języków** dla całego serwera. Zapisuje klucz `locale` → Supabase → `settings-sync` → bot (`resolveLocale`). Domyka model **auto + override per-serwer** z partii 1 end-to-end (`/api/locale`, walidacja Zod).
+  - 🌐 **Generyczny błąd komendy w 14 językach** — centralny dispatcher interakcji (`index.mts`) zwraca komunikat o błędzie przez `t()` w języku użytkownika. Dźwignia: dotyczy **wszystkich komend naraz** (zero zmian w plikach komend).
+  - ⏭️ Dalej: migracja właściwych odpowiedzi komend (eco/profil/mod…) na `t()` falami → i18n UI panelu i strony web (+ RTL dla arabskiego).
 
 ## [0.105.0] — 🌍 Wielojęzyczność (1/?): fundament i18n bota + opisy komend w 14 językach
 

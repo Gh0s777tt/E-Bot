@@ -12,6 +12,28 @@ export const presenceSchema = z.object({
 });
 export type PresenceInput = z.infer<typeof presenceSchema>;
 
+// ── Język bota (POST /api/locale) — 'auto' = locale klienta Discord usera ──
+export const botLocaleSchema = z.object({
+  locale: z.enum([
+    'auto',
+    'pl',
+    'en',
+    'de',
+    'es',
+    'it',
+    'fr',
+    'pt',
+    'zh',
+    'ko',
+    'ru',
+    'uk',
+    'ja',
+    'ar',
+    'id',
+  ]),
+});
+export type BotLocaleInput = z.infer<typeof botLocaleSchema>;
+
 // ── Profil bota (PATCH /api/bot/profile) ───────────────────
 export const botProfileSchema = z
   .object({

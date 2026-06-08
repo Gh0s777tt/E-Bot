@@ -1,9 +1,11 @@
-import { Activity, Archive, Bot, Cloud, Palette, Server, Users } from 'lucide-react';
+import { Activity, Archive, Bot, Cloud, Languages, Palette, Server, Users } from 'lucide-react';
 import BotCustomizeForm from '../../components/BotCustomizeForm';
+import BotLanguageForm from '../../components/BotLanguageForm';
 import BotPresenceForm from '../../components/BotPresenceForm';
 import ConfigBackupForm from '../../components/ConfigBackupForm';
 import PanelUsersForm from '../../components/PanelUsersForm';
 import ThemeSwitcher from '../../components/ThemeSwitcher';
+import { normalizeBotLocale } from '../../lib/botLocales';
 import { getBotProfile } from '../../lib/botProfile';
 import { activeSource, getRawSetting, getStats } from '../../lib/data';
 import { currentRole, getStaff } from '../../lib/panelRoles';
@@ -12,14 +14,16 @@ import { hasSupabase } from '../../lib/supabase';
 export const dynamic = 'force-dynamic';
 
 export default async function SettingsPage() {
-  const [src, stats, botProfile, presenceRaw, role, staff] = await Promise.all([
+  const [src, stats, botProfile, presenceRaw, localeRaw, role, staff] = await Promise.all([
     activeSource(),
     getStats(),
     getBotProfile(),
     getRawSetting('bot_presence'),
+    getRawSetting('locale'),
     currentRole(),
     getStaff(),
   ]);
+  const botLocale = normalizeBotLocale(localeRaw);
 
   let presence = { status: 'online', type: 'none', text: '', url: '' };
   if (presenceRaw) {
@@ -55,6 +59,13 @@ export default async function SettingsPage() {
           <Activity size={16} className="text-accent" /> Status / aktywność bota
         </h2>
         <BotPresenceForm initial={presence} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Languages size={16} className="text-accent" /> Język bota (wielojęzyczność)
+        </h2>
+        <BotLanguageForm initial={botLocale} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

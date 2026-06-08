@@ -54,6 +54,7 @@ import { loadEnv } from './env.mts';
 import { startFreeGames } from './gaming/freegames.mts';
 import { startPatchNotes } from './gaming/patchnotes.mts';
 import { startPriceTracker } from './gaming/pricetracker.mts';
+import { resolveLocale, t } from './i18n/index.mts';
 import { startLeveling } from './leveling.mts';
 import { log } from './lib/log.mts';
 import { captureError } from './lib/sentry.mts';
@@ -245,7 +246,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   } catch (err) {
     console.error(`Błąd w /${interaction.commandName}:`, err);
     const msg = {
-      content: '😵 Wystąpił błąd przy wykonywaniu komendy.',
+      content: t(resolveLocale(interaction), 'common.commandError'),
       flags: MessageFlags.Ephemeral as const,
     };
     if (interaction.replied || interaction.deferred) await interaction.followUp(msg);
