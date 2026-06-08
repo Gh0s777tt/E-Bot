@@ -1,19 +1,18 @@
 @import "tailwindcss";
 
-/* ── Motyw (Tailwind 4, CSS-first) ─────────────────────────
-   Kolory akcentu wskazują na runtime'owe zmienne --accent-rgb
-   (ustawiane przez ThemeSwitcher / skrypt w layout). */
+/* ── Motyw „Obsidian / Crimson" (Tailwind 4, CSS-first) ─────────────────────────
+   Deep black z głębią + deep red akcent (runtime --accent-rgb z ThemeSwitcher). */
 @theme {
-  --color-bg: #0a0a0a;
-  --color-surface: #141414;
-  --color-card: #171717;
-  --color-elevated: #232323;
+  --color-bg: #08080a;
+  --color-surface: #0e0e12;
+  --color-card: #121217;
+  --color-elevated: #1b1b21;
   --color-accent: rgb(var(--accent-rgb));
   --color-accent-hover: rgb(var(--accent-hover-rgb));
   --color-accent-dark: rgb(var(--accent-dark-rgb));
-  --color-muted: #a0a0a0;
-  --color-line: #262626;
-  --color-text: #ededed;
+  --color-muted: #9a9aa6;
+  --color-line: #232329;
+  --color-text: #ededf2;
 
   /* akcenty platform (stałe) */
   --color-discord: #5865f2;
@@ -21,11 +20,12 @@
   --color-kick: #53fc18;
   --color-youtube: #ff0000;
 
-  /* font-sans = czcionka body z next/font (--font-body); display obsługuje .font-display niżej */
   --font-sans: var(--font-body), system-ui, 'Segoe UI', sans-serif;
 
-  --shadow-glow: 0 0 18px rgb(var(--accent-rgb) / 0.22);
-  --shadow-glow-sm: 0 0 10px rgb(var(--accent-rgb) / 0.28);
+  --shadow-glow: 0 0 24px rgb(var(--accent-rgb) / 0.25);
+  --shadow-glow-sm: 0 0 12px rgb(var(--accent-rgb) / 0.3);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
@@ -37,15 +37,18 @@
 }
 
 html {
-  background-color: #0a0a0a;
+  background-color: #08080a;
   font-size: 15px;
+  scrollbar-color: rgb(var(--accent-rgb) / 0.35) transparent;
+  scrollbar-width: thin;
 }
 html,
 body {
-  color: #ededed;
+  color: #ededf2;
 }
 body {
   font-family: var(--font-body), system-ui, sans-serif;
+  min-height: 100vh;
 }
 
 h1,
@@ -55,7 +58,7 @@ h2,
   letter-spacing: 0.02em;
 }
 
-/* Poświata tła w kolorze akcentu */
+/* ── Tło: warstwy poświaty (deep red) ─────────────────────────────────────────── */
 body::before {
   content: "";
   position: fixed;
@@ -63,8 +66,66 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(50vw 34vh at 84% -10%, rgb(var(--accent-rgb) / 0.08), transparent 70%),
-    radial-gradient(42vw 34vh at -8% 110%, rgb(var(--accent-dark-rgb) / 0.06), transparent 70%);
+    radial-gradient(58vw 40vh at 88% -12%, rgb(var(--accent-rgb) / 0.11), transparent 66%),
+    radial-gradient(46vw 40vh at -10% 112%, rgb(var(--accent-dark-rgb) / 0.12), transparent 70%),
+    radial-gradient(90vw 70vh at 50% 40%, rgb(255 255 255 / 0.014), transparent 76%);
+}
+/* ── Tło: subtelna siatka „tech" + winieta (maska wygasza ją ku dołowi) ───────── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.02) 1px, transparent 1px);
+  background-size: 46px 46px, 46px 46px;
+  -webkit-mask-image: radial-gradient(130vw 105vh at 50% -5%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(130vw 105vh at 50% -5%, #000 30%, transparent 80%);
+  opacity: 0.55;
+}
+
+/* ── Scrollbar / zaznaczenie / focus — premium ────────────────────────────────── */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent-rgb) / 0.28);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent-rgb) / 0.5);
+  background-clip: padding-box;
+}
+::selection {
+  background: rgb(var(--accent-rgb) / 0.32);
+  color: #fff;
+}
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--accent-rgb) / 0.55), 0 0 14px rgb(var(--accent-rgb) / 0.28);
+}
+
+/* płynność interakcji */
+a,
+button,
+select,
+input,
+textarea,
+[role="button"] {
+  transition:
+    color 0.18s,
+    background-color 0.18s,
+    border-color 0.18s,
+    box-shadow 0.18s,
+    transform 0.18s;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -76,15 +137,17 @@ body::before {
 }
 
 .glow-red {
-  box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.22);
+  box-shadow: 0 0 24px rgb(var(--accent-rgb) / 0.25);
 }
 .text-glow {
-  text-shadow: 0 0 10px rgb(var(--accent-rgb) / 0.4);
+  text-shadow: 0 0 12px rgb(var(--accent-rgb) / 0.45);
 }
 
+/* ── Karty: poświata + gradientowa ramka 1px (maska) + delikatna głębia ───────── */
 .panel-glow {
   position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 18px 40px -28px rgb(0 0 0 / 0.8);
 }
 .panel-glow::after {
   content: "";
@@ -94,7 +157,102 @@ body::before {
   width: 50%;
   height: 80%;
   pointer-events: none;
-  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.12), transparent 70%);
+  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.13), transparent 70%);
+}
+.panel-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgb(var(--accent-rgb) / 0.4),
+    transparent 38%,
+    transparent 64%,
+    rgb(255 255 255 / 0.07)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+/* ── Animacje wejścia + akcenty ───────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* wejście treści przy każdej nawigacji (PageTransition keyuje pathname) */
+.page-enter > * {
+  animation: fadeInUp 0.45s var(--ease-soft) both;
+}
+.reveal {
+  animation: fadeInUp 0.5s var(--ease-soft) both;
+}
+
+/* pulsująca kropka statusu (np. „online") */
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.5;
+  animation: glowPulse 2s var(--ease-soft) infinite;
+  z-index: -1;
+}
+
+/* shimmer (skeletony) */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.06), transparent);
+  animation: shimmer 1.6s infinite;
+}
+
+/* dostępność — szanuj wyłączony ruch */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ── Tryb kompaktowy (opt-in przez html.compact) — gęściej, mniej scrollowania ──────

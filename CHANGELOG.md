@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-130-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.69.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-131-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.70.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.70.0] — Nowy wygląd: motyw „Obsidian / Crimson" + ruch (1/3)
+
+- `[#131]` ✨ **Przeprojektowanie wizualne (rdzeń)** — głębsza czerń z warstwami, deep-red akcenty jako światło na czerni, warstwowe tło + subtelna siatka „tech" + winieta, **gradientowe ramki kart** (maska 1px) i głębia cieni, premium scrollbar / zaznaczenie / focus-ring, animacje wejścia treści przy każdej nawigacji (`PageTransition` fade-up), pulsujące statusy, shimmer loaderów. `prefers-reduced-motion` respektowane. Tokeny zmienione u źródła → kaskaduje na całą apkę bez ruszania komponentów.
 
 ## [0.69.1] — Statystyki ochrony w panelu
 
