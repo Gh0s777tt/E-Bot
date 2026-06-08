@@ -5,7 +5,7 @@
 // UWAGA: env czytamy LENIWIE (przy wywołaniu), bo bot ładuje .env w ciele index.mts,
 // czyli PO hoistingu importów — odczyt na poziomie modułu złapałby puste process.env.
 
-function creds(): { url: string; key: string } {
+export function creds(): { url: string; key: string } {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const key =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||

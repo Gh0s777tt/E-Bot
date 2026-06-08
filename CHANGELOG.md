@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-121-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.64.2-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-122-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.65.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.65.0] — Realtime: natychmiastowy sync panel → bot (zero-dep)
+
+- `[#122]` ⚡ **Supabase Realtime przez natywny WebSocket (bez nowych zależności)** — bot subskrybuje zmiany tabeli `settings` (protokół Phoenix v1.0.0) i synchronizuje konfigurację **od ręki**, zamiast czekać do 60 s na poll. Poll 60 s zostaje fallbackiem; po zerwaniu — auto-reconnect z backoffem (do 60 s), heartbeat co 25 s. Wymaga jednorazowo (opcjonalnie) `ALTER PUBLICATION supabase_realtime ADD TABLE settings;` (dodane do `schema.sql`, idempotentnie) — bez tego graceful fallback na poll, zero breakage. Respektuje zero-dep warstwy chmury (`cloud.mts`).
 
 ## [0.64.2] — Message Studio: szablony współdzielone (server-side)
 

@@ -31,3 +31,16 @@ alter table public.settings enable row level security;
 
 drop policy if exists "games read" on public.games;
 create policy "games read" on public.games for select using (true);
+
+-- (Opcjonalnie) Supabase Realtime dla tabeli settings — natychmiastowy sync bota po zmianie z panelu.
+-- Bez tego bot i tak działa: nasłuch WS nie dostaje zdarzeń → fallback na poll 60 s (zero breakage).
+-- Uruchom raz w SQL Editor (idempotentne):
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'settings'
+  ) then
+    alter publication supabase_realtime add table public.settings;
+  end if;
+end $$;
