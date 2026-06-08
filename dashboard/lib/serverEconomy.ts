@@ -54,6 +54,38 @@ export async function saveServerEconomy(cfg: EconomyConfig): Promise<void> {
   await setRawSetting('economy_config', JSON.stringify(cfg));
 }
 
+// ── Sezon ekonomii (miesięczny top-eco + wypłata podium + opcjonalny reset) ──
+export type EcoSeasonConfig = {
+  enabled: boolean;
+  channelId: string;
+  reward1: number;
+  reward2: number;
+  reward3: number;
+  reset: boolean;
+};
+export const ECO_SEASON_DEFAULT: EcoSeasonConfig = {
+  enabled: false,
+  channelId: '',
+  reward1: 0,
+  reward2: 0,
+  reward3: 0,
+  reset: false,
+};
+
+export async function getEcoSeason(): Promise<EcoSeasonConfig> {
+  const raw = await getRawSetting('eco_season_config');
+  if (!raw) return { ...ECO_SEASON_DEFAULT };
+  try {
+    return { ...ECO_SEASON_DEFAULT, ...(JSON.parse(raw) as Partial<EcoSeasonConfig>) };
+  } catch {
+    return { ...ECO_SEASON_DEFAULT };
+  }
+}
+
+export async function saveEcoSeason(cfg: EcoSeasonConfig): Promise<void> {
+  await setRawSetting('eco_season_config', JSON.stringify(cfg));
+}
+
 export type ShopItem = {
   id: string;
   name: string;

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-166-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.98.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-167-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.99.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.99.0] — Sezon ekonomii z wypłatą
+
+- `[#167]` 🏆 **Sezon ekonomii** — odpowiednik sezonów XP, ale dla waluty: co miesiąc bot ogłasza **top‑10 najbogatszych**, **wypłaca nagrody podium** (🥇🥈🥉 — konfigurowalne kwoty, trafiają do historii jako „sezon") i opcjonalnie **resetuje salda** (podium dostaje nagrodę już w nowym sezonie). Konfiguracja w panelu `/eco` → „Sezon ekonomii" (kanał, 3 nagrody, reset). Lustro `analytics/seasons.mts`, dane z `economy_users`.
 
 ## [0.98.0] — Appeale banów przez modmail
 

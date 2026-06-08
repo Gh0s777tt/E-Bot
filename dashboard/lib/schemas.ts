@@ -294,6 +294,17 @@ export const economySchema = z.object({
 });
 export type EconomyInput = z.infer<typeof economySchema>;
 
+// ── Sezon ekonomii (POST /api/eco-season) ─────────────────
+export const ecoSeasonSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  reward1: z.number().int().min(0).max(100_000_000),
+  reward2: z.number().int().min(0).max(100_000_000),
+  reward3: z.number().int().min(0).max(100_000_000),
+  reset: z.boolean(),
+});
+export type EcoSeasonInput = z.infer<typeof ecoSeasonSchema>;
+
 export const shopItemSchema = z.object({
   name: z.string().min(1).max(80),
   description: z.string().max(200).optional().default(''),

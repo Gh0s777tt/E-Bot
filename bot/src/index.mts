@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { startActivity } from './analytics/activity.mts';
 import { startDigest } from './analytics/digest.mts';
+import { startEcoSeason } from './analytics/ecoSeason.mts';
 import { startSeasons } from './analytics/seasons.mts';
 import { startServerHistory } from './analytics/serverHistory.mts';
 import { startAutomod } from './automod.mts';
@@ -167,6 +168,7 @@ client.once(Events.ClientReady, (c) => {
   startServerHistory(c); // snapshot rozmiaru serwera co 30 min → server_history (wykres wzrostu)
   startEcoInterest(c); // pasywny dochód — dzienne odsetki bankowe (jeśli włączone w configu eko)
   startSeasons(c); // Faza 7 / F10.2 — sezonowe rankingi (miesięczny hall of fame, sprawdza co 6h)
+  startEcoSeason(c); // sezon ekonomii — miesięczny top-eco + wypłata podium + opcjonalny reset
   startDigest(c); // Tor E — tygodniowy digest serwera (poniedziałek, config z panelu)
   // Faza 3 — integracja bot↔chmura (no-op gdy brak SUPABASE_* w .env):
   startHeartbeat(c); // puls 'bot_status' → panel
