@@ -63,8 +63,15 @@ async function inbound(client: Client, msg: Message): Promise<void> {
 
   let isNew = false;
   if (!thread) {
+    // Odwołanie od bana? Jeśli piszący jest zbanowany, oznacz wątek jako APEL + pokaż powód bana.
+    const ban = await text.guild.bans.fetch(msg.author.id).catch(() => null);
+    const banReason = ban ? ban.reason || 'brak podanego powodu' : null;
+
     thread = await text.threads
-      .create({ name: `📨 ${msg.author.username}`.slice(0, 90), type: ChannelType.PublicThread })
+      .create({
+        name: `${banReason ? '🚫 APEL' : '📨'} ${msg.author.username}`.slice(0, 90),
+        type: ChannelType.PublicThread,
+      })
       .catch(() => null);
     if (!thread) return;
     isNew = true;
@@ -76,9 +83,11 @@ async function inbound(client: Client, msg: Message): Promise<void> {
         embeds: [
           new EmbedBuilder()
             .setColor(0xe50914)
-            .setTitle('📨 Nowy modmail')
+            .setTitle(banReason ? '🚫 Odwołanie od bana' : '📨 Nowy modmail')
             .setDescription(
-              `Od <@${msg.author.id}> (${msg.author.tag})\nID: ${msg.author.id}\nOdpowiedz w tym wątku — trafi w DM. \`!close\` zamyka rozmowę.`,
+              banReason
+                ? `Od <@${msg.author.id}> (${msg.author.tag})\nID: ${msg.author.id}\n**Status: ZBANOWANY** — powód: ${banReason}\n\nOdpowiedz w wątku (→ DM). \`!unban\` cofa bana, \`!close\` zamyka.`
+                : `Od <@${msg.author.id}> (${msg.author.tag})\nID: ${msg.author.id}\nOdpowiedz w tym wątku — trafi w DM. \`!close\` zamyka rozmowę.`,
             ),
         ],
       })
@@ -120,6 +129,31 @@ async function outbound(client: Client, msg: Message): Promise<void> {
       .catch(() => {});
     await thread.send('📪 Modmail zamknięty.').catch(() => {});
     await thread.setArchived(true).catch(() => {});
+    return;
+  }
+
+  // Akceptacja odwołania — cofnięcie bana użytkownika z wątku.
+  if (msg.content.trim().toLowerCase() === '!unban') {
+    let ok = false;
+    try {
+      await thread.guild.bans.remove(
+        row.user_id,
+        `Modmail: odwołanie zaakceptowane przez ${msg.author.tag}`,
+      );
+      ok = true;
+    } catch {
+      /* brak bana lub uprawnień bota */
+    }
+    const u = await client.users.fetch(row.user_id).catch(() => null);
+    if (ok) await u?.send('✅ Twój ban został cofnięty — możesz wrócić na serwer.').catch(() => {});
+    await thread
+      .send(
+        ok
+          ? `✅ Cofnięto bana <@${row.user_id}>.`
+          : '❌ Nie udało się cofnąć bana (brak bana lub uprawnień bota).',
+      )
+      .catch(() => {});
+    await msg.react(ok ? '✅' : '⚠️').catch(() => {});
     return;
   }
 

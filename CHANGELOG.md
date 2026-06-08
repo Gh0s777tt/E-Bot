@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-165-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.97.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-166-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.98.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.98.0] — Appeale banów przez modmail
+
+- `[#166]` 📨 **Odwołania od banów w modmailu** — gdy do bota napisze **zbanowana** osoba (mająca otwarty DM), wątek modmaila zostaje oznaczony jako **🚫 APEL** z **powodem bana**, a obsługa może jednym poleceniem **`!unban`** cofnąć bana (bot DM-uje wtedy użytkownika „ban cofnięty"). Zwykłe modmaile działają jak dotąd. _Uwaga Discord: użytkownik bez wspólnego serwera/otwartego DM może nie móc napisać do bota — to ograniczenie platformy._
 
 ## [0.97.0] — Ogon (3): tester wzorców regex w panelu
 
