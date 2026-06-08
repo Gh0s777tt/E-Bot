@@ -1,8 +1,8 @@
 'use client';
 
 import { Check, Hammer, Loader2, Sparkles, X } from 'lucide-react';
-import { useState } from 'react';
-import { PROV_BLOCKS, type ProvBlock } from '../lib/setup';
+import { useMemo, useState } from 'react';
+import { buildPlan, PROV_BLOCKS, type ProvBlock } from '../lib/setup';
 
 type LogItem = { label: string; ok: boolean; detail?: string };
 const PRESET_LABEL: Record<string, string> = {
@@ -84,6 +84,8 @@ export default function ServerArchitect() {
   }
 
   const working = st === 'working';
+  const preview = useMemo(() => buildPlan([...sel], 'preview'), [sel]);
+  const icon = (k: string) => (k === 'voice' ? '🔊' : k === 'announcement' ? '📣' : '#');
 
   return (
     <div className="space-y-4">
@@ -155,6 +157,45 @@ export default function ServerArchitect() {
           );
         })}
       </div>
+
+      {sel.size > 0 && (
+        <div className="rounded-xl border border-line bg-bg/40 p-4">
+          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
+            Podgląd — co powstanie
+          </div>
+          {preview.roles.length > 0 && (
+            <div className="mb-2 flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-muted">Role:</span>
+              {preview.roles.map((r) => (
+                <span key={r.name} className="rounded bg-elevated px-2 py-0.5 text-xs">
+                  @{r.name}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="space-y-0.5 font-mono text-xs">
+            {preview.categories.map((cat) => (
+              <div key={cat.key}>
+                <div className="text-muted">▸ {cat.name}</div>
+                {preview.channels
+                  .filter((ch) => ch.categoryKey === cat.key)
+                  .map((ch) => (
+                    <div key={ch.name} className="ml-4">
+                      {icon(ch.kind)} {ch.name}
+                    </div>
+                  ))}
+              </div>
+            ))}
+            {preview.channels
+              .filter((ch) => !ch.categoryKey)
+              .map((ch) => (
+                <div key={ch.name}>
+                  {icon(ch.kind)} {ch.name}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center gap-3">
         <button

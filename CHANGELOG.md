@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-172-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.103.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-173-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.104.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.104.0] — 🏗️ Architekt Serwera (5/5): podgląd struktury (dry-run) — KOMPLET
+
+- `[#173]` 👁️ **Podgląd „co powstanie"** w Architekcie — zanim klikniesz „Utwórz strukturę", widzisz **na żywo drzewo** kategorii → kanałów (z ikonami #/🔊/📣) i listę ról, aktualizowane przy każdym wyborze bloku / sugestii AI. To dry-run bez ryzyka. _(Podgląd treści/embedów powitań i innych wiadomości już istnieje w Message Studio — live-preview „jak Discord".)_
+- 🏁 **Architekt Serwera kompletny (5/5):** provisioning → auto-wpinanie → AI-kreator → blueprinty/eksport-import → podgląd. Od opisu zdaniem do w pełni zbudowanego, skonfigurowanego serwera.
 
 ## [0.103.0] — 🏗️ Architekt Serwera (4/?): Blueprinty + eksport/import
 
