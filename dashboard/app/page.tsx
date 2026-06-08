@@ -1,7 +1,8 @@
 import { Clock, Gamepad2, Layers, Plug, UserPlus } from 'lucide-react';
 import GameCard from '../components/GameCard';
+import SetupChecklist from '../components/SetupChecklist';
 import StatCard from '../components/StatCard';
-import { activeSource, getGames, getStats } from '../lib/data';
+import { activeSource, getGames, getSetupChecklist, getStats } from '../lib/data';
 import { getIntegrations } from '../lib/integrations';
 import { botInviteUrl } from '../lib/invite';
 
@@ -15,11 +16,12 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function OverviewPage() {
-  const [stats, games, src, integrations] = await Promise.all([
+  const [stats, games, src, integrations, checklist] = await Promise.all([
     getStats(),
     getGames(),
     activeSource(),
     Promise.resolve(getIntegrations()),
+    getSetupChecklist(),
   ]);
   const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
@@ -114,6 +116,9 @@ export default async function OverviewPage() {
           </div>
         </div>
       </section>
+
+      {/* ===== PIERWSZE KROKI (checklist konfiguracji) ===== */}
+      <SetupChecklist items={checklist} />
 
       {/* ===== 2 KOLUMNY: PLATFORMY | INTEGRACJE ===== */}
       <div className="grid gap-4 lg:grid-cols-2">

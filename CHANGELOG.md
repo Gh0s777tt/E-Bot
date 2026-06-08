@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-119-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.64.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-120-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.64.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.64.1] — Pulpit: checklist „Pierwsze kroki"
+
+- `[#120]` 🚀 **Checklist startowy na pulpicie** — sekcja „Pierwsze kroki" z paskiem postępu (X/8) i statusem kluczowych modułów (powiadomienia live, powitania, automod, ochrona serwera, tickety, poziomy, social, zaplanowane posty), każdy z linkiem do ustawień. Jeden odczyt `settings`, czysto serwerowe. Nowy użytkownik od razu widzi, co skonfigurować.
 
 ## [0.64.0] — Ulepszenia #4: Zaplanowane posty (embedy, cyklicznie, bez SQL)
 

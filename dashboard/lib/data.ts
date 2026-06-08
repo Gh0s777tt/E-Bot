@@ -317,6 +317,83 @@ export async function restoreSettings(input: Record<string, unknown>): Promise<n
   }
 }
 
+// ───────────── Checklist startowy („Pierwsze kroki" na pulpicie) — jeden odczyt settings ─────────────
+export type ChecklistItem = { label: string; done: boolean; href: string; hint: string };
+export async function getSetupChecklist(): Promise<ChecklistItem[]> {
+  const all = await getAllSettings();
+  const json = (k: string): Record<string, unknown> | unknown[] | null => {
+    try {
+      return all[k] ? JSON.parse(all[k]) : null;
+    } catch {
+      return null;
+    }
+  };
+  const obj = (k: string): Record<string, unknown> => {
+    const v = json(k);
+    return v && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
+  };
+  const welcome = obj('welcome_config');
+  const automod = obj('automod_config');
+  const tickets = obj('tickets_config');
+  const leveling = obj('leveling_config');
+  const antinuke = obj('antinuke');
+  const verification = obj('verification_config');
+  const social = obj('social_feeds_config');
+  const scheduled = json('scheduled_posts');
+  const scheduledArr = Array.isArray(scheduled) ? (scheduled as Record<string, unknown>[]) : [];
+
+  return [
+    {
+      label: 'Powiadomienia o streamach',
+      done: !!all['notify_channel_id'],
+      href: '/notifications',
+      hint: 'Kanał alertów live',
+    },
+    {
+      label: 'Powitania nowych osób',
+      done: !!(welcome.enabled && welcome.channelId),
+      href: '/welcome',
+      hint: 'Wiadomość + autorole',
+    },
+    {
+      label: 'Automoderacja',
+      done: !!automod.enabled,
+      href: '/moderation',
+      hint: 'Filtry treści i spamu',
+    },
+    {
+      label: 'Ochrona serwera',
+      done: !!(antinuke.enabled || verification.enabled),
+      href: '/security',
+      hint: 'Anti-nuke / weryfikacja',
+    },
+    {
+      label: 'System ticketów',
+      done: !!tickets.enabled,
+      href: '/tickets',
+      hint: 'Wsparcie użytkowników',
+    },
+    {
+      label: 'Poziomy / XP',
+      done: !!leveling.enabled,
+      href: '/levels',
+      hint: 'Aktywność i role',
+    },
+    {
+      label: 'Powiadomienia social',
+      done: !!social.enabled,
+      href: '/creator',
+      hint: 'Nowe posty (RSS)',
+    },
+    {
+      label: 'Zaplanowane posty',
+      done: scheduledArr.some((p) => p?.enabled),
+      href: '/scheduled',
+      hint: 'Automatyczne ogłoszenia',
+    },
+  ];
+}
+
 export type AntiProtection = { enabled: boolean; count: number; windowSec: number };
 export type AntinukeConfig = {
   enabled: boolean;
