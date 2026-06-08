@@ -74,10 +74,10 @@ export default function Sidebar() {
                       <Link
                         key={href}
                         href={href}
-                        className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] transition ${
+                        className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] transition-all ${
                           active
-                            ? 'bg-accent text-white'
-                            : 'text-muted hover:bg-elevated hover:text-white'
+                            ? 'bg-gradient-to-r from-accent/90 to-accent-dark/60 font-semibold text-white shadow-[0_0_18px_-5px_rgb(var(--accent-rgb)/0.7)]'
+                            : 'text-muted hover:translate-x-0.5 hover:bg-elevated hover:text-white'
                         }`}
                       >
                         <Icon size={16} />
@@ -93,7 +93,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="shrink-0 border-t border-line p-4 text-[11px] text-muted/60">
-        v0.37 · GH0ST EMPIRE
+        E‑BOT · GH0ST EMPIRE
       </div>
     </aside>
   );

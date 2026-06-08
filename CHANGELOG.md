@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-131-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.70.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-132-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.70.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.70.1] — Nowy wygląd: mikro-interakcje (2/3)
+
+- `[#132]` ✨ **Polish komponentów** — aktywna pozycja w menu jako **gradient deep-red + poświata + hover-slide**; **pulsująca kropka „online"** w pasku górnym; karty statystyk i okładki gier z **hover-lift + czerwoną poświatą** („odrywają się" od tła). Naprawiona zwietrzała wersja w stopce menu. Drobne mikro-interakcje, które podnoszą wrażenie żywego, zaawansowanego interfejsu.
 
 ## [0.70.0] — Nowy wygląd: motyw „Obsidian / Crimson" + ruch (1/3)
 

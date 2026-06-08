@@ -14,7 +14,7 @@ export default function GameCard({ game, onClick }: { game: Game; onClick?: () =
     <button
       type="button"
       onClick={onClick}
-      className="group relative block aspect-[2/3] w-full overflow-hidden rounded-lg bg-elevated text-left shadow-lg transition hover:ring-2 hover:ring-accent"
+      className="group relative block aspect-[2/3] w-full overflow-hidden rounded-lg bg-elevated text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-glow hover:ring-2 hover:ring-accent"
     >
       <CoverImg
         game={game}

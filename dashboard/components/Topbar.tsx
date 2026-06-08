@@ -83,7 +83,9 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
       </h1>
       <div className="ml-auto flex items-center gap-2 text-xs">
         <span className="hidden items-center gap-1.5 rounded-md border border-line px-3 py-1 sm:flex">
-          <span className={`h-2 w-2 rounded-full ${dot}`} />
+          <span
+            className={`h-2 w-2 rounded-full ${dot} ${status.online === true ? 'pulse-dot text-green-500' : ''}`}
+          />
           <strong className="font-semibold">{status.tag ?? 'E-Bot'}</strong>
           <span className="text-muted">
             · {stateText}
