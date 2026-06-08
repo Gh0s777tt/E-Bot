@@ -8,6 +8,7 @@ import MobileNav from './MobileNav';
 const TITLES: Record<string, string> = {
   '/': 'Przegląd',
   '/scheduled': 'Zaplanowane posty',
+  '/custom-commands': 'Własne komendy',
   '/library': 'Biblioteka gier',
   '/notifications': 'Powiadomienia live',
   '/live': 'Na żywo',

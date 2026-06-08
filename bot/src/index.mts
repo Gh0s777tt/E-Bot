@@ -17,6 +17,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startRealtimeSync } from './cloud/realtime.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
+import { handleCustomCommand } from './commands/customCommands.mts';
 import { type Command, commands } from './commands/index.mts';
 import { startAfk } from './community/afk.mts';
 import { startAiDigest } from './community/aidigest.mts';
@@ -226,7 +227,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
   if (!interaction.isChatInputCommand()) return;
   const cmd = registry.get(interaction.commandName);
-  if (!cmd) return;
+  if (!cmd) {
+    // komenda spoza rejestru — może być no-code komendą z panelu (settings 'custom_commands')
+    await handleCustomCommand(interaction).catch((err) => console.error('custom-cmd:', err));
+    return;
+  }
   try {
     await cmd.execute(interaction);
   } catch (err) {

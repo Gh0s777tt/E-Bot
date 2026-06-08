@@ -104,6 +104,18 @@ export const studioTemplatesSchema = z.object({
 });
 export type StudioTemplatesInput = z.infer<typeof studioTemplatesSchema>;
 
+// ── No-code komendy slash (POST /api/custom-commands) ──────
+export const customCommandSchema = z.object({
+  name: z.string().regex(/^[a-z0-9_-]{1,32}$/, 'małe litery/cyfry/-/_, 1–32 znaki'),
+  description: z.string().min(1).max(100),
+  response: richMessageSchema,
+  ephemeral: z.boolean().default(false),
+});
+export const customCommandsSchema = z.object({
+  commands: z.array(customCommandSchema).max(25),
+});
+export type CustomCommandsInput = z.infer<typeof customCommandsSchema>;
+
 // ── Tickety (POST /api/tickets) ────────────────────────────
 export const ticketCategorySchema = z.object({
   id: z.string().max(20),

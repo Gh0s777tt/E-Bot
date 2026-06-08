@@ -13,22 +13,33 @@ import { syncSettingsNow } from './settings-sync.mts';
 type WSLike = {
   send(data: string): void;
   close(): void;
-  addEventListener(type: 'open' | 'close' | 'error', cb: () => void): void;
+  addEventListener(type: 'open', cb: () => void): void;
+  addEventListener(type: 'close', cb: (ev: { code?: number; reason?: string }) => void): void;
+  addEventListener(type: 'error', cb: () => void): void;
   addEventListener(type: 'message', cb: (ev: { data: unknown }) => void): void;
 };
 const WSCtor = (globalThis as { WebSocket?: new (url: string) => WSLike }).WebSocket;
+
+// Do połączenia preferuj anon (apikey), do RLS preferuj service_role (access_token).
+function realtimeKeys(): { apikey: string; token: string } {
+  const anon = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+  const svc = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  return { apikey: anon || svc, token: svc || anon };
+}
 
 const TOPIC = 'realtime:db-settings';
 let heartbeat: ReturnType<typeof setInterval> | null = null;
 let ref = 1;
 let backoff = 2_000;
-let stop = false;
+let attempts = 0;
 
 function connect(): void {
-  if (stop || !WSCtor) return;
-  const { url, key } = creds();
-  if (!url || !key) return;
-  const wsUrl = `${url.replace(/^http/, 'ws')}/realtime/v1/websocket?apikey=${encodeURIComponent(key)}&vsn=1.0.0`;
+  if (!WSCtor) return;
+  const { url } = creds();
+  const { apikey, token } = realtimeKeys();
+  if (!url || !apikey) return;
+  const wsUrl = `${url.replace(/^http/, 'ws')}/realtime/v1/websocket?apikey=${encodeURIComponent(apikey)}&vsn=1.0.0`;
+  attempts++;
 
   let socket: WSLike;
   try {
@@ -42,7 +53,6 @@ function connect(): void {
   socket.addEventListener('open', () => {
     backoff = 2_000;
     const joinRef = String(ref++);
-    // Dołącz do kanału z subskrypcją postgres_changes na public.settings.
     socket.send(
       JSON.stringify({
         topic: TOPIC,
@@ -53,21 +63,20 @@ function connect(): void {
             presence: { key: '' },
             postgres_changes: [{ event: '*', schema: 'public', table: 'settings' }],
           },
+          access_token: token,
         },
         ref: joinRef,
         join_ref: joinRef,
       }),
     );
-    // Ustaw token (service_role) — omija RLS dla postgres_changes.
     socket.send(
       JSON.stringify({
         topic: TOPIC,
         event: 'access_token',
-        payload: { access_token: key },
+        payload: { access_token: token },
         ref: String(ref++),
       }),
     );
-    // Phoenix heartbeat — bez niego serwer zrywa połączenie po ~30-60 s.
     heartbeat = setInterval(() => {
       try {
         socket.send(
@@ -81,7 +90,7 @@ function connect(): void {
   });
 
   socket.addEventListener('message', (ev) => {
-    let msg: { event?: string; payload?: { status?: string } };
+    let msg: { event?: string; payload?: { status?: string; response?: unknown } };
     try {
       msg = JSON.parse(String(ev.data)) as typeof msg;
     } catch {
@@ -91,13 +100,21 @@ function connect(): void {
       syncSettingsNow(); // zmiana w tabeli settings → natychmiastowy sync
     } else if (msg.event === 'phx_reply' && msg.payload?.status === 'ok') {
       log.info('realtime: subskrypcja settings aktywna');
+    } else if (msg.event === 'phx_reply' && msg.payload?.status === 'error') {
+      log.warn('realtime: serwer odrzucił subskrypcję', { resp: msg.payload?.response });
     }
   });
 
-  const onDown = () => {
+  const onDown = (ev?: { code?: number; reason?: string }) => {
     if (heartbeat) {
       clearInterval(heartbeat);
       heartbeat = null;
+    }
+    if (attempts <= 3) {
+      log.warn('realtime: rozłączono — ponawiam (fallback: poll 60 s)', {
+        code: ev?.code,
+        reason: ev?.reason,
+      });
     }
     scheduleReconnect();
   };
@@ -108,7 +125,6 @@ function connect(): void {
 }
 
 function scheduleReconnect(): void {
-  if (stop) return;
   setTimeout(connect, backoff);
   backoff = Math.min(backoff * 2, 60_000); // wykładniczy backoff do 60 s
 }
@@ -122,6 +138,6 @@ export function startRealtimeSync(): void {
     log.warn('realtime: brak globalnego WebSocket — pomijam (zostaje poll 60 s)');
     return;
   }
-  stop = false;
+  log.info('realtime: start — łączę z Supabase Realtime');
   connect();
 }

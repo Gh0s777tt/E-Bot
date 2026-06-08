@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-122-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.65.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-123-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.66.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.66.0] — No-code komendy slash + diagnostyka Realtime
+
+- `[#123]` 🛠️ **Kreator własnych komend slash (bez kodu)** — nowa strona `/custom-commands`: nazwa, opis i odpowiedź przez pełny **Message Studio** (treść + embed, zmienne `{user}`/`{server}`…, opcja ephemeral). Panel rejestruje komendy w Discordzie **od razu po zapisie** (REST POST upsert — nie rusza wbudowanych), kasuje usunięte i blokuje kolizję z komendą wbudowaną. Bot odpowiada (`commands/customCommands.mts`, config `settings 'custom_commands'`, sync przez bridge/realtime). **Bez nowego SQL.**
+- `[#123]` 🔎 **Realtime — twardszy auth + diagnostyka** — `apikey=anon` (połączenie) + `access_token=service_role` (RLS), logi `start/połączono/subskrypcja/rozłączono` z kodem zamknięcia (łatwe potwierdzenie w logach Railway). Fallback na poll 60 s bez zmian.
 
 ## [0.65.0] — Realtime: natychmiastowy sync panel → bot (zero-dep)
 

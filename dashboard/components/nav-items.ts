@@ -113,6 +113,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/appearance', label: 'Wygląd grafik', icon: Palette },
       { href: '/commands', label: 'Komendy', icon: TerminalSquare },
+      { href: '/custom-commands', label: 'Własne komendy', icon: TerminalSquare },
       { href: '/integrations', label: 'Integracje', icon: Plug },
       { href: '/profile', label: 'Profil', icon: User },
       { href: '/settings', label: 'Ustawienia', icon: Settings },
