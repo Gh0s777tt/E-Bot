@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-173-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.104.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-174-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.105.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.105.0] — 🌍 Wielojęzyczność (1/?): fundament i18n bota + opisy komend w 14 językach
+
+- `[#174]` 🌍 **Tłumaczenia — Partia 1 (bot).** Postawiłem **fundament i18n** (`bot/src/i18n/`): rejestr **14 języków** (🇵🇱 🇬🇧 🇩🇪 🇪🇸 🇮🇹 🇫🇷 🇵🇹 🇨🇳 🇰🇷 🇷🇺 🇺🇦 🇯🇵 🇸🇦 🇮🇩), funkcję `t()` z interpolacją `{…}` i łańcuchem fallback (locale → en → pl) oraz **resolver języka** `resolveLocale()`: czyta locale użytkownika z Discorda (`interaction.locale`), z **override per-serwer** (klucz `locale` z panelu, domyślnie `auto` = podążaj za userem).
+  - 🏷️ **Opisy wszystkich 51 slash-komend przetłumaczone na 14 języków** i wpięte przez **natywną lokalizację Discorda** (`setDescriptionLocalizations`) — każdy widzi opis komendy w języku swojego klienta Discord. Wpinane **centralnie** w `commands/index.mts` (765 wpisów, bez edycji 51 plików). _Arabski: Discord nie wspiera go jako locale interfejsu — zostaje dla runtime/panelu/web._
+  - ✅ `/ping` zmigrowany na `t()` jako dowód działania runtime. Most z panelem już gotowy (bot czyta klucz `locale`; `settings-sync` ciągnie go automatycznie).
+  - ⏭️ Następne partie: **przełącznik języka w panelu** + migracja komunikatów bota falami → i18n **UI panelu** i **strony web** (+ `dir="rtl"` dla arabskiego).
 
 ## [0.104.0] — 🏗️ Architekt Serwera (5/5): podgląd struktury (dry-run) — KOMPLET
 
