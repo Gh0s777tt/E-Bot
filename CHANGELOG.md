@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-152-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.84.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-153-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.85.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.85.0] — Onboarding (1/?): strona Diagnostyka
+
+- `[#153]` 🩺 **Diagnostyka** (`/diagnostics`) — jedno miejsce „czy wszystko gra": **kondycja konfiguracji w %** + werdykt, sekcja **Połączenia** (bot online z pulsu + baza Supabase/SQLite), **Integracje** pogrupowane (Discord/Streaming/Gry/AI… z ✓/✗ i notką), oraz **Konfiguracja modułów** (co włączone, czego brakuje — z linkiem „Ustaw →"). Start serii „rób wszystko po kolei" — kierunek **Onboarding & intuicyjność**.
 
 ## [0.84.0] — Historia ekonomii na karcie profilu (log transakcji)
 

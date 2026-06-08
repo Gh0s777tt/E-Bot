@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
+  Stethoscope,
   Tags,
   TerminalSquare,
   Ticket,
@@ -50,6 +51,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/', label: 'Przegląd', icon: LayoutDashboard },
       { href: '/modules', label: 'Centrum sterowania', icon: SlidersHorizontal },
       { href: '/stats', label: 'Statystyki', icon: BarChart3 },
+      { href: '/diagnostics', label: 'Diagnostyka', icon: Stethoscope },
     ],
   },
   {
