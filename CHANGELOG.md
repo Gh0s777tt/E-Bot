@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-159-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.91.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-160-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.92.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.92.0] — Wow (2/?): bogatszy tygodniowy recap
+
+- `[#160]` 🗞️ **Tygodniowy recap** (digest) dostał dwa nowe wyróżnienia: **🏆 Najaktywniejszy** tygodnia (najwięcej wiadomości z `user_activity`) i **⭐ Najwyższa reputacja** (z `/rep`). Obok dotychczasowych: wiadomości, minuty voice, wzrost. _Uwaga:_ go-live embed **już** pokazuje liczbę widzów, a sezonowy Hall of Fame (`/hof`) już działa — w tym kierunku dołożyłem brakujące elementy.
 
 ## [0.91.0] — Wow (1/?): progres odznak na karcie profilu
 

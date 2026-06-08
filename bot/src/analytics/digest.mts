@@ -44,6 +44,32 @@ async function maybePost(client: Client): Promise<void> {
     }),
     { m: 0, j: 0, l: 0, v: 0 },
   );
+  // 🏆 Najaktywniejszy (per-user, 7 dni) + ⭐ top reputacja — wzbogacenie recapu.
+  const ua = await cloudSelect<{ user_id: string; username?: string; messages?: number }>(
+    'user_activity',
+    `select=user_id,username,messages&day=gte.${since}`,
+  ).catch(() => [] as { user_id: string; username?: string; messages?: number }[]);
+  const byUser = new Map<string, { name: string; msgs: number }>();
+  for (const r of ua) {
+    const cu = byUser.get(r.user_id) ?? { name: r.username || r.user_id, msgs: 0 };
+    cu.msgs += r.messages ?? 0;
+    if (r.username) cu.name = r.username;
+    byUser.set(r.user_id, cu);
+  }
+  const topUser = [...byUser.values()].sort((a, b) => b.msgs - a.msgs)[0];
+
+  let topRep: { name: string; points: number } | null = null;
+  try {
+    const raw = await cloudGetSetting('reputation');
+    if (raw) {
+      const map = JSON.parse(raw) as Record<string, { points: number; name: string }>;
+      const best = Object.values(map).sort((a, b) => b.points - a.points)[0];
+      if (best && best.points > 0) topRep = best;
+    }
+  } catch {
+    /* brak repów */
+  }
+
   const ch = await client.channels.fetch(c.channelId).catch(() => null);
   if (ch?.isTextBased() && 'send' in ch) {
     const net = s.j - s.l;
@@ -60,6 +86,18 @@ async function maybePost(client: Client): Promise<void> {
         },
       )
       .setTimestamp(now);
+    if (topUser && topUser.msgs > 0)
+      embed.addFields({
+        name: '🏆 Najaktywniejszy',
+        value: `${topUser.name} — ${topUser.msgs.toLocaleString('pl-PL')} wiad.`,
+        inline: false,
+      });
+    if (topRep)
+      embed.addFields({
+        name: '⭐ Najwyższa reputacja',
+        value: `${topRep.name} — ${topRep.points} ⭐`,
+        inline: false,
+      });
     await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});
   }
   await cloudSetSetting('digest_last', tag).catch(() => {});
