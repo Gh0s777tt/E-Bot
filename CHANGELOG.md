@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-118-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.63.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-119-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.64.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.64.0] — Ulepszenia #4: Zaplanowane posty (embedy, cyklicznie, bez SQL)
+
+- `[#119]` 🗓️ **Zaplanowane posty** — nowa strona `/scheduled`: ogłoszenia z pełnym **Message Studio** (treść + embed) wysyłane automatycznie przez bota. Tryby: **jednorazowo** (data + godzina) lub **cyklicznie** (codziennie / co tydzień o `HH:MM`, strefa **Europe/Warsaw** z DST). Per-post włącznik, picker kanału, zmienne `{server}` / `{memberCount}` (realne dane serwera). Bot: `engagement/scheduledPosts.mts` — poll 60 s, okno catch-up 10 min, dedup w cloud-key `scheduled_posts_state` (jak `social_feeds_seen`). Config w settings `scheduled_posts` (tablica JSON, sync przez bridge) — **zero nowego SQL**. Uzupełnia komendowy `/schedule`.
 
 ## [0.63.0] — Ulepszenia #3: UX + nowe funkcje (kopia configu, paleta Ctrl-K, test wysyłki)
 

@@ -41,6 +41,7 @@ import { handleButton } from './engagement/buttons.mts';
 import { startGiveaways } from './engagement/giveaways.mts';
 import { startReminders } from './engagement/reminders.mts';
 import { handleRoleMenu } from './engagement/rolemenu.mts';
+import { startScheduledPosts } from './engagement/scheduledPosts.mts';
 import { startScheduler } from './engagement/scheduler.mts';
 import { startStarboard } from './engagement/starboard.mts';
 import { startTempVoice } from './engagement/tempvoice.mts';
@@ -175,6 +176,7 @@ client.once(Events.ClientReady, (c) => {
   startSocialFeeds(c); // Faza 8 — powiadomienia o nowych postach social (RSS), config /creator
   startReminders(c); // Faza 6 / B5 — przypomnienia /remind
   startScheduler(c); // Tor F — zaplanowane/cykliczne ogłoszenia (/schedule)
+  startScheduledPosts(c); // Tor F+ — zaplanowane posty bogate (Message Studio), config z panelu
   startGiveaways(c); // Faza 6 / B5 — giveawaye /giveaway
   startStarboard(c); // Faza 6 / B5 — starboard ⭐
   startTempVoice(c); // Faza 6 / B5 — kanały głosowe na żądanie

@@ -479,6 +479,26 @@ export const webhookRelaySchema = z.object({
 });
 export type WebhookRelayInput = z.infer<typeof webhookRelaySchema>;
 
+// ── Zaplanowane posty (POST /api/scheduled-posts) ──────────
+export const scheduledPostSchema = z.object({
+  id: z.string().max(40),
+  enabled: z.boolean().default(true),
+  label: z.string().max(80).default(''),
+  channelId: z.string().max(40),
+  message: richMessageSchema,
+  mode: z.enum(['once', 'daily', 'weekly']),
+  runAt: z.number().int().optional(),
+  time: z
+    .string()
+    .regex(/^([01]?\d|2[0-3]):[0-5]\d$/)
+    .optional(),
+  weekday: z.number().int().min(0).max(6).optional(),
+});
+export const scheduledPostsSchema = z.object({
+  posts: z.array(scheduledPostSchema).max(50),
+});
+export type ScheduledPostsInput = z.infer<typeof scheduledPostsSchema>;
+
 // ── Sezonowe rankingi (POST /api/seasons) ──────────────────
 export const seasonsSchema = z.object({
   enabled: z.boolean(),
