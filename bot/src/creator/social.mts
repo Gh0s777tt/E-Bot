@@ -6,6 +6,7 @@
 import type { Client, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
+import { parseFeed } from '../lib/rss.mts';
 
 type Feed = { url: string; label: string };
 type Cfg = { enabled: boolean; channelId: string; message: string; feeds: Feed[] };
@@ -25,41 +26,6 @@ function refresh(): void {
   } catch {
     /* zostaw poprzedni */
   }
-}
-
-type Item = { id: string; title: string; link: string };
-
-function decode(s: string): string {
-  return s
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, '&')
-    .trim();
-}
-function firstTag(block: string, tag: string): string {
-  const m = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'i').exec(block);
-  return m?.[1] ? decode(m[1]) : '';
-}
-function atomLink(block: string): string {
-  const m = /<link[^>]*href="([^"]+)"/i.exec(block);
-  return m?.[1] ?? '';
-}
-
-function parseFeed(xml: string): Item[] {
-  const items: Item[] = [];
-  const blocks = xml.match(/<(item|entry)[\s\S]*?<\/(?:item|entry)>/gi) ?? [];
-  for (const b of blocks.slice(0, 10)) {
-    const title = firstTag(b, 'title');
-    let link = firstTag(b, 'link');
-    if (!link || link.length > 500 || !/^https?:/i.test(link)) link = atomLink(b);
-    const guid = firstTag(b, 'guid') || firstTag(b, 'id') || link || title;
-    if (title) items.push({ id: guid.slice(0, 200), title: title.slice(0, 300), link });
-  }
-  return items;
 }
 
 async function tick(client: Client): Promise<void> {

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-115-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.61.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-116-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.61.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.61.1] — Ulepszenia #1: hartowanie (testy + czysty parser RSS)
+
+- `[#116]` 🧪 **Hartowanie:** wydzielony **czysty parser RSS/Atom** `bot/src/lib/rss.mts` (z `social.mts`, bez zależności runtime) + **+11 testów jednostkowych → 22 łącznie**: `rss` (RSS/Atom/CDATA/encje/pusty feed), `richMessage` (`buildRichMessage`/`hasRich`/`embedHasContent` — zmienne, kolor hex, filtr pustych pól), `unicodeFonts` (smallcaps/bold). Łapie regresje najryzykowniejszej nowej logiki tanim kosztem.
 
 ## [0.61.0] — Pozostałości #2: Free games multi-store (Steam/GOG przez ITAD)
 
