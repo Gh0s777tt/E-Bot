@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-135-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.71.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-136-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.71.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.71.1] — Spójny hero-nagłówek na każdej stronie
+
+- `[#136]` ✨ **Globalny PageHeader** — każda strona dostaje spójny nagłówek (świecąca ikona w akcent-chipie + duży tytuł `font-display` + gradientowy pasek akcentu), generowany automatycznie z nawigacji — **bez ruszania ~30 plików stron**. Pomija pulpit (ma własny hero) i widoki publiczne.
 
 ## [0.71.0] — Tryb focus (ukryj menu, pełna szerokość)
 

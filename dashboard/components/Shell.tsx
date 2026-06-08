@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import CommandPalette from './CommandPalette';
+import GlobalPageHeader from './GlobalPageHeader';
 import ModuleBar from './ModuleBar';
 import PageTransition from './PageTransition';
 import Sidebar from './Sidebar';
@@ -19,6 +20,7 @@ export default function Shell({ children, inviteUrl }: { children: ReactNode; in
       <div className="content-pane min-w-0 flex-1 md:pl-60">
         <Topbar inviteUrl={inviteUrl} />
         <main className="mx-auto max-w-7xl px-5 py-6 md:px-8">
+          <GlobalPageHeader />
           <ModuleBar />
           <PageTransition>{children}</PageTransition>
         </main>
