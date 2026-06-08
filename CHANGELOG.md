@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-145-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.77.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-146-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.78.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.78.0] — Live-kafelki serwera na pulpicie (2/4 z „rozwiń wszystko")
+
+- `[#146]` 📈 **Serwer na żywo** — nowa sekcja na pulpicie z **animowanymi kafelkami** (CountUp), odświeżanymi co **12 s** z heartbeatu bota: **serwery, członkowie, na voice (teraz), boosty, kanały**. Puls „● aktualizacja" przy świeżym odczycie, pauza gdy karta w tle, natychmiastowe odświeżenie po powrocie (Page Visibility).
+  - 🤖 Bot rozszerza puls (`bot_status`) o agregaty po wszystkich serwerach (liczone z cache, bez dodatkowych zapytań).
+  - 🔌 `/api/bot-status` przepuszcza nowe pola (obie ścieżki: `BOT_STATUS_URL` i fallback Supabase), świeżość < 120 s.
 
 ## [0.77.0] — Profil & ranking: glow-up (1/4 z „rozwiń wszystko")
 

@@ -1,5 +1,6 @@
 import { Clock, Gamepad2, Layers, Plug, UserPlus } from 'lucide-react';
 import GameCard from '../components/GameCard';
+import LiveServerTiles from '../components/LiveServerTiles';
 import SetupChecklist from '../components/SetupChecklist';
 import StatCard from '../components/StatCard';
 import { activeSource, getGames, getSetupChecklist, getStats } from '../lib/data';
@@ -116,6 +117,9 @@ export default async function OverviewPage() {
           </div>
         </div>
       </section>
+
+      {/* ===== SERWER NA ŻYWO (heartbeat bota) ===== */}
+      <LiveServerTiles />
 
       {/* ===== PIERWSZE KROKI (checklist konfiguracji) ===== */}
       <SetupChecklist items={checklist} />
