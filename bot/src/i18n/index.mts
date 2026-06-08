@@ -37,6 +37,14 @@ export function resolveLocale(interaction: { locale?: string | null } | null | u
   return fromDiscordLocale(interaction?.locale) ?? DEFAULT_LOCALE;
 }
 
+// Locale dla treści PUBLICZNYCH / broadcast (np. anonimowe wyznanie, ogłoszenia na kanale):
+// używa WYŁĄCZNIE override serwera; przy 'auto' wraca do języka bazowego (pl), NIE do języka
+// pojedynczego użytkownika — spójny język serwera i brak wycieku języka autora (anonimowość).
+export function resolveGuildLocale(): Locale {
+  const ov = localeOverride();
+  return ov !== 'auto' && isLocale(ov) ? ov : BASE_LOCALE;
+}
+
 // Tłumaczenie z interpolacją {placeholder}. Łańcuch fallback: locale → en → pl → sam klucz.
 export function t(locale: Locale, key: string, vars?: Record<string, string | number>): string {
   const raw =

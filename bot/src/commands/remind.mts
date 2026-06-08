@@ -1,5 +1,6 @@
 // /remind — przypomnienie po zadanym czasie. Zapis do Supabase 'reminders'; poller wysyła gdy nadejdzie.
 import { type ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { cloudInsert, hasCloud } from '../lib/cloud.mts';
 import { formatDuration, parseDuration } from '../lib/duration.mts';
 
@@ -14,19 +15,20 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   const when = interaction.options.getString('kiedy', true);
   const text = interaction.options.getString('tresc', true);
   const ms = parseDuration(when);
   if (!ms) {
     await interaction.reply({
-      content: '❌ Zły format czasu. Użyj np. `10m`, `2h`, `1d`, `1h30m`.',
+      content: t(locale, 'remind.badFormat'),
       flags: MessageFlags.Ephemeral,
     });
     return;
   }
   if (!hasCloud()) {
     await interaction.reply({
-      content: '❌ Przypomnienia wymagają chmury (Supabase).',
+      content: t(locale, 'remind.needCloud'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -41,7 +43,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     },
   ]);
   await interaction.reply({
-    content: `⏰ Przypomnę za **${formatDuration(ms)}**: ${text}`,
+    content: t(locale, 'remind.set', { duration: formatDuration(ms), text }),
     flags: MessageFlags.Ephemeral,
   });
 }

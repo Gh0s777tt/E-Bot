@@ -6,6 +6,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
@@ -58,19 +59,20 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   await load();
+  const locale = resolveLocale(interaction);
   const sub = interaction.options.getSubcommand();
 
   if (sub === 'daj') {
     const target = interaction.options.getUser('uzytkownik', true);
     if (target.bot || target.id === interaction.user.id) {
-      await interaction.reply(eph('Nie możesz dać reputacji sobie ani botowi.'));
+      await interaction.reply(eph(t(locale, 'rep.selfOrBot')));
       return;
     }
     const key = `${interaction.user.id}:${target.id}`;
     const last = cooldown.get(key) ?? 0;
     if (Date.now() - last < COOLDOWN_MS) {
       const h = Math.ceil((COOLDOWN_MS - (Date.now() - last)) / 3_600_000);
-      await interaction.reply(eph(`⏳ Tej osobie dasz rep ponownie za ~${h} h.`));
+      await interaction.reply(eph(t(locale, 'rep.cooldown', { h })));
       return;
     }
     cooldown.set(key, Date.now());
@@ -80,7 +82,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     rep[target.id] = cur;
     await save();
     await interaction.reply(
-      `🙏 <@${interaction.user.id}> docenił(a) <@${target.id}>! Reputacja: **${cur.points}** ⭐`,
+      t(locale, 'rep.gave', { giver: interaction.user.id, target: target.id, points: cur.points }),
     );
     return;
   }
@@ -94,7 +96,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .setColor(ACCENT)
       .setAuthor({ name: target.username, iconURL: target.displayAvatarURL() })
       .setDescription(
-        `⭐ Reputacja: **${pts}**\n${rank > 0 ? `🏆 Pozycja: **#${rank}**` : 'Brak na liście — zbierz repy!'}`,
+        `${t(locale, 'rep.points', { points: pts })}\n${rank > 0 ? t(locale, 'rep.position', { rank }) : t(locale, 'rep.noPosition')}`,
       );
     await interaction.reply({ embeds: [embed] });
     return;
@@ -105,12 +107,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     .sort((a, b) => b[1].points - a[1].points)
     .slice(0, 10);
   if (!top.length) {
-    await interaction.reply(eph('Nikt nie ma jeszcze reputacji. Użyj `/rep daj`!'));
+    await interaction.reply(eph(t(locale, 'rep.rankingEmpty')));
     return;
   }
   const embed = new EmbedBuilder()
     .setColor(ACCENT)
-    .setTitle('⭐ Ranking reputacji')
+    .setTitle(t(locale, 'rep.rankingTitle'))
     .setDescription(
       top
         .map(([id, v], i) => `${MEDAL[i] ?? `**${i + 1}.**`} <@${id}> — **${v.points}** ⭐`)

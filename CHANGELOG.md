@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-176-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.107.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-177-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.108.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.108.0] — 🌍 Wielojęzyczność (3/?): pierwsza fala komend na t() (5 komend × 14 jęz.)
+
+- `[#177]` 🌍 **Tłumaczenia — Partia 3.** Pierwsza fala migracji **właściwych odpowiedzi komend** na `t()` w 14 językach: **`/afk`, `/remind`, `/donate`, `/rep`, `/confess`** (21 nowych kluczy z interpolacją `{…}`, markdownem i wzmiankami `<@…>`).
+  - 🗣️ Odpowiedzi **efemeryczne** (widzi je tylko nadawca) → język klienta Discord użytkownika (`resolveLocale`).
+  - 📢 Treści **publiczne** (np. embed anonimowego `/confess`) → nowy **`resolveGuildLocale()`**: język serwera (override z panelu) z fallbackiem do bazy `pl`, **nie** do języka autora — spójność serwera + brak wycieku języka przy anonimowości.
+  - ➕ Słownik `strings.mts` urósł do ~24 kluczy × 14 jęz. Kolejne fale (ekonomia, profil, moderacja) lecą dalej.
 
 ## [0.107.0] — 👥 Lista dostępu do panelu (kto ma jaką rangę)
 

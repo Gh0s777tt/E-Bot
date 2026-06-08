@@ -9,6 +9,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { getSettings } from '../lib/db.mts';
 
 type Provider = { label: string; url: string; emoji?: string };
@@ -27,16 +28,19 @@ function cfg(): Cfg {
 }
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   const c = cfg();
   const providers = (c.providers ?? []).filter((p) => p.label && /^https?:\/\//i.test(p.url));
   if (!c.enabled || !providers.length) {
     await interaction.reply({
-      content: '💖 Donejty nie są jeszcze skonfigurowane.',
+      content: t(locale, 'donate.notConfigured'),
       flags: MessageFlags.Ephemeral,
     });
     return;
   }
-  const embed = new EmbedBuilder().setColor(0xe50914).setTitle(c.title || '💖 Wesprzyj nas');
+  const embed = new EmbedBuilder()
+    .setColor(0xe50914)
+    .setTitle(c.title || t(locale, 'donate.defaultTitle'));
   if (c.description) embed.setDescription(c.description);
   const rows: ActionRowBuilder<ButtonBuilder>[] = [];
   for (let i = 0; i < providers.length; i += 5) {
