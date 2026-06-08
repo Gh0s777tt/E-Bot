@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-163-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.95.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-164-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.96.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.96.0] — Ogon (2): wykres ≈salda na karcie profilu
+
+- `[#164]` 📉 **Wykres salda w czasie** na karcie profilu — z `economy_tx` odtwarzam (przybliżony) przebieg salda i rysuję go jako AreaChart (pojawia się, gdy masz ≥2 logowane transakcje). Jedno zapytanie zasila i **historię** (8 ostatnich), i **wykres** (do 40 zdarzeń). Pełni dane po włączeniu tabeli `economy_tx`.
 
 ## [0.95.0] — Ogon (1): auto-lockdown przy raidzie
 

@@ -1,6 +1,7 @@
 import { BADGE_COUNT, nextBadges, resolveBadges } from '../lib/badges';
 import { relTime } from '../lib/insights';
 import type { ProfileCardData } from '../lib/public';
+import AreaChart from './AreaChart';
 
 const TX_LABEL: Record<string, string> = {
   daily: '💸 Dzienna',
@@ -182,6 +183,18 @@ export default function ProfileCard({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {data.flowSeries.length >= 2 && (
+        <div className="relative mt-4">
+          <div className="mb-1 text-[11px] uppercase tracking-wide text-muted">
+            ≈ Saldo w czasie
+          </div>
+          <AreaChart values={data.flowSeries} height={90} />
+          <p className="mt-1 text-[10px] text-muted">
+            Przybliżone — odtworzone z logowanych transakcji ekonomii.
+          </p>
         </div>
       )}
 

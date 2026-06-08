@@ -168,6 +168,7 @@ export type ProfileCardData = {
   dailyStreak: number;
   items: number;
   history: { delta: number; reason: string; ts: number }[];
+  flowSeries: number[];
 };
 
 export async function profileCard(uid: string): Promise<ProfileCardData> {
@@ -189,6 +190,7 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
     dailyStreak: 0,
     items: 0,
     history: [],
+    flowSeries: [],
   };
   if (!hasSupabase) return empty;
   try {
@@ -213,8 +215,8 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
         .from('economy_tx')
         .select('delta,reason,created_at')
         .eq('user_id', uid)
-        .order('created_at', { ascending: false })
-        .limit(8),
+        .order('created_at', { ascending: true })
+        .limit(40),
     ]);
     const l = (lvl.data ?? null) as { username?: string; xp?: number; level?: number } | null;
     const e = (eco.data ?? null) as {
@@ -234,6 +236,26 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
         .gt('xp', xp);
       rank = (count ?? 0) + 1;
     }
+    // Transakcje (rosnąco) → historia (8 najnowszych) + seria ≈salda (rekonstrukcja z bieżącego stanu).
+    const txRows = (
+      (tx.data ?? []) as { delta?: number; reason?: string; created_at?: string }[]
+    ).map((r) => ({
+      delta: r.delta ?? 0,
+      reason: r.reason ?? '',
+      ts: r.created_at ? Date.parse(r.created_at) : 0,
+    }));
+    const total = (e?.wallet ?? 0) + (e?.bank ?? 0);
+    const sumD = txRows.reduce((acc, r) => acc + r.delta, 0);
+    let run = total - sumD;
+    const flow: number[] = [];
+    if (txRows.length >= 2) {
+      flow.push(Math.max(0, Math.round(run)));
+      for (const r of txRows) {
+        run += r.delta;
+        flow.push(Math.max(0, Math.round(run)));
+      }
+    }
+    const history = txRows.slice(-8).reverse();
     return {
       found: Boolean(l || e),
       username: l?.username || e?.username || uid,
@@ -251,13 +273,8 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
       badgeIds: ((badges.data ?? []) as { badge_id: string }[]).map((b) => b.badge_id),
       dailyStreak: e?.daily_streak ?? 0,
       items: ((invtory.data ?? []) as { qty?: number }[]).reduce((s, r) => s + (r.qty || 0), 0),
-      history: ((tx.data ?? []) as { delta?: number; reason?: string; created_at?: string }[]).map(
-        (r) => ({
-          delta: r.delta ?? 0,
-          reason: r.reason ?? '',
-          ts: r.created_at ? Date.parse(r.created_at) : 0,
-        }),
-      ),
+      history,
+      flowSeries: flow,
     };
   } catch {
     return empty;
