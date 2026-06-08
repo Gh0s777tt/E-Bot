@@ -1,5 +1,6 @@
 import { ShieldCheck } from 'lucide-react';
 import type { AutomodStats as AutomodStatsData } from '../lib/community';
+import AreaChart from './AreaChart';
 
 // Statystyki ochrony (ostatnie 7 dni) — zliczane przez bota. Server component (statyczny widok).
 const CAT_LABEL: Record<string, string> = {
@@ -29,6 +30,13 @@ export default function AutomodStats({ stats }: { stats: AutomodStatsData }) {
   const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]);
   const grand = entries.reduce((s, [, n]) => s + n, 0);
   const max = entries[0]?.[1] ?? 1;
+  const trend: number[] = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const day = d.toISOString().slice(0, 10);
+    trend.push(Object.values(stats[day] ?? {}).reduce((a, b) => a + b, 0));
+  }
 
   return (
     <section className="panel-glow rounded-2xl border border-line bg-card p-5">
@@ -44,6 +52,12 @@ export default function AutomodStats({ stats }: { stats: AutomodStatsData }) {
           <p className="text-sm text-muted">
             Łącznie usunięto: <strong className="text-white">{grand}</strong> wiadomości
           </p>
+          <div className="pt-1">
+            <p className="mb-1 text-[10px] uppercase tracking-wide text-muted">
+              Trend usunięć (14 dni)
+            </p>
+            <AreaChart values={trend} height={84} />
+          </div>
           {entries.map(([cat, n]) => (
             <div key={cat} className="flex items-center gap-3 text-sm">
               <span className="w-32 shrink-0 text-muted">{CAT_LABEL[cat] ?? cat}</span>
