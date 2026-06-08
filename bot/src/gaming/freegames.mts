@@ -4,8 +4,8 @@ import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
 
-type Cfg = { enabled: boolean; channelId: string };
-const DEFAULT: Cfg = { enabled: false, channelId: '' };
+type Cfg = { enabled: boolean; channelId: string; multiStore?: boolean };
+const DEFAULT: Cfg = { enabled: false, channelId: '', multiStore: false };
 let cfg: Cfg = { ...DEFAULT };
 
 function refresh(): void {
@@ -81,6 +81,56 @@ async function tick(client: Client): Promise<void> {
     await cloudSetSetting('freegames_seen', JSON.stringify(seen.slice(-50))).catch(() => {});
 }
 
+// Faza 8 — multi-store darmowe gry przez ITAD (deals −100%). Defensywne: zła odpowiedź → pusto.
+async function tickItad(client: Client): Promise<void> {
+  const key = process.env.ITAD_API_KEY;
+  if (!cfg.enabled || !cfg.multiStore || !cfg.channelId || !hasCloud() || !key) return;
+  const r = await fetch(
+    `https://api.isthereanydeal.com/deals/v2?key=${key}&country=PL&limit=50&sort=-cut`,
+    { signal: AbortSignal.timeout(15_000) },
+  ).catch(() => null);
+  if (!r?.ok) return;
+  const d = (await r.json().catch(() => ({}))) as { list?: unknown[] };
+  const list = Array.isArray(d?.list) ? d.list : [];
+  if (!list.length) return;
+
+  let seen: string[] = [];
+  try {
+    seen = JSON.parse((await cloudGetSetting('freegames_itad_seen')) || '[]') as string[];
+  } catch {
+    /* pusta lista */
+  }
+  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
+  if (!ch?.isTextBased() || !('send' in ch)) return;
+
+  let changed = false;
+  for (const itRaw of list) {
+    const it = itRaw as {
+      id?: string;
+      slug?: string;
+      title?: string;
+      deal?: { cut?: number; price?: { amount?: number }; shop?: { name?: string }; url?: string };
+    };
+    const deal = it.deal;
+    if (!deal) continue;
+    const free = (deal.cut ?? 0) >= 100 || deal.price?.amount === 0;
+    if (!free) continue;
+    const id = `itad:${it.id ?? it.slug ?? deal.url ?? it.title ?? ''}`;
+    if (id === 'itad:' || seen.includes(id)) continue;
+    const embed = new EmbedBuilder()
+      .setColor(0xe50914)
+      .setTitle(`🆓 Za darmo: ${it.title ?? 'Gra'}`)
+      .setURL(deal.url || null)
+      .setDescription(`Darmowe rozdanie w **${deal.shop?.name ?? 'sklepie'}** — odbierz!`)
+      .setTimestamp(new Date());
+    await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});
+    seen.push(id);
+    changed = true;
+  }
+  if (changed)
+    await cloudSetSetting('freegames_itad_seen', JSON.stringify(seen.slice(-80))).catch(() => {});
+}
+
 export function startFreeGames(client: Client): void {
   refresh();
   setInterval(refresh, 30_000);
@@ -89,9 +139,10 @@ export function startFreeGames(client: Client): void {
     return;
   }
   void tick(client).catch(() => {});
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[freegames]', (e as Error).message)),
-    6 * 3_600_000,
-  );
-  console.log('[freegames] feed darmowych gier Epic aktywny (poll 6h, config z panelu).');
+  void tickItad(client).catch(() => {});
+  setInterval(() => {
+    void tick(client).catch((e) => console.warn('[freegames]', (e as Error).message));
+    void tickItad(client).catch((e) => console.warn('[freegames:itad]', (e as Error).message));
+  }, 6 * 3_600_000);
+  console.log('[freegames] feed darmowych gier (Epic + multi-store ITAD) aktywny (poll 6h).');
 }

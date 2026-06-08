@@ -405,6 +405,7 @@ export type AiModInput = z.infer<typeof aimodSchema>;
 export const freegamesSchema = z.object({
   enabled: z.boolean(),
   channelId: z.string().max(40),
+  multiStore: z.boolean().optional().default(false),
 });
 export type FreeGamesInput = z.infer<typeof freegamesSchema>;
 

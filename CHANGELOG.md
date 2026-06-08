@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-114-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.60.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-115-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.61.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.61.0] — Pozostałości #2: Free games multi-store (Steam/GOG przez ITAD)
+
+- `[#115]` 🆓 **Darmowe gry multi-store:** feed darmowych gier dostaje opcję **multi-store** — obok Epic (publiczne API) bot sprawdza też darmowe rozdania (−100%) w innych sklepach (**Steam / GOG / …**) przez **ITAD** (`/deals/v2`, gated `ITAD_API_KEY`). W pełni defensywne (zła odpowiedź API → pusto, bez crasha). Toggle w `/gaming`; osobny dedup `freegames_itad_seen`. Bez SQL.
 
 ## [0.60.0] — Pozostałości #1: Profil 2.0 + Smallcaps w UI
 

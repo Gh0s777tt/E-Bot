@@ -49,6 +49,17 @@ export default function FreeGamesForm({
           channels={guild.channels}
         />
       </label>
+      <label className="flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={!!c.multiStore}
+          onChange={(e) => setC({ ...c, multiStore: e.target.checked })}
+          className="h-4 w-4 accent-accent"
+        />
+        <span className="font-semibold text-white/90">
+          Multi-store (Steam / GOG / … przez ITAD — wymaga klucza ITAD)
+        </span>
+      </label>
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -62,8 +73,9 @@ export default function FreeGamesForm({
         {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
       </div>
       <p className="text-xs text-muted">
-        Bot co ~6 h sprawdza darmowe gry w Epic Games Store i ogłasza nowe na wybranym kanale
-        (publiczne API, bez klucza).
+        Bot co ~6 h sprawdza darmowe gry w Epic Games Store (publiczne API, bez klucza) i ogłasza
+        nowe na wybranym kanale. Z opcją <strong>multi-store</strong> dochodzą darmowe rozdania
+        (−100%) z innych sklepów (Steam/GOG/…) przez ITAD.
       </p>
     </div>
   );

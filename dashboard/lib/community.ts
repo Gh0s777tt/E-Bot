@@ -472,8 +472,12 @@ export async function saveAiModConfig(cfg: AiModConfig): Promise<void> {
 }
 
 // ── Free-games feed (Faza 7 / F9.1) ──
-export type FreeGamesConfig = { enabled: boolean; channelId: string };
-export const FREEGAMES_DEFAULT: FreeGamesConfig = { enabled: false, channelId: '' };
+export type FreeGamesConfig = { enabled: boolean; channelId: string; multiStore?: boolean };
+export const FREEGAMES_DEFAULT: FreeGamesConfig = {
+  enabled: false,
+  channelId: '',
+  multiStore: false,
+};
 
 export async function getFreeGamesConfig(): Promise<FreeGamesConfig> {
   const raw = await getRawSetting('freegames_config');
