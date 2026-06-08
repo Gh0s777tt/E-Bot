@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-146-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.78.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-147-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.79.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.79.0] — Liczniki YouTube: suby / wyświetlenia / filmy (3/4 z „rozwiń wszystko")
+
+- `[#147]` ▶️ **Liczniki kanałów YouTube** — trzy nowe typy liczników: **suby**, **wyświetlenia**, **filmy**. Bot pobiera dane z **YouTube Data API v3** (klucz `YOUTUBE_API_KEY`, **bez OAuth**), z cache per kanał (~9 min → jeden fetch obsługuje wiele liczników, oszczędza limit API). Przy błędzie/braku danych nazwa kanału **nie jest zerowana** (trzyma ostatnią dobrą wartość).
+  - 🎛️ W panelu (`/counters`) dochodzą 3 pozycje na liście typów + pole na **ID kanału (`UC…`) lub `@handle`** (puste = domyślny kanał z env bota).
+  - ⚠️ YouTube podaje liczbę subskrybentów publicznie **zaokrągloną** (np. 12,3 tys.). Suby/followy **Twitch** wciąż wymagają OAuth twórcy — niedostępne.
 
 ## [0.78.0] — Live-kafelki serwera na pulpicie (2/4 z „rozwiń wszystko")
 

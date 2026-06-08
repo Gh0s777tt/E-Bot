@@ -476,8 +476,12 @@ export const countersSchema = z.object({
           'emojis',
           'stickers',
           'voice',
+          'ytSubs',
+          'ytViews',
+          'ytVideos',
         ]),
         template: z.string().min(1).max(100),
+        arg: z.string().max(60).optional(),
       }),
     )
     .max(20),

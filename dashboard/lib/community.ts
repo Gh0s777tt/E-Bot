@@ -479,8 +479,11 @@ export type CounterType =
   | 'roles'
   | 'emojis'
   | 'stickers'
-  | 'voice';
-export type CounterItem = { channelId: string; type: CounterType; template: string };
+  | 'voice'
+  | 'ytSubs'
+  | 'ytViews'
+  | 'ytVideos';
+export type CounterItem = { channelId: string; type: CounterType; template: string; arg?: string };
 export type CountersConfig = { enabled: boolean; items: CounterItem[] };
 export const COUNTERS_DEFAULT: CountersConfig = { enabled: false, items: [] };
 

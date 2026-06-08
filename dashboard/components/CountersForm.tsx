@@ -22,7 +22,12 @@ const TYPES: { v: CounterType; l: string; tpl: string }[] = [
   { v: 'emojis', l: 'Emoji', tpl: '😀 Emoji: {count}' },
   { v: 'stickers', l: 'Naklejki', tpl: '🏷️ Naklejek: {count}' },
   { v: 'voice', l: 'Na voice (teraz)', tpl: '🎙️ Na voice: {count}' },
+  { v: 'ytSubs', l: '▶️ YouTube — suby', tpl: '▶️ Subów: {count}' },
+  { v: 'ytViews', l: '▶️ YouTube — wyświetlenia', tpl: '👁️ Wyświetleń: {count}' },
+  { v: 'ytVideos', l: '▶️ YouTube — filmy', tpl: '🎬 Filmów: {count}' },
 ];
+
+const isYt = (t: CounterType) => t === 'ytSubs' || t === 'ytViews' || t === 'ytVideos';
 
 export default function CountersForm({
   initial,
@@ -91,48 +96,60 @@ export default function CountersForm({
           </button>
         </div>
         {rows.map((r) => (
-          <div key={r.k} className="flex items-start gap-2">
-            <div className="w-44 shrink-0">
-              <ChannelSelect
-                value={r.channelId}
-                onChange={(v) =>
-                  setRows(rows.map((x) => (x.k === r.k ? { ...x, channelId: v } : x)))
+          <div key={r.k} className="space-y-1.5">
+            <div className="flex items-start gap-2">
+              <div className="w-44 shrink-0">
+                <ChannelSelect
+                  value={r.channelId}
+                  onChange={(v) =>
+                    setRows(rows.map((x) => (x.k === r.k ? { ...x, channelId: v } : x)))
+                  }
+                  channels={guild.channels}
+                  kind="voice"
+                />
+              </div>
+              <select
+                value={r.type}
+                onChange={(e) => {
+                  const type = e.target.value as CounterType;
+                  const tpl = TYPES.find((t) => t.v === type)?.tpl ?? r.template;
+                  setRows(rows.map((x) => (x.k === r.k ? { ...x, type, template: tpl } : x)));
+                }}
+                className={`${inputCls} w-36`}
+              >
+                {TYPES.map((t) => (
+                  <option key={t.v} value={t.v}>
+                    {t.l}
+                  </option>
+                ))}
+              </select>
+              <input
+                value={r.template}
+                onChange={(e) =>
+                  setRows(rows.map((x) => (x.k === r.k ? { ...x, template: e.target.value } : x)))
                 }
-                channels={guild.channels}
-                kind="voice"
+                placeholder="Szablon ({count})"
+                className={inputCls}
               />
+              <button
+                type="button"
+                onClick={() => setRows(rows.filter((x) => x.k !== r.k))}
+                className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
+                aria-label="Usuń"
+              >
+                <Trash2 size={14} />
+              </button>
             </div>
-            <select
-              value={r.type}
-              onChange={(e) => {
-                const type = e.target.value as CounterType;
-                const tpl = TYPES.find((t) => t.v === type)?.tpl ?? r.template;
-                setRows(rows.map((x) => (x.k === r.k ? { ...x, type, template: tpl } : x)));
-              }}
-              className={`${inputCls} w-36`}
-            >
-              {TYPES.map((t) => (
-                <option key={t.v} value={t.v}>
-                  {t.l}
-                </option>
-              ))}
-            </select>
-            <input
-              value={r.template}
-              onChange={(e) =>
-                setRows(rows.map((x) => (x.k === r.k ? { ...x, template: e.target.value } : x)))
-              }
-              placeholder="Szablon ({count})"
-              className={inputCls}
-            />
-            <button
-              type="button"
-              onClick={() => setRows(rows.filter((x) => x.k !== r.k))}
-              className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
-            >
-              <Trash2 size={14} />
-            </button>
+            {isYt(r.type) && (
+              <input
+                value={r.arg ?? ''}
+                onChange={(e) =>
+                  setRows(rows.map((x) => (x.k === r.k ? { ...x, arg: e.target.value } : x)))
+                }
+                placeholder="ID kanału YouTube (UC…) lub @handle — puste = domyślny z konfiguracji bota"
+                className={inputCls}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -153,6 +170,14 @@ export default function CountersForm({
         Najlepiej użyj <strong>zablokowanych kanałów głosowych</strong> (bez prawa łączenia) jako
         liczników. Zmienna <code>{'{count}'}</code> wstawia liczbę. Bot odświeża co ~10 min (limit
         Discorda na zmianę nazwy kanału). Potrzebuje uprawnienia <em>Zarządzanie kanałami</em>.
+      </p>
+      <p className="text-xs text-muted">
+        ▶️ <strong>YouTube</strong> (suby / wyświetlenia / filmy) — wymaga klucza{' '}
+        <code>YOUTUBE_API_KEY</code> w konfiguracji bota. W polu pod licznikiem wpisz{' '}
+        <strong>ID kanału</strong> (zaczyna się od <code>UC…</code>) albo <code>@handle</code> —
+        puste = domyślny kanał z env. <em>Uwaga:</em> YouTube podaje subskrybentów publicznie
+        zaokrąglone (np. 12,3 tys.). Suby/followy <strong>Twitch</strong> nadal wymagają OAuth
+        twórcy (niedostępne).
       </p>
     </div>
   );

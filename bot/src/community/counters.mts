@@ -14,15 +14,21 @@ type CounterType =
   | 'roles'
   | 'emojis'
   | 'stickers'
-  | 'voice';
-type Item = { channelId: string; type: CounterType; template: string };
+  | 'voice'
+  | 'ytSubs'
+  | 'ytViews'
+  | 'ytVideos';
+// `arg` = ID kanału YouTube (UC…) lub handle (@nazwa); puste → env YOUTUBE_LIVE_CHANNEL_ID/CHANNEL.
+type Item = { channelId: string; type: CounterType; template: string; arg?: string };
 type CountersConfig = { enabled: boolean; items: Item[] };
 
 const DEFAULT: CountersConfig = { enabled: false, items: [] };
 let cfg: CountersConfig = { ...DEFAULT };
 
+const YT_TYPES = new Set<CounterType>(['ytSubs', 'ytViews', 'ytVideos']);
+
 function refresh(): void {
-  const raw = getSettings()['counters_config'];
+  const raw = getSettings().counters_config;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<CountersConfig>) } : { ...DEFAULT };
   } catch {
@@ -57,6 +63,52 @@ function countOf(guild: Guild, type: CounterType): number {
   }
 }
 
+// ── YouTube Data API v3 — statystyki kanału (subs/views/videos). Klucz API, bez OAuth. ──
+// Cache per kanał (~9 min): jeden fetch obsługuje wszystkie 3 typy + wiele liczników tego kanału.
+type YtStats = { subs: number; views: number; videos: number; ts: number };
+const ytCache = new Map<string, YtStats>();
+
+async function ytStats(channelArg: string): Promise<YtStats | null> {
+  const key = process.env.YOUTUBE_API_KEY;
+  const id = channelArg || process.env.YOUTUBE_LIVE_CHANNEL_ID || process.env.YOUTUBE_CHANNEL || '';
+  if (!key || !id) return null;
+  const cached = ytCache.get(id);
+  if (cached && Date.now() - cached.ts < 540_000) return cached; // < 9 min → użyj cache
+  const sel = id.startsWith('@')
+    ? `forHandle=${encodeURIComponent(id)}`
+    : `id=${encodeURIComponent(id)}`;
+  const url = `https://www.googleapis.com/youtube/v3/channels?part=statistics&${sel}&key=${key}`;
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return cached ?? null; // przy błędzie zostaw ostatnią dobrą wartość
+    const d = (await r.json()) as {
+      items?: {
+        statistics?: { subscriberCount?: string; viewCount?: string; videoCount?: string };
+      }[];
+    };
+    const st = d.items?.[0]?.statistics;
+    if (!st) return cached ?? null;
+    const fresh: YtStats = {
+      subs: Number(st.subscriberCount ?? 0),
+      views: Number(st.viewCount ?? 0),
+      videos: Number(st.videoCount ?? 0),
+      ts: Date.now(),
+    };
+    ytCache.set(id, fresh);
+    return fresh;
+  } catch {
+    return cached ?? null;
+  }
+}
+
+async function ytCountOf(type: CounterType, arg?: string): Promise<number | null> {
+  const st = await ytStats(arg ?? '');
+  if (!st) return null;
+  if (type === 'ytViews') return st.views;
+  if (type === 'ytVideos') return st.videos;
+  return st.subs;
+}
+
 async function tick(client: Client): Promise<void> {
   if (!cfg.enabled) return;
   // humans/bots wymagają pełnej listy członków — dociągnij raz na serwer (GuildMembers intent).
@@ -70,7 +122,14 @@ async function tick(client: Client): Promise<void> {
       await ch.guild.members.fetch().catch(() => {});
       fetched.add(ch.guild.id);
     }
-    const name = it.template.replace('{count}', String(countOf(ch.guild, it.type))).slice(0, 100);
+    let count: number | null;
+    if (YT_TYPES.has(it.type)) {
+      count = await ytCountOf(it.type, it.arg);
+      if (count === null) continue; // brak klucza/danych YouTube → nie zeruj nazwy
+    } else {
+      count = countOf(ch.guild, it.type);
+    }
+    const name = it.template.replace('{count}', count.toLocaleString('pl-PL')).slice(0, 100);
     if (ch.name !== name) await ch.setName(name).catch(() => {});
   }
 }
