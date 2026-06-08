@@ -80,14 +80,3 @@ export async function fetchDiscordUser(
     avatar?: string | null;
   };
 }
-
-export function isAllowed(uid: string): boolean {
-  const owners = authConfig().owners;
-  // fail-closed: brak skonfigurowanych właścicieli = nikt nie wchodzi (zapobiega przypadkowo
-  // otwartemu panelowi, gdyby DASHBOARD_OWNER_IDS zniknął z env).
-  if (owners.length === 0) {
-    console.warn('[auth] DASHBOARD_OWNER_IDS nieustawiony — odmawiam dostępu (fail-closed).');
-    return false;
-  }
-  return owners.includes(uid);
-}

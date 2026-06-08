@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-124-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.67.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-125-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.67.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.67.1] — Porządki: lint gate w 100% czysty
+
+- `[#125]` 🧹 **Housekeeping** — usunięto martwą funkcję `isAllowed` (zastąpiona przez `resolveRole` przy wprowadzeniu ról) oraz dostęp przez literał `all['notify_channel_id']` → `all.notify_channel_id`. `biome ci dashboard web` przechodzi bez żadnych uwag. Zero zmian funkcjonalnych. (Przy okazji naprawiony realny powód, dla którego deploye bota nie wchodziły — `railway up` musi startować z roota repo; szczegóły w pamięci projektu.)
 
 ## [0.67.0] — Uprawnienia panelu: role admin / editor / viewer (multi-user)
 

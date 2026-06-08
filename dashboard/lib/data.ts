@@ -345,7 +345,7 @@ export async function getSetupChecklist(): Promise<ChecklistItem[]> {
   return [
     {
       label: 'Powiadomienia o streamach',
-      done: !!all['notify_channel_id'],
+      done: !!all.notify_channel_id,
       href: '/notifications',
       hint: 'Kanał alertów live',
     },
