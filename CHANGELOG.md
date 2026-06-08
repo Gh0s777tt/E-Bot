@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-134-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.70.3-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-135-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.71.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.71.0] — Tryb focus (ukryj menu, pełna szerokość)
+
+- `[#135]` 🖥️ **Tryb focus** — przycisk w pasku górnym oraz akcja w palecie **Ctrl-K** chowają boczne menu, dając treści pełną szerokość do skupionej pracy. Stan zapamiętany (`localStorage`), bez mignięcia przy starcie (inline-script), spójny z trybami Kompakt / Kapitaliki.
 
 ## [0.70.3] — Polish UI: liczniki + glass topbar
 

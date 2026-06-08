@@ -1,7 +1,15 @@
 'use client';
 
 import type { LucideIcon } from 'lucide-react';
-import { ArrowUp, CornerDownLeft, Download, Minimize2, Search, Type } from 'lucide-react';
+import {
+  ArrowUp,
+  CornerDownLeft,
+  Download,
+  Maximize2,
+  Minimize2,
+  Search,
+  Type,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NAV_ITEMS } from './nav-items';
@@ -74,6 +82,14 @@ export default function CommandPalette() {
         group: 'Akcja',
         icon: Type,
         run: () => toggleClass('smallcaps'),
+      },
+      {
+        id: 'act:focus',
+        label: 'Tryb focus (ukryj menu boczne)',
+        group: 'Akcja',
+        icon: Maximize2,
+        kw: 'focus pełny ekran wide',
+        run: () => toggleClass('focus-mode'),
       },
       {
         id: 'act:backup',

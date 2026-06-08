@@ -16,7 +16,7 @@ export default function Shell({ children, inviteUrl }: { children: ReactNode; in
     <div className="relative z-10 flex min-h-screen">
       <CommandPalette />
       <Sidebar />
-      <div className="min-w-0 flex-1 md:pl-60">
+      <div className="content-pane min-w-0 flex-1 md:pl-60">
         <Topbar inviteUrl={inviteUrl} />
         <main className="mx-auto max-w-7xl px-5 py-6 md:px-8">
           <ModuleBar />

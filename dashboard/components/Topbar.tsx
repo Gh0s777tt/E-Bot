@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, Minimize2, Search, Type, UserPlus } from 'lucide-react';
+import { LogOut, Maximize2, Minimize2, Search, Type, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MobileNav from './MobileNav';
@@ -71,6 +71,21 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
     setSmallcaps(next);
   }
 
+  const [focus, setFocus] = useState(false);
+  useEffect(() => {
+    setFocus(document.documentElement.classList.contains('focus-mode'));
+  }, []);
+  function toggleFocus() {
+    const next = !document.documentElement.classList.contains('focus-mode');
+    document.documentElement.classList.toggle('focus-mode', next);
+    try {
+      localStorage.setItem('focusmode', next ? '1' : '0');
+    } catch {
+      /* brak localStorage */
+    }
+    setFocus(next);
+  }
+
   // „Glass" + cień gdy strona przewinięta
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -131,6 +146,14 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
           className={`hidden items-center gap-1.5 rounded-md border px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex ${smallcaps ? 'border-accent text-accent' : 'border-line'}`}
         >
           <Type size={13} /> Aa
+        </button>
+        <button
+          type="button"
+          onClick={toggleFocus}
+          title={focus ? 'Pokaż menu boczne' : 'Tryb focus (ukryj menu)'}
+          className={`hidden items-center gap-1.5 rounded-md border px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex ${focus ? 'border-accent text-accent' : 'border-line'}`}
+        >
+          <Maximize2 size={13} />
         </button>
         <a
           href={inviteUrl}

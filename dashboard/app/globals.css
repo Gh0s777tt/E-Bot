@@ -323,6 +323,14 @@ html.compact h2 {
   margin-bottom: 0.6rem;
 }
 
+/* ── Tryb focus (opt-in przez html.focus-mode) — chowa boczne menu, treść na pełną szerokość ── */
+html.focus-mode aside {
+  display: none;
+}
+html.focus-mode .content-pane {
+  padding-left: 0;
+}
+
 /* ── Smallcaps w UI (opt-in przez html.smallcaps) — nagłówki w kapitalikach ──────── */
 html.smallcaps h1,
 html.smallcaps h2,
