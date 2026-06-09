@@ -1020,6 +1020,76 @@ const INFO_DESC: Record<Locale, Record<string, string>> = {
   },
 };
 
+// Opisy /slowmode /lock /unlock (Etap C — mod-utils) — dołożone do COMMAND_DESC niżej.
+const MOD2_DESC: Record<Locale, Record<string, string>> = {
+  pl: {
+    slowmode: 'Ustaw tryb wolny (slowmode) na kanale.',
+    lock: 'Zablokuj pisanie na kanale.',
+    unlock: 'Odblokuj pisanie na kanale.',
+  },
+  en: {
+    slowmode: 'Set channel slowmode.',
+    lock: 'Lock a channel (no sending).',
+    unlock: 'Unlock a channel.',
+  },
+  de: {
+    slowmode: 'Slowmodus für den Kanal festlegen.',
+    lock: 'Kanal sperren (kein Schreiben).',
+    unlock: 'Kanal entsperren.',
+  },
+  es: {
+    slowmode: 'Configura el modo lento del canal.',
+    lock: 'Bloquea un canal (sin escribir).',
+    unlock: 'Desbloquea un canal.',
+  },
+  it: {
+    slowmode: 'Imposta la modalità lenta del canale.',
+    lock: 'Blocca un canale (nessun invio).',
+    unlock: 'Sblocca un canale.',
+  },
+  fr: {
+    slowmode: 'Règle le mode lent du salon.',
+    lock: 'Verrouille un salon (pas de messages).',
+    unlock: 'Déverrouille un salon.',
+  },
+  pt: {
+    slowmode: 'Define o modo lento do canal.',
+    lock: 'Bloqueia um canal (sem enviar).',
+    unlock: 'Desbloqueia um canal.',
+  },
+  zh: { slowmode: '设置频道慢速模式。', lock: '锁定频道（禁止发言）。', unlock: '解锁频道。' },
+  ko: {
+    slowmode: '채널 슬로우 모드를 설정합니다.',
+    lock: '채널을 잠급니다 (전송 불가).',
+    unlock: '채널 잠금을 해제합니다.',
+  },
+  ru: {
+    slowmode: 'Установить медленный режим канала.',
+    lock: 'Заблокировать канал (нельзя писать).',
+    unlock: 'Разблокировать канал.',
+  },
+  uk: {
+    slowmode: 'Встановити повільний режим каналу.',
+    lock: 'Заблокувати канал (без повідомлень).',
+    unlock: 'Розблокувати канал.',
+  },
+  ja: {
+    slowmode: 'チャンネルの低速モードを設定します。',
+    lock: 'チャンネルをロックします（送信不可）。',
+    unlock: 'チャンネルのロックを解除します。',
+  },
+  ar: {
+    slowmode: 'ضبط الوضع البطيء للقناة.',
+    lock: 'قفل قناة (منع الإرسال).',
+    unlock: 'فتح قناة.',
+  },
+  id: {
+    slowmode: 'Atur mode lambat kanal.',
+    lock: 'Kunci kanal (tidak bisa kirim).',
+    unlock: 'Buka kunci kanal.',
+  },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1028,6 +1098,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], SEARCH_DESC[l]);
   Object.assign(COMMAND_DESC[l], PERSONA_DESC[l]);
   Object.assign(COMMAND_DESC[l], INFO_DESC[l]);
+  Object.assign(COMMAND_DESC[l], MOD2_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-193-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.124.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-194-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.125.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.125.0] — 🛡️ Mod-utils: /slowmode /lock /unlock · Etap C (8/?)
+
+- `[#194]` 🛡️ **Trzy narzędzia moderacji kanału** (uzupełniają `/mod` warn/ban/timeout/clear…):
+  - 🐌 **`/slowmode <sekundy>`** — tryb wolny 0–21600 s (0 = wyłącz), z czytelnym czasem (np. `10s`, `5min`, `1h`).
+  - 🔒 **`/lock [kanał]`** — blokuje pisanie (`@everyone` → SendMessages = false).
+  - 🔓 **`/unlock [kanał]`** — przywraca pisanie (SendMessages = dziedzicz).
+  Uprawnienia: **Zarządzanie kanałami**, błędy z przyjaznym komunikatem o brakujących uprawnieniach bota. Komplementarne do `/lockdown` (cały serwer). 5 kluczy i18n (`strings.mod2.mts` ×14) + `MOD2_DESC` ×14. Ósma fala Etapu C. Nowe komendy → rejestracja globalna po deployu.
 
 ## [0.124.0] — 🪪 Pakiet info: /avatar /userinfo /serverinfo · Etap C (7/?)
 

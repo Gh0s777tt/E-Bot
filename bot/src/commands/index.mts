@@ -30,6 +30,7 @@ import * as invites from './invites.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
 import * as linktwitch from './linktwitch.mts';
+import * as lock from './lock.mts';
 import * as lockdown from './lockdown.mts';
 import * as lottery from './lottery.mts';
 import * as market from './market.mts';
@@ -52,6 +53,7 @@ import * as schedule from './schedule.mts';
 import * as search from './search.mts';
 import * as serverinfo from './serverinfo.mts';
 import * as skins from './skins.mts';
+import * as slowmode from './slowmode.mts';
 import * as sticky from './sticky.mts';
 import * as suggest from './suggest.mts';
 import * as ticket from './ticket.mts';
@@ -60,6 +62,7 @@ import * as tldr from './tldr.mts';
 import * as translate from './translate.mts';
 import * as trivia from './trivia.mts';
 import * as tutorial from './tutorial.mts';
+import * as unlock from './unlock.mts';
 import * as userinfo from './userinfo.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
@@ -137,6 +140,9 @@ export const commands: Command[] = [
   avatar,
   userinfo,
   serverinfo,
+  slowmode,
+  lock,
+  unlock,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji
