@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-183-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.114.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-184-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.115.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.115.0] — 📖 Opisy „co/po co" na każdej stronie panelu · Etap A „Przyjazność" (2/?)
+
+- `[#184]` 📖 **Opisy modułów w panelu.** Każda strona dostaje pod tytułem **1-zdaniowy opis „co robi / kiedy włączyć"** (centralny rejestr `dashboard/lib/pageInfo.ts`, ~37 stron), renderowany automatycznie w `GlobalPageHeader` — bez ruszania pojedynczych stron. Użytkownik od razu rozumie, do czego służy moduł i po co go włączyć. _(Tooltipy ⓘ przy polach formularzy oraz i18n UI panelu — kolejne fale.)_
 
 ## [0.114.0] — 🆘 /help — interaktywny hub pomocy (14 języków) · Etap A „Przyjazność" (1/?)
 
