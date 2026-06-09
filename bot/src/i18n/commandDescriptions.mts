@@ -910,11 +910,30 @@ const FAREWELL_DESC: Record<Locale, Record<string, string>> = {
   id: { farewell: 'Pesan perpisahan dan ucapan terima kasih boost server.' },
 };
 
+// Opis /search (Etap C) — dołożony do COMMAND_DESC w pętli niżej.
+const SEARCH_DESC: Record<Locale, Record<string, string>> = {
+  pl: { search: 'Szukaj w Wikipedii, grach (IGDB) lub na YouTube.' },
+  en: { search: 'Search Wikipedia, games (IGDB) or YouTube.' },
+  de: { search: 'Suche in Wikipedia, Spielen (IGDB) oder YouTube.' },
+  es: { search: 'Busca en Wikipedia, juegos (IGDB) o YouTube.' },
+  it: { search: 'Cerca su Wikipedia, giochi (IGDB) o YouTube.' },
+  fr: { search: 'Cherche sur Wikipédia, les jeux (IGDB) ou YouTube.' },
+  pt: { search: 'Pesquise na Wikipédia, jogos (IGDB) ou YouTube.' },
+  zh: { search: '搜索维基百科、游戏（IGDB）或 YouTube。' },
+  ko: { search: '위키백과, 게임(IGDB), YouTube에서 검색합니다.' },
+  ru: { search: 'Поиск в Википедии, играх (IGDB) или на YouTube.' },
+  uk: { search: 'Пошук у Вікіпедії, іграх (IGDB) або на YouTube.' },
+  ja: { search: 'Wikipedia・ゲーム（IGDB）・YouTube を検索します。' },
+  ar: { search: 'ابحث في ويكيبيديا أو الألعاب (IGDB) أو يوتيوب.' },
+  id: { search: 'Cari di Wikipedia, game (IGDB), atau YouTube.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
   Object.assign(COMMAND_DESC[l], POLL2_DESC[l]);
   Object.assign(COMMAND_DESC[l], FAREWELL_DESC[l]);
+  Object.assign(COMMAND_DESC[l], SEARCH_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

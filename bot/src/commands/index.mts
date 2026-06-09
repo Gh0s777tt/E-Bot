@@ -47,6 +47,7 @@ import * as rewrite from './rewrite.mts';
 import * as rolemenu from './rolemenu.mts';
 import * as rps from './rps.mts';
 import * as schedule from './schedule.mts';
+import * as search from './search.mts';
 import * as skins from './skins.mts';
 import * as sticky from './sticky.mts';
 import * as suggest from './suggest.mts';
@@ -127,6 +128,7 @@ export const commands: Command[] = [
   lockdown,
   sticky,
   farewell,
+  search,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

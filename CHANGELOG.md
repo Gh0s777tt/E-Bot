@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-190-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.121.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-191-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.122.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.122.0] — 🔎 /search — Wikipedia / gry / YouTube · Etap C (5/?)
+
+- `[#191]` 🔎 **`/search` — wyszukiwarka w 3 źródłach** (opcja `zrodlo`):
+  - 📖 **Wikipedia** (domyślnie) — **bez klucza**, pełnia wyników w **języku użytkownika** (subdomena `{locale}.wikipedia.org`), z miniaturą i linkiem.
+  - 🎮 **Gra (IGDB)** — reużywa istniejące creds Twitch (`twitchToken()` + `TWITCH_CLIENT_ID`); rok wydania, ocena, okładka, opis.
+  - ▶️ **YouTube** — `YOUTUBE_API_KEY`.
+  Źródła wymagające kluczy działają jako **graceful no-op** (gdy brak klucza → przyjazny komunikat „admin doda później", zero crasha) — zgodnie z zasadą „klucze na końcu". `deferReply` + timeout 8 s + try/catch. 3 klucze i18n (`strings.search.mts` ×14) + opis (`SEARCH_DESC` ×14). Piąta fala Etapu C. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.121.0] — 👋 Pożegnania + 💜 podziękowania za boost (/farewell) · Etap C (4/?)
 

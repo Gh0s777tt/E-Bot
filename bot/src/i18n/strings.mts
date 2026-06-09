@@ -11,6 +11,7 @@ import { HELP_STRINGS } from './strings.help.mts';
 import { MOD_STRINGS } from './strings.mod.mts';
 import { POLL2_STRINGS } from './strings.poll2.mts';
 import { PROFILE_STRINGS } from './strings.profile.mts';
+import { SEARCH_STRINGS } from './strings.search.mts';
 import { SOCIAL_STRINGS } from './strings.social.mts';
 import { STICKY_STRINGS } from './strings.sticky.mts';
 import { TUTORIAL_STRINGS } from './strings.tutorial.mts';
@@ -401,6 +402,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], MOD_STRINGS[l]);
   Object.assign(DICTS[l], POLL2_STRINGS[l]);
   Object.assign(DICTS[l], PROFILE_STRINGS[l]);
+  Object.assign(DICTS[l], SEARCH_STRINGS[l]);
   Object.assign(DICTS[l], SOCIAL_STRINGS[l]);
   Object.assign(DICTS[l], STICKY_STRINGS[l]);
   Object.assign(DICTS[l], TUTORIAL_STRINGS[l]);
