@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-180-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.111.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-181-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.112.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.112.0] — 🌍 Wielojęzyczność (7/?): moderacja /mod + /case na t()
+
+- `[#181]` 🌍 **Tłumaczenia — moderacja.** **`/mod`** (9 podkomend: warn / timeout / kick / ban / tempban / unban / note / clear / warnings) + **`/case`** (user / recent) na **14 języków** — 31 kluczy w `strings.mod.mts`. Odpowiedzi do moderatora → jego język (`resolveLocale`); **mod-log embed + DM ostrzeżenia** → język serwera (`resolveGuildLocale` — spójny log na kanale + DM do celu, którego locale nie znamy). Logika akcji moderacyjnych bez zmian; kody akcji w mod-logu (WARN/BAN/…) zostają tokenami.
 
 ## [0.111.0] — 🌍 Wielojęzyczność (6/?): profil + rank (karty Latin-safe)
 

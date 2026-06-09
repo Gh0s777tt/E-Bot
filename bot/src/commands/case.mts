@@ -1,4 +1,5 @@
 // /case — historia spraw moderacyjnych (Supabase 'mod_cases'). Gate: ModerateMembers.
+// i18n: efemeryczne (tylko moderator) → resolveLocale. Kody akcji (warn/ban/…) zostają tokenami.
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -6,6 +7,7 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from 'discord.js';
+import { type Locale, resolveLocale, t } from '../i18n/index.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 
 type Case = {
@@ -35,9 +37,9 @@ function fmt(d: string): string {
   return new Date(d).toLocaleString('pl-PL', { dateStyle: 'short', timeStyle: 'short' });
 }
 
-function line(c: Case): string {
+function line(c: Case, locale: Locale): string {
   const mod = c.moderator_name ? ` · ${c.moderator_name}` : '';
-  return `${EMOJI[c.action] ?? '•'} **${c.action}** \`#${c.id.slice(0, 8)}\` — ${c.reason || '(brak powodu)'}\n   ${fmt(c.created_at)}${mod}`;
+  return `${EMOJI[c.action] ?? '•'} **${c.action}** \`#${c.id.slice(0, 8)}\` — ${c.reason || t(locale, 'mod.noReason')}\n   ${fmt(c.created_at)}${mod}`;
 }
 
 export const data = new SlashCommandBuilder()
@@ -53,13 +55,17 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((s) => s.setName('recent').setDescription('Ostatnie sprawy na serwerze'));
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   if (!interaction.guild) {
-    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: t(locale, 'error.guildOnly'),
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
   if (!hasCloud()) {
     await interaction.reply({
-      content: '❌ Historia spraw wymaga chmury (Supabase + mod-cases-schema.sql).',
+      content: t(locale, 'case.needCloud'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -82,10 +88,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         .join('  ') || '—';
     const embed = new EmbedBuilder()
       .setColor(0xe50914)
-      .setTitle(`📋 Sprawy: ${user.username}`)
+      .setTitle(t(locale, 'case.userTitle', { username: user.username }))
       .setThumbnail(user.displayAvatarURL())
-      .setDescription(rows.length ? rows.map(line).join('\n\n') : 'Brak spraw.')
-      .setFooter({ text: `Razem: ${rows.length} · ${summary}` });
+      .setDescription(
+        rows.length ? rows.map((c) => line(c, locale)).join('\n\n') : t(locale, 'case.noCases'),
+      )
+      .setFooter({ text: t(locale, 'case.footer', { count: rows.length, summary }) });
     await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     return;
   }
@@ -97,7 +105,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   );
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
-    .setTitle('📋 Ostatnie sprawy')
+    .setTitle(t(locale, 'case.recentTitle'))
     .setDescription(
       rows.length
         ? rows
@@ -106,7 +114,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
                 `${EMOJI[c.action] ?? '•'} **${c.action}** — ${c.username || c.user_id || '—'} \`#${c.id.slice(0, 8)}\``,
             )
             .join('\n')
-        : 'Brak spraw.',
+        : t(locale, 'case.noCases'),
     );
   await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
 }
