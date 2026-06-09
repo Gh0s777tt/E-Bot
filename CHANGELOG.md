@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-198-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.129.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-199-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.130.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.130.0] — 🤖 /aiserver — AI-kreator serwera · Etap D (5/?)
+
+- `[#199]` 🤖 **`/aiserver <opis>` — AI projektuje i tworzy strukturę serwera.** Opisujesz serwer słowami (np. _„klan CS2 z sekcją turniejów i streamów"_), a **istniejący silnik AI** zwraca plan (kategorie + kanały + role w JSON), który bot od razu **tworzy**. „`/blueprint` na sterydach" — nieograniczony do gotowych szablonów.
+  - Limity bezpieczeństwa: do **4 kategorii × 6 kanałów + 6 ról**, nazwy ucinane do 90 zn., odporne parsowanie JSON (ignoruje śmieci wokół).
+  - **Graceful**: gdy AI wyłączone / brak klucza → przyjazny komunikat; gdy zły opis → prośba o prostszy; gdy brak uprawnień bota → info. Perm: **Zarządzanie serwerem**.
+  Reużywa `lib/ai.mts` (klucz AI już skonfigurowany w projekcie). 3 klucze i18n (`strings.aiserver.mts` ×14) + `AISERVER_DESC`. Piąta fala Etapu D — domyka rdzeń Architekta v2. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.129.0] — 🧩 /blueprint — galeria szablonów serwera · Etap D (4/?)
 

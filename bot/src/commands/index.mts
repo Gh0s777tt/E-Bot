@@ -2,6 +2,7 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 import { applyCommandLocalizations } from '../i18n/commandDescriptions.mts';
 import * as afk from './afk.mts';
 import * as ai from './ai.mts';
+import * as aiserver from './aiserver.mts';
 import * as antinuke from './antinuke.mts';
 import * as applypanel from './applypanel.mts';
 import * as ask from './ask.mts';
@@ -151,6 +152,7 @@ export const commands: Command[] = [
   roleperms,
   rolecopy,
   blueprint,
+  aiserver,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

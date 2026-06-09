@@ -1162,6 +1162,24 @@ const BLUEPRINT_DESC: Record<Locale, Record<string, string>> = {
   id: { blueprint: 'Buat satu set kanal dari template.' },
 };
 
+// Opis /aiserver (Etap D — AI-kreator serwera) — dołożony do COMMAND_DESC niżej.
+const AISERVER_DESC: Record<Locale, Record<string, string>> = {
+  pl: { aiserver: 'AI zaprojektuje i utworzy strukturę serwera z opisu.' },
+  en: { aiserver: 'AI designs and builds your server layout from a description.' },
+  de: { aiserver: 'KI entwirft und erstellt die Serverstruktur aus einer Beschreibung.' },
+  es: { aiserver: 'La IA diseña y crea la estructura del servidor desde una descripción.' },
+  it: { aiserver: "L'IA progetta e crea la struttura del server da una descrizione." },
+  fr: { aiserver: 'IA crée la structure du serveur depuis une description.' },
+  pt: { aiserver: 'A IA cria a estrutura do servidor a partir de uma descrição.' },
+  zh: { aiserver: 'AI 根据描述设计并创建服务器结构。' },
+  ko: { aiserver: 'AI가 설명을 바탕으로 서버 구조를 설계하고 만듭니다.' },
+  ru: { aiserver: 'ИИ спроектирует и создаст структуру сервера из описания.' },
+  uk: { aiserver: 'ШІ спроєктує та створить структуру сервера з опису.' },
+  ja: { aiserver: 'AI が説明からサーバー構造を設計・作成します。' },
+  ar: { aiserver: 'يصمّم الذكاء الاصطناعي بنية الخادم وينشئها من وصفك.' },
+  id: { aiserver: 'AI merancang dan membuat struktur server dari deskripsi.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1175,6 +1193,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], ROLEPRESET_DESC[l]);
   Object.assign(COMMAND_DESC[l], ROLECOPY_DESC[l]);
   Object.assign(COMMAND_DESC[l], BLUEPRINT_DESC[l]);
+  Object.assign(COMMAND_DESC[l], AISERVER_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
