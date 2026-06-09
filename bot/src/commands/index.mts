@@ -16,6 +16,7 @@ import * as economy from './economy.mts';
 import * as event from './event.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
+import * as help from './help.mts';
 import * as highlight from './highlight.mts';
 import * as hof from './hof.mts';
 import * as imagine from './imagine.mts';
@@ -108,6 +109,7 @@ export const commands: Command[] = [
   confess,
   xpevent,
   event,
+  help,
   lockdown,
 ];
 

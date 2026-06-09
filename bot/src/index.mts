@@ -20,6 +20,7 @@ import { startRealtimeSync } from './cloud/realtime.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
 import { handleCustomCommand } from './commands/customCommands.mts';
+import { handleHelpSelect } from './commands/help.mts';
 import { type Command, commands } from './commands/index.mts';
 import { startAfk } from './community/afk.mts';
 import { startAiDigest } from './community/aidigest.mts';
@@ -231,7 +232,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
     return;
   }
   if (interaction.isStringSelectMenu()) {
-    await handleRoleMenu(interaction).catch((err) => console.error('select:', err));
+    const h = interaction.customId.startsWith('help:')
+      ? handleHelpSelect(interaction)
+      : handleRoleMenu(interaction);
+    await h.catch((err) => console.error('select:', err));
     return;
   }
   if (!interaction.isChatInputCommand()) return;

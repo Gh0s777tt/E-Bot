@@ -5,6 +5,7 @@
 import { LOCALES, type Locale } from './locales.mts';
 import { BJ_STRINGS } from './strings.bj.mts';
 import { ECO_STRINGS } from './strings.eco.mts';
+import { HELP_STRINGS } from './strings.help.mts';
 import { MOD_STRINGS } from './strings.mod.mts';
 import { PROFILE_STRINGS } from './strings.profile.mts';
 import { SOCIAL_STRINGS } from './strings.social.mts';
@@ -388,6 +389,7 @@ export const DICTS: Record<Locale, Dict> = {
 // Dołącz słowniki modułów (osobne pliki) do każdego języka — mniej szumu w tym pliku.
 for (const l of LOCALES) {
   Object.assign(DICTS[l], ECO_STRINGS[l]);
+  Object.assign(DICTS[l], HELP_STRINGS[l]);
   Object.assign(DICTS[l], BJ_STRINGS[l]);
   Object.assign(DICTS[l], MOD_STRINGS[l]);
   Object.assign(DICTS[l], PROFILE_STRINGS[l]);

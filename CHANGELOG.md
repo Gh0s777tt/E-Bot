@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-182-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.113.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-183-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.114.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.114.0] — 🆘 /help — interaktywny hub pomocy (14 języków) · Etap A „Przyjazność" (1/?)
+
+- `[#183]` 🆘 **`/help` — interaktywny przeglądacz wszystkich komend.** Embed z **menu kategorii** (10 grup: Moderacja · Poziomy · Ekonomia · Społeczność · Twórca · Zabawa · AI · Gry · Narzędzia · Panele); wybór kategorii pokazuje jej komendy z **opisami „co robią"** — reużyte z `COMMAND_DESC`, więc **14 języków za darmo**. Efemeryczny, na `StringSelect` (routing `help:cat` w dispatcherze), w pełni zlokalizowany. Domyka brak `/help` (luka vs MEE6/Dyno) i startuje **Etap A — Przyjazność** z `docs/ANALIZA-FUNKCJI.md`. Nowa komenda → rejestracja globalna po deployu.
+- 📊 Dodano **`docs/ANALIZA-FUNKCJI.md`** — pełna analiza funkcji vs konkurencja + roadmapa (Etapy A–E): co jest, czego brakuje, ulepszenia UX, Architekt v2, tutorial, 3 tryby panelu.
 
 ## [0.113.0] — 🌍 Wielojęzyczność (8/?): /suggest /poll /birthday /trivia(UI) na t()
 
