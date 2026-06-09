@@ -856,7 +856,28 @@ const FUN2_DESC: Record<Locale, Record<string, string>> = {
   },
 };
 
-for (const l of LOCALES) Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
+// Opis /sticky (Etap C) — dołożony do COMMAND_DESC w pętli niżej.
+const STICKY_DESC: Record<Locale, Record<string, string>> = {
+  pl: { sticky: 'Przypnij wiadomość trzymającą się dołu kanału.' },
+  en: { sticky: 'Pin a message that sticks to the bottom of the channel.' },
+  de: { sticky: 'Eine Nachricht anpinnen, die unten im Kanal bleibt.' },
+  es: { sticky: 'Fija un mensaje que se mantiene al final del canal.' },
+  it: { sticky: 'Fissa un messaggio che resta in fondo al canale.' },
+  fr: { sticky: 'Épingle un message qui reste en bas du salon.' },
+  pt: { sticky: 'Fixe uma mensagem que fica no final do canal.' },
+  zh: { sticky: '置顶一条始终保持在频道底部的消息。' },
+  ko: { sticky: '채널 맨 아래에 유지되는 메시지를 고정합니다.' },
+  ru: { sticky: 'Закрепить сообщение, которое держится внизу канала.' },
+  uk: { sticky: 'Закріпити повідомлення, що тримається внизу каналу.' },
+  ja: { sticky: 'チャンネルの一番下に固定され続けるメッセージを設定します。' },
+  ar: { sticky: 'تثبيت رسالة تبقى في أسفل القناة.' },
+  id: { sticky: 'Sematkan pesan yang tetap berada di bagian bawah channel.' },
+};
+
+for (const l of LOCALES) {
+  Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
+  Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
+}
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
 // w index.mts opisuje tylko { name, toJSON }).

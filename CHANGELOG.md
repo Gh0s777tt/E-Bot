@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-187-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.118.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-188-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.119.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.119.0] — 📌 Sticky messages — /sticky (14 języków) · Etap C (2/?)
+
+- `[#188]` 📌 **Przypięte wiadomości (`/sticky`)** — wiadomość, która **trzyma się dołu kanału**: gdy ktoś napisze, bot kasuje poprzednią kopię i wysyła ją na nowo na dół (czerwony embed). Podkomendy: **`set`** (treść do 2000 zn.), **`clear`**, **`list`** (kanały z aktywnym sticky na tym serwerze). Uprawnienia: **Zarządzanie serwerem**. Wydajność: **debounce 3 s na kanał** (burst czatu = jeden repost, bezpieczne dla rate-limitów), kasowanie starej kopii dopiero po wysłaniu nowej (brak migotania). Config trzymany w `settings.sticky_config` (JSON), nowy moduł `bot/src/sticky.mts` (listener `MessageCreate`) + `commands/sticky.mts`. UI i opis w **14 językach** (`strings.sticky.mts`, `STICKY_DESC`). Druga fala Etapu C. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.118.0] — 🎉 Fun-pack: /rps /flip /dadjoke /cat /dog (14 języków) · Etap C (1/?)
 

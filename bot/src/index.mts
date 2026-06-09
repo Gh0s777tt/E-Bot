@@ -69,6 +69,7 @@ import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
 import { handleVerifyButton, handleVerifyModal } from './security/verification.mts';
 import { startProvision } from './setup/provision.mts';
+import { startSticky } from './sticky.mts';
 import { handleTicketButton, handleTicketModal } from './tickets/interactions.mts';
 import { startTicketSla } from './tickets/sla.mts';
 import { startWelcome } from './welcome.mts';
@@ -194,6 +195,7 @@ client.once(Events.ClientReady, (c) => {
   startGiveaways(c); // Faza 6 / B5 — giveawaye /giveaway
   startStarboard(c); // Faza 6 / B5 — starboard ⭐
   startTempVoice(c); // Faza 6 / B5 — kanały głosowe na żądanie
+  startSticky(c); // Etap C — przypięte wiadomości (/sticky)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(
