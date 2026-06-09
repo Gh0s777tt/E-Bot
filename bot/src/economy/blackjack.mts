@@ -1,5 +1,6 @@
 // Tor 4 — blackjack: interaktywna gra (przyciski Dobierz/Pas). Stawka pobierana z góry,
-// wypłata przy rozliczeniu. Stan gry w pamięci (klucz guild:user).
+// wypłata przy rozliczeniu. Stan gry w pamięci (klucz guild:user). Lokalizacja: język gracza
+// (resolveLocale działa też na interakcjach przyciskowych — klikać może tylko właściciel gry).
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -10,6 +11,7 @@ import {
   MessageFlags,
 } from 'discord.js';
 import { bumpQuest } from '../community/quests.mts';
+import { type Locale, resolveLocale, t } from '../i18n/index.mts';
 import { ecoConfig, fmt, getUser, saveUser } from './store.mts';
 
 const ACCENT = 0xe50914;
@@ -53,31 +55,33 @@ function val(cards: Card[]): number {
 
 const hand = (cards: Card[]): string => cards.map((c) => `${c.r}${c.s}`).join('  ');
 
-function view(g: Game, reveal: boolean, desc: string): EmbedBuilder {
+function view(g: Game, reveal: boolean, desc: string, locale: Locale): EmbedBuilder {
   return new EmbedBuilder()
     .setColor(ACCENT)
-    .setTitle('🃏 Blackjack')
+    .setTitle(t(locale, 'bj.title'))
     .setDescription(desc)
     .addFields(
-      { name: `Twoje karty (${val(g.player)})`, value: hand(g.player) },
+      { name: t(locale, 'bj.yourCards', { val: val(g.player) }), value: hand(g.player) },
       {
-        name: reveal ? `Krupier (${val(g.dealer)})` : 'Krupier',
+        name: reveal
+          ? t(locale, 'bj.dealer', { val: val(g.dealer) })
+          : t(locale, 'bj.dealerHidden'),
         value: reveal ? hand(g.dealer) : `${g.dealer[0].r}${g.dealer[0].s}  🂠`,
       },
     );
 }
 
-function row(disabled = false): ActionRowBuilder<ButtonBuilder> {
+function row(locale: Locale, disabled = false): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId('bj:hit')
-      .setLabel('Dobierz')
+      .setLabel(t(locale, 'bj.hit'))
       .setEmoji('🃏')
       .setStyle(ButtonStyle.Primary)
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId('bj:stand')
-      .setLabel('Pas')
+      .setLabel(t(locale, 'bj.stand'))
       .setEmoji('✋')
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(disabled),
@@ -89,11 +93,12 @@ export async function startBlackjack(
   gid: string,
   bet: number,
 ): Promise<void> {
+  const locale = resolveLocale(interaction);
   const cur = ecoConfig().currency;
   const u = await getUser(gid, interaction.user.id);
   if (u.wallet < bet) {
     await interaction.reply({
-      content: `Masz za mało (${fmt(u.wallet, cur)}).`,
+      content: t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) }),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -128,25 +133,26 @@ export async function startBlackjack(
     });
     bumpQuest(gid, interaction.user.id, 'gamesWon');
     await interaction.reply({
-      embeds: [view(g, true, `🃏 **Blackjack!** Wygrywasz ${fmt(winBonus, cur)}.`)],
+      embeds: [view(g, true, t(locale, 'bj.blackjack', { amount: fmt(winBonus, cur) }), locale)],
     });
     return;
   }
 
   games.set(key(gid, interaction.user.id), g);
   await interaction.reply({
-    embeds: [view(g, false, `Stawka: ${fmt(bet, cur)}`)],
-    components: [row()],
+    embeds: [view(g, false, t(locale, 'bj.bet', { bet: fmt(bet, cur) }), locale)],
+    components: [row(locale)],
   });
 }
 
 export async function handleBlackjackButton(interaction: ButtonInteraction): Promise<void> {
   const gid = interaction.guildId;
   if (!gid) return;
+  const locale = resolveLocale(interaction);
   const g = games.get(key(gid, interaction.user.id));
   if (!g) {
     await interaction.reply({
-      content: 'To nie Twoja gra (albo już się zakończyła). Zagraj: `/eco blackjack`.',
+      content: t(locale, 'bj.notYours'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -158,14 +164,14 @@ export async function handleBlackjackButton(interaction: ButtonInteraction): Pro
     if (val(g.player) > 21) {
       games.delete(key(gid, interaction.user.id));
       await interaction.update({
-        embeds: [view(g, true, `💥 Przebicie! Tracisz ${fmt(g.bet, cur)}.`)],
-        components: [row(true)],
+        embeds: [view(g, true, t(locale, 'bj.bust', { amount: fmt(g.bet, cur) }), locale)],
+        components: [row(locale, true)],
       });
       return;
     }
     await interaction.update({
-      embeds: [view(g, false, `Stawka: ${fmt(g.bet, cur)}`)],
-      components: [row()],
+      embeds: [view(g, false, t(locale, 'bj.bet', { bet: fmt(g.bet, cur) }), locale)],
+      components: [row(locale)],
     });
     return;
   }
@@ -179,13 +185,13 @@ export async function handleBlackjackButton(interaction: ButtonInteraction): Pro
   let result = '';
   if (dv > 21 || pv > dv) {
     payout = g.bet * 2;
-    result = `✅ Wygrywasz ${fmt(g.bet, cur)}!`;
+    result = t(locale, 'bj.win', { amount: fmt(g.bet, cur) });
     bumpQuest(gid, interaction.user.id, 'gamesWon');
   } else if (pv === dv) {
     payout = g.bet;
-    result = '🤝 Remis — zwrot stawki.';
+    result = t(locale, 'bj.push');
   } else {
-    result = `❌ Krupier wygrywa. Tracisz ${fmt(g.bet, cur)}.`;
+    result = t(locale, 'bj.lose', { amount: fmt(g.bet, cur) });
   }
   if (payout > 0) {
     const nu = await getUser(gid, interaction.user.id);
@@ -196,5 +202,8 @@ export async function handleBlackjackButton(interaction: ButtonInteraction): Pro
       wallet: nu.wallet + payout,
     });
   }
-  await interaction.update({ embeds: [view(g, true, result)], components: [row(true)] });
+  await interaction.update({
+    embeds: [view(g, true, result, locale)],
+    components: [row(locale, true)],
+  });
 }

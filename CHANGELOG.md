@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-178-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.109.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-179-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.110.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.110.0] — 🌍 Wielojęzyczność (5/?): blackjack-UI → ekonomia w 100% na t()
+
+- `[#179]` 🌍 **Tłumaczenia — blackjack.** Interaktywny **blackjack** (`/eco blackjack`, gra przyciskami **Dobierz/Pas**) zlokalizowany na **14 języków**: embed (tytuł, „Twoje karty"/„Krupier"), etykiety przycisków i wszystkie wyniki (blackjack / przebicie / wygrana / remis / przegrana). 13 kluczy w osobnym `strings.bj.mts`. **Domyka ekonomię w 100%** — całe `/eco` + gra blackjacka mówi w języku gracza (`resolveLocale` działa też na interakcjach przyciskowych; klikać może tylko właściciel gry). Logika gry bez zmian; `eco.low` reużyte między modułami.
 
 ## [0.109.0] — 🌍 Wielojęzyczność (4/?): cała ekonomia /eco na t() (15 podkomend × 14 jęz.)
 
