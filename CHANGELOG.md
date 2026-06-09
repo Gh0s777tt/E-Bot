@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-181-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.112.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-182-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.113.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.113.0] — 🌍 Wielojęzyczność (8/?): /suggest /poll /birthday /trivia(UI) na t()
+
+- `[#182]` 🌍 **Tłumaczenia — komendy społecznościowe.** **`/suggest`** (+ publiczny embed sugestii), **`/poll`** (ankieta + tak/nie), **`/birthday`** (set/clear), **`/trivia`** (UI: footer, feedback przyciskowy, embed wyniku) na **14 języków** — 22 klucze w `strings.social.mts`. Treści publiczne (embed sugestii, embedy trivii) → `resolveGuildLocale`; feedback gracza w quizie → `resolveLocale(buttonInteraction)`. **Bank pytań `/trivia` zostaje PL** — kategoria „Polska" jest kulturowo polska (osobny język = osobny bank pytań). `/fun` (banki prawd/wyzwań/wolałbyś/8ball) → następna, dedykowana fala.
 
 ## [0.112.0] — 🌍 Wielojęzyczność (7/?): moderacja /mod + /case na t()
 

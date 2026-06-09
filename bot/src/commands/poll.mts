@@ -5,6 +5,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 
 const NUM = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
@@ -22,6 +23,7 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   const q = interaction.options.getString('pytanie', true);
   const opts = (interaction.options.getString('opcje') ?? '')
     .split('|')
@@ -32,7 +34,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
     .setTitle(`📊 ${q}`)
-    .setFooter({ text: `Ankieta • ${interaction.user.username}` })
+    .setFooter({ text: t(locale, 'poll.footer', { username: interaction.user.username }) })
     .setTimestamp(new Date());
 
   let emojis: string[];
@@ -40,14 +42,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     embed.setDescription(opts.map((o, i) => `${NUM[i]} ${o}`).join('\n'));
     emojis = opts.map((_, i) => NUM[i]);
   } else {
-    embed.setDescription('👍 Tak\n👎 Nie');
+    embed.setDescription(t(locale, 'poll.yesNo'));
     emojis = ['👍', '👎'];
   }
 
   const ch = interaction.channel;
   if (!ch || !('send' in ch)) {
     await interaction.reply({
-      content: 'Tu nie można utworzyć ankiety.',
+      content: t(locale, 'poll.cantCreate'),
       flags: MessageFlags.Ephemeral,
     });
     return;

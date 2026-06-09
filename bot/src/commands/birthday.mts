@@ -1,5 +1,6 @@
 // /birthday — ustaw/usuń swoje urodziny (ogłaszane przez poller z community/birthdays.mts).
 import { type ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { cloudDelete, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 
 const MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -31,13 +32,17 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((s) => s.setName('clear').setDescription('Usuń swoje urodziny'));
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   if (!interaction.guild) {
-    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: t(locale, 'error.guildOnly'),
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
   if (!hasCloud()) {
     await interaction.reply({
-      content: '❌ Urodziny wymagają chmury (Supabase + _ALL.sql).',
+      content: t(locale, 'birthday.needCloud'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -49,7 +54,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       `guild_id=eq.${interaction.guildId}&user_id=eq.${interaction.user.id}`,
     ).catch(() => {});
     await interaction.reply({
-      content: '🗑️ Usunięto Twoje urodziny.',
+      content: t(locale, 'birthday.cleared'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -59,7 +64,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const month = interaction.options.getInteger('miesiac', true);
   if (day > MONTH_DAYS[month - 1]) {
     await interaction.reply({
-      content: '❌ Ten miesiąc nie ma tylu dni.',
+      content: t(locale, 'birthday.badDay'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -78,7 +83,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     'guild_id,user_id',
   ).catch((e) => console.warn('[birthday]', (e as Error).message));
   await interaction.reply({
-    content: `🎂 Zapisano urodziny: **${day}.${month}**.`,
+    content: t(locale, 'birthday.saved', { day, month }),
     flags: MessageFlags.Ephemeral,
   });
 }

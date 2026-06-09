@@ -1,4 +1,5 @@
 // /suggest — zgłoś sugestię na kanał sugestii (głosowanie reakcjami + decyzje moderacji).
+// i18n: efemeryczne potwierdzenia → język nadawcy; publiczny embed na kanale → resolveGuildLocale.
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -7,6 +8,7 @@ import {
   type TextChannel,
 } from 'discord.js';
 import { STATUS, suggestionModRow, suggestionsConfig } from '../community/suggestions.mts';
+import { resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
 import { cloudInsert, hasCloud } from '../lib/cloud.mts';
 
 export const data = new SlashCommandBuilder()
@@ -17,34 +19,42 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   const cfg = suggestionsConfig();
   if (!interaction.guild) {
-    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: t(locale, 'error.guildOnly'),
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
   if (!cfg.enabled || !cfg.channelId) {
-    await interaction.reply({ content: '⚠️ Sugestie są wyłączone.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: t(locale, 'suggest.disabled'),
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
   const content = interaction.options.getString('tresc', true);
   const ch = await interaction.guild.channels.fetch(cfg.channelId).catch(() => null);
   if (!ch?.isTextBased() || !('send' in ch)) {
     await interaction.reply({
-      content: '❌ Kanał sugestii jest nieprawidłowy (ustaw go w panelu).',
+      content: t(locale, 'suggest.badChannel'),
       flags: MessageFlags.Ephemeral,
     });
     return;
   }
+  const glocale = resolveGuildLocale();
   const embed = new EmbedBuilder()
     .setColor(STATUS.open.color)
-    .setTitle('💡 Sugestia')
+    .setTitle(t(glocale, 'suggest.embedTitle'))
     .setDescription(content)
     .setAuthor(
       cfg.anonymous
-        ? { name: 'Anonimowa sugestia' }
+        ? { name: t(glocale, 'suggest.anonymous') }
         : { name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() },
     )
-    .addFields({ name: 'Status', value: STATUS.open.label, inline: true })
+    .addFields({ name: t(glocale, 'suggest.statusField'), value: STATUS.open.label, inline: true })
     .setTimestamp(new Date());
 
   const msg = await (ch as TextChannel)
@@ -52,7 +62,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     .catch(() => null);
   if (!msg) {
     await interaction.reply({
-      content: '❌ Nie udało się opublikować (sprawdź uprawnienia bota na kanale).',
+      content: t(locale, 'suggest.publishFail'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -73,7 +83,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     ]).catch((e) => console.warn('[suggest]', (e as Error).message));
   }
   await interaction.reply({
-    content: `✅ Sugestia wysłana: <#${cfg.channelId}>`,
+    content: t(locale, 'suggest.sent', { channel: `<#${cfg.channelId}>` }),
     flags: MessageFlags.Ephemeral,
   });
 }

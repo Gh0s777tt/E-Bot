@@ -12,6 +12,7 @@ import {
 } from 'discord.js';
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
+import { resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
@@ -204,12 +205,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     { ogolna: 'Ogólna', gaming: 'Gaming', film: 'Film/Seriale', nauka: 'Nauka', polska: 'Polska' }[
       q.cat
     ] ?? q.cat;
+  const glocale = resolveGuildLocale();
 
   const embed = new EmbedBuilder()
     .setColor(ACCENT)
     .setTitle(`🧠 Trivia — ${catName}`)
     .setDescription(`**${q.q}**\n\n${q.a.map((opt, i) => `**${LABELS[i]}.** ${opt}`).join('\n')}`)
-    .setFooter({ text: `Masz 25 s • nagroda ${REWARD} ${cur} dla pierwszego` });
+    .setFooter({ text: t(glocale, 'trivia.footer', { reward: `${REWARD} ${cur}` }) });
 
   await interaction.reply({ embeds: [embed], components: [row(false)] });
   const msg = await interaction.fetchReply();
@@ -219,9 +221,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const collector = msg.createMessageComponentCollector({ time: 25_000 });
 
   collector.on('collect', async (i: ButtonInteraction) => {
+    const il = resolveLocale(i);
     if (answered.has(i.user.id)) {
       await i.reply({
-        content: 'Już odpowiedziałeś na to pytanie.',
+        content: t(il, 'trivia.already'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -229,11 +232,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     answered.add(i.user.id);
     const choice = Number(i.customId.split(':')[1]);
     if (choice !== q.c) {
-      await i.reply({ content: '❌ Niestety, to zła odpowiedź.', flags: MessageFlags.Ephemeral });
+      await i.reply({ content: t(il, 'trivia.wrong'), flags: MessageFlags.Ephemeral });
       return;
     }
     if (winner) {
-      await i.reply({ content: '⚡ Ktoś był szybszy!', flags: MessageFlags.Ephemeral });
+      await i.reply({ content: t(il, 'trivia.tooSlow'), flags: MessageFlags.Ephemeral });
       return;
     }
     winner = i.user.id;
@@ -249,7 +252,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       logTx(interaction.guildId, i.user.id, REWARD, 'trivia');
       extra = ` +${fmt(REWARD, cur)}`;
     }
-    await i.reply({ content: `✅ Dobrze! Wygrywasz!${extra}`, flags: MessageFlags.Ephemeral });
+    await i.reply({ content: t(il, 'trivia.correct', { extra }), flags: MessageFlags.Ephemeral });
     collector.stop('won');
   });
 
@@ -258,8 +261,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .setColor(ACCENT)
       .setTitle(`🧠 Trivia — ${catName}`)
       .setDescription(
-        `**${q.q}**\n\n✅ Poprawna odpowiedź: **${LABELS[q.c]}. ${q.a[q.c]}**\n\n${
-          winner ? `🏆 Wygrywa <@${winner}>!` : '⏱️ Nikt nie odpowiedział poprawnie.'
+        `**${q.q}**\n\n${t(glocale, 'trivia.answer', { label: LABELS[q.c], answer: q.a[q.c] })}\n\n${
+          winner ? t(glocale, 'trivia.winner', { winner }) : t(glocale, 'trivia.noWinner')
         }`,
       );
     await msg.edit({ embeds: [done], components: [row(true, q.c)] }).catch(() => {});

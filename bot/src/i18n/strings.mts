@@ -7,6 +7,7 @@ import { BJ_STRINGS } from './strings.bj.mts';
 import { ECO_STRINGS } from './strings.eco.mts';
 import { MOD_STRINGS } from './strings.mod.mts';
 import { PROFILE_STRINGS } from './strings.profile.mts';
+import { SOCIAL_STRINGS } from './strings.social.mts';
 
 type Dict = Record<string, string>;
 
@@ -390,4 +391,5 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], BJ_STRINGS[l]);
   Object.assign(DICTS[l], MOD_STRINGS[l]);
   Object.assign(DICTS[l], PROFILE_STRINGS[l]);
+  Object.assign(DICTS[l], SOCIAL_STRINGS[l]);
 }
