@@ -9,11 +9,15 @@ import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
+import * as cat from './cat.mts';
 import * as confess from './confess.mts';
+import * as dadjoke from './dadjoke.mts';
 import * as describe from './describe.mts';
+import * as dog from './dog.mts';
 import * as donate from './donate.mts';
 import * as economy from './economy.mts';
 import * as event from './event.mts';
+import * as flip from './flip.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
 import * as help from './help.mts';
@@ -40,6 +44,7 @@ import * as remind from './remind.mts';
 import * as rep from './rep.mts';
 import * as rewrite from './rewrite.mts';
 import * as rolemenu from './rolemenu.mts';
+import * as rps from './rps.mts';
 import * as schedule from './schedule.mts';
 import * as skins from './skins.mts';
 import * as suggest from './suggest.mts';
@@ -98,6 +103,11 @@ export const commands: Command[] = [
   backlog,
   hof,
   fun,
+  rps,
+  flip,
+  dadjoke,
+  cat,
+  dog,
   invites,
   linktwitch,
   lottery,

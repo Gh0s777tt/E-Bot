@@ -753,6 +753,111 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   },
 };
 
+// Opisy fun-packu (/rps /flip /dadjoke /cat /dog) — dołożone do COMMAND_DESC w pętli niżej,
+// żeby nie wchodzić w 14 osobnych bloków lokali.
+const FUN2_DESC: Record<Locale, Record<string, string>> = {
+  pl: {
+    rps: 'Kamień, papier, nożyce z botem.',
+    flip: 'Rzut monetą — orzeł czy reszka.',
+    dadjoke: 'Losowy suchar (żart) — po angielsku.',
+    cat: 'Losowe zdjęcie kota. 🐱',
+    dog: 'Losowe zdjęcie psa. 🐶',
+  },
+  en: {
+    rps: 'Rock, paper, scissors against the bot.',
+    flip: 'Flip a coin — heads or tails.',
+    dadjoke: 'A random dad joke (in English).',
+    cat: 'A random cat photo. 🐱',
+    dog: 'A random dog photo. 🐶',
+  },
+  de: {
+    rps: 'Schere, Stein, Papier gegen den Bot.',
+    flip: 'Münzwurf — Kopf oder Zahl.',
+    dadjoke: 'Ein zufälliger Flachwitz (auf Englisch).',
+    cat: 'Ein zufälliges Katzenfoto. 🐱',
+    dog: 'Ein zufälliges Hundefoto. 🐶',
+  },
+  es: {
+    rps: 'Piedra, papel o tijera contra el bot.',
+    flip: 'Lanza una moneda: cara o cruz.',
+    dadjoke: 'Un chiste malo al azar (en inglés).',
+    cat: 'Una foto de gato al azar. 🐱',
+    dog: 'Una foto de perro al azar. 🐶',
+  },
+  it: {
+    rps: 'Sasso, carta, forbici contro il bot.',
+    flip: 'Lancia una moneta: testa o croce.',
+    dadjoke: 'Una battuta da papà casuale (in inglese).',
+    cat: 'Una foto di gatto casuale. 🐱',
+    dog: 'Una foto di cane casuale. 🐶',
+  },
+  fr: {
+    rps: 'Pierre, feuille, ciseaux contre le bot.',
+    flip: 'Lance une pièce : pile ou face.',
+    dadjoke: 'Une blague de papa au hasard (en anglais).',
+    cat: 'Une photo de chat au hasard. 🐱',
+    dog: 'Une photo de chien au hasard. 🐶',
+  },
+  pt: {
+    rps: 'Pedra, papel e tesoura contra o bot.',
+    flip: 'Jogue uma moeda: cara ou coroa.',
+    dadjoke: 'Uma piada de tiozão aleatória (em inglês).',
+    cat: 'Uma foto de gato aleatória. 🐱',
+    dog: 'Uma foto de cachorro aleatória. 🐶',
+  },
+  zh: {
+    rps: '和机器人玩石头剪刀布。',
+    flip: '抛硬币——正面还是反面。',
+    dadjoke: '随机冷笑话（英文）。',
+    cat: '随机猫咪图片。🐱',
+    dog: '随机狗狗图片。🐶',
+  },
+  ko: {
+    rps: '봇과 가위바위보 대결.',
+    flip: '동전 던지기 — 앞면 또는 뒷면.',
+    dadjoke: '랜덤 아재 개그 (영어).',
+    cat: '랜덤 고양이 사진. 🐱',
+    dog: '랜덤 강아지 사진. 🐶',
+  },
+  ru: {
+    rps: 'Камень, ножницы, бумага против бота.',
+    flip: 'Бросок монеты — орёл или решка.',
+    dadjoke: 'Случайный бородатый анекдот (на английском).',
+    cat: 'Случайное фото кота. 🐱',
+    dog: 'Случайное фото пса. 🐶',
+  },
+  uk: {
+    rps: 'Камінь, ножиці, папір проти бота.',
+    flip: 'Підкидання монети — орел чи решка.',
+    dadjoke: 'Випадковий батьківський жарт (англійською).',
+    cat: 'Випадкове фото котика. 🐱',
+    dog: 'Випадкове фото песика. 🐶',
+  },
+  ja: {
+    rps: 'ボットとじゃんけん勝負。',
+    flip: 'コイントス — 表か裏か。',
+    dadjoke: 'ランダムなおやじギャグ（英語）。',
+    cat: 'ランダムなねこの写真。🐱',
+    dog: 'ランダムないぬの写真。🐶',
+  },
+  ar: {
+    rps: 'حجر، ورقة، مقص ضد البوت.',
+    flip: 'رمي العملة — صورة أو كتابة.',
+    dadjoke: 'نكتة سمجة عشوائية (بالإنجليزية).',
+    cat: 'صورة قطة عشوائية. 🐱',
+    dog: 'صورة كلب عشوائية. 🐶',
+  },
+  id: {
+    rps: 'Batu, kertas, gunting melawan bot.',
+    flip: 'Lempar koin — kepala atau ekor.',
+    dadjoke: 'Lelucon receh acak (bahasa Inggris).',
+    cat: 'Foto kucing acak. 🐱',
+    dog: 'Foto anjing acak. 🐶',
+  },
+};
+
+for (const l of LOCALES) Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
+
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
 // w index.mts opisuje tylko { name, toJSON }).
 type LocalizableBuilder = {

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-186-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.117.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-187-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.118.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.118.0] — 🎉 Fun-pack: /rps /flip /dadjoke /cat /dog (14 języków) · Etap C (1/?)
+
+- `[#187]` 🎉 **Pięć nowych komend rozrywkowych** — pełna lokalizacja (14 języków) UI i opisów:
+  - ✊✋✌️ **`/rps`** — kamień, papier, nożyce z botem (czysta logika, wynik z embedem Ty vs Bot).
+  - 🪙 **`/flip`** — rzut monetą (orzeł / reszka).
+  - 😄 **`/dadjoke`** — losowy suchar z `icanhazdadjoke.com` (darmowe API, bez klucza).
+  - 🐱 **`/cat`** — losowe zdjęcie kota (TheCatAPI; opcjonalny `CAT_API_KEY` aktywuje wyższe limity).
+  - 🐶 **`/dog`** — losowe zdjęcie psa (`dog.ceo`, bez klucza).
+  Komendy z API mają **graceful fail** (`deferReply` + try/catch + timeout 8 s → przyjazny komunikat błędu, bez crasha). 19 kluczy UI w nowym `strings.fun2.mts` + 5×14 opisów w `commandDescriptions.mts` (osobny `FUN2_DESC` z merge-loopem). Startuje **Etap C — Zabawa & zaangażowanie** z `docs/ANALIZA-FUNKCJI.md`. Nowe komendy → rejestracja globalna po deployu. _(Banki treści `/fun`, Polls v2, sticky, AI-postacie — kolejne fale Etapu C.)_
 
 ## [0.117.0] — 🎛️ 3 tryby dashboardu (Prosty / Zaawansowany / Developer) · Etap B (1/?)
 
