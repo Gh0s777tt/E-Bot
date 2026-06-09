@@ -1090,6 +1090,24 @@ const MOD2_DESC: Record<Locale, Record<string, string>> = {
   },
 };
 
+// Opis /healthcheck (Etap D — health-check) — dołożony do COMMAND_DESC niżej.
+const HEALTH_DESC: Record<Locale, Record<string, string>> = {
+  pl: { healthcheck: 'Audyt bezpieczeństwa i konfiguracji serwera.' },
+  en: { healthcheck: 'Audit your server security and setup.' },
+  de: { healthcheck: 'Sicherheit & Einrichtung des Servers prüfen.' },
+  es: { healthcheck: 'Audita la seguridad y configuración del servidor.' },
+  it: { healthcheck: 'Controlla sicurezza e configurazione del server.' },
+  fr: { healthcheck: 'Audite la sécurité et la configuration du serveur.' },
+  pt: { healthcheck: 'Audite a segurança e configuração do servidor.' },
+  zh: { healthcheck: '审计服务器的安全与配置。' },
+  ko: { healthcheck: '서버 보안과 설정을 점검합니다.' },
+  ru: { healthcheck: 'Аудит безопасности и настроек сервера.' },
+  uk: { healthcheck: 'Аудит безпеки та налаштувань сервера.' },
+  ja: { healthcheck: 'サーバーのセキュリティと設定を診断します。' },
+  ar: { healthcheck: 'تدقيق أمان الخادم وإعداداته.' },
+  id: { healthcheck: 'Audit keamanan dan konfigurasi server.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1099,6 +1117,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], PERSONA_DESC[l]);
   Object.assign(COMMAND_DESC[l], INFO_DESC[l]);
   Object.assign(COMMAND_DESC[l], MOD2_DESC[l]);
+  Object.assign(COMMAND_DESC[l], HEALTH_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

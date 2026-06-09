@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-194-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.125.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-195-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.126.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.126.0] — 🩺 /healthcheck — audyt serwera · Etap D start (1/?)
+
+- `[#195]` 🩺 **`/healthcheck` — audyt bezpieczeństwa i konfiguracji serwera.** Pierwszy klocek **Etapu D (Architekt v2)**. Sprawdza **8 obszarów** i zwraca kartę z wynikiem **0–100** (zielony/żółty/czerwony):
+  - 🔐 poziom weryfikacji · 🖼️ filtr treści (skan mediów) · ⚠️ **ryzykowne uprawnienia `@everyone`** (Administrator, Ban, Zarządzanie…) · 🔑 2FA dla moderacji · 🔔 domyślne powiadomienia · 🤖 pozycja roli bota · 📜 kanał zasad · 🌐 tryb społeczności.
+  Czyta wyłącznie stan z Discord API (zero zapisów), perm: **Zarządzanie serwerem**. Etykiety/werdykty w **14 językach** (`strings.health.mts` 12 kluczy + `HEALTH_DESC`). Otwiera Etap D health-checkiem. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.125.0] — 🛡️ Mod-utils: /slowmode /lock /unlock · Etap C (8/?)
 

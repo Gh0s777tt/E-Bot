@@ -7,6 +7,7 @@ import { BJ_STRINGS } from './strings.bj.mts';
 import { ECO_STRINGS } from './strings.eco.mts';
 import { FAREWELL_STRINGS } from './strings.farewell.mts';
 import { FUN2_STRINGS } from './strings.fun2.mts';
+import { HEALTH_STRINGS } from './strings.health.mts';
 import { HELP_STRINGS } from './strings.help.mts';
 import { INFO_STRINGS } from './strings.info.mts';
 import { MOD_STRINGS } from './strings.mod.mts';
@@ -400,6 +401,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], ECO_STRINGS[l]);
   Object.assign(DICTS[l], FAREWELL_STRINGS[l]);
   Object.assign(DICTS[l], FUN2_STRINGS[l]);
+  Object.assign(DICTS[l], HEALTH_STRINGS[l]);
   Object.assign(DICTS[l], HELP_STRINGS[l]);
   Object.assign(DICTS[l], INFO_STRINGS[l]);
   Object.assign(DICTS[l], BJ_STRINGS[l]);
