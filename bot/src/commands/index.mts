@@ -8,6 +8,7 @@ import * as ask from './ask.mts';
 import * as avatar from './avatar.mts';
 import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
+import * as blueprint from './blueprint.mts';
 import * as buttonpanel from './buttonpanel.mts';
 import * as caseCmd from './case.mts';
 import * as cat from './cat.mts';
@@ -149,6 +150,7 @@ export const commands: Command[] = [
   healthcheck,
   roleperms,
   rolecopy,
+  blueprint,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

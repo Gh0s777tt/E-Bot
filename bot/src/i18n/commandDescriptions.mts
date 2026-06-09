@@ -1144,6 +1144,24 @@ const ROLECOPY_DESC: Record<Locale, Record<string, string>> = {
   id: { rolecopy: 'Salin pengaturan satu peran ke peran lain.' },
 };
 
+// Opis /blueprint (Etap D — galeria szablonów) — dołożony do COMMAND_DESC niżej.
+const BLUEPRINT_DESC: Record<Locale, Record<string, string>> = {
+  pl: { blueprint: 'Utwórz gotowy zestaw kanałów z szablonu.' },
+  en: { blueprint: 'Create a ready set of channels from a template.' },
+  de: { blueprint: 'Fertigen Kanalsatz aus einer Vorlage erstellen.' },
+  es: { blueprint: 'Crea un conjunto de canales desde una plantilla.' },
+  it: { blueprint: 'Crea un set di canali da un modello.' },
+  fr: { blueprint: 'Crée un ensemble de salons depuis un modèle.' },
+  pt: { blueprint: 'Crie um conjunto de canais a partir de um modelo.' },
+  zh: { blueprint: '从模板创建一组现成的频道。' },
+  ko: { blueprint: '템플릿으로 채널 묶음을 만듭니다.' },
+  ru: { blueprint: 'Создать готовый набор каналов из шаблона.' },
+  uk: { blueprint: 'Створити готовий набір каналів із шаблону.' },
+  ja: { blueprint: 'テンプレートからチャンネル一式を作成します。' },
+  ar: { blueprint: 'إنشاء مجموعة قنوات جاهزة من قالب.' },
+  id: { blueprint: 'Buat satu set kanal dari template.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1156,6 +1174,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], HEALTH_DESC[l]);
   Object.assign(COMMAND_DESC[l], ROLEPRESET_DESC[l]);
   Object.assign(COMMAND_DESC[l], ROLECOPY_DESC[l]);
+  Object.assign(COMMAND_DESC[l], BLUEPRINT_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

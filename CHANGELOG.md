@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-197-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.128.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-198-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.129.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.129.0] — 🧩 /blueprint — galeria szablonów serwera · Etap D (4/?)
+
+- `[#198]` 🧩 **`/blueprint` — gotowe szablony serwera** (Architekt v2). Jednym poleceniem tworzy **kategorię + zestaw kanałów** dla wybranego motywu:
+  - 🎮 **Gaming** — announcements, general, looking-for-group, clips + Game Voice.
+  - 🏠 **Społeczność** — rules, welcome, general, media, bot-commands + General Voice.
+  - 🛟 **Wsparcie** — info, faq, open-a-ticket + Help Desk.
+  Nazwy kanałów uniwersalne (emoji), działa w każdym języku. Błędy (np. brak uprawnień bota) → przyjazny komunikat. Perm: **Zarządzanie serwerem**. 2 klucze i18n (`strings.blueprint.mts` ×14) + `BLUEPRINT_DESC`. Czwarta fala Etapu D — pierwszy namacalny „szablon serwera". Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.128.0] — 📋 /rolecopy — klonowanie ustawień roli · Etap D (3/?)
 
