@@ -49,6 +49,7 @@ import * as remind from './remind.mts';
 import * as rep from './rep.mts';
 import * as rewrite from './rewrite.mts';
 import * as rolemenu from './rolemenu.mts';
+import * as roleperms from './roleperms.mts';
 import * as rps from './rps.mts';
 import * as schedule from './schedule.mts';
 import * as search from './search.mts';
@@ -145,6 +146,7 @@ export const commands: Command[] = [
   lock,
   unlock,
   healthcheck,
+  roleperms,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

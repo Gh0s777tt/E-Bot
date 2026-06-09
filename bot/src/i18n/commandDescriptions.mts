@@ -1108,6 +1108,24 @@ const HEALTH_DESC: Record<Locale, Record<string, string>> = {
   id: { healthcheck: 'Audit keamanan dan konfigurasi server.' },
 };
 
+// Opis /roleperms (Etap D — presety uprawnień ról) — dołożony do COMMAND_DESC niżej.
+const ROLEPRESET_DESC: Record<Locale, Record<string, string>> = {
+  pl: { roleperms: 'Ustaw uprawnienia roli z gotowego presetu.' },
+  en: { roleperms: 'Set role permissions from a preset.' },
+  de: { roleperms: 'Rollenrechte aus einer Vorlage setzen.' },
+  es: { roleperms: 'Aplica permisos de rol desde un preajuste.' },
+  it: { roleperms: 'Imposta i permessi di un ruolo da un preset.' },
+  fr: { roleperms: 'Applique les permissions de rôle depuis un préréglage.' },
+  pt: { roleperms: 'Defina permissões de cargo a partir de um preset.' },
+  zh: { roleperms: '从预设设置身份组权限。' },
+  ko: { roleperms: '프리셋으로 역할 권한을 설정합니다.' },
+  ru: { roleperms: 'Установить права роли из пресета.' },
+  uk: { roleperms: 'Встановити права ролі з пресету.' },
+  ja: { roleperms: 'プリセットからロール権限を設定します。' },
+  ar: { roleperms: 'ضبط صلاحيات الرتبة من إعداد جاهز.' },
+  id: { roleperms: 'Atur izin peran dari preset.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1118,6 +1136,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], INFO_DESC[l]);
   Object.assign(COMMAND_DESC[l], MOD2_DESC[l]);
   Object.assign(COMMAND_DESC[l], HEALTH_DESC[l]);
+  Object.assign(COMMAND_DESC[l], ROLEPRESET_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

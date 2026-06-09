@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-195-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.126.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-196-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.127.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.127.0] — 🎚️ /roleperms — presety uprawnień ról · Etap D (2/?)
+
+- `[#196]` 🎚️ **`/roleperms` — gotowe pakiety uprawnień dla roli** (Architekt v2). Jednym kliknięciem ustawia bazowe uprawnienia roli z presetu:
+  - 👀 **Guest** — tylko podgląd (oglądanie + historia + połączenie głosowe).
+  - 💬 **Member** — czat + głos (pisanie, wątki, reakcje, załączniki, mówienie…).
+  - 🛡️ **Moderator** — Member + moderacja (kick/ban/timeout, zarządzanie wiadomościami/nickami/wątkami, log audytu…).
+  - 👑 **Admin** — Administrator.
+  Sprawdza **hierarchię** (rola bota musi być wyżej) i typ roli (blokuje role zarządzane + `@everyone`); przy błędzie podaje przyjazny powód. Perm: **Zarządzanie rolami**. 3 klucze i18n (`strings.rolepreset.mts` ×14) + `ROLEPRESET_DESC`. Druga fala Etapu D. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.126.0] — 🩺 /healthcheck — audyt serwera · Etap D start (1/?)
 
