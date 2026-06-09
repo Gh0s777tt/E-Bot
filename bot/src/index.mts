@@ -22,6 +22,7 @@ import { startTicketSync } from './cloud/ticket-sync.mts';
 import { handleCustomCommand } from './commands/customCommands.mts';
 import { handleHelpSelect } from './commands/help.mts';
 import { type Command, commands } from './commands/index.mts';
+import { handleTutorialButton } from './commands/tutorial.mts';
 import { startAfk } from './community/afk.mts';
 import { startAiDigest } from './community/aidigest.mts';
 import { startAiHelp } from './community/aihelp.mts';
@@ -218,7 +219,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
               ? handleQuestButton(interaction)
               : id.startsWith('app:')
                 ? handleApplicationButton(interaction)
-                : handleButton(interaction);
+                : id.startsWith('tut:')
+                  ? handleTutorialButton(interaction)
+                  : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }

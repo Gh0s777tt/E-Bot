@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-184-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.115.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-185-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.116.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.116.0] — 🎓 /tutorial — interaktywny onboarding (14 języków) · Etap A „Przyjazność" (3/?)
+
+- `[#185]` 🎓 **`/tutorial` — interaktywny samouczek krok po kroku.** 6 kroków na przyciskach (**◀ Wstecz / Dalej ▶ / ✅ Zakończ**): powitanie → profil & ekonomia → poziomy → zabawa → AI → „przeglądaj `/help`, admini zacznijcie od `/setup`". Efemeryczny, w **14 językach**, stan kroku zakodowany w customId `tut:go:N` (routing `tut:` w dispatcherze). Przyjazne wprowadzenie nowych użytkowników. _(Auto-DM do admina po dodaniu bota + checklista z nagrodą eko — kolejna fala.)_ Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.115.0] — 📖 Opisy „co/po co" na każdej stronie panelu · Etap A „Przyjazność" (2/?)
 

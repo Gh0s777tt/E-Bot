@@ -9,6 +9,7 @@ import { HELP_STRINGS } from './strings.help.mts';
 import { MOD_STRINGS } from './strings.mod.mts';
 import { PROFILE_STRINGS } from './strings.profile.mts';
 import { SOCIAL_STRINGS } from './strings.social.mts';
+import { TUTORIAL_STRINGS } from './strings.tutorial.mts';
 
 type Dict = Record<string, string>;
 
@@ -394,4 +395,5 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], MOD_STRINGS[l]);
   Object.assign(DICTS[l], PROFILE_STRINGS[l]);
   Object.assign(DICTS[l], SOCIAL_STRINGS[l]);
+  Object.assign(DICTS[l], TUTORIAL_STRINGS[l]);
 }
