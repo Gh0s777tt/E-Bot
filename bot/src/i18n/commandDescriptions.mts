@@ -874,9 +874,28 @@ const STICKY_DESC: Record<Locale, Record<string, string>> = {
   id: { sticky: 'Sematkan pesan yang tetap berada di bagian bawah channel.' },
 };
 
+// Aktualizacja opisu /poll (Polls v2 — natywne ankiety) — nadpisuje stary „reakcjami".
+const POLL2_DESC: Record<Locale, Record<string, string>> = {
+  pl: { poll: 'Ankieta — natywna ankieta Discord z timerem.' },
+  en: { poll: 'Create a poll — native Discord poll with a timer.' },
+  de: { poll: 'Umfrage erstellen — native Discord-Umfrage mit Timer.' },
+  es: { poll: 'Crea una encuesta — encuesta nativa de Discord con temporizador.' },
+  it: { poll: 'Crea un sondaggio — sondaggio nativo di Discord con timer.' },
+  fr: { poll: 'Crée un sondage — sondage natif Discord avec minuteur.' },
+  pt: { poll: 'Crie uma enquete — enquete nativa do Discord com timer.' },
+  zh: { poll: '创建投票 —— 带计时器的 Discord 原生投票。' },
+  ko: { poll: '투표 만들기 — 타이머가 있는 Discord 기본 투표.' },
+  ru: { poll: 'Создать опрос — нативный опрос Discord с таймером.' },
+  uk: { poll: 'Створити опитування — нативне опитування Discord із таймером.' },
+  ja: { poll: '投票を作成 — タイマー付きの Discord ネイティブ投票。' },
+  ar: { poll: 'إنشاء استطلاع — استطلاع Discord الأصلي مع مؤقّت.' },
+  id: { poll: 'Buat polling — polling asli Discord dengan timer.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
+  Object.assign(COMMAND_DESC[l], POLL2_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-188-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.119.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-189-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.120.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.120.0] — 📊 Polls v2 — natywne ankiety Discord (/poll) · Etap C (3/?)
+
+- `[#189]` 📊 **`/poll` v2 — natywne ankiety Discord.** Domyślnie tworzy **prawdziwą ankietę Discord** (wbudowane głosowanie, pasek wyników, automatyczne zamknięcie po czasie) zamiast embeda z reakcjami:
+  - 🕒 **`czas`** — czas trwania: 1 godz. / 4 / 12 / 1 dzień (domyślnie) / 3 dni / 7 dni.
+  - ☑️ **`wielokrotny`** — pozwól zaznaczyć kilka odpowiedzi.
+  - 🔢 **`opcje`** — 2–10 odpowiedzi oddzielonych `|` (każda z emoji 1️⃣–🔟); puste = **Tak/Nie** (👍/👎, w języku serwera).
+  - 🔁 **`reakcje: true`** — stary tryb (embed + reakcje) zachowany jako opcja, gdy ktoś go woli. **Non-breaking.**
+  Brak rate-limit ryzyka i limitu reakcji — głosowanie liczy Discord. 3 nowe klucze i18n (`strings.poll2.mts`: tak/nie/potwierdzenie ×14) + zaktualizowany opis komendy (`POLL2_DESC` ×14). Trzecia fala Etapu C. Zmiana definicji komendy → ponowna rejestracja globalna po deployu.
 
 ## [0.119.0] — 📌 Sticky messages — /sticky (14 języków) · Etap C (2/?)
 
