@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-196-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.127.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-197-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.128.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.128.0] — 📋 /rolecopy — klonowanie ustawień roli · Etap D (3/?)
+
+- `[#197]` 📋 **`/rolecopy` — skopiuj ustawienia z jednej roli na drugą** (Architekt v2). Kopiuje **uprawnienia, kolor, wyróżnienie (hoist) i możliwość wzmianki** z roli `źródło` na rolę `cel` — szybkie powielanie konfiguracji ról. Te same zabezpieczenia co `/roleperms` (hierarchia roli bota, blokada ról zarządzanych i `@everyone`), reużywa komunikaty błędów. Perm: **Zarządzanie rolami**. 1 klucz i18n (`strings.rolecopy.mts` ×14) + `ROLECOPY_DESC`. Trzecia fala Etapu D. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.127.0] — 🎚️ /roleperms — presety uprawnień ról · Etap D (2/?)
 

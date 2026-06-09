@@ -48,6 +48,7 @@ import * as reactionpanel from './reactionpanel.mts';
 import * as remind from './remind.mts';
 import * as rep from './rep.mts';
 import * as rewrite from './rewrite.mts';
+import * as rolecopy from './rolecopy.mts';
 import * as rolemenu from './rolemenu.mts';
 import * as roleperms from './roleperms.mts';
 import * as rps from './rps.mts';
@@ -147,6 +148,7 @@ export const commands: Command[] = [
   unlock,
   healthcheck,
   roleperms,
+  rolecopy,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

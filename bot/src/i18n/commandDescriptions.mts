@@ -1126,6 +1126,24 @@ const ROLEPRESET_DESC: Record<Locale, Record<string, string>> = {
   id: { roleperms: 'Atur izin peran dari preset.' },
 };
 
+// Opis /rolecopy (Etap D — klonowanie roli) — dołożony do COMMAND_DESC niżej.
+const ROLECOPY_DESC: Record<Locale, Record<string, string>> = {
+  pl: { rolecopy: 'Skopiuj ustawienia roli na inną rolę.' },
+  en: { rolecopy: 'Copy one role settings to another.' },
+  de: { rolecopy: 'Rolleneinstellungen auf eine andere Rolle kopieren.' },
+  es: { rolecopy: 'Copia la configuración de un rol a otro.' },
+  it: { rolecopy: 'Copia le impostazioni di un ruolo su un altro.' },
+  fr: { rolecopy: 'Copie la configuration de rôle vers un autre rôle.' },
+  pt: { rolecopy: 'Copia as configurações de um cargo para outro.' },
+  zh: { rolecopy: '将一个身份组的设置复制到另一个。' },
+  ko: { rolecopy: '한 역할의 설정을 다른 역할로 복사합니다.' },
+  ru: { rolecopy: 'Скопировать настройки одной роли на другую.' },
+  uk: { rolecopy: 'Скопіювати налаштування однієї ролі на іншу.' },
+  ja: { rolecopy: 'あるロールの設定を別のロールにコピーします。' },
+  ar: { rolecopy: 'نسخ إعدادات رتبة إلى أخرى.' },
+  id: { rolecopy: 'Salin pengaturan satu peran ke peran lain.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1137,6 +1155,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], MOD2_DESC[l]);
   Object.assign(COMMAND_DESC[l], HEALTH_DESC[l]);
   Object.assign(COMMAND_DESC[l], ROLEPRESET_DESC[l]);
+  Object.assign(COMMAND_DESC[l], ROLECOPY_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
