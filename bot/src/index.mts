@@ -53,6 +53,7 @@ import { startScheduler } from './engagement/scheduler.mts';
 import { startStarboard } from './engagement/starboard.mts';
 import { startTempVoice } from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
+import { startFarewell } from './farewell.mts';
 import { startFreeGames } from './gaming/freegames.mts';
 import { startPatchNotes } from './gaming/patchnotes.mts';
 import { startPriceTracker } from './gaming/pricetracker.mts';
@@ -196,6 +197,7 @@ client.once(Events.ClientReady, (c) => {
   startStarboard(c); // Faza 6 / B5 — starboard ⭐
   startTempVoice(c); // Faza 6 / B5 — kanały głosowe na żądanie
   startSticky(c); // Etap C — przypięte wiadomości (/sticky)
+  startFarewell(c); // Etap C — pożegnania + podziękowania za boost (/farewell)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(

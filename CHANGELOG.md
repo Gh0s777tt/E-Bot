@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-189-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.120.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-190-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.121.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.121.0] — 👋 Pożegnania + 💜 podziękowania za boost (/farewell) · Etap C (4/?)
+
+- `[#190]` 👋💜 **`/farewell` — pożegnania i podziękowania za boost.** Domyka „trójkę powitań" (welcome → goodbye → boost):
+  - 👋 **`goodbye`** — wiadomość na kanale, gdy ktoś **opuszcza serwer** (event `GuildMemberRemove`).
+  - 💜 **`booster`** — podziękowanie, gdy ktoś **zaczyna boostować** serwer (event `GuildMemberUpdate`, wykrycie startu `premiumSince`; różowy embed).
+  - Każda grupa: **`set`** (kanał + treść, zmienne `{user} {username} {server} {memberCount}`), **`off`**, **`test`** (podgląd na żywo). Perm: **Zarządzanie serwerem**.
+  Nowy moduł `bot/src/farewell.mts` (oba listenery, cache 30 s, config w `settings.goodbye_config`/`booster_config`) + `commands/farewell.mts`. Pełne **14 języków** (`strings.farewell.mts`, `FAREWELL_DESC`). Czwarta fala Etapu C. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.120.0] — 📊 Polls v2 — natywne ankiety Discord (/poll) · Etap C (3/?)
 

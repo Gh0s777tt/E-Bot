@@ -892,10 +892,29 @@ const POLL2_DESC: Record<Locale, Record<string, string>> = {
   id: { poll: 'Buat polling — polling asli Discord dengan timer.' },
 };
 
+// Opis /farewell (Etap C) — dołożony do COMMAND_DESC w pętli niżej.
+const FAREWELL_DESC: Record<Locale, Record<string, string>> = {
+  pl: { farewell: 'Pożegnania i podziękowania za boost serwera.' },
+  en: { farewell: 'Goodbye messages and server boost thank-yous.' },
+  de: { farewell: 'Abschiedsnachrichten und Boost-Dankeschöns.' },
+  es: { farewell: 'Mensajes de despedida y agradecimientos por boost.' },
+  it: { farewell: 'Messaggi di addio e ringraziamenti per il boost.' },
+  fr: { farewell: "Messages d'adieu et remerciements de boost." },
+  pt: { farewell: 'Mensagens de despedida e agradecimentos por boost.' },
+  zh: { farewell: '告别消息与服务器助力感谢。' },
+  ko: { farewell: '작별 메시지와 서버 부스트 감사 메시지.' },
+  ru: { farewell: 'Прощальные сообщения и благодарность за буст.' },
+  uk: { farewell: 'Прощальні повідомлення та подяки за буст.' },
+  ja: { farewell: 'お別れメッセージとサーバーブーストのお礼。' },
+  ar: { farewell: 'رسائل الوداع وشكر تعزيز الخادم.' },
+  id: { farewell: 'Pesan perpisahan dan ucapan terima kasih boost server.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
   Object.assign(COMMAND_DESC[l], POLL2_DESC[l]);
+  Object.assign(COMMAND_DESC[l], FAREWELL_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

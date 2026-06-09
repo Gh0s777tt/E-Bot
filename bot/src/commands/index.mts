@@ -17,6 +17,7 @@ import * as dog from './dog.mts';
 import * as donate from './donate.mts';
 import * as economy from './economy.mts';
 import * as event from './event.mts';
+import * as farewell from './farewell.mts';
 import * as flip from './flip.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
@@ -125,6 +126,7 @@ export const commands: Command[] = [
   tutorial,
   lockdown,
   sticky,
+  farewell,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji
