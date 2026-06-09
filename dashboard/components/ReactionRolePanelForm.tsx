@@ -25,6 +25,7 @@ export default function ReactionRolePanelForm({
   const [pairs, setPairs] = useState<Pair[]>(() =>
     initial.pairs.map((p, i) => ({ id: `p${i}`, emoji: p.emoji, roleId: p.roleId })),
   );
+  const [exclusive, setExclusive] = useState<boolean>(initial.exclusive ?? false);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
   async function save() {
@@ -35,6 +36,7 @@ export default function ReactionRolePanelForm({
         pairs: pairs
           .map(({ emoji, roleId }) => ({ emoji: emoji.trim(), roleId }))
           .filter((p) => p.emoji && p.roleId),
+        exclusive,
       };
       const r = await fetch('/api/reaction-roles/panel', {
         method: 'POST',
@@ -106,6 +108,18 @@ export default function ReactionRolePanelForm({
           </div>
         ))}
       </div>
+
+      <label className="flex items-center gap-2 rounded-xl border border-line bg-bg/40 px-4 py-3 text-sm">
+        <input
+          type="checkbox"
+          checked={exclusive}
+          onChange={(e) => setExclusive(e.target.checked)}
+          className="h-4 w-4 accent-accent"
+        />
+        <span className="text-white/90">
+          🎚️ Wybierz jedną — reakcja zostawia użytkownikowi tylko jedną rolę z tego panelu (radio).
+        </span>
+      </label>
 
       <div className="flex items-center gap-3">
         <button

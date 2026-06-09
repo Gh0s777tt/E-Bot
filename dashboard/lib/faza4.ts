@@ -261,13 +261,21 @@ export async function saveReactionRoles(list: ReactionRole[]): Promise<void> {
 }
 
 // Panel reaction-role utworzony przez bota (Faza 8): embed (Message Studio) + pary emoji→rola.
-export type ReactionPanel = { panelSpec?: RichMessage; pairs: { emoji: string; roleId: string }[] };
+export type ReactionPanel = {
+  panelSpec?: RichMessage;
+  pairs: { emoji: string; roleId: string }[];
+  exclusive?: boolean; // „wybierz jedną" — reakcja zostawia tylko jedną rolę z panelu
+};
 export async function getReactionPanel(): Promise<ReactionPanel> {
   const raw = await getRawSetting('reaction_role_panel');
   if (!raw) return { pairs: [] };
   try {
     const o = JSON.parse(raw) as Partial<ReactionPanel>;
-    return { panelSpec: o.panelSpec, pairs: Array.isArray(o.pairs) ? o.pairs : [] };
+    return {
+      panelSpec: o.panelSpec,
+      pairs: Array.isArray(o.pairs) ? o.pairs : [],
+      exclusive: o.exclusive === true,
+    };
   } catch {
     return { pairs: [] };
   }

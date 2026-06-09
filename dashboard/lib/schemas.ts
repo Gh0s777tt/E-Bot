@@ -293,6 +293,7 @@ export const reactionPanelSchema = z.object({
     .max(20)
     .optional()
     .default([]),
+  exclusive: z.boolean().optional().default(false),
 });
 export type ReactionPanelInput = z.infer<typeof reactionPanelSchema>;
 

@@ -18,6 +18,7 @@ type Pair = { emoji: string; roleId: string };
 
 let rules: RR[] = [];
 let panelPairs: Pair[] = [];
+let panelExclusive = false;
 let panelMsgId = '';
 
 function refresh(): void {
@@ -29,10 +30,15 @@ function refresh(): void {
     rules = [];
   }
   try {
-    const p = JSON.parse(getSettings()['reaction_role_panel'] || '{}') as { pairs?: Pair[] };
+    const p = JSON.parse(getSettings()['reaction_role_panel'] || '{}') as {
+      pairs?: Pair[];
+      exclusive?: boolean;
+    };
     panelPairs = Array.isArray(p.pairs) ? p.pairs : [];
+    panelExclusive = p.exclusive === true;
   } catch {
     panelPairs = [];
+    panelExclusive = false;
   }
   panelMsgId = getSettings()['reaction_role_panel_msg'] || '';
 }
@@ -69,8 +75,20 @@ async function apply(
     if (!guild) return;
     const member = await guild.members.fetch(user.id).catch(() => null);
     if (!member) return;
-    if (add) await member.roles.add(roleId).catch(() => {});
-    else await member.roles.remove(roleId).catch(() => {});
+    if (add) {
+      await member.roles.add(roleId).catch(() => {});
+      // Tryb „wybierz jedną" (exclusive) — zostaw tylko wybraną rolę z panelu, zdejmij resztę.
+      if (panelExclusive && reaction.message.id === panelMsgId) {
+        for (const p of panelPairs) {
+          if (p.roleId === roleId) continue;
+          if (member.roles.cache.has(p.roleId)) await member.roles.remove(p.roleId).catch(() => {});
+          const other = reaction.message.reactions.cache.find((rr) => emojiMatches(p.emoji, rr));
+          if (other) await other.users.remove(user.id).catch(() => {});
+        }
+      }
+    } else {
+      await member.roles.remove(roleId).catch(() => {});
+    }
   } catch (e) {
     console.warn('[reaction-roles]', (e as Error).message);
   }

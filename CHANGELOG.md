@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-200-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.131.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-201-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.132.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.132.0] — 🎚️ Reaction-roles „wybierz jedną" (exclusive) · Panel (1/?)
+
+- `[#201]` 🎚️ **Reaction-role panel w trybie „wybierz jedną"** (radio) — **bot + panel**. Nowy przełącznik w panelu (`/roles` → panel reaction-role): gdy włączony, użytkownik reagujący na panelu dostaje **tylko jedną rolę** z tego panelu — bot automatycznie **zdejmuje pozostałe role i ich reakcje** (klasyczny „unique roles" jak w Carl-bocie).
+  - **Bot** (`reaction-roles.mts`): czyta `exclusive` z `reaction_role_panel`; po dodaniu roli usuwa pozostałe pary panelu + reakcje użytkownika.
+  - **Panel** (`ReactionRolePanelForm` + `faza4.ts` + Zod `reactionPanelSchema`): checkbox „🎚️ Wybierz jedną", zapisywany w configu.
+  Pierwsza fala dotykająca **frontu (Vercel)**. Bez nowych komend (panel publikujesz jak dotąd `/reactionpanel`).
 
 ## [0.131.0] — ↩️ /undo — rollback Architekta 🎉 update #200 · Etap D (6/?)
 
