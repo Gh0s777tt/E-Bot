@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createCanvas, GlobalFonts, loadImage } from '@napi-rs/canvas';
+import { type Locale, t } from '../i18n/index.mts';
 
 const FONT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'assets', 'fonts');
 
@@ -24,6 +25,13 @@ export function ensureFonts(): void {
 }
 
 export const CARD_FONTS = ['Poppins', 'Anton', 'Bebas Neue', 'Pacifico', 'Lobster'] as const;
+
+// Karty rysowane czcionkami TYLKO-ŁACIŃSKIMI (Poppins/Anton/…) — brak glifów CJK/cyrylicy/arabskiego.
+// Dla języków o innym piśmie etykiety renderujemy po angielsku (Latin-safe, bez „tofu" / kwadracików).
+const LATIN_LOCALES = new Set<Locale>(['pl', 'en', 'de', 'es', 'it', 'fr', 'pt', 'id']);
+function cardLocale(l: Locale | undefined): Locale {
+  return l && LATIN_LOCALES.has(l) ? l : 'en';
+}
 
 export type CardStyle = {
   from: string;
@@ -62,9 +70,11 @@ export async function renderRankCard(o: {
   rank: number;
   xpInto: number;
   xpFor: number;
+  locale?: Locale;
   style?: Partial<CardStyle>;
 }): Promise<Buffer> {
   ensureFonts();
+  const loc = cardLocale(o.locale);
   const s = { ...CARD_STYLE_DEFAULT, ...o.style };
   const font = safeFont(s.font);
   const W = 900;
@@ -111,7 +121,7 @@ export async function renderRankCard(o: {
   ctx.font = `bold 46px ${font}`;
   ctx.fillText(o.username.slice(0, 18), left, 108);
   ctx.font = `28px ${font}`;
-  ctx.fillText(`Poziom ${o.level}   •   #${o.rank}`, left, 152);
+  ctx.fillText(`${t(loc, 'card.level')} ${o.level}   •   #${o.rank}`, left, 152);
 
   const barX = left;
   const barY = 184;
@@ -197,9 +207,11 @@ export async function renderProfileCard(o: {
   xpFor: number;
   balance: string; // gotowy tekst (bez emoji — canvas nie renderuje emoji)
   invites: number;
+  locale?: Locale;
   style?: Partial<CardStyle>;
 }): Promise<Buffer> {
   ensureFonts();
+  const loc = cardLocale(o.locale);
   const s = { ...CARD_STYLE_DEFAULT, ...o.style };
   const font = safeFont(s.font);
   const W = 900;
@@ -246,8 +258,8 @@ export async function renderProfileCard(o: {
   ctx.font = `bold 44px ${font}`;
   ctx.fillText(o.username.slice(0, 18), left, 96);
   ctx.font = `26px ${font}`;
-  const prest = o.prestige > 0 ? `   •   Prestiż ${o.prestige}` : '';
-  ctx.fillText(`Poziom ${o.level}   •   #${o.rank}${prest}`, left, 138);
+  const prest = o.prestige > 0 ? `   •   ${t(loc, 'card.prestige')} ${o.prestige}` : '';
+  ctx.fillText(`${t(loc, 'card.level')} ${o.level}   •   #${o.rank}${prest}`, left, 138);
 
   const barX = left;
   const barY = 162;
@@ -270,9 +282,9 @@ export async function renderProfileCard(o: {
 
   // Kafelki statystyk
   const tiles: [string, string][] = [
-    ['SALDO', o.balance],
-    ['ZAPROSZENIA', String(o.invites)],
-    ['PRESTIŻ', String(o.prestige)],
+    [t(loc, 'card.balance').toUpperCase(), o.balance],
+    [t(loc, 'card.invites').toUpperCase(), String(o.invites)],
+    [t(loc, 'card.prestige').toUpperCase(), String(o.prestige)],
   ];
   const ty = 250;
   const th = 74;

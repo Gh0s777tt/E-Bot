@@ -9,6 +9,7 @@ import {
 import { syncBadges } from '../community/badges.mts';
 import { getEquippedStyle } from '../economy/skins.mts';
 import { getUser } from '../economy/store.mts';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { type CardStyle, renderProfileCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
@@ -42,13 +43,17 @@ export const data = new SlashCommandBuilder()
   .addUserOption((o) => o.setName('user').setDescription('Czyj profil (opcjonalnie)'));
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   if (!interaction.guildId) {
-    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: t(locale, 'error.guildOnly'),
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
   if (!hasCloud()) {
     await interaction.reply({
-      content: '❌ Profil wymaga chmury (Supabase).',
+      content: t(locale, 'profile.needCloud'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -110,6 +115,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       xpFor,
       balance: total.toLocaleString('pl-PL'),
       invites,
+      locale,
       style: (await getEquippedStyle(gid, user.id)) ?? rankStyle(),
     });
 
@@ -117,17 +123,18 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       .setColor(ACCENT)
       .setDescription(
         badges.length
-          ? `**Odznaki (${badges.length}/13):**\n${badges.map((b) => `${b.emoji} ${b.name}`).join('\n')}`
-          : '_Brak odznak jeszcze — zdobywaj poziomy, walutę i zaproszenia!_',
+          ? `${t(locale, 'profile.badgesHeader', { count: badges.length })}\n${badges.map((b) => `${b.emoji} ${b.name}`).join('\n')}`
+          : t(locale, 'profile.noBadges'),
       );
     const bd = bdRows[0];
-    if (bd) embed.setFooter({ text: `🎂 Urodziny: ${bd.day}.${bd.month}` });
+    if (bd)
+      embed.setFooter({ text: t(locale, 'profile.birthday', { day: bd.day, month: bd.month }) });
 
     await interaction.editReply({
       files: [new AttachmentBuilder(buf, { name: 'profile.png' })],
       embeds: [embed],
     });
   } catch (e) {
-    await interaction.editReply(`❌ Nie udało się wygenerować profilu: ${(e as Error).message}`);
+    await interaction.editReply(t(locale, 'profile.genFail', { error: (e as Error).message }));
   }
 }

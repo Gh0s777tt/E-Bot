@@ -5,6 +5,7 @@
 import { LOCALES, type Locale } from './locales.mts';
 import { BJ_STRINGS } from './strings.bj.mts';
 import { ECO_STRINGS } from './strings.eco.mts';
+import { PROFILE_STRINGS } from './strings.profile.mts';
 
 type Dict = Record<string, string>;
 
@@ -386,4 +387,5 @@ export const DICTS: Record<Locale, Dict> = {
 for (const l of LOCALES) {
   Object.assign(DICTS[l], ECO_STRINGS[l]);
   Object.assign(DICTS[l], BJ_STRINGS[l]);
+  Object.assign(DICTS[l], PROFILE_STRINGS[l]);
 }

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-179-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.110.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-180-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.111.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.111.0] — 🌍 Wielojęzyczność (6/?): profil + rank (karty Latin-safe)
+
+- `[#180]` 🌍 **Tłumaczenia — profil/rank.** `/profile` i `/rank` w **14 językach**: wszystkie komunikaty (błędy, nagłówek odznak, „brak XP", urodziny, błąd generowania). **Etykiety rysowane na kartach-obrazkach** (Poziom / Saldo / Zaproszenia / Prestiż) lokalizowane dla **8 języków łacińskich** (pl/en/de/es/it/fr/pt/id); dla CJK/cyrylicy/arabskiego karta pokazuje **angielskie** etykiety — czcionki kart (Poppins/Anton/…) nie mają tych glifów, więc helper **`cardLocale`** chroni przed „tofu"/kwadracikami. Renderer `lib/cards.mts` przyjmuje `locale`; klucze w `strings.profile.mts`.
 
 ## [0.110.0] — 🌍 Wielojęzyczność (5/?): blackjack-UI → ekonomia w 100% na t()
 

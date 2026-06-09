@@ -6,6 +6,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { getEquippedStyle } from '../economy/skins.mts';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { type CardStyle, renderRankCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
@@ -38,13 +39,17 @@ export const data = new SlashCommandBuilder()
   .addUserOption((o) => o.setName('user').setDescription('Czyja karta (opcjonalnie)'));
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
   if (!interaction.guild) {
-    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: t(locale, 'error.guildOnly'),
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
   if (!hasCloud()) {
     await interaction.reply({
-      content: '❌ Ranking wymaga chmury (Supabase).',
+      content: t(locale, 'rank.needCloud'),
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -58,7 +63,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     );
     const xp = rows[0]?.xp;
     if (xp === undefined) {
-      await interaction.editReply(`📉 **${user.username}** nie ma jeszcze XP na tym serwerze.`);
+      await interaction.editReply(t(locale, 'rank.noXp', { username: user.username }));
       return;
     }
     const above = await cloudSelect<{ user_id: string }>(
@@ -74,10 +79,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       rank: above.length + 1,
       xpInto,
       xpFor,
+      locale,
       style: userStyle ?? rankStyle(),
     });
     await interaction.editReply({ files: [new AttachmentBuilder(buf, { name: 'rank.png' })] });
   } catch (e) {
-    await interaction.editReply(`❌ Nie udało się wygenerować karty: ${(e as Error).message}`);
+    await interaction.editReply(t(locale, 'rank.genFail', { error: (e as Error).message }));
   }
 }
