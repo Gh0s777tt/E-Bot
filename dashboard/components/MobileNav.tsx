@@ -4,11 +4,18 @@ import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { tierVisible } from '../lib/viewMode';
 import { NAV_GROUPS } from './nav-items';
+import { useViewMode } from './ViewModeContext';
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { mode } = useViewMode();
+  const groups = NAV_GROUPS.map((g) => ({
+    ...g,
+    items: g.items.filter((i) => tierVisible(i.tier, mode)),
+  })).filter((g) => g.items.length > 0);
 
   return (
     <>
@@ -40,7 +47,7 @@ export default function MobileNav() {
               </button>
             </div>
             <nav className="flex-1 space-y-3 overflow-y-auto p-3">
-              {NAV_GROUPS.map((group) => (
+              {groups.map((group) => (
                 <div key={group.label}>
                   <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted/60">
                     {group.label}

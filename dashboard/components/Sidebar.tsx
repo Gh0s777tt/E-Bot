@@ -4,10 +4,13 @@ import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { tierVisible, VIEW_MODES } from '../lib/viewMode';
 import { NAV_GROUPS } from './nav-items';
+import { useViewMode } from './ViewModeContext';
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { mode, setMode } = useViewMode();
   const activeGroup =
     NAV_GROUPS.find((g) => g.items.some((i) => i.href === pathname))?.label ?? NAV_GROUPS[0].label;
   // Start: tylko sekcja aktywnej strony otwarta (deterministycznie → zero hydration mismatch).
@@ -36,6 +39,12 @@ export default function Sidebar() {
     });
   }
 
+  // Filtr widoczności wg trybu (Prosty/Zaawansowany/Developer) — chowa moduły o wyższym progu.
+  const groups = NAV_GROUPS.map((g) => ({
+    ...g,
+    items: g.items.filter((i) => tierVisible(i.tier, mode)),
+  })).filter((g) => g.items.length > 0);
+
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-line bg-surface md:flex">
       <div className="flex h-14 shrink-0 items-center gap-2 border-b border-line px-4">
@@ -50,7 +59,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-0.5 overflow-y-auto p-2.5">
-        {NAV_GROUPS.map((group) => {
+        {groups.map((group) => {
           const isOpen = !!open[group.label];
           return (
             <div key={group.label}>
@@ -92,8 +101,29 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="shrink-0 border-t border-line p-4 text-[11px] text-muted/60">
-        E‑BOT · GH0ST EMPIRE
+      <div className="shrink-0 space-y-1.5 border-t border-line p-3">
+        <div className="flex items-center gap-1">
+          {VIEW_MODES.map((m) => (
+            <button
+              key={m.value}
+              type="button"
+              onClick={() => setMode(m.value)}
+              title={m.hint}
+              aria-pressed={mode === m.value}
+              className={`flex-1 rounded-md border py-1.5 text-sm transition ${
+                mode === m.value
+                  ? 'border-accent bg-accent/15'
+                  : 'border-line opacity-60 hover:opacity-100'
+              }`}
+            >
+              {m.short}
+            </button>
+          ))}
+        </div>
+        <p className="text-center text-[10px] text-muted/60">
+          Tryb:{' '}
+          <span className="text-muted">{VIEW_MODES.find((m) => m.value === mode)?.label}</span>
+        </p>
       </div>
     </aside>
   );

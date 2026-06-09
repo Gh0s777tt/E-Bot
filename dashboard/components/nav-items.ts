@@ -39,8 +39,10 @@ import {
   Wand2,
   Zap,
 } from 'lucide-react';
+import type { NavTier } from '../lib/viewMode';
 
-export type NavItem = { href: string; label: string; icon: LucideIcon };
+// tier: brak = „esencja" (tryb Prosty+), 'adv' = Zaawansowany+, 'dev' = tylko Developer.
+export type NavItem = { href: string; label: string; icon: LucideIcon; tier?: NavTier };
 export type NavGroup = { label: string; items: NavItem[] };
 
 // Boczny pasek pogrupowany w sekcje (akordeon w Sidebar). Sensowny podział tematyczny,
@@ -52,8 +54,8 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/', label: 'Przegląd', icon: LayoutDashboard },
       { href: '/setup', label: 'Kreator startowy', icon: Wand2 },
       { href: '/modules', label: 'Centrum sterowania', icon: SlidersHorizontal },
-      { href: '/stats', label: 'Statystyki', icon: BarChart3 },
-      { href: '/diagnostics', label: 'Diagnostyka', icon: Stethoscope },
+      { href: '/stats', label: 'Statystyki', icon: BarChart3, tier: 'adv' },
+      { href: '/diagnostics', label: 'Diagnostyka', icon: Stethoscope, tier: 'dev' },
     ],
   },
   {
@@ -61,17 +63,17 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/security', label: 'Bezpieczeństwo', icon: ShieldAlert },
       { href: '/moderation', label: 'Automod', icon: ShieldCheck },
-      { href: '/logging', label: 'Logi serwera', icon: ScrollText },
-      { href: '/audit', label: 'Dziennik zmian', icon: History },
+      { href: '/logging', label: 'Logi serwera', icon: ScrollText, tier: 'adv' },
+      { href: '/audit', label: 'Dziennik zmian', icon: History, tier: 'dev' },
     ],
   },
   {
     label: 'Wsparcie & AI',
     items: [
       { href: '/tickets', label: 'Tickety', icon: Ticket },
-      { href: '/modmail', label: 'Modmail', icon: Mails },
-      { href: '/applications', label: 'Aplikacje', icon: ClipboardList },
-      { href: '/ai', label: 'AI', icon: Sparkles },
+      { href: '/modmail', label: 'Modmail', icon: Mails, tier: 'adv' },
+      { href: '/applications', label: 'Aplikacje', icon: ClipboardList, tier: 'adv' },
+      { href: '/ai', label: 'AI', icon: Sparkles, tier: 'adv' },
     ],
   },
   {
@@ -81,37 +83,37 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: '/levels', label: 'Levele', icon: Trophy },
       { href: '/leaderboard', label: 'Ranking', icon: Crown },
       { href: '/roles', label: 'Role', icon: Tags },
-      { href: '/engagement', label: 'Engagement', icon: Gift },
+      { href: '/engagement', label: 'Engagement', icon: Gift, tier: 'adv' },
       { href: '/suggestions', label: 'Sugestie', icon: Lightbulb },
-      { href: '/responder', label: 'Komendy własne', icon: MessageSquarePlus },
-      { href: '/birthdays', label: 'Urodziny', icon: Cake },
+      { href: '/responder', label: 'Komendy własne', icon: MessageSquarePlus, tier: 'adv' },
+      { href: '/birthdays', label: 'Urodziny', icon: Cake, tier: 'adv' },
       { href: '/counters', label: 'Liczniki', icon: Activity },
-      { href: '/automations', label: 'Automatyzacje', icon: Zap },
+      { href: '/automations', label: 'Automatyzacje', icon: Zap, tier: 'adv' },
     ],
   },
   {
     label: 'Ekonomia',
     items: [
       { href: '/eco', label: 'Ekonomia serwera', icon: Banknote },
-      { href: '/economy', label: 'Ekonomia GT', icon: Coins },
+      { href: '/economy', label: 'Ekonomia GT', icon: Coins, tier: 'adv' },
     ],
   },
   {
     label: 'Twórca & live',
     items: [
-      { href: '/live', label: 'Na żywo', icon: Tv },
-      { href: '/creator', label: 'Twórca', icon: Clapperboard },
       { href: '/notifications', label: 'Powiadomienia', icon: Radio },
-      { href: '/scheduled', label: 'Zaplanowane', icon: CalendarClock },
-      { href: '/donations', label: 'Donejty', icon: Coffee },
+      { href: '/creator', label: 'Twórca', icon: Clapperboard },
+      { href: '/live', label: 'Na żywo', icon: Tv, tier: 'adv' },
+      { href: '/scheduled', label: 'Zaplanowane', icon: CalendarClock, tier: 'adv' },
+      { href: '/donations', label: 'Donejty', icon: Coffee, tier: 'adv' },
     ],
   },
   {
     label: 'Biblioteka & gry',
     items: [
-      { href: '/library', label: 'Biblioteka', icon: Gamepad2 },
-      { href: '/wishlist', label: 'Lista życzeń', icon: Heart },
-      { href: '/gaming', label: 'Gaming feed', icon: Rss },
+      { href: '/library', label: 'Biblioteka', icon: Gamepad2, tier: 'adv' },
+      { href: '/wishlist', label: 'Lista życzeń', icon: Heart, tier: 'adv' },
+      { href: '/gaming', label: 'Gaming feed', icon: Rss, tier: 'adv' },
     ],
   },
   {
@@ -119,9 +121,9 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/appearance', label: 'Wygląd grafik', icon: Palette },
       { href: '/commands', label: 'Komendy', icon: TerminalSquare },
-      { href: '/custom-commands', label: 'Własne komendy', icon: TerminalSquare },
-      { href: '/integrations', label: 'Integracje', icon: Plug },
-      { href: '/profile', label: 'Profil', icon: User },
+      { href: '/custom-commands', label: 'Własne komendy', icon: TerminalSquare, tier: 'adv' },
+      { href: '/integrations', label: 'Integracje', icon: Plug, tier: 'dev' },
+      { href: '/profile', label: 'Profil', icon: User, tier: 'adv' },
       { href: '/settings', label: 'Ustawienia', icon: Settings },
     ],
   },

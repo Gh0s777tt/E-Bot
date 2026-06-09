@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-185-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.116.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-186-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.117.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.117.0] — 🎛️ 3 tryby dashboardu (Prosty / Zaawansowany / Developer) · Etap B (1/?)
+
+- `[#186]` 🎛️ **Trzy tryby panelu** — przełącznik w stopce paska bocznego filtruje nawigację (Sidebar, menu mobilne, paleta ⌘K) wg poziomu:
+  - 🌸 **Prosty** — tylko najważniejsze moduły (esencja), łatwy start dla nowych.
+  - ⚙️ **Zaawansowany** (domyślny) — wszystkie moduły dla twórców serwerów.
+  - 🛠️ **Developer** — pełny dostęp + narzędzia techniczne (diagnostyka, dziennik zmian, integracje/klucze).
+  Wybór zapamiętany per-użytkownik (localStorage), wspólny `ViewModeContext`; każdy moduł ma próg `tier` w `nav-items.ts`. Rozwiązuje problem „dużo funkcji" — nowy widzi tylko esencję, developer ma wszystko. Pierwsza fala Etapu B. _(Filtrowanie zaawansowanych pól formularzy + domyślny tryb wg rangi panelu — kolejne fale.)_
 
 ## [0.116.0] — 🎓 /tutorial — interaktywny onboarding (14 języków) · Etap A „Przyjazność" (3/?)
 

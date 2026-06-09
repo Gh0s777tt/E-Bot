@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { tierVisible } from '../lib/viewMode';
 import { NAV_ITEMS } from './nav-items';
+import { useViewMode } from './ViewModeContext';
 
 type Cmd = {
   id: string;
@@ -53,6 +55,7 @@ function toggleClass(cls: string): void {
 
 export default function CommandPalette() {
   const router = useRouter();
+  const { mode } = useViewMode();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [idx, setIdx] = useState(0);
@@ -60,7 +63,7 @@ export default function CommandPalette() {
   const listRef = useRef<HTMLDivElement>(null);
 
   const commands = useMemo<Cmd[]>(() => {
-    const nav: Cmd[] = NAV_ITEMS.map((n) => ({
+    const nav: Cmd[] = NAV_ITEMS.filter((n) => tierVisible(n.tier, mode)).map((n) => ({
       id: `nav:${n.href}`,
       label: n.label,
       group: 'Przejdź do',
@@ -108,7 +111,7 @@ export default function CommandPalette() {
       },
     ];
     return [...nav, ...actions];
-  }, [router]);
+  }, [router, mode]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
