@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { aiConfig, type ChatMsg, callModel } from '../lib/ai.mts';
+import { recordUndo } from '../lib/undo.mts';
 
 const SYSTEM = [
   'You are a Discord server architect. Read the description and design a server layout.',
@@ -92,7 +93,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   try {
     let cats = 0;
     let channels = 0;
-    let roles = 0;
+    const chIds: string[] = [];
+    const roleIds: string[] = [];
     for (const cat of plan.categories.slice(0, 4)) {
       if (!nm(cat?.name)) continue;
       const category = await guild.channels.create({
@@ -103,24 +105,27 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       const list = Array.isArray(cat.channels) ? cat.channels.slice(0, 6) : [];
       for (const ch of list) {
         if (!nm(ch?.name)) continue;
-        await guild.channels.create({
+        const created = await guild.channels.create({
           name: nm(ch.name),
           type: ch.voice ? ChannelType.GuildVoice : ChannelType.GuildText,
           parent: category.id,
         });
+        chIds.push(created.id);
         channels++;
       }
+      chIds.push(category.id); // kategoria po dzieciach (kolejność usuwania w /undo)
     }
     for (const r of (plan.roles ?? []).slice(0, 6)) {
       if (!nm(r?.name)) continue;
-      await guild.roles.create({ name: nm(r.name) });
-      roles++;
+      const role = await guild.roles.create({ name: nm(r.name) });
+      roleIds.push(role.id);
     }
+    recordUndo({ channels: chIds, roles: roleIds, label: 'aiserver' });
     await interaction.editReply({
       content: t(locale, 'aiserver.created', {
         cats: String(cats),
         channels: String(channels),
-        roles: String(roles),
+        roles: String(roleIds.length),
       }),
     });
   } catch {

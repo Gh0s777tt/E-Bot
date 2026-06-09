@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-199-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.130.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-200-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.131.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.131.0] — ↩️ /undo — rollback Architekta 🎉 update #200 · Etap D (6/?)
+
+- `[#200]` ↩️ **`/undo` — cofnij ostatnie prowizjonowanie** (Architekt v2 — rollback). Usuwa kanały i role utworzone przez ostatnie **`/blueprint`** lub **`/aiserver`** — bezpieczna „gumka", gdy wynik nie pasuje. `/blueprint` i `/aiserver` zapisują teraz utworzone ID-ki (`provision_undo`), a `/undo` je kasuje (kategorie po kanałach) i czyści rejestr. Perm: **Zarządzanie serwerem**, odpowiedź efemeryczna. Nowy `lib/undo.mts` + `commands/undo.mts` + 2 klucze i18n (`strings.undo.mts` ×14) + `UNDO_DESC`. Szósta fala Etapu D — **domyka pętlę „twórz → cofnij" Architekta**. Nowa komenda → rejestracja globalna po deployu.
+- 🎉 **Jubileuszowy update #200!** Od startu programu „zrób wszystko": **57 → 73 komendy**, Etapy A–D wdrożone partiami, każda z zielonym deployem.
 
 ## [0.130.0] — 🤖 /aiserver — AI-kreator serwera · Etap D (5/?)
 

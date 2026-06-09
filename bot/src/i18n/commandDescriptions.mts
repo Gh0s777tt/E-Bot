@@ -1180,6 +1180,24 @@ const AISERVER_DESC: Record<Locale, Record<string, string>> = {
   id: { aiserver: 'AI merancang dan membuat struktur server dari deskripsi.' },
 };
 
+// Opis /undo (Etap D — rollback prowizjonowania) — dołożony do COMMAND_DESC niżej.
+const UNDO_DESC: Record<Locale, Record<string, string>> = {
+  pl: { undo: 'Cofnij ostatnio utworzone kanały/role (Architekt).' },
+  en: { undo: 'Undo the last channels/roles created (Architect).' },
+  de: { undo: 'Zuletzt erstellte Kanäle/Rollen rückgängig machen.' },
+  es: { undo: 'Deshaz los últimos canales/roles creados.' },
+  it: { undo: 'Annulla gli ultimi canali/ruoli creati.' },
+  fr: { undo: 'Annule les derniers salons/rôles créés.' },
+  pt: { undo: 'Desfaz os últimos canais/cargos criados.' },
+  zh: { undo: '撤销最近创建的频道/身份组。' },
+  ko: { undo: '최근 만든 채널/역할을 되돌립니다.' },
+  ru: { undo: 'Отменить последние созданные каналы/роли.' },
+  uk: { undo: 'Скасувати останні створені канали/ролі.' },
+  ja: { undo: '最近作成したチャンネル/ロールを取り消します。' },
+  ar: { undo: 'التراجع عن آخر القنوات/الرتب المُنشأة.' },
+  id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1194,6 +1212,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], ROLECOPY_DESC[l]);
   Object.assign(COMMAND_DESC[l], BLUEPRINT_DESC[l]);
   Object.assign(COMMAND_DESC[l], AISERVER_DESC[l]);
+  Object.assign(COMMAND_DESC[l], UNDO_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

@@ -8,6 +8,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { resolveLocale, t } from '../i18n/index.mts';
+import { recordUndo } from '../lib/undo.mts';
 
 type Ch = { name: string; voice?: boolean };
 type Template = { label: string; category: string; channels: Ch[] };
@@ -88,17 +89,19 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       name: tpl.category,
       type: ChannelType.GuildCategory,
     });
-    let count = 0;
+    const ids: string[] = [];
     for (const ch of tpl.channels) {
-      await guild.channels.create({
+      const created = await guild.channels.create({
         name: ch.name,
         type: ch.voice ? ChannelType.GuildVoice : ChannelType.GuildText,
         parent: category.id,
       });
-      count++;
+      ids.push(created.id);
     }
+    ids.push(category.id); // kategoria na końcu — usuwana po dzieciach przy /undo
+    recordUndo({ channels: ids, roles: [], label: tpl.label });
     await interaction.editReply({
-      content: t(locale, 'blueprint.created', { name: tpl.label, count: String(count) }),
+      content: t(locale, 'blueprint.created', { name: tpl.label, count: String(ids.length - 1) }),
     });
   } catch {
     await interaction.editReply({ content: t(locale, 'blueprint.fail') });

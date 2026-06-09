@@ -23,6 +23,7 @@ import { SEARCH_STRINGS } from './strings.search.mts';
 import { SOCIAL_STRINGS } from './strings.social.mts';
 import { STICKY_STRINGS } from './strings.sticky.mts';
 import { TUTORIAL_STRINGS } from './strings.tutorial.mts';
+import { UNDO_STRINGS } from './strings.undo.mts';
 
 type Dict = Record<string, string>;
 
@@ -422,4 +423,5 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], SOCIAL_STRINGS[l]);
   Object.assign(DICTS[l], STICKY_STRINGS[l]);
   Object.assign(DICTS[l], TUTORIAL_STRINGS[l]);
+  Object.assign(DICTS[l], UNDO_STRINGS[l]);
 }
