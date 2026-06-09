@@ -3,6 +3,7 @@
 // (reszta dziedziczy do czasu przetłumaczenia). Namespacy: ping, common, error, afk, remind,
 // donate, rep, confess. Placeholdery {x} interpolowane przez t(locale, key, vars).
 import { LOCALES, type Locale } from './locales.mts';
+import { ACHV_STRINGS } from './strings.achievements.mts';
 import { AISERVER_STRINGS } from './strings.aiserver.mts';
 import { BJ_STRINGS } from './strings.bj.mts';
 import { BLUEPRINT_STRINGS } from './strings.blueprint.mts';
@@ -403,6 +404,7 @@ export const DICTS: Record<Locale, Dict> = {
 
 // Dołącz słowniki modułów (osobne pliki) do każdego języka — mniej szumu w tym pliku.
 for (const l of LOCALES) {
+  Object.assign(DICTS[l], ACHV_STRINGS[l]);
   Object.assign(DICTS[l], AISERVER_STRINGS[l]);
   Object.assign(DICTS[l], BLUEPRINT_STRINGS[l]);
   Object.assign(DICTS[l], ECO_STRINGS[l]);

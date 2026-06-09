@@ -1,5 +1,6 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { applyCommandLocalizations } from '../i18n/commandDescriptions.mts';
+import * as achievements from './achievements.mts';
 import * as afk from './afk.mts';
 import * as ai from './ai.mts';
 import * as aiserver from './aiserver.mts';
@@ -155,6 +156,7 @@ export const commands: Command[] = [
   blueprint,
   aiserver,
   undo,
+  achievements,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

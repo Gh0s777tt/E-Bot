@@ -162,6 +162,17 @@ export default function LevelingForm({
           />
           <span className="font-semibold text-white/90">DM do użytkownika przy awansie</span>
         </label>
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={b.achievementsEnabled}
+            onChange={(e) => setB({ ...b, achievementsEnabled: e.target.checked })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">
+            🏆 Osiągnięcia — ogłaszaj odznaki-tiery (poziom 5/10/25/50/100/200) na kanale awansów
+          </span>
+        </label>
       </div>
 
       <div className="space-y-1 text-sm">

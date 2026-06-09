@@ -3,6 +3,8 @@
 // settings-sync). Dane piszemy do tabeli Supabase 'user_levels'. Panel czyta ranking z tej tabeli.
 import { type Client, Events, type GuildMember, type Message } from 'discord.js';
 import { xpMultiplier } from './economy/effects.mts';
+import { resolveGuildLocale, t } from './i18n/index.mts';
+import { tierAtLevel } from './lib/achievements.mts';
 import {
   cloudGetSetting,
   cloudSelect,
@@ -30,6 +32,7 @@ type LevelingConfig = {
   stackRewards: boolean; // nadawaj wszystkie role ≤ poziom (zamiast tylko najwyższej)
   levelUpMessage: string; // własny tekst awansu ({user}, {level}); pusty = domyślny
   levelUpDm: boolean; // wyślij też DM do użytkownika przy awansie
+  achievementsEnabled: boolean; // ogłaszaj odznaki-tiery przy awansie (na kanale level-up)
   prestigeEnabled: boolean;
   prestigeLevel: number; // poziom wymagany do prestiżu
   prestigeRoleId: string; // rola za prestiż
@@ -50,6 +53,7 @@ const DEFAULT: LevelingConfig = {
   stackRewards: false,
   levelUpMessage: '',
   levelUpDm: false,
+  achievementsEnabled: false,
   prestigeEnabled: false,
   prestigeLevel: 100,
   prestigeRoleId: '',
@@ -208,6 +212,17 @@ async function onLevelUp(
             .replaceAll('{level}', String(level))
         : `🏆 <@${userId}> awansował na **poziom ${level}**!`;
       await ch.send(text).catch(() => {});
+      // Osiągnięcia-tiery — odznaka, gdy poziom trafia dokładnie w próg (config z panelu levelingu).
+      const tier = cfg.achievementsEnabled ? tierAtLevel(level) : undefined;
+      if (tier) {
+        const loc = resolveGuildLocale();
+        const badge = `${tier.emoji} ${t(loc, `achv.tier.${tier.key}`)}`;
+        await ch
+          .send(
+            t(loc, 'achv.announce', { user: `<@${userId}>`, tier: badge, level: String(level) }),
+          )
+          .catch(() => {});
+      }
     }
   }
 

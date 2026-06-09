@@ -82,6 +82,7 @@ export const levelingSchema = z.object({
   stackRewards: z.boolean(),
   levelUpMessage: z.string().max(1000),
   levelUpDm: z.boolean().optional().default(false),
+  achievementsEnabled: z.boolean().optional().default(false),
   prestigeEnabled: z.boolean(),
   prestigeLevel: z.number().int().min(1).max(1000),
   prestigeRoleId: z.string().max(40),

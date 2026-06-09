@@ -23,6 +23,7 @@ export type LevelingConfig = {
   stackRewards: boolean;
   levelUpMessage: string;
   levelUpDm: boolean;
+  achievementsEnabled: boolean;
   prestigeEnabled: boolean;
   prestigeLevel: number;
   prestigeRoleId: string;
@@ -43,6 +44,7 @@ export const LEVELING_DEFAULT: LevelingConfig = {
   stackRewards: false,
   levelUpMessage: '',
   levelUpDm: false,
+  achievementsEnabled: false,
   prestigeEnabled: false,
   prestigeLevel: 100,
   prestigeRoleId: '',

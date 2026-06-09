@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-201-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.132.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-202-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.133.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.133.0] — 🏆 Osiągnięcia-tiery (/achievements) · Panel (2/?)
+
+- `[#202]` 🏆 **Osiągnięcia-tiery** — odznaki za poziom, **bot + panel**:
+  - 🆕 **`/achievements [użytkownik]`** — karta osiągnięć: 6 tierów (🌱 Nowicjusz 5 · 🥉 Brąz 10 · 🥈 Srebro 25 · 🥇 Złoto 50 · 💎 Diament 100 · 👑 Legenda 200) z ✅/🔒 i progresem do następnego. Czyta poziom z `user_levels` (graceful, gdy brak danych).
+  - 📣 **Auto-ogłoszenie** przy awansie: gdy poziom trafia w próg tieru, bot ogłasza odznakę na kanale awansów (`onLevelUp`).
+  - 🖥️ **Panel** (`/levels`): nowy przełącznik **„🏆 Osiągnięcia"** w konfiguracji levelingu (`LevelingForm` + `faza4.ts` + Zod `levelingSchema`, pole `achievementsEnabled`).
+  Pełne **14 języków** (`strings.achievements.mts` 11 kluczy: nazwy tierów + karta + ogłoszenie) + `ACHV_DESC`. **Domyka część panelową roadmapy.** Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.132.0] — 🎚️ Reaction-roles „wybierz jedną" (exclusive) · Panel (1/?)
 

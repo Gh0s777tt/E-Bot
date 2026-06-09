@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /achievements (Panel — osiągnięcia-tiery) — dołożony do COMMAND_DESC niżej.
+const ACHV_DESC: Record<Locale, Record<string, string>> = {
+  pl: { achievements: 'Osiągnięcia — tiery za poziom (odznaki).' },
+  en: { achievements: 'Achievements — level-based tier badges.' },
+  de: { achievements: 'Erfolge — levelbasierte Stufen-Abzeichen.' },
+  es: { achievements: 'Logros — insignias por niveles.' },
+  it: { achievements: 'Obiettivi — distintivi a livelli.' },
+  fr: { achievements: 'Succès — badges par paliers de niveau.' },
+  pt: { achievements: 'Conquistas — emblemas por nível.' },
+  zh: { achievements: '成就 — 基于等级的徽章。' },
+  ko: { achievements: '업적 — 레벨 기반 등급 배지.' },
+  ru: { achievements: 'Достижения — значки по уровням.' },
+  uk: { achievements: 'Досягнення — значки за рівнями.' },
+  ja: { achievements: '実績 — レベル別のティアバッジ。' },
+  ar: { achievements: 'الإنجازات — أوسمة حسب المستوى.' },
+  id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1213,6 +1231,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], BLUEPRINT_DESC[l]);
   Object.assign(COMMAND_DESC[l], AISERVER_DESC[l]);
   Object.assign(COMMAND_DESC[l], UNDO_DESC[l]);
+  Object.assign(COMMAND_DESC[l], ACHV_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
