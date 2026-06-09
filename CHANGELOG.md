@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-191-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.122.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-192-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.123.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.123.0] — 🎭 /persona — osobowość bota AI · Etap C (6/?)
+
+- `[#192]` 🎭 **`/persona` — osobowość AI bota.** Zmienia **styl odpowiedzi wszystkich funkcji AI** naraz (/ai, /ask, AI-pomoc, AI-digest) — zapisuje `ai_config.persona` (prefiks system-promptu, który silnik już czytał):
+  - **`set`** — 8 gotowych osobowości: 😊 Przyjazny · 😏 Sarkastyczny · 🏴‍☠️ Pirat · 🎮 Gracz · 🎩 Formalny · 🤗 Wspierający · 🤖 Robot · 🧙 Mędrzec.
+  - **`custom`** — własny opis osobowości (do 500 zn.).
+  - **`off`** — powrót do neutralnego tonu · **`show`** — podgląd aktualnej.
+  Każdy preset dopina „odpowiadaj w języku użytkownika", więc **i18n odpowiedzi zachowane**. Perm: **Zarządzanie serwerem**. Nowy `commands/persona.mts` + 5 kluczy i18n (`strings.persona.mts`, `PERSONA_DESC` ×14). Realizuje „bardziej interaktywny/przyjazny bot". Szósta fala Etapu C. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.122.0] — 🔎 /search — Wikipedia / gry / YouTube · Etap C (5/?)
 

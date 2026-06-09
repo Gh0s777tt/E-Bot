@@ -928,12 +928,31 @@ const SEARCH_DESC: Record<Locale, Record<string, string>> = {
   id: { search: 'Cari di Wikipedia, game (IGDB), atau YouTube.' },
 };
 
+// Opis /persona (Etap C) — dołożony do COMMAND_DESC w pętli niżej.
+const PERSONA_DESC: Record<Locale, Record<string, string>> = {
+  pl: { persona: 'Osobowość bota AI — styl odpowiedzi /ai i /ask.' },
+  en: { persona: 'AI bot personality — the reply style for /ai and /ask.' },
+  de: { persona: 'KI-Persönlichkeit — Antwortstil für /ai und /ask.' },
+  es: { persona: 'Personalidad del bot IA — el estilo de /ai y /ask.' },
+  it: { persona: 'Personalità del bot IA — lo stile di /ai e /ask.' },
+  fr: { persona: 'Personnalité du bot IA — le style de /ai et /ask.' },
+  pt: { persona: 'Personalidade do bot de IA — o estilo de /ai e /ask.' },
+  zh: { persona: 'AI 机器人性格 — /ai 和 /ask 的回复风格。' },
+  ko: { persona: 'AI 봇 성격 — /ai와 /ask의 응답 스타일.' },
+  ru: { persona: 'Личность ИИ-бота — стиль ответов /ai и /ask.' },
+  uk: { persona: 'Особистість ШІ-бота — стиль відповідей /ai та /ask.' },
+  ja: { persona: 'AI ボットの性格 — /ai と /ask の応答スタイル。' },
+  ar: { persona: 'شخصية بوت الذكاء الاصطناعي — أسلوب ردود /ai و /ask.' },
+  id: { persona: 'Kepribadian bot AI — gaya balasan /ai dan /ask.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
   Object.assign(COMMAND_DESC[l], POLL2_DESC[l]);
   Object.assign(COMMAND_DESC[l], FAREWELL_DESC[l]);
   Object.assign(COMMAND_DESC[l], SEARCH_DESC[l]);
+  Object.assign(COMMAND_DESC[l], PERSONA_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
