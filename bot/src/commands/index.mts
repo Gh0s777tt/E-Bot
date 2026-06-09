@@ -5,6 +5,7 @@ import * as ai from './ai.mts';
 import * as antinuke from './antinuke.mts';
 import * as applypanel from './applypanel.mts';
 import * as ask from './ask.mts';
+import * as avatar from './avatar.mts';
 import * as backlog from './backlog.mts';
 import * as birthday from './birthday.mts';
 import * as buttonpanel from './buttonpanel.mts';
@@ -49,6 +50,7 @@ import * as rolemenu from './rolemenu.mts';
 import * as rps from './rps.mts';
 import * as schedule from './schedule.mts';
 import * as search from './search.mts';
+import * as serverinfo from './serverinfo.mts';
 import * as skins from './skins.mts';
 import * as sticky from './sticky.mts';
 import * as suggest from './suggest.mts';
@@ -58,6 +60,7 @@ import * as tldr from './tldr.mts';
 import * as translate from './translate.mts';
 import * as trivia from './trivia.mts';
 import * as tutorial from './tutorial.mts';
+import * as userinfo from './userinfo.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
 import * as xp from './xp.mts';
@@ -131,6 +134,9 @@ export const commands: Command[] = [
   farewell,
   search,
   persona,
+  avatar,
+  userinfo,
+  serverinfo,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

@@ -946,6 +946,80 @@ const PERSONA_DESC: Record<Locale, Record<string, string>> = {
   id: { persona: 'Kepribadian bot AI — gaya balasan /ai dan /ask.' },
 };
 
+// Opisy /avatar /userinfo /serverinfo (Etap C — pakiet info) — dołożone do COMMAND_DESC niżej.
+const INFO_DESC: Record<Locale, Record<string, string>> = {
+  pl: {
+    avatar: 'Pokaż awatar użytkownika.',
+    userinfo: 'Informacje o użytkowniku (konto, role, boost).',
+    serverinfo: 'Informacje o serwerze (członkowie, kanały, boosty).',
+  },
+  en: {
+    avatar: 'Show a user avatar.',
+    userinfo: 'User info (account, roles, boost).',
+    serverinfo: 'Server info (members, channels, boosts).',
+  },
+  de: {
+    avatar: 'Avatar eines Nutzers anzeigen.',
+    userinfo: 'Nutzerinfo (Konto, Rollen, Boost).',
+    serverinfo: 'Serverinfo (Mitglieder, Kanäle, Boosts).',
+  },
+  es: {
+    avatar: 'Muestra el avatar de un usuario.',
+    userinfo: 'Info del usuario (cuenta, roles, boost).',
+    serverinfo: 'Info del servidor (miembros, canales, boosts).',
+  },
+  it: {
+    avatar: "Mostra l'avatar di un utente.",
+    userinfo: 'Info utente (account, ruoli, boost).',
+    serverinfo: 'Info server (membri, canali, boost).',
+  },
+  fr: {
+    avatar: "Affiche l'avatar d'un utilisateur.",
+    userinfo: 'Infos utilisateur (compte, rôles, boost).',
+    serverinfo: 'Infos serveur (membres, salons, boosts).',
+  },
+  pt: {
+    avatar: 'Mostra o avatar de um usuário.',
+    userinfo: 'Info do usuário (conta, cargos, boost).',
+    serverinfo: 'Info do servidor (membros, canais, boosts).',
+  },
+  zh: {
+    avatar: '显示用户的头像。',
+    userinfo: '用户信息（账户、身份组、助力）。',
+    serverinfo: '服务器信息（成员、频道、助力）。',
+  },
+  ko: {
+    avatar: '사용자의 아바타를 보여줍니다.',
+    userinfo: '사용자 정보 (계정, 역할, 부스트).',
+    serverinfo: '서버 정보 (멤버, 채널, 부스트).',
+  },
+  ru: {
+    avatar: 'Показать аватар пользователя.',
+    userinfo: 'Инфо о пользователе (аккаунт, роли, буст).',
+    serverinfo: 'Инфо о сервере (участники, каналы, бусты).',
+  },
+  uk: {
+    avatar: 'Показати аватар користувача.',
+    userinfo: 'Інфо про користувача (акаунт, ролі, буст).',
+    serverinfo: 'Інфо про сервер (учасники, канали, бусти).',
+  },
+  ja: {
+    avatar: 'ユーザーのアバターを表示します。',
+    userinfo: 'ユーザー情報（アカウント・ロール・ブースト）。',
+    serverinfo: 'サーバー情報（メンバー・チャンネル・ブースト）。',
+  },
+  ar: {
+    avatar: 'عرض صورة المستخدم الرمزية.',
+    userinfo: 'معلومات المستخدم (الحساب، الأدوار، التعزيز).',
+    serverinfo: 'معلومات الخادم (الأعضاء، القنوات، التعزيزات).',
+  },
+  id: {
+    avatar: 'Tampilkan avatar pengguna.',
+    userinfo: 'Info pengguna (akun, peran, boost).',
+    serverinfo: 'Info server (anggota, kanal, boost).',
+  },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -953,6 +1027,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FAREWELL_DESC[l]);
   Object.assign(COMMAND_DESC[l], SEARCH_DESC[l]);
   Object.assign(COMMAND_DESC[l], PERSONA_DESC[l]);
+  Object.assign(COMMAND_DESC[l], INFO_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

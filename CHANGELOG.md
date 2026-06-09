@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-192-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.123.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-193-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.124.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.124.0] — 🪪 Pakiet info: /avatar /userinfo /serverinfo · Etap C (7/?)
+
+- `[#193]` 🪪 **Trzy klasyczne komendy informacyjne** (luka vs MEE6/Dyno/Carl-bot — teraz wypełniona):
+  - 🖼️ **`/avatar [użytkownik]`** — awatar w dużym rozmiarze + link.
+  - 👤 **`/userinfo [użytkownik]`** — konto utworzone, dołączenie, najwyższa rola, lista ról, „boostuje od", flaga bota. Kolor embeda = kolor najwyższej roli.
+  - 🏠 **`/serverinfo`** — właściciel, data utworzenia, liczba członków/kanałów/ról/emoji, boosty + poziom, ikona serwera.
+  Wszystkie daty jako **znaczniki Discorda `<t:…>`** (auto-lokalizacja w kliencie każdego użytkownika). Etykiety pól w **14 językach** (`strings.info.mts` 16 kluczy + `INFO_DESC` ×14). Bot-only, bez kluczy. Siódma fala Etapu C. Nowe komendy → rejestracja globalna po deployu.
 
 ## [0.123.0] — 🎭 /persona — osobowość bota AI · Etap C (6/?)
 
