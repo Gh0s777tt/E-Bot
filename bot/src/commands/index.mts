@@ -32,6 +32,7 @@ import * as heat from './heat.mts';
 import * as help from './help.mts';
 import * as highlight from './highlight.mts';
 import * as hof from './hof.mts';
+import * as imageonly from './imageonly.mts';
 import * as imagine from './imagine.mts';
 import * as invites from './invites.mts';
 import * as library from './library.mts';
@@ -178,6 +179,7 @@ export const commands: Command[] = [
   backup,
   heat,
   panic,
+  imageonly,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

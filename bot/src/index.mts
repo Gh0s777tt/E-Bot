@@ -35,6 +35,7 @@ import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
 import { startCounting } from './community/counting.mts';
 import { startHighlights } from './community/highlights.mts';
+import { startImageOnly } from './community/imageonly.mts';
 import { startInvites } from './community/invites.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startResponder } from './community/responder.mts';
@@ -207,6 +208,7 @@ client.once(Events.ClientReady, (c) => {
   startSticky(c); // Etap C — przypięte wiadomości (/sticky)
   startFarewell(c); // Etap C — pożegnania + podziękowania za boost (/farewell)
   startHeat(c); // Etap G — adaptacyjny anty-spam (heat system, /heat)
+  startImageOnly(c); // Etap H — kanały tylko-obrazki (/imageonly)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-213-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.143.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-214-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.144.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.144.0] — 🖼️ Kanały tylko-obrazki (/imageonly) · Etap H (2/?)
+
+- `[#214]` 🖼️ **Kanały tylko-obrazki** (typ kanału moderowanego jak w StartIT): na oznaczonym kanale **wiadomości bez obrazka/wideo są kasowane**, a autor dostaje krótką notkę (auto-usuwaną po 5 s).
+  - **`/imageonly add|remove [kanał]`** (domyślnie bieżący) · **`list`**. Perm: **Zarządzanie kanałami**.
+  - Sprytny detal: linki do obrazków dostają **1,5 s na zbudowanie podglądu** przez Discorda — wiadomość z URL-em obrazka przeżywa, czysty tekst nie. Moderatorzy poza filtrem.
+  Lista w `settings.imageonly_channels` (zmiany natychmiastowe). 5 kluczy i18n (`strings.imageonly.mts` ×14) + `IMGONLY_DESC`. Druga fala Etapu H. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.143.0] — 🎛️ TempVoice 2.0 — panel kanału z przyciskami · Etap H (1/?)
 

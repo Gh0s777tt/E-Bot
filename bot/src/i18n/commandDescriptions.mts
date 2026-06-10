@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /imageonly (Etap H — kanały moderowane) — dołożony do COMMAND_DESC niżej.
+const IMGONLY_DESC: Record<Locale, Record<string, string>> = {
+  pl: { imageonly: 'Kanały tylko-obrazki (tekst kasowany).' },
+  en: { imageonly: 'Image-only channels (text gets deleted).' },
+  de: { imageonly: 'Nur-Bilder-Kanäle (Text wird gelöscht).' },
+  es: { imageonly: 'Canales solo-imágenes (el texto se elimina).' },
+  it: { imageonly: 'Canali solo-immagini (il testo viene eliminato).' },
+  fr: { imageonly: 'Salons réservés aux images (le texte est supprimé).' },
+  pt: { imageonly: 'Canais só-imagens (o texto é apagado).' },
+  zh: { imageonly: '纯图频道（文字会被删除）。' },
+  ko: { imageonly: '이미지 전용 채널 (텍스트는 삭제됩니다).' },
+  ru: { imageonly: 'Каналы только для изображений (текст удаляется).' },
+  uk: { imageonly: 'Канали лише для зображень (текст видаляється).' },
+  ja: { imageonly: '画像専用チャンネル（テキストは削除）。' },
+  ar: { imageonly: 'قنوات للصور فقط (يُحذف النص).' },
+  id: { imageonly: 'Kanal khusus gambar (teks dihapus).' },
+};
+
 // Opis /panic (Etap G — security, finał) — dołożony do COMMAND_DESC niżej.
 const PANIC_DESC: Record<Locale, Record<string, string>> = {
   pl: { panic: 'PANIC MODE — lockdown serwera + blokada wejść.' },
@@ -1468,6 +1486,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], BACKUP_DESC[l]);
   Object.assign(COMMAND_DESC[l], HEATSYS_DESC[l]);
   Object.assign(COMMAND_DESC[l], PANIC_DESC[l]);
+  Object.assign(COMMAND_DESC[l], IMGONLY_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

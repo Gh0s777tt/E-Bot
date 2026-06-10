@@ -16,6 +16,7 @@ import { GAMES_STRINGS } from './strings.games.mts';
 import { HEALTH_STRINGS } from './strings.health.mts';
 import { HEAT_STRINGS } from './strings.heat.mts';
 import { HELP_STRINGS } from './strings.help.mts';
+import { IMGONLY_STRINGS } from './strings.imageonly.mts';
 import { INFO_STRINGS } from './strings.info.mts';
 import { MARRY_STRINGS } from './strings.marry.mts';
 import { MOD_STRINGS } from './strings.mod.mts';
@@ -425,6 +426,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], HEALTH_STRINGS[l]);
   Object.assign(DICTS[l], HEAT_STRINGS[l]);
   Object.assign(DICTS[l], HELP_STRINGS[l]);
+  Object.assign(DICTS[l], IMGONLY_STRINGS[l]);
   Object.assign(DICTS[l], INFO_STRINGS[l]);
   Object.assign(DICTS[l], BJ_STRINGS[l]);
   Object.assign(DICTS[l], MARRY_STRINGS[l]);
