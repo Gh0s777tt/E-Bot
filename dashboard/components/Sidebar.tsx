@@ -8,6 +8,8 @@ import {
   groupLabel,
   isPanelLocale,
   LOCALE_NAMES,
+  modeHint,
+  modeLabel,
   navLabel,
   PANEL_LOCALES,
   tp,
@@ -118,7 +120,7 @@ export default function Sidebar() {
               key={m.value}
               type="button"
               onClick={() => setMode(m.value)}
-              title={m.hint}
+              title={`${modeLabel(lang, m.value)} — ${modeHint(lang, m.value)}`}
               aria-pressed={mode === m.value}
               className={`flex-1 rounded-md border py-1.5 text-sm transition ${
                 mode === m.value
@@ -131,8 +133,7 @@ export default function Sidebar() {
           ))}
         </div>
         <p className="text-center text-[10px] text-muted/60">
-          {tp(lang, 'ui.mode')}:{' '}
-          <span className="text-muted">{VIEW_MODES.find((m) => m.value === mode)?.label}</span>
+          {tp(lang, 'ui.mode')}: <span className="text-muted">{modeLabel(lang, mode)}</span>
         </p>
         <label data-tour="lang" className="flex items-center gap-1.5 text-[10px] text-muted/60">
           <span aria-hidden>🌍</span>

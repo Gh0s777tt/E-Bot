@@ -1154,6 +1154,129 @@ const UI: Record<PanelLocale, Dict> = {
   },
 };
 
+// ── Tryby panelu (etykieta + podpowiedź) w 14 językach ──
+const MODES: Record<PanelLocale, Dict> = {
+  pl: {
+    simple: 'Prosty',
+    adv: 'Zaawansowany',
+    dev: 'Developer',
+    'simple.h': 'Tylko najważniejsze moduły — łatwy start',
+    'adv.h': 'Wszystkie moduły — dla twórców serwerów',
+    'dev.h': 'Pełny dostęp + narzędzia techniczne i klucze',
+  },
+  en: {
+    simple: 'Simple',
+    adv: 'Advanced',
+    dev: 'Developer',
+    'simple.h': 'Only the essential modules — easy start',
+    'adv.h': 'All modules — for server creators',
+    'dev.h': 'Full access + technical tools and keys',
+  },
+  de: {
+    simple: 'Einfach',
+    adv: 'Erweitert',
+    dev: 'Developer',
+    'simple.h': 'Nur die wichtigsten Module — leichter Start',
+    'adv.h': 'Alle Module — für Server-Ersteller',
+    'dev.h': 'Voller Zugriff + technische Tools und Schlüssel',
+  },
+  es: {
+    simple: 'Simple',
+    adv: 'Avanzado',
+    dev: 'Developer',
+    'simple.h': 'Solo los módulos esenciales — inicio fácil',
+    'adv.h': 'Todos los módulos — para creadores de servidores',
+    'dev.h': 'Acceso total + herramientas técnicas y claves',
+  },
+  it: {
+    simple: 'Semplice',
+    adv: 'Avanzato',
+    dev: 'Developer',
+    'simple.h': 'Solo i moduli essenziali — avvio facile',
+    'adv.h': 'Tutti i moduli — per i creatori di server',
+    'dev.h': 'Accesso completo + strumenti tecnici e chiavi',
+  },
+  fr: {
+    simple: 'Simple',
+    adv: 'Avancé',
+    dev: 'Developer',
+    'simple.h': 'Seulement les modules essentiels — démarrage facile',
+    'adv.h': 'Tous les modules — pour les créateurs de serveurs',
+    'dev.h': 'Accès complet + outils techniques et clés',
+  },
+  pt: {
+    simple: 'Simples',
+    adv: 'Avançado',
+    dev: 'Developer',
+    'simple.h': 'Apenas os módulos essenciais — início fácil',
+    'adv.h': 'Todos os módulos — para criadores de servidores',
+    'dev.h': 'Acesso total + ferramentas técnicas e chaves',
+  },
+  zh: {
+    simple: '简易',
+    adv: '高级',
+    dev: '开发者',
+    'simple.h': '仅最重要的模块 — 轻松上手',
+    'adv.h': '全部模块 — 适合服务器创建者',
+    'dev.h': '完全访问 + 技术工具与密钥',
+  },
+  ko: {
+    simple: '간단',
+    adv: '고급',
+    dev: '개발자',
+    'simple.h': '핵심 모듈만 — 쉬운 시작',
+    'adv.h': '모든 모듈 — 서버 운영자용',
+    'dev.h': '전체 접근 + 기술 도구와 키',
+  },
+  ru: {
+    simple: 'Простой',
+    adv: 'Расширенный',
+    dev: 'Developer',
+    'simple.h': 'Только ключевые модули — лёгкий старт',
+    'adv.h': 'Все модули — для создателей серверов',
+    'dev.h': 'Полный доступ + технические инструменты и ключи',
+  },
+  uk: {
+    simple: 'Простий',
+    adv: 'Розширений',
+    dev: 'Developer',
+    'simple.h': 'Лише ключові модулі — легкий старт',
+    'adv.h': 'Усі модулі — для творців серверів',
+    'dev.h': 'Повний доступ + технічні інструменти та ключі',
+  },
+  ja: {
+    simple: 'シンプル',
+    adv: '上級',
+    dev: 'Developer',
+    'simple.h': '主要モジュールのみ — 簡単スタート',
+    'adv.h': '全モジュール — サーバー運営者向け',
+    'dev.h': 'フルアクセス + 技術ツールとキー',
+  },
+  ar: {
+    simple: 'بسيط',
+    adv: 'متقدم',
+    dev: 'Developer',
+    'simple.h': 'الوحدات الأساسية فقط — بداية سهلة',
+    'adv.h': 'كل الوحدات — لمنشئي الخوادم',
+    'dev.h': 'وصول كامل + أدوات تقنية ومفاتيح',
+  },
+  id: {
+    simple: 'Sederhana',
+    adv: 'Lanjutan',
+    dev: 'Developer',
+    'simple.h': 'Hanya modul penting — mulai dengan mudah',
+    'adv.h': 'Semua modul — untuk pembuat server',
+    'dev.h': 'Akses penuh + alat teknis dan kunci',
+  },
+};
+
+export function modeLabel(locale: PanelLocale, value: string): string {
+  return MODES[locale]?.[value] ?? MODES.pl[value] ?? value;
+}
+export function modeHint(locale: PanelLocale, value: string): string {
+  return MODES[locale]?.[`${value}.h`] ?? MODES.pl[`${value}.h`] ?? '';
+}
+
 export function navLabel(locale: PanelLocale, href: string, fallback: string): string {
   return NAV[locale]?.[href] ?? fallback;
 }

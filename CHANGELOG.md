@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-236-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.166.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-237-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.167.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.167.0] — 🎚️ Tryby 2.0 — domyślny wg rangi + i18n · Etap K (5a/?)
+
+- `[#237]` 🎚️ **Domyślny tryb panelu wg rangi + wielojęzyczne etykiety trybów:**
+  - 🎯 **Domyślny tryb dobiera się automatycznie do rangi** użytkownika panelu, gdy nie wybrał własnego: **właściciel → Developer**, **viewer → Prosty**, admin/editor → Zaawansowany (`/api/view-default`; `ViewModeContext` dociąga to, gdy brak zapisu w localStorage — własny wybór zawsze ma pierwszeństwo).
+  - 🌍 **Etykiety i podpowiedzi trybów** (Prosty/Zaawansowany/Developer + ich opisy) w **14 językach** — wcześniej były po polsku w każdym języku. Nowe `modeLabel`/`modeHint` w `panelI18n`.
+  - Pierwsza pod-fala „modów 2.0". Kolejne: dokładanie opcji do istniejących funkcji wg trybów + i18n treści pomocy/asystenta/samouczka. Etap K (5a). Zmiana tylko panelowa.
 
 ## [0.166.0] — 🎓 Interaktywny samouczek panelu · Etap K (4/?)
 

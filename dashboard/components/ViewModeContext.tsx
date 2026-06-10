@@ -15,10 +15,22 @@ export function ViewModeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('viewMode');
-      if (isViewMode(saved)) setModeState(saved);
+      if (isViewMode(saved)) {
+        setModeState(saved);
+        return;
+      }
     } catch {
       /* brak localStorage */
     }
+    // Brak własnego wyboru → domyślny tryb wg rangi panelu (właściciel→Developer, viewer→Prosty).
+    fetch('/api/view-default')
+      .then((r) => r.json())
+      .then((j: { mode?: string }) => {
+        if (isViewMode(j.mode)) setModeState(j.mode);
+      })
+      .catch(() => {
+        /* zostaje domyślny */
+      });
   }, []);
 
   function setMode(m: ViewMode): void {
