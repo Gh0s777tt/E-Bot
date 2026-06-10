@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-237-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.167.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-238-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.168.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.168.0] — 🗂️ Fundament configów per-serwer · Etap K (C-1/?)
+
+- `[#238]` 🗂️ **Fundament konfiguracji per-serwer** (wstecznie zgodny, zero zmian w działaniu) — pierwszy krok migracji „wspólnych" ustawień na osobne per-serwer:
+  - 🤖 Bot (`lib/db.mts`): `getGuildSettings(guildId)` / `getGuildSetting` / `setGuildSetting` / `guildKey` — override'y serwera trzymane pod kluczem `g:<guildId>:<key>`, z **fallbackiem do wartości globalnej**. Dopóki serwer nie zapisze własnej wartości, widzi dotychczasową — nic nie znika.
+  - 🖥️ Panel (`lib/data.ts`): `getGuildRawSetting` / `setGuildRawSetting` — odczyt override → fallback global, zapis do override'u **wybranego serwera** (z przełącznika serwerów).
+  - 🧠 Spostrzeżenie: ustawienia z ID Discorda (kanały/role) i tak są już per-serwer (ID unikatowe) — migracja dotyczy „blobów" (ekonomia, automod, powitania…), które dziś dzielą jedną wartość.
+  - ⚠️ To **sam substrat** — żaden moduł jeszcze nie przełączony, więc działanie bez zmian. Kolejne fale migrują moduły **pojedynczo, z testami** (bezpiecznie na żywym bocie). Etap K (C-1). Bot + panel (dwa deploye).
 
 ## [0.167.0] — 🎚️ Tryby 2.0 — domyślny wg rangi + i18n · Etap K (5a/?)
 

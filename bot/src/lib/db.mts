@@ -59,3 +59,35 @@ export function setSetting(key: string, value: string): void {
   setSettingLocal(key, value);
   void mirrorUp(key, value);
 }
+
+// ── Ustawienia per-serwer (Etap K — migracja configów) ──────────────────────────────────
+// Override'y serwera trzymamy pod kluczem `g:<guildId>:<key>`; globalny `<key>` zostaje fallbackiem.
+// Dzięki temu migracja jest WSTECZNIE ZGODNA: dopóki serwer nie ma własnego override'u, widzi
+// dotychczasową wartość globalną. Klucze z ID Discorda (kanały/role) i tak są per-serwer (ID unikatowe).
+export function guildKey(guildId: string, key: string): string {
+  return `g:${guildId}:${key}`;
+}
+
+// Pełny widok ustawień dla danego serwera: globalne nadpisane override'ami `g:<guildId>:*`.
+export function getGuildSettings(guildId: string): Record<string, string> {
+  const all = getSettings();
+  const prefix = `g:${guildId}:`;
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(all)) {
+    if (!k.startsWith('g:')) out[k] = v; // globalne (fallback)
+  }
+  for (const [k, v] of Object.entries(all)) {
+    if (k.startsWith(prefix)) out[k.slice(prefix.length)] = v; // override serwera ma pierwszeństwo
+  }
+  return out;
+}
+
+// Pojedyncza wartość per-serwer (override → fallback global → undefined).
+export function getGuildSetting(guildId: string, key: string): string | undefined {
+  return getGuildSettings(guildId)[key];
+}
+
+// Zapis ustawienia dla konkretnego serwera (override) — lokalnie + mirror do chmury.
+export function setGuildSetting(guildId: string, key: string, value: string): void {
+  setSetting(guildKey(guildId, key), value);
+}

@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { getPrimaryGuildId } from './guild';
 import { hasSupabase, supabase } from './supabase';
 
 export type Game = {
@@ -252,6 +253,23 @@ export async function getRawSetting(key: string): Promise<string | null> {
 }
 export async function setRawSetting(key: string, value: string): Promise<void> {
   return rawSet(key, value);
+}
+
+// ── Ustawienia per-serwer (Etap K — migracja configów) ──────────────────────────────────
+// Override serwera pod kluczem `g:<guildId>:<key>` (jak w bocie). Odczyt: override → fallback global.
+// Zapis: zawsze do override'u wybranego serwera (przełącznik serwerów / DISCORD_GUILD_ID).
+// WSTECZNIE ZGODNE: dopóki serwer nie zapisze własnej wartości, widzi dotychczasową globalną.
+export async function getGuildRawSetting(key: string): Promise<string | null> {
+  const gid = await getPrimaryGuildId();
+  if (gid) {
+    const override = await rawGet(`g:${gid}:${key}`);
+    if (override !== null) return override;
+  }
+  return rawGet(key);
+}
+export async function setGuildRawSetting(key: string, value: string): Promise<void> {
+  const gid = await getPrimaryGuildId();
+  return rawSet(gid ? `g:${gid}:${key}` : key, value);
 }
 
 // ───────────── Backup / Restore całej konfiguracji (wszystkie klucze tabeli settings) ─────────────
