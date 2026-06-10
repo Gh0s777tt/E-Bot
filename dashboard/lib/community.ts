@@ -401,7 +401,8 @@ export const SUGGESTIONS_DEFAULT: SuggestionsConfig = {
 };
 
 export async function getSuggestionsConfig(): Promise<SuggestionsConfig> {
-  const raw = await getRawSetting('suggestions_config');
+  // Etap K — suggestions_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('suggestions_config');
   if (!raw) return structuredClone(SUGGESTIONS_DEFAULT);
   try {
     return { ...SUGGESTIONS_DEFAULT, ...(JSON.parse(raw) as Partial<SuggestionsConfig>) };
@@ -410,7 +411,7 @@ export async function getSuggestionsConfig(): Promise<SuggestionsConfig> {
   }
 }
 export async function saveSuggestionsConfig(cfg: SuggestionsConfig): Promise<void> {
-  await setRawSetting('suggestions_config', JSON.stringify(cfg));
+  await setConfigSetting('suggestions_config', JSON.stringify(cfg));
 }
 
 // ── Komendy własne + autoresponder (Faza 7 / F7.2) ──

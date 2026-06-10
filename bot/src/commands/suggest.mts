@@ -20,7 +20,6 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
-  const cfg = suggestionsConfig();
   if (!interaction.guild) {
     await interaction.reply({
       content: t(locale, 'error.guildOnly'),
@@ -28,6 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     return;
   }
+  const cfg = suggestionsConfig(interaction.guild.id);
   if (!cfg.enabled || !cfg.channelId) {
     await interaction.reply({
       content: t(locale, 'suggest.disabled'),

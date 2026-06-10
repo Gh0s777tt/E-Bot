@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-240-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.170.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-241-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.171.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.171.0] — 🗂️ Sugestie per-serwer · Etap K (C-4/?)
+
+- `[#241]` 🗂️ **Sugestie (`suggestions`) per-serwer** — trzeci zmigrowany moduł:
+  - 🤖 **Bot**: `suggestionsConfig(guildId)` czyta config świeżo dla danego serwera (`/suggest` = niska częstotliwość); odczyt przeniesiony za sprawdzenie `guild`.
+  - 🖥️ **Panel**: `suggestions_config` dołączony do `MIGRATED_GUILD_KEYS`; getter/setter formularza (`community.ts`) i przełącznik w Centrum sterowania idą per-serwer.
+  - Wsteczna zgodność (fallback global). Etap K (C-4). Bot + panel (bot pierwszy).
 
 ## [0.170.0] — 🗂️ Poziomy/leveling per-serwer · Etap K (C-3/?)
 
