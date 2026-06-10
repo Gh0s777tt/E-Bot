@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-230-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.160.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-231-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.161.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.161.0] — 🃏 Kolekcjonerskie karty — `/cards` · Etap J (4/?)
+
+- `[#231]` 🃏 **Kolekcjonerskie karty (gacha, eko 2.0)** — nowa komenda `/cards`: losuj karty, kompletuj kolekcję, sprzedawaj duplikaty:
+  - 🎴 17 kart w 5 rzadkościach (⚪ pospolita → 🔴 mityczna **GH0ST King**) z wagami losowania (50/30/14/5/1). `pull` (za walutę), `daily` (darmowe raz/20 h), `collection [gracz]` (z % ukończenia), `sell` (duplikaty, ostatnia sztuka zostaje), `info`.
+  - 🎰 Losowanie = **sink** (oczekiwana wartość < kosztu), kolekcja to nagroda; sprzedaż dubli = drobne **źródło**. Trafienie pokazuje 🆕 gdy karta nowa, embed w kolorze rzadkości.
+  - 🗃️ Dane w Supabase `economy_cards` + `economy_card_daily` (schemat `dashboard/scripts/etapj-cards-schema.sql`); `economy.enabled`, wpisy w historii transakcji (`cards:pull/sell`), graceful bez chmury, 14 języków (rzadkości lokalizowane). Komendy: **97** (94 slash + 3 context-menu).
 
 ## [0.160.0] — 🐾 Pety — `/pet` · Etap J (3/?)
 

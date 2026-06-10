@@ -14,6 +14,7 @@ import * as backup from './backup.mts';
 import * as birthday from './birthday.mts';
 import * as blueprint from './blueprint.mts';
 import * as buttonpanel from './buttonpanel.mts';
+import * as cards from './cards.mts';
 import * as caseCmd from './case.mts';
 import * as cat from './cat.mts';
 import * as confess from './confess.mts';
@@ -190,6 +191,7 @@ export const commands: Command[] = [
   vanityrole,
   stocks,
   pet,
+  cards,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

@@ -1462,6 +1462,24 @@ const ACHV_DESC: Record<Locale, Record<string, string>> = {
   id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
 };
 
+// Opis /cards (Etap J — kolekcjonerskie karty) — dołożony do COMMAND_DESC niżej.
+const CARDS_DESC: Record<Locale, Record<string, string>> = {
+  pl: { cards: 'Kolekcjonerskie karty — losuj i zbieraj.' },
+  en: { cards: 'Collectible cards — pull and collect.' },
+  de: { cards: 'Sammelkarten — ziehen und sammeln.' },
+  es: { cards: 'Cartas coleccionables — tira y colecciona.' },
+  it: { cards: 'Carte collezionabili — pesca e colleziona.' },
+  fr: { cards: 'Cartes à collectionner — tire et collectionne.' },
+  pt: { cards: 'Cartas colecionáveis — tire e colecione.' },
+  zh: { cards: '收藏卡牌 — 抽卡与收集。' },
+  ko: { cards: '수집 카드 — 뽑고 모으기.' },
+  ru: { cards: 'Коллекционные карты — розыгрыш и коллекция.' },
+  uk: { cards: 'Колекційні картки — розіграш і колекція.' },
+  ja: { cards: 'コレクションカード — ガチャと収集。' },
+  ar: { cards: 'بطاقات قابلة للجمع — اسحب واجمع.' },
+  id: { cards: 'Kartu koleksi — tarik dan kumpulkan.' },
+};
+
 // Opis /pet (Etap J — pety) — dołożony do COMMAND_DESC niżej.
 const PET_DESC: Record<Locale, Record<string, string>> = {
   pl: { pet: 'Pet — adoptuj, karm i odbieraj prezenty.' },
@@ -1572,6 +1590,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], PROLES_DESC[l]);
   Object.assign(COMMAND_DESC[l], STOCKS_DESC[l]);
   Object.assign(COMMAND_DESC[l], PET_DESC[l]);
+  Object.assign(COMMAND_DESC[l], CARDS_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
