@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-221-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.151.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-222-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.152.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.152.0] — 🧬 Components V2 w Message Studio · Etap I (5/?)
+
+- `[#222]` 🧬 **Components V2** (nowy format wiadomości Discorda) w **Message Studio** — zaplanowane posty można teraz składać z bloków zamiast treść+embed:
+  - 🧱 **Bloki**: 📝 tekst (markdown, zmienne, emoji serwera — pełny pasek narzędzi) · ➖ separator (linia/odstęp) · 🖼️ galeria do 10 obrazków · 🧱 sekcja z miniaturą po prawej; przestawianie ↑↓, limity Discorda (10 bloków, 4000 znaków) pilnowane licznikami.
+  - 🎨 Opcjonalny **kolor akcentu** — bloki lądują w kontenerze z paskiem koloru (jak embed, ale na całość).
+  - 👁️ **Podgląd jak w Discordzie** renderuje bloki na żywo; „Wyślij testowo" obsługuje nowy format (flaga `IS_COMPONENTS_V2`).
+  - 🤖 Bot: `richMessage.mts` + `buildSendOptions()` (V2 → components+flaga; klasyka → content+embeds), zaplanowane posty wysyłają oba formaty. Wspólny typ `V2Block`/`V2Spec` panel↔bot + zod. Tryb włączony w **Zaplanowanych** (panele ticket/reaction mają własne przyciski — tam celowo bez V2).
+  Piąta fala Etapu I (bot + panel — dwa deploye).
 
 ## [0.151.0] — 🤖 Discord AutoMod (natywny) z panelu · Etap I (4/?)
 

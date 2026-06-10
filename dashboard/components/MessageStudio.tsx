@@ -5,6 +5,8 @@
 // Live-preview ~jak Discord, liczniki znaków wg limitów, smallcaps/fonty Unicode,
 // emoji standardowe + customowe z serwera, zmienne, szablony (localStorage).
 import {
+  ArrowDown,
+  ArrowUp,
   Bold,
   Code,
   Italic,
@@ -18,12 +20,17 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import type { GuildChannel, GuildEmoji } from '../lib/guild';
 import {
+  EMPTY_V2,
   embedHasContent,
   embedTotal,
   LIMITS,
+  LIMITS_V2,
   type RichEmbed,
   type RichField,
   type RichMessage,
+  type V2Block,
+  type V2Spec,
+  v2TextTotal,
 } from '../lib/richMessage';
 import { applyFont, FONTS, type FontKey } from '../lib/unicodeFonts';
 import ColorField from './ColorField';
@@ -390,16 +397,225 @@ function StudioTest({ message }: { message: RichMessage }) {
   );
 }
 
+// Edytor bloków Components V2 (Etap I): tekst / separator / galeria / sekcja z miniaturą,
+// z przestawianiem i licznikami limitów Discorda.
+function V2Editor({
+  v2,
+  onChange,
+  variables,
+  emojis,
+}: {
+  v2: V2Spec;
+  onChange: (v: V2Spec) => void;
+  variables: EditorVar[];
+  emojis: GuildEmoji[];
+}) {
+  const keys = useRef<number[]>(v2.blocks.map((_, i) => i + 1));
+  const idc = useRef(v2.blocks.length + 1);
+  if (keys.current.length !== v2.blocks.length) {
+    keys.current = v2.blocks.map((_, i) => i + 1);
+    idc.current = v2.blocks.length + 1;
+  }
+
+  function add(block: V2Block) {
+    if (v2.blocks.length >= LIMITS_V2.blocks) return;
+    keys.current.push(idc.current);
+    idc.current += 1;
+    onChange({ ...v2, blocks: [...v2.blocks, block] });
+  }
+  function set(i: number, patch: Partial<V2Block>) {
+    onChange({
+      ...v2,
+      blocks: v2.blocks.map((b, idx) => (idx === i ? ({ ...b, ...patch } as V2Block) : b)),
+    });
+  }
+  function remove(i: number) {
+    keys.current.splice(i, 1);
+    onChange({ ...v2, blocks: v2.blocks.filter((_, idx) => idx !== i) });
+  }
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= v2.blocks.length) return;
+    const blocks = [...v2.blocks];
+    [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
+    [keys.current[i], keys.current[j]] = [keys.current[j], keys.current[i]];
+    onChange({ ...v2, blocks });
+  }
+
+  const inp =
+    'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
+  const addBtn =
+    'rounded-md border border-line px-2.5 py-1.5 text-xs transition hover:border-accent hover:bg-elevated';
+  const KIND_LABEL: Record<V2Block['kind'], string> = {
+    text: '📝 Tekst',
+    separator: '➖ Separator',
+    gallery: '🖼️ Galeria',
+    section: '🧱 Sekcja + miniatura',
+  };
+  const total = v2TextTotal(v2);
+
+  return (
+    <div className="space-y-3">
+      <ColorField
+        value={v2.accentColor}
+        onChange={(accentColor) => onChange({ ...v2, accentColor })}
+        label="Kolor akcentu (kontener — puste = bez ramki)"
+      />
+
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-muted">
+          Dodaj blok ({v2.blocks.length}/{LIMITS_V2.blocks}):
+        </span>
+        <button type="button" className={addBtn} onClick={() => add({ kind: 'text', text: '' })}>
+          📝 Tekst
+        </button>
+        <button
+          type="button"
+          className={addBtn}
+          onClick={() => add({ kind: 'separator', divider: true, large: false })}
+        >
+          ➖ Separator
+        </button>
+        <button type="button" className={addBtn} onClick={() => add({ kind: 'gallery', urls: [] })}>
+          🖼️ Galeria
+        </button>
+        <button
+          type="button"
+          className={addBtn}
+          onClick={() => add({ kind: 'section', text: '', thumbnailUrl: '' })}
+        >
+          🧱 Sekcja + miniatura
+        </button>
+        <span className="ml-auto">
+          <Counter len={total} limit={LIMITS_V2.textTotal} />
+        </span>
+      </div>
+
+      {v2.blocks.length === 0 && (
+        <p className="text-xs text-muted">Brak bloków — dodaj pierwszy przyciskami wyżej.</p>
+      )}
+
+      {v2.blocks.map((b, i) => (
+        <div
+          key={keys.current[i]}
+          className="space-y-2 rounded-md border border-line bg-elevated/40 p-2"
+        >
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-white/80">{KIND_LABEL[b.kind]}</span>
+            <div className="ml-auto flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => move(i, -1)}
+                disabled={i === 0}
+                className="rounded-md border border-line p-1 text-muted transition hover:border-accent disabled:opacity-30"
+                title="W górę"
+              >
+                <ArrowUp size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => move(i, 1)}
+                disabled={i === v2.blocks.length - 1}
+                className="rounded-md border border-line p-1 text-muted transition hover:border-accent disabled:opacity-30"
+                title="W dół"
+              >
+                <ArrowDown size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => remove(i)}
+                className="rounded-md border border-line p-1 text-muted transition hover:border-accent hover:text-accent"
+                title="Usuń blok"
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
+          </div>
+
+          {b.kind === 'text' && (
+            <RichTextArea
+              value={b.text}
+              onChange={(text) => set(i, { text })}
+              variables={variables}
+              emojis={emojis}
+              rows={3}
+              placeholder="Treść bloku (markdown Discorda)…"
+            />
+          )}
+          {b.kind === 'separator' && (
+            <div className="flex flex-wrap gap-4 text-xs text-muted">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={b.divider}
+                  onChange={(e) => set(i, { divider: e.target.checked })}
+                  className="h-3.5 w-3.5 accent-accent"
+                />
+                Widoczna linia
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={b.large}
+                  onChange={(e) => set(i, { large: e.target.checked })}
+                  className="h-3.5 w-3.5 accent-accent"
+                />
+                Większy odstęp
+              </label>
+            </div>
+          )}
+          {b.kind === 'gallery' && (
+            <div className="space-y-1">
+              <textarea
+                value={b.urls.join('\n')}
+                onChange={(e) =>
+                  set(i, { urls: e.target.value.split('\n').slice(0, LIMITS_V2.galleryUrls) })
+                }
+                rows={3}
+                placeholder={'https://obrazek1.png\nhttps://obrazek2.png (1 URL na linię, max 10)'}
+                className={inp}
+              />
+              <p className="text-[10px] text-muted">
+                {b.urls.filter((u) => u.trim()).length}/{LIMITS_V2.galleryUrls} obrazków
+              </p>
+            </div>
+          )}
+          {b.kind === 'section' && (
+            <div className="space-y-2">
+              <RichTextArea
+                value={b.text}
+                onChange={(text) => set(i, { text })}
+                variables={variables}
+                emojis={emojis}
+                rows={2}
+                placeholder="Tekst sekcji…"
+              />
+              <input
+                value={b.thumbnailUrl}
+                onChange={(e) => set(i, { thumbnailUrl: e.target.value })}
+                className={inp}
+                placeholder="Miniatura po prawej (URL, opcjonalna)"
+              />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function MessageStudio({
   value,
   onChange,
   variables = [],
   emojis = [],
+  allowV2 = false,
 }: {
   value: RichMessage;
   onChange: (v: RichMessage) => void;
   variables?: EditorVar[];
   emojis?: GuildEmoji[];
+  allowV2?: boolean;
 }) {
   const embed = value.embed;
   const setEmbed = (patch: Partial<RichEmbed>) =>
@@ -479,210 +695,249 @@ export default function MessageStudio({
   const inp =
     'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
   const total = embedTotal(embed);
+  const isV2 = allowV2 && !!value.useV2;
+  const v2 = value.v2 ?? EMPTY_V2;
 
   return (
     <div className="space-y-4">
-      {/* Treść nad embedem */}
-      <div className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Treść wiadomości</span>
-        <RichTextArea
-          value={value.content}
-          onChange={(content) => onChange({ ...value, content })}
-          variables={variables}
-          emojis={emojis}
-          placeholder="Tekst nad embedem (opcjonalny)…"
-          limit={LIMITS.content}
-        />
-      </div>
-
-      {/* Embed */}
-      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
-        <label className="flex items-center gap-3 text-sm">
-          <input
-            type="checkbox"
-            checked={value.useEmbed}
-            onChange={(e) => onChange({ ...value, useEmbed: e.target.checked })}
-            className="h-4 w-4 accent-accent"
-          />
-          <span className="font-semibold text-white/90">Dołącz embed</span>
-          <span className="ml-auto">
-            <Counter len={total} limit={LIMITS.embedTotal} />
-          </span>
-        </label>
-
-        {value.useEmbed && (
-          <div className="space-y-3">
-            <ColorField
-              value={embed.color}
-              onChange={(color) => setEmbed({ color })}
-              label="Kolor"
+      {/* Components V2 (Etap I) — tryb blokowy zamiast treść+embed */}
+      {allowV2 && (
+        <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={!!value.useV2}
+              onChange={(e) =>
+                onChange({ ...value, useV2: e.target.checked, v2: value.v2 ?? { ...EMPTY_V2 } })
+              }
+              className="h-4 w-4 accent-accent"
             />
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Autor (nazwa)</span>
-                <input
-                  value={embed.authorName}
-                  onChange={(e) => setEmbed({ authorName: e.target.value })}
-                  className={inp}
-                  maxLength={LIMITS.author}
-                />
-              </label>
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Autor — ikona (URL)</span>
-                <input
-                  value={embed.authorIcon}
-                  onChange={(e) => setEmbed({ authorIcon: e.target.value })}
-                  className={inp}
-                  placeholder="https://…"
-                />
-              </label>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Tytuł</span>
-                <input
-                  value={embed.title}
-                  onChange={(e) => setEmbed({ title: e.target.value })}
-                  className={inp}
-                  maxLength={LIMITS.title}
-                />
-              </label>
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Tytuł — link (URL)</span>
-                <input
-                  value={embed.url}
-                  onChange={(e) => setEmbed({ url: e.target.value })}
-                  className={inp}
-                  placeholder="https://…"
-                />
-              </label>
-            </div>
-
-            <div className="space-y-1 text-sm">
-              <span className="text-muted">Opis</span>
-              <RichTextArea
-                value={embed.description}
-                onChange={(description) => setEmbed({ description })}
+            <span className="font-semibold text-white/90">
+              🧬 Components V2 <span className="text-xs text-muted">(nowy format Discorda)</span>
+            </span>
+          </label>
+          {isV2 && (
+            <>
+              <p className="text-xs text-muted">
+                Wiadomość składa się z bloków (tekst, separatory, galerie do 10 obrazków, sekcje z
+                miniaturą) — zwykła treść i embed są w tym trybie pomijane.
+              </p>
+              <V2Editor
+                v2={v2}
+                onChange={(next) => onChange({ ...value, v2: next })}
                 variables={variables}
                 emojis={emojis}
-                rows={4}
-                limit={LIMITS.description}
               />
-            </div>
+            </>
+          )}
+        </div>
+      )}
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Duży obraz (URL)</span>
-                <input
-                  value={embed.imageUrl}
-                  onChange={(e) => setEmbed({ imageUrl: e.target.value })}
-                  className={inp}
-                  placeholder="https://…"
-                />
-              </label>
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Miniatura (URL)</span>
-                <input
-                  value={embed.thumbnailUrl}
-                  onChange={(e) => setEmbed({ thumbnailUrl: e.target.value })}
-                  className={inp}
-                  placeholder="https://…"
-                />
-              </label>
-            </div>
+      {/* Treść nad embedem */}
+      {!isV2 && (
+        <div className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">Treść wiadomości</span>
+          <RichTextArea
+            value={value.content}
+            onChange={(content) => onChange({ ...value, content })}
+            variables={variables}
+            emojis={emojis}
+            placeholder="Tekst nad embedem (opcjonalny)…"
+            limit={LIMITS.content}
+          />
+        </div>
+      )}
 
-            {/* Pola */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted">
-                  Pola ({embed.fields.length}/{LIMITS.fields})
-                </span>
-                <button
-                  type="button"
-                  onClick={addField}
-                  className="flex items-center gap-1 rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated"
-                >
-                  <Plus size={13} /> Dodaj pole
-                </button>
-              </div>
-              {embed.fields.map((f, i) => (
-                <div
-                  key={fieldKeys.current[i]}
-                  className="space-y-2 rounded-md border border-line bg-elevated/40 p-2"
-                >
-                  <div className="flex gap-2">
-                    <input
-                      value={f.name}
-                      onChange={(e) => setField(i, { name: e.target.value })}
-                      placeholder="Nazwa pola"
-                      className={inp}
-                      maxLength={LIMITS.fieldName}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeField(i)}
-                      className="rounded-md border border-line px-2 text-muted transition hover:border-accent hover:text-accent"
-                      title="Usuń pole"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                  <textarea
-                    value={f.value}
-                    onChange={(e) => setField(i, { value: e.target.value })}
-                    placeholder="Treść pola"
-                    rows={2}
+      {/* Embed */}
+      {!isV2 && (
+        <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={value.useEmbed}
+              onChange={(e) => onChange({ ...value, useEmbed: e.target.checked })}
+              className="h-4 w-4 accent-accent"
+            />
+            <span className="font-semibold text-white/90">Dołącz embed</span>
+            <span className="ml-auto">
+              <Counter len={total} limit={LIMITS.embedTotal} />
+            </span>
+          </label>
+
+          {value.useEmbed && (
+            <div className="space-y-3">
+              <ColorField
+                value={embed.color}
+                onChange={(color) => setEmbed({ color })}
+                label="Kolor"
+              />
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Autor (nazwa)</span>
+                  <input
+                    value={embed.authorName}
+                    onChange={(e) => setEmbed({ authorName: e.target.value })}
                     className={inp}
-                    maxLength={LIMITS.fieldValue}
+                    maxLength={LIMITS.author}
                   />
-                  <label className="flex items-center gap-2 text-xs text-muted">
-                    <input
-                      type="checkbox"
-                      checked={f.inline}
-                      onChange={(e) => setField(i, { inline: e.target.checked })}
-                      className="h-3.5 w-3.5 accent-accent"
-                    />
-                    W jednej linii (inline)
-                  </label>
+                </label>
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Autor — ikona (URL)</span>
+                  <input
+                    value={embed.authorIcon}
+                    onChange={(e) => setEmbed({ authorIcon: e.target.value })}
+                    className={inp}
+                    placeholder="https://…"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Tytuł</span>
+                  <input
+                    value={embed.title}
+                    onChange={(e) => setEmbed({ title: e.target.value })}
+                    className={inp}
+                    maxLength={LIMITS.title}
+                  />
+                </label>
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Tytuł — link (URL)</span>
+                  <input
+                    value={embed.url}
+                    onChange={(e) => setEmbed({ url: e.target.value })}
+                    className={inp}
+                    placeholder="https://…"
+                  />
+                </label>
+              </div>
+
+              <div className="space-y-1 text-sm">
+                <span className="text-muted">Opis</span>
+                <RichTextArea
+                  value={embed.description}
+                  onChange={(description) => setEmbed({ description })}
+                  variables={variables}
+                  emojis={emojis}
+                  rows={4}
+                  limit={LIMITS.description}
+                />
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Duży obraz (URL)</span>
+                  <input
+                    value={embed.imageUrl}
+                    onChange={(e) => setEmbed({ imageUrl: e.target.value })}
+                    className={inp}
+                    placeholder="https://…"
+                  />
+                </label>
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Miniatura (URL)</span>
+                  <input
+                    value={embed.thumbnailUrl}
+                    onChange={(e) => setEmbed({ thumbnailUrl: e.target.value })}
+                    className={inp}
+                    placeholder="https://…"
+                  />
+                </label>
+              </div>
+
+              {/* Pola */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted">
+                    Pola ({embed.fields.length}/{LIMITS.fields})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={addField}
+                    className="flex items-center gap-1 rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated"
+                  >
+                    <Plus size={13} /> Dodaj pole
+                  </button>
                 </div>
-              ))}
-            </div>
+                {embed.fields.map((f, i) => (
+                  <div
+                    key={fieldKeys.current[i]}
+                    className="space-y-2 rounded-md border border-line bg-elevated/40 p-2"
+                  >
+                    <div className="flex gap-2">
+                      <input
+                        value={f.name}
+                        onChange={(e) => setField(i, { name: e.target.value })}
+                        placeholder="Nazwa pola"
+                        className={inp}
+                        maxLength={LIMITS.fieldName}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeField(i)}
+                        className="rounded-md border border-line px-2 text-muted transition hover:border-accent hover:text-accent"
+                        title="Usuń pole"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                    <textarea
+                      value={f.value}
+                      onChange={(e) => setField(i, { value: e.target.value })}
+                      placeholder="Treść pola"
+                      rows={2}
+                      className={inp}
+                      maxLength={LIMITS.fieldValue}
+                    />
+                    <label className="flex items-center gap-2 text-xs text-muted">
+                      <input
+                        type="checkbox"
+                        checked={f.inline}
+                        onChange={(e) => setField(i, { inline: e.target.checked })}
+                        className="h-3.5 w-3.5 accent-accent"
+                      />
+                      W jednej linii (inline)
+                    </label>
+                  </div>
+                ))}
+              </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Stopka (tekst)</span>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Stopka (tekst)</span>
+                  <input
+                    value={embed.footerText}
+                    onChange={(e) => setEmbed({ footerText: e.target.value })}
+                    className={inp}
+                    maxLength={LIMITS.footer}
+                  />
+                </label>
+                <label className="space-y-1 text-sm">
+                  <span className="text-muted">Stopka — ikona (URL)</span>
+                  <input
+                    value={embed.footerIcon}
+                    onChange={(e) => setEmbed({ footerIcon: e.target.value })}
+                    className={inp}
+                    placeholder="https://…"
+                  />
+                </label>
+              </div>
+
+              <label className="flex items-center gap-2 text-sm text-muted">
                 <input
-                  value={embed.footerText}
-                  onChange={(e) => setEmbed({ footerText: e.target.value })}
-                  className={inp}
-                  maxLength={LIMITS.footer}
+                  type="checkbox"
+                  checked={embed.timestamp}
+                  onChange={(e) => setEmbed({ timestamp: e.target.checked })}
+                  className="h-4 w-4 accent-accent"
                 />
-              </label>
-              <label className="space-y-1 text-sm">
-                <span className="text-muted">Stopka — ikona (URL)</span>
-                <input
-                  value={embed.footerIcon}
-                  onChange={(e) => setEmbed({ footerIcon: e.target.value })}
-                  className={inp}
-                  placeholder="https://…"
-                />
+                Znacznik czasu (timestamp)
               </label>
             </div>
-
-            <label className="flex items-center gap-2 text-sm text-muted">
-              <input
-                type="checkbox"
-                checked={embed.timestamp}
-                onChange={(e) => setEmbed({ timestamp: e.target.checked })}
-                className="h-4 w-4 accent-accent"
-              />
-              Znacznik czasu (timestamp)
-            </label>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Szablony */}
       <div className="flex flex-wrap items-end gap-2 rounded-xl border border-line bg-bg/40 p-3">
@@ -738,13 +993,58 @@ export default function MessageStudio({
       {/* Podgląd 1:1 jak Discord */}
       <div className="rounded-xl border border-line bg-[#313338] p-4">
         <p className="mb-2 text-[10px] uppercase tracking-wide text-white/40">Podgląd</p>
-        {value.content.trim() && (
+        {isV2 && (
+          <div
+            className={`max-w-lg space-y-2 ${v2.accentColor ? 'rounded border-l-4 bg-[#2b2d31] p-3' : ''}`}
+            style={v2.accentColor ? { borderLeftColor: v2.accentColor } : undefined}
+          >
+            {v2.blocks.length === 0 && <p className="text-sm text-white/40">— dodaj bloki —</p>}
+            {v2.blocks.map((b, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: bloki nie mają ID — kolejność jest tożsamością (podgląd tylko czyta)
+              <div key={`${b.kind}-${i}`}>
+                {b.kind === 'text' && b.text.trim() && (
+                  <div
+                    className="whitespace-pre-wrap break-words text-sm text-[#dbdee1]"
+                    dangerouslySetInnerHTML={{ __html: renderMarkdown(b.text, variables) }}
+                  />
+                )}
+                {b.kind === 'separator' && (
+                  <hr
+                    className={`${b.large ? 'my-3' : 'my-1.5'} ${b.divider ? 'border-white/20' : 'border-transparent'}`}
+                  />
+                )}
+                {b.kind === 'gallery' && b.urls.some((u) => u.trim()) && (
+                  <div className="grid max-w-md grid-cols-3 gap-1">
+                    {b.urls
+                      .map((u) => u.trim())
+                      .filter(Boolean)
+                      .map((u) => (
+                        <img key={u} src={u} alt="" className="h-20 w-full rounded object-cover" />
+                      ))}
+                  </div>
+                )}
+                {b.kind === 'section' && b.text.trim() && (
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="min-w-0 flex-1 whitespace-pre-wrap break-words text-sm text-[#dbdee1]"
+                      dangerouslySetInnerHTML={{ __html: renderMarkdown(b.text, variables) }}
+                    />
+                    {b.thumbnailUrl.trim() && (
+                      <img src={b.thumbnailUrl} alt="" className="h-14 w-14 rounded object-cover" />
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {!isV2 && value.content.trim() && (
           <div
             className="mb-2 whitespace-pre-wrap break-words text-sm text-[#dbdee1]"
             dangerouslySetInnerHTML={{ __html: renderMarkdown(value.content, variables) }}
           />
         )}
-        {showEmbed ? (
+        {!isV2 && showEmbed ? (
           <div
             className="max-w-lg rounded border-l-4 bg-[#2b2d31] p-3"
             style={{ borderLeftColor: embed.color || '#E50914' }}
@@ -807,7 +1107,7 @@ export default function MessageStudio({
             </div>
           </div>
         ) : (
-          !value.content.trim() && <p className="text-sm text-white/40">— pusto —</p>
+          !isV2 && !value.content.trim() && <p className="text-sm text-white/40">— pusto —</p>
         )}
       </div>
     </div>

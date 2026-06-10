@@ -225,6 +225,7 @@ export default function ScheduledPostsForm({
                     value={p.message}
                     onChange={(message: RichMessage) => update(p.id, { message })}
                     emojis={guild.emojis}
+                    allowV2
                     variables={[
                       { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
                       { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },

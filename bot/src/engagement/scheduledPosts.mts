@@ -6,7 +6,7 @@
 import type { Client, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
-import { buildRichMessage, type RichMessage } from '../lib/richMessage.mts';
+import { buildSendOptions, hasRich, type RichMessage } from '../lib/richMessage.mts';
 
 type Mode = 'once' | 'daily' | 'weekly';
 type Post = {
@@ -97,9 +97,10 @@ async function tick(client: Client): Promise<void> {
         '{memberCount}': String(guild?.memberCount ?? ''),
         '{count}': String(guild?.memberCount ?? ''),
       };
-      const payload = buildRichMessage(p.message, vars);
-      if (payload.content || payload.embeds.length) {
-        await (ch as TextChannel).send(payload).catch(() => {});
+      if (hasRich(p.message)) {
+        // V2 (components + flaga) albo klasyka (content + embeds) — buildSendOptions decyduje.
+        const payload = buildSendOptions(p.message, vars);
+        await (ch as TextChannel).send(payload as never).catch(() => {});
       }
     }
     state[p.id] = now.getTime();

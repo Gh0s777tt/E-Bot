@@ -114,10 +114,32 @@ export const richEmbedSchema = z.object({
     .max(25)
     .default([]),
 });
+// Components V2 (Etap I) — bloki nowego formatu wiadomości (tryb opcjonalny w Message Studio).
+const v2BlockSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('text'), text: z.string().max(4000) }),
+  z.object({
+    kind: z.literal('separator'),
+    divider: z.boolean().default(true),
+    large: z.boolean().default(false),
+  }),
+  z.object({ kind: z.literal('gallery'), urls: z.array(z.string().max(500)).max(10) }),
+  z.object({
+    kind: z.literal('section'),
+    text: z.string().max(4000),
+    thumbnailUrl: z.string().max(500),
+  }),
+]);
 export const richMessageSchema = z.object({
   content: z.string().max(2000).default(''),
   useEmbed: z.boolean().default(false),
   embed: richEmbedSchema.optional(),
+  useV2: z.boolean().optional().default(false),
+  v2: z
+    .object({
+      accentColor: z.string().max(9).default(''),
+      blocks: z.array(v2BlockSchema).max(10).default([]),
+    })
+    .optional(),
 });
 export type RichMessageInput = z.infer<typeof richMessageSchema>;
 

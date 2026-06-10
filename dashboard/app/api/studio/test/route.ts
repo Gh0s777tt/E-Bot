@@ -1,7 +1,12 @@
 // „Wyślij testowo" z Message Studio — buduje payload Discord z RichMessage i wysyła na wybrany
 // kanał (bot token, server-side). Zmienne podstawiane próbkami; pingi wyłączone (parse: []).
 // Chronione sesją przez proxy.
-import { embedHasContent, type RichEmbed, type RichMessage } from '../../../../lib/richMessage';
+import {
+  embedHasContent,
+  type RichEmbed,
+  type RichMessage,
+  v2HasContent,
+} from '../../../../lib/richMessage';
 
 export const dynamic = 'force-dynamic';
 
@@ -82,10 +87,42 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const payload: Record<string, unknown> = { allowed_mentions: { parse: [] } };
-  if (msg.content?.trim()) payload.content = sub(msg.content).slice(0, 2000);
-  if (msg.useEmbed && msg.embed && embedHasContent(msg.embed))
-    payload.embeds = [buildEmbed(msg.embed)];
-  if (!payload.content && !payload.embeds) {
+  if (msg.useV2 && v2HasContent(msg.v2)) {
+    // Components V2: bloki zamiast content/embeds (Discord zabrania ich przy tej fladze).
+    const items: unknown[] = [];
+    for (const b of (msg.v2?.blocks ?? []).slice(0, 10)) {
+      if (b.kind === 'text' && b.text.trim()) {
+        items.push({ type: 10, content: sub(b.text).slice(0, 4000) });
+      } else if (b.kind === 'separator') {
+        items.push({ type: 14, divider: b.divider !== false, spacing: b.large ? 2 : 1 });
+      } else if (b.kind === 'gallery') {
+        const urls = b.urls
+          .map((u) => u.trim())
+          .filter(Boolean)
+          .slice(0, 10);
+        if (urls.length) items.push({ type: 12, items: urls.map((url) => ({ media: { url } })) });
+      } else if (b.kind === 'section' && b.text.trim()) {
+        items.push({
+          type: 9,
+          components: [{ type: 10, content: sub(b.text).slice(0, 4000) }],
+          ...(b.thumbnailUrl.trim()
+            ? { accessory: { type: 11, media: { url: b.thumbnailUrl.trim() } } }
+            : {}),
+        });
+      }
+    }
+    const accent = hexToInt(msg.v2?.accentColor ?? '');
+    payload.components =
+      accent !== undefined && items.length
+        ? [{ type: 17, accent_color: accent, components: items }]
+        : items;
+    payload.flags = 1 << 15; // IS_COMPONENTS_V2
+  } else {
+    if (msg.content?.trim()) payload.content = sub(msg.content).slice(0, 2000);
+    if (msg.useEmbed && msg.embed && embedHasContent(msg.embed))
+      payload.embeds = [buildEmbed(msg.embed)];
+  }
+  if (!payload.content && !payload.embeds && !(payload.components as unknown[])?.length) {
     return Response.json({ ok: false, error: 'pusta wiadomość' }, { status: 400 });
   }
 
