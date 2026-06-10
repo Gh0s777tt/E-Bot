@@ -20,6 +20,8 @@ export type EconomyConfig = {
   gambleEnabled: boolean;
   gambleMax: number;
   bankInterestPct: number;
+  payTaxPct: number; // podatek od /eco pay (%)
+  levelUpMoney: number; // nagroda pieniężna za awans poziomu (0 = wył.)
 };
 
 export const ECONOMY_DEFAULT: EconomyConfig = {
@@ -38,6 +40,8 @@ export const ECONOMY_DEFAULT: EconomyConfig = {
   gambleEnabled: true,
   gambleMax: 10000,
   bankInterestPct: 0,
+  payTaxPct: 0,
+  levelUpMoney: 0,
 };
 
 export async function getServerEconomy(): Promise<EconomyConfig> {

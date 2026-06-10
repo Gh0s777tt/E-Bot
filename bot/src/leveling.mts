@@ -3,6 +3,13 @@
 // settings-sync). Dane piszemy do tabeli Supabase 'user_levels'. Panel czyta ranking z tej tabeli.
 import { type Client, Events, type GuildMember, type Message } from 'discord.js';
 import { xpMultiplier } from './economy/effects.mts';
+import {
+  ecoConfig,
+  fmt,
+  getUser as getEcoUser,
+  saveUser as saveEcoUser,
+} from './economy/store.mts';
+import { logTx } from './economy/txlog.mts';
 import { resolveGuildLocale, t } from './i18n/index.mts';
 import { tierAtLevel } from './lib/achievements.mts';
 import {
@@ -203,6 +210,29 @@ async function onLevelUp(
     }
   }
 
+  // Most eko↔leveling: nagroda pieniężna za awans (panel ekonomii: levelUpMoney).
+  let moneyLine = '';
+  const eco = ecoConfig();
+  if (eco.enabled && eco.levelUpMoney > 0) {
+    try {
+      const u = await getEcoUser(guildId, userId);
+      await saveEcoUser({
+        guild_id: guildId,
+        user_id: userId,
+        username: u.username,
+        wallet: u.wallet + eco.levelUpMoney,
+      });
+      logTx(guildId, userId, eco.levelUpMoney, 'level-up');
+      moneyLine = t(resolveGuildLocale(), 'eco.levelReward', {
+        user: `<@${userId}>`,
+        amount: fmt(eco.levelUpMoney, eco.currency),
+        level: String(level),
+      });
+    } catch (e) {
+      console.warn('[leveling] level-up money:', (e as Error).message);
+    }
+  }
+
   if (cfg.announceChannelId) {
     const ch = await guild.channels.fetch(cfg.announceChannelId).catch(() => null);
     if (ch?.isTextBased() && 'send' in ch) {
@@ -212,6 +242,7 @@ async function onLevelUp(
             .replaceAll('{level}', String(level))
         : `🏆 <@${userId}> awansował na **poziom ${level}**!`;
       await ch.send(text).catch(() => {});
+      if (moneyLine) await ch.send(moneyLine).catch(() => {});
       // Osiągnięcia-tiery — odznaka, gdy poziom trafia dokładnie w próg (config z panelu levelingu).
       const tier = cfg.achievementsEnabled ? tierAtLevel(level) : undefined;
       if (tier) {

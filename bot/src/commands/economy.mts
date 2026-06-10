@@ -335,6 +335,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
     const rec = await getUser(gid, to.id);
+    // Podatek od przelewu (panel: payTaxPct) — potrącany odbiorcy, "spalany".
+    const tax = Math.floor((amount * Math.max(0, cfg.payTaxPct)) / 100);
+    const received = amount - tax;
     await saveUser({
       guild_id: gid,
       user_id: interaction.user.id,
@@ -345,11 +348,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       guild_id: gid,
       user_id: to.id,
       username: to.username,
-      wallet: rec.wallet + amount,
+      wallet: rec.wallet + received,
     });
     logTx(gid, interaction.user.id, -amount, 'przelew');
-    logTx(gid, to.id, amount, 'przelew');
-    await interaction.reply(t(locale, 'eco.payOk', { amount: fmt(amount, cur), to: to.id }));
+    logTx(gid, to.id, received, 'przelew');
+    const taxNote = tax > 0 ? `\n${t(locale, 'eco.payTax', { tax: fmt(tax, cur) })}` : '';
+    await interaction.reply(
+      t(locale, 'eco.payOk', { amount: fmt(received, cur), to: to.id }) + taxNote,
+    );
     return;
   }
 

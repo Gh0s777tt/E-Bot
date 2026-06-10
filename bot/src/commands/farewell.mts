@@ -32,9 +32,8 @@ function group(name: 'goodbye' | 'booster') {
           ? 'Wiadomości pożegnalne (gdy ktoś wychodzi).'
           : 'Podziękowania za boost serwera.',
       )
-      .addSubcommand((s) =>
-        s
-          .setName('set')
+      .addSubcommand((s) => {
+        s.setName('set')
           .setDescription('Ustaw kanał i treść wiadomości.')
           .addChannelOption((o) =>
             o
@@ -45,8 +44,14 @@ function group(name: 'goodbye' | 'booster') {
           )
           .addStringOption((o) =>
             o.setName('tekst').setDescription(VARS_HINT).setRequired(true).setMaxLength(1000),
-          ),
-      )
+          );
+        if (name === 'booster') {
+          s.addRoleOption((o) =>
+            o.setName('rola').setDescription('Rola nadawana boosterom (opcjonalnie)'),
+          );
+        }
+        return s;
+      })
       .addSubcommand((s) => s.setName('off').setDescription('Wyłącz te wiadomości.'))
       .addSubcommand((s) => s.setName('test').setDescription('Wyślij testową wiadomość na kanał.'));
 }
@@ -91,6 +96,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const channel = interaction.options.getChannel('kanal', true);
     const text = interaction.options.getString('tekst', true);
     const cfg: FarewellConfig = { enabled: true, channelId: channel.id, message: text };
+    if (grp === 'booster') {
+      const role = interaction.options.getRole('rola');
+      if (role) cfg.roleId = role.id;
+    }
     setSetting(key, JSON.stringify(cfg));
     await interaction.reply({
       content: t(locale, grp === 'booster' ? 'farewell.boosterSet' : 'farewell.goodbyeSet', {

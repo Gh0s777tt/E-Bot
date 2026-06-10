@@ -13,7 +13,12 @@ import { getSettings } from './lib/db.mts';
 export const FAREWELL_ACCENT = 0xe50914; // czerwień marki (goodbye)
 export const FAREWELL_BOOST = 0xf47fff; // róż boostu (booster)
 
-export type FarewellConfig = { enabled: boolean; channelId: string; message: string };
+export type FarewellConfig = {
+  enabled: boolean;
+  channelId: string;
+  message: string;
+  roleId?: string; // tylko booster: rola nadawana za boost (opcjonalna)
+};
 const EMPTY: FarewellConfig = { enabled: false, channelId: '', message: '' };
 
 let goodbye: FarewellConfig = { ...EMPTY };
@@ -87,6 +92,10 @@ export function startFarewell(client: Client): void {
   client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
     if (oldMember.partial) return;
     if (!oldMember.premiumSinceTimestamp && newMember.premiumSinceTimestamp) {
+      // Booster-autorola (niezależna od wiadomości — działa nawet bez kanału podziękowań).
+      if (booster.enabled && booster.roleId) {
+        await newMember.roles.add(booster.roleId).catch(() => {});
+      }
       await send(newMember, booster, FAREWELL_BOOST);
     }
   });

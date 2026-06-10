@@ -1,5 +1,5 @@
 import type { TextChannel } from 'discord.js';
-import { type Client, EmbedBuilder } from 'discord.js';
+import { ChannelType, type Client, EmbedBuilder } from 'discord.js';
 import { getSettings } from '../lib/db.mts';
 import { getKickLive } from './kick.mts';
 import { getRumbleLive } from './rumble.mts';
@@ -150,6 +150,8 @@ async function announce(
   const content = (
     msgTpl ? fillVars(msgTpl, st, mention) : `${mention} ${st.url ?? ''}`.trim()
   ).slice(0, 2000);
-  await (ch as TextChannel).send({ content: content || undefined, embeds: [embed] });
+  const sent = await (ch as TextChannel).send({ content: content || undefined, embeds: [embed] });
+  // Kanał ogłoszeń (News) → auto-crosspost na serwery obserwujące.
+  if (ch.type === ChannelType.GuildAnnouncement) await sent.crosspost().catch(() => {});
   console.log(`[live] ogłoszono: ${st.platform} / ${st.channelName}`);
 }

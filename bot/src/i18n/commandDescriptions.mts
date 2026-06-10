@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /math (Etap F — kalkulator) — dołożony do COMMAND_DESC niżej.
+const MATH_DESC: Record<Locale, Record<string, string>> = {
+  pl: { math: 'Kalkulator — policz wyrażenie.' },
+  en: { math: 'Calculator — evaluate an expression.' },
+  de: { math: 'Taschenrechner — Ausdruck berechnen.' },
+  es: { math: 'Calculadora — evalúa una expresión.' },
+  it: { math: "Calcolatrice — calcola un'espressione." },
+  fr: { math: 'Calculatrice — évalue une expression.' },
+  pt: { math: 'Calculadora — calcule uma expressão.' },
+  zh: { math: '计算器 — 计算表达式。' },
+  ko: { math: '계산기 — 수식을 계산합니다.' },
+  ru: { math: 'Калькулятор — вычислить выражение.' },
+  uk: { math: 'Калькулятор — обчислити вираз.' },
+  ja: { math: '電卓 — 式を計算します。' },
+  ar: { math: 'آلة حاسبة — احسب تعبيرًا.' },
+  id: { math: 'Kalkulator — hitung ekspresi.' },
+};
+
 // Opis /ttt (Etap F — kółko i krzyżyk) — dołożony do COMMAND_DESC niżej.
 const TTT_DESC: Record<Locale, Record<string, string>> = {
   pl: { ttt: 'Kółko i krzyżyk z innym graczem. ⭕❌' },
@@ -1373,6 +1391,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], SOCIAL2_DESC[l]);
   Object.assign(COMMAND_DESC[l], MARRY_DESC[l]);
   Object.assign(COMMAND_DESC[l], TTT_DESC[l]);
+  Object.assign(COMMAND_DESC[l], MATH_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

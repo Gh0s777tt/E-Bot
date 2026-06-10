@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-206-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.136.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-207-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.137.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.137.0] — 🔗 Mosty eko + crosspost + booster-rola + /math · Etap F (4/4) — ETAP F DOMKNIĘTY 🎉
+
+- `[#207]` 🔗 **Mosty między modułami** (integracje w stylu StartIT) — **bot + panel**:
+  - 🧾 **Podatek od przelewów** — `/eco pay` potrąca % (panel ekonomii: „Podatek od przelewów", 0–50%, domyślnie 0); odbiorca widzi kwotę netto + notkę o podatku.
+  - 💰 **Nagroda za awans poziomu** — leveling→eko: przy level-upie użytkownik dostaje walutę (panel: „Nagroda za awans poziomu", 0 = wył.), wpis w historii transakcji + ogłoszenie na kanale awansów.
+  - 💜 **Booster-autorola** — `/farewell booster set` ma opcję `rola`: bot nadaje ją automatycznie przy starcie boosta (działa nawet bez wiadomości podziękowania).
+  - 📣 **Auto-crosspost** — powiadomienia live wysłane na **kanał ogłoszeń (News)** są automatycznie publikowane do serwerów obserwujących.
+  - 🧮 **`/math`** — kalkulator (twardy filtr znaków, bez wykonywania dowolnego kodu; obsługuje × ÷ −).
+  4 klucze i18n (`strings.bridges.mts` ×14) + `MATH_DESC`. **Etap F (Fun & mosty eko) DOMKNIĘTY** — 4 fale: pakiet społeczny → małżeństwa → gry → mosty. Zmiana `/farewell` + nowa `/math` → rejestracja globalna po deployu.
 
 ## [0.136.0] — 🎮 Gry: /eco crime, /eco highlow, /ttt · Etap F (3/?)
 

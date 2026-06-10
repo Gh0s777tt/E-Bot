@@ -315,6 +315,8 @@ export const economySchema = z.object({
   gambleEnabled: z.boolean(),
   gambleMax: z.number().int().min(1).max(100_000_000),
   bankInterestPct: z.number().min(0).max(100).optional().default(0),
+  payTaxPct: z.number().min(0).max(50).optional().default(0),
+  levelUpMoney: z.number().int().min(0).max(1_000_000).optional().default(0),
 });
 export type EconomyInput = z.infer<typeof economySchema>;
 

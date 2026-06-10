@@ -18,6 +18,8 @@ export type EcoConfig = {
   gambleEnabled: boolean;
   gambleMax: number;
   bankInterestPct: number; // dzienne odsetki od salda w banku (% , 0 = wyłączone)
+  payTaxPct: number; // podatek od /eco pay (%, 0 = brak) — spalany, nie trafia do nikogo
+  levelUpMoney: number; // nagroda pieniężna za awans poziomu (0 = wyłączone)
 };
 
 export const ECO_DEFAULT: EcoConfig = {
@@ -36,6 +38,8 @@ export const ECO_DEFAULT: EcoConfig = {
   gambleEnabled: true,
   gambleMax: 10000,
   bankInterestPct: 0,
+  payTaxPct: 0,
+  levelUpMoney: 0,
 };
 
 export function ecoConfig(): EcoConfig {

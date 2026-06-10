@@ -75,10 +75,17 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
           {N('Praca: min', 'workMin')}
           {N('Praca: max', 'workMax')}
           {N('Odsetki bank / dzień (%)', 'bankInterestPct')}
+          {N('Podatek od przelewów (%)', 'payTaxPct')}
+          {N('Nagroda za awans poziomu', 'levelUpMoney')}
         </div>
         <p className="mt-2 text-xs text-muted">
           💰 <strong>Odsetki bankowe</strong> — co dzień dolicza ten % do salda w banku każdej osoby
           (pasywny dochód). 0 = wyłączone. Trafia też do historii transakcji jako „odsetki".
+        </p>
+        <p className="mt-1 text-xs text-muted">
+          🧾 <strong>Podatek od przelewów</strong> — potrącany z kwoty <code>/eco pay</code> (0 =
+          brak). 💰 <strong>Nagroda za awans</strong> — tyle waluty dostaje użytkownik przy każdym
+          awansie poziomu (0 = wyłączone).
         </p>
       </div>
 
