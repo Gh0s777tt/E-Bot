@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /marry (Etap F — małżeństwa) — dołożony do COMMAND_DESC niżej.
+const MARRY_DESC: Record<Locale, Record<string, string>> = {
+  pl: { marry: 'Małżeństwa: oświadczyny, status, rozwód. 💍' },
+  en: { marry: 'Marriages: propose, status, divorce. 💍' },
+  de: { marry: 'Ehen: Antrag, Status, Scheidung. 💍' },
+  es: { marry: 'Matrimonios: propuesta, estado, divorcio. 💍' },
+  it: { marry: 'Matrimoni: proposta, stato, divorzio. 💍' },
+  fr: { marry: 'Mariages : demande, statut, divorce. 💍' },
+  pt: { marry: 'Casamentos: pedido, status, divórcio. 💍' },
+  zh: { marry: '结婚系统：求婚、状态、离婚。💍' },
+  ko: { marry: '결혼 시스템: 프러포즈, 상태, 이혼. 💍' },
+  ru: { marry: 'Браки: предложение, статус, развод. 💍' },
+  uk: { marry: 'Шлюби: пропозиція, статус, розлучення. 💍' },
+  ja: { marry: '結婚システム：プロポーズ・ステータス・離婚。💍' },
+  ar: { marry: 'الزواج: عرض، حالة، طلاق. 💍' },
+  id: { marry: 'Pernikahan: lamaran, status, cerai. 💍' },
+};
+
 // Opisy /ship + interakcji (Etap F — pakiet społeczny) — dołożone do COMMAND_DESC niżej.
 const SOCIAL2_DESC: Record<Locale, Record<string, string>> = {
   pl: {
@@ -1335,6 +1353,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], UNDO_DESC[l]);
   Object.assign(COMMAND_DESC[l], ACHV_DESC[l]);
   Object.assign(COMMAND_DESC[l], SOCIAL2_DESC[l]);
+  Object.assign(COMMAND_DESC[l], MARRY_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

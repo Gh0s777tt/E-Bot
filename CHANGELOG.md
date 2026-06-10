@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-204-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.134.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-205-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.135.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.135.0] — 💍 /marry — system małżeństw · Etap F (2/?)
+
+- `[#205]` 💍 **`/marry` — małżeństwa na serwerze** (jak Miki/Nadeko):
+  - **`oswiadczyny <użytkownik>`** — publiczne oświadczyny z przyciskami **💍 Tak! / 💔 Nie**; odpowiedzieć może **tylko adresat(ka)** (routing `marry:` w dispatcherze), stan re-walidowany przy kliknięciu (nikt nie „wskoczy w związek" w międzyczasie).
+  - **`status [użytkownik]`** — stan cywilny + data ślubu (`<t:…>` auto-lokalizowana).
+  - **`rozwod`** — kończy związek (czyści oba lustrzane wpisy).
+  Zabezpieczenia: nie można oświadczyć się sobie/botowi ani osobie w związku. Magazyn `settings.marriages` (symetryczne wpisy A↔B, `lib/marriage.mts`). Publiczne treści w **języku serwera**, efemeryczne w języku użytkownika — pełne **14 języków** (13 kluczy `strings.marry.mts` + `MARRY_DESC`). Druga fala Etapu F. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.134.0] — 💞 Pakiet społeczny: /ship /hug /kiss /slap /pat · Etap F (1/?)
 

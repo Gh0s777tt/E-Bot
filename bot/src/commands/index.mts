@@ -39,6 +39,7 @@ import * as lock from './lock.mts';
 import * as lockdown from './lockdown.mts';
 import * as lottery from './lottery.mts';
 import * as market from './market.mts';
+import * as marry from './marry.mts';
 import * as mod from './mod.mts';
 import * as persona from './persona.mts';
 import * as ping from './ping.mts';
@@ -164,6 +165,7 @@ export const commands: Command[] = [
   kiss,
   slap,
   pat,
+  marry,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji
