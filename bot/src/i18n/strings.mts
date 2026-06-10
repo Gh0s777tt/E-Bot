@@ -9,6 +9,7 @@ import { BACKUP_STRINGS } from './strings.backup.mts';
 import { BJ_STRINGS } from './strings.bj.mts';
 import { BLUEPRINT_STRINGS } from './strings.blueprint.mts';
 import { BRIDGES_STRINGS } from './strings.bridges.mts';
+import { CTX_STRINGS } from './strings.ctx.mts';
 import { ECO_STRINGS } from './strings.eco.mts';
 import { FAREWELL_STRINGS } from './strings.farewell.mts';
 import { FUN2_STRINGS } from './strings.fun2.mts';
@@ -419,6 +420,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], BACKUP_STRINGS[l]);
   Object.assign(DICTS[l], BLUEPRINT_STRINGS[l]);
   Object.assign(DICTS[l], BRIDGES_STRINGS[l]);
+  Object.assign(DICTS[l], CTX_STRINGS[l]);
   Object.assign(DICTS[l], ECO_STRINGS[l]);
   Object.assign(DICTS[l], FAREWELL_STRINGS[l]);
   Object.assign(DICTS[l], FUN2_STRINGS[l]);

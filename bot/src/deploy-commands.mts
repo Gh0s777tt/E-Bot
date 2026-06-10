@@ -1,7 +1,8 @@
 // Rejestracja slash-komend. Guild (jeśli ustawisz DISCORD_DEV_GUILD_ID) = natychmiast; inaczej globalnie.
 import { REST, Routes } from 'discord.js';
-import { loadEnv } from './env.mts';
+import { contextCommands } from './commands/contextmenu.mts';
 import { commands } from './commands/index.mts';
+import { loadEnv } from './env.mts';
 
 loadEnv();
 
@@ -14,7 +15,10 @@ if (!token || !appId) {
   process.exit(1);
 }
 
-const body = commands.map((c) => c.data.toJSON());
+const body = [
+  ...commands.map((c) => c.data.toJSON()),
+  ...contextCommands.map((c) => c.data.toJSON()),
+];
 const rest = new REST().setToken(token);
 const route = guildId
   ? Routes.applicationGuildCommands(appId, guildId)
@@ -25,3 +29,4 @@ console.log(
   `✅ Zarejestrowano ${data.length} komend ${guildId ? `na serwerze ${guildId} (natychmiast)` : 'globalnie (propagacja do ~1h)'}.`,
 );
 console.log('   Komendy:', commands.map((c) => '/' + c.data.name).join(', '));
+console.log('   Context-menu:', contextCommands.map((c) => c.data.name).join(', '));

@@ -1,7 +1,14 @@
 // /userinfo — karta informacji o użytkowniku (konto, dołączenie, role, boost). Daty jako
 // znaczniki Discorda <t:…> (auto-lokalizacja w kliencie każdego użytkownika).
-import { type ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { resolveLocale, t } from '../i18n/index.mts';
+// userInfoEmbed eksportowany — reużywany przez context-menu (PPM na użytkowniku).
+import {
+  type ChatInputCommandInteraction,
+  EmbedBuilder,
+  type GuildMember,
+  SlashCommandBuilder,
+  type User,
+} from 'discord.js';
+import { type Locale, resolveLocale, t } from '../i18n/index.mts';
 
 const ACCENT = 0xe50914;
 
@@ -10,13 +17,11 @@ export const data = new SlashCommandBuilder()
   .setDescription('Informacje o użytkowniku.')
   .addUserOption((o) => o.setName('uzytkownik').setDescription('O kim (domyślnie Ty)'));
 
-export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
-  const locale = resolveLocale(interaction);
-  const user = interaction.options.getUser('uzytkownik') ?? interaction.user;
-  const member = interaction.guild
-    ? await interaction.guild.members.fetch(user.id).catch(() => null)
-    : null;
-
+export function userInfoEmbed(
+  locale: Locale,
+  user: User,
+  member: GuildMember | null,
+): EmbedBuilder {
   const embed = new EmbedBuilder()
     .setColor(member?.displayColor || ACCENT)
     .setAuthor({ name: user.tag, iconURL: user.displayAvatarURL() })
@@ -73,6 +78,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       inline: true,
     });
   }
+  return embed;
+}
 
-  await interaction.reply({ embeds: [embed] });
+export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
+  const user = interaction.options.getUser('uzytkownik') ?? interaction.user;
+  const member = interaction.guild
+    ? await interaction.guild.members.fetch(user.id).catch(() => null)
+    : null;
+  await interaction.reply({ embeds: [userInfoEmbed(locale, user, member)] });
 }

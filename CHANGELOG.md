@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-214-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.144.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-215-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.145.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.145.0] — 🖱️ Context-menu — PPM na użytkowniku · Etap H (3/?)
+
+- `[#215]` 🖱️ **Komendy kontekstowe** (prawy przycisk na użytkowniku → Aplikacje) — **nowy typ komend** w bocie:
+  - 👤 **Userinfo** — karta użytkownika (reużyty embed z `/userinfo`, teraz wspólny helper).
+  - 🖼️ **Avatar** — awatar w pełnym rozmiarze.
+  - ⏳ **Timeout 10 min** — szybkie wyciszenie (tylko moderatorzy — `ModerateMembers`; odpowiedź z powodem przy braku uprawnień/hierarchii).
+  Wszystkie odpowiedzi **efemeryczne** (nie spamują czatu), **nazwy w menu zlokalizowane** (13 języków klienta przez `setNameLocalizations` — Discord pokazuje „👤 Об участнике", „⏳ 禁言10分钟"…). Architektura: osobny rejestr `contextCommands` + gałąź `isUserContextMenuCommand` w dispatcherze + payload w `deploy-commands`. Trzecia fala Etapu H. Nowe komendy → rejestracja globalna po deployu.
 
 ## [0.144.0] — 🖼️ Kanały tylko-obrazki (/imageonly) · Etap H (2/?)
 

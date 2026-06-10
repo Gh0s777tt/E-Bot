@@ -19,6 +19,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startRealtimeSync } from './cloud/realtime.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
+import { handleContextMenu } from './commands/contextmenu.mts';
 import { handleCustomCommand } from './commands/customCommands.mts';
 import { handleHelpSelect } from './commands/help.mts';
 import { type Command, commands } from './commands/index.mts';
@@ -267,6 +268,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isUserSelectMenu()) {
     if (interaction.customId.startsWith('tv:'))
       await handleTempvoiceSelect(interaction).catch((err) => console.error('uselect:', err));
+    return;
+  }
+  if (interaction.isUserContextMenuCommand()) {
+    await handleContextMenu(interaction).catch((err) => console.error('ctx:', err));
     return;
   }
   if (!interaction.isChatInputCommand()) return;
