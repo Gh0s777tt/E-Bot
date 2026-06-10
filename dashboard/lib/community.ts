@@ -164,8 +164,9 @@ export type VerificationConfig = {
   roleId: string;
   message: string;
   buttonLabel: string;
-  mode: 'button' | 'captcha';
+  mode: 'button' | 'captcha' | 'phrase';
   minAccountAgeDays: number;
+  phrase: string; // hasło dla trybu 'phrase'
 };
 export const VERIFICATION_DEFAULT: VerificationConfig = {
   enabled: false,
@@ -174,6 +175,7 @@ export const VERIFICATION_DEFAULT: VerificationConfig = {
   buttonLabel: 'Zweryfikuj się',
   mode: 'button',
   minAccountAgeDays: 0,
+  phrase: '',
 };
 
 export async function getVerificationConfig(): Promise<VerificationConfig> {

@@ -85,6 +85,7 @@ export default function VerificationForm({
           >
             <option value="button">Przycisk (1 klik)</option>
             <option value="captcha">Captcha obrazkowa</option>
+            <option value="phrase">Hasło (pass-phrase)</option>
           </select>
         </label>
         <label className="space-y-1 text-sm">
@@ -102,6 +103,23 @@ export default function VerificationForm({
           />
         </label>
       </div>
+
+      {c.mode === 'phrase' && (
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">Hasło weryfikacyjne</span>
+          <input
+            value={c.phrase}
+            onChange={(e) => setC({ ...c, phrase: e.target.value })}
+            maxLength={100}
+            placeholder="np. tajne-haslo-serwera"
+            className={inputCls}
+          />
+          <span className="block text-xs text-muted">
+            Użytkownik musi wpisać to hasło w okienku po kliknięciu przycisku (wielkość liter bez
+            znaczenia). Podaj je np. w regulaminie.
+          </span>
+        </label>
+      )}
 
       <div className="flex items-center gap-3">
         <button

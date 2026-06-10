@@ -432,8 +432,9 @@ export const verificationSchema = z.object({
   roleId: z.string().max(40),
   message: z.string().max(1000),
   buttonLabel: z.string().max(80),
-  mode: z.enum(['button', 'captcha']).optional().default('button'),
+  mode: z.enum(['button', 'captcha', 'phrase']).optional().default('button'),
   minAccountAgeDays: z.number().int().min(0).max(365).optional().default(0),
+  phrase: z.string().max(100).optional().default(''),
 });
 export type VerificationInput = z.infer<typeof verificationSchema>;
 

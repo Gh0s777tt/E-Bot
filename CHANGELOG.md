@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-210-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.140.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-211-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.141.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.141.0] — 🕵️ Bypass-guard kwarantanny + 🔐 weryfikacja hasłem · Etap G (4/?)
+
+- `[#211]` 🕵️ **Bypass-guard kwarantanny** (anti-nuke, jak Wick): jeśli ktoś **spoza whitelisty** zdejmie rolę kwarantanny z odizolowanego użytkownika, bot **przywraca kwarantannę ofierze** i **wsadza do kwarantanny zdejmującego** + log na kanale anti-nuke. Bot/właściciel/whitelista pomijani — zero pętli i fałszywych trafień.
+- 🔐 **Weryfikacja pass-phrase** — trzeci tryb weryfikacji (**bot + panel**): użytkownik po kliknięciu przycisku wpisuje **hasło serwera** w okienku (np. podane w regulaminie — wymusza jego przeczytanie). Wielkość liter bez znaczenia. Panel (`/security`): tryb „Hasło (pass-phrase)" + pole hasła (`community.ts`, Zod, `VerificationForm`). Razem z przyciskiem i captchą obrazkową = **3 typy weryfikacji**.
+  Czwarta fala Etapu G. Bez nowych komend (przycisk/modal) — bez ponownej rejestracji.
 
 ## [0.140.0] — 🔥 Heat system — adaptacyjny anty-spam (/heat) · Etap G (3/?)
 

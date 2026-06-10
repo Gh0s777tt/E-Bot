@@ -20,8 +20,9 @@ export type VerificationConfig = {
   roleId: string;
   message: string;
   buttonLabel: string;
-  mode: 'button' | 'captcha';
+  mode: 'button' | 'captcha' | 'phrase';
   minAccountAgeDays: number;
+  phrase: string; // hasło dla trybu 'phrase'
 };
 
 const DEFAULT: VerificationConfig = {
@@ -31,6 +32,7 @@ const DEFAULT: VerificationConfig = {
   buttonLabel: 'Zweryfikuj się',
   mode: 'button',
   minAccountAgeDays: 0,
+  phrase: '',
 };
 
 export function verifyConfig(): VerificationConfig {
@@ -140,6 +142,30 @@ export async function handleVerifyButton(interaction: ButtonInteraction): Promis
     }
   }
 
+  // Tryb pass-phrase: od razu modal z pytaniem o hasło serwera.
+  if (cfg.mode === 'phrase') {
+    if (!cfg.phrase.trim()) {
+      await interaction.reply({
+        content: '⚠️ Weryfikacja hasłem jest źle skonfigurowana (brak hasła w panelu).',
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+    const modal = new ModalBuilder()
+      .setCustomId('verify:phrase:submit')
+      .setTitle('Weryfikacja — podaj hasło');
+    const input = new TextInputBuilder()
+      .setCustomId('phrase')
+      .setLabel('Hasło weryfikacyjne serwera')
+      .setStyle(TextInputStyle.Short)
+      .setMinLength(1)
+      .setMaxLength(100)
+      .setRequired(true);
+    modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(input));
+    await interaction.showModal(modal);
+    return;
+  }
+
   if (cfg.mode === 'captcha') {
     const code = generateCaptchaCode(5);
     captchaStore.set(`${interaction.guild.id}:${interaction.user.id}`, {
@@ -167,13 +193,31 @@ export async function handleVerifyButton(interaction: ButtonInteraction): Promis
 }
 
 export async function handleVerifyModal(interaction: ModalSubmitInteraction): Promise<void> {
-  if (interaction.customId !== 'verify:captcha:submit') return;
+  if (
+    interaction.customId !== 'verify:captcha:submit' &&
+    interaction.customId !== 'verify:phrase:submit'
+  )
+    return;
   const cfg = verifyConfig();
   if (!cfg.enabled || !cfg.roleId || !interaction.guild) {
     await interaction.reply({
       content: '⚠️ Weryfikacja jest wyłączona.',
       flags: MessageFlags.Ephemeral,
     });
+    return;
+  }
+
+  // Tryb pass-phrase — porównanie bez rozróżniania wielkości liter.
+  if (interaction.customId === 'verify:phrase:submit') {
+    const given = interaction.fields.getTextInputValue('phrase').trim().toLowerCase();
+    if (!cfg.phrase.trim() || given !== cfg.phrase.trim().toLowerCase()) {
+      await interaction.reply({
+        content: '❌ Błędne hasło. Spróbuj ponownie.',
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+    await grantRole(interaction, cfg);
     return;
   }
   const key = `${interaction.guild.id}:${interaction.user.id}`;

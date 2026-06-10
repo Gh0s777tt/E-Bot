@@ -1,15 +1,20 @@
 // Czysty moduł Anti-Nuke (własna implementacja, bez nulled kodu).
 // Detekcja przez GuildAuditLogEntryCreate + progi (X akcji / Y s) w pamięci + whitelist + kary.
-import { AuditLogEvent, EmbedBuilder, Events, PermissionFlagsBits } from 'discord.js';
+
 import type { Client, Guild, GuildTextBasedChannel } from 'discord.js';
+import { AuditLogEvent, EmbedBuilder, Events, PermissionFlagsBits } from 'discord.js';
 import { getSettings, setSetting } from '../lib/db.mts';
 
 export type Punishment = 'ban' | 'kick' | 'timeout' | 'strip' | 'quarantine';
 export type ProtKey =
-  | 'channelDelete' | 'channelCreate'
-  | 'roleDelete' | 'roleCreate'
-  | 'ban' | 'kick'
-  | 'webhookCreate' | 'webhookDelete'
+  | 'channelDelete'
+  | 'channelCreate'
+  | 'roleDelete'
+  | 'roleCreate'
+  | 'ban'
+  | 'kick'
+  | 'webhookCreate'
+  | 'webhookDelete'
   | 'botAdd';
 
 export type Protection = { enabled: boolean; count: number; windowSec: number };
@@ -84,7 +89,8 @@ function mergeConfig(stored: Partial<AntinukeConfig>): AntinukeConfig {
   Object.assign(base, { ...stored, protections: base.protections });
   if (stored.protections) {
     for (const k of Object.keys(base.protections) as ProtKey[]) {
-      if (stored.protections[k]) base.protections[k] = { ...base.protections[k], ...stored.protections[k] };
+      if (stored.protections[k])
+        base.protections[k] = { ...base.protections[k], ...stored.protections[k] };
     }
   }
   base.whitelistUsers = stored.whitelistUsers ?? [];
@@ -122,6 +128,47 @@ export function startAntiNuke(client: Client): void {
     try {
       const cfg = getConfig();
       if (!cfg.enabled) return;
+
+      // Bypass-guard kwarantanny: zdjęcie roli kwarantanny przez nieuprawnionego = kwarantanna
+      // dla zdejmującego + przywrócenie roli ofierze. (Bot/owner/whitelista pomijani.)
+      if (entry.action === AuditLogEvent.MemberRoleUpdate && cfg.quarantineRoleId) {
+        const removedQuarantine = (entry.changes ?? []).some(
+          (ch) =>
+            ch.key === '$remove' &&
+            Array.isArray(ch.new) &&
+            (ch.new as { id?: string }[]).some((r) => r.id === cfg.quarantineRoleId),
+        );
+        if (removedQuarantine) {
+          const execId = entry.executorId;
+          const targetId = entry.targetId;
+          if (
+            execId &&
+            targetId &&
+            execId !== client.user?.id &&
+            execId !== guild.ownerId &&
+            !cfg.whitelistUsers.includes(execId)
+          ) {
+            const exec = await guild.members.fetch(execId).catch(() => null);
+            const execWhitelisted = exec?.roles.cache.some((r) =>
+              cfg.whitelistRoles.includes(r.id),
+            );
+            if (!execWhitelisted) {
+              const target = await guild.members.fetch(targetId).catch(() => null);
+              if (target)
+                await target.roles
+                  .add(cfg.quarantineRoleId, 'Anti-Nuke: przywrócenie kwarantanny (bypass-guard)')
+                  .catch(() => {});
+              if (exec)
+                await exec.roles
+                  .set([cfg.quarantineRoleId], 'Anti-Nuke: próba zdjęcia kwarantanny')
+                  .catch(() => {});
+              await sendBypassLog(guild, cfg, execId, targetId);
+            }
+          }
+          return;
+        }
+      }
+
       const prot = ACTION_MAP[entry.action as AuditLogEvent];
       if (!prot) return;
       const rule = cfg.protections[prot];
@@ -153,7 +200,13 @@ export function startAntiNuke(client: Client): void {
   console.log('[antinuke] aktywny (nasłuch audit-log).');
 }
 
-async function punish(guild: Guild, userId: string, cfg: AntinukeConfig, prot: ProtKey, count: number): Promise<void> {
+async function punish(
+  guild: Guild,
+  userId: string,
+  cfg: AntinukeConfig,
+  prot: ProtKey,
+  count: number,
+): Promise<void> {
   const reason = `Anti-Nuke: ${PROT_LABELS[prot]} (${count} akcji)`;
   let action = 'tylko log';
   try {
@@ -164,16 +217,28 @@ async function punish(guild: Guild, userId: string, cfg: AntinukeConfig, prot: P
         action = 'BAN';
         break;
       case 'kick':
-        if (member) { await member.kick(reason); action = 'KICK'; }
+        if (member) {
+          await member.kick(reason);
+          action = 'KICK';
+        }
         break;
       case 'timeout':
-        if (member) { await member.timeout(7 * 24 * 3600 * 1000, reason); action = 'TIMEOUT 7 dni'; }
+        if (member) {
+          await member.timeout(7 * 24 * 3600 * 1000, reason);
+          action = 'TIMEOUT 7 dni';
+        }
         break;
       case 'strip':
-        if (member) { await member.roles.set([], reason); action = 'odebrano role'; }
+        if (member) {
+          await member.roles.set([], reason);
+          action = 'odebrano role';
+        }
         break;
       case 'quarantine':
-        if (member && cfg.quarantineRoleId) { await member.roles.set([cfg.quarantineRoleId], reason); action = 'kwarantanna'; }
+        if (member && cfg.quarantineRoleId) {
+          await member.roles.set([cfg.quarantineRoleId], reason);
+          action = 'kwarantanna';
+        }
         break;
     }
   } catch (e) {
@@ -182,7 +247,14 @@ async function punish(guild: Guild, userId: string, cfg: AntinukeConfig, prot: P
   await sendLog(guild, cfg, userId, prot, count, action);
 }
 
-async function sendLog(guild: Guild, cfg: AntinukeConfig, userId: string, prot: ProtKey, count: number, action: string): Promise<void> {
+async function sendLog(
+  guild: Guild,
+  cfg: AntinukeConfig,
+  userId: string,
+  prot: ProtKey,
+  count: number,
+  action: string,
+): Promise<void> {
   if (!cfg.logChannelId) return;
   const ch = await guild.channels.fetch(cfg.logChannelId).catch(() => null);
   if (!ch || !ch.isTextBased()) return;
@@ -194,6 +266,25 @@ async function sendLog(guild: Guild, cfg: AntinukeConfig, userId: string, prot: 
       { name: 'Ochrona', value: PROT_LABELS[prot], inline: true },
       { name: 'Akcji', value: String(count), inline: true },
       { name: 'Kara', value: action, inline: true },
+    )
+    .setTimestamp(new Date());
+  await (ch as GuildTextBasedChannel).send({ embeds: [embed] }).catch(() => null);
+}
+
+async function sendBypassLog(
+  guild: Guild,
+  cfg: AntinukeConfig,
+  execId: string,
+  targetId: string,
+): Promise<void> {
+  if (!cfg.logChannelId) return;
+  const ch = await guild.channels.fetch(cfg.logChannelId).catch(() => null);
+  if (!ch || !ch.isTextBased()) return;
+  const embed = new EmbedBuilder()
+    .setColor(0xe50914)
+    .setTitle('🛡️ Anti-Nuke — próba zdjęcia kwarantanny')
+    .setDescription(
+      `<@${execId}> próbował(a) zdjąć kwarantannę z <@${targetId}> → kwarantanna przywrócona, sprawca w kwarantannie.`,
     )
     .setTimestamp(new Date());
   await (ch as GuildTextBasedChannel).send({ embeds: [embed] }).catch(() => null);
