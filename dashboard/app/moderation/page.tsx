@@ -1,9 +1,11 @@
-import { Bot, Gavel, Hourglass, ShieldCheck } from 'lucide-react';
+import { Bot, Gavel, Hourglass, ShieldCheck, Zap } from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
 import AutomodForm from '../../components/AutomodForm';
 import AutomodStats from '../../components/AutomodStats';
+import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
 import { getAiModConfig, getAutomodConfig, getAutomodStats } from '../../lib/community';
+import { getNativeRules } from '../../lib/discordAutomod';
 import { getModCases, getTempBans } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
 
@@ -42,13 +44,14 @@ function remaining(iso: string): string {
 }
 
 export default async function ModerationPage() {
-  const [cfg, aimod, cases, tempbans, guild, stats] = await Promise.all([
+  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules] = await Promise.all([
     getAutomodConfig(),
     getAiModConfig(),
     getModCases(30),
     getTempBans(50),
     getGuildMeta(),
     getAutomodStats(),
+    getNativeRules(),
   ]);
   return (
     <div className="space-y-6">
@@ -71,6 +74,13 @@ export default async function ModerationPage() {
           <ShieldCheck size={16} className="text-accent" /> Automod
         </h2>
         <AutomodForm initial={cfg} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Zap size={16} className="text-accent" /> Discord AutoMod (natywny)
+        </h2>
+        <NativeAutomodForm initial={nativeRules} guild={guild} />
       </section>
 
       <AutomodStats stats={stats} />

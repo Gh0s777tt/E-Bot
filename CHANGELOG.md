@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-220-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.150.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-221-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.151.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.151.0] — 🤖 Discord AutoMod (natywny) z panelu · Etap I (4/?)
+
+- `[#221]` 🤖 **Natywny Discord AutoMod zarządzany z panelu** (strona *Automod*, nowa sekcja) — reguły egzekwowane **przez sam Discord**, więc chronią nawet gdy bot offline, a wiadomość jest blokowana *zanim* się pojawi:
+  - ⚡ **Szybkie szablony 1-klik**: 🤬 filtr wulgaryzmów/18+/obelg (presety Discorda) · 🌊 anty-spam treści · 📣 limit wzmianek (konfigurowalny) z anty-raidem pingów i timeoutem 10 min.
+  - 📝 **Własne listy słów** (do 6 reguł po 50 fraz, gwiazdki `*kasyno*` wspierane) + opcjonalny kanał alertów dla moderacji.
+  - 🎛️ Lista wszystkich reguł serwera z detalami (typ, akcje, liczba fraz) + włącz/wyłącz/usuń; limity Discorda pilnowane w UI, błędy API (np. brak uprawnienia) pokazywane wprost.
+  - Nowe: `lib/discordAutomod.ts` (REST + mapper), `/api/automod-native` (zod discriminated union), `NativeAutomodForm` — uzupełnia automod bota zamiast go zastępować. Czwarta fala Etapu I, zmiana tylko panelowa (deploy Vercel).
 
 ## [0.150.0] — 📅 Harmonogram Twitch → wydarzenia Discord · Etap I (3/?)
 
