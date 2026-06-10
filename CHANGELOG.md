@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-229-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.159.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-230-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.160.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.160.0] — 🐾 Pety — `/pet` · Etap J (3/?)
+
+- `[#230]` 🐾 **Pety (eko 2.0)** — nowa komenda `/pet`: adoptuj zwierzaka, dbaj o niego, a on przynosi prezenty. Pętla Tamagotchi + ekonomia:
+  - 🐹🐧🐱🐶🦊🐉 6 gatunków (od chomika za 2 000 po smoka za 20 000); jeden pet na osobę. `adopt`, `status` (karta: poziom + pasek XP, sytość + nastrój), `feed`, `gift`, `rename`, `release`.
+  - 🍖 **Karmienie** (sink, cooldown 2 h) daje petowi XP → poziomy; **sytość spada z czasem** (głodny pet = gorszy nastrój i mniejsze prezenty). 🎁 **Prezent** raz na 20 h = `giftBase × poziom × sytość` (źródło) — opłaca się dbać.
+  - 🗃️ Dane w Supabase `economy_pets` (schemat `dashboard/scripts/etapj-pets-schema.sql`); respektuje `economy.enabled`, wpisy w historii transakcji (`pet:adopt/feed/gift`). Pełen graceful bez chmury, 14 języków. Komendy: **96** (93 slash + 3 context-menu).
 
 ## [0.159.0] — ⏳ Role czasowe w sklepie · Etap J (2/?)
 

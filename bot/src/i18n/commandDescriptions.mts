@@ -1462,6 +1462,24 @@ const ACHV_DESC: Record<Locale, Record<string, string>> = {
   id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
 };
 
+// Opis /pet (Etap J — pety) — dołożony do COMMAND_DESC niżej.
+const PET_DESC: Record<Locale, Record<string, string>> = {
+  pl: { pet: 'Pet — adoptuj, karm i odbieraj prezenty.' },
+  en: { pet: 'Pet — adopt, feed and collect gifts.' },
+  de: { pet: 'Pet — adoptieren, füttern und Geschenke sammeln.' },
+  es: { pet: 'Mascota — adopta, alimenta y recoge regalos.' },
+  it: { pet: 'Pet — adotta, nutri e raccogli regali.' },
+  fr: { pet: 'Familier — adopte, nourris et reçois des cadeaux.' },
+  pt: { pet: 'Pet — adote, alimente e receba presentes.' },
+  zh: { pet: '宠物 — 领养、喂食并领取礼物。' },
+  ko: { pet: '펫 — 입양하고 먹이를 주고 선물 받기.' },
+  ru: { pet: 'Питомец — заведи, корми и получай подарки.' },
+  uk: { pet: 'Улюбленець — заведи, годуй і отримуй подарунки.' },
+  ja: { pet: 'ペット — 迎えて、餌をやり、プレゼントを受け取る。' },
+  ar: { pet: 'حيوان أليف — تبنَّ وأطعم واجمع الهدايا.' },
+  id: { pet: 'Pet — adopsi, beri makan, dan kumpulkan hadiah.' },
+};
+
 // Opis /stocks (Etap J — giełda) — dołożony do COMMAND_DESC niżej.
 const STOCKS_DESC: Record<Locale, Record<string, string>> = {
   pl: { stocks: 'Giełda — kupuj i sprzedawaj wirtualne akcje.' },
@@ -1553,6 +1571,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], SSYNC_DESC[l]);
   Object.assign(COMMAND_DESC[l], PROLES_DESC[l]);
   Object.assign(COMMAND_DESC[l], STOCKS_DESC[l]);
+  Object.assign(COMMAND_DESC[l], PET_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

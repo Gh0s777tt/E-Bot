@@ -48,6 +48,7 @@ import * as math from './math.mts';
 import * as mod from './mod.mts';
 import * as panic from './panic.mts';
 import * as persona from './persona.mts';
+import * as pet from './pet.mts';
 import * as ping from './ping.mts';
 import * as poll from './poll.mts';
 import * as portal from './portal.mts';
@@ -188,6 +189,7 @@ export const commands: Command[] = [
   liverole,
   vanityrole,
   stocks,
+  pet,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

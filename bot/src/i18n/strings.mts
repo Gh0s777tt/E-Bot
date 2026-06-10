@@ -24,6 +24,7 @@ import { MOD_STRINGS } from './strings.mod.mts';
 import { MOD2_STRINGS } from './strings.mod2.mts';
 import { PANIC_STRINGS } from './strings.panic.mts';
 import { PERSONA_STRINGS } from './strings.persona.mts';
+import { PET_STRINGS } from './strings.pet.mts';
 import { POLL2_STRINGS } from './strings.poll2.mts';
 import { PROFILE_STRINGS } from './strings.profile.mts';
 import { PROLES_STRINGS } from './strings.proles.mts';
@@ -439,6 +440,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], MOD2_STRINGS[l]);
   Object.assign(DICTS[l], PANIC_STRINGS[l]);
   Object.assign(DICTS[l], PERSONA_STRINGS[l]);
+  Object.assign(DICTS[l], PET_STRINGS[l]);
   Object.assign(DICTS[l], POLL2_STRINGS[l]);
   Object.assign(DICTS[l], PROFILE_STRINGS[l]);
   Object.assign(DICTS[l], PROLES_STRINGS[l]);
