@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-232-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.162.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-233-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.163.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.163.0] — 🔀 Przełącznik serwerów · Etap K — Przyjazność 2.0 (1/?)
+
+- `[#233]` 🔀 **Przełącznik serwerów w panelu** — kto ma bota na kilku serwerach, wybiera i przełącza, który konfiguruje:
+  - 🧭 Selektor w górnym pasku (widoczny tylko gdy bot jest na >1 serwerze) z ikonami i nazwami; wybór zapisany w cookie `panel_guild`, panel przeładowuje się w kontekście wybranego serwera.
+  - 🔧 `getPrimaryGuildId` honoruje wybór (walidowany — tylko serwery, na których bot faktycznie jest) → DISCORD_GUILD_ID → pierwszy. Nowe `getBotGuilds()` + `/api/guilds`. Przełącza wszystko **per-serwer**: listy ról/kanałów, akcje Discord (AutoMod, backup, health) i dane Supabase (ekonomia/karty/pety/sklep).
+  - ⚠️ Uwaga: *globalne konfiguracje funkcji* (jeden blok ustawień na bota) są na razie współdzielone między serwerami — pełne per-serwer to osobna, większa migracja (planowana). 14 języków (`ui.server`).
+  - **Startuje Etap K — Przyjazność 2.0** (zrozumiałość + UX: opisy „jak to działa", asystent AI, tutorial w panelu, więcej opcji wg trybów). Zmiana tylko panelowa.
 
 ## [0.162.0] — 🖼️ Generator memów — `/meme` · Etap J (5/5) — ETAP J DOMKNIĘTY 🎉
 

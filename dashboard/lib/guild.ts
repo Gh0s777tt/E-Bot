@@ -1,6 +1,7 @@
 // Faza 6 / B3 — pobiera role i kanały serwera z Discord REST (bot token), aby panel
-// mógł oferować listy rozwijane zamiast wklejania ID. Guild ID: jawne DISCORD_GUILD_ID
-// (jeśli to poprawny snowflake), inaczej auto-detekcja pierwszego serwera bota (E-Bot jest na 1).
+// mógł oferować listy rozwijane zamiast wklejania ID. Guild ID: wybór z cookie 'panel_guild'
+// (Etap K — przełącznik serwerów), inaczej jawne DISCORD_GUILD_ID, inaczej pierwszy serwer bota.
+import { cookies } from 'next/headers';
 import { cache } from 'react';
 
 export type GuildRole = { id: string; name: string; color: number; position: number };
@@ -24,18 +25,41 @@ async function dfetch<T>(path: string, token: string): Promise<T> {
   return (await r.json()) as T;
 }
 
-// Główny serwer bota: jawny DISCORD_GUILD_ID (gdy to snowflake), inaczej auto-detekcja.
+export type BotGuild = { id: string; name: string; icon: string | null };
+
+// Serwery, na których jest bot (do przełącznika serwerów). Cache per-render.
+export const getBotGuilds = cache(async (): Promise<BotGuild[]> => {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) return [];
+  try {
+    const guilds = await dfetch<{ id: string; name: string; icon: string | null }[]>(
+      '/users/@me/guilds',
+      token,
+    );
+    return guilds.map((g) => ({ id: g.id, name: g.name, icon: g.icon ?? null }));
+  } catch {
+    return [];
+  }
+});
+
+// Wybrany serwer: cookie 'panel_guild' (tylko jeśli bot tam jest) → DISCORD_GUILD_ID → pierwszy.
 export const getPrimaryGuildId = cache(async (): Promise<string> => {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) return '';
+  const guilds = await getBotGuilds();
+  const ids = guilds.map((g) => g.id);
+  // 1) Wybór z przełącznika — tylko gdy bot faktycznie jest na tym serwerze.
+  try {
+    const sel = (await cookies()).get('panel_guild')?.value;
+    if (sel && ids.includes(sel)) return sel;
+  } catch {
+    /* brak kontekstu żądania (np. statyczny render) — pomijamy cookie */
+  }
+  // 2) Jawny serwer z env (snowflake).
   const envId = (process.env.DISCORD_GUILD_ID || '').trim();
   if (/^\d{15,}$/.test(envId)) return envId;
-  try {
-    const guilds = await dfetch<{ id: string }[]>('/users/@me/guilds', token);
-    return guilds[0]?.id ?? '';
-  } catch {
-    return '';
-  }
+  // 3) Pierwszy serwer bota.
+  return ids[0] ?? '';
 });
 
 // Cache TTL w pamięci (60 s) — React cache() dedupuje tylko w obrębie jednego renderu;
