@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-234-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.164.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-235-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.165.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.165.0] — 🤖 Asystent AI w panelu · Etap K (3/?)
+
+- `[#235]` 🤖 **Asystent konfiguracji AI** — pływający przycisk ✨ dostępny **na każdej stronie** panelu. Opisujesz po ludzku, jak ma działać Twój serwer, a asystent **rozpisuje plan krok po kroku z klikalnymi linkami** do właściwych stron:
+  - 🧠 Model dostaje katalog 31 funkcji panelu (po `href`) i zwraca strukturalny plan: *co zrobić · jak dokładnie + jakie uprawnienia i dlaczego · → przycisk otwierający stronę*. Odpowiada **w języku użytkownika**.
+  - 💬 Gotowe przykłady na start („Chcę serwer gamingowy: weryfikacja, poziomy, powiadomienia o streamach"), kolejność kroków od fundamentów (setup/bezpieczeństwo) wzwyż, kierowanie na `/integrations` gdy trzeba kluczy.
+  - 🔌 Używa tych samych kluczy co bot (`DEEPSEEK_API_KEY` / `OPENAI_API_KEY`); bez klucza działa **graceful** — uczciwie mówi, gdzie go dodać, zamiast się wywalać. `lib/assistant.ts` + `/api/assistant` (zod) + `Assistant.tsx`.
+  - Etykiety UI po polsku (i18n później); odpowiedzi już wielojęzyczne (model). Etap K (3). Zmiana tylko panelowa.
 
 ## [0.164.0] — 🧭 „Jak to działa?" na każdej stronie · Etap K (2/?)
 

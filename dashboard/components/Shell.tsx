@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import Assistant from './Assistant';
 import CommandPalette from './CommandPalette';
 import GlobalPageHeader from './GlobalPageHeader';
 import HowItWorks from './HowItWorks';
@@ -21,6 +22,7 @@ export default function Shell({ children, inviteUrl }: { children: ReactNode; in
       <ViewModeProvider>
         <div className="relative z-10 flex min-h-screen">
           <CommandPalette />
+          <Assistant />
           <Sidebar />
           <div className="content-pane min-w-0 flex-1 md:pl-60">
             <Topbar inviteUrl={inviteUrl} />
