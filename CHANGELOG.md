@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-212-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.142.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-213-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.143.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.143.0] — 🎛️ TempVoice 2.0 — panel kanału z przyciskami · Etap H (1/?)
+
+- `[#213]` 🎛️ **TempVoice 2.0** — kanały głosowe na żądanie dostają **interfejs jak w bocie TempVoice**: po utworzeniu kanału bot wysyła do jego czatu **panel z przyciskami**:
+  - ✏️ **Nazwa** i 👥 **Limit** (0–99, 0 = ∞) — przez okienka (modale).
+  - 🔒 **Zamknij/Otwórz** (Connect) i 👻 **Ukryj/Pokaż** (ViewChannel) — przełączniki na `@everyone`.
+  - 👢 **Wyrzuć** i 🔁 **Przekaż własność** — przez **wybór osoby z listy** (UserSelect).
+  - 👑 **Przejmij** — gdy właściciel opuści kanał, ktokolwiek na kanale może przejąć stery.
+  Właściciel śledzony per-kanał; tylko on (lub moderator z Zarządzaniem kanałami) steruje panelem. Publiczne potwierdzenia w **języku serwera**, błędy prywatnie w języku klikającego — **14 języków** (25 kluczy `strings.tempvoice.mts`). Routing `tv:` (przyciski + modale + **pierwszy UserSelect w bocie**). Startuje **Etap H — Interakcje 2.0**. Bez nowych slash-komend — bez ponownej rejestracji.
 
 ## [0.142.0] — 🚨 /panic — PANIC MODE · Etap G (5/?)
 

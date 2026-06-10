@@ -53,7 +53,12 @@ import { handleRoleMenu } from './engagement/rolemenu.mts';
 import { startScheduledPosts } from './engagement/scheduledPosts.mts';
 import { startScheduler } from './engagement/scheduler.mts';
 import { startStarboard } from './engagement/starboard.mts';
-import { startTempVoice } from './engagement/tempvoice.mts';
+import {
+  handleTempvoiceButton,
+  handleTempvoiceModal,
+  handleTempvoiceSelect,
+  startTempVoice,
+} from './engagement/tempvoice.mts';
 import { loadEnv } from './env.mts';
 import { startFarewell } from './farewell.mts';
 import { startFreeGames } from './gaming/freegames.mts';
@@ -233,7 +238,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     ? handleMarryButton(interaction)
                     : id.startsWith('ttt:')
                       ? handleTttButton(interaction)
-                      : handleButton(interaction);
+                      : id.startsWith('tv:')
+                        ? handleTempvoiceButton(interaction)
+                        : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }
@@ -242,7 +249,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
       ? handleVerifyModal(interaction)
       : interaction.customId.startsWith('app:')
         ? handleApplicationModal(interaction)
-        : handleTicketModal(interaction);
+        : interaction.customId.startsWith('tv:')
+          ? handleTempvoiceModal(interaction)
+          : handleTicketModal(interaction);
     await h.catch((err) => console.error('modal:', err));
     return;
   }
@@ -251,6 +260,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
       ? handleHelpSelect(interaction)
       : handleRoleMenu(interaction);
     await h.catch((err) => console.error('select:', err));
+    return;
+  }
+  if (interaction.isUserSelectMenu()) {
+    if (interaction.customId.startsWith('tv:'))
+      await handleTempvoiceSelect(interaction).catch((err) => console.error('uselect:', err));
     return;
   }
   if (!interaction.isChatInputCommand()) return;
