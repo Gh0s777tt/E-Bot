@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-222-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.152.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-223-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.153.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.153.0] — 🟣 Live-rola + vanity-rola (Presence) · Etap I (6/?)
+
+- `[#223]` 🟣 **Role z obecności** — dwie nowe komendy (moduł `presenceRoles.mts`):
+  - 🔴 **`/liverole`** — streamujący (status „Streamuje") dostają wskazaną rolę, po streamie rola sama znika; opcjonalny filtr `tylko-z-rola` (np. live-rola tylko dla rangi Twórca). Jak w Streamcord/StartIT.
+  - 🟣 **`/vanityrole`** — rola za frazę/link w statusie niestandardowym (np. `discord.gg/twojserwer` = darmowa reklama serwera ↔ rola-nagroda); dopasowanie bez rozróżniania wielkości liter, rola znika po zmianie statusu.
+  - Sweep startowy łapie osoby już streamujące (po cache), potem na bieżąco z `PresenceUpdate`; ON/OFF/STATUS + 14 języków.
+  - ⚠️ **Wymaga Presence Intent** (to nie klucz API, ale przełącznik): intent dodawany do klienta **tylko przy env `PRESENCE_INTENT=1`** — włączenie go w kodzie bez przełącznika w Dev Portal wywaliłoby logowanie bota, stąd bezpiecznik. Bez env: pełny graceful no-op, komendy konfigurują i uczciwie pokazują „uśpione". **Komendy: 94** (91 slash + 3 context-menu).
 
 ## [0.152.0] — 🧬 Components V2 w Message Studio · Etap I (5/?)
 

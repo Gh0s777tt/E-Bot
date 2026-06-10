@@ -38,6 +38,7 @@ import * as invites from './invites.mts';
 import * as library from './library.mts';
 import * as link from './link.mts';
 import * as linktwitch from './linktwitch.mts';
+import * as liverole from './liverole.mts';
 import * as lock from './lock.mts';
 import * as lockdown from './lockdown.mts';
 import * as lottery from './lottery.mts';
@@ -82,6 +83,7 @@ import * as tutorial from './tutorial.mts';
 import * as undo from './undo.mts';
 import * as unlock from './unlock.mts';
 import * as userinfo from './userinfo.mts';
+import * as vanityrole from './vanityrole.mts';
 import * as verifypanel from './verifypanel.mts';
 import * as wishlist from './wishlist.mts';
 import * as xp from './xp.mts';
@@ -182,6 +184,8 @@ export const commands: Command[] = [
   panic,
   imageonly,
   streamsync,
+  liverole,
+  vanityrole,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

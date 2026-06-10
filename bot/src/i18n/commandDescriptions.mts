@@ -1462,6 +1462,33 @@ const ACHV_DESC: Record<Locale, Record<string, string>> = {
   id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
 };
 
+// Opisy /liverole + /vanityrole (Etap I — role z obecności) — dołożone do COMMAND_DESC niżej.
+const PROLES_DESC: Record<Locale, Record<string, string>> = {
+  pl: { liverole: 'Rola NA ŻYWO dla streamujących.', vanityrole: 'Rola za frazę/link w statusie.' },
+  en: { liverole: 'LIVE role for streamers.', vanityrole: 'Role for a phrase/link in the status.' },
+  de: { liverole: 'LIVE-Rolle für Streamer.', vanityrole: 'Rolle für Phrase/Link im Status.' },
+  es: { liverole: 'Rol EN VIVO para streamers.', vanityrole: 'Rol por frase/enlace en el estado.' },
+  it: { liverole: 'Ruolo LIVE per chi streamma.', vanityrole: 'Ruolo per frase/link nello stato.' },
+  fr: {
+    liverole: 'Rôle EN DIRECT pour les streamers.',
+    vanityrole: 'Rôle pour phrase/lien dans le statut.',
+  },
+  pt: { liverole: 'Cargo AO VIVO para streamers.', vanityrole: 'Cargo por frase/link no status.' },
+  zh: { liverole: '为直播中的成员发放直播身份组。', vanityrole: '状态含指定文字/链接即发身份组。' },
+  ko: { liverole: '방송 중인 멤버용 LIVE 역할.', vanityrole: '상태의 문구/링크에 따른 역할.' },
+  ru: { liverole: 'Роль LIVE для стримящих.', vanityrole: 'Роль за фразу/ссылку в статусе.' },
+  uk: { liverole: 'Роль LIVE для стримерів.', vanityrole: 'Роль за фразу/посилання у статусі.' },
+  ja: {
+    liverole: '配信中メンバーに LIVE ロール。',
+    vanityrole: 'ステータスの文言/リンクでロール付与。',
+  },
+  ar: { liverole: 'رتبة البث المباشر لمن يبث.', vanityrole: 'رتبة مقابل عبارة/رابط في الحالة.' },
+  id: {
+    liverole: 'Role LIVE untuk yang sedang live.',
+    vanityrole: 'Role untuk frasa/tautan di status.',
+  },
+};
+
 // Opis /streamsync (Etap I — Twitch Schedule → Discord Events) — dołożony do COMMAND_DESC niżej.
 const SSYNC_DESC: Record<Locale, Record<string, string>> = {
   pl: { streamsync: 'Harmonogram Twitch → wydarzenia Discord.' },
@@ -1506,6 +1533,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], PANIC_DESC[l]);
   Object.assign(COMMAND_DESC[l], IMGONLY_DESC[l]);
   Object.assign(COMMAND_DESC[l], SSYNC_DESC[l]);
+  Object.assign(COMMAND_DESC[l], PROLES_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

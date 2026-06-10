@@ -38,6 +38,7 @@ import { startCounting } from './community/counting.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startImageOnly } from './community/imageonly.mts';
 import { startInvites } from './community/invites.mts';
+import { startPresenceRoles } from './community/presenceRoles.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
@@ -114,6 +115,9 @@ const intents = [
   GatewayIntentBits.GuildMembers,
   GatewayIntentBits.GuildInvites, // Tor 3 — Invite Tracker (śledzenie zaproszeń)
   GatewayIntentBits.DirectMessages, // Faza 7 / F6.4 — modmail (DM do bota)
+  // Etap I — live-rola/vanity-rola: intent TYLKO przy env PRESENCE_INTENT=1, bo bez
+  // włączonego przełącznika „Presence Intent" w Dev Portal logowanie by się wywaliło.
+  ...(process.env.PRESENCE_INTENT ? [GatewayIntentBits.GuildPresences] : []),
 ];
 const client = new Client({
   intents,
@@ -212,6 +216,7 @@ client.once(Events.ClientReady, (c) => {
   startHeat(c); // Etap G — adaptacyjny anty-spam (heat system, /heat)
   startImageOnly(c); // Etap H — kanały tylko-obrazki (/imageonly)
   startScheduleSync(c); // Etap I — harmonogram Twitch → wydarzenia Discord (/streamsync)
+  startPresenceRoles(c); // Etap I — live-rola + vanity-rola (/liverole /vanityrole; PRESENCE_INTENT)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(
