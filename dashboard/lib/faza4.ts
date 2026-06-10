@@ -1,7 +1,7 @@
 // Faza 4 — warstwa danych panelu (leveling + tickety).
 // Config trzymamy w tabeli `settings` (JSON, jak antinuke/presence) — działa od razu.
 // Dane (ranking, tickety) czytamy z nowych tabel (faza4-schema.sql); brak tabeli → pusto.
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
 import type { RichMessage } from './richMessage';
 import { hasSupabase, supabase } from './supabase';
 
@@ -51,7 +51,8 @@ export const LEVELING_DEFAULT: LevelingConfig = {
 };
 
 export async function getLevelingConfig(): Promise<LevelingConfig> {
-  const raw = await getRawSetting('leveling_config');
+  // Etap K — leveling_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('leveling_config');
   if (!raw) return structuredClone(LEVELING_DEFAULT);
   try {
     return { ...LEVELING_DEFAULT, ...(JSON.parse(raw) as Partial<LevelingConfig>) };
@@ -61,7 +62,7 @@ export async function getLevelingConfig(): Promise<LevelingConfig> {
 }
 
 export async function saveLevelingConfig(cfg: LevelingConfig): Promise<void> {
-  await setRawSetting('leveling_config', JSON.stringify(cfg));
+  await setConfigSetting('leveling_config', JSON.stringify(cfg));
 }
 
 export type LevelRow = { user_id: string; username: string | null; xp: number; level: number };

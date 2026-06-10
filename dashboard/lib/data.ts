@@ -275,7 +275,7 @@ export async function setGuildRawSetting(key: string, value: string): Promise<vo
 // Klucze configu już zmigrowane na per-serwer (bot czyta je przez getGuildSettings). Dla nich
 // WSZYSTKIE ścieżki panelu (form, przełącznik modułów, kreator) muszą iść per-serwer — inaczej
 // rozjazd. Dokładamy klucz DOPIERO po wdrożeniu odczytu per-serwer w bocie. Reszta zostaje globalna.
-export const MIGRATED_GUILD_KEYS = new Set<string>(['welcome_config']);
+export const MIGRATED_GUILD_KEYS = new Set<string>(['welcome_config', 'leveling_config']);
 
 export async function getConfigSetting(key: string): Promise<string | null> {
   return MIGRATED_GUILD_KEYS.has(key) ? getGuildRawSetting(key) : getRawSetting(key);

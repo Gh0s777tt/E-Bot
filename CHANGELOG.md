@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-239-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.169.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-240-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.170.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.170.0] — 🗂️ Poziomy/leveling per-serwer · Etap K (C-3/?)
+
+- `[#240]` 🗂️ **Poziomy (leveling + prestiż) działają teraz per-serwer** — drugi zmigrowany moduł, pierwszy wysokiej częstotliwości (XP na każdej wiadomości):
+  - 🤖 **Bot**: zamiast jednej globalnej cache — **cache configu per-serwer z TTL 30 s** (`cfgFor(guildId)`). Nie otwiera bazy na każdą wiadomość, a każdy serwer ma własne ustawienia XP, mnożniki, role-nagrody, kanały bez XP, anonse i prestiż. `/prestige` czyta config świeżo dla swojego serwera.
+  - 🖥️ **Panel**: `leveling_config` dołączony do `MIGRATED_GUILD_KEYS`; formularz poziomów (`faza4.ts`) i przełącznik w Centrum sterowania idą per-serwer (router z fali C-2).
+  - 🔁 Wsteczna zgodność: bez własnego override'u serwer widzi dotychczasowe globalne ustawienia. Klucze `g:<serwer>:leveling_config` synca settings-sync. Etap K (C-3). Bot + panel (bot pierwszy).
 
 ## [0.169.0] — 🗂️ Powitania per-serwer (pierwszy moduł) · Etap K (C-2/?)
 

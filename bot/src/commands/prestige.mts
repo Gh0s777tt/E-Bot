@@ -6,10 +6,10 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
-function prestigeCfg(): { enabled: boolean; level: number; roleId: string } {
-  const raw = getSettings()['leveling_config'];
+function prestigeCfg(guildId: string): { enabled: boolean; level: number; roleId: string } {
+  const raw = getGuildSettings(guildId)['leveling_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {
@@ -45,7 +45,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await interaction.reply(eph('Tylko na serwerze.'));
     return;
   }
-  const pc = prestigeCfg();
+  const pc = prestigeCfg(interaction.guildId);
   if (!pc.enabled) {
     await interaction.reply(eph('✨ Prestiż jest wyłączony.'));
     return;

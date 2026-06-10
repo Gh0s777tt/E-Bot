@@ -19,7 +19,7 @@ import {
   cloudUpsert,
   hasCloud,
 } from './lib/cloud.mts';
-import { getSettings } from './lib/db.mts';
+import { getGuildSettings } from './lib/db.mts';
 
 type Reward = { level: number; roleId: string };
 type Multiplier = { roleId: string; factor: number };
@@ -66,19 +66,21 @@ const DEFAULT: LevelingConfig = {
   prestigeRoleId: '',
 };
 
-// ── Config (cache odświeżany z lokalnej bazy co 30 s, żeby nie otwierać SQLite na każdą wiadomość) ──
-let cfg: LevelingConfig = { ...DEFAULT };
-function refreshConfig(): void {
-  const raw = getSettings()['leveling_config'];
-  if (!raw) {
-    cfg = { ...DEFAULT };
-    return;
-  }
+// ── Config PER-SERWER (Etap K): cache z TTL 30 s per guild — nie otwiera SQLite na każdą wiadomość,
+// a każdy serwer ma własny config (override g:<id>:leveling_config z fallbackiem do globalnego). ──
+const cfgCache = new Map<string, { cfg: LevelingConfig; at: number }>();
+function cfgFor(guildId: string): LevelingConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['leveling_config'];
+  let cfg: LevelingConfig;
   try {
-    cfg = { ...DEFAULT, ...(JSON.parse(raw) as Partial<LevelingConfig>) };
+    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<LevelingConfig>) } : { ...DEFAULT };
   } catch {
     cfg = { ...DEFAULT };
   }
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
 // ── Formuła poziomów: do awansu z L na L+1 trzeba 5L² + 50L + 100 XP ──
@@ -132,6 +134,7 @@ function isWeekend(): boolean {
   return d === 0 || d === 6;
 }
 function effectiveXp(member: GuildMember, base: number): number {
+  const cfg = cfgFor(member.guild.id);
   let mult = 1;
   for (const m of cfg.multipliers) {
     if (m.roleId && member.roles.cache.has(m.roleId)) mult = Math.max(mult, m.factor || 1);
@@ -142,7 +145,7 @@ function effectiveXp(member: GuildMember, base: number): number {
   return Math.max(0, Math.round(base * mult));
 }
 function noXpMember(member: GuildMember): boolean {
-  return cfg.noXpRoles.some((r) => r && member.roles.cache.has(r));
+  return cfgFor(member.guild.id).noXpRoles.some((r) => r && member.roles.cache.has(r));
 }
 
 const cooldowns = new Map<string, number>();
@@ -198,6 +201,7 @@ async function onLevelUp(
 ): Promise<void> {
   const guild = client.guilds.cache.get(guildId);
   if (!guild) return;
+  const cfg = cfgFor(guildId);
 
   // role-nagrody: stack (wszystkie ≤ poziom) lub tylko najwyższa
   const eligible = cfg.rewards.filter((r) => r.level <= level && r.roleId);
@@ -264,13 +268,13 @@ async function onLevelUp(
 }
 
 export function startLeveling(client: Client): void {
-  refreshConfig();
-  setInterval(refreshConfig, 30_000);
   void loadXpEvent();
 
   // XP za wiadomości (nie potrzebujemy treści → wystarczy intent GuildMessages)
   client.on(Events.MessageCreate, (msg: Message) => {
-    if (!cfg.enabled || msg.author.bot || !msg.guild) return;
+    if (msg.author.bot || !msg.guild) return;
+    const cfg = cfgFor(msg.guild.id);
+    if (!cfg.enabled) return;
     if (cfg.noXpChannels.includes(msg.channelId)) return;
     const member = msg.member;
     if (member && noXpMember(member)) return;
@@ -284,8 +288,9 @@ export function startLeveling(client: Client): void {
 
   // XP za voice — co 60 s dla każdego w kanale głosowym
   setInterval(() => {
-    if (!cfg.enabled || cfg.xpPerVoiceMin <= 0) return;
     for (const guild of client.guilds.cache.values()) {
+      const cfg = cfgFor(guild.id);
+      if (!cfg.enabled || cfg.xpPerVoiceMin <= 0) continue;
       for (const channel of guild.channels.cache.values()) {
         if (!channel.isVoiceBased() || channel.id === guild.afkChannelId) continue;
         if (cfg.noXpChannels.includes(channel.id)) continue;
