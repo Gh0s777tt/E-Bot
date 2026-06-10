@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-202-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.133.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-203-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.133.1-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.133.1] — 📊 Analiza funkcji v2 + roadmapa Etapy F–J (docs)
+
+- `[#203]` 📊 **`docs/ANALIZA-FUNKCJI-2.md`** — szczegółowa analiza projektu po domknięciu Etapów A–D: pełny inwentarz (75 komend, ~35 modułów, panel, 14 języków), mapowanie nowej listy konkurencji (StartIT, Wick, TempVoice, boty muzyczne/weryfikacyjne, Miki, Loritta, Streamcord, free-games/patch-boty) z oceną ✅/🟡/❌, TOP-10 braków, plan ulepszeń istniejących funkcji, integracje do dodania i plan interfejsu. Nowa roadmapa: **Etap F** (fun & mosty eko — quick-wins), **Etap G** (security PRO: joingate, heat, backupy, panic), **Etap H** (TempVoice 2.0, custom commands 2.0, context-menu), **Etap I** (panel 2.0: i18n panelu, pulpit 2.0, Components V2), **Etap J** (eko 2.0 — opcjonalny), **Etap E** bez zmian (klucze na końcu). _(Sama dokumentacja — bez deployu bota/panelu.)_
 
 ## [0.133.0] — 🏆 Osiągnięcia-tiery (/achievements) · Panel (2/?)
 
