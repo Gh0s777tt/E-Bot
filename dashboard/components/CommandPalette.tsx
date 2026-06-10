@@ -5,6 +5,7 @@ import {
   ArrowUp,
   CornerDownLeft,
   Download,
+  GraduationCap,
   Maximize2,
   Minimize2,
   Search,
@@ -113,6 +114,14 @@ export default function CommandPalette() {
         group: action,
         icon: ArrowUp,
         run: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      },
+      {
+        id: 'act:tour',
+        label: tp(lang, 'ui.tour'),
+        group: action,
+        icon: GraduationCap,
+        kw: 'samouczek tutorial tour pomoc help oprowadzanie',
+        run: () => window.dispatchEvent(new CustomEvent('tour:start')),
       },
     ];
     return [...nav, ...actions];

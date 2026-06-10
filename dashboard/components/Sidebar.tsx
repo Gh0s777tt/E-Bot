@@ -68,7 +68,7 @@ export default function Sidebar() {
         </span>
       </div>
 
-      <nav className="flex-1 space-y-0.5 overflow-y-auto p-2.5">
+      <nav data-tour="nav" className="flex-1 space-y-0.5 overflow-y-auto p-2.5">
         {groups.map((group) => {
           const isOpen = !!open[group.label];
           return (
@@ -112,7 +112,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="shrink-0 space-y-1.5 border-t border-line p-3">
-        <div className="flex items-center gap-1">
+        <div data-tour="modes" className="flex items-center gap-1">
           {VIEW_MODES.map((m) => (
             <button
               key={m.value}
@@ -134,7 +134,7 @@ export default function Sidebar() {
           {tp(lang, 'ui.mode')}:{' '}
           <span className="text-muted">{VIEW_MODES.find((m) => m.value === mode)?.label}</span>
         </p>
-        <label className="flex items-center gap-1.5 text-[10px] text-muted/60">
+        <label data-tour="lang" className="flex items-center gap-1.5 text-[10px] text-muted/60">
           <span aria-hidden>🌍</span>
           <span className="sr-only">{tp(lang, 'ui.language')}</span>
           <select

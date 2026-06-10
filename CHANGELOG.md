@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-235-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.165.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-236-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.166.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.166.0] — 🎓 Interaktywny samouczek panelu · Etap K (4/?)
+
+- `[#236]` 🎓 **Interaktywny samouczek (tour)** — przewodnik, który podświetla **realne elementy** panelu i prowadzi krok po kroku:
+  - 🔦 Spotlight (przyciemnia resztę, podświetla element) + dymek z opisem; prowadzi przez: nawigację, tryby, język, przełącznik serwerów, wyszukiwarkę ⌘K, panel „Jak to działa?" i asystenta AI.
+  - ▶️ **Uruchamialny w każdej chwili** — z palety `Ctrl+K → „Samouczek panelu"` (14 języków etykiety), a przy pierwszej wizycie startuje sam (raz, zapamiętane w `localStorage`).
+  - 🧠 Kroki, których elementu nie ma na danej stronie (np. ukryty przełącznik serwerów albo „Jak to działa?" na pulpicie), są **automatycznie pomijane**; dymek sam dobiera pozycję (nad/pod elementem) i przewija do celu.
+  - `TourGuide.tsx` + atrybuty `data-tour` na elementach + akcja w palecie. Treść kroków po polsku (i18n później). Etap K (4). Zmiana tylko panelowa.
 
 ## [0.165.0] — 🤖 Asystent AI w panelu · Etap K (3/?)
 

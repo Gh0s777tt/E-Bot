@@ -129,6 +129,7 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
         </span>
         <button
           type="button"
+          data-tour="search"
           onClick={() => window.dispatchEvent(new CustomEvent('cmdk:open'))}
           title={`${tp(lang, 'ui.search')} (Ctrl+K)`}
           className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 uppercase tracking-wide transition hover:border-accent"

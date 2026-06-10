@@ -11,6 +11,7 @@ import ModuleBar from './ModuleBar';
 import PageTransition from './PageTransition';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
+import TourGuide from './TourGuide';
 import { ViewModeProvider } from './ViewModeContext';
 
 // Publiczne strony (/p/*) renderujemy bez panelowego chromu (sidebar/topbar) — to widok dla gości.
@@ -23,6 +24,7 @@ export default function Shell({ children, inviteUrl }: { children: ReactNode; in
         <div className="relative z-10 flex min-h-screen">
           <CommandPalette />
           <Assistant />
+          <TourGuide />
           <Sidebar />
           <div className="content-pane min-w-0 flex-1 md:pl-60">
             <Topbar inviteUrl={inviteUrl} />

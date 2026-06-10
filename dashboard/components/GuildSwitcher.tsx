@@ -67,7 +67,7 @@ export default function GuildSwitcher() {
     );
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} data-tour="guild" className="relative">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}

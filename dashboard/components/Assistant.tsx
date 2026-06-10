@@ -45,6 +45,7 @@ export default function Assistant() {
       {/* Pływający przycisk — zawsze widoczny */}
       <button
         type="button"
+        data-tour="assistant"
         onClick={() => setOpen((o) => !o)}
         title="Asystent — opisz, czego chcesz"
         className="fixed bottom-5 right-5 z-[90] flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_30px_-6px_rgb(var(--accent-rgb)/0.8)] transition hover:bg-accent-hover hover:scale-105"

@@ -760,6 +760,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Tryb focus (ukryj menu boczne)',
     'ui.actBackup': 'Kopia / przywracanie konfiguracji',
     'ui.actTop': 'Przewiń na górę',
+    'ui.tour': 'Samouczek panelu',
   },
   en: {
     'ui.mode': 'Mode',
@@ -789,6 +790,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Focus mode (hide sidebar)',
     'ui.actBackup': 'Backup / restore configuration',
     'ui.actTop': 'Scroll to top',
+    'ui.tour': 'Panel tour',
   },
   de: {
     'ui.mode': 'Modus',
@@ -818,6 +820,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Fokusmodus (Seitenleiste ausblenden)',
     'ui.actBackup': 'Konfiguration sichern / wiederherstellen',
     'ui.actTop': 'Nach oben scrollen',
+    'ui.tour': 'Panel-Tour',
   },
   es: {
     'ui.mode': 'Modo',
@@ -847,6 +850,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Modo enfoque (ocultar menú lateral)',
     'ui.actBackup': 'Copia / restauración de configuración',
     'ui.actTop': 'Ir arriba',
+    'ui.tour': 'Tour del panel',
   },
   it: {
     'ui.mode': 'Modalità',
@@ -876,6 +880,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Modalità focus (nascondi barra laterale)',
     'ui.actBackup': 'Backup / ripristino configurazione',
     'ui.actTop': 'Scorri in alto',
+    'ui.tour': 'Tour del pannello',
   },
   fr: {
     'ui.mode': 'Mode',
@@ -905,6 +910,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Mode focus (masquer le menu)',
     'ui.actBackup': 'Sauvegarde / restauration de la config',
     'ui.actTop': 'Remonter en haut',
+    'ui.tour': 'Visite du panneau',
   },
   pt: {
     'ui.mode': 'Modo',
@@ -934,6 +940,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Modo foco (ocultar menu lateral)',
     'ui.actBackup': 'Backup / restauração da configuração',
     'ui.actTop': 'Rolar para o topo',
+    'ui.tour': 'Tour do painel',
   },
   zh: {
     'ui.mode': '模式',
@@ -963,6 +970,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': '专注模式（隐藏侧栏）',
     'ui.actBackup': '备份 / 恢复配置',
     'ui.actTop': '滚动到顶部',
+    'ui.tour': '面板导览',
   },
   ko: {
     'ui.mode': '모드',
@@ -992,6 +1000,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': '집중 모드 (사이드바 숨기기)',
     'ui.actBackup': '설정 백업 / 복원',
     'ui.actTop': '맨 위로 스크롤',
+    'ui.tour': '패널 둘러보기',
   },
   ru: {
     'ui.mode': 'Режим',
@@ -1021,6 +1030,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Режим фокуса (скрыть меню)',
     'ui.actBackup': 'Резервная копия / восстановление',
     'ui.actTop': 'Прокрутить вверх',
+    'ui.tour': 'Тур по панели',
   },
   uk: {
     'ui.mode': 'Режим',
@@ -1050,6 +1060,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Режим фокуса (сховати меню)',
     'ui.actBackup': 'Резервна копія / відновлення',
     'ui.actTop': 'Прокрутити вгору',
+    'ui.tour': 'Тур панеллю',
   },
   ja: {
     'ui.mode': 'モード',
@@ -1079,6 +1090,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'フォーカスモード（サイドバー非表示）',
     'ui.actBackup': '設定のバックアップ / 復元',
     'ui.actTop': '一番上へスクロール',
+    'ui.tour': 'パネルツアー',
   },
   ar: {
     'ui.mode': 'الوضع',
@@ -1108,6 +1120,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'وضع التركيز (إخفاء الشريط الجانبي)',
     'ui.actBackup': 'نسخ احتياطي / استعادة الإعدادات',
     'ui.actTop': 'التمرير إلى الأعلى',
+    'ui.tour': 'جولة اللوحة',
   },
   id: {
     'ui.mode': 'Mode',
@@ -1137,6 +1150,7 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.actFocus': 'Mode fokus (sembunyikan menu samping)',
     'ui.actBackup': 'Cadangkan / pulihkan konfigurasi',
     'ui.actTop': 'Gulir ke atas',
+    'ui.tour': 'Tur panel',
   },
 };
 

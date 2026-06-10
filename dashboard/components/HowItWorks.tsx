@@ -46,7 +46,7 @@ export default function HowItWorks() {
   }
 
   return (
-    <div className="mb-6 overflow-hidden rounded-2xl border border-line bg-card/50">
+    <div data-tour="how" className="mb-6 overflow-hidden rounded-2xl border border-line bg-card/50">
       <button
         type="button"
         onClick={toggle}
