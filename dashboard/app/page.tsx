@@ -1,11 +1,14 @@
 import { Clock, Gamepad2, Layers, Plug, UserPlus } from 'lucide-react';
 import AntiraidAlarm from '../components/AntiraidAlarm';
 import GameCard from '../components/GameCard';
+import HealthScoreCard from '../components/HealthScoreCard';
 import LiveServerTiles from '../components/LiveServerTiles';
+import QuickActionsCard from '../components/QuickActionsCard';
 import ServerGrowthCard from '../components/ServerGrowthCard';
 import SetupChecklist from '../components/SetupChecklist';
 import StatCard from '../components/StatCard';
 import { activeSource, getGames, getSetupChecklist, getStats } from '../lib/data';
+import { getServerHealth } from '../lib/health';
 import { getAntiraidState, getServerHistory } from '../lib/insights';
 import { getIntegrations } from '../lib/integrations';
 import { botInviteUrl } from '../lib/invite';
@@ -20,15 +23,18 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function OverviewPage() {
-  const [stats, games, src, integrations, checklist, history, antiraid] = await Promise.all([
-    getStats(),
-    getGames(),
-    activeSource(),
-    Promise.resolve(getIntegrations()),
-    getSetupChecklist(),
-    getServerHistory(),
-    getAntiraidState(),
-  ]);
+  const [stats, games, src, integrations, checklist, history, antiraid, health] = await Promise.all(
+    [
+      getStats(),
+      getGames(),
+      activeSource(),
+      Promise.resolve(getIntegrations()),
+      getSetupChecklist(),
+      getServerHistory(),
+      getAntiraidState(),
+      getServerHealth(),
+    ],
+  );
   const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
   const coverPct = stats.total ? Math.round((stats.withCover / stats.total) * 100) : 0;
@@ -125,6 +131,12 @@ export default async function OverviewPage() {
 
       {/* ===== SERWER NA ŻYWO (heartbeat bota) ===== */}
       <LiveServerTiles />
+
+      {/* ===== PULPIT 2.0: HEALTH-SCORE + SZYBKIE AKCJE ===== */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <HealthScoreCard health={health} />
+        <QuickActionsCard />
+      </div>
 
       {/* ===== WZROST SERWERA + ALARM ANTI-RAID ===== */}
       <div className="grid gap-4 lg:grid-cols-2">

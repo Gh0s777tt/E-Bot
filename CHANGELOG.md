@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-217-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.147.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-218-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.148.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.148.0] — 🧭 Pulpit 2.0 — health-score + szybkie akcje · Etap I (1/?)
+
+- `[#218]` 🧭 **Pulpit 2.0** (strona główna panelu) — dwa nowe kafle:
+  - 🩺 **Health-check serwera** — wynik /100 liczony na żywo (Discord REST): poziom weryfikacji, filtr treści, uprawnienia `@everyone` (z listą niebezpiecznych), 2FA moderacji, domyślne powiadomienia + informacyjnie kanał zasad i tryb społeczności. Lustro komendy `/healthcheck`, kolorowy pasek (zielony/żółty/czerwony).
+  - ⚡ **Szybkie akcje** — **przełącznik Raidmode z panelu** (nowe API `/api/raidmode` → flaga `settings.raidmode`, bot podchwytuje ≤30 s; badge „aktywny"), skróty do Bezpieczeństwa/Moderacji i ściąga awaryjna (`/panic`, `/backup restore`).
+  Startuje **Etap I — Panel 2.0**. Zmiana tylko panelowa (deploy Vercel).
 
 ## [0.147.0] — 🧩 Custom Commands 2.0 — akcje i warunki · Etap H (5/5) — ETAP H DOMKNIĘTY 🎉
 
