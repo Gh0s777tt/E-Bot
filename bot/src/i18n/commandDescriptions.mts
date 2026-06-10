@@ -1462,6 +1462,24 @@ const ACHV_DESC: Record<Locale, Record<string, string>> = {
   id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
 };
 
+// Opis /meme (Etap J — generator memów) — dołożony do COMMAND_DESC niżej.
+const MEME_DESC: Record<Locale, Record<string, string>> = {
+  pl: { meme: 'Wygeneruj mema — tekst na szablonie.' },
+  en: { meme: 'Generate a meme — text on a template.' },
+  de: { meme: 'Meme erstellen — Text auf einer Vorlage.' },
+  es: { meme: 'Genera un meme — texto en una plantilla.' },
+  it: { meme: 'Genera un meme — testo su un modello.' },
+  fr: { meme: 'Génère un mème — texte sur un modèle.' },
+  pt: { meme: 'Gere um meme — texto em um modelo.' },
+  zh: { meme: '生成表情包 — 在模板上加文字。' },
+  ko: { meme: '밈 생성 — 템플릿에 텍스트 추가.' },
+  ru: { meme: 'Создай мем — текст на шаблоне.' },
+  uk: { meme: 'Створи мем — текст на шаблоні.' },
+  ja: { meme: 'ミームを生成 — テンプレートに文字。' },
+  ar: { meme: 'أنشئ ميمًا — نص على قالب.' },
+  id: { meme: 'Buat meme — teks pada templat.' },
+};
+
 // Opis /cards (Etap J — kolekcjonerskie karty) — dołożony do COMMAND_DESC niżej.
 const CARDS_DESC: Record<Locale, Record<string, string>> = {
   pl: { cards: 'Kolekcjonerskie karty — losuj i zbieraj.' },
@@ -1591,6 +1609,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], STOCKS_DESC[l]);
   Object.assign(COMMAND_DESC[l], PET_DESC[l]);
   Object.assign(COMMAND_DESC[l], CARDS_DESC[l]);
+  Object.assign(COMMAND_DESC[l], MEME_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

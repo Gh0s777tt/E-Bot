@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-231-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.161.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-232-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.162.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.162.0] — 🖼️ Generator memów — `/meme` · Etap J (5/5) — ETAP J DOMKNIĘTY 🎉
+
+- `[#232]` 🖼️ **Generator memów** — nowa komenda `/meme`: nakłada `góra`/`dół` na popularny szablon przez **darmowe, bezkluczowe API memegen.link** (jak `/cat` `/dog`):
+  - 🎭 12 szablonów (Drake, Distracted Boyfriend, Change My Mind, Gru’s Plan, Doge, Futurama Fry, Success Kid, X Everywhere, Ancient Aliens, One Does Not Simply, Is This a Pigeon, Roll Safe).
+  - 🔤 Poprawny escaping reguł memegen (spacje→`_`, `?`→`~q` itd.) + `encodeURI` — działa z polskimi znakami i interpunkcją. Bot składa URL obrazka i wstawia w embed (zero przetwarzania grafiki po stronie bota, zero kluczy). 14 języków.
+  - **ETAP J — Eko/Fun 2.0 DOMKNIĘTY** (5 fal: giełda → role czasowe → pety → karty → memy). Komendy: **98** (95 slash + 3 context-menu).
 
 ## [0.161.0] — 🃏 Kolekcjonerskie karty — `/cards` · Etap J (4/?)
 
