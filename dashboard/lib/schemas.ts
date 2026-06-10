@@ -189,6 +189,7 @@ export const ticketsConfigSchema = z.object({
   categories: z.array(ticketCategorySchema).max(10).optional().default([]),
   ratingEnabled: z.boolean().optional().default(true),
   slaHours: z.number().int().min(0).max(720).optional().default(0),
+  questions: z.array(z.string().min(1).max(100)).max(4).optional().default([]),
 });
 export type TicketsConfigInput = z.infer<typeof ticketsConfigSchema>;
 

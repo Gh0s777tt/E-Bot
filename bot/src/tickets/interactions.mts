@@ -2,6 +2,7 @@
 import {
   ActionRowBuilder,
   type ButtonInteraction,
+  EmbedBuilder,
   MessageFlags,
   ModalBuilder,
   type ModalSubmitInteraction,
@@ -35,6 +36,17 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
       .setMaxLength(200)
       .setRequired(true);
     modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(input));
+    // Etap H — dodatkowe pytania formularza z panelu (max 4; modal mieści 5 pól).
+    const questions = (ticketConfig().questions ?? []).slice(0, 4);
+    questions.forEach((q, i) => {
+      const qi = new TextInputBuilder()
+        .setCustomId(`q${i}`)
+        .setLabel(q.slice(0, 45))
+        .setStyle(TextInputStyle.Paragraph)
+        .setMaxLength(500)
+        .setRequired(true);
+      modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(qi));
+    });
     await interaction.showModal(modal);
     return;
   }
@@ -118,6 +130,35 @@ export async function handleTicketModal(interaction: ModalSubmitInteraction): Pr
   }
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
   const thread = await openTicket(ch as TextChannel, interaction.user, subject, catId || undefined);
+
+  // Odpowiedzi z formularza → embed w wątku (pytania z panelu, max 4).
+  if (thread) {
+    const questions = (ticketConfig().questions ?? []).slice(0, 4);
+    const fields = questions
+      .map((q, i) => {
+        let answer = '';
+        try {
+          answer = interaction.fields.getTextInputValue(`q${i}`);
+        } catch {
+          return null;
+        }
+        return { name: q.slice(0, 250), value: answer.slice(0, 1000) || '—' };
+      })
+      .filter((f): f is { name: string; value: string } => f !== null);
+    if (fields.length) {
+      await thread
+        .send({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(0xe50914)
+              .setTitle('📋 Formularz zgłoszenia')
+              .addFields(fields),
+          ],
+        })
+        .catch(() => {});
+    }
+  }
+
   await interaction.editReply(
     thread ? `✅ Otwarto ticket: <#${thread.id}>` : '❌ Nie udało się otworzyć ticketu.',
   );

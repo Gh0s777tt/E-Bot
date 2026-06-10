@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-215-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.145.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-216-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.146.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.146.0] — 📋 Formularz przed ticketem · Etap H (4/?)
+
+- `[#216]` 📋 **Pytania przed otwarciem ticketu** (jak w StartIT) — **bot + panel**: w panelu (`/tickets`) konfigurujesz do **4 pytań** (np. „Jaki masz nick w grze?", „Od kiedy występuje problem?"); bot zadaje je w **okienku** razem z tematem (modal Discorda mieści 5 pól), a **odpowiedzi wkleja jako embed do wątku** ticketu — obsługa od razu ma pełen kontekst, zero ping-ponga.
+  - Panel: sekcja „📋 Pytania formularza" w konfiguracji ticketów (dodaj/usuń, max 4 × 100 zn.; `faza4.ts` + Zod + `TicketsConfigForm`).
+  - Bot: dynamiczna budowa modala z `tickets_config.questions` + embed „Formularz zgłoszenia" w wątku.
+  Czwarta fala Etapu H. Bez nowych komend — bez ponownej rejestracji.
 
 ## [0.145.0] — 🖱️ Context-menu — PPM na użytkowniku · Etap H (3/?)
 

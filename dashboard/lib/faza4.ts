@@ -101,6 +101,7 @@ export type TicketsConfig = {
   categories?: TicketCategory[];
   ratingEnabled: boolean;
   slaHours: number;
+  questions?: string[]; // pytania formularza przed otwarciem (max 4)
 };
 
 export const TICKETS_DEFAULT: TicketsConfig = {
@@ -113,6 +114,7 @@ export const TICKETS_DEFAULT: TicketsConfig = {
   categories: [],
   ratingEnabled: true,
   slaHours: 0,
+  questions: [],
 };
 
 export async function getTicketsConfig(): Promise<TicketsConfig> {

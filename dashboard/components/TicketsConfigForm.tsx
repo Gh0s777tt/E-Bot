@@ -19,11 +19,13 @@ type Cfg = {
   categories: TicketCategory[];
   ratingEnabled: boolean;
   slaHours: number;
+  questions: string[];
 };
 
-type Init = Omit<Cfg, 'panelSpec' | 'categories'> & {
+type Init = Omit<Cfg, 'panelSpec' | 'categories' | 'questions'> & {
   panelSpec?: RichMessage;
   categories?: TicketCategory[];
+  questions?: string[];
 };
 
 const inputCls =
@@ -43,6 +45,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
       ? normalizeRich(initial.panelSpec)
       : fromLegacy(initial.panelMessage),
     categories: initial.categories ?? [],
+    questions: initial.questions ?? [],
   });
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -52,7 +55,11 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
       const r = await fetch('/api/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...c, panelMessage: c.panelSpec.content || c.panelMessage }),
+        body: JSON.stringify({
+          ...c,
+          panelMessage: c.panelSpec.content || c.panelMessage,
+          questions: c.questions.map((q) => q.trim()).filter(Boolean),
+        }),
       });
       setSt(r.ok ? 'ok' : 'err');
     } catch {
@@ -248,6 +255,52 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
           />
           <span className="font-semibold text-white/90">Proś o ocenę (1–5 ⭐)</span>
         </label>
+      </div>
+
+      <div className="space-y-2 rounded-xl border border-line bg-bg/40 p-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-white/90">
+            📋 Pytania formularza przed otwarciem (max 4)
+          </span>
+          <button
+            type="button"
+            onClick={() =>
+              c.questions.length < 4 && setC({ ...c, questions: [...c.questions, ''] })
+            }
+            disabled={c.questions.length >= 4}
+            className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
+          >
+            <Plus size={12} /> Dodaj
+          </button>
+        </div>
+        {c.questions.length === 0 && (
+          <p className="text-xs text-muted">
+            Brak pytań — użytkownik poda tylko temat. Dodaj pytania (np. „Jaki masz nick w grze?"),
+            a bot zada je w okienku przed otwarciem ticketu i wklei odpowiedzi do wątku.
+          </p>
+        )}
+        {c.questions.map((q, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: lista edytowalna po indeksie
+          <div key={i} className="grid grid-cols-[1fr_auto] gap-2">
+            <input
+              value={q}
+              onChange={(e) =>
+                setC({ ...c, questions: c.questions.map((x, j) => (j === i ? e.target.value : x)) })
+              }
+              placeholder={`Pytanie ${i + 1}`}
+              maxLength={100}
+              className={inputCls}
+            />
+            <button
+              type="button"
+              onClick={() => setC({ ...c, questions: c.questions.filter((_, j) => j !== i) })}
+              className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
+              aria-label="Usuń pytanie"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        ))}
       </div>
 
       <div className="flex items-center gap-3">

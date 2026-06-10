@@ -31,6 +31,7 @@ export type TicketsConfig = {
   categories?: TicketCategory[];
   ratingEnabled: boolean;
   slaHours: number; // Tor D — auto-close po bezczynności (0 = off)
+  questions?: string[]; // Etap H — dodatkowe pytania formularza przed otwarciem (max 4)
 };
 
 export function ticketConfig(): TicketsConfig {
@@ -43,6 +44,7 @@ export function ticketConfig(): TicketsConfig {
     categories: [],
     ratingEnabled: true,
     slaHours: 0,
+    questions: [],
   };
   const raw = getSettings()['tickets_config'];
   try {
