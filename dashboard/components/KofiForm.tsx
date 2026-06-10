@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { KofiConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { ChannelSelect } from './pickers';
+import SaveButton from './SaveButton';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -71,18 +72,7 @@ export default function KofiForm({ initial, guild }: { initial: KofiConfig; guil
         />
       </label>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={save}
-          disabled={st === 'saving'}
-          className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
-        >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
-        </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
-      </div>
+      <SaveButton st={st} onClick={save} />
 
       <div className="rounded-lg border border-line bg-bg/40 p-3 text-xs text-muted">
         <p className="mb-1 font-semibold text-white/90">Konfiguracja w Ko-fi:</p>

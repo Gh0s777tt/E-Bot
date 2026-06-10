@@ -3,6 +3,7 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { DonateConfig } from '../lib/community';
+import SaveButton from './SaveButton';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -154,18 +155,7 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
         ))}
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={save}
-          disabled={st === 'saving'}
-          className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
-        >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
-        </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
-      </div>
+      <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
         Komenda <code className="text-accent">/donate</code> pokaże embed z przyciskami-linkami do
         powyższych miejsc. URL musi zaczynać się od http(s)://.

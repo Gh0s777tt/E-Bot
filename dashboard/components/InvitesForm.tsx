@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { InvitesConfig } from '../lib/engagement';
 import type { GuildMeta } from '../lib/guild';
 import { ChannelSelect, RoleSelect } from './pickers';
+import SaveButton from './SaveButton';
 
 type Row = { count: number; roleId: string; k: string };
 
@@ -130,18 +131,7 @@ export default function InvitesForm({
         ))}
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={save}
-          disabled={st === 'saving'}
-          className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
-        >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
-        </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
-      </div>
+      <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
         Bot wykrywa, czyim zaproszeniem wszedł nowy członek (porównanie liczby użyć zaproszeń).
         Wymaga uprawnienia bota <em>Zarządzanie serwerem</em> oraz <code>_ALL.sql</code> w Supabase.

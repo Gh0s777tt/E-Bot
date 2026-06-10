@@ -3,6 +3,7 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { AutoResponder, ResponderConfig } from '../lib/community';
+import SaveButton from './SaveButton';
 
 type CmdRow = { name: string; response: string; k: string };
 type AutoRow = AutoResponder & { k: string };
@@ -183,18 +184,7 @@ export default function ResponderForm({ initial }: { initial: ResponderConfig })
         ))}
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={save}
-          disabled={st === 'saving'}
-          className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
-        >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
-        </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
-      </div>
+      <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
         Komendy własne: użytkownik pisze <code>{b.prefix}nazwa</code> → bot odpowiada. Autoresponder
         reaguje na słowa-klucze w zwykłych wiadomościach. Zmienne: <code>{'{user}'}</code>,{' '}

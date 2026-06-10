@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import SaveButton from './SaveButton';
 
 type Cfg = {
   enabled: boolean;
@@ -89,18 +90,7 @@ export default function AiConfigForm({ initial }: { initial: Cfg }) {
         />
       </label>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={save}
-          disabled={st === 'saving'}
-          className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
-        >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
-        </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
-      </div>
+      <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
         Komenda <code className="text-accent">/ai</code> w bocie sprawdza dzienny limit (tabela
         <code className="text-accent"> ai_usage</code>) przed wywołaniem modelu — twardy bezpiecznik

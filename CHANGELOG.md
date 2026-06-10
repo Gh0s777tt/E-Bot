@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-225-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.155.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-226-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.156.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.156.0] — 🌍 i18n panelu — przyciski zapisu w 41 formularzach · Etap I (9/?)
+
+- `[#226]` 📝 **i18n panelu, fala 3: wspólny `<SaveButton>`** — koniec z 50 kopiami bloku „Zapisz / Zapisywanie… / ✓ Zapisano / Błąd zapisu":
+  - Jeden komponent z etykietami w języku panelu (`ui.save/saving/saved/saveError` ×14) i spójnym stylem; **41 formularzy przepiętych** (ekonomia, leveling, automod, tickety, powitania, AI, liczniki, urodziny, starboard…).
+  - Podmiana wykonana skryptem po dokładnym wzorcu + weryfikacja tsc/biome; 8 formularzy z celowo niestandardowymi komunikatami (np. „Zapisz i zarejestruj", komunikaty błędów z API) zostaje na osobną falę.
+  - Mniej duplikacji = każda przyszła zmiana stylu/etykiet w jednym miejscu.
 
 ## [0.155.0] — 🌍 i18n panelu — opisy stron (14 języków) · Etap I (8/?)
 
