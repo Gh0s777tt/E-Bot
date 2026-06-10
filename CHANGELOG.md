@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-233-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.163.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-234-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.164.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.164.0] — 🧭 „Jak to działa?" na każdej stronie · Etap K (2/?)
+
+- `[#234]` 🧭 **Rozwijany panel „Jak to działa?"** pod nagłówkiem każdej strony — żeby każdy rozumiał funkcję bez czytania dokumentacji:
+  - 5 sekcji: 🎯 **co robi** · ❓ **po co / kiedy włączyć** · ✅ **co musi być włączone** · 🔐 **jakie uprawnienia bota i DLACZEGO** (np. „Zarządzanie rolami — aby nadać rolę powitalną; rola bota musi być nad nią") · 💡 **wskazówki**.
+  - Treść dla **35 stron** (`lib/howItWorks.ts`): bezpieczeństwo, automod, tickety, modmail, aplikacje, AI, powitania, poziomy, role, liczniki, ekonomia, powiadomienia live, twórca, integracje, ustawienia i inne. Nacisk na „dlaczego coś musi być włączone i czemu te uprawnienia".
+  - Domyślnie zwinięty (stan zapamiętany per-strona), zero zaśmiecania. Komponent `HowItWorks` renderuje się automatycznie wszędzie (jak nagłówek) — bez edycji pojedynczych stron.
+  - Treść po polsku (bazowo, jak opisy stron); **i18n tej treści w 14 językach = kolejna fala**. Etap K (2). Zmiana tylko panelowa.
 
 ## [0.163.0] — 🔀 Przełącznik serwerów · Etap K — Przyjazność 2.0 (1/?)
 
