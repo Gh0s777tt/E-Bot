@@ -2,7 +2,7 @@
 // Config 'counters_config'. Poll co 10 min (Discord limituje zmianę nazwy kanału do 2/10 min!).
 // Liczone tanio z gateway/cache (bez fetchowania członków): members/boosts/channels/roles.
 import type { Client, Guild } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { STREAMER_TYPES, type StreamerType, streamerCount } from './streamerStats.mts';
 
 type CounterType =
@@ -29,16 +29,16 @@ type Item = { channelId: string; type: CounterType; template: string; arg?: stri
 type CountersConfig = { enabled: boolean; items: Item[] };
 
 const DEFAULT: CountersConfig = { enabled: false, items: [] };
-let cfg: CountersConfig = { ...DEFAULT };
 
 const YT_TYPES = new Set<CounterType>(['ytSubs', 'ytViews', 'ytVideos']);
 
-function refresh(): void {
-  const raw = getSettings().counters_config;
+// Etap K — config per-serwer: czytany świeżo dla danego serwera (poll co 10 min = niska częstotliwość).
+function cfgFor(guildId: string): CountersConfig {
+  const raw = getGuildSettings(guildId).counters_config;
   try {
-    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<CountersConfig>) } : { ...DEFAULT };
+    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<CountersConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
@@ -116,36 +116,36 @@ async function ytCountOf(type: CounterType, arg?: string): Promise<number | null
 }
 
 async function tick(client: Client): Promise<void> {
-  if (!cfg.enabled) return;
-  // humans/bots wymagają pełnej listy członków — dociągnij raz na serwer (GuildMembers intent).
-  const needMembers = cfg.items.some((i) => i.type === 'humans' || i.type === 'bots');
-  const fetched = new Set<string>();
-  for (const it of cfg.items) {
-    if (!it.channelId) continue;
-    const ch = await client.channels.fetch(it.channelId).catch(() => null);
-    if (!ch || !('guild' in ch) || !('setName' in ch)) continue;
-    if (needMembers && !fetched.has(ch.guild.id)) {
-      await ch.guild.members.fetch().catch(() => {});
-      fetched.add(ch.guild.id);
+  // Per-serwer: każdy serwer ma własną listę liczników; kanał musi należeć do tego serwera.
+  for (const guild of client.guilds.cache.values()) {
+    const cfg = cfgFor(guild.id);
+    if (!cfg.enabled || !cfg.items.length) continue;
+    // humans/bots wymagają pełnej listy członków — dociągnij raz na serwer (GuildMembers intent).
+    if (cfg.items.some((i) => i.type === 'humans' || i.type === 'bots')) {
+      await guild.members.fetch().catch(() => {});
     }
-    let count: number | null;
-    if (YT_TYPES.has(it.type)) {
-      count = await ytCountOf(it.type, it.arg);
-      if (count === null) continue; // brak klucza/danych YouTube → nie zeruj nazwy
-    } else if (STREAMER_TYPES.has(it.type as StreamerType)) {
-      count = await streamerCount(it.type as StreamerType, it.arg);
-      if (count === null) continue; // brak tokena/danych Twitch/Kick → nie zeruj nazwy
-    } else {
-      count = countOf(ch.guild, it.type);
+    for (const it of cfg.items) {
+      if (!it.channelId) continue;
+      const ch = await client.channels.fetch(it.channelId).catch(() => null);
+      if (!ch || !('guild' in ch) || !('setName' in ch)) continue;
+      if (ch.guild.id !== guild.id) continue; // guard: fallback global może wskazywać cudzy kanał
+      let count: number | null;
+      if (YT_TYPES.has(it.type)) {
+        count = await ytCountOf(it.type, it.arg);
+        if (count === null) continue; // brak klucza/danych YouTube → nie zeruj nazwy
+      } else if (STREAMER_TYPES.has(it.type as StreamerType)) {
+        count = await streamerCount(it.type as StreamerType, it.arg);
+        if (count === null) continue; // brak tokena/danych Twitch/Kick → nie zeruj nazwy
+      } else {
+        count = countOf(ch.guild, it.type);
+      }
+      const name = it.template.replace('{count}', count.toLocaleString('pl-PL')).slice(0, 100);
+      if (ch.name !== name) await ch.setName(name).catch(() => {});
     }
-    const name = it.template.replace('{count}', count.toLocaleString('pl-PL')).slice(0, 100);
-    if (ch.name !== name) await ch.setName(name).catch(() => {});
   }
 }
 
 export function startCounters(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   void tick(client).catch(() => {});
   setInterval(
     () => void tick(client).catch((e) => console.warn('[counters]', (e as Error).message)),

@@ -91,3 +91,19 @@ export function getGuildSetting(guildId: string, key: string): string | undefine
 export function setGuildSetting(guildId: string, key: string, value: string): void {
   setSetting(guildKey(guildId, key), value);
 }
+
+// Klucze configu zmigrowane na per-serwer (LUSTRO panelowego MIGRATED_GUILD_KEYS — trzymać w sync!).
+// Używane przez kod, który zapisuje configi (np. setup/provision.mts), by trafić w ten sam klucz,
+// który czyta moduł per-serwer.
+export const MIGRATED_GUILD_KEYS = new Set<string>([
+  'welcome_config',
+  'leveling_config',
+  'suggestions_config',
+  'birthday_config',
+  'counters_config',
+]);
+
+// Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.
+export function configWriteKey(guildId: string, key: string): string {
+  return MIGRATED_GUILD_KEYS.has(key) ? guildKey(guildId, key) : key;
+}

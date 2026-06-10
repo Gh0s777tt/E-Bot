@@ -10,7 +10,7 @@ import {
   PermissionFlagsBits,
 } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { configWriteKey, getGuildSettings } from '../lib/db.mts';
 
 type Role = { name: string; color?: number; hoist?: boolean };
 type Category = { key: string; name: string };
@@ -114,10 +114,16 @@ function findId(log: LogItem[], label: string): string | undefined {
   return log.find((l) => l.label === label && l.ok && l.id)?.id;
 }
 
-async function mergeConfig(key: string, patch: Record<string, unknown>): Promise<void> {
+// Etap K — zapisy per-serwer: czytamy widok serwera (getGuildSettings), zapisujemy pod kluczem
+// per-serwer dla configów zmigrowanych (configWriteKey), inaczej globalnie.
+async function mergeConfig(
+  guildId: string,
+  key: string,
+  patch: Record<string, unknown>,
+): Promise<void> {
   let cur: Record<string, unknown> = {};
   try {
-    const raw = getSettings()[key];
+    const raw = getGuildSettings(guildId)[key];
     if (raw) {
       const p = JSON.parse(raw);
       if (p && typeof p === 'object' && !Array.isArray(p)) cur = p as Record<string, unknown>;
@@ -125,14 +131,16 @@ async function mergeConfig(key: string, patch: Record<string, unknown>): Promise
   } catch {
     /* domyślnie pusty */
   }
-  await cloudSetSetting(key, JSON.stringify({ ...cur, ...patch })).catch(() => {});
+  await cloudSetSetting(configWriteKey(guildId, key), JSON.stringify({ ...cur, ...patch })).catch(
+    () => {},
+  );
 }
 
 type CounterItem = { channelId: string; type: string; template: string };
-async function wireCounters(memberId?: string, boostId?: string): Promise<void> {
+async function wireCounters(guildId: string, memberId?: string, boostId?: string): Promise<void> {
   let cur: { enabled?: boolean; items?: CounterItem[] } = {};
   try {
-    const raw = getSettings().counters_config;
+    const raw = getGuildSettings(guildId).counters_config;
     if (raw) cur = JSON.parse(raw) as { enabled?: boolean; items?: CounterItem[] };
   } catch {
     /* pusty */
@@ -143,27 +151,28 @@ async function wireCounters(memberId?: string, boostId?: string): Promise<void> 
     items.push({ channelId: memberId, type: 'members', template: '👥 Członków: {count}' });
   if (boostId && !have.has(boostId))
     items.push({ channelId: boostId, type: 'boosts', template: '🚀 Boostów: {count}' });
-  await cloudSetSetting('counters_config', JSON.stringify({ ...cur, enabled: true, items })).catch(
-    () => {},
-  );
+  await cloudSetSetting(
+    configWriteKey(guildId, 'counters_config'),
+    JSON.stringify({ ...cur, enabled: true, items }),
+  ).catch(() => {});
 }
 
 // Auto-wpinanie utworzonych kanałów w configi modułów („twórz + połącz").
-async function autowire(log: LogItem[]): Promise<void> {
+async function autowire(guildId: string, log: LogItem[]): Promise<void> {
   const welcome = findId(log, 'Kanał: powitania');
   if (welcome) {
-    await mergeConfig('welcome_config', { channelId: welcome, enabled: true });
+    await mergeConfig(guildId, 'welcome_config', { channelId: welcome, enabled: true });
     log.push({ label: 'Powiązano: powitania → moduł powitań', ok: true });
   }
   const logs = findId(log, 'Kanał: logi-serwera');
   if (logs) {
-    await mergeConfig('logging_config', { channelId: logs, enabled: true });
+    await mergeConfig(guildId, 'logging_config', { channelId: logs, enabled: true });
     log.push({ label: 'Powiązano: logi → logi serwera', ok: true });
   }
   const mem = findId(log, 'Kanał: 📊 Członkowie');
   const boo = findId(log, 'Kanał: 🚀 Boosty');
   if (mem || boo) {
-    await wireCounters(mem, boo);
+    await wireCounters(guildId, mem, boo);
     log.push({ label: 'Powiązano: liczniki → moduł liczników', ok: true });
   }
 }
@@ -199,7 +208,7 @@ async function tick(client: Client): Promise<void> {
   const log = await execute(guild, plan).catch((e) => [
     { label: 'Provisioning', ok: false, detail: (e as Error).message },
   ]);
-  await autowire(log).catch(() => {});
+  await autowire(guild.id, log).catch(() => {});
   await cloudSetSetting(
     'setup_provision_result',
     JSON.stringify({ id: plan.id, done: true, log, ts: Date.now() }),

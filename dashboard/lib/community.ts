@@ -500,7 +500,8 @@ export type CountersConfig = { enabled: boolean; items: CounterItem[] };
 export const COUNTERS_DEFAULT: CountersConfig = { enabled: false, items: [] };
 
 export async function getCountersConfig(): Promise<CountersConfig> {
-  const raw = await getRawSetting('counters_config');
+  // Etap K — counters_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('counters_config');
   if (!raw) return structuredClone(COUNTERS_DEFAULT);
   try {
     return { ...COUNTERS_DEFAULT, ...(JSON.parse(raw) as Partial<CountersConfig>) };
@@ -509,7 +510,7 @@ export async function getCountersConfig(): Promise<CountersConfig> {
   }
 }
 export async function saveCountersConfig(cfg: CountersConfig): Promise<void> {
-  await setRawSetting('counters_config', JSON.stringify(cfg));
+  await setConfigSetting('counters_config', JSON.stringify(cfg));
 }
 
 // ── AI-moderacja (Faza 7 / F8.3) ──

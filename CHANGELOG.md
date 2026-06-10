@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-242-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.172.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-243-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.173.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.173.0] — 🗂️ Liczniki per-serwer (+ fix kreatora) · Etap K (C-6/?)
+
+- `[#243]` 🗂️ **Liczniki kanałów (`counters`) per-serwer** — piąty zmigrowany moduł:
+  - 🤖 **Bot**: poller liczników **iteruje po wszystkich serwerach**, czyta listę liczników per-serwer (`cfgFor(guildId)`, świeżo co 10 min) i aktualizuje tylko kanały danego serwera (guard przynależności kanału).
+  - 🛠️ **Naprawiony latentny split-brain kreatora**: `setup/provision.mts` (Architekt — blueprint/AI-kreator/kreator startowy) zapisywał configi **globalnie**, co kłóciło się z już zmigrowanymi `welcome`/`counters`. Teraz provision pisze **per-serwer dla kluczy zmigrowanych** (nowy bot-side router `configWriteKey` + `MIGRATED_GUILD_KEYS`, lustro panelowego), a globalnie dla reszty.
+  - 🖥️ **Panel**: `counters_config` w `MIGRATED_GUILD_KEYS`; getter/setter (`community.ts`) i przełącznik per-serwer.
+  - Wsteczna zgodność (fallback global). Etap K (C-6). Bot + panel (bot pierwszy).
 
 ## [0.172.0] — 🗂️ Urodziny per-serwer (+ multi-serwer fix) · Etap K (C-5/?)
 
