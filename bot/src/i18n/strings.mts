@@ -21,6 +21,7 @@ import { MOD2_STRINGS } from './strings.mod2.mts';
 import { PERSONA_STRINGS } from './strings.persona.mts';
 import { POLL2_STRINGS } from './strings.poll2.mts';
 import { PROFILE_STRINGS } from './strings.profile.mts';
+import { RAIDMODE_STRINGS } from './strings.raidmode.mts';
 import { ROLECOPY_STRINGS } from './strings.rolecopy.mts';
 import { ROLEPRESET_STRINGS } from './strings.rolepreset.mts';
 import { SEARCH_STRINGS } from './strings.search.mts';
@@ -426,6 +427,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], PERSONA_STRINGS[l]);
   Object.assign(DICTS[l], POLL2_STRINGS[l]);
   Object.assign(DICTS[l], PROFILE_STRINGS[l]);
+  Object.assign(DICTS[l], RAIDMODE_STRINGS[l]);
   Object.assign(DICTS[l], ROLECOPY_STRINGS[l]);
   Object.assign(DICTS[l], ROLEPRESET_STRINGS[l]);
   Object.assign(DICTS[l], SEARCH_STRINGS[l]);

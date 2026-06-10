@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-207-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.137.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-208-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.138.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.138.0] — 🛡️ /raidmode — ręczna blokada wejść · Etap G (1/?)
+
+- `[#208]` 🛡️ **`/raidmode stan:on|off`** — awaryjna, ręczna blokada nowych wejść (jak Beemo/Security-boty): przy **ON** bot **wyrzuca każdego nowego członka** do odwołania — niezależnie od ustawień anti-raida. Flaga działa **natychmiast** (bez czekania na sync), jest **trwała** (przeżywa restart bota — settings `raidmode`), a alert na kanale anti-raida jest **dławiony do 1/min** (fala nie zaleje kanału). Perm: **Zarządzanie serwerem**. 2 klucze i18n (`strings.raidmode.mts` ×14) + `RAIDMODE_DESC`.
+- ℹ️ **Audyt fali G1:** „joingate" (bramka wieku konta + alt-detect kont bez avatara z karą) oraz **eskalacja kar automoda** (threshold/okno/akcja) **już istniały** w `antiraid_config`/`automod_config` — odhaczone bez dublowania. Startuje **Etap G — Security PRO**. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.137.0] — 🔗 Mosty eko + crosspost + booster-rola + /math · Etap F (4/4) — ETAP F DOMKNIĘTY 🎉
 

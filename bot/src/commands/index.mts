@@ -49,6 +49,7 @@ import * as portal from './portal.mts';
 import * as prestige from './prestige.mts';
 import * as profile from './profile.mts';
 import * as quests from './quests.mts';
+import * as raidmode from './raidmode.mts';
 import * as rank from './rank.mts';
 import * as reactionpanel from './reactionpanel.mts';
 import * as remind from './remind.mts';
@@ -170,6 +171,7 @@ export const commands: Command[] = [
   marry,
   ttt,
   math,
+  raidmode,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

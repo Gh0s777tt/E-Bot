@@ -3,7 +3,7 @@
 import { type Client, Events, type Guild, type GuildMember, type TextChannel } from 'discord.js';
 import { applyLockdown } from '../commands/lockdown.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getSettings, setSetting } from '../lib/db.mts';
 
 type Action = 'kick' | 'ban' | 'timeout';
 type AntiRaidConfig = {
@@ -37,6 +37,14 @@ const DEFAULT: AntiRaidConfig = {
 
 let cfg: AntiRaidConfig = { ...DEFAULT };
 
+// Ręczny tryb raid (/raidmode) — kick każdego nowego wejścia do odwołania. Działa niezależnie
+// od cfg.enabled; stan trwały w settings 'raidmode' (przeżywa restart, widoczny dla panelu).
+let manualRaid = false;
+export function setRaidmode(on: boolean): void {
+  manualRaid = on;
+  setSetting('raidmode', on ? '1' : '');
+}
+
 function refresh(): void {
   const raw = getSettings()['antiraid_config'];
   try {
@@ -44,10 +52,12 @@ function refresh(): void {
   } catch {
     /* zostaw poprzedni */
   }
+  manualRaid = getSettings().raidmode === '1';
 }
 
 const recent: { m: GuildMember; at: number }[] = [];
 let raidUntil = 0;
+let lastManualAlert = 0; // throttle alertów raidmode (1/min — fala nie zaleje kanału)
 
 // ── Log zdarzeń do chmury ('antiraid_state') → panel pokazuje alarm + historię ──
 type RaidEvent = { ts: number; type: 'raid' | 'alt' | 'young'; detail: string; count: number };
@@ -108,6 +118,19 @@ export function startAntiRaid(client: Client): void {
   setInterval(refresh, 30_000);
 
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
+    // Ręczny tryb raid — kick natychmiast, zanim cokolwiek innego (działa też przy cfg.enabled=false).
+    if (manualRaid) {
+      await punishWith(member, 'kick', 'Raidmode: ręczna blokada nowych wejść');
+      const now0 = Date.now();
+      if (now0 - lastManualAlert > 60_000) {
+        lastManualAlert = now0;
+        await alert(
+          member.guild,
+          '🛡️ **Raidmode aktywny** — wyrzucam nowe wejścia. Wyłącz: `/raidmode stan:off`.',
+        );
+      }
+      return;
+    }
     if (!cfg.enabled) return;
     const now = Date.now();
 

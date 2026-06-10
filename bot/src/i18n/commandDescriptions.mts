@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /raidmode (Etap G — security) — dołożony do COMMAND_DESC niżej.
+const RAIDMODE_DESC: Record<Locale, Record<string, string>> = {
+  pl: { raidmode: 'Awaryjna blokada nowych wejść (raid).' },
+  en: { raidmode: 'Emergency block for new joins (raid).' },
+  de: { raidmode: 'Notfall-Sperre für neue Beitritte (Raid).' },
+  es: { raidmode: 'Bloqueo de emergencia de nuevas entradas (raid).' },
+  it: { raidmode: 'Blocco di emergenza dei nuovi ingressi (raid).' },
+  fr: { raidmode: "Blocage d'urgence des nouvelles arrivées (raid)." },
+  pt: { raidmode: 'Bloqueio de emergência de novas entradas (raid).' },
+  zh: { raidmode: '紧急阻止新成员加入（突袭）。' },
+  ko: { raidmode: '신규 입장 긴급 차단 (레이드).' },
+  ru: { raidmode: 'Экстренная блокировка новых входов (рейд).' },
+  uk: { raidmode: 'Екстрене блокування нових входів (рейд).' },
+  ja: { raidmode: '新規参加の緊急ブロック（レイド）。' },
+  ar: { raidmode: 'حظر طارئ للانضمام الجديد (غارة).' },
+  id: { raidmode: 'Blokir darurat anggota baru (raid).' },
+};
+
 // Opis /math (Etap F — kalkulator) — dołożony do COMMAND_DESC niżej.
 const MATH_DESC: Record<Locale, Record<string, string>> = {
   pl: { math: 'Kalkulator — policz wyrażenie.' },
@@ -1392,6 +1410,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], MARRY_DESC[l]);
   Object.assign(COMMAND_DESC[l], TTT_DESC[l]);
   Object.assign(COMMAND_DESC[l], MATH_DESC[l]);
+  Object.assign(COMMAND_DESC[l], RAIDMODE_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
