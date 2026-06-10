@@ -1,6 +1,6 @@
 // Faza 6 — config powitań/autorole + automod (w tabeli settings, bez nowej tabeli).
 import { type CardStyle, RANKCARD_DEFAULT } from './cardStyle';
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
 import type { RichMessage } from './richMessage';
 
 // ── Powitania + autorole (+ baner-grafika Faza 7/F2) ──
@@ -25,7 +25,8 @@ export const WELCOME_DEFAULT: WelcomeConfig = {
 };
 
 export async function getWelcomeConfig(): Promise<WelcomeConfig> {
-  const raw = await getRawSetting('welcome_config');
+  // Etap K — welcome_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('welcome_config');
   if (!raw) return structuredClone(WELCOME_DEFAULT);
   try {
     return { ...WELCOME_DEFAULT, ...(JSON.parse(raw) as Partial<WelcomeConfig>) };
@@ -34,7 +35,7 @@ export async function getWelcomeConfig(): Promise<WelcomeConfig> {
   }
 }
 export async function saveWelcomeConfig(cfg: WelcomeConfig): Promise<void> {
-  await setRawSetting('welcome_config', JSON.stringify(cfg));
+  await setConfigSetting('welcome_config', JSON.stringify(cfg));
 }
 
 // ── Automod ──

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-238-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.168.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-239-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.169.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.169.0] — 🗂️ Powitania per-serwer (pierwszy moduł) · Etap K (C-2/?)
+
+- `[#239]` 🗂️ **Powitania (`welcome`) działają teraz per-serwer** — pierwszy moduł przełączony end-to-end (wzorzec dla reszty):
+  - 🤖 **Bot**: handler `GuildMemberAdd` czyta config **świeżo dla danego serwera** (`getGuildSettings(guildId)`) zamiast jednej globalnej cache — z fallbackiem do wartości globalnej (bez override'u = dotychczasowe zachowanie). Bonus: zmiany z panelu wchodzą **od razu** (koniec 30 s opóźnienia cache).
+  - 🖥️ **Panel**: nowy router `getConfigSetting`/`setConfigSetting` + zbiór `MIGRATED_GUILD_KEYS` — **wszystkie** ścieżki klucza `welcome_config` (formularz powitań, przełącznik w Centrum sterowania) idą teraz per-serwer, więc **brak rozjazdu** między formularzem a włącznikiem.
+  - 🔁 Klucze `g:<serwer>:welcome_config` synchronizują się panel→Supabase→bot (istniejący settings-sync), więc każdy serwer z przełącznika ma własne powitania. Reszta modułów zostaje globalna do swojej kolejki.
+  - Etap K (C-2). Bot + panel (dwa deploye, bot pierwszy).
 
 ## [0.168.0] — 🗂️ Fundament configów per-serwer · Etap K (C-1/?)
 

@@ -1,12 +1,13 @@
 // Faza 7 / F1 — odczyt/zapis stanu włączenia modułów (Centrum sterowania).
-import { getRawSetting, setRawSetting } from './data';
+// Etap K — przez getConfigSetting/setConfigSetting: klucze zmigrowane na per-serwer idą per-serwer.
+import { getConfigSetting, setConfigSetting } from './data';
 import { MODULES } from './modules';
 
 export async function getModuleStates(): Promise<Record<string, boolean>> {
   const out: Record<string, boolean> = {};
   await Promise.all(
     MODULES.map(async (m) => {
-      const raw = await getRawSetting(m.settingsKey);
+      const raw = await getConfigSetting(m.settingsKey);
       if (m.kind === 'bool') {
         out[m.key] =
           raw === null || raw === undefined ? !!m.default : raw === '1' || raw === 'true';
@@ -30,10 +31,10 @@ export async function setModuleEnabled(
   const m = MODULES.find((x) => x.key === key);
   if (!m) return { ok: false, error: 'nieznany moduł' };
   if (m.kind === 'bool') {
-    await setRawSetting(m.settingsKey, enabled ? 'true' : 'false');
+    await setConfigSetting(m.settingsKey, enabled ? 'true' : 'false');
     return { ok: true };
   }
-  const raw = await getRawSetting(m.settingsKey);
+  const raw = await getConfigSetting(m.settingsKey);
   let cfg: Record<string, unknown> = {};
   try {
     cfg = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
@@ -41,6 +42,6 @@ export async function setModuleEnabled(
     cfg = {};
   }
   cfg[m.path ?? 'enabled'] = enabled;
-  await setRawSetting(m.settingsKey, JSON.stringify(cfg));
+  await setConfigSetting(m.settingsKey, JSON.stringify(cfg));
   return { ok: true };
 }

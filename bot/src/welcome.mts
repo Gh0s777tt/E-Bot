@@ -7,7 +7,7 @@ import {
   type GuildMember,
 } from 'discord.js';
 import { type CardStyle, renderWelcomeBanner } from './lib/cards.mts';
-import { getSettings } from './lib/db.mts';
+import { getGuildSettings } from './lib/db.mts';
 import {
   buildRichMessage,
   embedHasContent,
@@ -25,26 +25,23 @@ type WelcomeConfig = {
   messageSpec?: RichMessage;
   autoroleDelaySec?: number;
 };
-let cfg: WelcomeConfig = { enabled: false, channelId: '', message: '', autoroleId: '' };
+const DEF: WelcomeConfig = { enabled: false, channelId: '', message: '', autoroleId: '' };
 
-function refresh(): void {
-  const raw = getSettings()['welcome_config'];
-  if (!raw) {
-    cfg = { enabled: false, channelId: '', message: '', autoroleId: '' };
-    return;
-  }
+// Etap K — config per-serwer: czytany ŚWIEŻO przy każdym wejściu (rzadkie zdarzenie, więc bez
+// cache). getGuildSettings nadpisuje globalny welcome_config override'em serwera (fallback global).
+function loadConfig(guildId: string): WelcomeConfig {
+  const raw = getGuildSettings(guildId)['welcome_config'];
+  if (!raw) return { ...DEF };
   try {
-    cfg = { ...cfg, ...(JSON.parse(raw) as Partial<WelcomeConfig>) };
+    return { ...DEF, ...(JSON.parse(raw) as Partial<WelcomeConfig>) };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEF };
   }
 }
 
 export function startWelcome(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
+    const cfg = loadConfig(member.guild.id);
     if (!cfg.enabled) return;
     try {
       if (cfg.autoroleId) {
