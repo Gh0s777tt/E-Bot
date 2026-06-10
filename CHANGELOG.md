@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-224-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.154.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-225-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.155.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.155.0] — 🌍 i18n panelu — opisy stron (14 języków) · Etap I (8/?)
+
+- `[#225]` 📄 **i18n panelu, fala 2: opisy wszystkich stron w 14 językach** — sekcja „co robi / po co" pod tytułem każdej strony (36 stron × 13 nowych języków = **468 przetłumaczonych opisów**, `lib/pageInfo.i18n.ts`):
+  - Nagłówek hero każdej strony mówi teraz w języku panelu — tytuł (fala 1) **i opis** (ta fala); polski pozostaje bazą i fallbackiem.
+  - Wzorzec `pageDesc(locale, href)` gotowy do reużycia (np. w ⌘K palecie wyszukiwania w przyszłości).
 
 ## [0.154.0] — 🌍 i18n panelu — fundament + nawigacja (14 języków) · Etap I (7/?)
 
