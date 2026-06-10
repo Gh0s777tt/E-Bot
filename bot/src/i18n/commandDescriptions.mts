@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /heat (Etap G — security) — dołożony do COMMAND_DESC niżej.
+const HEATSYS_DESC: Record<Locale, Record<string, string>> = {
+  pl: { heat: 'Adaptacyjny anty-spam (heat) — scoring z karą.' },
+  en: { heat: 'Adaptive anti-spam (heat) — scoring with punishment.' },
+  de: { heat: 'Adaptiver Anti-Spam (Heat) — Scoring mit Strafe.' },
+  es: { heat: 'Anti-spam adaptativo (heat) — puntuación con sanción.' },
+  it: { heat: 'Anti-spam adattivo (heat) — punteggio con sanzione.' },
+  fr: { heat: 'Anti-spam adaptatif (heat) — score avec sanction.' },
+  pt: { heat: 'Anti-spam adaptativo (heat) — pontuação com punição.' },
+  zh: { heat: '自适应反垃圾（热度）— 计分并处罚。' },
+  ko: { heat: '적응형 스팸 방지 (히트) — 점수 기반 제재.' },
+  ru: { heat: 'Адаптивный антиспам (heat) — скоринг с наказанием.' },
+  uk: { heat: 'Адаптивний антиспам (heat) — скоринг із покаранням.' },
+  ja: { heat: '適応型スパム対策（ヒート）— スコアで制裁。' },
+  ar: { heat: 'مكافحة سبام تكيفية (حرارة) — تقييم مع عقوبة.' },
+  id: { heat: 'Anti-spam adaptif (heat) — skor dengan hukuman.' },
+};
+
 // Opis /backup (Etap G — security) — dołożony do COMMAND_DESC niżej.
 const BACKUP_DESC: Record<Locale, Record<string, string>> = {
   pl: { backup: 'Backup struktury serwera + bezpieczny restore.' },
@@ -1430,6 +1448,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], MATH_DESC[l]);
   Object.assign(COMMAND_DESC[l], RAIDMODE_DESC[l]);
   Object.assign(COMMAND_DESC[l], BACKUP_DESC[l]);
+  Object.assign(COMMAND_DESC[l], HEATSYS_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

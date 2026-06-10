@@ -28,6 +28,7 @@ import * as flip from './flip.mts';
 import * as fun from './fun.mts';
 import * as giveaway from './giveaway.mts';
 import * as healthcheck from './healthcheck.mts';
+import * as heat from './heat.mts';
 import * as help from './help.mts';
 import * as highlight from './highlight.mts';
 import * as hof from './hof.mts';
@@ -174,6 +175,7 @@ export const commands: Command[] = [
   math,
   raidmode,
   backup,
+  heat,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

@@ -68,6 +68,7 @@ import { startModmail } from './modmail.mts';
 import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
 import { startAntiRaid } from './security/antiraid.mts';
+import { startHeat } from './security/heat.mts';
 import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
 import { handleVerifyButton, handleVerifyModal } from './security/verification.mts';
@@ -200,6 +201,7 @@ client.once(Events.ClientReady, (c) => {
   startTempVoice(c); // Faza 6 / B5 — kanały głosowe na żądanie
   startSticky(c); // Etap C — przypięte wiadomości (/sticky)
   startFarewell(c); // Etap C — pożegnania + podziękowania za boost (/farewell)
+  startHeat(c); // Etap G — adaptacyjny anty-spam (heat system, /heat)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(

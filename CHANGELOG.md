@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-209-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.139.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-210-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.140.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.140.0] — 🔥 Heat system — adaptacyjny anty-spam (/heat) · Etap G (3/?)
+
+- `[#210]` 🔥 **Heat system** — flagowy mechanizm klasy Wick: każda wiadomość **podgrzewa licznik** użytkownika, a ciepło **wygasa wykładniczo** (half-life 20 s). Czynniki: powtórzenia tej samej treści (+3), wzmianki userów (+2/szt., max 6), **@everyone (+8)**, ściana emoji (+2), ściana tekstu/nowe linie (+2), linki (+2), załączniki (+1), bardzo długie wiadomości (+1). Próg przekroczony → **kara (timeout 10 min / kick) + alert** na kanale.
+  - **`/heat on [prog] [akcja] [alerty]`** · **`/heat off`** · **`/heat status`** — zmiany działają **natychmiast** (config `heat_config`).
+  - Moderatorzy (Zarządzanie wiadomościami) i boty poza scoringiem; po karze licznik się zeruje; wystygłe wpisy sprzątane co 10 min (RAM-friendly).
+  W odróżnieniu od klasycznego anty-spamu (X wiadomości w Y s) heat **adaptuje się do stylu spamu** — wolny, ale agresywny spam (wzmianki/ściany) też dobije do progu. 5 kluczy i18n (`strings.heat.mts` ×14) + `HEATSYS_DESC`. Trzecia fala Etapu G. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.139.0] — 💾 /backup — snapshot serwera + bezpieczny restore · Etap G (2/?)
 
