@@ -462,7 +462,8 @@ export const BIRTHDAY_DEFAULT: BirthdayConfig = {
 };
 
 export async function getBirthdayConfig(): Promise<BirthdayConfig> {
-  const raw = await getRawSetting('birthday_config');
+  // Etap K — birthday_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('birthday_config');
   if (!raw) return structuredClone(BIRTHDAY_DEFAULT);
   try {
     return { ...BIRTHDAY_DEFAULT, ...(JSON.parse(raw) as Partial<BirthdayConfig>) };
@@ -471,7 +472,7 @@ export async function getBirthdayConfig(): Promise<BirthdayConfig> {
   }
 }
 export async function saveBirthdayConfig(cfg: BirthdayConfig): Promise<void> {
-  await setRawSetting('birthday_config', JSON.stringify(cfg));
+  await setConfigSetting('birthday_config', JSON.stringify(cfg));
 }
 
 // ── Liczniki kanałów (Faza 7 / F7.4) ──

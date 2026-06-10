@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-241-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.171.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-242-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.172.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.172.0] — 🗂️ Urodziny per-serwer (+ multi-serwer fix) · Etap K (C-5/?)
+
+- `[#242]` 🗂️ **Urodziny (`birthdays`) per-serwer** — czwarty zmigrowany moduł, przy okazji **naprawiony pod multi-serwer**:
+  - 🐛 Wcześniej skaner urodzin używał **jednego globalnego kanału i jednego klucza dedup** — działał realnie tylko na jednym serwerze. Teraz **iteruje po wszystkich serwerach**, czyta config per-serwer i dedupuje osobno (`birthday_last:<serwer>`), więc życzenia idą na **każdym** skonfigurowanym serwerze, raz dziennie.
+  - 🛡️ Zabezpieczenie: gdy serwer korzysta z fallbacku globalnego, a kanał należy do innego serwera — pomijamy (zero życzeń na obcym kanale).
+  - 🖥️ **Panel**: `birthday_config` w `MIGRATED_GUILD_KEYS`; getter/setter (`community.ts`) i przełącznik idą per-serwer.
+  - Wsteczna zgodność (fallback global). Etap K (C-5). Bot + panel (bot pierwszy).
 
 ## [0.171.0] — 🗂️ Sugestie per-serwer · Etap K (C-4/?)
 

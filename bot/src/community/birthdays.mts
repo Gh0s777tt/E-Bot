@@ -2,7 +2,7 @@
 // Config 'birthday_config', dane w Supabase 'birthdays'. Dedup po dacie w cloud setting 'birthday_last'.
 import type { Client, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type BirthdayConfig = { enabled: boolean; channelId: string; message: string; roleId: string };
 const DEFAULT: BirthdayConfig = {
@@ -11,55 +11,60 @@ const DEFAULT: BirthdayConfig = {
   message: '🎉 Dziś urodziny obchodzi {users}! Wszystkiego najlepszego! 🎂',
   roleId: '',
 };
-let cfg: BirthdayConfig = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings()['birthday_config'];
+// Etap K — config per-serwer: czytany świeżo dla danego serwera (poller godzinny = niska częstotliwość).
+function cfgFor(guildId: string): BirthdayConfig {
+  const raw = getGuildSettings(guildId)['birthday_config'];
   try {
-    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<BirthdayConfig>) } : { ...DEFAULT };
+    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<BirthdayConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
 async function tick(client: Client): Promise<void> {
-  if (!cfg.enabled || !cfg.channelId || !hasCloud()) return;
+  if (!hasCloud()) return;
   const now = new Date();
   const todayKey = now.toISOString().slice(0, 10);
-  if ((await cloudGetSetting('birthday_last').catch(() => null)) === todayKey) return;
+  // Per-serwer: każdy serwer ma własny config, kanał i klucz dedup (ogłasza raz dziennie na serwer).
+  for (const guild of client.guilds.cache.values()) {
+    const cfg = cfgFor(guild.id);
+    if (!cfg.enabled || !cfg.channelId) continue;
+    const dedupKey = `birthday_last:${guild.id}`;
+    if ((await cloudGetSetting(dedupKey).catch(() => null)) === todayKey) continue;
 
-  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
-  if (!ch?.isTextBased() || !('guild' in ch)) return;
-  const guild = (ch as TextChannel).guild;
-  const rows = await cloudSelect<{ user_id: string }>(
-    'birthdays',
-    `select=user_id&guild_id=eq.${guild.id}&day=eq.${now.getUTCDate()}&month=eq.${now.getUTCMonth() + 1}`,
-  );
-  const ids = rows.map((r) => r.user_id);
+    const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
+    if (!ch?.isTextBased() || !('guild' in ch)) continue;
+    // Kanał MUSI należeć do tego serwera (gdy fallback global wskazuje cudzy kanał — pomijamy).
+    if ((ch as TextChannel).guild.id !== guild.id) continue;
 
-  if (cfg.roleId) {
-    const role = await guild.roles.fetch(cfg.roleId).catch(() => null);
-    if (role) {
-      for (const mem of role.members.values()) {
-        if (!ids.includes(mem.id)) await mem.roles.remove(cfg.roleId).catch(() => {});
-      }
-      for (const id of ids) {
-        const mem = await guild.members.fetch(id).catch(() => null);
-        await mem?.roles.add(cfg.roleId).catch(() => {});
+    const rows = await cloudSelect<{ user_id: string }>(
+      'birthdays',
+      `select=user_id&guild_id=eq.${guild.id}&day=eq.${now.getUTCDate()}&month=eq.${now.getUTCMonth() + 1}`,
+    );
+    const ids = rows.map((r) => r.user_id);
+
+    if (cfg.roleId) {
+      const role = await guild.roles.fetch(cfg.roleId).catch(() => null);
+      if (role) {
+        for (const mem of role.members.values()) {
+          if (!ids.includes(mem.id)) await mem.roles.remove(cfg.roleId).catch(() => {});
+        }
+        for (const id of ids) {
+          const mem = await guild.members.fetch(id).catch(() => null);
+          await mem?.roles.add(cfg.roleId).catch(() => {});
+        }
       }
     }
-  }
 
-  if (ids.length) {
-    const text = cfg.message.replaceAll('{users}', ids.map((i) => `<@${i}>`).join(', '));
-    await (ch as TextChannel).send(text).catch(() => {});
+    if (ids.length) {
+      const text = cfg.message.replaceAll('{users}', ids.map((i) => `<@${i}>`).join(', '));
+      await (ch as TextChannel).send(text).catch(() => {});
+    }
+    await cloudSetSetting(dedupKey, todayKey).catch(() => {});
   }
-  await cloudSetSetting('birthday_last', todayKey).catch(() => {});
 }
 
 export function startBirthdays(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   if (!hasCloud()) {
     console.log('[birthdays] brak chmury — urodziny wyłączone.');
     return;
