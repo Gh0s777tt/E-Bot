@@ -1462,6 +1462,24 @@ const ACHV_DESC: Record<Locale, Record<string, string>> = {
   id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
 };
 
+// Opis /streamsync (Etap I — Twitch Schedule → Discord Events) — dołożony do COMMAND_DESC niżej.
+const SSYNC_DESC: Record<Locale, Record<string, string>> = {
+  pl: { streamsync: 'Harmonogram Twitch → wydarzenia Discord.' },
+  en: { streamsync: 'Twitch schedule → Discord events.' },
+  de: { streamsync: 'Twitch-Zeitplan → Discord-Events.' },
+  es: { streamsync: 'Horario de Twitch → eventos de Discord.' },
+  it: { streamsync: 'Palinsesto Twitch → eventi Discord.' },
+  fr: { streamsync: 'Planning Twitch → événements Discord.' },
+  pt: { streamsync: 'Agenda da Twitch → eventos do Discord.' },
+  zh: { streamsync: 'Twitch 日程 → Discord 活动。' },
+  ko: { streamsync: 'Twitch 일정 → Discord 이벤트.' },
+  ru: { streamsync: 'Расписание Twitch → события Discord.' },
+  uk: { streamsync: 'Розклад Twitch → події Discord.' },
+  ja: { streamsync: 'Twitch スケジュール → Discord イベント。' },
+  ar: { streamsync: 'جدول Twitch ← أحداث Discord.' },
+  id: { streamsync: 'Jadwal Twitch → event Discord.' },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1487,6 +1505,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], HEATSYS_DESC[l]);
   Object.assign(COMMAND_DESC[l], PANIC_DESC[l]);
   Object.assign(COMMAND_DESC[l], IMGONLY_DESC[l]);
+  Object.assign(COMMAND_DESC[l], SSYNC_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

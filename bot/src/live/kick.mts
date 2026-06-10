@@ -3,9 +3,12 @@ import type { LiveStatus } from './types.mts';
 
 export async function getKickLive(slug: string): Promise<LiveStatus> {
   const token = await kickToken();
-  const r = await fetch(`https://api.kick.com/public/v1/channels?slug=${encodeURIComponent(slug)}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const r = await fetch(
+    `https://api.kick.com/public/v1/channels?slug=${encodeURIComponent(slug)}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
   const j = (await r.json()) as { data?: any[] };
   const c = j.data?.[0];
   if (!c?.stream?.is_live) return { platform: 'kick', live: false, channelName: slug };

@@ -70,6 +70,7 @@ import * as ship from './ship.mts';
 import * as skins from './skins.mts';
 import * as slowmode from './slowmode.mts';
 import * as sticky from './sticky.mts';
+import * as streamsync from './streamsync.mts';
 import * as suggest from './suggest.mts';
 import * as ticket from './ticket.mts';
 import * as ticketpanel from './ticketpanel.mts';
@@ -180,6 +181,7 @@ export const commands: Command[] = [
   heat,
   panic,
   imageonly,
+  streamsync,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

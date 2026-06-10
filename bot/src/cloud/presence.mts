@@ -1,8 +1,9 @@
 // Synchronizacja statusu/aktywności bota z panelem (klucz settings 'bot_presence').
 // Panel zapisuje {status,type,text,url}; bot co 60 s odczytuje i stosuje setPresence.
-import { ActivityType } from 'discord.js';
+
 import type { Client, PresenceStatusData } from 'discord.js';
-import { hasCloud, cloudGetSetting } from '../lib/cloud.mts';
+import { ActivityType } from 'discord.js';
+import { cloudGetSetting, hasCloud } from '../lib/cloud.mts';
 
 const INTERVAL_MS = 60_000;
 
@@ -21,7 +22,9 @@ const STATUSES = new Set<PresenceStatusData>(['online', 'idle', 'dnd', 'invisibl
 let lastRaw = '';
 
 function apply(client: Client, cfg: PresenceCfg): void {
-  const status = (STATUSES.has(cfg.status as PresenceStatusData) ? cfg.status : 'online') as PresenceStatusData;
+  const status = (
+    STATUSES.has(cfg.status as PresenceStatusData) ? cfg.status : 'online'
+  ) as PresenceStatusData;
   const text = (cfg.text ?? '').trim();
   const type = cfg.type && cfg.type !== 'none' ? TYPE_MAP[cfg.type] : undefined;
 
@@ -30,7 +33,10 @@ function apply(client: Client, cfg: PresenceCfg): void {
     return;
   }
 
-  const activity: { name: string; type: ActivityType; url?: string; state?: string } = { name: text, type };
+  const activity: { name: string; type: ActivityType; url?: string; state?: string } = {
+    name: text,
+    type,
+  };
   if (type === ActivityType.Streaming && cfg.url) activity.url = cfg.url;
   if (type === ActivityType.Custom) activity.state = text; // custom pokazuje pole state
   client.user?.setPresence({ status, activities: [activity] });

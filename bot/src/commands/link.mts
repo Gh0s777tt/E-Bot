@@ -1,7 +1,12 @@
 // Integracja z GH0ST EMPIRE — łączenie konta Discord z profilem na stronie.
 // Flow: użytkownik bierze 6-znakowy kod na stronie GH0ST, podaje go w /link,
 // bot woła POST /api/internal/link-discord (Authorization: Bearer BOT_SECRET).
-import { SlashCommandBuilder, EmbedBuilder, MessageFlags, type ChatInputCommandInteraction } from 'discord.js';
+import {
+  type ChatInputCommandInteraction,
+  EmbedBuilder,
+  MessageFlags,
+  SlashCommandBuilder,
+} from 'discord.js';
 
 const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
 
@@ -9,7 +14,12 @@ export const data = new SlashCommandBuilder()
   .setName('link')
   .setDescription('Połącz konto Discord z profilem GH0ST EMPIRE.')
   .addStringOption((o) =>
-    o.setName('kod').setDescription('6-znakowy kod ze strony GH0ST EMPIRE').setRequired(true).setMinLength(6).setMaxLength(6),
+    o
+      .setName('kod')
+      .setDescription('6-znakowy kod ze strony GH0ST EMPIRE')
+      .setRequired(true)
+      .setMinLength(6)
+      .setMaxLength(6),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -41,10 +51,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       const embed = new EmbedBuilder()
         .setColor(0xe50914)
         .setTitle('✅ Połączono z GH0ST EMPIRE')
-        .setDescription('Twoje konto Discord jest teraz powiązane z profilem na stronie GH0ST EMPIRE.');
+        .setDescription(
+          'Twoje konto Discord jest teraz powiązane z profilem na stronie GH0ST EMPIRE.',
+        );
       await interaction.editReply({ embeds: [embed] });
     } else {
-      await interaction.editReply(`❌ ${data.error || `Nie udało się połączyć (HTTP ${r.status}).`}`);
+      await interaction.editReply(
+        `❌ ${data.error || `Nie udało się połączyć (HTTP ${r.status}).`}`,
+      );
     }
   } catch (e) {
     await interaction.editReply(`❌ Błąd połączenia z GH0ST: ${(e as Error).message}`);

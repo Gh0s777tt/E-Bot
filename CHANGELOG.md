@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-219-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.149.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-220-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.150.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.150.0] — 📅 Harmonogram Twitch → wydarzenia Discord · Etap I (3/?)
+
+- `[#220]` 📅 **`/streamsync`** — harmonogram streamów z Twitcha sam tworzy **wydarzenia Discord** (jak Streamcord Pro, ale za darmo):
+  - 🔁 Bot co ~6 h czyta harmonogram kanału (Twitch Helix `/schedule`) i lustruje nadchodzące segmenty (horyzont 7 dni, max 5) jako wydarzenia typu **External** z linkiem `twitch.tv/...`, tytułem segmentu i grą w opisie.
+  - 🧠 Anty-duplikaty: mapa zsynchronizowanych segmentów w settings + dopasowanie po nazwie i starcie ±5 min (ręcznie utworzone wydarzenia są adoptowane, nie dublowane); stare wpisy sprzątane po 24 h od startu.
+  - 🎛️ `/streamsync stan:ON|OFF|STATUS` (+ opcjonalny `login`; domyślnie kanał z konfiguracji notifiera) — włączenie odpala sync od razu, status pokazuje licznik segmentów. Wymaga uprawnienia bota *Zarządzanie wydarzeniami*.
+  - 🌍 14 języków (`strings.ssync.mts` + opis komendy), 🔑 graceful no-op bez kluczy Twitch (komenda uczciwie o tym mówi). Trzecia fala Etapu I. **Komendy: 92** (89 slash + 3 context-menu).
 
 ## [0.149.0] — ⓘ Tooltipsy pól + pola formularzy wg trybu · Etap I (2/?)
 

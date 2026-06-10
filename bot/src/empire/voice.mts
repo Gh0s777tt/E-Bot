@@ -1,10 +1,10 @@
 // GH0ST EMPIRE economy — award GT to everyone active in voice, on a fixed tick.
 // Requires the GuildVoiceStates + Server Members intents (added in index.mts when economy on).
-import type { Client, Guild } from "discord.js";
-import { economy } from "./config.mts";
-import { awardTokens } from "./award.mts";
+import type { Client, Guild } from 'discord.js';
+import { awardTokens } from './award.mts';
+import { economy } from './config.mts';
 
-const GUILD_ID = process.env.DISCORD_GUILD_ID || process.env.GHOST_GUILD_ID || "";
+const GUILD_ID = process.env.DISCORD_GUILD_ID || process.env.GHOST_GUILD_ID || '';
 
 export function setupVoiceEarning(client: Client): void {
   // Tick rate is fixed at setup (kept simple); the reward amount is still read live each tick.
@@ -32,7 +32,7 @@ export function setupVoiceEarning(client: Client): void {
           if (!economy.mutedGivesReward && (vs.selfMute || vs.serverMute)) continue;
           if (vs.serverDeaf) continue; // can't hear → not really present
 
-          await awardTokens({ discordId: memberId, amount: reward, reason: "voice" });
+          await awardTokens({ discordId: memberId, amount: reward, reason: 'voice' });
         }
       }
     }

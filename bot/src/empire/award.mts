@@ -3,7 +3,7 @@
 // the same portal endpoint the old ghost-empire-bot used (now superseded by E-Bot). The GT
 // balance lives in the portal's Postgres — E-Bot only calls the API (no local economy state).
 // Reuses GHOST_API_URL / GHOST_BOT_SECRET (already set for the /link command).
-const GHOST_URL = process.env.GHOST_API_URL || "https://ghost-empire-web.vercel.app";
+const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
 
 export type AwardResponse =
   | { ok: true; awarded: number; newBalance: number }
@@ -19,11 +19,11 @@ export async function awardTokens(params: {
   multiplier?: number;
 }): Promise<AwardResponse> {
   const secret = process.env.GHOST_BOT_SECRET;
-  if (!secret) return { error: "no_secret" };
+  if (!secret) return { error: 'no_secret' };
   try {
     const res = await fetch(`${GHOST_URL}/api/internal/award`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${secret}` },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
       body: JSON.stringify(params),
     });
     const data = (await res.json().catch(() => ({}))) as AwardResponse;

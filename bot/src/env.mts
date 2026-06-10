@@ -1,6 +1,7 @@
 // Wczytuje sekrety z głównego .env repo (niezależnie od katalogu startowego).
-import path from 'node:path';
+
 import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 export function loadEnv(): void {
   const candidates = [

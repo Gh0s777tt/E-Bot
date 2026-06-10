@@ -1,18 +1,18 @@
 import {
-  SlashCommandBuilder,
-  EmbedBuilder,
-  PermissionFlagsBits,
-  MessageFlags,
   type ChatInputCommandInteraction,
+  EmbedBuilder,
+  MessageFlags,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
 } from 'discord.js';
 import {
   getConfig,
-  saveConfig,
   missingPerms,
   PROT_LABELS,
-  PUNISHMENT_LABELS,
   type ProtKey,
+  PUNISHMENT_LABELS,
   type Punishment,
+  saveConfig,
 } from '../security/antinuke.mts';
 
 const PROT_KEYS = Object.keys(PROT_LABELS) as ProtKey[];
@@ -23,10 +23,16 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
   .addSubcommand((s) => s.setName('status').setDescription('Pokaż aktualną konfigurację.'))
   .addSubcommand((s) =>
-    s.setName('toggle').setDescription('Włącz/wyłącz cały system.').addBooleanOption((o) => o.setName('enabled').setDescription('Włączony?').setRequired(true)),
+    s
+      .setName('toggle')
+      .setDescription('Włącz/wyłącz cały system.')
+      .addBooleanOption((o) => o.setName('enabled').setDescription('Włączony?').setRequired(true)),
   )
   .addSubcommand((s) =>
-    s.setName('setlog').setDescription('Kanał logów incydentów.').addChannelOption((o) => o.setName('channel').setDescription('Kanał').setRequired(true)),
+    s
+      .setName('setlog')
+      .setDescription('Kanał logów incydentów.')
+      .addChannelOption((o) => o.setName('channel').setDescription('Kanał').setRequired(true)),
   )
   .addSubcommand((s) =>
     s
@@ -37,7 +43,9 @@ export const data = new SlashCommandBuilder()
           .setName('type')
           .setDescription('Rodzaj kary')
           .setRequired(true)
-          .addChoices(...(Object.entries(PUNISHMENT_LABELS).map(([value, name]) => ({ name, value })))),
+          .addChoices(
+            ...Object.entries(PUNISHMENT_LABELS).map(([value, name]) => ({ name, value })),
+          ),
       ),
   )
   .addSubcommand((s) =>
@@ -52,17 +60,27 @@ export const data = new SlashCommandBuilder()
           .addChoices(...PROT_KEYS.map((k) => ({ name: PROT_LABELS[k], value: k }))),
       )
       .addBooleanOption((o) => o.setName('enabled').setDescription('Włączona?').setRequired(true))
-      .addIntegerOption((o) => o.setName('count').setDescription('Liczba akcji progu').setMinValue(1).setMaxValue(50))
-      .addIntegerOption((o) => o.setName('window').setDescription('Okno czasu (s)').setMinValue(1).setMaxValue(300)),
+      .addIntegerOption((o) =>
+        o.setName('count').setDescription('Liczba akcji progu').setMinValue(1).setMaxValue(50),
+      )
+      .addIntegerOption((o) =>
+        o.setName('window').setDescription('Okno czasu (s)').setMinValue(1).setMaxValue(300),
+      ),
   )
   .addSubcommand((s) =>
     s
       .setName('whitelist')
       .setDescription('Dodaj/usuń zaufanego użytkownika lub rolę.')
       .addStringOption((o) =>
-        o.setName('action').setDescription('Akcja').setRequired(true).addChoices({ name: 'Dodaj', value: 'add' }, { name: 'Usuń', value: 'remove' }),
+        o
+          .setName('action')
+          .setDescription('Akcja')
+          .setRequired(true)
+          .addChoices({ name: 'Dodaj', value: 'add' }, { name: 'Usuń', value: 'remove' }),
       )
-      .addMentionableOption((o) => o.setName('target').setDescription('Użytkownik lub rola').setRequired(true)),
+      .addMentionableOption((o) =>
+        o.setName('target').setDescription('Użytkownik lub rola').setRequired(true),
+      ),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -99,7 +117,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   if (sub === 'toggle') {
     cfg.enabled = interaction.options.getBoolean('enabled', true);
     saveConfig(cfg);
-    await interaction.reply({ content: `Anti-Nuke **${cfg.enabled ? 'włączony' : 'wyłączony'}**.`, flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: `Anti-Nuke **${cfg.enabled ? 'włączony' : 'wyłączony'}**.`,
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
 
@@ -107,14 +128,20 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const ch = interaction.options.getChannel('channel', true);
     cfg.logChannelId = ch.id;
     saveConfig(cfg);
-    await interaction.reply({ content: `Kanał logów: <#${ch.id}>.`, flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: `Kanał logów: <#${ch.id}>.`,
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
 
   if (sub === 'punishment') {
     cfg.punishment = interaction.options.getString('type', true) as Punishment;
     saveConfig(cfg);
-    await interaction.reply({ content: `Kara ustawiona: **${PUNISHMENT_LABELS[cfg.punishment]}**.`, flags: MessageFlags.Ephemeral });
+    await interaction.reply({
+      content: `Kara ustawiona: **${PUNISHMENT_LABELS[cfg.punishment]}**.`,
+      flags: MessageFlags.Ephemeral,
+    });
     return;
   }
 

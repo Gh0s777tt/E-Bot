@@ -42,6 +42,7 @@ import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
+import { startScheduleSync } from './creator/scheduleSync.mts';
 import { startSocialFeeds } from './creator/social.mts';
 import { handleBlackjackButton } from './economy/blackjack.mts';
 import { startEcoInterest } from './economy/interest.mts';
@@ -210,6 +211,7 @@ client.once(Events.ClientReady, (c) => {
   startFarewell(c); // Etap C — pożegnania + podziękowania za boost (/farewell)
   startHeat(c); // Etap G — adaptacyjny anty-spam (heat system, /heat)
   startImageOnly(c); // Etap H — kanały tylko-obrazki (/imageonly)
+  startScheduleSync(c); // Etap I — harmonogram Twitch → wydarzenia Discord (/streamsync)
   if (economyOn) {
     startEconomyConfigPolling();
     console.log(

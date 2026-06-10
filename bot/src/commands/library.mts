@@ -1,7 +1,7 @@
-import { SlashCommandBuilder, EmbedBuilder, type ChatInputCommandInteraction } from 'discord.js';
-import { DatabaseSync } from 'node:sqlite';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+import { type ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 
 function dbPath(): string {
   const candidates = [
@@ -33,7 +33,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         )
         .all(`%${q}%`)
     : db
-        .prepare('SELECT title, release_year, playtime_min FROM games ORDER BY playtime_min DESC LIMIT 15')
+        .prepare(
+          'SELECT title, release_year, playtime_min FROM games ORDER BY playtime_min DESC LIMIT 15',
+        )
         .all();
   const total = (db.prepare('SELECT COUNT(*) AS c FROM games').get() as { c: number }).c;
   db.close();
