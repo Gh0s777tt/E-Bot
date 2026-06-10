@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-216-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.146.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-217-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.147.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.147.0] — 🧩 Custom Commands 2.0 — akcje i warunki · Etap H (5/5) — ETAP H DOMKNIĘTY 🎉
+
+- `[#217]` 🧩 **Custom Commands 2.0** (najpotężniejszy brak vs StartIT) — własne komendy z panelu dostają **akcje i warunki** (bot + panel):
+  - 🎯 **Warunek roli** — komenda działa tylko dla posiadaczy wybranej roli (inni dostają grzeczną odmowę).
+  - ⚡ **Akcje przy użyciu** (max 3 na komendę): ➕ **nadaj rolę** · ➖ **zabierz rolę** · 💰 **daj walutę** (z wpisem w historii transakcji `cmd:/nazwa`) · ✨ **daj XP** (z przeliczeniem poziomu).
+  - Przykłady: `/odbierz-nagrode` (warunek: rola eventowa → akcja: +500 🪙 i zdjęcie roli), `/dolacz-do-klanu` (nadaj rolę + XP na start).
+  - Panel (`/custom-commands`): sekcja „Warunek i akcje" — RoleSelect warunku + edytor akcji (typ + rola/ilość). Bot: bramka roli + `runActions` (błąd jednej akcji nie blokuje reszty, eko/XP tylko gdy moduły aktywne).
+  Bez ponownej rejestracji (panel sam rejestruje te komendy). **ETAP H — Interakcje 2.0 DOMKNIĘTY** (5 fal: TempVoice 2.0 → image-only → context-menu → formularz ticketów → CC 2.0).
 
 ## [0.146.0] — 📋 Formularz przed ticketem · Etap H (4/?)
 

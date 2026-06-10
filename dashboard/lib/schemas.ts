@@ -149,6 +149,18 @@ export const customCommandSchema = z.object({
   roleId: z.string().max(40).optional().default(''),
   cooldownSec: z.number().int().min(0).max(86400).optional().default(0),
   category: z.string().max(40).optional().default(''),
+  requiredRoleId: z.string().max(40).optional().default(''),
+  actions: z
+    .array(
+      z.object({
+        kind: z.enum(['addRole', 'removeRole', 'giveMoney', 'giveXp']),
+        roleId: z.string().max(40).optional().default(''),
+        amount: z.number().int().min(0).max(1_000_000).optional().default(0),
+      }),
+    )
+    .max(3)
+    .optional()
+    .default([]),
 });
 export const customCommandsSchema = z.object({
   commands: z.array(customCommandSchema).max(25),

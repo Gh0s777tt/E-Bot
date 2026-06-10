@@ -7,6 +7,11 @@ import { getPrimaryGuildId } from './guild';
 import { normalizeRich, type RichMessage } from './richMessage';
 
 export type CommandOption = { name: string; description: string; required: boolean };
+export type CustomAction = {
+  kind: 'addRole' | 'removeRole' | 'giveMoney' | 'giveXp';
+  roleId?: string;
+  amount?: number;
+};
 export type CustomCommand = {
   name: string;
   description: string;
@@ -18,6 +23,8 @@ export type CustomCommand = {
   roleId?: string;
   cooldownSec?: number;
   category?: string;
+  requiredRoleId?: string; // CC 2.0 — warunek: tylko dla posiadaczy roli
+  actions?: CustomAction[]; // CC 2.0 — akcje przy użyciu (max 3)
 };
 
 export async function getCustomCommands(): Promise<CustomCommand[]> {

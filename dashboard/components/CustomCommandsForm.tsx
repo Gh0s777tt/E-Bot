@@ -2,7 +2,7 @@
 
 import { ChevronDown, Plus, TerminalSquare, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
-import type { CustomCommand } from '../lib/customCommands';
+import type { CustomAction, CustomCommand } from '../lib/customCommands';
 import type { GuildMeta } from '../lib/guild';
 import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
 import MessageStudio from './MessageStudio';
@@ -188,6 +188,105 @@ export default function CustomCommandsForm({
                       className="w-36 rounded-md border border-line bg-elevated px-3 py-1.5 text-sm outline-none focus:border-accent"
                     />
                   </label>
+                </div>
+
+                {/* CC 2.0 — warunek roli + akcje przy użyciu */}
+                <div className="space-y-2 rounded-lg border border-line/60 bg-bg/30 p-2.5">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-muted">
+                    Warunek i akcje
+                  </span>
+                  <label className="block space-y-1 text-sm">
+                    <span className="text-muted">Wymagana rola (puste = każdy może użyć)</span>
+                    <RoleSelect
+                      value={c.requiredRoleId ?? ''}
+                      onChange={(v) => update(i, { requiredRoleId: v })}
+                      roles={guild.roles}
+                    />
+                  </label>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted">
+                      Akcje przy użyciu (max 3): rola / waluta / XP
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        (c.actions ?? []).length < 3 &&
+                        update(i, {
+                          actions: [
+                            ...(c.actions ?? []),
+                            { kind: 'addRole', roleId: '', amount: 0 },
+                          ],
+                        })
+                      }
+                      disabled={(c.actions ?? []).length >= 3}
+                      className="rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated disabled:opacity-40"
+                    >
+                      <Plus size={12} className="inline" /> Akcja
+                    </button>
+                  </div>
+                  {(c.actions ?? []).map((a, ai) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: lista edytowalna po indeksie
+                    <div key={ai} className="grid grid-cols-[10rem_1fr_auto] gap-2">
+                      <select
+                        value={a.kind}
+                        onChange={(e) =>
+                          update(i, {
+                            actions: (c.actions ?? []).map((x, j) =>
+                              j === ai ? { ...x, kind: e.target.value as CustomAction['kind'] } : x,
+                            ),
+                          })
+                        }
+                        className="rounded-md border border-line bg-elevated px-2 py-2 text-sm outline-none focus:border-accent"
+                      >
+                        <option value="addRole">➕ Nadaj rolę</option>
+                        <option value="removeRole">➖ Zabierz rolę</option>
+                        <option value="giveMoney">💰 Daj walutę</option>
+                        <option value="giveXp">✨ Daj XP</option>
+                      </select>
+                      {a.kind === 'addRole' || a.kind === 'removeRole' ? (
+                        <RoleSelect
+                          value={a.roleId ?? ''}
+                          onChange={(v) =>
+                            update(i, {
+                              actions: (c.actions ?? []).map((x, j) =>
+                                j === ai ? { ...x, roleId: v } : x,
+                              ),
+                            })
+                          }
+                          roles={guild.roles}
+                        />
+                      ) : (
+                        <input
+                          type="number"
+                          value={a.amount ?? 0}
+                          onChange={(e) =>
+                            update(i, {
+                              actions: (c.actions ?? []).map((x, j) =>
+                                j === ai
+                                  ? {
+                                      ...x,
+                                      amount: Math.max(0, Math.floor(Number(e.target.value) || 0)),
+                                    }
+                                  : x,
+                              ),
+                            })
+                          }
+                          className={inp}
+                          placeholder="Ilość"
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          update(i, { actions: (c.actions ?? []).filter((_, j) => j !== ai) })
+                        }
+                        className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
+                        aria-label="Usuń akcję"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Argumenty komendy — wartości wstawisz w odpowiedzi jako {nazwa} */}

@@ -1,9 +1,20 @@
 // No-code komendy slash — definicje rejestruje panel w Discord (POST upsert), a bot obsługuje
 // ich wywołania tutaj: czyta settings 'custom_commands' (sync przez bridge/realtime) i odpowiada
 // zbudowanym RichMessage. Zwraca true, jeśli komenda była customowa (obsłużona).
-import { type ChatInputCommandInteraction, MessageFlags } from 'discord.js';
+// CC 2.0 (Etap H): warunek requiredRoleId + akcje (addRole/removeRole/giveMoney/giveXp).
+import { type ChatInputCommandInteraction, type GuildMember, MessageFlags } from 'discord.js';
+import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
+import { logTx } from '../economy/txlog.mts';
+import { levelForXp } from '../leveling.mts';
+import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
 import { buildRichMessage, type RichMessage } from '../lib/richMessage.mts';
+
+type CustomAction = {
+  kind: 'addRole' | 'removeRole' | 'giveMoney' | 'giveXp';
+  roleId?: string;
+  amount?: number;
+};
 
 type CustomCommand = {
   name: string;
@@ -16,6 +27,8 @@ type CustomCommand = {
   roleId?: string;
   cooldownSec?: number;
   category?: string;
+  requiredRoleId?: string; // CC 2.0 — warunek: komenda tylko dla posiadaczy roli
+  actions?: CustomAction[]; // CC 2.0 — akcje wykonywane przy użyciu (max 3)
 };
 
 function load(): CustomCommand[] {
@@ -25,6 +38,59 @@ function load(): CustomCommand[] {
     return Array.isArray(a) ? a : [];
   } catch {
     return [];
+  }
+}
+
+// CC 2.0 — akcje przy użyciu komendy (rola/kasa/XP). Błędy pojedynczych akcji nie blokują reszty.
+async function runActions(
+  interaction: ChatInputCommandInteraction,
+  member: GuildMember | null,
+  actions: CustomAction[],
+): Promise<void> {
+  const gid = interaction.guildId;
+  if (!gid) return;
+  for (const a of actions.slice(0, 3)) {
+    try {
+      if ((a.kind === 'addRole' || a.kind === 'removeRole') && a.roleId && member) {
+        if (a.kind === 'addRole') await member.roles.add(a.roleId);
+        else await member.roles.remove(a.roleId);
+      } else if (
+        a.kind === 'giveMoney' &&
+        (a.amount ?? 0) > 0 &&
+        ecoConfig().enabled &&
+        hasCloud()
+      ) {
+        const u = await getEcoUser(gid, interaction.user.id);
+        await saveEcoUser({
+          guild_id: gid,
+          user_id: interaction.user.id,
+          username: interaction.user.username,
+          wallet: u.wallet + (a.amount ?? 0),
+        });
+        logTx(gid, interaction.user.id, a.amount ?? 0, `cmd:/${interaction.commandName}`);
+      } else if (a.kind === 'giveXp' && (a.amount ?? 0) > 0 && hasCloud()) {
+        const rows = await cloudSelect<{ xp: number }>(
+          'user_levels',
+          `select=xp&guild_id=eq.${gid}&user_id=eq.${interaction.user.id}`,
+        );
+        const newXp = (rows[0]?.xp ?? 0) + (a.amount ?? 0);
+        await cloudUpsert(
+          'user_levels',
+          [
+            {
+              guild_id: gid,
+              user_id: interaction.user.id,
+              username: interaction.user.username,
+              xp: newXp,
+              level: levelForXp(newXp),
+            },
+          ],
+          'guild_id,user_id',
+        );
+      }
+    } catch (e) {
+      console.warn('[custom-cmd] akcja:', (e as Error).message);
+    }
   }
 }
 
@@ -57,6 +123,21 @@ export async function handleCustomCommand(
   }
 
   const guild = interaction.guild;
+
+  // CC 2.0 — warunek roli + akcje (member pobierany raz, reużywany).
+  const member = guild ? await guild.members.fetch(interaction.user.id).catch(() => null) : null;
+  if (cmd.requiredRoleId) {
+    if (!member || !member.roles.cache.has(cmd.requiredRoleId)) {
+      await interaction.reply({
+        content: `⛔ Ta komenda wymaga roli <@&${cmd.requiredRoleId}>.`,
+        flags: MessageFlags.Ephemeral,
+        allowedMentions: { parse: [] },
+      });
+      return true;
+    }
+  }
+  if (cmd.actions?.length) await runActions(interaction, member, cmd.actions);
+
   const vars: Record<string, string> = {
     '{user}': `<@${interaction.user.id}>`,
     '{username}': interaction.user.username,
