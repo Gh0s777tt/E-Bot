@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-205-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.135.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-206-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.136.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.136.0] — 🎮 Gry: /eco crime, /eco highlow, /ttt · Etap F (3/?)
+
+- `[#206]` 🎮 **Trzy nowe gry** (domykają hazard/zabawę vs StartIT/Nadeko):
+  - 🦹 **`/eco crime`** — drobne przestępstwo (komediowe scenariusze: skok na osiedlowy, włam do automatu, Wi-Fi sąsiada): 55% szans na **podwójną wypłatę**, wpadka = **grzywna** (nigdy poniżej zera). Współdzieli cooldown i włącznik z `rob` (jeden suwak w panelu), liczy się do questów.
+  - 🎴 **`/eco highlow`** — zgadnij, czy druga liczba (1–100) będzie wyżej/niżej: trafienie ×2, remis = zwrot stawki. Respektuje limit stawki i włącznik hazardu z panelu.
+  - ⭕❌ **`/ttt <przeciwnik>`** — kółko i krzyżyk 1v1 **na przyciskach** (czerwone ❌ vs niebieskie ⭕): tylko gracze mogą klikać, pilnowanie kolejki ruchów, wykrywanie wygranej/remisu, TTL gry 10 min (routing `ttt:` w dispatcherze, stan w pamięci).
+  18 kluczy i18n (`strings.games.mts` ×14 — scenariusze przestępstw lokalizowane kulturowo 😄) + `TTT_DESC`. Trzecia fala Etapu F. Zmiana `/eco` + nowa `/ttt` → rejestracja globalna po deployu.
 
 ## [0.135.0] — 💍 /marry — system małżeństw · Etap F (2/?)
 

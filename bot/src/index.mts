@@ -23,6 +23,7 @@ import { handleCustomCommand } from './commands/customCommands.mts';
 import { handleHelpSelect } from './commands/help.mts';
 import { type Command, commands } from './commands/index.mts';
 import { handleMarryButton } from './commands/marry.mts';
+import { handleTttButton } from './commands/ttt.mts';
 import { handleTutorialButton } from './commands/tutorial.mts';
 import { startAfk } from './community/afk.mts';
 import { startAiDigest } from './community/aidigest.mts';
@@ -228,7 +229,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
                   ? handleTutorialButton(interaction)
                   : id.startsWith('marry:')
                     ? handleMarryButton(interaction)
-                    : handleButton(interaction);
+                    : id.startsWith('ttt:')
+                      ? handleTttButton(interaction)
+                      : handleButton(interaction);
     await h.catch((err) => console.error('button:', err));
     return;
   }

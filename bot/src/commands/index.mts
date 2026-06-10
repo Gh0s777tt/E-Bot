@@ -70,6 +70,7 @@ import * as ticketpanel from './ticketpanel.mts';
 import * as tldr from './tldr.mts';
 import * as translate from './translate.mts';
 import * as trivia from './trivia.mts';
+import * as ttt from './ttt.mts';
 import * as tutorial from './tutorial.mts';
 import * as undo from './undo.mts';
 import * as unlock from './unlock.mts';
@@ -166,6 +167,7 @@ export const commands: Command[] = [
   slap,
   pat,
   marry,
+  ttt,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

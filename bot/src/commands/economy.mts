@@ -112,6 +112,24 @@ export const data = new SlashCommandBuilder()
           ),
       ),
   )
+  .addSubcommand((s) =>
+    s.setName('crime').setDescription('Popełnij drobne przestępstwo (ryzyko vs nagroda!)'),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('highlow')
+      .setDescription('Wyżej czy niżej? Zgadnij drugą liczbę (1–100)')
+      .addIntegerOption((o) =>
+        o.setName('amount').setDescription('Stawka').setRequired(true).setMinValue(1),
+      )
+      .addStringOption((o) =>
+        o
+          .setName('typ')
+          .setDescription('Twój typ')
+          .setRequired(true)
+          .addChoices({ name: '⬆️ Wyżej', value: 'high' }, { name: '⬇️ Niżej', value: 'low' }),
+      ),
+  )
   .addSubcommand((s) => s.setName('shop').setDescription('Sklep serwera'))
   .addSubcommand((s) =>
     s
@@ -366,6 +384,92 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       });
       await interaction.reply(t(locale, 'eco.wdOk', { amount: fmt(amount, cur) }));
     }
+    return;
+  }
+
+  // ── crime ── (ryzyko/nagroda; współdzieli cooldown i włącznik z rob — jeden suwak w panelu)
+  if (sub === 'crime') {
+    if (!cfg.robEnabled) {
+      await interaction.reply(eph(t(locale, 'eco.crimeOff')));
+      return;
+    }
+    const u = await getUser(gid, interaction.user.id);
+    if (minutesSince(u.last_rob) < cfg.robCooldownMin) {
+      await interaction.reply(
+        eph(
+          t(locale, 'eco.crimeCd', {
+            min: Math.ceil(cfg.robCooldownMin - minutesSince(u.last_rob)),
+          }),
+        ),
+      );
+      return;
+    }
+    const crimes = [t(locale, 'eco.crime1'), t(locale, 'eco.crime2'), t(locale, 'eco.crime3')];
+    const crime = crimes[Math.floor(Math.random() * crimes.length)];
+    const base =
+      cfg.workMin + Math.floor(Math.random() * Math.max(1, cfg.workMax - cfg.workMin + 1));
+    const success = Math.random() < 0.55;
+    const delta = success ? base * 2 : -Math.min(u.wallet, base); // grzywna nie zejdzie poniżej zera
+    await saveUser({
+      guild_id: gid,
+      user_id: interaction.user.id,
+      username: interaction.user.username,
+      wallet: u.wallet + delta,
+      last_rob: new Date().toISOString(),
+    });
+    logTx(gid, interaction.user.id, delta, 'crime');
+    bumpQuest(gid, interaction.user.id, 'games');
+    if (success) bumpQuest(gid, interaction.user.id, 'gamesWon');
+    await interaction.reply(
+      success
+        ? t(locale, 'eco.crimeWin', { crime, earned: fmt(base * 2, cur) })
+        : t(locale, 'eco.crimeFail', { crime, fine: fmt(Math.min(u.wallet, base), cur) }),
+    );
+    return;
+  }
+
+  // ── highlow ── (zgadnij, czy druga liczba 1–100 będzie wyżej/niżej; remis = zwrot stawki)
+  if (sub === 'highlow') {
+    if (!cfg.gambleEnabled) {
+      await interaction.reply(eph(t(locale, 'eco.gambleOff')));
+      return;
+    }
+    const amount = interaction.options.getInteger('amount', true);
+    if (amount > cfg.gambleMax) {
+      await interaction.reply(eph(t(locale, 'eco.maxBet', { max: fmt(cfg.gambleMax, cur) })));
+      return;
+    }
+    const u = await getUser(gid, interaction.user.id);
+    if (u.wallet < amount) {
+      await interaction.reply(eph(t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) })));
+      return;
+    }
+    const guess = interaction.options.getString('typ', true);
+    const first = 1 + Math.floor(Math.random() * 100);
+    const second = 1 + Math.floor(Math.random() * 100);
+    bumpQuest(gid, interaction.user.id, 'games');
+    if (second === first) {
+      await interaction.reply(t(locale, 'eco.hlPush', { first: String(first) }));
+      return;
+    }
+    const win = second > first === (guess === 'high');
+    const delta = win ? amount : -amount;
+    if (win) bumpQuest(gid, interaction.user.id, 'gamesWon');
+    await saveUser({
+      guild_id: gid,
+      user_id: interaction.user.id,
+      username: interaction.user.username,
+      wallet: u.wallet + delta,
+    });
+    logTx(gid, interaction.user.id, delta, 'highlow');
+    await interaction.reply(
+      t(locale, win ? 'eco.hlWin' : 'eco.hlLose', {
+        first: String(first),
+        second: String(second),
+        earned: fmt(amount, cur),
+        lost: fmt(amount, cur),
+      }),
+    );
     return;
   }
 

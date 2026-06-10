@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /ttt (Etap F — kółko i krzyżyk) — dołożony do COMMAND_DESC niżej.
+const TTT_DESC: Record<Locale, Record<string, string>> = {
+  pl: { ttt: 'Kółko i krzyżyk z innym graczem. ⭕❌' },
+  en: { ttt: 'Tic-tac-toe with another player. ⭕❌' },
+  de: { ttt: 'Tic-Tac-Toe gegen einen anderen Spieler. ⭕❌' },
+  es: { ttt: 'Tres en raya con otro jugador. ⭕❌' },
+  it: { ttt: 'Tris con un altro giocatore. ⭕❌' },
+  fr: { ttt: 'Morpion avec un autre joueur. ⭕❌' },
+  pt: { ttt: 'Jogo da velha com outro jogador. ⭕❌' },
+  zh: { ttt: '和其他玩家玩井字棋。⭕❌' },
+  ko: { ttt: '다른 플레이어와 틱택토 한 판. ⭕❌' },
+  ru: { ttt: 'Крестики-нолики с другим игроком. ⭕❌' },
+  uk: { ttt: 'Хрестики-нулики з іншим гравцем. ⭕❌' },
+  ja: { ttt: '他のプレイヤーと〇✕ゲーム。⭕❌' },
+  ar: { ttt: 'إكس-أو مع لاعب آخر. ⭕❌' },
+  id: { ttt: 'Tic-tac-toe dengan pemain lain. ⭕❌' },
+};
+
 // Opis /marry (Etap F — małżeństwa) — dołożony do COMMAND_DESC niżej.
 const MARRY_DESC: Record<Locale, Record<string, string>> = {
   pl: { marry: 'Małżeństwa: oświadczyny, status, rozwód. 💍' },
@@ -1354,6 +1372,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], ACHV_DESC[l]);
   Object.assign(COMMAND_DESC[l], SOCIAL2_DESC[l]);
   Object.assign(COMMAND_DESC[l], MARRY_DESC[l]);
+  Object.assign(COMMAND_DESC[l], TTT_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
