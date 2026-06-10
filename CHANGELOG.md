@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-211-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.141.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-212-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.142.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.142.0] — 🚨 /panic — PANIC MODE · Etap G (5/?)
+
+- `[#212]` 🚨 **`/panic stan:on|off`** — jednoprzyciskowa twierdza (odpowiednik Panic Mode z Wick): **jednym ruchem** blokuje pisanie na **wszystkich kanałach** (lockdown) **i** włącza **raidmode** (każde nowe wejście wyrzucane). `off` odwraca oba naraz. Odpowiedź podpowiada `/backup restore` do odbudowy zniszczeń po ataku — pełny łańcuch obrony: **panic → opanowanie → restore**. Spina istniejące, przetestowane klocki (`applyLockdown` + `setRaidmode`) — zero nowej powierzchni błędów. Perm: **Administrator**. 2 klucze i18n (`strings.panic.mts` ×14) + `PANIC_DESC`. Piąta fala Etapu G. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.141.0] — 🕵️ Bypass-guard kwarantanny + 🔐 weryfikacja hasłem · Etap G (4/?)
 

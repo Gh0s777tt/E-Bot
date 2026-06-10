@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /panic (Etap G — security, finał) — dołożony do COMMAND_DESC niżej.
+const PANIC_DESC: Record<Locale, Record<string, string>> = {
+  pl: { panic: 'PANIC MODE — lockdown serwera + blokada wejść.' },
+  en: { panic: 'PANIC MODE — server lockdown + join block.' },
+  de: { panic: 'PANIC MODE — Server-Lockdown + Beitrittssperre.' },
+  es: { panic: 'MODO PÁNICO — bloqueo del servidor + entradas.' },
+  it: { panic: 'PANIC MODE — lockdown del server + blocco ingressi.' },
+  fr: { panic: 'MODE PANIQUE — verrouillage du serveur + des arrivées.' },
+  pt: { panic: 'MODO PÂNICO — lockdown do servidor + bloqueio de entradas.' },
+  zh: { panic: '紧急模式 — 服务器封锁 + 阻止加入。' },
+  ko: { panic: '패닉 모드 — 서버 잠금 + 입장 차단.' },
+  ru: { panic: 'PANIC MODE — локдаун сервера + блок входов.' },
+  uk: { panic: 'PANIC MODE — локдаун сервера + блок входів.' },
+  ja: { panic: 'パニックモード — サーバーロック＋参加ブロック。' },
+  ar: { panic: 'وضع الطوارئ — إغلاق الخادم + حظر الانضمام.' },
+  id: { panic: 'MODE PANIK — lockdown server + blokir masuk.' },
+};
+
 // Opis /heat (Etap G — security) — dołożony do COMMAND_DESC niżej.
 const HEATSYS_DESC: Record<Locale, Record<string, string>> = {
   pl: { heat: 'Adaptacyjny anty-spam (heat) — scoring z karą.' },
@@ -1449,6 +1467,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], RAIDMODE_DESC[l]);
   Object.assign(COMMAND_DESC[l], BACKUP_DESC[l]);
   Object.assign(COMMAND_DESC[l], HEATSYS_DESC[l]);
+  Object.assign(COMMAND_DESC[l], PANIC_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

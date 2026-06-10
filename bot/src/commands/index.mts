@@ -44,6 +44,7 @@ import * as market from './market.mts';
 import * as marry from './marry.mts';
 import * as math from './math.mts';
 import * as mod from './mod.mts';
+import * as panic from './panic.mts';
 import * as persona from './persona.mts';
 import * as ping from './ping.mts';
 import * as poll from './poll.mts';
@@ -176,6 +177,7 @@ export const commands: Command[] = [
   raidmode,
   backup,
   heat,
+  panic,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji
