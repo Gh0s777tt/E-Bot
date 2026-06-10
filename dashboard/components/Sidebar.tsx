@@ -4,13 +4,23 @@ import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import {
+  groupLabel,
+  isPanelLocale,
+  LOCALE_NAMES,
+  navLabel,
+  PANEL_LOCALES,
+  tp,
+} from '../lib/panelI18n';
 import { tierVisible, VIEW_MODES } from '../lib/viewMode';
+import { useLang } from './LangContext';
 import { NAV_GROUPS } from './nav-items';
 import { useViewMode } from './ViewModeContext';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { mode, setMode } = useViewMode();
+  const { lang, setLang } = useLang();
   const activeGroup =
     NAV_GROUPS.find((g) => g.items.some((i) => i.href === pathname))?.label ?? NAV_GROUPS[0].label;
   // Start: tylko sekcja aktywnej strony otwarta (deterministycznie → zero hydration mismatch).
@@ -69,7 +79,7 @@ export default function Sidebar() {
                 aria-expanded={isOpen}
                 className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted/70 transition hover:text-white"
               >
-                {group.label}
+                {groupLabel(lang, group.label)}
                 <ChevronDown
                   size={13}
                   className={`transition-transform ${isOpen ? '' : '-rotate-90'}`}
@@ -90,7 +100,7 @@ export default function Sidebar() {
                         }`}
                       >
                         <Icon size={16} />
-                        {label}
+                        {navLabel(lang, href, label)}
                       </Link>
                     );
                   })}
@@ -121,9 +131,27 @@ export default function Sidebar() {
           ))}
         </div>
         <p className="text-center text-[10px] text-muted/60">
-          Tryb:{' '}
+          {tp(lang, 'ui.mode')}:{' '}
           <span className="text-muted">{VIEW_MODES.find((m) => m.value === mode)?.label}</span>
         </p>
+        <label className="flex items-center gap-1.5 text-[10px] text-muted/60">
+          <span aria-hidden>🌍</span>
+          <span className="sr-only">{tp(lang, 'ui.language')}</span>
+          <select
+            value={lang}
+            onChange={(e) => {
+              if (isPanelLocale(e.target.value)) setLang(e.target.value);
+            }}
+            className="w-full rounded-md border border-line bg-elevated px-1.5 py-1 text-[11px] text-muted outline-none transition focus:border-accent"
+            title={tp(lang, 'ui.language')}
+          >
+            {PANEL_LOCALES.map((l) => (
+              <option key={l} value={l}>
+                {LOCALE_NAMES[l]}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
     </aside>
   );

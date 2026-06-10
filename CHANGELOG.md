@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-223-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.153.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-224-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.154.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.154.0] — 🌍 i18n panelu — fundament + nawigacja (14 języków) · Etap I (7/?)
+
+- `[#224]` 🌍 **Panel w 14 językach — fala 1 (fundament + nawigacja):**
+  - 🧠 Nowy moduł `lib/panelI18n.ts` (te same 14 języków co bot) + `LangContext` (wzorzec ViewMode: zero hydration mismatch, zapis w localStorage + cookie `panel_lang` pod przyszłe tłumaczenie server-side).
+  - 🌐 **Przełącznik języka w stopce paska bocznego** (natywne nazwy: English, Deutsch, 中文, …); przy pierwszym wejściu język dobierany z przeglądarki.
+  - 🧭 Przetłumaczone: **cała nawigacja** (39 pozycji + 8 grup) i **tytuły stron** w nagłówkach hero. Opisy stron i formularze — kolejne fale.
 
 ## [0.153.0] — 🟣 Live-rola + vanity-rola (Presence) · Etap I (6/?)
 

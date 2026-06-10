@@ -2,12 +2,16 @@
 
 import { usePathname } from 'next/navigation';
 import { PAGE_INFO } from '../lib/pageInfo';
+import { navLabel } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { NAV_ITEMS } from './nav-items';
 
-// Spójny hero-nagłówek strony — ikona + tytuł z NAV_ITEMS + opis „co/po co" z PAGE_INFO
-// (zero ruszania pojedynczych stron). Pomija pulpit (/, ma własny hero) i widoki publiczne (/p/*).
+// Spójny hero-nagłówek strony — ikona + tytuł z NAV_ITEMS (tłumaczony, i18n fala 1) + opis
+// „co/po co" z PAGE_INFO (PL — tłumaczenie opisów w kolejnej fali).
+// Pomija pulpit (/, ma własny hero) i widoki publiczne (/p/*).
 export default function GlobalPageHeader() {
   const pathname = usePathname();
+  const { lang } = useLang();
   if (pathname === '/' || pathname.startsWith('/p/')) return null;
   const item = NAV_ITEMS.find((n) => n.href === pathname);
   if (!item) return null;
@@ -19,7 +23,9 @@ export default function GlobalPageHeader() {
         <Icon size={22} />
       </span>
       <div className="min-w-0">
-        <h1 className="font-display text-2xl leading-none tracking-wide">{item.label}</h1>
+        <h1 className="font-display text-2xl leading-none tracking-wide">
+          {navLabel(lang, item.href, item.label)}
+        </h1>
         {desc ? (
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{desc}</p>
         ) : (
