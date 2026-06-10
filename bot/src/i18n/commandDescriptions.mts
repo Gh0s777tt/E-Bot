@@ -1198,6 +1198,24 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opis /backup (Etap G — security) — dołożony do COMMAND_DESC niżej.
+const BACKUP_DESC: Record<Locale, Record<string, string>> = {
+  pl: { backup: 'Backup struktury serwera + bezpieczny restore.' },
+  en: { backup: 'Server structure backup + safe restore.' },
+  de: { backup: 'Backup der Serverstruktur + sichere Wiederherstellung.' },
+  es: { backup: 'Copia de la estructura del servidor + restauración segura.' },
+  it: { backup: 'Backup della struttura del server + ripristino sicuro.' },
+  fr: { backup: 'Sauvegarde de la structure du serveur + restauration sûre.' },
+  pt: { backup: 'Backup da estrutura do servidor + restauração segura.' },
+  zh: { backup: '服务器结构备份 + 安全恢复。' },
+  ko: { backup: '서버 구조 백업 + 안전한 복원.' },
+  ru: { backup: 'Бэкап структуры сервера + безопасное восстановление.' },
+  uk: { backup: 'Бекап структури сервера + безпечне відновлення.' },
+  ja: { backup: 'サーバー構造のバックアップ＋安全な復元。' },
+  ar: { backup: 'نسخ احتياطي لهيكل الخادم + استعادة آمنة.' },
+  id: { backup: 'Backup struktur server + pemulihan aman.' },
+};
+
 // Opis /raidmode (Etap G — security) — dołożony do COMMAND_DESC niżej.
 const RAIDMODE_DESC: Record<Locale, Record<string, string>> = {
   pl: { raidmode: 'Awaryjna blokada nowych wejść (raid).' },
@@ -1411,6 +1429,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], TTT_DESC[l]);
   Object.assign(COMMAND_DESC[l], MATH_DESC[l]);
   Object.assign(COMMAND_DESC[l], RAIDMODE_DESC[l]);
+  Object.assign(COMMAND_DESC[l], BACKUP_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

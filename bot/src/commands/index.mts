@@ -10,6 +10,7 @@ import * as applypanel from './applypanel.mts';
 import * as ask from './ask.mts';
 import * as avatar from './avatar.mts';
 import * as backlog from './backlog.mts';
+import * as backup from './backup.mts';
 import * as birthday from './birthday.mts';
 import * as blueprint from './blueprint.mts';
 import * as buttonpanel from './buttonpanel.mts';
@@ -172,6 +173,7 @@ export const commands: Command[] = [
   ttt,
   math,
   raidmode,
+  backup,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

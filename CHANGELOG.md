@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-208-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.138.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-209-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.139.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.139.0] — 💾 /backup — snapshot serwera + bezpieczny restore · Etap G (2/?)
+
+- `[#209]` 💾 **`/backup` — backup struktury serwera** (odpowiednik Imaging/Restore z Wick):
+  - **`create`** — snapshot: **role** (nazwa, kolor, hoist, wzmianki, pełne uprawnienia; bez ról botów/integracji) + **kanały** (tekst/głos/kategorie/ogłoszenia: nazwa, kategoria, temat, NSFW, slowmode, bitrate, limit) + **nadpisania uprawnień** (role mapowane po nazwie, użytkownicy po ID). Limity bezpieczeństwa: 100 ról / 200 kanałów.
+  - **`restore`** — **ADDYTYWNY**: odtwarza **tylko brakujące** role/kanały (dopasowanie po nazwie, kanały w obrębie kategorii) — idealny po nuke'u, a na zdrowym serwerze **niczego nie zepsuje ani nie usunie**. Kolejność: role → kategorie → kanały (z mapowaniem nadpisań na nowe ID ról).
+  - **`info`** — data snapshotu (`<t:…>`) + liczby.
+  Snapshot w `settings.server_backup` (mirror do chmury — przeżyje restart i awarię hosta). Perm: **Administrator**. 5 kluczy i18n (`strings.backup.mts` ×14) + `BACKUP_DESC`. Druga fala Etapu G — fundament pod Panic Mode. Nowa komenda → rejestracja globalna po deployu.
 
 ## [0.138.0] — 🛡️ /raidmode — ręczna blokada wejść · Etap G (1/?)
 
