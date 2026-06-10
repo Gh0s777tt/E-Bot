@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-226-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.156.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-227-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.157.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.157.0] — 🌍 i18n panelu — górny pasek + paleta ⌘K (14 języków) · Etap I (10/?)
+
+- `[#227]` 🌍 **i18n panelu, fala 4: Topbar + paleta poleceń ⌘K** — elementy widoczne na każdej stronie mówią teraz w języku panelu:
+  - 🔝 **Górny pasek**: tytuł strony (z nawigacji), status bota (online/offline/serwery), przyciski Szukaj · Kompakt/Normalny · focus · **Zaproś bota** · **Wyloguj** + tooltipy.
+  - ⌘K **Paleta poleceń**: placeholder wyszukiwania, grupy „Przejdź do"/„Akcja", wszystkie akcje (kompakt, kapitaliki, focus, kopia konfiguracji, przewiń), „Brak wyników" i stopka (wybierz / nawigacja). Wyszukiwarka dopasowuje teraz po nazwie w obu językach (PL + bieżący).
+  - +25 kluczy UI ×14 w `panelI18n`. Pozostają tylko etykiety pól w formularzach + 8 przycisków z komunikatami z API. Zmiana tylko panelowa.
 
 ## [0.156.0] — 🌍 i18n panelu — przyciski zapisu w 41 formularzach · Etap I (9/?)
 

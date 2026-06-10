@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { navLabel, tp } from '../lib/panelI18n';
 import { tierVisible } from '../lib/viewMode';
+import { useLang } from './LangContext';
 import { NAV_ITEMS } from './nav-items';
 import { useViewMode } from './ViewModeContext';
 
@@ -56,6 +58,7 @@ function toggleClass(cls: string): void {
 export default function CommandPalette() {
   const router = useRouter();
   const { mode } = useViewMode();
+  const { lang } = useLang();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [idx, setIdx] = useState(0);
@@ -63,55 +66,57 @@ export default function CommandPalette() {
   const listRef = useRef<HTMLDivElement>(null);
 
   const commands = useMemo<Cmd[]>(() => {
+    const goto = tp(lang, 'ui.groupGoto');
+    const action = tp(lang, 'ui.groupAction');
     const nav: Cmd[] = NAV_ITEMS.filter((n) => tierVisible(n.tier, mode)).map((n) => ({
       id: `nav:${n.href}`,
-      label: n.label,
-      group: 'Przejdź do',
+      label: navLabel(lang, n.href, n.label),
+      group: goto,
       icon: n.icon,
-      kw: n.href,
+      kw: `${n.href} ${n.label}`,
       run: () => router.push(n.href),
     }));
     const actions: Cmd[] = [
       {
         id: 'act:compact',
-        label: 'Przełącz tryb kompaktowy',
-        group: 'Akcja',
+        label: tp(lang, 'ui.actCompact'),
+        group: action,
         icon: Minimize2,
         run: () => toggleClass('compact'),
       },
       {
         id: 'act:smallcaps',
-        label: 'Przełącz kapitaliki (smallcaps)',
-        group: 'Akcja',
+        label: tp(lang, 'ui.actSmallcaps'),
+        group: action,
         icon: Type,
         run: () => toggleClass('smallcaps'),
       },
       {
         id: 'act:focus',
-        label: 'Tryb focus (ukryj menu boczne)',
-        group: 'Akcja',
+        label: tp(lang, 'ui.actFocus'),
+        group: action,
         icon: Maximize2,
         kw: 'focus pełny ekran wide',
         run: () => toggleClass('focus-mode'),
       },
       {
         id: 'act:backup',
-        label: 'Kopia / przywracanie konfiguracji',
-        group: 'Akcja',
+        label: tp(lang, 'ui.actBackup'),
+        group: action,
         icon: Download,
         kw: 'backup eksport import',
         run: () => router.push('/settings'),
       },
       {
         id: 'act:top',
-        label: 'Przewiń na górę',
-        group: 'Akcja',
+        label: tp(lang, 'ui.actTop'),
+        group: action,
         icon: ArrowUp,
         run: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
       },
     ];
     return [...nav, ...actions];
-  }, [router, mode]);
+  }, [router, mode, lang]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -202,7 +207,7 @@ export default function CommandPalette() {
               setIdx(0);
             }}
             onKeyDown={onInputKey}
-            placeholder="Szukaj stron i akcji…"
+            placeholder={tp(lang, 'ui.cmdPlaceholder')}
             className="w-full bg-transparent py-3.5 text-sm outline-none placeholder:text-muted"
           />
           <kbd className="shrink-0 rounded border border-line px-1.5 py-0.5 text-[10px] text-muted">
@@ -211,7 +216,9 @@ export default function CommandPalette() {
         </div>
         <div ref={listRef} className="max-h-[52vh] overflow-auto py-2">
           {filtered.length === 0 && (
-            <p className="px-4 py-6 text-center text-sm text-muted">Brak wyników</p>
+            <p className="px-4 py-6 text-center text-sm text-muted">
+              {tp(lang, 'ui.cmdNoResults')}
+            </p>
           )}
           {filtered.map((c, i) => {
             const Icon = c.icon;
@@ -234,9 +241,9 @@ export default function CommandPalette() {
         </div>
         <div className="flex items-center justify-end gap-3 border-t border-line px-4 py-2 text-[11px] text-muted">
           <span className="flex items-center gap-1">
-            <CornerDownLeft size={12} /> wybierz
+            <CornerDownLeft size={12} /> {tp(lang, 'ui.cmdSelect')}
           </span>
-          <span>↑ ↓ nawigacja</span>
+          <span>↑ ↓ {tp(lang, 'ui.cmdNav')}</span>
         </div>
       </div>
     </div>

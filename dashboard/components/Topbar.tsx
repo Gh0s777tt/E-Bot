@@ -3,27 +3,18 @@
 import { LogOut, Maximize2, Minimize2, Search, Type, UserPlus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { navLabel, tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import MobileNav from './MobileNav';
-
-const TITLES: Record<string, string> = {
-  '/': 'Przegląd',
-  '/scheduled': 'Zaplanowane posty',
-  '/custom-commands': 'Własne komendy',
-  '/library': 'Biblioteka gier',
-  '/notifications': 'Powiadomienia live',
-  '/live': 'Na żywo',
-  '/security': 'Bezpieczeństwo (Anti-Nuke)',
-  '/integrations': 'Integracje',
-  '/commands': 'Komendy',
-  '/economy': 'Ekonomia GH0ST',
-  '/profile': 'Profil',
-  '/settings': 'Ustawienia',
-};
+import { NAV_ITEMS } from './nav-items';
 
 type Status = { online: boolean | null; guilds?: number | null; tag?: string };
 
 export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
   const pathname = usePathname();
+  const { lang } = useLang();
+  const navItem = NAV_ITEMS.find((n) => n.href === pathname);
+  const title = navItem ? navLabel(lang, navItem.href, navItem.label) : tp(lang, 'ui.dashboard');
   const [status, setStatus] = useState<Status>({ online: null, tag: 'E-Bot' });
   const [compact, setCompact] = useState(false);
   const [smallcaps, setSmallcaps] = useState(false);
@@ -104,7 +95,12 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
 
   const dot =
     status.online === true ? 'bg-green-500' : status.online === false ? 'bg-accent' : 'bg-muted';
-  const stateText = status.online === true ? 'online' : status.online === false ? 'offline' : '—';
+  const stateText =
+    status.online === true
+      ? tp(lang, 'ui.online')
+      : status.online === false
+        ? tp(lang, 'ui.offline')
+        : '—';
 
   return (
     <header
@@ -115,9 +111,7 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
       }`}
     >
       <MobileNav />
-      <h1 className="font-display text-base font-semibold uppercase tracking-wide">
-        {TITLES[pathname] ?? 'Dashboard'}
-      </h1>
+      <h1 className="font-display text-base font-semibold uppercase tracking-wide">{title}</h1>
       <div className="ml-auto flex items-center gap-2 text-xs">
         <span className="hidden items-center gap-1.5 rounded-md border border-line px-3 py-1 sm:flex">
           <span
@@ -126,13 +120,13 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
           <strong className="font-semibold">{status.tag ?? 'E-Bot'}</strong>
           <span className="text-muted">
             · {stateText}
-            {status.guilds != null ? ` · ${status.guilds} serw.` : ''}
+            {status.guilds != null ? ` · ${status.guilds} ${tp(lang, 'ui.serversShort')}` : ''}
           </span>
         </span>
         <button
           type="button"
           onClick={() => window.dispatchEvent(new CustomEvent('cmdk:open'))}
-          title="Szukaj / paleta poleceń (Ctrl+K)"
+          title={`${tp(lang, 'ui.search')} (Ctrl+K)`}
           className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 uppercase tracking-wide transition hover:border-accent"
         >
           <Search size={13} />
@@ -141,15 +135,15 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
         <button
           type="button"
           onClick={toggleCompact}
-          title={compact ? 'Przełącz na tryb normalny' : 'Przełącz na tryb kompaktowy'}
+          title={compact ? tp(lang, 'ui.normal') : tp(lang, 'ui.compact')}
           className="hidden items-center gap-1.5 rounded-md border border-line px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex"
         >
-          <Minimize2 size={13} /> {compact ? 'Normalny' : 'Kompakt'}
+          <Minimize2 size={13} /> {compact ? tp(lang, 'ui.normal') : tp(lang, 'ui.compact')}
         </button>
         <button
           type="button"
           onClick={toggleSmallcaps}
-          title="Kapitaliki (small caps) w nagłówkach"
+          title={tp(lang, 'ui.actSmallcaps')}
           className={`hidden items-center gap-1.5 rounded-md border px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex ${smallcaps ? 'border-accent text-accent' : 'border-line'}`}
         >
           <Type size={13} /> Aa
@@ -157,7 +151,7 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
         <button
           type="button"
           onClick={toggleFocus}
-          title={focus ? 'Pokaż menu boczne' : 'Tryb focus (ukryj menu)'}
+          title={tp(lang, 'ui.actFocus')}
           className={`hidden items-center gap-1.5 rounded-md border px-2.5 py-1 uppercase tracking-wide transition hover:border-accent sm:flex ${focus ? 'border-accent text-accent' : 'border-line'}`}
         >
           <Maximize2 size={13} />
@@ -168,14 +162,14 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
           rel="noreferrer"
           className="hidden items-center gap-1.5 rounded-md bg-accent px-3 py-1 font-semibold uppercase tracking-wide text-white transition hover:bg-accent-hover sm:flex"
         >
-          <UserPlus size={13} /> Zaproś bota
+          <UserPlus size={13} /> {tp(lang, 'ui.invite')}
         </a>
         <a
           href="/api/auth/logout"
-          title="Wyloguj"
+          title={tp(lang, 'ui.logout')}
           className="flex items-center gap-1.5 rounded-md border border-accent/50 px-3 py-1 font-semibold uppercase tracking-wide text-accent transition hover:bg-accent hover:text-white"
         >
-          <LogOut size={13} /> Wyloguj
+          <LogOut size={13} /> {tp(lang, 'ui.logout')}
         </a>
         <span className="grid h-9 w-9 place-items-center rounded-md bg-gradient-to-br from-accent to-accent-dark font-display text-sm text-white">
           E
