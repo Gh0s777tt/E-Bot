@@ -24,6 +24,7 @@ export default function ShopManager({
   const [roleId, setRoleId] = useState('');
   const [desc, setDesc] = useState('');
   const [effect, setEffect] = useState('');
+  const [durationDays, setDurationDays] = useState(0);
   const [st, setSt] = useState<'idle' | 'saving' | 'err'>('idle');
 
   async function add() {
@@ -33,7 +34,14 @@ export default function ShopManager({
       const r = await fetch('/api/economy/shop', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, price, role_id: roleId, description: desc, effect }),
+        body: JSON.stringify({
+          name,
+          price,
+          role_id: roleId,
+          description: desc,
+          effect,
+          duration_days: roleId ? durationDays : 0,
+        }),
       });
       const j = (await r.json()) as { ok?: boolean; items?: ShopItem[] };
       if (r.ok && j.items) {
@@ -42,6 +50,7 @@ export default function ShopManager({
         setDesc('');
         setRoleId('');
         setEffect('');
+        setDurationDays(0);
         setPrice(1000);
         setSt('idle');
       } else {
@@ -91,6 +100,26 @@ export default function ShopManager({
           <option value="shield">🛡️ Tarcza anty-rabunek (24h)</option>
           <option value="lootbox">🎁 Lootbox (losowa waluta)</option>
         </select>
+        {roleId && (
+          <label className="space-y-1 text-sm sm:col-span-2">
+            <span className="font-semibold text-white/90">
+              ⏳ Rola czasowa — dni (0 = na stałe)
+            </span>
+            <input
+              type="number"
+              min={0}
+              max={3650}
+              value={durationDays}
+              onChange={(e) =>
+                setDurationDays(
+                  Math.max(0, Math.min(3650, Math.floor(Number(e.target.value) || 0))),
+                )
+              }
+              placeholder="np. 30 — bot zdejmie rolę po 30 dniach"
+              className={inputCls}
+            />
+          </label>
+        )}
       </div>
       <button
         type="button"
@@ -139,6 +168,11 @@ export default function ShopManager({
                     {i.role_id
                       ? `@${guild.roles.find((r) => r.id === i.role_id)?.name ?? 'rola'}`
                       : '—'}
+                    {i.duration_days ? (
+                      <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                        ⏳ {i.duration_days}d
+                      </span>
+                    ) : null}
                   </td>
                   <td className="px-3 py-2">
                     <button

@@ -372,6 +372,7 @@ export const shopItemSchema = z.object({
   price: z.number().int().min(0).max(100_000_000),
   role_id: z.string().max(40).optional().default(''),
   effect: z.enum(['', 'xp2', 'shield', 'lootbox']).optional().default(''),
+  duration_days: z.number().int().min(0).max(3650).optional().default(0), // Etap J — rola czasowa (0 = na stałe)
 });
 export type ShopItemInput = z.infer<typeof shopItemSchema>;
 

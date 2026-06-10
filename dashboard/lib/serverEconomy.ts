@@ -98,6 +98,7 @@ export type ShopItem = {
   role_id: string | null;
   stock: number | null;
   effect: string | null;
+  duration_days: number | null; // Etap J — rola czasowa (po tylu dniach bot ją zdejmie)
 };
 
 export async function getShopItems(): Promise<ShopItem[]> {
@@ -107,7 +108,7 @@ export async function getShopItems(): Promise<ShopItem[]> {
     if (!gid) return [];
     const { data, error } = await supabase()
       .from('economy_shop')
-      .select('id,name,description,price,role_id,stock,effect')
+      .select('id,name,description,price,role_id,stock,effect,duration_days')
       .eq('guild_id', gid)
       .order('price', { ascending: true });
     if (error) throw new Error(error.message);
@@ -123,6 +124,7 @@ export type ShopItemInput = {
   price: number;
   role_id?: string;
   effect?: string;
+  duration_days?: number;
 };
 
 export async function addShopItem(item: ShopItemInput): Promise<{ ok: boolean; error?: string }> {
@@ -139,6 +141,7 @@ export async function addShopItem(item: ShopItemInput): Promise<{ ok: boolean; e
         price: item.price,
         role_id: item.role_id || null,
         effect: item.effect || null,
+        duration_days: item.role_id && item.duration_days ? item.duration_days : null,
       },
     ]);
   return error ? { ok: false, error: error.message } : { ok: true };

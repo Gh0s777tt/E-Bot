@@ -20,6 +20,7 @@ import {
   minutesSince,
   saveUser,
 } from '../economy/store.mts';
+import { grantTempRole } from '../economy/tempRoles.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { hasCloud } from '../lib/cloud.mts';
@@ -588,9 +589,11 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
       return;
     }
+    const tempDays = item.role_id ? (item.duration_days ?? 0) : 0;
     if (item.role_id) {
       const member = interaction.member as GuildMember | null;
-      if (member?.roles.cache.has(item.role_id)) {
+      // Rola czasowa: pozwól na ponowny zakup (= przedłużenie). Stała: blokuj, gdy już ją ma.
+      if (tempDays <= 0 && member?.roles.cache.has(item.role_id)) {
         await interaction.reply(eph(t(locale, 'eco.buyHasRole')));
         return;
       }
@@ -599,6 +602,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       } catch {
         await interaction.reply(eph(t(locale, 'eco.buyRoleFail')));
         return;
+      }
+      if (tempDays > 0) {
+        await grantTempRole(gid, interaction.user.id, item.role_id, tempDays);
       }
     } else {
       // przedmiot bez roli → trafia do ekwipunku
@@ -611,10 +617,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       wallet: u.wallet - item.price,
     });
     logTx(gid, interaction.user.id, -item.price, 'sklep');
-    await interaction.reply(
-      t(locale, 'eco.buyOk', { name: item.name, price: fmt(item.price, cur) }) +
-        (item.role_id ? '' : ` ${t(locale, 'eco.buyInv')}`),
-    );
+    const okMsg =
+      tempDays > 0
+        ? t(locale, 'eco.buyOkTemp', {
+            name: item.name,
+            price: fmt(item.price, cur),
+            days: String(tempDays),
+          })
+        : t(locale, 'eco.buyOk', { name: item.name, price: fmt(item.price, cur) }) +
+          (item.role_id ? '' : ` ${t(locale, 'eco.buyInv')}`);
+    await interaction.reply(okMsg);
     return;
   }
 

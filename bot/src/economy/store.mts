@@ -105,6 +105,7 @@ export type ShopItem = {
   role_id: string | null;
   stock: number | null;
   effect: string | null; // '', 'xp2', 'shield', 'lootbox' (Tor B — itemy z efektem)
+  duration_days: number | null; // Etap J — rola czasowa: po tylu dniach bot ją zdejmie (null/0 = na stałe)
 };
 
 export async function getShop(guildId: string): Promise<ShopItem[]> {

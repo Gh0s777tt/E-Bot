@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-228-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.158.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-229-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.159.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.159.0] — ⏳ Role czasowe w sklepie · Etap J (2/?)
+
+- `[#229]` ⏳ **Role czasowe w sklepie ekonomii** (mocny money-sink, bot + panel) — przedmiot z rolą może mieć **czas trwania w dniach**; po zakupie bot sam zdejmie rolę po wyznaczonym czasie:
+  - 🛒 W panelu (Ekonomia → sklep) przy itemie z rolą pojawia się pole **„Rola czasowa — dni"** (0 = na stałe); na liście odznaka `⏳ 30d`.
+  - 🤖 `/eco buy` rozpoznaje rolę czasową: nadaje ją, zapisuje wygaśnięcie i potwierdza „rola na **N dni**". **Ponowny zakup = przedłużenie** od teraz (nie blokuje jak rola stała).
+  - 🧹 Nowy poller `economy/tempRoles.mts` (co 60 s, wzorzec auto-unbana tempbanów) zdejmuje wygasłe role — działa też po restarcie bota; dane w Supabase `temp_roles`.
+  - 🗃️ Schemat `dashboard/scripts/etapj-temproles-schema.sql` (ALTER `economy_shop.duration_days` + tabela `temp_roles`). Bez chmury rola nadawana na stałe (graceful). 14 języków (`eco.buyOkTemp`). Bez nowych komend (bez re-rejestracji). **Etap J (2).**
 
 ## [0.158.0] — 📈 Giełda — `/stocks` · Etap J (1/?)
 

@@ -47,6 +47,7 @@ import { startScheduleSync } from './creator/scheduleSync.mts';
 import { startSocialFeeds } from './creator/social.mts';
 import { handleBlackjackButton } from './economy/blackjack.mts';
 import { startEcoInterest } from './economy/interest.mts';
+import { startTempRoles } from './economy/tempRoles.mts';
 import { startEconomyConfigPolling } from './empire/config.mts';
 import { setupMessageEarning } from './empire/messages.mts';
 import { setupVoiceEarning } from './empire/voice.mts';
@@ -167,6 +168,7 @@ client.once(Events.ClientReady, (c) => {
   startNotifier(c);
   startAntiNuke(c);
   startModeration(c); // Faza 7 / F6 — auto-unban tempbanów (poll Supabase)
+  startTempRoles(c); // Etap J — zdejmowanie wygasłych ról czasowych ze sklepu (poll Supabase)
   startServerLog(c); // Faza 7 / F6.2 — logi serwera (zdarzenia → kanał, config z panelu)
   startAntiRaid(c); // Faza 7 / F6.3 — anti-raid (fala wejść → akcja, config z panelu)
   startModmail(c); // Faza 7 / F6.4 — modmail (DM ↔ wątek obsługi, config z panelu)
