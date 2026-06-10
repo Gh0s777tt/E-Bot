@@ -1,6 +1,7 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { applyCommandLocalizations } from '../i18n/commandDescriptions.mts';
 import * as achievements from './achievements.mts';
+import { hug, kiss, pat, slap } from './actions.mts';
 import * as afk from './afk.mts';
 import * as ai from './ai.mts';
 import * as aiserver from './aiserver.mts';
@@ -58,6 +59,7 @@ import * as rps from './rps.mts';
 import * as schedule from './schedule.mts';
 import * as search from './search.mts';
 import * as serverinfo from './serverinfo.mts';
+import * as ship from './ship.mts';
 import * as skins from './skins.mts';
 import * as slowmode from './slowmode.mts';
 import * as sticky from './sticky.mts';
@@ -157,6 +159,11 @@ export const commands: Command[] = [
   aiserver,
   undo,
   achievements,
+  ship,
+  hug,
+  kiss,
+  slap,
+  pat,
 ];
 
 // i18n: wpina opisy komend w 14 językach (Discord-localizations) — centralnie, bez edycji

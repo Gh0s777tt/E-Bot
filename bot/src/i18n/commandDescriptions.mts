@@ -1198,6 +1198,108 @@ const UNDO_DESC: Record<Locale, Record<string, string>> = {
   id: { undo: 'Batalkan kanal/peran yang terakhir dibuat.' },
 };
 
+// Opisy /ship + interakcji (Etap F — pakiet społeczny) — dołożone do COMMAND_DESC niżej.
+const SOCIAL2_DESC: Record<Locale, Record<string, string>> = {
+  pl: {
+    ship: 'Sprawdź dopasowanie dwóch osób. 💘',
+    hug: 'Przytul kogoś! 🤗',
+    kiss: 'Pocałuj kogoś! 😘',
+    slap: 'Daj komuś z liścia! 👋',
+    pat: 'Pogłaszcz kogoś po głowie! 🫳',
+  },
+  en: {
+    ship: 'Check how well two people match. 💘',
+    hug: 'Hug someone! 🤗',
+    kiss: 'Kiss someone! 😘',
+    slap: 'Slap someone! 👋',
+    pat: 'Pat someone on the head! 🫳',
+  },
+  de: {
+    ship: 'Prüfe, wie gut zwei Personen zusammenpassen. 💘',
+    hug: 'Umarme jemanden! 🤗',
+    kiss: 'Küsse jemanden! 😘',
+    slap: 'Verpasse jemandem eine! 👋',
+    pat: 'Tätschle jemandem den Kopf! 🫳',
+  },
+  es: {
+    ship: 'Mira qué tan compatibles son dos personas. 💘',
+    hug: '¡Abraza a alguien! 🤗',
+    kiss: '¡Besa a alguien! 😘',
+    slap: '¡Dale una cachetada a alguien! 👋',
+    pat: '¡Acaricia la cabeza de alguien! 🫳',
+  },
+  it: {
+    ship: 'Scopri quanto sono compatibili due persone. 💘',
+    hug: 'Abbraccia qualcuno! 🤗',
+    kiss: 'Bacia qualcuno! 😘',
+    slap: 'Molla uno schiaffo a qualcuno! 👋',
+    pat: 'Accarezza la testa di qualcuno! 🫳',
+  },
+  fr: {
+    ship: 'Vérifie la compatibilité de deux personnes. 💘',
+    hug: "Fais un câlin à quelqu'un ! 🤗",
+    kiss: "Embrasse quelqu'un ! 😘",
+    slap: "Colle une baffe à quelqu'un ! 👋",
+    pat: "Tapote la tête de quelqu'un ! 🫳",
+  },
+  pt: {
+    ship: 'Veja o quanto duas pessoas combinam. 💘',
+    hug: 'Abrace alguém! 🤗',
+    kiss: 'Beije alguém! 😘',
+    slap: 'Dê um tapa em alguém! 👋',
+    pat: 'Faça cafuné em alguém! 🫳',
+  },
+  zh: {
+    ship: '测测两个人的契合度。💘',
+    hug: '抱抱某人！🤗',
+    kiss: '亲亲某人！😘',
+    slap: '拍某人一巴掌！👋',
+    pat: '摸摸某人的头！🫳',
+  },
+  ko: {
+    ship: '두 사람의 궁합을 확인하세요. 💘',
+    hug: '누군가를 안아주세요! 🤗',
+    kiss: '누군가에게 뽀뽀하세요! 😘',
+    slap: '누군가를 찰싹! 👋',
+    pat: '누군가의 머리를 쓰담쓰담! 🫳',
+  },
+  ru: {
+    ship: 'Проверь совместимость двух людей. 💘',
+    hug: 'Обними кого-нибудь! 🤗',
+    kiss: 'Поцелуй кого-нибудь! 😘',
+    slap: 'Отвесь кому-нибудь пощёчину! 👋',
+    pat: 'Погладь кого-нибудь по голове! 🫳',
+  },
+  uk: {
+    ship: 'Перевір сумісність двох людей. 💘',
+    hug: 'Обійми когось! 🤗',
+    kiss: 'Поцілуй когось! 😘',
+    slap: 'Дай комусь ляпаса! 👋',
+    pat: 'Погладь когось по голові! 🫳',
+  },
+  ja: {
+    ship: '二人の相性をチェック。💘',
+    hug: '誰かをハグしよう！🤗',
+    kiss: '誰かにキスしよう！😘',
+    slap: '誰かをペシッ！👋',
+    pat: '誰かの頭をなでなで！🫳',
+  },
+  ar: {
+    ship: 'اختبر التوافق بين شخصين. 💘',
+    hug: 'عانق شخصًا ما! 🤗',
+    kiss: 'قبّل شخصًا ما! 😘',
+    slap: 'اصفع شخصًا ما! 👋',
+    pat: 'ربّت على رأس شخص ما! 🫳',
+  },
+  id: {
+    ship: 'Cek kecocokan dua orang. 💘',
+    hug: 'Peluk seseorang! 🤗',
+    kiss: 'Cium seseorang! 😘',
+    slap: 'Tampar seseorang! 👋',
+    pat: 'Elus kepala seseorang! 🫳',
+  },
+};
+
 // Opis /achievements (Panel — osiągnięcia-tiery) — dołożony do COMMAND_DESC niżej.
 const ACHV_DESC: Record<Locale, Record<string, string>> = {
   pl: { achievements: 'Osiągnięcia — tiery za poziom (odznaki).' },
@@ -1232,6 +1334,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], AISERVER_DESC[l]);
   Object.assign(COMMAND_DESC[l], UNDO_DESC[l]);
   Object.assign(COMMAND_DESC[l], ACHV_DESC[l]);
+  Object.assign(COMMAND_DESC[l], SOCIAL2_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

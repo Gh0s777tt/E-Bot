@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-203-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.133.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-204-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.134.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.134.0] — 💞 Pakiet społeczny: /ship /hug /kiss /slap /pat · Etap F (1/?)
+
+- `[#204]` 💞 **Pięć komend społecznych** (luka vs Miki/Loritta/Nadeko — interakcje między użytkownikami):
+  - 💘 **`/ship <osoba1> [osoba2]`** — „ship-o-metr": dopasowanie pary w %, pasek ▰▱ i komentarz (4 progi). Wynik **deterministyczny** (hash ID) — ta sama para zawsze dostaje ten sam procent, kolejność bez znaczenia.
+  - 🤗 **`/hug`** · 😘 **`/kiss`** · 👋 **`/slap`** · 🫳 **`/pat`** — interakcje z **anime-GIF-ami** z `nekos.best` (**darmowe API, bez klucza**), graceful fail + timeout 8 s; reakcja na samego siebie = przytulas od bota.
+  Cztery interakcje z **jednej fabryki** (`commands/actions.mts` — named exports zamiast 4 plików). Pełne **14 języków** z lokalnym sznytem (zh: „这对CP我磕了！", pt: „cafuné") — 12 kluczy w `strings.social2.mts` + `SOCIAL2_DESC`. Startuje **Etap F — Fun & mosty eko** z `docs/ANALIZA-FUNKCJI-2.md`. Nowe komendy → rejestracja globalna po deployu.
 
 ## [0.133.1] — 📊 Analiza funkcji v2 + roadmapa Etapy F–J (docs)
 
