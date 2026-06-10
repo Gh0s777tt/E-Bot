@@ -35,6 +35,7 @@ import { SOCIAL_STRINGS } from './strings.social.mts';
 import { SOCIAL2_STRINGS } from './strings.social2.mts';
 import { SSYNC_STRINGS } from './strings.ssync.mts';
 import { STICKY_STRINGS } from './strings.sticky.mts';
+import { STOCKS_STRINGS } from './strings.stocks.mts';
 import { TEMPVOICE_STRINGS } from './strings.tempvoice.mts';
 import { TUTORIAL_STRINGS } from './strings.tutorial.mts';
 import { UNDO_STRINGS } from './strings.undo.mts';
@@ -449,6 +450,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], SOCIAL2_STRINGS[l]);
   Object.assign(DICTS[l], SSYNC_STRINGS[l]);
   Object.assign(DICTS[l], STICKY_STRINGS[l]);
+  Object.assign(DICTS[l], STOCKS_STRINGS[l]);
   Object.assign(DICTS[l], TEMPVOICE_STRINGS[l]);
   Object.assign(DICTS[l], TUTORIAL_STRINGS[l]);
   Object.assign(DICTS[l], UNDO_STRINGS[l]);

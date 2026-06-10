@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-227-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.157.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-228-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.158.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.158.0] — 📈 Giełda — `/stocks` · Etap J (1/?)
+
+- `[#228]` 📈 **Giełda (eko 2.0)** — nowa komenda `/stocks` z 6 fikcyjnymi spółkami (👻 GHOST, 💎 GEM, 🤖 BOT, 🍕 PIZZA, 🚀 MOON, 🐸 PEPE):
+  - 📊 `list` — notowania na żywo z trendem 24h (🟢▲ / 🔴▼); `buy`/`sell` — handel za walutę serwera; `portfolio` — pozycje, wartość i wynik (zysk/strata, także przy częściowej sprzedaży).
+  - 🧮 **Ceny deterministyczne z czasu** (suma sinusoid z fazami z hasza symbolu) — łagodnie falują i wracają do średniej, są spójne między odczytami, **bez workera w tle**; memy (PEPE/MOON) bujają mocniej. Brak losowości = brak „dojenia" odświeżaniem.
+  - 🗃️ Pozycje w Supabase `economy_stocks` (schemat `dashboard/scripts/etapj-stocks-schema.sql`); bez chmury działa podgląd cen, a handel uczciwie informuje. Respektuje `economy.enabled`, wpisy w historii transakcji (`stock:buy/sell`). 14 języków. **Startuje Etap J (eko 2.0).** Komendy: **95** (92 slash + 3 context-menu).
 
 ## [0.157.0] — 🌍 i18n panelu — górny pasek + paleta ⌘K (14 języków) · Etap I (10/?)
 

@@ -1462,6 +1462,24 @@ const ACHV_DESC: Record<Locale, Record<string, string>> = {
   id: { achievements: 'Pencapaian — lencana berdasarkan level.' },
 };
 
+// Opis /stocks (Etap J — giełda) — dołożony do COMMAND_DESC niżej.
+const STOCKS_DESC: Record<Locale, Record<string, string>> = {
+  pl: { stocks: 'Giełda — kupuj i sprzedawaj wirtualne akcje.' },
+  en: { stocks: 'Stock market — buy and sell virtual shares.' },
+  de: { stocks: 'Börse — virtuelle Aktien kaufen und verkaufen.' },
+  es: { stocks: 'Bolsa — compra y vende acciones virtuales.' },
+  it: { stocks: 'Borsa — compra e vendi azioni virtuali.' },
+  fr: { stocks: 'Bourse — achète et vends des actions virtuelles.' },
+  pt: { stocks: 'Bolsa — compre e venda ações virtuais.' },
+  zh: { stocks: '股市 — 买卖虚拟股票。' },
+  ko: { stocks: '주식 시장 — 가상 주식 매매.' },
+  ru: { stocks: 'Биржа — покупайте и продавайте виртуальные акции.' },
+  uk: { stocks: 'Біржа — купуйте та продавайте віртуальні акції.' },
+  ja: { stocks: '株式市場 — 仮想株を売買。' },
+  ar: { stocks: 'البورصة — اشترِ وبع أسهمًا افتراضية.' },
+  id: { stocks: 'Bursa — beli dan jual saham virtual.' },
+};
+
 // Opisy /liverole + /vanityrole (Etap I — role z obecności) — dołożone do COMMAND_DESC niżej.
 const PROLES_DESC: Record<Locale, Record<string, string>> = {
   pl: { liverole: 'Rola NA ŻYWO dla streamujących.', vanityrole: 'Rola za frazę/link w statusie.' },
@@ -1534,6 +1552,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], IMGONLY_DESC[l]);
   Object.assign(COMMAND_DESC[l], SSYNC_DESC[l]);
   Object.assign(COMMAND_DESC[l], PROLES_DESC[l]);
+  Object.assign(COMMAND_DESC[l], STOCKS_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command
