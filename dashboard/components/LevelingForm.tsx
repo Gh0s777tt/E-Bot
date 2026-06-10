@@ -4,6 +4,8 @@ import { Plus, Trash2, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { LevelingConfig } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
+import AdvancedOnly from './AdvancedOnly';
+import Hint from './Hint';
 import MessageEditor from './MessageEditor';
 import { ChannelSelect, RoleSelect } from './pickers';
 
@@ -105,7 +107,10 @@ export default function LevelingForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Cooldown wiadomości (s)</span>
+          <span className="font-semibold text-white/90">
+            Cooldown wiadomości (s)
+            <Hint text="Minimalny odstęp między wiadomościami liczonymi do XP — chroni przed spamem dla XP." />
+          </span>
           <input
             type="number"
             value={b.cooldownSec}
@@ -114,7 +119,10 @@ export default function LevelingForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Mnożnik weekendowy (1 = off)</span>
+          <span className="font-semibold text-white/90">
+            Mnożnik weekendowy (1 = off)
+            <Hint text="W soboty i niedziele XP jest mnożone przez tę wartość — np. 2 = podwójne XP w weekendy." />
+          </span>
           <input
             type="number"
             step="0.5"
@@ -142,7 +150,10 @@ export default function LevelingForm({
             onChange={(e) => setB({ ...b, voiceAntiAfk: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Anti‑AFK voice (≥2 osób, bez mute)</span>
+          <span className="font-semibold text-white/90">
+            Anti‑AFK voice (≥2 osób, bez mute)
+            <Hint text="XP za voice tylko, gdy na kanale są min. 2 osoby i użytkownik nie jest wyciszony — blokuje farmienie AFK." />
+          </span>
         </label>
         <label className="flex items-center gap-3 text-sm">
           <input
@@ -151,7 +162,10 @@ export default function LevelingForm({
             onChange={(e) => setB({ ...b, stackRewards: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Kumuluj role‑nagrody</span>
+          <span className="font-semibold text-white/90">
+            Kumuluj role‑nagrody
+            <Hint text="Włączone: użytkownik trzyma wszystkie role-nagrody do swojego poziomu. Wyłączone: tylko najwyższą." />
+          </span>
         </label>
         <label className="flex items-center gap-3 text-sm">
           <input
@@ -233,127 +247,134 @@ export default function LevelingForm({
         ))}
       </div>
 
-      {/* Mnożniki XP za rolę */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Mnożniki XP za rolę</span>
-          <button
-            type="button"
-            onClick={() =>
-              setMults([...mults, { roleId: '', factor: 2, k: `m${idRef.current++}` }])
-            }
-            className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
-          >
-            <Plus size={12} /> Dodaj
-          </button>
-        </div>
-        {mults.map((m) => (
-          <div key={m.k} className="flex items-center gap-2">
-            <RoleSelect
-              value={m.roleId}
-              onChange={(v) => setMults(mults.map((x) => (x.k === m.k ? { ...x, roleId: v } : x)))}
-              roles={guild.roles}
-            />
-            <input
-              type="number"
-              step="0.5"
-              value={m.factor}
-              onChange={(e) =>
-                setMults(
-                  mults.map((x) => (x.k === m.k ? { ...x, factor: fnum(e.target.value) } : x)),
-                )
-              }
-              className={`${inputCls} w-24`}
-              placeholder="×"
-            />
+      <AdvancedOnly>
+        {/* Mnożniki XP za rolę */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-white/90">
+              Mnożniki XP za rolę
+              <Hint text="Posiadacze roli zdobywają XP szybciej (brany najwyższy mnożnik, np. VIP ×2)." />
+            </span>
             <button
               type="button"
-              onClick={() => setMults(mults.filter((x) => x.k !== m.k))}
-              className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              onClick={() =>
+                setMults([...mults, { roleId: '', factor: 2, k: `m${idRef.current++}` }])
+              }
+              className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
             >
-              <Trash2 size={14} />
+              <Plus size={12} /> Dodaj
             </button>
           </div>
-        ))}
-      </div>
-
-      {/* No-XP kanały / role */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
-          <span className="text-sm font-semibold text-white/90">Kanały bez XP</span>
-          <ChannelSelect
-            value=""
-            onChange={(v) => v && !noCh.includes(v) && setNoCh([...noCh, v])}
-            channels={guild.channels}
-            placeholder="+ dodaj kanał"
-          />
-          <div className="flex flex-wrap gap-1.5">
-            {noCh.map((id) => (
-              <Chip
-                key={id}
-                label={`#${chanName(id)}`}
-                onX={() => setNoCh(noCh.filter((x) => x !== id))}
+          {mults.map((m) => (
+            <div key={m.k} className="flex items-center gap-2">
+              <RoleSelect
+                value={m.roleId}
+                onChange={(v) =>
+                  setMults(mults.map((x) => (x.k === m.k ? { ...x, roleId: v } : x)))
+                }
+                roles={guild.roles}
               />
-            ))}
-          </div>
-        </div>
-        <div className="space-y-2">
-          <span className="text-sm font-semibold text-white/90">Role bez XP</span>
-          <RoleSelect
-            value=""
-            onChange={(v) => v && !noRo.includes(v) && setNoRo([...noRo, v])}
-            roles={guild.roles}
-            placeholder="+ dodaj rolę"
-          />
-          <div className="flex flex-wrap gap-1.5">
-            {noRo.map((id) => (
-              <Chip
-                key={id}
-                label={`@${roleName(id)}`}
-                onX={() => setNoRo(noRo.filter((x) => x !== id))}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Prestiż */}
-      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
-        <label className="flex items-center gap-3 text-sm">
-          <input
-            type="checkbox"
-            checked={b.prestigeEnabled}
-            onChange={(e) => setB({ ...b, prestigeEnabled: e.target.checked })}
-            className="h-4 w-4 accent-accent"
-          />
-          <span className="font-semibold text-white/90">
-            Prestiż włączony (/prestige resetuje XP za odznakę)
-          </span>
-        </label>
-        {b.prestigeEnabled && (
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="space-y-1 text-sm">
-              <span className="font-semibold text-white/90">Poziom wymagany</span>
               <input
                 type="number"
-                value={b.prestigeLevel}
-                onChange={(e) => setB({ ...b, prestigeLevel: Math.max(1, num(e.target.value)) })}
-                className={inputCls}
+                step="0.5"
+                value={m.factor}
+                onChange={(e) =>
+                  setMults(
+                    mults.map((x) => (x.k === m.k ? { ...x, factor: fnum(e.target.value) } : x)),
+                  )
+                }
+                className={`${inputCls} w-24`}
+                placeholder="×"
               />
-            </label>
-            <label className="space-y-1 text-sm">
-              <span className="font-semibold text-white/90">Rola za prestiż</span>
-              <RoleSelect
-                value={b.prestigeRoleId}
-                onChange={(v) => setB({ ...b, prestigeRoleId: v })}
-                roles={guild.roles}
-                placeholder="— brak —"
-              />
-            </label>
+              <button
+                type="button"
+                onClick={() => setMults(mults.filter((x) => x.k !== m.k))}
+                className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
+                aria-label="Usuń"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* No-XP kanały / role */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <span className="text-sm font-semibold text-white/90">Kanały bez XP</span>
+            <ChannelSelect
+              value=""
+              onChange={(v) => v && !noCh.includes(v) && setNoCh([...noCh, v])}
+              channels={guild.channels}
+              placeholder="+ dodaj kanał"
+            />
+            <div className="flex flex-wrap gap-1.5">
+              {noCh.map((id) => (
+                <Chip
+                  key={id}
+                  label={`#${chanName(id)}`}
+                  onX={() => setNoCh(noCh.filter((x) => x !== id))}
+                />
+              ))}
+            </div>
           </div>
-        )}
-      </div>
+          <div className="space-y-2">
+            <span className="text-sm font-semibold text-white/90">Role bez XP</span>
+            <RoleSelect
+              value=""
+              onChange={(v) => v && !noRo.includes(v) && setNoRo([...noRo, v])}
+              roles={guild.roles}
+              placeholder="+ dodaj rolę"
+            />
+            <div className="flex flex-wrap gap-1.5">
+              {noRo.map((id) => (
+                <Chip
+                  key={id}
+                  label={`@${roleName(id)}`}
+                  onX={() => setNoRo(noRo.filter((x) => x !== id))}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Prestiż */}
+        <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="checkbox"
+              checked={b.prestigeEnabled}
+              onChange={(e) => setB({ ...b, prestigeEnabled: e.target.checked })}
+              className="h-4 w-4 accent-accent"
+            />
+            <span className="font-semibold text-white/90">
+              Prestiż włączony (/prestige resetuje XP za odznakę)
+            </span>
+          </label>
+          {b.prestigeEnabled && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="space-y-1 text-sm">
+                <span className="font-semibold text-white/90">Poziom wymagany</span>
+                <input
+                  type="number"
+                  value={b.prestigeLevel}
+                  onChange={(e) => setB({ ...b, prestigeLevel: Math.max(1, num(e.target.value)) })}
+                  className={inputCls}
+                />
+              </label>
+              <label className="space-y-1 text-sm">
+                <span className="font-semibold text-white/90">Rola za prestiż</span>
+                <RoleSelect
+                  value={b.prestigeRoleId}
+                  onChange={(v) => setB({ ...b, prestigeRoleId: v })}
+                  roles={guild.roles}
+                  placeholder="— brak —"
+                />
+              </label>
+            </div>
+          )}
+        </div>
+      </AdvancedOnly>
 
       <div className="flex items-center gap-3">
         <button

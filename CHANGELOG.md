@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-218-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.148.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-219-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.149.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.149.0] — ⓘ Tooltipsy pól + pola formularzy wg trybu · Etap I (2/?)
+
+- `[#219]` ⓘ **Tooltipsy przy polach + tryby w formularzach** (dokończenie Etapów A/B) — dwa komponenty wielokrotnego użytku:
+  - **`<Hint>`** — ikona ⓘ przy etykiecie pola z wyjaśnieniem po najechaniu (natywny tooltip, zero JS). Wdrożone w **ekonomii** (11 pól: saldo startowe, stawka hazardu, streak, odsetki, podatek, nagroda za awans, rabunki…) i **levelingu** (6: cooldown, weekend, anti-AFK, kumulacja ról, mnożniki).
+  - **`<AdvancedOnly>`** — sekcja znika w trybie **🌸 Prostym** (zostaje delikatna informacja jak ją odzyskać); w Zaawansowanym/Developer bez zmian. Ukryte sekcje: „Rabunki i hazard" (ekonomia) oraz mnożniki XP / kanały-role bez XP / prestiż (leveling).
+  Wzorzec gotowy do rozsiania po pozostałych formularzach. Druga fala Etapu I — zmiana tylko panelowa (deploy Vercel).
 
 ## [0.148.0] — 🧭 Pulpit 2.0 — health-score + szybkie akcje · Etap I (1/?)
 

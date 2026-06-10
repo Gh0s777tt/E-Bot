@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { EconomyConfig } from '../lib/serverEconomy';
+import AdvancedOnly from './AdvancedOnly';
+import Hint from './Hint';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -26,9 +28,12 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
     setTimeout(() => setSt('idle'), 2500);
   }
 
-  const N = (label: string, key: keyof EconomyConfig) => (
+  const N = (label: string, key: keyof EconomyConfig, hint?: string) => (
     <label className="space-y-1 text-sm">
-      <span className="font-semibold text-white/90">{label}</span>
+      <span className="font-semibold text-white/90">
+        {label}
+        {hint && <Hint text={hint} />}
+      </span>
       <input
         type="number"
         value={c[key] as number}
@@ -62,21 +67,49 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
             placeholder="🪙"
           />
         </label>
-        {N('Saldo startowe', 'startBalance')}
-        {N('Maks. stawka hazardu', 'gambleMax')}
+        {N('Saldo startowe', 'startBalance', 'Tyle waluty dostaje każdy nowy gracz na start.')}
+        {N(
+          'Maks. stawka hazardu',
+          'gambleMax',
+          'Górny limit zakładu w /eco gamble, slots, highlow itd.',
+        )}
       </div>
 
       <div className="rounded-xl border border-line bg-bg/40 p-4">
         <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-accent">Zarobki</p>
         <div className="grid gap-4 sm:grid-cols-3">
-          {N('Dzienna kwota', 'dailyAmount')}
-          {N('Bonus za streak', 'dailyStreakBonus')}
-          {N('Cooldown pracy (min)', 'workCooldownMin')}
-          {N('Praca: min', 'workMin')}
-          {N('Praca: max', 'workMax')}
-          {N('Odsetki bank / dzień (%)', 'bankInterestPct')}
-          {N('Podatek od przelewów (%)', 'payTaxPct')}
-          {N('Nagroda za awans poziomu', 'levelUpMoney')}
+          {N('Dzienna kwota', 'dailyAmount', 'Bazowa wypłata /eco daily.')}
+          {N(
+            'Bonus za streak',
+            'dailyStreakBonus',
+            'Dodatek za każdy kolejny dzień serii daily (motywuje do codziennego wbijania).',
+          )}
+          {N('Cooldown pracy (min)', 'workCooldownMin', 'Co ile minut można użyć /eco work.')}
+          {N(
+            'Praca: min',
+            'workMin',
+            'Dolna granica losowanej wypłaty z /eco work (i bazy /eco crime).',
+          )}
+          {N(
+            'Praca: max',
+            'workMax',
+            'Górna granica losowanej wypłaty z /eco work (i bazy /eco crime).',
+          )}
+          {N(
+            'Odsetki bank / dzień (%)',
+            'bankInterestPct',
+            'Dzienny % doliczany do salda w banku (pasywny dochód). 0 = wyłączone.',
+          )}
+          {N(
+            'Podatek od przelewów (%)',
+            'payTaxPct',
+            'Potrącany z kwoty /eco pay. 0 = brak podatku.',
+          )}
+          {N(
+            'Nagroda za awans poziomu',
+            'levelUpMoney',
+            'Tyle waluty dostaje użytkownik przy każdym level-upie. 0 = wyłączone.',
+          )}
         </div>
         <p className="mt-2 text-xs text-muted">
           💰 <strong>Odsetki bankowe</strong> — co dzień dolicza ten % do salda w banku każdej osoby
@@ -89,20 +122,30 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
         </p>
       </div>
 
-      <div className="rounded-xl border border-line bg-bg/40 p-4 space-y-3">
-        <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-          Rabunki i hazard
-        </p>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {Toggle('Rabunki włączone', 'robEnabled')}
-          {Toggle('Hazard włączony', 'gambleEnabled')}
+      <AdvancedOnly>
+        <div className="rounded-xl border border-line bg-bg/40 p-4 space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-wide text-accent">
+            Rabunki i hazard
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {Toggle('Rabunki włączone', 'robEnabled')}
+            {Toggle('Hazard włączony', 'gambleEnabled')}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {N('Szansa rabunku (%)', 'robChance', 'Prawdopodobieństwo udanego /eco rob.')}
+            {N(
+              'Cooldown rabunku (min)',
+              'robCooldownMin',
+              'Wspólny cooldown dla /eco rob i /eco crime.',
+            )}
+            {N(
+              'Maks. łup (% portfela)',
+              'robMaxPercent',
+              'Ile maksymalnie % portfela ofiary można ukraść.',
+            )}
+          </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {N('Szansa rabunku (%)', 'robChance')}
-          {N('Cooldown rabunku (min)', 'robCooldownMin')}
-          {N('Maks. łup (% portfela)', 'robMaxPercent')}
-        </div>
-      </div>
+      </AdvancedOnly>
 
       <div className="flex items-center gap-3">
         <button
