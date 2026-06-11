@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-273-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.203.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-274-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.204.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.204.0] — 🌍 i18n treści: „Jak to działa?" — fundament + chunk 1
+
+- `[#274]` 🌍 **Panele „Jak to działa?" (`HowItWorks`) — architektura i18n + pierwszy chunk treści.** Trzecia (i największa) fala i18n treści, robiona przyrostowo.
+  - 🖥️ **Panel**: nowy `lib/howItWorksI18n.ts`. **Etykiety sekcji** (🧭 tytuł, 🎯 co robi, ❓ po co, ✅ co włączyć, 🔐 uprawnienia, 💡 wskazówki) przetłumaczone na **14 języków** — pojawiają się na **wszystkich 35 stronach**. **Treść** stron tłumaczona **chunkami**: chunk 1 = `/setup`, `/modules`, `/diagnostics` (14 jęz). `HowItWorks.tsx` bierze język z `useLang()`; **strony jeszcze nieprzetłumaczone spadają na PL** (`HOW_IT_WORKS`) — zawsze spójny stan.
+  - 🧱 **Wzorzec przyrostowy**: kolejne chunki dokładają strony do `HOW_CONTENT_I18N` bez ruszania reszty. Zostają 32 strony treści do przetłumaczenia w następnych falach.
+  - Czysto panel (Vercel). Wstecznie zgodne (pl niezmienione).
 
 ## [0.203.0] — 🌍 i18n treści: asystent AI (14 języków)
 

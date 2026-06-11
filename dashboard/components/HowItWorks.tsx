@@ -1,25 +1,21 @@
 'use client';
 
 // Etap K — rozwijany panel „Jak to działa?" pod nagłówkiem każdej strony. Treść z lib/howItWorks.ts
-// (po href). Domyślnie zwinięty, stan zapamiętany per-strona w localStorage. Etykiety PL (treść też
-// PL — bazowo, jak pageInfo); i18n treści to osobna fala.
+// (po href). Domyślnie zwinięty, stan zapamiętany per-strona w localStorage. Etykiety w 14 językach
+// (HOW_LABELS); treść tłumaczona przyrostowo (HOW_CONTENT_I18N) z fallbackiem do PL.
 import { ChevronDown, Compass } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { HOW_IT_WORKS } from '../lib/howItWorks';
-
-const L = {
-  title: '🧭 Jak to działa?',
-  does: '🎯 Co robi',
-  why: '❓ Po co / kiedy włączyć',
-  needs: '✅ Co musi być włączone',
-  perms: '🔐 Uprawnienia bota i po co',
-  tips: '💡 Wskazówki',
-};
+import { HOW_CONTENT_I18N, HOW_LABELS } from '../lib/howItWorksI18n';
+import { useLang } from './LangContext';
 
 export default function HowItWorks() {
+  const { lang } = useLang();
+  const L = HOW_LABELS[lang] ?? HOW_LABELS.pl;
   const pathname = usePathname();
-  const info = HOW_IT_WORKS[pathname];
+  // Treść w języku panelu; strony jeszcze nieprzetłumaczone spadają na PL (HOW_IT_WORKS).
+  const info = HOW_CONTENT_I18N[lang]?.[pathname] ?? HOW_IT_WORKS[pathname];
   const [open, setOpen] = useState(false);
 
   // Po zamontowaniu: przywróć zapamiętany stan rozwinięcia dla tej strony.
