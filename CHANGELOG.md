@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-270-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.200.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-271-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.201.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.201.0] — 🎟️ Transkrypty ticketów na web (panel)
+
+- `[#271]` 🎟️ **Transkrypty ticketów dostępne w panelu** (z roadmapy sek.4: „Tickety: transkrypty także na web") — **domyka listę usprawnień sek.4**.
+  - 🤖 **Bot** (`tickets/service.mts`): przy zamknięciu ticketu zapisuje pełny HTML transkryptu do Supabase (`tickets.transcript_html`) **osobnym, graceful update'em** — gdy kolumny nie ma (brak ALTER), update cicho pada, a kanał logów (plik HTML), DM i status zamknięcia są **nietknięte** → zero ryzyka regresji.
+  - 🖥️ **Panel**: nowy route `GET /api/tickets/transcript?channel=<id>` zwraca transkrypt jako stronę HTML (treść escapowana po stronie bota → bez XSS). Strona `/tickets` ma teraz przy każdym zgłoszeniu link **„📄 Transkrypt"** (otwiera w nowej karcie). `getTickets`/`TicketRow` dostały `channel_id`.
+  - 🗃️ **SQL** (`dashboard/scripts/etap-ticket-transcripts-schema.sql`): `ALTER TABLE tickets ADD COLUMN IF NOT EXISTS transcript_html TEXT`. Do uruchomienia w Supabase — do tego czasu wszystko działa po staremu (transkrypt jako załącznik na kanale logów).
+  - Wymaga `deploy` bota (Railway) + panelu (Vercel). Bez zmian definicji komend.
 
 ## [0.200.0] — 👋 Onboarding: DM powitalny przy dodaniu bota
 

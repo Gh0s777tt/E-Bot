@@ -94,7 +94,19 @@ export default async function TicketsPage() {
                       {t.rating ? '⭐'.repeat(t.rating) : '—'}
                     </td>
                     <td className="py-2">
-                      {t.status !== 'closed' && <TicketCloseButton id={t.id} />}
+                      <div className="flex items-center gap-2">
+                        {t.status !== 'closed' && <TicketCloseButton id={t.id} />}
+                        {t.channel_id && (
+                          <a
+                            href={`/api/tickets/transcript?channel=${t.channel_id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rounded-md border border-line px-2 py-0.5 text-xs text-muted transition hover:border-accent hover:text-white"
+                          >
+                            📄 Transkrypt
+                          </a>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

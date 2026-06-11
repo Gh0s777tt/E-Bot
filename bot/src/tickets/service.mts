@@ -196,6 +196,14 @@ export async function closeTicket(
       closed_at: new Date().toISOString(),
     }).catch(() => {});
   }
+  // Transkrypt HTML do Supabase, by panel mógł go wyświetlić (/api/tickets/transcript). GRACEFUL:
+  // gdy kolumna 'transcript_html' nie istnieje (brak ALTER), update cicho pada → zero regresji;
+  // kanał logów, DM i status zamknięcia powyżej są nietknięte.
+  if (hasCloud()) {
+    await cloudUpdate('tickets', `channel_id=eq.${thread.id}`, {
+      transcript_html: transcript.toString('utf-8'),
+    }).catch(() => {});
+  }
   await thread.setLocked(true).catch(() => {});
   await thread.setArchived(true).catch(() => {});
 }

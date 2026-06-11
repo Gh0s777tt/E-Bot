@@ -136,6 +136,7 @@ export async function saveTicketsConfig(cfg: TicketsConfig): Promise<void> {
 
 export type TicketRow = {
   id: string;
+  channel_id: string | null;
   user_id: string;
   username: string | null;
   subject: string | null;
@@ -151,7 +152,9 @@ export async function getTickets(limit = 100): Promise<TicketRow[]> {
   try {
     const { data, error } = await supabase()
       .from('tickets')
-      .select('id,user_id,username,subject,status,claimed_by,created_at,closed_at,rating')
+      .select(
+        'id,channel_id,user_id,username,subject,status,claimed_by,created_at,closed_at,rating',
+      )
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);
