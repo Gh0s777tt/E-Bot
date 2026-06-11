@@ -75,6 +75,7 @@ import { log } from './lib/log.mts';
 import { captureError } from './lib/sentry.mts';
 import { startNotifier } from './live/notifier.mts';
 import { startModmail } from './modmail.mts';
+import { startOnboarding } from './onboarding.mts';
 import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
 import { startAntiRaid } from './security/antiraid.mts';
@@ -202,6 +203,7 @@ client.once(Events.ClientReady, (c) => {
   startLeveling(c); // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
   startTicketSync(c); // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
   startTicketSla(c); // Tor D — auto-close ticketów po bezczynności (SLA)
+  startOnboarding(c); // Onboarding — DM powitalny do właściciela przy dodaniu bota do serwera
   startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
   startWelcome(c); // Faza 6 — powitania + autorole
   startAutomod(c); // Faza 6 — automoderacja

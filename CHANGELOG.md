@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-269-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.199.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-270-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.200.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.200.0] — 👋 Onboarding: DM powitalny przy dodaniu bota
+
+- `[#270]` 👋 **Auto-onboarding — DM do właściciela po dodaniu bota do serwera** (z roadmapy sek.6: „Onboarding: auto-DM do admina + checklista startowa"). Okrągła wersja **0.200.0**! 🎉
+  - 🤖 **Bot** (nowy `onboarding.mts`): handler `Events.GuildCreate` wysyła właścicielowi serwera DM z powitaniem i **quick-startem** (`/help`, `/tutorial`, „włącz moduły w panelu") + opcjonalnym linkiem do panelu (`DASHBOARD_URL` z env — graceful, gdy brak po prostu wspomina panel web).
+  - 🔒 **Bez spamu**: `GuildCreate` odpala się też przy starcie dla serwerów już w cache — handler **filtruje po `joinedTimestamp`** (tylko dołączenia ≤60 s temu), więc właściciele istniejących serwerów NIE dostają DM przy każdym restarcie bota. DM owijany w `catch` (właściciel z zamkniętymi DM = cicho pomijany, bez spamu kanałów).
+  - Bot-only, event handler (bez `deploy-commands`). Wstecznie zgodne (nowe zachowanie tylko przy świeżym dołączeniu).
 
 ## [0.199.0] — 🎁 Giveaway: nagrody pieniężne i XP
 
