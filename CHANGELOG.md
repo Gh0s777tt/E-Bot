@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-287-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.217.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-288-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.218.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.218.0] — 🌍 i18n UI panelu — strona /birthdays
+
+- `[#288]` 🌍 **i18n UI panelu — kolejna fala: `/birthdays` (urodziny społeczności + AFK/Highlighty).**
+  - 🖥️ **Panel**: 14 nowych kluczy `ui.birthdays.*` × **14 języków** w `panelI18n.ts` (parzystość 14×14=196). `app/birthdays/page.tsx` (serwer, w tym sekcja „Pozostałe funkcje osobiste": AFK + Highlighty + Centrum sterowania, 3 linie przez `<br/>`) + `BirthdayForm.tsx` (klient) na `tp()`. Placeholder `{users}` i tokeny komend (`/birthday set`, `/afk`, `/highlight …`)/`_ALL.sql`/`Supabase` zachowane.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 7/~40 stron.
 
 ## [0.217.0] — 🌍 i18n UI panelu — strona /modmail
 

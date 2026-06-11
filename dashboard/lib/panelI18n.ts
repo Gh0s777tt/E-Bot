@@ -817,6 +817,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — prywatny kanał kontaktu z obsługą przez DM. Użytkownik pisze wiadomość prywatną do bota, a ta trafia jako wątek na kanale obsługi; odpowiedzi obsługi w wątku wracają do użytkownika w DM. Komenda !close w wątku kończy rozmowę.',
     'ui.modmail.statusOn': 'Modmail: WŁĄCZONY',
+    'ui.birthdays.intro':
+      'Urodziny społeczności — bot raz dziennie ogłasza solenizantów na wybranym kanale i może nadać im rolę na ten dzień. Użytkownicy ustawiają datę komendą /birthday set (lub /birthday clear).',
+    'ui.birthdays.statusOn': 'Urodziny: WŁĄCZONE',
+    'ui.birthdays.statusOff': 'Urodziny: WYŁĄCZONE',
+    'ui.birthdays.heading': 'Urodziny',
+    'ui.birthdays.otherTitle': 'Pozostałe funkcje osobiste',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [powód] ustawia status; powrót czyści go automatycznie, a wzmianka osoby AFK informuje rozmówcę.',
+    'ui.birthdays.highlightLine':
+      'Highlighty — /highlight add|remove|list: bot wysyła DM, gdy Twoje słowo-klucz padnie w czacie (z poszanowaniem dostępu do kanału).',
+    'ui.birthdays.bothLine': 'Oba moduły włączysz w Centrum sterowania (domyślnie wyłączone).',
+    'ui.birthdays.enabledLabel': 'Urodziny włączone',
+    'ui.birthdays.channelLabel': 'Kanał życzeń',
+    'ui.birthdays.messageLabel': 'Wiadomość (zmienna {users})',
+    'ui.birthdays.roleLabel': 'Rola na urodziny (opcjonalnie)',
+    'ui.birthdays.noRole': '— brak —',
+    'ui.birthdays.footNote':
+      'Użytkownicy ustawiają datę przez /birthday set. Bot raz dziennie ogłasza solenizantów i (opcjonalnie) nadaje im rolę na ten dzień. Wymaga _ALL.sql w Supabase.',
     'ui.modmail.statusOff': 'Modmail: WYŁĄCZONY',
     'ui.modmail.enabledLabel': 'Modmail włączony',
     'ui.modmail.channelLabel': 'Kanał obsługi (wątki modmaila)',
@@ -931,6 +949,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — a private support contact channel via DM. A user sends a private message to the bot, and it arrives as a thread in the support channel; the staff replies in the thread go back to the user in DM. The !close command in the thread ends the conversation.',
     'ui.modmail.statusOn': 'Modmail: ON',
+    'ui.birthdays.intro':
+      'Community birthdays — once a day the bot announces the birthday people in the chosen channel and can grant them a role for that day. Users set their date with the /birthday set command (or /birthday clear).',
+    'ui.birthdays.statusOn': 'Birthdays: ON',
+    'ui.birthdays.statusOff': 'Birthdays: OFF',
+    'ui.birthdays.heading': 'Birthdays',
+    'ui.birthdays.otherTitle': 'Other personal features',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [reason] sets a status; returning clears it automatically, and mentioning an AFK person notifies the sender.',
+    'ui.birthdays.highlightLine':
+      'Highlights — /highlight add|remove|list: the bot sends a DM when your keyword appears in chat (respecting channel access).',
+    'ui.birthdays.bothLine': 'Enable both modules in the Control center (off by default).',
+    'ui.birthdays.enabledLabel': 'Birthdays enabled',
+    'ui.birthdays.channelLabel': 'Wishes channel',
+    'ui.birthdays.messageLabel': 'Message ({users} variable)',
+    'ui.birthdays.roleLabel': 'Birthday role (optional)',
+    'ui.birthdays.noRole': '— none —',
+    'ui.birthdays.footNote':
+      'Users set their date with /birthday set. Once a day the bot announces the birthday people and (optionally) grants them a role for that day. Requires _ALL.sql in Supabase.',
     'ui.modmail.statusOff': 'Modmail: OFF',
     'ui.modmail.enabledLabel': 'Modmail enabled',
     'ui.modmail.channelLabel': 'Support channel (modmail threads)',
@@ -1045,6 +1081,25 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — ein privater Kontaktkanal zum Support per DM. Ein Benutzer sendet eine private Nachricht an den Bot, und diese landet als Thread im Support-Kanal; die Antworten des Teams im Thread gehen per DM an den Benutzer zurück. Der Befehl !close im Thread beendet das Gespräch.',
     'ui.modmail.statusOn': 'Modmail: EIN',
+    'ui.birthdays.intro':
+      'Community-Geburtstage — einmal täglich kündigt der Bot die Geburtstagskinder im gewählten Kanal an und kann ihnen für diesen Tag eine Rolle verleihen. Nutzer legen ihr Datum mit dem Befehl /birthday set fest (oder /birthday clear).',
+    'ui.birthdays.statusOn': 'Geburtstage: AN',
+    'ui.birthdays.statusOff': 'Geburtstage: AUS',
+    'ui.birthdays.heading': 'Geburtstage',
+    'ui.birthdays.otherTitle': 'Weitere persönliche Funktionen',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [Grund] setzt einen Status; bei der Rückkehr wird er automatisch gelöscht, und eine Erwähnung einer AFK-Person benachrichtigt den Absender.',
+    'ui.birthdays.highlightLine':
+      'Highlights — /highlight add|remove|list: Der Bot sendet eine DM, wenn dein Schlüsselwort im Chat auftaucht (unter Beachtung des Kanalzugriffs).',
+    'ui.birthdays.bothLine':
+      'Beide Module aktivierst du im Steuerungszentrum (standardmäßig deaktiviert).',
+    'ui.birthdays.enabledLabel': 'Geburtstage aktiviert',
+    'ui.birthdays.channelLabel': 'Glückwunsch-Kanal',
+    'ui.birthdays.messageLabel': 'Nachricht (Variable {users})',
+    'ui.birthdays.roleLabel': 'Geburtstagsrolle (optional)',
+    'ui.birthdays.noRole': '— keine —',
+    'ui.birthdays.footNote':
+      'Nutzer legen ihr Datum mit /birthday set fest. Einmal täglich kündigt der Bot die Geburtstagskinder an und verleiht ihnen (optional) für diesen Tag eine Rolle. Erfordert _ALL.sql in Supabase.',
     'ui.modmail.statusOff': 'Modmail: AUS',
     'ui.modmail.enabledLabel': 'Modmail aktiviert',
     'ui.modmail.channelLabel': 'Support-Kanal (Modmail-Threads)',
@@ -1159,6 +1214,25 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — un canal privado de contacto con el soporte por DM. Un usuario envía un mensaje privado al bot, y este llega como un hilo en el canal de soporte; las respuestas del equipo en el hilo vuelven al usuario por DM. El comando !close en el hilo finaliza la conversación.',
     'ui.modmail.statusOn': 'Modmail: ACTIVADO',
+    'ui.birthdays.intro':
+      'Cumpleaños de la comunidad — una vez al día el bot anuncia a los cumpleañeros en el canal elegido y puede otorgarles un rol para ese día. Los usuarios establecen su fecha con el comando /birthday set (o /birthday clear).',
+    'ui.birthdays.statusOn': 'Cumpleaños: ACTIVADOS',
+    'ui.birthdays.statusOff': 'Cumpleaños: DESACTIVADOS',
+    'ui.birthdays.heading': 'Cumpleaños',
+    'ui.birthdays.otherTitle': 'Otras funciones personales',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [motivo] establece un estado; al regresar se borra automáticamente, y mencionar a una persona AFK avisa al remitente.',
+    'ui.birthdays.highlightLine':
+      'Destacados — /highlight add|remove|list: el bot envía un DM cuando tu palabra clave aparece en el chat (respetando el acceso al canal).',
+    'ui.birthdays.bothLine':
+      'Activa ambos módulos en el Centro de control (desactivados por defecto).',
+    'ui.birthdays.enabledLabel': 'Cumpleaños activados',
+    'ui.birthdays.channelLabel': 'Canal de felicitaciones',
+    'ui.birthdays.messageLabel': 'Mensaje (variable {users})',
+    'ui.birthdays.roleLabel': 'Rol de cumpleaños (opcional)',
+    'ui.birthdays.noRole': '— ninguno —',
+    'ui.birthdays.footNote':
+      'Los usuarios establecen su fecha con /birthday set. Una vez al día el bot anuncia a los cumpleañeros y (opcionalmente) les otorga un rol para ese día. Requiere _ALL.sql en Supabase.',
     'ui.modmail.statusOff': 'Modmail: DESACTIVADO',
     'ui.modmail.enabledLabel': 'Modmail activado',
     'ui.modmail.channelLabel': 'Canal de soporte (hilos de modmail)',
@@ -1273,6 +1347,25 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — un canale privato di contatto con l’assistenza tramite DM. Un utente invia un messaggio privato al bot, e questo arriva come thread nel canale di assistenza; le risposte dello staff nel thread tornano all’utente in DM. Il comando !close nel thread termina la conversazione.',
     'ui.modmail.statusOn': 'Modmail: ATTIVO',
+    'ui.birthdays.intro':
+      'Compleanni della community — una volta al giorno il bot annuncia i festeggiati nel canale scelto e può assegnare loro un ruolo per quel giorno. Gli utenti impostano la propria data con il comando /birthday set (o /birthday clear).',
+    'ui.birthdays.statusOn': 'Compleanni: ATTIVI',
+    'ui.birthdays.statusOff': 'Compleanni: DISATTIVATI',
+    'ui.birthdays.heading': 'Compleanni',
+    'ui.birthdays.otherTitle': 'Altre funzioni personali',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [motivo] imposta uno stato; al ritorno viene cancellato automaticamente, e menzionare una persona AFK avvisa il mittente.',
+    'ui.birthdays.highlightLine':
+      'Highlight — /highlight add|remove|list: il bot invia un DM quando la tua parola chiave compare in chat (rispettando l’accesso al canale).',
+    'ui.birthdays.bothLine':
+      'Attiva entrambi i moduli nel Centro di controllo (disattivati per impostazione predefinita).',
+    'ui.birthdays.enabledLabel': 'Compleanni attivati',
+    'ui.birthdays.channelLabel': 'Canale degli auguri',
+    'ui.birthdays.messageLabel': 'Messaggio (variabile {users})',
+    'ui.birthdays.roleLabel': 'Ruolo di compleanno (opzionale)',
+    'ui.birthdays.noRole': '— nessuno —',
+    'ui.birthdays.footNote':
+      'Gli utenti impostano la propria data con /birthday set. Una volta al giorno il bot annuncia i festeggiati e (facoltativamente) assegna loro un ruolo per quel giorno. Richiede _ALL.sql in Supabase.',
     'ui.modmail.statusOff': 'Modmail: DISATTIVATO',
     'ui.modmail.enabledLabel': 'Modmail attivato',
     'ui.modmail.channelLabel': 'Canale di assistenza (thread di modmail)',
@@ -1387,6 +1480,25 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — un canal de contact privé avec le support via DM. Un utilisateur envoie un message privé au bot, et celui-ci arrive sous forme de fil de discussion dans le canal du support ; les réponses du support dans le fil reviennent à l’utilisateur en DM. La commande !close dans le fil met fin à la conversation.',
     'ui.modmail.statusOn': 'Modmail : ACTIVÉ',
+    'ui.birthdays.intro':
+      'Anniversaires de la communauté — une fois par jour, le bot annonce les personnes dont c’est l’anniversaire sur le salon choisi et peut leur accorder un rôle pour la journée. Les utilisateurs définissent leur date avec la commande /birthday set (ou /birthday clear).',
+    'ui.birthdays.statusOn': 'Anniversaires : ACTIVÉS',
+    'ui.birthdays.statusOff': 'Anniversaires : DÉSACTIVÉS',
+    'ui.birthdays.heading': 'Anniversaires',
+    'ui.birthdays.otherTitle': 'Autres fonctionnalités personnelles',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [raison] définit un statut ; le retour l’efface automatiquement, et mentionner une personne AFK en informe l’expéditeur.',
+    'ui.birthdays.highlightLine':
+      'Surveillance de mots-clés — /highlight add|remove|list : le bot envoie un DM lorsque ton mot-clé apparaît dans le chat (en respectant l’accès au salon).',
+    'ui.birthdays.bothLine':
+      'Active les deux modules dans le Centre de contrôle (désactivés par défaut).',
+    'ui.birthdays.enabledLabel': 'Anniversaires activés',
+    'ui.birthdays.channelLabel': 'Salon des vœux',
+    'ui.birthdays.messageLabel': 'Message (variable {users})',
+    'ui.birthdays.roleLabel': 'Rôle d’anniversaire (facultatif)',
+    'ui.birthdays.noRole': '— aucun —',
+    'ui.birthdays.footNote':
+      'Les utilisateurs définissent leur date avec /birthday set. Une fois par jour, le bot annonce les personnes dont c’est l’anniversaire et (en option) leur accorde un rôle pour la journée. Nécessite _ALL.sql dans Supabase.',
     'ui.modmail.statusOff': 'Modmail : DÉSACTIVÉ',
     'ui.modmail.enabledLabel': 'Modmail activé',
     'ui.modmail.channelLabel': 'Canal du support (fils modmail)',
@@ -1501,6 +1613,25 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — um canal privado de contacto com o suporte através de DM. Um utilizador envia uma mensagem privada ao bot, e esta chega como um tópico no canal de suporte; as respostas do suporte no tópico voltam ao utilizador em DM. O comando !close no tópico termina a conversa.',
     'ui.modmail.statusOn': 'Modmail: LIGADO',
+    'ui.birthdays.intro':
+      'Aniversários da comunidade — uma vez por dia o bot anuncia os aniversariantes no canal escolhido e pode atribuir-lhes um cargo nesse dia. Os utilizadores definem a sua data com o comando /birthday set (ou /birthday clear).',
+    'ui.birthdays.statusOn': 'Aniversários: ATIVADOS',
+    'ui.birthdays.statusOff': 'Aniversários: DESATIVADOS',
+    'ui.birthdays.heading': 'Aniversários',
+    'ui.birthdays.otherTitle': 'Outras funcionalidades pessoais',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [motivo] define um estado; ao regressares limpa-o automaticamente, e mencionar uma pessoa AFK avisa quem a mencionou.',
+    'ui.birthdays.highlightLine':
+      'Destaques — /highlight add|remove|list: o bot envia uma DM quando a tua palavra-chave aparece no chat (respeitando o acesso ao canal).',
+    'ui.birthdays.bothLine':
+      'Ativa ambos os módulos no Centro de controlo (desativados por predefinição).',
+    'ui.birthdays.enabledLabel': 'Aniversários ativados',
+    'ui.birthdays.channelLabel': 'Canal das felicitações',
+    'ui.birthdays.messageLabel': 'Mensagem (variável {users})',
+    'ui.birthdays.roleLabel': 'Cargo de aniversário (opcional)',
+    'ui.birthdays.noRole': '— nenhum —',
+    'ui.birthdays.footNote':
+      'Os utilizadores definem a sua data com /birthday set. Uma vez por dia o bot anuncia os aniversariantes e (opcionalmente) atribui-lhes um cargo nesse dia. Requer _ALL.sql no Supabase.',
     'ui.modmail.statusOff': 'Modmail: DESLIGADO',
     'ui.modmail.enabledLabel': 'Modmail ligado',
     'ui.modmail.channelLabel': 'Canal de suporte (tópicos do modmail)',
@@ -1613,6 +1744,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — 通过 DM 与客服私聊的渠道。用户向机器人发送私信，消息会作为帖子出现在客服频道；客服在帖子中的回复会通过 DM 返回给用户。在帖子中使用 !close 命令即可结束对话。',
     'ui.modmail.statusOn': 'Modmail：已开启',
+    'ui.birthdays.intro':
+      '社区生日——机器人每天一次在指定频道公布当天的寿星，并可为他们授予当日专属身份组。用户使用 /birthday set 命令设置日期（或用 /birthday clear 清除）。',
+    'ui.birthdays.statusOn': '生日：已开启',
+    'ui.birthdays.statusOff': '生日：已关闭',
+    'ui.birthdays.heading': '生日',
+    'ui.birthdays.otherTitle': '其他个人功能',
+    'ui.birthdays.afkLine':
+      'AFK——/afk [原因] 设置离开状态；返回时自动清除，提及处于 AFK 的成员会通知发送者。',
+    'ui.birthdays.highlightLine':
+      '关键词提醒——/highlight add|remove|list：当你的关键词出现在聊天中时，机器人会发送 DM（并尊重频道访问权限）。',
+    'ui.birthdays.bothLine': '这两个模块均可在控制中心开启（默认关闭）。',
+    'ui.birthdays.enabledLabel': '生日已启用',
+    'ui.birthdays.channelLabel': '祝福频道',
+    'ui.birthdays.messageLabel': '消息（变量 {users}）',
+    'ui.birthdays.roleLabel': '生日身份组（可选）',
+    'ui.birthdays.noRole': '— 无 —',
+    'ui.birthdays.footNote':
+      '用户通过 /birthday set 设置日期。机器人每天一次公布当天的寿星，并（可选）为其授予当日专属身份组。需要在 Supabase 中执行 _ALL.sql。',
     'ui.modmail.statusOff': 'Modmail：已关闭',
     'ui.modmail.enabledLabel': '已启用 Modmail',
     'ui.modmail.channelLabel': '客服频道（modmail 帖子）',
@@ -1727,6 +1876,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — DM을 통한 비공개 고객 지원 채널입니다. 사용자가 봇에게 개인 메시지를 보내면 지원 채널에 스레드로 도착하며, 스레드에서 작성한 지원팀의 답변은 DM으로 사용자에게 전달됩니다. 스레드에서 !close 명령을 사용하면 대화가 종료됩니다.',
     'ui.modmail.statusOn': 'Modmail: 켜짐',
+    'ui.birthdays.intro':
+      '커뮤니티 생일 — 봇이 하루에 한 번 지정된 채널에 그날의 생일자를 알리고, 해당 날짜 동안 역할을 부여할 수 있습니다. 사용자는 /birthday set 명령으로 날짜를 설정합니다(또는 /birthday clear).',
+    'ui.birthdays.statusOn': '생일: 켜짐',
+    'ui.birthdays.statusOff': '생일: 꺼짐',
+    'ui.birthdays.heading': '생일',
+    'ui.birthdays.otherTitle': '기타 개인 기능',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [사유]로 상태를 설정하며, 돌아오면 자동으로 해제되고 AFK 상태인 사람을 멘션하면 보낸 사람에게 알립니다.',
+    'ui.birthdays.highlightLine':
+      '하이라이트 — /highlight add|remove|list: 채팅에 내 키워드가 등장하면 봇이 DM을 보냅니다(채널 접근 권한 존중).',
+    'ui.birthdays.bothLine': '두 모듈 모두 컨트롤 센터에서 켤 수 있습니다(기본값은 꺼짐).',
+    'ui.birthdays.enabledLabel': '생일 활성화',
+    'ui.birthdays.channelLabel': '축하 채널',
+    'ui.birthdays.messageLabel': '메시지({users} 변수)',
+    'ui.birthdays.roleLabel': '생일 역할(선택)',
+    'ui.birthdays.noRole': '— 없음 —',
+    'ui.birthdays.footNote':
+      '사용자는 /birthday set으로 날짜를 설정합니다. 봇이 하루에 한 번 생일자를 알리고 (선택적으로) 해당 날짜 동안 역할을 부여합니다. Supabase에 _ALL.sql이 필요합니다.',
     'ui.modmail.statusOff': 'Modmail: 꺼짐',
     'ui.modmail.enabledLabel': 'Modmail 활성화됨',
     'ui.modmail.channelLabel': '지원 채널 (modmail 스레드)',
@@ -1841,6 +2008,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — приватный канал связи с поддержкой через DM. Пользователь пишет личное сообщение боту, и оно поступает в виде ветки на канале поддержки; ответы поддержки в ветке возвращаются пользователю в DM. Команда !close в ветке завершает разговор.',
     'ui.modmail.statusOn': 'Modmail: ВКЛЮЧЁН',
+    'ui.birthdays.intro':
+      'Дни рождения сообщества — раз в день бот объявляет именинников в выбранном канале и может выдать им роль на этот день. Пользователи задают свою дату командой /birthday set (или /birthday clear).',
+    'ui.birthdays.statusOn': 'Дни рождения: ВКЛЮЧЕНЫ',
+    'ui.birthdays.statusOff': 'Дни рождения: ВЫКЛЮЧЕНЫ',
+    'ui.birthdays.heading': 'Дни рождения',
+    'ui.birthdays.otherTitle': 'Другие персональные функции',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [причина] задаёт статус; возвращение очищает его автоматически, а упоминание AFK-пользователя уведомляет отправителя.',
+    'ui.birthdays.highlightLine':
+      'Ключевые слова — /highlight add|remove|list: бот отправляет DM, когда ваше ключевое слово появляется в чате (с учётом доступа к каналу).',
+    'ui.birthdays.bothLine': 'Оба модуля включаются в Центре управления (по умолчанию выключены).',
+    'ui.birthdays.enabledLabel': 'Дни рождения включены',
+    'ui.birthdays.channelLabel': 'Канал поздравлений',
+    'ui.birthdays.messageLabel': 'Сообщение (переменная {users})',
+    'ui.birthdays.roleLabel': 'Роль на день рождения (необязательно)',
+    'ui.birthdays.noRole': '— нет —',
+    'ui.birthdays.footNote':
+      'Пользователи задают свою дату командой /birthday set. Раз в день бот объявляет именинников и (по желанию) выдаёт им роль на этот день. Требуется _ALL.sql в Supabase.',
     'ui.modmail.statusOff': 'Modmail: ВЫКЛЮЧЕН',
     'ui.modmail.enabledLabel': 'Modmail включён',
     'ui.modmail.channelLabel': 'Канал поддержки (ветки modmail)',
@@ -1955,6 +2140,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — приватний канал зв’язку з підтримкою через DM. Користувач пише особисте повідомлення боту, і воно надходить у вигляді гілки на каналі підтримки; відповіді підтримки в гілці повертаються користувачу в DM. Команда !close у гілці завершує розмову.',
     'ui.modmail.statusOn': 'Modmail: УВІМКНЕНО',
+    'ui.birthdays.intro':
+      'Дні народження спільноти — раз на день бот оголошує іменинників у вибраному каналі та може надати їм роль на цей день. Користувачі задають свою дату командою /birthday set (або /birthday clear).',
+    'ui.birthdays.statusOn': 'Дні народження: УВІМКНЕНО',
+    'ui.birthdays.statusOff': 'Дні народження: ВИМКНЕНО',
+    'ui.birthdays.heading': 'Дні народження',
+    'ui.birthdays.otherTitle': 'Інші персональні функції',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [причина] задає статус; повернення очищає його автоматично, а згадка AFK-користувача сповіщає відправника.',
+    'ui.birthdays.highlightLine':
+      'Ключові слова — /highlight add|remove|list: бот надсилає DM, коли ваше ключове слово зʼявляється в чаті (з урахуванням доступу до каналу).',
+    'ui.birthdays.bothLine': 'Обидва модулі вмикаються в Центрі керування (типово вимкнено).',
+    'ui.birthdays.enabledLabel': 'Дні народження увімкнено',
+    'ui.birthdays.channelLabel': 'Канал привітань',
+    'ui.birthdays.messageLabel': 'Повідомлення (змінна {users})',
+    'ui.birthdays.roleLabel': 'Роль на день народження (необовʼязково)',
+    'ui.birthdays.noRole': '— немає —',
+    'ui.birthdays.footNote':
+      'Користувачі задають свою дату командою /birthday set. Раз на день бот оголошує іменинників і (за бажанням) надає їм роль на цей день. Потрібен _ALL.sql у Supabase.',
     'ui.modmail.statusOff': 'Modmail: ВИМКНЕНО',
     'ui.modmail.enabledLabel': 'Modmail увімкнено',
     'ui.modmail.channelLabel': 'Канал підтримки (гілки modmail)',
@@ -2069,6 +2272,25 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — DM を通じてサポートと連絡できる非公開チャンネルです。ユーザーがボットにダイレクトメッセージを送ると、サポートチャンネルにスレッドとして届き、スレッド内のサポートからの返信は DM でユーザーに戻ります。スレッド内で !close コマンドを使うと会話が終了します。',
     'ui.modmail.statusOn': 'Modmail：オン',
+    'ui.birthdays.intro':
+      'コミュニティの誕生日 — ボットが1日1回、指定したチャンネルでその日の誕生日の人を発表し、その日限定でロールを付与できます。ユーザーは /birthday set コマンドで日付を設定します（または /birthday clear）。',
+    'ui.birthdays.statusOn': '誕生日：オン',
+    'ui.birthdays.statusOff': '誕生日：オフ',
+    'ui.birthdays.heading': '誕生日',
+    'ui.birthdays.otherTitle': 'その他の個人向け機能',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [理由] でステータスを設定し、戻ると自動で解除され、AFK中の人をメンションすると送信者に通知します。',
+    'ui.birthdays.highlightLine':
+      'ハイライト — /highlight add|remove|list：チャットで自分のキーワードが出ると、ボットがDMを送ります（チャンネルのアクセス権を尊重）。',
+    'ui.birthdays.bothLine':
+      'どちらのモジュールもコントロールセンターで有効化できます（デフォルトはオフ）。',
+    'ui.birthdays.enabledLabel': '誕生日を有効化',
+    'ui.birthdays.channelLabel': 'お祝いチャンネル',
+    'ui.birthdays.messageLabel': 'メッセージ（変数 {users}）',
+    'ui.birthdays.roleLabel': '誕生日ロール（任意）',
+    'ui.birthdays.noRole': '— なし —',
+    'ui.birthdays.footNote':
+      'ユーザーは /birthday set で日付を設定します。ボットが1日1回、誕生日の人を発表し、（任意で）その日限定でロールを付与します。Supabase に _ALL.sql が必要です。',
     'ui.modmail.statusOff': 'Modmail：オフ',
     'ui.modmail.enabledLabel': 'Modmail 有効',
     'ui.modmail.channelLabel': 'サポートチャンネル（modmail スレッド）',
@@ -2183,6 +2405,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — قناة تواصل خاصة مع الدعم عبر DM. يرسل المستخدم رسالة خاصة إلى البوت، فتصل على شكل سلسلة محادثة في قناة الدعم؛ وردود الدعم في السلسلة تعود إلى المستخدم عبر DM. الأمر !close داخل السلسلة ينهي المحادثة.',
     'ui.modmail.statusOn': 'Modmail: مُفعَّل',
+    'ui.birthdays.intro':
+      'أعياد ميلاد المجتمع — مرة واحدة يوميًا يُعلن البوت عن أصحاب أعياد الميلاد في القناة المختارة ويمكنه منحهم رتبة لذلك اليوم. يحدّد المستخدمون تاريخهم بأمر /birthday set (أو /birthday clear).',
+    'ui.birthdays.statusOn': 'أعياد الميلاد: مُفعَّلة',
+    'ui.birthdays.statusOff': 'أعياد الميلاد: مُعطَّلة',
+    'ui.birthdays.heading': 'أعياد الميلاد',
+    'ui.birthdays.otherTitle': 'ميزات شخصية أخرى',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [السبب] يحدّد حالة؛ والعودة تمسحها تلقائيًا، وذكر شخص في وضع AFK يُعلِم المُرسِل.',
+    'ui.birthdays.highlightLine':
+      'الكلمات المميَّزة — /highlight add|remove|list: يرسل البوت رسالة DM عندما تظهر كلمتك المفتاحية في الدردشة (مع مراعاة صلاحية الوصول إلى القناة).',
+    'ui.birthdays.bothLine': 'يمكنك تفعيل الوحدتين من مركز التحكم (مُعطَّلتان افتراضيًا).',
+    'ui.birthdays.enabledLabel': 'أعياد الميلاد مُفعَّلة',
+    'ui.birthdays.channelLabel': 'قناة التهاني',
+    'ui.birthdays.messageLabel': 'الرسالة (المتغيّر {users})',
+    'ui.birthdays.roleLabel': 'رتبة عيد الميلاد (اختياري)',
+    'ui.birthdays.noRole': '— لا شيء —',
+    'ui.birthdays.footNote':
+      'يحدّد المستخدمون تاريخهم بأمر /birthday set. مرة واحدة يوميًا يُعلن البوت عن أصحاب أعياد الميلاد و(اختياريًا) يمنحهم رتبة لذلك اليوم. يتطلّب _ALL.sql في Supabase.',
     'ui.modmail.statusOff': 'Modmail: مُعطَّل',
     'ui.modmail.enabledLabel': 'تفعيل Modmail',
     'ui.modmail.channelLabel': 'قناة الدعم (سلاسل Modmail)',
@@ -2297,6 +2537,24 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.modmail.intro':
       'Modmail — saluran kontak pribadi dengan tim dukungan melalui DM. Pengguna mengirim pesan pribadi ke bot, dan pesan itu masuk sebagai utas di saluran dukungan; balasan tim dukungan di utas kembali ke pengguna melalui DM. Perintah !close di utas mengakhiri percakapan.',
     'ui.modmail.statusOn': 'Modmail: AKTIF',
+    'ui.birthdays.intro':
+      'Ulang tahun komunitas — sekali sehari bot mengumumkan orang yang berulang tahun di kanal yang dipilih dan dapat memberi mereka peran untuk hari itu. Pengguna mengatur tanggalnya dengan perintah /birthday set (atau /birthday clear).',
+    'ui.birthdays.statusOn': 'Ulang tahun: AKTIF',
+    'ui.birthdays.statusOff': 'Ulang tahun: NONAKTIF',
+    'ui.birthdays.heading': 'Ulang tahun',
+    'ui.birthdays.otherTitle': 'Fitur pribadi lainnya',
+    'ui.birthdays.afkLine':
+      'AFK — /afk [alasan] menetapkan status; kembali akan menghapusnya secara otomatis, dan menyebut orang yang AFK akan memberi tahu pengirimnya.',
+    'ui.birthdays.highlightLine':
+      'Highlight — /highlight add|remove|list: bot mengirim DM saat kata kuncimu muncul di obrolan (dengan menghormati akses kanal).',
+    'ui.birthdays.bothLine': 'Aktifkan kedua modul di Pusat kendali (nonaktif secara bawaan).',
+    'ui.birthdays.enabledLabel': 'Ulang tahun aktif',
+    'ui.birthdays.channelLabel': 'Kanal ucapan',
+    'ui.birthdays.messageLabel': 'Pesan (variabel {users})',
+    'ui.birthdays.roleLabel': 'Peran ulang tahun (opsional)',
+    'ui.birthdays.noRole': '— tidak ada —',
+    'ui.birthdays.footNote':
+      'Pengguna mengatur tanggalnya dengan /birthday set. Sekali sehari bot mengumumkan orang yang berulang tahun dan (opsional) memberi mereka peran untuk hari itu. Memerlukan _ALL.sql di Supabase.',
     'ui.modmail.statusOff': 'Modmail: NONAKTIF',
     'ui.modmail.enabledLabel': 'Modmail aktif',
     'ui.modmail.channelLabel': 'Saluran dukungan (utas modmail)',
