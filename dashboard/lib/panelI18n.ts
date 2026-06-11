@@ -779,6 +779,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Nowy członek (oznaczenie)',
     'ui.welcome.varServer': 'Nazwa serwera',
     'ui.welcome.varMemberCount': 'Liczba członków',
+    'ui.modules.intro':
+      'Centrum sterowania — włącz lub wyłącz każdy moduł bota jednym kliknięciem. Szczegółową konfigurację znajdziesz pod „konfig" przy module.',
+    'ui.modules.active': 'Aktywne moduły:',
+    'ui.modules.config': 'konfig',
+    'ui.modules.saveNote':
+      'Zmiany zapisują się od razu (Supabase) i bot stosuje je na żywo (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Rankingi serwera na żywo z Supabase. Kliknij gracza, by zobaczyć jego publiczną kartę. Top‑3 dostają podium 🥇🥈🥉.',
+    'ui.lb.public': 'Publiczny ranking',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top ekonomia',
+    'ui.lb.topActive': 'Najaktywniejsi',
+    'ui.lb.msgUnit': 'wiad.',
+    'ui.lb.empty': 'Brak danych.',
   },
   en: {
     'ui.mode': 'Mode',
@@ -827,6 +841,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'New member (mention)',
     'ui.welcome.varServer': 'Server name',
     'ui.welcome.varMemberCount': 'Member count',
+    'ui.modules.intro':
+      'Control center — turn each bot module on or off with one click. Detailed configuration is under “config” next to each module.',
+    'ui.modules.active': 'Active modules:',
+    'ui.modules.config': 'config',
+    'ui.modules.saveNote':
+      'Changes save instantly (Supabase) and the bot applies them live (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Live server rankings from Supabase. Click a player to see their public card. The top 3 get a podium 🥇🥈🥉.',
+    'ui.lb.public': 'Public ranking',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top economy',
+    'ui.lb.topActive': 'Most active',
+    'ui.lb.msgUnit': 'msg',
+    'ui.lb.empty': 'No data.',
   },
   de: {
     'ui.mode': 'Modus',
@@ -875,6 +903,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Neues Mitglied (Erwähnung)',
     'ui.welcome.varServer': 'Servername',
     'ui.welcome.varMemberCount': 'Mitgliederzahl',
+    'ui.modules.intro':
+      'Steuerzentrale — schalte jedes Bot-Modul mit einem Klick ein oder aus. Die detaillierte Konfiguration findest du unter „Konfig“ neben jedem Modul.',
+    'ui.modules.active': 'Aktive Module:',
+    'ui.modules.config': 'Konfig',
+    'ui.modules.saveNote':
+      'Änderungen werden sofort gespeichert (Supabase) und der Bot wendet sie live an (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Live-Serverranglisten aus Supabase. Klicke auf einen Spieler, um seine öffentliche Karte zu sehen. Die Top 3 erhalten ein Podium 🥇🥈🥉.',
+    'ui.lb.public': 'Öffentliche Rangliste',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top-Wirtschaft',
+    'ui.lb.topActive': 'Aktivste',
+    'ui.lb.msgUnit': 'Nachr.',
+    'ui.lb.empty': 'Keine Daten.',
   },
   es: {
     'ui.mode': 'Modo',
@@ -923,6 +965,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Nuevo miembro (mención)',
     'ui.welcome.varServer': 'Nombre del servidor',
     'ui.welcome.varMemberCount': 'Número de miembros',
+    'ui.modules.intro':
+      'Centro de control — activa o desactiva cada módulo del bot con un clic. La configuración detallada está bajo «config» junto a cada módulo.',
+    'ui.modules.active': 'Módulos activos:',
+    'ui.modules.config': 'config',
+    'ui.modules.saveNote':
+      'Los cambios se guardan al instante (Supabase) y el bot los aplica en vivo (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Clasificaciones del servidor en vivo desde Supabase. Haz clic en un jugador para ver su tarjeta pública. Los 3 primeros reciben un podio 🥇🥈🥉.',
+    'ui.lb.public': 'Clasificación pública',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top economía',
+    'ui.lb.topActive': 'Más activos',
+    'ui.lb.msgUnit': 'mens.',
+    'ui.lb.empty': 'Sin datos.',
   },
   it: {
     'ui.mode': 'Modalità',
@@ -971,6 +1027,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Nuovo membro (menzione)',
     'ui.welcome.varServer': 'Nome del server',
     'ui.welcome.varMemberCount': 'Numero di membri',
+    'ui.modules.intro':
+      'Centro di controllo — attiva o disattiva ogni modulo del bot con un clic. La configurazione dettagliata è sotto «config» accanto a ogni modulo.',
+    'ui.modules.active': 'Moduli attivi:',
+    'ui.modules.config': 'config',
+    'ui.modules.saveNote':
+      'Le modifiche vengono salvate subito (Supabase) e il bot le applica in tempo reale (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Classifiche del server in tempo reale da Supabase. Clicca su un giocatore per vedere la sua scheda pubblica. I primi 3 ricevono un podio 🥇🥈🥉.',
+    'ui.lb.public': 'Classifica pubblica',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top economia',
+    'ui.lb.topActive': 'Più attivi',
+    'ui.lb.msgUnit': 'mess.',
+    'ui.lb.empty': 'Nessun dato.',
   },
   fr: {
     'ui.mode': 'Mode',
@@ -1019,6 +1089,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Nouveau membre (mention)',
     'ui.welcome.varServer': 'Nom du serveur',
     'ui.welcome.varMemberCount': 'Nombre de membres',
+    'ui.modules.intro':
+      'Centre de contrôle — activez ou désactivez chaque module du bot d’un seul clic. La configuration détaillée se trouve sous « config » à côté de chaque module.',
+    'ui.modules.active': 'Modules actifs :',
+    'ui.modules.config': 'config',
+    'ui.modules.saveNote':
+      'Les modifications sont enregistrées immédiatement (Supabase) et le bot les applique en direct (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Classements du serveur en direct depuis Supabase. Cliquez sur un joueur pour voir sa carte publique. Le top 3 obtient un podium 🥇🥈🥉.',
+    'ui.lb.public': 'Classement public',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top économie',
+    'ui.lb.topActive': 'Les plus actifs',
+    'ui.lb.msgUnit': 'msg',
+    'ui.lb.empty': 'Aucune donnée.',
   },
   pt: {
     'ui.mode': 'Modo',
@@ -1067,6 +1151,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Novo membro (menção)',
     'ui.welcome.varServer': 'Nome do servidor',
     'ui.welcome.varMemberCount': 'Número de membros',
+    'ui.modules.intro':
+      'Centro de controlo — liga ou desliga cada módulo do bot com um clique. A configuração detalhada está em «config» junto a cada módulo.',
+    'ui.modules.active': 'Módulos ativos:',
+    'ui.modules.config': 'config',
+    'ui.modules.saveNote':
+      'As alterações são guardadas de imediato (Supabase) e o bot aplica-as em direto (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Classificações do servidor em direto a partir do Supabase. Clica num jogador para veres o seu cartão público. O top 3 recebe um pódio 🥇🥈🥉.',
+    'ui.lb.public': 'Classificação pública',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top economia',
+    'ui.lb.topActive': 'Mais ativos',
+    'ui.lb.msgUnit': 'msg',
+    'ui.lb.empty': 'Sem dados.',
   },
   zh: {
     'ui.mode': '模式',
@@ -1115,6 +1213,18 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': '新成员（提及）',
     'ui.welcome.varServer': '服务器名称',
     'ui.welcome.varMemberCount': '成员数量',
+    'ui.modules.intro': '控制中心——一键开启或关闭每个机器人模块。详细配置请见各模块旁的「配置」。',
+    'ui.modules.active': '已启用模块：',
+    'ui.modules.config': '配置',
+    'ui.modules.saveNote': '更改即时保存（Supabase），机器人实时应用（settings-sync ~60 s）。',
+    'ui.lb.intro':
+      '来自 Supabase 的服务器实时排行榜。点击玩家可查看其公开卡片。前三名登上领奖台 🥇🥈🥉。',
+    'ui.lb.public': '公开排行榜',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': '经济榜',
+    'ui.lb.topActive': '最活跃',
+    'ui.lb.msgUnit': '条',
+    'ui.lb.empty': '暂无数据。',
   },
   ko: {
     'ui.mode': '모드',
@@ -1163,6 +1273,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': '신규 멤버（멘션）',
     'ui.welcome.varServer': '서버 이름',
     'ui.welcome.varMemberCount': '멤버 수',
+    'ui.modules.intro':
+      '컨트롤 센터 — 클릭 한 번으로 각 봇 모듈을 켜거나 끕니다. 자세한 설정은 각 모듈 옆의 「설정」에서 확인하세요.',
+    'ui.modules.active': '활성화된 모듈:',
+    'ui.modules.config': '설정',
+    'ui.modules.saveNote':
+      '변경 사항은 즉시 저장되며(Supabase) 봇이 실시간으로 적용합니다(settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Supabase 기반 서버 실시간 순위입니다. 플레이어를 클릭하면 공개 카드를 볼 수 있습니다. 상위 3명은 시상대에 오릅니다 🥇🥈🥉.',
+    'ui.lb.public': '공개 순위',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': '경제 순위',
+    'ui.lb.topActive': '가장 활발한',
+    'ui.lb.msgUnit': '개',
+    'ui.lb.empty': '데이터 없음.',
   },
   ru: {
     'ui.mode': 'Режим',
@@ -1211,6 +1335,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Новый участник (упоминание)',
     'ui.welcome.varServer': 'Название сервера',
     'ui.welcome.varMemberCount': 'Количество участников',
+    'ui.modules.intro':
+      'Центр управления — включайте или выключайте каждый модуль бота одним кликом. Подробную настройку найдёте под «конфиг» рядом с модулем.',
+    'ui.modules.active': 'Активные модули:',
+    'ui.modules.config': 'конфиг',
+    'ui.modules.saveNote':
+      'Изменения сохраняются сразу (Supabase), и бот применяет их вживую (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Живые рейтинги сервера из Supabase. Нажмите на игрока, чтобы увидеть его публичную карточку. Топ‑3 получают подиум 🥇🥈🥉.',
+    'ui.lb.public': 'Публичный рейтинг',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Топ экономики',
+    'ui.lb.topActive': 'Самые активные',
+    'ui.lb.msgUnit': 'сообщ.',
+    'ui.lb.empty': 'Нет данных.',
   },
   uk: {
     'ui.mode': 'Режим',
@@ -1259,6 +1397,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Новий учасник (згадка)',
     'ui.welcome.varServer': 'Назва сервера',
     'ui.welcome.varMemberCount': 'Кількість учасників',
+    'ui.modules.intro':
+      'Центр керування — вмикайте або вимикайте кожен модуль бота одним кліком. Детальне налаштування знайдете під «конфіг» біля модуля.',
+    'ui.modules.active': 'Активні модулі:',
+    'ui.modules.config': 'конфіг',
+    'ui.modules.saveNote':
+      'Зміни зберігаються одразу (Supabase), і бот застосовує їх наживо (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Живі рейтинги сервера з Supabase. Натисніть на гравця, щоб побачити його публічну картку. Топ‑3 отримують подіум 🥇🥈🥉.',
+    'ui.lb.public': 'Публічний рейтинг',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Топ економіки',
+    'ui.lb.topActive': 'Найактивніші',
+    'ui.lb.msgUnit': 'повідомл.',
+    'ui.lb.empty': 'Немає даних.',
   },
   ja: {
     'ui.mode': 'モード',
@@ -1307,6 +1459,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': '新規メンバー（メンション）',
     'ui.welcome.varServer': 'サーバー名',
     'ui.welcome.varMemberCount': 'メンバー数',
+    'ui.modules.intro':
+      'コントロールセンター — ワンクリックで各ボットモジュールをオン・オフできます。詳細な設定は各モジュール横の「設定」からご確認ください。',
+    'ui.modules.active': '有効なモジュール:',
+    'ui.modules.config': '設定',
+    'ui.modules.saveNote':
+      '変更は即座に保存され（Supabase）、ボットがリアルタイムで適用します（settings-sync ~60 s）。',
+    'ui.lb.intro':
+      'Supabase によるサーバーのリアルタイムランキングです。プレイヤーをクリックすると公開カードを表示できます。上位 3 名は表彰台に上がります 🥇🥈🥉。',
+    'ui.lb.public': '公開ランキング',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': '経済ランキング',
+    'ui.lb.topActive': '最も活発',
+    'ui.lb.msgUnit': '件',
+    'ui.lb.empty': 'データなし。',
   },
   ar: {
     'ui.mode': 'الوضع',
@@ -1355,6 +1521,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'عضو جديد (إشارة)',
     'ui.welcome.varServer': 'اسم الخادم',
     'ui.welcome.varMemberCount': 'عدد الأعضاء',
+    'ui.modules.intro':
+      'مركز التحكم — فعّل أو عطّل كل وحدة من وحدات البوت بنقرة واحدة. تجد الإعداد التفصيلي تحت «الإعداد» بجانب كل وحدة.',
+    'ui.modules.active': 'الوحدات النشطة:',
+    'ui.modules.config': 'الإعداد',
+    'ui.modules.saveNote':
+      'تُحفظ التغييرات فوراً (Supabase) ويطبّقها البوت مباشرةً (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'تصنيفات الخادم المباشرة من Supabase. انقر على لاعب لرؤية بطاقته العامة. يحصل أصحاب المراكز الثلاثة الأولى على منصة تتويج 🥇🥈🥉.',
+    'ui.lb.public': 'التصنيف العام',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'أعلى اقتصاد',
+    'ui.lb.topActive': 'الأكثر نشاطاً',
+    'ui.lb.msgUnit': 'رسالة',
+    'ui.lb.empty': 'لا توجد بيانات.',
   },
   id: {
     'ui.mode': 'Mode',
@@ -1403,6 +1583,20 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.varUser': 'Anggota baru (mention)',
     'ui.welcome.varServer': 'Nama server',
     'ui.welcome.varMemberCount': 'Jumlah anggota',
+    'ui.modules.intro':
+      'Pusat kendali — aktifkan atau nonaktifkan setiap modul bot dengan satu klik. Konfigurasi terperinci ada di bawah “konfig” di samping setiap modul.',
+    'ui.modules.active': 'Modul aktif:',
+    'ui.modules.config': 'konfig',
+    'ui.modules.saveNote':
+      'Perubahan tersimpan langsung (Supabase) dan bot menerapkannya secara langsung (settings-sync ~60 s).',
+    'ui.lb.intro':
+      'Peringkat server langsung dari Supabase. Klik seorang pemain untuk melihat kartu publiknya. Top 3 mendapat podium 🥇🥈🥉.',
+    'ui.lb.public': 'Peringkat publik',
+    'ui.lb.topXp': 'Top XP',
+    'ui.lb.topEco': 'Top ekonomi',
+    'ui.lb.topActive': 'Paling aktif',
+    'ui.lb.msgUnit': 'pesan',
+    'ui.lb.empty': 'Tidak ada data.',
   },
 };
 

@@ -4,6 +4,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import type { ModuleView } from '../lib/modules';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
   return (
@@ -27,6 +29,7 @@ export default function ControlCenter({
   modules: ModuleView[];
   initial: Record<string, boolean>;
 }) {
+  const { lang } = useLang();
   const [states, setStates] = useState<Record<string, boolean>>(initial);
 
   async function flip(key: string) {
@@ -50,7 +53,8 @@ export default function ControlCenter({
   return (
     <div className="space-y-6">
       <p className="text-xs uppercase tracking-wide text-muted">
-        Aktywne moduły: <span className="text-accent">{onCount}</span> / {modules.length}
+        {tp(lang, 'ui.modules.active')} <span className="text-accent">{onCount}</span> /{' '}
+        {modules.length}
       </p>
       {groups.map((g) => (
         <section key={g} className="panel-glow rounded-2xl border border-line bg-card p-5">
@@ -69,7 +73,7 @@ export default function ControlCenter({
                     </span>
                     {m.href && (
                       <Link href={m.href} className="text-xs text-accent hover:underline">
-                        konfig
+                        {tp(lang, 'ui.modules.config')}
                       </Link>
                     )}
                   </span>
@@ -79,9 +83,7 @@ export default function ControlCenter({
           </div>
         </section>
       ))}
-      <p className="text-xs text-muted">
-        Zmiany zapisują się od razu (Supabase) i bot stosuje je na żywo (settings-sync ~60 s).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.modules.saveNote')}</p>
     </div>
   );
 }

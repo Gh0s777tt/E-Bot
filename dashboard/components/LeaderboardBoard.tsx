@@ -9,11 +9,13 @@ export default function LeaderboardBoard({
   icon,
   rows,
   unit,
+  emptyText = 'Brak danych.',
 }: {
   title: string;
   icon?: string;
   rows: LbRow[];
   unit?: string;
+  emptyText?: string;
 }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
@@ -29,7 +31,7 @@ export default function LeaderboardBoard({
         {title}
       </h2>
       {rows.length === 0 ? (
-        <p className="relative text-sm text-muted">Brak danych.</p>
+        <p className="relative text-sm text-muted">{emptyText}</p>
       ) : (
         <ol className="relative space-y-1.5">
           {rows.map((r, i) => {

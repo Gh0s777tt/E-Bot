@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-283-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.213.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-284-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.214.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.214.0] — 🌍 i18n UI panelu — strony /modules + /leaderboard
+
+- `[#284]` 🌍 **i18n UI panelu — kolejna fala: `/modules` (Centrum sterowania) + `/leaderboard`.**
+  - 🖥️ **Panel**: 11 nowych kluczy (`ui.modules.*` + `ui.lb.*`) × **14 języków** w `panelI18n.ts` (parzystość 14×11=154). `app/modules/page.tsx` + `ControlCenter.tsx` (master włącz/wyłącz) oraz `app/leaderboard/page.tsx` + `LeaderboardBoard.tsx` na `tp()`. `LeaderboardBoard` dostał opcjonalny `emptyText` (domyślnie PL) — **publiczny `/p/leaderboard` niezmieniony**. Nazwy modułów/grup (z `lib/modules.ts`) i liczby (`toLocaleString`) zostają jak były (dane). `Supabase`/`XP`/`settings-sync`/emoji 🥇🥈🥉 nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 3/~40 stron; zostaje ~37.
 
 ## [0.213.0] — 🌍 i18n UI panelu — fundament server-side + strona /welcome
 
