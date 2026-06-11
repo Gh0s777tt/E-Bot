@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-275-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.205.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-276-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.206.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.206.0] — 🌍 i18n treści: „Jak to działa?" — chunk 3 (Wsparcie)
+
+- `[#276]` 🌍 **„Jak to działa?" (`HowItWorks`) — chunk 3 treści: grupa Wsparcie.** Kolejna porcja przyrostowej, trzeciej fali i18n treści.
+  - 🖥️ **Panel**: do `HOW_CONTENT_I18N` (`lib/howItWorksI18n.ts`) doszły strony `/tickets`, `/modmail`, `/applications`, `/ai` w **14 językach** (pl bazowo + 13 tłumaczeń). Uprawnienia (`Manage Channels`/`Manage Roles`/`Manage Threads`) w **oficjalnych, zlokalizowanych nazwach uprawnień Discorda**; tokeny slash (`/ticketpanel`, `/ai`, `/ask`, `/tldr`, `/imagine`), `Discord` i `Google Forms` nietłumaczone.
+  - 🧱 Wzorzec przyrostowy bez zmian: strony jeszcze nieprzetłumaczone wciąż spadają na PL (`HOW_IT_WORKS`). Po tym chunku zostają **24 strony** treści do przetłumaczenia.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0. Wstecznie zgodne (pl niezmienione).
 
 ## [0.205.0] — 🌍 i18n treści: „Jak to działa?" — chunk 2 (Bezpieczeństwo)
 

@@ -1,7 +1,8 @@
 // i18n „Jak to działa?" — PRZYROSTOWO. Etykiety sekcji (na każdej stronie) w 14 językach + tłumaczenia
 // treści stron dodawane chunkami. Brak tłumaczenia strony/języka → fallback do PL (HOW_IT_WORKS).
 // Chunk 1: etykiety + strony /setup, /modules, /diagnostics. Chunk 2: /security, /moderation,
-// /logging, /audit (grupa „Bezpieczeństwo"). Kolejne chunki dokładają strony.
+// /logging, /audit (grupa „Bezpieczeństwo"). Chunk 3: /tickets, /modmail, /applications, /ai
+// (grupa „Wsparcie"). Kolejne chunki dokładają strony.
 import type { HowEntry } from './howItWorks';
 import type { PanelLocale } from './panelI18n';
 
@@ -132,6 +133,43 @@ export const HOW_LABELS: Record<PanelLocale, HowLabels> = {
 // Tłumaczenia treści stron — przyrostowo. Pominięte strony/języki → fallback do PL (HOW_IT_WORKS).
 export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEntry>>> = {
   en: {
+    '/tickets': {
+      does: 'Ticket system: a user opens a private ticket channel (with categories, a form, a rating and a transcript), and the staff reply.',
+      why: 'Order in support: instead of DMs and chat chaos, every case gets its own channel and history.',
+      needs: ['Tickets module enabled', 'A published ticket panel (/ticketpanel)'],
+      perms: [
+        { perm: 'Manage Channels', why: 'to create and close ticket channels' },
+        {
+          perm: 'Manage Roles / Permissions',
+          why: 'to give ticket access only to the reporter and staff',
+        },
+      ],
+      tips: [
+        'Add questions to the form — you collect the info you need before the ticket is created.',
+        'The transcript goes to the log channel and to the reporter’s DM after closing.',
+      ],
+    },
+    '/modmail': {
+      does: 'A user DMs the bot, and you reply in a staff thread on the server (anonymous to everyone else). It also handles ban appeals.',
+      why: 'A contact channel for people who don’t want to write publicly — or who are banned and have no other way.',
+      perms: [{ perm: 'Manage Threads', why: 'to create staff threads for each conversation' }],
+    },
+    '/applications': {
+      does: 'Recruitment forms (e.g. for staff) with a decision panel — the applicant fills it in, you accept or reject with one click.',
+      why: 'Professional recruitment without Google Forms — all on the server, with an automatic role grant on acceptance.',
+      perms: [{ perm: 'Manage Roles', why: 'to grant a role after accepting an application' }],
+    },
+    '/ai': {
+      does: 'Configures the AI assistant (model, daily limits, persona/character) for the /ai, /ask, /tldr, /imagine commands and summaries.',
+      why: 'You personalize how the bot replies and how much it can do — so it fits the server’s vibe and doesn’t run up costs without a limit.',
+      needs: [
+        'An AI provider API key entered in Integrations (otherwise the AI commands are inactive)',
+      ],
+      tips: [
+        'The persona changes the tone of replies (e.g. “helpful mentor” vs “snarky bot”).',
+        'Set a daily limit to keep costs under control.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + verification: protects the server from mass deletion of channels/roles, malicious bots and raids; newcomers must pass verification.',
       why: 'A single hacked admin can wipe a server in a minute. Anti-Nuke reverts such actions and strips the offender’s permissions before they do damage.',
@@ -200,6 +238,50 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   de: {
+    '/tickets': {
+      does: 'Ticket-System: Ein Nutzer öffnet einen privaten Ticket-Kanal (mit Kategorien, einem Formular, einer Bewertung und einem Transkript), und das Team antwortet.',
+      why: 'Ordnung im Support: statt DMs und Chaos im Chat bekommt jeder Fall einen eigenen Kanal und einen eigenen Verlauf.',
+      needs: ['Ticket-Modul aktiviert', 'Veröffentlichtes Ticket-Panel (/ticketpanel)'],
+      perms: [
+        { perm: 'Kanäle verwalten', why: 'um Ticket-Kanäle zu erstellen und zu schließen' },
+        {
+          perm: 'Rollen verwalten / Berechtigungen',
+          why: 'um den Ticket-Zugriff nur dem Melder und dem Team zu geben',
+        },
+      ],
+      tips: [
+        'Füge Fragen zum Formular hinzu — so sammelst du die nötigen Infos, bevor das Ticket entsteht.',
+        'Das Transkript geht nach dem Schließen an den Log-Kanal und in die DM des Melders.',
+      ],
+    },
+    '/modmail': {
+      does: 'Ein Nutzer schreibt dem Bot eine DM, und ihr antwortet in einem Team-Thread auf dem Server (anonym für alle anderen). Es bearbeitet auch Bann-Einsprüche.',
+      why: 'Ein Kontaktkanal für Personen, die nicht öffentlich schreiben möchten — oder die gebannt sind und keinen anderen Weg haben.',
+      perms: [
+        { perm: 'Threads verwalten', why: 'um für jedes Gespräch einen Team-Thread zu erstellen' },
+      ],
+    },
+    '/applications': {
+      does: 'Bewerbungsformulare (z. B. fürs Team) mit einem Entscheidungs-Panel — der Bewerber füllt es aus, ihr nehmt mit einem Klick an oder lehnt ab.',
+      why: 'Professionelle Rekrutierung ohne Google Forms — alles auf dem Server, mit automatischer Rollenvergabe nach der Annahme.',
+      perms: [
+        {
+          perm: 'Rollen verwalten',
+          why: 'um nach der Annahme einer Bewerbung eine Rolle zu vergeben',
+        },
+      ],
+    },
+    '/ai': {
+      does: 'Konfiguration des KI-Assistenten (Modell, Tageslimits, Persona/Charakter) für die Befehle /ai, /ask, /tldr, /imagine und für Zusammenfassungen.',
+      why: 'Du personalisierst, wie der Bot antwortet und wie viel er darf — damit er zur Stimmung des Servers passt und keine unbegrenzten Kosten verursacht.',
+      needs: [
+        'Ein API-Schlüssel des KI-Anbieters, eingetragen in den Integrationen (sonst sind die KI-Befehle inaktiv)',
+      ],
+      tips: [
+        'Die Persona ändert den Ton der Antworten (z. B. „hilfsbereiter Mentor“ vs. „bissiger Bot“).',
+        'Lege ein Tageslimit fest, um die Kosten unter Kontrolle zu halten.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + Verifizierung: schützt den Server vor dem massenhaften Löschen von Kanälen/Rollen, vor schädlichen Bots und Raids; Neulinge müssen die Verifizierung durchlaufen.',
       why: 'Ein einziger gehackter Admin kann einen Server in einer Minute auslöschen. Anti-Nuke macht solche Aktionen rückgängig und entzieht dem Verursacher die Berechtigungen, bevor er Schaden anrichtet.',
@@ -280,6 +362,45 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   es: {
+    '/tickets': {
+      does: 'Sistema de tickets: un usuario abre un canal de ticket privado (con categorías, un formulario, una valoración y una transcripción), y el equipo responde.',
+      why: 'Orden en el soporte: en lugar de DMs y caos en el chat, cada caso tiene su propio canal y su propio historial.',
+      needs: ['Módulo de tickets activado', 'Un panel de tickets publicado (/ticketpanel)'],
+      perms: [
+        { perm: 'Gestionar canales', why: 'para crear y cerrar los canales de ticket' },
+        {
+          perm: 'Gestionar roles / permisos',
+          why: 'para dar acceso al ticket solo a quien lo abre y al equipo',
+        },
+      ],
+      tips: [
+        'Añade preguntas al formulario — así recoges la información necesaria antes de que se cree el ticket.',
+        'La transcripción va al canal de registros y al DM de quien abrió el ticket tras cerrarlo.',
+      ],
+    },
+    '/modmail': {
+      does: 'Un usuario escribe un DM al bot, y vosotros respondéis en un hilo del equipo en el servidor (anónimo para los demás). También gestiona las apelaciones de baneos.',
+      why: 'Un canal de contacto para quienes no quieren escribir públicamente — o que están baneados y no tienen otra forma.',
+      perms: [
+        { perm: 'Gestionar hilos', why: 'para crear hilos del equipo para cada conversación' },
+      ],
+    },
+    '/applications': {
+      does: 'Formularios de reclutamiento (p. ej. para el equipo) con un panel de decisión — el candidato lo rellena y vosotros aceptáis o rechazáis con un clic.',
+      why: 'Reclutamiento profesional sin Google Forms — todo en el servidor, con asignación automática de rol al aceptar.',
+      perms: [{ perm: 'Gestionar roles', why: 'para asignar un rol tras aceptar una solicitud' }],
+    },
+    '/ai': {
+      does: 'Configuración del asistente de IA (modelo, límites diarios, persona/carácter) para los comandos /ai, /ask, /tldr, /imagine y los resúmenes.',
+      why: 'Personalizas cómo responde el bot y cuánto puede hacer — para que encaje con el ambiente del servidor y no genere costes sin límite.',
+      needs: [
+        'Una clave de API del proveedor de IA introducida en las Integraciones (de lo contrario, los comandos de IA están inactivos)',
+      ],
+      tips: [
+        'La persona cambia el tono de las respuestas (p. ej. «mentor servicial» vs. «bot mordaz»).',
+        'Establece un límite diario para mantener los costes bajo control.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + verificación: protege el servidor del borrado masivo de canales/roles, de bots maliciosos y de raids; los recién llegados deben pasar la verificación.',
       why: 'Un solo administrador hackeado puede arrasar un servidor en un minuto. Anti-Nuke revierte esas acciones y retira los permisos al infractor antes de que cause daños.',
@@ -361,6 +482,50 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   it: {
+    '/tickets': {
+      does: 'Sistema di ticket: un utente apre un canale-ticket privato (con categorie, un modulo, una valutazione e una trascrizione), e lo staff risponde.',
+      why: 'Ordine nel supporto: invece di DM e caos in chat, ogni richiesta ha un proprio canale e una propria cronologia.',
+      needs: ['Modulo ticket attivato', 'Un pannello ticket pubblicato (/ticketpanel)'],
+      perms: [
+        { perm: 'Gestire i canali', why: 'per creare e chiudere i canali-ticket' },
+        {
+          perm: 'Gestire i ruoli / permessi',
+          why: 'per dare accesso al ticket solo a chi lo apre e allo staff',
+        },
+      ],
+      tips: [
+        'Aggiungi domande al modulo — così raccogli le informazioni necessarie prima che il ticket venga creato.',
+        'La trascrizione va al canale dei log e nel DM di chi ha aperto il ticket dopo la chiusura.',
+      ],
+    },
+    '/modmail': {
+      does: 'Un utente scrive un DM al bot, e voi rispondete in un thread dello staff sul server (anonimo per tutti gli altri). Gestisce anche i ricorsi contro i ban.',
+      why: 'Un canale di contatto per chi non vuole scrivere pubblicamente — o per chi è bannato e non ha altro modo.',
+      perms: [
+        { perm: 'Gestire i thread', why: 'per creare thread dello staff per ogni conversazione' },
+      ],
+    },
+    '/applications': {
+      does: 'Moduli di reclutamento (ad es. per lo staff) con un pannello di decisione — il candidato lo compila e voi accettate o rifiutate con un clic.',
+      why: 'Reclutamento professionale senza Google Forms — tutto sul server, con assegnazione automatica del ruolo all’accettazione.',
+      perms: [
+        {
+          perm: 'Gestire i ruoli',
+          why: 'per assegnare un ruolo dopo aver accettato una candidatura',
+        },
+      ],
+    },
+    '/ai': {
+      does: 'Configurazione dell’assistente AI (modello, limiti giornalieri, persona/carattere) per i comandi /ai, /ask, /tldr, /imagine e per i riepiloghi.',
+      why: 'Personalizzi come il bot risponde e quanto può fare — così si adatta all’atmosfera del server e non genera costi senza limite.',
+      needs: [
+        'Una chiave API del fornitore AI inserita nelle Integrazioni (altrimenti i comandi AI sono inattivi)',
+      ],
+      tips: [
+        'La persona cambia il tono delle risposte (ad es. «mentore disponibile» vs. «bot pungente»).',
+        'Imposta un limite giornaliero per tenere i costi sotto controllo.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + verifica: protegge il server dall’eliminazione di massa di canali/ruoli, da bot dannosi e dai raid; i nuovi arrivati devono superare la verifica.',
       why: 'Un solo admin compromesso può cancellare un server in un minuto. Anti-Nuke annulla queste azioni e revoca i permessi al responsabile prima che faccia danni.',
@@ -438,6 +603,53 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   fr: {
+    '/tickets': {
+      does: 'Système de tickets : un utilisateur ouvre un salon-ticket privé (avec catégories, formulaire, évaluation et transcription), et le staff répond.',
+      why: 'De l’ordre dans le support : au lieu de MP et de chaos dans le chat, chaque demande a son propre salon et son historique.',
+      needs: ['Module de tickets activé', 'Un panneau de tickets publié (/ticketpanel)'],
+      perms: [
+        { perm: 'Gérer les salons', why: 'pour créer et fermer les salons-tickets' },
+        {
+          perm: 'Gérer les rôles / permissions',
+          why: 'pour donner l’accès au ticket uniquement à l’auteur de la demande et au staff',
+        },
+      ],
+      tips: [
+        'Ajoute des questions au formulaire — tu récoltes les infos dont tu as besoin avant la création du ticket.',
+        'La transcription est envoyée au salon de logs et en MP à l’auteur de la demande après la fermeture.',
+      ],
+    },
+    '/modmail': {
+      does: 'Un utilisateur envoie un MP au bot, et vous répondez dans un fil de discussion du staff sur le serveur (anonyme pour tous les autres). Il gère aussi les appels de bannissement.',
+      why: 'Un canal de contact pour ceux qui ne veulent pas écrire publiquement — ou qui sont bannis et n’ont aucun autre moyen.',
+      perms: [
+        {
+          perm: 'Gérer les fils de discussion',
+          why: 'pour créer des fils de discussion du staff pour chaque conversation',
+        },
+      ],
+    },
+    '/applications': {
+      does: 'Formulaires de recrutement (par ex. pour le staff) avec un panneau de décision — le candidat le remplit, vous acceptez ou refusez en un clic.',
+      why: 'Un recrutement professionnel sans Google Forms — tout sur le serveur, avec l’attribution automatique d’un rôle après acceptation.',
+      perms: [
+        {
+          perm: 'Gérer les rôles',
+          why: 'pour attribuer un rôle après l’acceptation d’une candidature',
+        },
+      ],
+    },
+    '/ai': {
+      does: 'Configure l’assistant IA (modèle, limites quotidiennes, persona/caractère) pour les commandes /ai, /ask, /tldr, /imagine et les résumés.',
+      why: 'Tu personnalises la façon dont le bot répond et ce qu’il peut faire — pour qu’il colle à l’ambiance du serveur et ne génère pas de coûts sans limite.',
+      needs: [
+        'Une clé API d’un fournisseur d’IA saisie dans les Intégrations (sinon les commandes IA sont inactives)',
+      ],
+      tips: [
+        'La persona change le ton des réponses (par ex. « mentor serviable » vs « bot sarcastique »).',
+        'Définis une limite quotidienne pour garder les coûts sous contrôle.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + vérification : protège le serveur contre la suppression massive de salons/rôles, les bots malveillants et les raids ; les nouveaux doivent passer la vérification.',
       why: 'Un seul admin piraté peut effacer un serveur en une minute. Anti-Nuke annule ces actions et retire les permissions du fautif avant qu’il ne fasse des dégâts.',
@@ -521,6 +733,43 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   pt: {
+    '/tickets': {
+      does: 'Sistema de tickets: um utilizador abre um canal-ticket privado (com categorias, formulário, avaliação e transcrição), e o staff responde.',
+      why: 'Ordem no suporte: em vez de DMs e caos no chat, cada caso tem o seu próprio canal e histórico.',
+      needs: ['Módulo de tickets ativado', 'Um painel de tickets publicado (/ticketpanel)'],
+      perms: [
+        { perm: 'Gerir canais', why: 'para criar e fechar canais-ticket' },
+        {
+          perm: 'Gerir cargos / permissões',
+          why: 'para dar acesso ao ticket apenas a quem o abriu e ao staff',
+        },
+      ],
+      tips: [
+        'Adiciona perguntas ao formulário — recolhes a informação de que precisas antes de o ticket ser criado.',
+        'A transcrição vai para o canal de registos e para a DM de quem abriu o ticket após o fecho.',
+      ],
+    },
+    '/modmail': {
+      does: 'Um utilizador envia uma DM ao bot, e vocês respondem num tópico do staff no servidor (anónimo para todos os outros). Também trata de apelações de banimento.',
+      why: 'Um canal de contacto para quem não quer escrever publicamente — ou para quem está banido e não tem outra forma.',
+      perms: [{ perm: 'Gerir tópicos', why: 'para criar tópicos do staff para cada conversa' }],
+    },
+    '/applications': {
+      does: 'Formulários de recrutamento (por ex. para o staff) com um painel de decisão — o candidato preenche-o, vocês aceitam ou rejeitam com um clique.',
+      why: 'Recrutamento profissional sem Google Forms — tudo no servidor, com a atribuição automática de um cargo após a aceitação.',
+      perms: [{ perm: 'Gerir cargos', why: 'para atribuir um cargo após aceitar uma candidatura' }],
+    },
+    '/ai': {
+      does: 'Configura o assistente de IA (modelo, limites diários, persona/carácter) para os comandos /ai, /ask, /tldr, /imagine e os resumos.',
+      why: 'Personalizas como o bot responde e quanto pode fazer — para que combine com o ambiente do servidor e não gere custos sem limite.',
+      needs: [
+        'Uma chave de API de um fornecedor de IA introduzida nas Integrações (caso contrário os comandos de IA ficam inativos)',
+      ],
+      tips: [
+        'A persona muda o tom das respostas (por ex. “mentor prestável” vs “bot sarcástico”).',
+        'Define um limite diário para manter os custos sob controlo.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + verificação: protege o servidor contra a eliminação em massa de canais/cargos, bots maliciosos e ataques; os novatos têm de passar a verificação.',
       why: 'Um único admin comprometido pode apagar um servidor num minuto. O Anti-Nuke reverte essas ações e retira as permissões ao infrator antes que ele cause danos.',
@@ -596,6 +845,38 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   zh: {
+    '/tickets': {
+      does: '工单系统：用户开启一个私密的工单频道（含分类、表单、评分与记录存档），由客服人员回复。',
+      why: '让支持井然有序：不再依赖私信和混乱的聊天，每个问题都有独立的频道与历史记录。',
+      needs: ['已启用工单模块', '已发布工单面板（/ticketpanel）'],
+      perms: [
+        { perm: '管理频道', why: '用于创建和关闭工单频道' },
+        { perm: '管理身份组 / 权限', why: '让工单仅对发起人和客服可见' },
+      ],
+      tips: [
+        '在表单中添加问题——在工单创建前就收集到所需信息。',
+        '关闭后，记录存档会发送到日志频道并私信发起人。',
+      ],
+    },
+    '/modmail': {
+      does: '用户给机器人发私信，你们在服务器的客服子区中回复（对其他人匿名）。也可处理封禁申诉。',
+      why: '为不愿公开发言的人提供联系渠道——或为被封禁、别无他法的人提供出口。',
+      perms: [{ perm: '管理子区', why: '用于为每次对话创建客服子区' }],
+    },
+    '/applications': {
+      does: '招募表单（例如招收团队成员）配带决策面板——申请人填写，你们一键通过或拒绝。',
+      why: '无需 Google Forms 的专业招募——一切都在服务器内完成，通过后自动授予身份组。',
+      perms: [{ perm: '管理身份组', why: '用于在通过申请后授予身份组' }],
+    },
+    '/ai': {
+      does: '配置 AI 助手（模型、每日额度、人设/性格），适用于 /ai、/ask、/tldr、/imagine 命令及摘要功能。',
+      why: '自定义机器人的回复方式和能力上限——既贴合服务器的氛围，又不会无限制地产生费用。',
+      needs: ['已在集成中填入 AI 服务商的 API 密钥（否则 AI 命令将无法使用）'],
+      tips: [
+        '人设会改变回复的语气（例如「乐于助人的导师」与「毒舌机器人」）。',
+        '设置每日额度以控制成本。',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + 验证：保护服务器免遭频道/身份组被批量删除、恶意机器人和突袭攻击；新成员必须通过验证。',
       why: '一个被盗号的管理员一分钟就能毁掉整个服务器。Anti-Nuke 会撤销这类操作，并在作恶者造成损害之前剥夺其权限。',
@@ -656,6 +937,38 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ko: {
+    '/tickets': {
+      does: '티켓 시스템: 사용자가 비공개 티켓 채널(카테고리, 양식, 평가, 기록 포함)을 열면 운영진이 응답합니다.',
+      why: '지원 업무 정리: DM과 혼란스러운 채팅 대신, 모든 문의가 각자의 채널과 기록을 갖습니다.',
+      needs: ['티켓 모듈 활성화', '게시된 티켓 패널(/ticketpanel)'],
+      perms: [
+        { perm: '채널 관리', why: '티켓 채널을 생성하고 닫기 위해' },
+        { perm: '역할 / 권한 관리', why: '티켓 접근을 신고자와 운영진에게만 허용하기 위해' },
+      ],
+      tips: [
+        '양식에 질문을 추가하세요 — 티켓이 생성되기 전에 필요한 정보를 수집합니다.',
+        '닫은 후 기록은 로그 채널과 신고자의 DM으로 전송됩니다.',
+      ],
+    },
+    '/modmail': {
+      does: '사용자가 봇에게 DM을 보내면, 여러분은 서버의 운영진 스레드에서 응답합니다(다른 사람에게는 익명). 차단 이의 제기도 처리합니다.',
+      why: '공개적으로 글을 쓰고 싶지 않은 사람 — 또는 차단되어 달리 방법이 없는 사람을 위한 연락 창구입니다.',
+      perms: [{ perm: '스레드 관리', why: '대화마다 운영진 스레드를 생성하기 위해' }],
+    },
+    '/applications': {
+      does: '결정 패널이 있는 모집 양식(예: 운영진 모집) — 지원자가 작성하면 여러분이 클릭 한 번으로 수락하거나 거절합니다.',
+      why: 'Google Forms 없이 전문적인 모집 — 모두 서버에서 처리하며, 수락 시 역할을 자동으로 부여합니다.',
+      perms: [{ perm: '역할 관리', why: '지원을 수락한 후 역할을 부여하기 위해' }],
+    },
+    '/ai': {
+      does: '/ai, /ask, /tldr, /imagine 명령과 요약 기능을 위한 AI 어시스턴트(모델, 일일 한도, 페르소나/성격)를 설정합니다.',
+      why: '봇이 어떻게 응답하고 얼마나 작동할지 맞춤 설정합니다 — 서버 분위기에 어울리면서 한도 없이 비용이 늘지 않도록.',
+      needs: ['통합 탭에 AI 제공업체 API 키 입력(없으면 AI 명령이 비활성화됩니다)'],
+      tips: [
+        '페르소나는 응답의 어조를 바꿉니다(예: 「도움이 되는 멘토」 vs 「냉소적인 봇」).',
+        '비용을 관리하려면 일일 한도를 설정하세요.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + 인증: 채널/역할 대량 삭제, 악성 봇, 레이드로부터 서버를 보호하며, 신규 멤버는 인증을 통과해야 합니다.',
       why: '해킹당한 관리자 한 명이 1분 만에 서버를 날려버릴 수 있습니다. Anti-Nuke는 이런 작업을 되돌리고, 가해자가 피해를 입히기 전에 권한을 박탈합니다.',
@@ -722,6 +1035,46 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ru: {
+    '/tickets': {
+      does: 'Система обращений: пользователь открывает приватный канал-тикет (с категориями, формой, оценкой и транскриптом), а персонал отвечает.',
+      why: 'Порядок в поддержке: вместо личных сообщений и хаоса в чате у каждого обращения есть отдельный канал и история.',
+      needs: ['Включённый модуль тикетов', 'Опубликованная панель тикетов (/ticketpanel)'],
+      perms: [
+        { perm: 'Управление каналами', why: 'чтобы создавать и закрывать каналы-тикеты' },
+        {
+          perm: 'Управление ролями / правами',
+          why: 'чтобы давать доступ к тикету только заявителю и персоналу',
+        },
+      ],
+      tips: [
+        'Добавьте вопросы в форму — вы соберёте нужную информацию ещё до создания тикета.',
+        'Транскрипт попадает в канал логов и в личные сообщения заявителя после закрытия.',
+      ],
+    },
+    '/modmail': {
+      does: 'Пользователь пишет боту в личные сообщения, а вы отвечаете в ветке персонала на сервере (анонимно для всех остальных). Также обрабатывает апелляции на баны.',
+      why: 'Канал связи для тех, кто не хочет писать публично — или кто забанен и не имеет другого способа связаться.',
+      perms: [
+        {
+          perm: 'Управление ветками',
+          why: 'чтобы создавать ветки персонала для каждого разговора',
+        },
+      ],
+    },
+    '/applications': {
+      does: 'Анкеты для набора (например, в команду) с панелью решений — кандидат заполняет, а вы принимаете или отклоняете одним кликом.',
+      why: 'Профессиональный набор без Google Forms — всё на сервере, с автоматической выдачей роли после принятия.',
+      perms: [{ perm: 'Управление ролями', why: 'чтобы выдать роль после принятия заявки' }],
+    },
+    '/ai': {
+      does: 'Настройка ИИ-ассистента (модель, дневные лимиты, персона/характер) для команд /ai, /ask, /tldr, /imagine и сводок.',
+      why: 'Вы персонализируете, как бот отвечает и сколько может — чтобы он подходил под атмосферу сервера и не генерировал расходы без лимита.',
+      needs: ['Ключ API провайдера ИИ, указанный в Интеграциях (иначе команды ИИ неактивны)'],
+      tips: [
+        'Персона меняет тон ответов (например, «полезный наставник» против «язвительного бота»).',
+        'Установите дневной лимит, чтобы держать расходы под контролем.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + верификация: защищает сервер от массового удаления каналов/ролей, вредоносных ботов и рейдов; новички обязаны пройти верификацию.',
       why: 'Один взломанный администратор может за минуту уничтожить сервер. Anti-Nuke отменяет такие действия и отбирает права у нарушителя, прежде чем он успеет навредить.',
@@ -796,6 +1149,43 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   uk: {
+    '/tickets': {
+      does: 'Система звернень: користувач відкриває приватний канал-тикет (з категоріями, формою, оцінкою та транскриптом), а команда підтримки відповідає.',
+      why: 'Порядок у підтримці: замість особистих повідомлень і хаосу в чаті кожна справа має окремий канал та історію.',
+      needs: ['Увімкнений модуль тикетів', 'Опублікована панель тикетів (/ticketpanel)'],
+      perms: [
+        { perm: 'Керування каналами', why: 'щоб створювати та закривати канали-тикети' },
+        {
+          perm: 'Керування ролями / правами',
+          why: 'щоб надавати доступ до тикета лише заявнику та команді підтримки',
+        },
+      ],
+      tips: [
+        'Додайте запитання до форми — ви зберете потрібну інформацію ще до створення тикета.',
+        'Транскрипт потрапляє в канал логів та в особисті повідомлення заявника після закриття.',
+      ],
+    },
+    '/modmail': {
+      does: 'Користувач пише боту в особисті повідомлення, а ви відповідаєте в гілці підтримки на сервері (анонімно для всіх інших). Також обробляє апеляції на бани.',
+      why: 'Канал зв’язку для тих, хто не хоче писати публічно — або хто забанений і не має іншого способу зв’язатися.',
+      perms: [
+        { perm: 'Керування гілками', why: 'щоб створювати гілки підтримки для кожної розмови' },
+      ],
+    },
+    '/applications': {
+      does: 'Анкети для набору (наприклад, до команди) з панеллю рішень — кандидат заповнює, а ви приймаєте або відхиляєте одним кліком.',
+      why: 'Професійний набір без Google Forms — усе на сервері, з автоматичною видачею ролі після прийняття.',
+      perms: [{ perm: 'Керування ролями', why: 'щоб надати роль після прийняття заявки' }],
+    },
+    '/ai': {
+      does: 'Налаштування ШІ-асистента (модель, денні ліміти, персона/характер) для команд /ai, /ask, /tldr, /imagine та підсумків.',
+      why: 'Ви персоналізуєте, як бот відповідає і скільки може — щоб він пасував до атмосфери сервера й не генерував витрати без ліміту.',
+      needs: ['Ключ API провайдера ШІ, вказаний в Інтеграціях (інакше команди ШІ неактивні)'],
+      tips: [
+        'Персона змінює тон відповідей (наприклад, «корисний наставник» проти «уїдливого бота»).',
+        'Встановіть денний ліміт, щоб тримати витрати під контролем.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + верифікація: захищає сервер від масового видалення каналів/ролей, шкідливих ботів і рейдів; новачки мусять пройти верифікацію.',
       why: 'Один зламаний адміністратор може за хвилину знищити сервер. Anti-Nuke скасовує такі дії та відбирає права в порушника, перш ніж він устигне нашкодити.',
@@ -873,6 +1263,41 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ja: {
+    '/tickets': {
+      does: 'チケットシステム：ユーザーがプライベートなチケットチャンネル（カテゴリー、フォーム、評価、記録付き）を開き、スタッフが対応します。',
+      why: 'サポートの整理：DMやチャットの混乱の代わりに、各案件が専用のチャンネルと履歴を持ちます。',
+      needs: ['チケットモジュールが有効', '公開されたチケットパネル（/ticketpanel）'],
+      perms: [
+        { perm: 'チャンネルの管理', why: 'チケットチャンネルを作成・クローズするため' },
+        {
+          perm: 'ロール / 権限の管理',
+          why: 'チケットへのアクセスを申請者とスタッフのみに限定するため',
+        },
+      ],
+      tips: [
+        'フォームに質問を追加しましょう — チケット作成前に必要な情報を集められます。',
+        'クローズ後、記録はログチャンネルと申請者のDMに送られます。',
+      ],
+    },
+    '/modmail': {
+      does: 'ユーザーがボットにDMを送ると、あなたはサーバーのスタッフスレッドで返信します（他の人には匿名）。BANの異議申し立ても処理します。',
+      why: '公開で書きたくない人 — あるいはBANされて他に手段がない人のための連絡窓口です。',
+      perms: [{ perm: 'スレッドの管理', why: '会話ごとにスタッフスレッドを作成するため' }],
+    },
+    '/applications': {
+      does: '判定パネル付きの募集フォーム（例：スタッフ募集） — 応募者が記入し、あなたはワンクリックで承認または却下します。',
+      why: 'Google Forms なしのプロフェッショナルな募集 — すべてサーバー上で完結し、承認時にロールを自動付与します。',
+      perms: [{ perm: 'ロールの管理', why: '応募の承認後にロールを付与するため' }],
+    },
+    '/ai': {
+      does: '/ai、/ask、/tldr、/imagine コマンドと要約のための AI アシスタント（モデル、1日あたりの上限、ペルソナ/性格）を設定します。',
+      why: 'ボットの返信の仕方とできる範囲をカスタマイズします — サーバーの雰囲気に合い、上限なくコストがかさまないように。',
+      needs: ['連携タブに AI プロバイダーの API キーを入力（未入力だと AI コマンドは無効です）'],
+      tips: [
+        'ペルソナは返信のトーンを変えます（例：「親切なメンター」と「皮肉屋のボット」）。',
+        '1日あたりの上限を設定してコストを抑えましょう。',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + 認証：チャンネル/ロールの一括削除、悪意あるボット、襲撃からサーバーを保護し、新規メンバーは認証を通過する必要があります。',
       why: '乗っ取られた管理者が一人いるだけで、1分でサーバーを消し飛ばせます。Anti-Nuke はそうした操作を取り消し、加害者が被害を出す前に権限を剥奪します。',
@@ -942,6 +1367,43 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ar: {
+    '/tickets': {
+      does: 'نظام التذاكر: يفتح المستخدم قناة تذكرة خاصة (مع الفئات ونموذج وتقييم ونص محفوظ للمحادثة)، ويرد فريق الدعم.',
+      why: 'تنظيم الدعم: بدلاً من الرسائل الخاصة والفوضى في الدردشة، تحصل كل حالة على قناتها الخاصة وسجلها.',
+      needs: ['تفعيل وحدة التذاكر', 'لوحة تذاكر منشورة (/ticketpanel)'],
+      perms: [
+        { perm: 'إدارة القنوات', why: 'لإنشاء قنوات التذاكر وإغلاقها' },
+        {
+          perm: 'إدارة الأدوار / الصلاحيات',
+          why: 'لمنح الوصول إلى التذكرة لمقدّم الطلب وفريق الدعم فقط',
+        },
+      ],
+      tips: [
+        'أضف أسئلة إلى النموذج — تجمع المعلومات التي تحتاجها قبل إنشاء التذكرة.',
+        'يُرسَل النص المحفوظ إلى قناة السجلات وإلى الرسائل الخاصة لمقدّم الطلب بعد الإغلاق.',
+      ],
+    },
+    '/modmail': {
+      does: 'يراسل المستخدم البوت في الرسائل الخاصة، وتردّون في موضوع للفريق على الخادم (بشكل مجهول لبقية الأعضاء). كما يتعامل مع طلبات الاعتراض على الحظر.',
+      why: 'قناة تواصل لمن لا يرغبون في الكتابة علنًا — أو لمن تم حظرهم ولا يملكون وسيلة أخرى.',
+      perms: [{ perm: 'إدارة المواضيع', why: 'لإنشاء مواضيع للفريق لكل محادثة' }],
+    },
+    '/applications': {
+      does: 'نماذج توظيف (مثلاً للفريق) مع لوحة قرارات — يملؤها المتقدّم، وتقبلونها أو ترفضونها بنقرة واحدة.',
+      why: 'توظيف احترافي دون Google Forms — كل شيء على الخادم، مع منح الدور تلقائيًا عند القبول.',
+      perms: [{ perm: 'إدارة الأدوار', why: 'لمنح دور بعد قبول الطلب' }],
+    },
+    '/ai': {
+      does: 'إعداد مساعد الذكاء الاصطناعي (النموذج والحدود اليومية والشخصية/الطابع) لأوامر /ai و/ask و/tldr و/imagine والملخّصات.',
+      why: 'تخصّص كيفية رد البوت ومقدار ما يستطيع فعله — ليناسب أجواء الخادم ولا يولّد تكاليف بلا حد.',
+      needs: [
+        'مفتاح API لمزوّد الذكاء الاصطناعي مُدخَل في التكاملات (وإلا تكون أوامر الذكاء الاصطناعي غير فعّالة)',
+      ],
+      tips: [
+        'تغيّر الشخصية نبرة الردود (مثلاً «مرشد مفيد» مقابل «بوت ساخر»).',
+        'حدّد حدًّا يوميًا لإبقاء التكاليف تحت السيطرة.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + التحقق: يحمي الخادم من الحذف الجماعي للقنوات/الأدوار، والبوتات الضارة، والغارات؛ على الأعضاء الجدد اجتياز التحقق.',
       why: 'يمكن لمشرف واحد مخترَق أن يمحو الخادم في دقيقة. يتراجع Anti-Nuke عن هذه الإجراءات ويسحب صلاحيات المعتدي قبل أن يُلحق الضرر.',
@@ -1005,6 +1467,43 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   id: {
+    '/tickets': {
+      does: 'Sistem tiket: pengguna membuka kanal-tiket pribadi (dengan kategori, formulir, penilaian, dan transkrip), lalu staf membalas.',
+      why: 'Bantuan jadi rapi: alih-alih DM dan kekacauan di obrolan, setiap kasus punya kanal dan riwayatnya sendiri.',
+      needs: ['Modul tiket diaktifkan', 'Panel tiket yang sudah dipublikasikan (/ticketpanel)'],
+      perms: [
+        { perm: 'Kelola Kanal', why: 'untuk membuat dan menutup kanal-tiket' },
+        {
+          perm: 'Kelola Peran / izin',
+          why: 'agar akses tiket hanya diberikan kepada pelapor dan staf',
+        },
+      ],
+      tips: [
+        'Tambahkan pertanyaan ke formulir — kamu mengumpulkan info yang dibutuhkan sebelum tiket dibuat.',
+        'Transkrip dikirim ke kanal log dan ke DM pelapor setelah tiket ditutup.',
+      ],
+    },
+    '/modmail': {
+      does: 'Pengguna mengirim DM ke bot, lalu kalian membalas di utas staf pada server (anonim bagi semua orang lain). Ini juga menangani banding banned.',
+      why: 'Kanal kontak bagi mereka yang tidak ingin menulis secara publik — atau yang dibanned dan tidak punya cara lain.',
+      perms: [{ perm: 'Kelola Utas', why: 'untuk membuat utas staf bagi setiap percakapan' }],
+    },
+    '/applications': {
+      does: 'Formulir rekrutmen (mis. untuk staf) dengan panel keputusan — pelamar mengisinya, kalian menerima atau menolak dengan satu klik.',
+      why: 'Rekrutmen profesional tanpa Google Forms — semua di server, dengan pemberian peran otomatis setelah diterima.',
+      perms: [{ perm: 'Kelola Peran', why: 'untuk memberikan peran setelah lamaran diterima' }],
+    },
+    '/ai': {
+      does: 'Mengatur asisten AI (model, batas harian, persona/karakter) untuk perintah /ai, /ask, /tldr, /imagine dan ringkasan.',
+      why: 'Kamu menyesuaikan cara bot membalas dan seberapa banyak yang bisa dilakukannya — agar cocok dengan suasana server dan tidak menimbulkan biaya tanpa batas.',
+      needs: [
+        'Kunci API penyedia AI yang dimasukkan di Integrasi (jika tidak, perintah AI menjadi nonaktif)',
+      ],
+      tips: [
+        'Persona mengubah nada balasan (mis. “mentor yang membantu” vs “bot yang sinis”).',
+        'Tetapkan batas harian agar biaya tetap terkendali.',
+      ],
+    },
     '/security': {
       does: 'Anti-Nuke + verifikasi: melindungi server dari penghapusan massal kanal/role, bot jahat, dan serangan raid; anggota baru harus lolos verifikasi.',
       why: 'Satu admin yang diretas bisa menghapus server dalam satu menit. Anti-Nuke membatalkan tindakan semacam itu dan mencabut izin pelaku sebelum ia menimbulkan kerusakan.',
