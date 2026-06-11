@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { type CardStyle, RANKCARD_DEFAULT } from '../lib/cardStyle';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
 import CardStyleEditor from './CardStyleEditor';
+import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -27,6 +29,7 @@ export default function WelcomeForm({
   initial: Omit<Cfg, 'messageSpec'> & { messageSpec?: RichMessage };
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>({
     ...initial,
     messageSpec: initial.messageSpec
@@ -59,12 +62,12 @@ export default function WelcomeForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Powitania włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.welcome.enabledLabel')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał powitań</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.welcome.channelLabel')}</span>
           <ChannelSelect
             value={c.channelId}
             onChange={(v) => setC({ ...c, channelId: v })}
@@ -72,21 +75,21 @@ export default function WelcomeForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Autorole na wejście</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.welcome.autoroleLabel')}
+          </span>
           <RoleSelect
             value={c.autoroleId}
             onChange={(v) => setC({ ...c, autoroleId: v })}
             roles={guild.roles}
-            placeholder="— bez autoroli —"
+            placeholder={tp(lang, 'ui.welcome.noAutorole')}
           />
         </label>
       </div>
 
       {c.autoroleId && (
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">
-            Opóźnienie autoroli (sekundy, anty-raid)
-          </span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.welcome.delayLabel')}</span>
           <input
             type="number"
             value={c.autoroleDelaySec ?? 0}
@@ -95,23 +98,24 @@ export default function WelcomeForm({
             }
             className="w-full max-w-[200px] rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
           />
-          <span className="block text-[11px] text-muted">
-            0 = od razu. Większa wartość = bot nada rolę dopiero po N s i tylko, jeśli osoba nadal
-            jest na serwerze (raid-boty znikające szybciej nie dostaną roli).
-          </span>
+          <span className="block text-[11px] text-muted">{tp(lang, 'ui.welcome.delayHelp')}</span>
         </label>
       )}
 
       <div className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Wiadomość powitalna</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.welcome.messageLabel')}</span>
         <MessageStudio
           value={c.messageSpec}
           onChange={(messageSpec) => setC({ ...c, messageSpec, message: messageSpec.content })}
           emojis={guild.emojis}
           variables={[
-            { token: '{user}', label: 'Nowy członek (oznaczenie)', sample: '@NowyGracz' },
-            { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
-            { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
+            { token: '{user}', label: tp(lang, 'ui.welcome.varUser'), sample: '@NowyGracz' },
+            { token: '{server}', label: tp(lang, 'ui.welcome.varServer'), sample: 'GH0ST EMPIRE' },
+            {
+              token: '{memberCount}',
+              label: tp(lang, 'ui.welcome.varMemberCount'),
+              sample: '1234',
+            },
           ]}
         />
       </div>
@@ -124,13 +128,13 @@ export default function WelcomeForm({
             onChange={(e) => setC({ ...c, cardEnabled: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Baner powitalny (grafika)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.welcome.bannerLabel')}</span>
         </label>
         {c.cardEnabled && (
           <CardStyleEditor
             value={c.card ?? RANKCARD_DEFAULT}
             onChange={(card) => setC({ ...c, card })}
-            previewText="Witaj!"
+            previewText={tp(lang, 'ui.welcome.previewText')}
           />
         )}
       </div>

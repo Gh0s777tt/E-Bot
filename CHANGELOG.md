@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-282-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.212.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-283-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.213.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.213.0] — 🌍 i18n UI panelu — fundament server-side + strona /welcome
+
+- `[#283]` 🌍 **i18n treści stron panelu — start (fala 4): fundament server-side + pierwsza strona `/welcome`.** Dotąd przetłumaczona była tylko powłoka panelu (nawigacja, command palette, SaveButton); ~39 stron ustawień miało etykiety/formularze PL-only.
+  - 🧱 **Fundament dla komponentów serwerowych**: nowy `lib/serverPanelLocale.ts` (`getPanelLocale()` czyta cookie `panel_lang` przez `next/headers`) — `page.tsx` renderują teksty serwerowo w języku panelu. `LangContext.setLang` woła teraz `router.refresh()`, więc po zmianie języka **teksty server-components zmieniają się natychmiast** (bez pełnego reloadu, stan formularzy zachowany), spójnie z natychmiastową zmianą po stronie klienta (kontekst). Wzorzec do replikacji na kolejnych stronach.
+  - 🖥️ **`/welcome` przetłumaczone**: 16 nowych kluczy `ui.welcome.*` w `panelI18n.ts` (× **14 języków**, parzystość 14×16=224). `app/welcome/page.tsx` (serwer) + `WelcomeForm.tsx` (klient) na `tp()`. `autorole`/`{user}`/`{server}`/`{memberCount}`/`config` nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy zweryfikowana. Wstecznie zgodne (fallback PL). Zostaje ~39 stron UI do przejścia falami.
 
 ## [0.212.0] — 🌍 i18n strony web (GameVault) — 14 języków + RTL + przełącznik
 

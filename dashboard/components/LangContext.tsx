@@ -4,6 +4,7 @@
 // deterministyczny ('pl' → zero hydration mismatch), po zamontowaniu localStorage,
 // a przy pierwszym wejściu język przeglądarki. Cookie 'panel_lang' idzie równolegle,
 // żeby przyszłe fale mogły tłumaczyć też server components.
+import { useRouter } from 'next/navigation';
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import {
   DEFAULT_PANEL_LOCALE,
@@ -19,6 +20,7 @@ const Ctx = createContext<{ lang: PanelLocale; setLang: (l: PanelLocale) => void
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<PanelLocale>(DEFAULT_PANEL_LOCALE);
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -43,6 +45,9 @@ export function LangProvider({ children }: { children: ReactNode }) {
     } catch {
       /* brak localStorage/cookies */
     }
+    // Odśwież komponenty serwerowe (page.tsx czyta `panel_lang` przez getPanelLocale), żeby ich
+    // teksty zmieniły język natychmiast — bez pełnego reloadu, zachowując stan klienta (formularze).
+    router.refresh();
   }
 
   return <Ctx.Provider value={{ lang, setLang }}>{children}</Ctx.Provider>;
