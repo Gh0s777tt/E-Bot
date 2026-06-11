@@ -301,6 +301,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'rankcard_config',
   'heat_config',
   'antiraid_config',
+  'antinuke',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {
@@ -511,7 +512,7 @@ function mergeAnti(stored: Partial<AntinukeConfig>): AntinukeConfig {
 }
 
 export async function getAntinuke(): Promise<AntinukeConfig> {
-  const raw = await rawGet('antinuke');
+  const raw = await getConfigSetting('antinuke');
   if (!raw) return structuredClone(ANTINUKE_DEFAULT);
   try {
     return mergeAnti(JSON.parse(raw) as Partial<AntinukeConfig>);
@@ -521,5 +522,5 @@ export async function getAntinuke(): Promise<AntinukeConfig> {
 }
 
 export async function saveAntinuke(cfg: AntinukeConfig): Promise<void> {
-  await rawSet('antinuke', JSON.stringify(cfg));
+  await setConfigSetting('antinuke', JSON.stringify(cfg));
 }

@@ -3,7 +3,7 @@
 
 import type { Client, Guild, GuildTextBasedChannel } from 'discord.js';
 import { AuditLogEvent, EmbedBuilder, Events, PermissionFlagsBits } from 'discord.js';
-import { getSettings, setSetting } from '../lib/db.mts';
+import { getGuildSettings, setGuildSetting } from '../lib/db.mts';
 
 export type Punishment = 'ban' | 'kick' | 'timeout' | 'strip' | 'quarantine';
 export type ProtKey =
@@ -98,11 +98,13 @@ function mergeConfig(stored: Partial<AntinukeConfig>): AntinukeConfig {
   return base;
 }
 
-let cache: { cfg: AntinukeConfig; at: number } | null = null;
+// Etap K — config per-serwer z cache TTL 15 s (Map po guildId zamiast jednej globalnej).
+const cfgCache = new Map<string, { cfg: AntinukeConfig; at: number }>();
 
-export function getConfig(): AntinukeConfig {
-  if (cache && Date.now() - cache.at < 15_000) return cache.cfg;
-  const raw = getSettings()['antinuke'];
+export function getConfig(guildId: string): AntinukeConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 15_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['antinuke'];
   let cfg = structuredClone(DEFAULT_CONFIG);
   if (raw) {
     try {
@@ -111,13 +113,13 @@ export function getConfig(): AntinukeConfig {
       /* zła konfiguracja -> domyślne */
     }
   }
-  cache = { cfg, at: Date.now() };
+  cfgCache.set(guildId, { cfg, at: Date.now() });
   return cfg;
 }
 
-export function saveConfig(cfg: AntinukeConfig): void {
-  setSetting('antinuke', JSON.stringify(cfg));
-  cache = { cfg, at: Date.now() };
+export function saveConfig(guildId: string, cfg: AntinukeConfig): void {
+  setGuildSetting(guildId, 'antinuke', JSON.stringify(cfg));
+  cfgCache.set(guildId, { cfg, at: Date.now() });
 }
 
 // Sliding-window licznik: klucz `${guildId}:${userId}:${prot}` -> znaczniki czasu
@@ -126,7 +128,7 @@ const hits = new Map<string, number[]>();
 export function startAntiNuke(client: Client): void {
   client.on(Events.GuildAuditLogEntryCreate, async (entry, guild) => {
     try {
-      const cfg = getConfig();
+      const cfg = getConfig(guild.id);
       if (!cfg.enabled) return;
 
       // Bypass-guard kwarantanny: zdjęcie roli kwarantanny przez nieuprawnionego = kwarantanna

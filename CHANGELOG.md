@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-260-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.190.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-261-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.191.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.191.0] — 🛡️ Anti-nuke per-serwer (3. moduł SAFETY — komplet) · Etap K (C-24/?)
+
+- `[#261]` 🛡️ **Anti-nuke (`antinuke`) per-serwer** — dwudziesta trzecia fala i **trzeci, ostatni moduł bezpieczeństwa** — tym samym KOMPLET safety (heat + anti-raid + anti-nuke) jest per-serwer.
+  - 🤖 **Bot** (`security/antinuke.mts`): globalna pojedyncza cache configu → **cache per-serwer** (`Map` po `guildId`, TTL 15 s). `getConfig()` → `getConfig(guildId)`, `saveConfig(cfg)` → `saveConfig(guildId, cfg)` (zapis `setGuildSetting`). Handler `GuildAuditLogEntryCreate` czyta config danego serwera (`getConfig(guild.id)`), więc każdy serwer ma własne progi ochron (usuwanie kanałów/ról, masowe bany/kicki, webhooki, dodawanie botów), karę, rolę kwarantanny i whitelisty. Licznik `hits` (`guildId:userId:prot`) i bypass-guard kwarantanny już były per-serwer. Komenda `/antinuke` (status/toggle/setlog/punishment/protection/whitelist) przekazuje `interaction.guildId`.
+  - 🖥️ **Panel**: `antinuke` w `MIGRATED_GUILD_KEYS` (panel + bot); `getAntinuke`/`saveAntinuke` (`data.ts`) przez `getConfigSetting`/`setConfigSetting`; `/api/antinuke` i strona Bezpieczeństwo automatycznie per-serwer.
+  - Wsteczna zgodność (fallback global). Etap K (C-24). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.190.0] — 🛡️ Anti-raid per-serwer (2. moduł SAFETY, 7 plików) · Etap K (C-23/?)
 

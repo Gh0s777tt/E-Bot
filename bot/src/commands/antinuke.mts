@@ -89,7 +89,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
   const sub = interaction.options.getSubcommand();
-  const cfg = getConfig();
+  const guildId = interaction.guildId; // zawężone do string przez inGuild() powyżej
+  const cfg = getConfig(guildId);
 
   if (sub === 'status') {
     const lines = PROT_KEYS.map((k) => {
@@ -116,7 +117,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   if (sub === 'toggle') {
     cfg.enabled = interaction.options.getBoolean('enabled', true);
-    saveConfig(cfg);
+    saveConfig(guildId, cfg);
     await interaction.reply({
       content: `Anti-Nuke **${cfg.enabled ? 'włączony' : 'wyłączony'}**.`,
       flags: MessageFlags.Ephemeral,
@@ -127,7 +128,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   if (sub === 'setlog') {
     const ch = interaction.options.getChannel('channel', true);
     cfg.logChannelId = ch.id;
-    saveConfig(cfg);
+    saveConfig(guildId, cfg);
     await interaction.reply({
       content: `Kanał logów: <#${ch.id}>.`,
       flags: MessageFlags.Ephemeral,
@@ -137,7 +138,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   if (sub === 'punishment') {
     cfg.punishment = interaction.options.getString('type', true) as Punishment;
-    saveConfig(cfg);
+    saveConfig(guildId, cfg);
     await interaction.reply({
       content: `Kara ustawiona: **${PUNISHMENT_LABELS[cfg.punishment]}**.`,
       flags: MessageFlags.Ephemeral,
@@ -153,7 +154,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const win = interaction.options.getInteger('window');
     if (count) p.count = count;
     if (win) p.windowSec = win;
-    saveConfig(cfg);
+    saveConfig(guildId, cfg);
     await interaction.reply({
       content: `**${PROT_LABELS[name]}**: ${p.enabled ? '🟢 wł.' : '⚪ wył.'} (${p.count}/${p.windowSec}s).`,
       flags: MessageFlags.Ephemeral,
@@ -173,7 +174,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     } else if (idx !== -1) {
       list.splice(idx, 1);
     }
-    saveConfig(cfg);
+    saveConfig(guildId, cfg);
     await interaction.reply({
       content: `Whitelist (${isRole ? 'rola' : 'użytkownik'}) ${action === 'add' ? 'dodano' : 'usunięto'}: <${isRole ? '@&' : '@'}${target.id}>.`,
       flags: MessageFlags.Ephemeral,
