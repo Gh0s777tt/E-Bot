@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 type Live = {
   platform: string;
@@ -39,6 +41,7 @@ function beep() {
 }
 
 export default function LiveBoard({ initial }: { initial: Live[] }) {
+  const { lang } = useLang();
   const [statuses, setStatuses] = useState<Live[]>(initial);
   const [updatedAt, setUpdatedAt] = useState('');
   const prevLive = useRef(new Set(initial.filter((s) => s.live).map((s) => s.platform)));
@@ -61,11 +64,11 @@ export default function LiveBoard({ initial }: { initial: Live[] }) {
             .join(', ');
           document.title = `🔴 LIVE: ${names}`;
         } else if (nowLive.size === 0) {
-          document.title = 'Na żywo — E-Bot';
+          document.title = tp(lang, 'ui.live.docTitle');
         }
         prevLive.current = nowLive;
         setStatuses(data);
-        setUpdatedAt(new Date().toLocaleTimeString('pl-PL'));
+        setUpdatedAt(new Date().toLocaleTimeString(lang));
       } catch {
         /* ignore */
       }
@@ -75,7 +78,7 @@ export default function LiveBoard({ initial }: { initial: Live[] }) {
       alive = false;
       clearInterval(id);
     };
-  }, []);
+  }, [lang]);
 
   const liveNow = statuses.filter((s) => s.live);
 
@@ -89,14 +92,16 @@ export default function LiveBoard({ initial }: { initial: Live[] }) {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
               </span>
-              {liveNow.length} na żywo teraz
+              {liveNow.length} {tp(lang, 'ui.live.liveNow')}
             </span>
           ) : (
-            'Nikt nie streamuje w tej chwili.'
+            tp(lang, 'ui.live.nobody')
           )}
         </p>
         <span className="text-[11px] uppercase tracking-wide text-muted/60">
-          {updatedAt ? `aktualizacja ${updatedAt}` : 'auto-odświeżanie co 30 s'}
+          {updatedAt
+            ? `${tp(lang, 'ui.live.updated')} ${updatedAt}`
+            : tp(lang, 'ui.live.autoRefresh')}
         </span>
       </div>
 
@@ -116,14 +121,16 @@ export default function LiveBoard({ initial }: { initial: Live[] }) {
               </span>
               {!s.configured ? (
                 <span className="text-[11px] uppercase tracking-wide text-muted">
-                  nieskonfigurowane
+                  {tp(lang, 'ui.live.notConfigured')}
                 </span>
               ) : s.live ? (
                 <span className="rounded-md bg-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide">
-                  ● Na żywo
+                  ● {tp(lang, 'ui.live.liveBadge')}
                 </span>
               ) : (
-                <span className="text-[11px] uppercase tracking-wide text-muted">offline</span>
+                <span className="text-[11px] uppercase tracking-wide text-muted">
+                  {tp(lang, 'ui.live.offline')}
+                </span>
               )}
             </div>
 
@@ -145,7 +152,10 @@ export default function LiveBoard({ initial }: { initial: Live[] }) {
                 <div className="px-5 py-3">
                   <p className="line-clamp-1 text-sm font-semibold">{s.title}</p>
                   <p className="text-xs text-muted">
-                    {[s.game, s.viewers != null ? `${s.viewers} widzów` : null]
+                    {[
+                      s.game,
+                      s.viewers != null ? `${s.viewers} ${tp(lang, 'ui.live.viewers')}` : null,
+                    ]
                       .filter(Boolean)
                       .join(' · ')}
                   </p>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-291-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.221.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-292-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.222.0] — 🌍 i18n UI panelu — strona /live (status streamów)
+
+- `[#292]` 🌍 **i18n UI panelu — kolejna fala: `/live` (tablica statusu streamów na żywo).**
+  - 🖥️ **Panel**: 9 nowych kluczy `ui.live.*` × **14 języków** w `panelI18n.ts` (parzystość 14×9=126). Cała strona to jeden komponent kliencki `LiveBoard.tsx` (page bez tekstów) — na `tp()`. **Godzina aktualizacji w języku panelu** (`toLocaleTimeString(lang)`); `useEffect` ma teraz dep `[lang]`, więc tytuł karty i format czasu odświeżają się po zmianie języka. Tytuł zakładki dla aktywnego live (`🔴 LIVE: …`) zostaje (uniwersalny token).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 12/~40 stron.
 
 ## [0.221.0] — 🌍 i18n UI panelu — strona /notifications (powiadomienia live)
 
