@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-258-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.188.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-259-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.189.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.189.0] — 🛡️ Heat system per-serwer (1. moduł SAFETY) · Etap K (C-22/?)
+
+- `[#259]` 🛡️ **Heat system (`heat`, adaptacyjny anty-spam) per-serwer** — dwudziesta pierwsza fala i **pierwszy moduł bezpieczeństwa** w migracji (te robione na końcu i najostrożniej).
+  - 🤖 **Bot**: globalny `cfg` + `refresh()`/`setInterval` → **cache per-serwer z TTL 30 s** (`cfgFor(guildId)`). Config jest sterowany **dwukierunkowo** komendą `/heat` (nie panelem): `setHeatConfig()` → `setHeatConfig(guildId, patch)` zapisuje per-serwer (`setGuildSetting`) i natychmiast odświeża cache; `getHeatConfig()` → `getHeatConfig(guildId)`. Handler `MessageCreate` i `alertAndPunish()` używają configu danego serwera (próg, half-life, kara timeout/kick, kanał alertów). Mapa ciepła (`guildId:userId`) i tak była per-serwer. Sprzątanie wystygłych wpisów liczone z domyślnego half-life.
+  - 🖥️ **Panel**: `heat_config` dodany do `MIGRATED_GUILD_KEYS` (panel + bot) dla spójności — heat nie ma formularza w panelu (sterowany wyłącznie `/heat`), więc to zmiana czysto bot-side.
+  - Wsteczna zgodność (fallback global). Etap K (C-22). Bot (bez zmian panelu funkcjonalnych). Bez zmian definicji komend.
 
 ## [0.188.0] — 🗂️ Karty rang (rankcard) per-serwer · Etap K (C-21/?)
 

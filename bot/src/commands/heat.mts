@@ -59,7 +59,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const threshold = interaction.options.getInteger('prog') ?? 20;
     const action = (interaction.options.getString('akcja') ?? 'timeout') as 'timeout' | 'kick';
     const alerts = interaction.options.getChannel('alerty');
-    const cfg = setHeatConfig({
+    const cfg = setHeatConfig(interaction.guild.id, {
       enabled: true,
       threshold,
       action,
@@ -72,12 +72,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
 
   if (sub === 'off') {
-    setHeatConfig({ enabled: false });
+    setHeatConfig(interaction.guild.id, { enabled: false });
     await interaction.reply({ content: t(locale, 'heat.off') });
     return;
   }
 
-  const cfg = getHeatConfig();
+  const cfg = getHeatConfig(interaction.guild.id);
   await interaction.reply({
     content: cfg.enabled
       ? t(locale, 'heat.statusOn', { threshold: String(cfg.threshold), action: cfg.action })

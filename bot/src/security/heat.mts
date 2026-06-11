@@ -3,7 +3,7 @@
 // (half-life). Próg → kara (timeout/kick) + alert. Config 'heat_config' sterowany /heat.
 import { type Client, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { resolveGuildLocale, t } from '../i18n/index.mts';
-import { getSettings, setSetting } from '../lib/db.mts';
+import { getGuildSettings, setGuildSetting } from '../lib/db.mts';
 
 export type HeatConfig = {
   enabled: boolean;
@@ -23,25 +23,31 @@ const DEFAULT: HeatConfig = {
   alertChannelId: '',
 };
 
-let cfg: HeatConfig = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings().heat_config;
+// Etap K — config per-serwer z cache TTL 30 s (handler chodzi na każdej wiadomości).
+const cfgCache = new Map<string, { cfg: HeatConfig; at: number }>();
+function cfgFor(guildId: string): HeatConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId).heat_config;
+  let cfg: HeatConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<HeatConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    cfg = { ...DEFAULT };
   }
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
-// Wołane z /heat — natychmiastowa zmiana + zapis (sync do panelu przez settings).
-export function setHeatConfig(patch: Partial<HeatConfig>): HeatConfig {
-  cfg = { ...cfg, ...patch };
-  setSetting('heat_config', JSON.stringify(cfg));
+// Wołane z /heat — natychmiastowa zmiana + zapis per-serwer (sync do panelu przez settings).
+export function setHeatConfig(guildId: string, patch: Partial<HeatConfig>): HeatConfig {
+  const cfg = { ...cfgFor(guildId), ...patch };
+  setGuildSetting(guildId, 'heat_config', JSON.stringify(cfg));
+  cfgCache.set(guildId, { cfg, at: Date.now() }); // natychmiast odśwież cache
   return cfg;
 }
-export function getHeatConfig(): HeatConfig {
-  return cfg;
+export function getHeatConfig(guildId: string): HeatConfig {
+  return cfgFor(guildId);
 }
 
 type Entry = { score: number; lastAt: number; lastContent: string };
@@ -64,7 +70,7 @@ function messageHeat(msg: Message, prev: Entry | undefined): number {
   return h;
 }
 
-async function alertAndPunish(msg: Message, score: number): Promise<void> {
+async function alertAndPunish(msg: Message, score: number, cfg: HeatConfig): Promise<void> {
   const member = msg.member;
   if (!member) return;
   const reason = `Heat system: ${Math.round(score)}/${cfg.threshold}`;
@@ -92,16 +98,16 @@ async function alertAndPunish(msg: Message, score: number): Promise<void> {
 }
 
 export function startHeat(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-  // Sprzątanie wystygłych wpisów (raz na 10 min).
+  // Sprzątanie wystygłych wpisów (raz na 10 min). Próg „zimna" z domyślnego half-life.
   setInterval(() => {
-    const cut = Date.now() - 10 * cfg.halfLifeSec * 1000;
+    const cut = Date.now() - 10 * DEFAULT.halfLifeSec * 1000;
     for (const [k, e] of heat) if (e.lastAt < cut) heat.delete(k);
   }, 10 * 60_000);
 
   client.on(Events.MessageCreate, async (msg: Message) => {
-    if (!cfg.enabled || !msg.guild || msg.author.bot) return;
+    if (!msg.guild || msg.author.bot) return;
+    const cfg = cfgFor(msg.guild.id);
+    if (!cfg.enabled) return;
     // Moderatorzy i admini poza scoringiem.
     if (msg.member?.permissions.has(PermissionFlagsBits.ManageMessages)) return;
 
@@ -116,7 +122,7 @@ export function startHeat(client: Client): void {
 
     if (score >= cfg.threshold) {
       heat.set(key, { score: 0, lastAt: now, lastContent: '' }); // reset po karze
-      await alertAndPunish(msg, score);
+      await alertAndPunish(msg, score, cfg);
     }
   });
 
