@@ -108,6 +108,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'modmail_config',
   'applications_config',
   'tickets_config',
+  'tempvoice_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

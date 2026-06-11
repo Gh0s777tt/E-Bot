@@ -22,14 +22,15 @@ import {
   type VoiceChannel,
 } from 'discord.js';
 import { type Locale, resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 const ACCENT = 0xe50914;
 const temp = new Set<string>(); // id kanałów utworzonych przez bota
 const owners = new Map<string, string>(); // channelId -> ownerId
 
-function cfg(): { on: boolean; hubId: string; categoryId: string; nameTpl: string } {
-  const raw = getSettings()['tempvoice_config'];
+// Etap K — config per-serwer: świeży odczyt (hub-channel ID i tak per-serwer), fallback global.
+function cfg(guildId: string): { on: boolean; hubId: string; categoryId: string; nameTpl: string } {
+  const raw = getGuildSettings(guildId)['tempvoice_config'];
   try {
     const c = raw
       ? (JSON.parse(raw) as {
@@ -281,7 +282,7 @@ export function startTempVoice(client: Client): void {
   console.log('[tempvoice] aktywny 2.0 (panel z przyciskami; config z panelu).');
   client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     try {
-      const c = cfg();
+      const c = cfg(newState.guild?.id ?? '');
       // utworzenie kanału po wejściu na hub
       if (c.on && c.hubId && newState.channelId === c.hubId && newState.member && newState.guild) {
         const name = c.nameTpl.replaceAll('{user}', newState.member.displayName).slice(0, 100);

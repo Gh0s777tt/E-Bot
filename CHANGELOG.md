@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-250-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.180.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-251-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.181.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.181.0] — 🗂️ TempVoice per-serwer · Etap K (C-14/?)
+
+- `[#251]` 🗂️ **Kanały głosowe na żądanie (`tempvoice`/TempVoice 2.0) per-serwer** — trzynasty zmigrowany moduł. Globalny config = jeden hub/kategoria/szablon dla wszystkich serwerów → tylko serwer z hub-kanałem w globalnym configu miał działający TempVoice.
+  - 🤖 **Bot**: `cfg()` → `cfg(guildId)` (świeży odczyt per-serwer, fallback global) w handlerze `VoiceStateUpdate` (`cfg(newState.guild?.id)`). Każdy serwer ma własny hub-kanał, kategorię i szablon nazwy. (Właściciele kanałów i zbiór kanałów tymczasowych są w pamięci, kluczowane po `channelId` — globalnie unikatowe, bez zmian.)
+  - 🖥️ **Panel**: `tempvoice_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getTempVoice`/`saveTempVoice` (`engagement.ts`) przez `getConfigSetting`/`setConfigSetting` (dodano import routera).
+  - Wsteczna zgodność (fallback global). Etap K (C-14). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.180.0] — 🗂️ Tickety per-serwer (5 plików) · Etap K (C-13/?)
 

@@ -1,5 +1,5 @@
 // Faza 6 / B5 — engagement: button-role, starboard, temp-voice (config w settings) + lista giveawayów.
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
 import { hasSupabase, supabase } from './supabase';
 
 // ── Button-role ──
@@ -65,7 +65,7 @@ export const TEMPVOICE_DEFAULT: TempVoiceConfig = {
 };
 
 export async function getTempVoice(): Promise<TempVoiceConfig> {
-  const raw = await getRawSetting('tempvoice_config');
+  const raw = await getConfigSetting('tempvoice_config');
   if (!raw) return structuredClone(TEMPVOICE_DEFAULT);
   try {
     return { ...TEMPVOICE_DEFAULT, ...(JSON.parse(raw) as Partial<TempVoiceConfig>) };
@@ -74,7 +74,7 @@ export async function getTempVoice(): Promise<TempVoiceConfig> {
   }
 }
 export async function saveTempVoice(cfg: TempVoiceConfig): Promise<void> {
-  await setRawSetting('tempvoice_config', JSON.stringify(cfg));
+  await setConfigSetting('tempvoice_config', JSON.stringify(cfg));
 }
 
 // ── Counting (Tor 3) ──
