@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-263-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.193.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-264-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.194.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.194.0] — 🗂️ Sezonowe rankingi per-serwer · Etap K opcja C — KOMPLET ✅
+
+- `[#264]` 🗂️ **Sezonowe rankingi XP / Hall of Fame (`seasons`) per-serwer** — dwudziesta szósta i **ostatnia fala migracji per-serwer**. `snapshot()` był już per-serwer (zapytania `user_levels`/`xp_hall_of_fame` po `guild_id`), ale `tick()` chodził na jednym globalnym configu/kanale i dedupie — działał tylko dla jednego serwera.
+  - 🤖 **Bot** (`analytics/seasons.mts`): globalny `cfg` + `refresh()` → `cfg(guildId)`; `tick()` **iteruje serwery** (`client.guilds.cache`), każdy z własnym configiem (kanał, top N, reset XP) i dedupem miesiąca per-serwer (`hof_last_month:<guildId>`); `snapshot(guild, month, cfg)` dostaje config serwera.
+  - 🖥️ **Panel**: `seasons_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getSeasonsConfig`/`saveSeasonsConfig` (`community.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - **🎉 KOMPLET Etap K opcja C** — wszystkie configowalne funkcje bota są teraz per-serwer (26 fal C-1…C-26). Każdy serwer ma w pełni niezależną konfigurację: społeczność, ekonomia, leveling, moderacja, bezpieczeństwo (heat/anti-raid/anti-nuke), tickety, modmail, aplikacje, role, analityka, komendy własne. Wszystko wstecznie zgodne (fallback do wartości globalnej do czasu pierwszego zapisu per-serwer).
+  - Etap K (C-26 — finał). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.193.0] — 🗂️ Tygodniowy digest per-serwer · Etap K (C-26/?)
 

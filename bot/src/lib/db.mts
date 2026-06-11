@@ -124,6 +124,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'antinuke',
   'custom_commands',
   'digest_config',
+  'seasons_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

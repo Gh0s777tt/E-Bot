@@ -671,7 +671,7 @@ export const SEASONS_DEFAULT: SeasonsConfig = {
 };
 
 export async function getSeasonsConfig(): Promise<SeasonsConfig> {
-  const raw = await getRawSetting('seasons_config');
+  const raw = await getConfigSetting('seasons_config');
   if (!raw) return structuredClone(SEASONS_DEFAULT);
   try {
     return { ...SEASONS_DEFAULT, ...(JSON.parse(raw) as Partial<SeasonsConfig>) };
@@ -680,7 +680,7 @@ export async function getSeasonsConfig(): Promise<SeasonsConfig> {
   }
 }
 export async function saveSeasonsConfig(cfg: SeasonsConfig): Promise<void> {
-  await setRawSetting('seasons_config', JSON.stringify(cfg));
+  await setConfigSetting('seasons_config', JSON.stringify(cfg));
 }
 
 // ── Śledzenie cen ITAD (Faza 7 / F9.3) ──
