@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-277-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.207.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-278-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.208.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.208.0] — 🌍 i18n treści: „Jak to działa?" — chunk 4b (Społeczność KOMPLET)
+
+- `[#278]` 🌍 **„Jak to działa?" (`HowItWorks`) — chunk 4b: domyka grupę Społeczność.** Kolejna porcja przyrostowej, trzeciej fali i18n treści.
+  - 🖥️ **Panel**: do `HOW_CONTENT_I18N` (`lib/howItWorksI18n.ts`) doszły strony `/suggestions`, `/responder`, `/birthdays`, `/counters`, `/automations` w **14 językach** (pl bazowo + 13 tłumaczeń). Tym samym **cała grupa „Społeczność" (10 stron) jest przetłumaczona.** Przykładowe wyzwalacze responderów (`„cześć"`, `/zasady`) zlokalizowane naturalnie per-język; terminy `Custom Commands 2.0`/`XP`/`YouTube`/`Twitch`/`Kick`/`Discord` nietłumaczone; uprawnienia w oficjalnych zlokalizowanych nazwach Discorda.
+  - 🧱 Wzorzec przyrostowy bez zmian: strony jeszcze nieprzetłumaczone wciąż spadają na PL (`HOW_IT_WORKS`). Po tym chunku zostają **14 stron** treści do przetłumaczenia.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0. Wstecznie zgodne (pl niezmienione).
 
 ## [0.207.0] — 🌍 i18n treści: „Jak to działa?" — chunk 4a (Społeczność, cz. 1)
 

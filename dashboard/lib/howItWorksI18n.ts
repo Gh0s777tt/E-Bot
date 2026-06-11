@@ -2,8 +2,9 @@
 // treści stron dodawane chunkami. Brak tłumaczenia strony/języka → fallback do PL (HOW_IT_WORKS).
 // Chunk 1: etykiety + strony /setup, /modules, /diagnostics. Chunk 2: /security, /moderation,
 // /logging, /audit (grupa „Bezpieczeństwo"). Chunk 3: /tickets, /modmail, /applications, /ai
-// (grupa „Wsparcie"). Chunk 4a: /welcome, /levels, /leaderboard, /roles, /engagement (grupa
-// „Społeczność", część 1). Kolejne chunki dokładają strony.
+// (grupa „Wsparcie"). Chunk 4a: /welcome, /levels, /leaderboard, /roles, /engagement +
+// chunk 4b: /suggestions, /responder, /birthdays, /counters, /automations (grupa „Społeczność"
+// KOMPLET). Kolejne chunki dokładają strony.
 import type { HowEntry } from './howItWorks';
 import type { PanelLocale } from './panelI18n';
 
@@ -134,6 +135,35 @@ export const HOW_LABELS: Record<PanelLocale, HowLabels> = {
 // Tłumaczenia treści stron — przyrostowo. Pominięte strony/języki → fallback do PL (HOW_IT_WORKS).
 export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEntry>>> = {
   en: {
+    '/suggestions': {
+      does: 'Collects community ideas with reaction voting and a moderation decision (approve/reject).',
+      why: 'Gives members a voice and organizes feedback in one place instead of scattered messages.',
+      needs: ['A suggestions channel selected'],
+    },
+    '/responder': {
+      does: 'Custom commands and automatic replies to keywords (e.g. “hi” → a greeting, /rules → the rules text).',
+      why: 'You automate repetitive replies and create your own commands without coding.',
+      tips: [
+        'Custom Commands 2.0 can also grant roles, give currency/XP and have a role condition.',
+      ],
+    },
+    '/birthdays': {
+      does: 'The bot wishes members a happy birthday on their day (optionally with a role for that day).',
+      why: 'A small gesture that builds community and makes people feel noticed.',
+      perms: [{ perm: 'Manage Roles', why: 'if you grant a “birthday person” role for the day' }],
+    },
+    '/counters': {
+      does: 'Counter channels: stats (members, boosts, YouTube/Twitch/Kick followers) shown in channel names.',
+      why: 'Live server stats visible right in the channel list — without opening the panel.',
+      perms: [{ perm: 'Manage Channels', why: 'to rename channels to the current numbers' }],
+      tips: [
+        'Discord limits a channel rename to 2×/10 min — the counter refreshes with a delay, that’s normal.',
+      ],
+    },
+    '/automations': {
+      does: '“If X happens, do Y” rules that react to server events (e.g. someone got a role → send a message).',
+      why: 'You chain features together without code — automating processes specific to your server.',
+    },
     '/welcome': {
       does: 'Welcome messages and images for new members + automatic role grant on join (autorole).',
       why: 'The server’s first impression. Autorole instantly gives newcomers access (or a “guest” role until verification).',
@@ -279,6 +309,40 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   de: {
+    '/suggestions': {
+      does: 'Sammelt Ideen der Community mit Reaktions-Voting und einer Moderationsentscheidung (annehmen/ablehnen).',
+      why: 'Gibt Mitgliedern eine Stimme und bündelt Feedback an einem Ort statt in verstreuten Nachrichten.',
+      needs: ['Ein ausgewählter Vorschlagskanal'],
+    },
+    '/responder': {
+      does: 'Eigene Befehle und automatische Antworten auf Schlüsselwörter (z. B. „hallo“ → eine Begrüßung, /regeln → der Regeltext).',
+      why: 'Du automatisierst wiederkehrende Antworten und erstellst eigene Befehle ohne Programmieren.',
+      tips: [
+        'Custom Commands 2.0 können auch Rollen vergeben, Währung/XP geben und eine Rollenbedingung haben.',
+      ],
+    },
+    '/birthdays': {
+      does: 'Der Bot gratuliert Mitgliedern an ihrem Geburtstag (optional mit einer Rolle für diesen Tag).',
+      why: 'Eine kleine Geste, die die Community stärkt und Menschen das Gefühl gibt, gesehen zu werden.',
+      perms: [
+        {
+          perm: 'Rollen verwalten',
+          why: 'wenn du für den Tag eine Rolle „Geburtstagskind“ vergibst',
+        },
+      ],
+    },
+    '/counters': {
+      does: 'Zähler-Kanäle: Statistiken (Mitglieder, Boosts, YouTube/Twitch/Kick-Follower) werden in Kanalnamen angezeigt.',
+      why: 'Live-Serverstatistiken direkt in der Kanalliste sichtbar — ohne das Panel zu öffnen.',
+      perms: [{ perm: 'Kanäle verwalten', why: 'um Kanäle in die aktuellen Zahlen umzubenennen' }],
+      tips: [
+        'Discord begrenzt das Umbenennen eines Kanals auf 2×/10 Min — der Zähler aktualisiert sich verzögert, das ist normal.',
+      ],
+    },
+    '/automations': {
+      does: 'Regeln nach dem Prinzip „Wenn X passiert, tue Y“, die auf Serverereignisse reagieren (z. B. jemand hat eine Rolle erhalten → sende eine Nachricht).',
+      why: 'Du verkettest Funktionen ohne Code — und automatisierst Abläufe, die für deinen Server spezifisch sind.',
+    },
     '/welcome': {
       does: 'Begrüßungsnachrichten und -bilder für neue Mitglieder + automatische Rollenvergabe beim Beitritt (autorole).',
       why: 'Der erste Eindruck des Servers. Autorole gibt Neulingen sofort Zugang (oder eine „Gast“-Rolle bis zur Verifizierung).',
@@ -457,6 +521,39 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   es: {
+    '/suggestions': {
+      does: 'Recopila ideas de la comunidad con votación por reacciones y una decisión de moderación (aprobar/rechazar).',
+      why: 'Da voz a los miembros y organiza el feedback en un solo lugar en lugar de mensajes dispersos.',
+      needs: ['Un canal de sugerencias seleccionado'],
+    },
+    '/responder': {
+      does: 'Comandos propios y respuestas automáticas a palabras clave (p. ej. «hola» → un saludo, /reglas → el texto del reglamento).',
+      why: 'Automatizas respuestas repetitivas y creas tus propios comandos sin programar.',
+      tips: [
+        'Los Custom Commands 2.0 también pueden otorgar roles, dar moneda/XP y tener una condición de rol.',
+      ],
+    },
+    '/birthdays': {
+      does: 'El bot felicita a los miembros en su cumpleaños (opcionalmente con un rol para ese día).',
+      why: 'Un pequeño gesto que construye comunidad y hace que la gente se sienta tenida en cuenta.',
+      perms: [
+        { perm: 'Gestionar roles', why: 'si otorgas un rol de «cumpleañero» durante ese día' },
+      ],
+    },
+    '/counters': {
+      does: 'Canales contador: estadísticas (miembros, boosts, seguidores de YouTube/Twitch/Kick) mostradas en los nombres de los canales.',
+      why: 'Estadísticas del servidor en vivo visibles directamente en la lista de canales — sin abrir el panel.',
+      perms: [
+        { perm: 'Gestionar canales', why: 'para renombrar los canales con las cifras actuales' },
+      ],
+      tips: [
+        'Discord limita el cambio de nombre de un canal a 2×/10 min — el contador se actualiza con retraso, es normal.',
+      ],
+    },
+    '/automations': {
+      does: 'Reglas del tipo «si ocurre X, haz Y» que reaccionan a eventos del servidor (p. ej. alguien recibió un rol → envía un mensaje).',
+      why: 'Encadenas funciones sin código — automatizando procesos específicos de tu servidor.',
+    },
     '/welcome': {
       does: 'Mensajes e imágenes de bienvenida para los nuevos miembros + asignación automática de rol al entrar (autorole).',
       why: 'La primera impresión del servidor. Autorole da acceso inmediato a los recién llegados (o un rol «invitado» hasta la verificación).',
@@ -625,6 +722,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   it: {
+    '/suggestions': {
+      does: 'Raccoglie le idee della community con voto tramite reazioni e una decisione di moderazione (approva/rifiuta).',
+      why: 'Dà voce ai membri e organizza il feedback in un unico posto invece che in messaggi sparsi.',
+      needs: ['Un canale dei suggerimenti selezionato'],
+    },
+    '/responder': {
+      does: 'Comandi personalizzati e risposte automatiche alle parole chiave (es. «ciao» → un saluto, /regole → il testo del regolamento).',
+      why: 'Automatizzi le risposte ripetitive e crei i tuoi comandi senza programmare.',
+      tips: [
+        'I Custom Commands 2.0 possono anche assegnare ruoli, dare valuta/XP e avere una condizione di ruolo.',
+      ],
+    },
+    '/birthdays': {
+      does: 'Il bot fa gli auguri ai membri nel giorno del loro compleanno (facoltativamente con un ruolo per quel giorno).',
+      why: 'Un piccolo gesto che costruisce community e fa sentire le persone notate.',
+      perms: [
+        { perm: 'Gestire i ruoli', why: 'se assegni un ruolo «festeggiato» per quel giorno' },
+      ],
+    },
+    '/counters': {
+      does: 'Canali contatore: statistiche (membri, boost, follower YouTube/Twitch/Kick) mostrate nei nomi dei canali.',
+      why: 'Statistiche del server in tempo reale visibili direttamente nella lista dei canali — senza aprire il pannello.',
+      perms: [{ perm: 'Gestire i canali', why: 'per rinominare i canali con i numeri attuali' }],
+      tips: [
+        'Discord limita la rinomina di un canale a 2×/10 min — il contatore si aggiorna con ritardo, è normale.',
+      ],
+    },
+    '/automations': {
+      does: 'Regole del tipo «se accade X, fai Y» che reagiscono agli eventi del server (es. qualcuno ha ricevuto un ruolo → invia un messaggio).',
+      why: 'Concateni le funzioni senza codice — automatizzando processi specifici del tuo server.',
+    },
     '/welcome': {
       does: 'Messaggi e immagini di benvenuto per i nuovi membri + assegnazione automatica del ruolo all’ingresso (autorole).',
       why: 'La prima impressione del server. Autorole dà subito accesso ai nuovi arrivati (o un ruolo «ospite» fino alla verifica).',
@@ -797,6 +925,42 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   fr: {
+    '/suggestions': {
+      does: 'Recueille les idées de la communauté avec un vote par réactions et une décision de modération (approuver/rejeter).',
+      why: 'Donne la parole aux membres et organise les retours au même endroit au lieu de messages éparpillés.',
+      needs: ['Un salon de suggestions sélectionné'],
+    },
+    '/responder': {
+      does: 'Commandes personnalisées et réponses automatiques à des mots-clés (par ex. « salut » → un message de bienvenue, /regles → le texte du règlement).',
+      why: 'Tu automatises les réponses répétitives et crées tes propres commandes sans coder.',
+      tips: [
+        'Les Custom Commands 2.0 peuvent aussi attribuer des rôles, donner de la monnaie/XP et avoir une condition de rôle.',
+      ],
+    },
+    '/birthdays': {
+      does: 'Le bot souhaite un joyeux anniversaire aux membres le jour J (avec, en option, un rôle pour la journée).',
+      why: 'Un petit geste qui renforce la communauté et fait que les gens se sentent remarqués.',
+      perms: [
+        {
+          perm: 'Gérer les rôles',
+          why: 'si tu attribues un rôle « membre fêté » pour la journée d’anniversaire',
+        },
+      ],
+    },
+    '/counters': {
+      does: 'Salons-compteurs : statistiques (membres, boosts, abonnés YouTube/Twitch/Kick) affichées dans les noms des salons.',
+      why: 'Des statistiques de serveur en direct visibles directement dans la liste des salons — sans ouvrir le panneau.',
+      perms: [
+        { perm: 'Gérer les salons', why: 'pour renommer les salons avec les chiffres actuels' },
+      ],
+      tips: [
+        'Discord limite le renommage d’un salon à 2×/10 min — le compteur se met à jour avec un délai, c’est normal.',
+      ],
+    },
+    '/automations': {
+      does: 'Des règles « si X se produit, fais Y » qui réagissent aux événements du serveur (par ex. quelqu’un a reçu un rôle → envoie un message).',
+      why: 'Tu enchaînes les fonctions entre elles sans code — en automatisant des processus propres à ton serveur.',
+    },
     '/welcome': {
       does: 'Messages et images de bienvenue pour les nouveaux membres + attribution automatique d’un rôle à l’arrivée (autorole).',
       why: 'La première impression du serveur. L’autorole donne immédiatement accès aux nouveaux venus (ou un rôle « invité » jusqu’à la vérification).',
@@ -978,6 +1142,40 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   pt: {
+    '/suggestions': {
+      does: 'Recolhe as ideias da comunidade com votação por reações e uma decisão de moderação (aprovar/rejeitar).',
+      why: 'Dá voz aos membros e organiza o feedback num só lugar, em vez de mensagens dispersas.',
+      needs: ['Um canal de sugestões selecionado'],
+    },
+    '/responder': {
+      does: 'Comandos personalizados e respostas automáticas a palavras-chave (por ex. “olá” → uma saudação, /regras → o texto do regulamento).',
+      why: 'Automatizas as respostas repetitivas e crias os teus próprios comandos sem programar.',
+      tips: [
+        'Os Custom Commands 2.0 também podem atribuir cargos, dar moeda/XP e ter uma condição de cargo.',
+      ],
+    },
+    '/birthdays': {
+      does: 'O bot deseja um feliz aniversário aos membros no seu dia (opcionalmente com um cargo para esse dia).',
+      why: 'Um pequeno gesto que constrói comunidade e faz com que as pessoas se sintam notadas.',
+      perms: [
+        {
+          perm: 'Gerir cargos',
+          why: 'se atribuíres um cargo de “aniversariante” durante o dia de aniversário',
+        },
+      ],
+    },
+    '/counters': {
+      does: 'Canais-contadores: estatísticas (membros, boosts, seguidores YouTube/Twitch/Kick) mostradas nos nomes dos canais.',
+      why: 'Estatísticas do servidor em tempo real visíveis logo na lista de canais — sem abrir o painel.',
+      perms: [{ perm: 'Gerir canais', why: 'para renomear os canais com os números atuais' }],
+      tips: [
+        'O Discord limita a mudança de nome de um canal a 2×/10 min — o contador atualiza-se com atraso, é normal.',
+      ],
+    },
+    '/automations': {
+      does: 'Regras “se acontecer X, faz Y” que reagem a eventos do servidor (por ex. alguém recebeu um cargo → envia uma mensagem).',
+      why: 'Ligas funcionalidades em cadeia sem código — automatizando processos específicos do teu servidor.',
+    },
     '/welcome': {
       does: 'Mensagens e imagens de boas-vindas para novos membros + atribuição automática de um cargo à entrada (autorole).',
       why: 'A primeira impressão do servidor. O autorole dá acesso imediato aos recém-chegados (ou um cargo “convidado” até à verificação).',
@@ -1138,6 +1336,31 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   zh: {
+    '/suggestions': {
+      does: '收集社区创意，支持反应投票，并由管理团队做出决定（批准／拒绝）。',
+      why: '让成员拥有发言权，把反馈集中归整在一处，而不是散落的零碎消息。',
+      needs: ['已选定一个建议频道'],
+    },
+    '/responder': {
+      does: '自定义命令与对关键词的自动回复（例如「你好」→ 问候语，/rules → 规则文本）。',
+      why: '自动化重复性的回复，无需编程即可创建你自己的命令。',
+      tips: ['Custom Commands 2.0 还能授予身份组、发放货币／XP，并设置身份组条件。'],
+    },
+    '/birthdays': {
+      does: '机器人在成员生日当天送上祝福（可选当天授予一个身份组）。',
+      why: '一个小小的举动，凝聚社区，让大家感到被关注。',
+      perms: [{ perm: '管理身份组', why: '如果你在生日当天授予「寿星」身份组' }],
+    },
+    '/counters': {
+      does: '计数频道：把统计数据（成员数、加成数、YouTube／Twitch／Kick 关注者）显示在频道名称中。',
+      why: '服务器实时统计直接显示在频道列表中——无需打开面板。',
+      perms: [{ perm: '管理频道', why: '以便把频道名称更新为当前数字' }],
+      tips: ['Discord 限制频道改名为每 10 分钟 2 次——计数器会延迟刷新，这属于正常现象。'],
+    },
+    '/automations': {
+      does: '「如果发生 X，就执行 Y」的规则，响应服务器上的事件（例如有人获得身份组 → 发送一条消息）。',
+      why: '无需代码即可把各项功能串联起来——自动化你服务器专属的流程。',
+    },
     '/welcome': {
       does: '为新成员发送欢迎消息和图片，并在加入时自动授予身份组（autorole）。',
       why: '服务器的第一印象。autorole 让新人立即获得访问权限（或在验证前给予「访客」身份组）。',
@@ -1268,6 +1491,33 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ko: {
+    '/suggestions': {
+      does: '커뮤니티의 아이디어를 모으고 리액션 투표와 운영진 결정(승인／거절)을 진행합니다.',
+      why: '구성원에게 발언권을 주고 흩어진 메시지 대신 피드백을 한곳에 정리합니다.',
+      needs: ['건의 채널이 선택됨'],
+    },
+    '/responder': {
+      does: '맞춤 명령어와 키워드에 대한 자동 응답(예: 「안녕」 → 인사말, /rules → 규칙 문구).',
+      why: '반복되는 응답을 자동화하고 코딩 없이 나만의 명령어를 만듭니다.',
+      tips: ['Custom Commands 2.0 은 역할 부여, 화폐／XP 지급, 역할 조건 설정도 할 수 있습니다.'],
+    },
+    '/birthdays': {
+      does: '봇이 생일 당일 구성원에게 축하 인사를 전합니다(선택적으로 당일 역할 부여).',
+      why: '커뮤니티를 다지고 사람들이 주목받는다고 느끼게 하는 작은 배려입니다.',
+      perms: [{ perm: '역할 관리', why: '생일 당일 「생일자」 역할을 부여하는 경우' }],
+    },
+    '/counters': {
+      does: '카운터 채널: 통계(구성원, 부스트, YouTube／Twitch／Kick 팔로워)를 채널 이름에 표시합니다.',
+      why: '서버 실시간 통계를 채널 목록에서 바로 확인——패널을 열 필요가 없습니다.',
+      perms: [{ perm: '채널 관리', why: '채널 이름을 현재 수치로 변경하기 위해' }],
+      tips: [
+        'Discord 는 채널 이름 변경을 10분당 2회로 제한합니다——카운터가 지연되어 갱신되는 것은 정상입니다.',
+      ],
+    },
+    '/automations': {
+      does: '서버 이벤트에 반응하는 「X 가 발생하면 Y 를 실행」 규칙(예: 누군가 역할을 받음 → 메시지 전송).',
+      why: '코드 없이 기능을 사슬처럼 연결——서버에 특화된 프로세스를 자동화합니다.',
+    },
     '/welcome': {
       does: '새 멤버를 위한 환영 메시지와 이미지 + 입장 시 자동 역할 부여(autorole).',
       why: '서버의 첫인상. autorole은 새 멤버에게 즉시 접근 권한을 줍니다(또는 인증 전까지 「게스트」 역할).',
@@ -1404,6 +1654,39 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ru: {
+    '/suggestions': {
+      does: 'Собирает идеи сообщества с голосованием реакциями и решением модерации (одобрить/отклонить).',
+      why: 'Даёт участникам право голоса и упорядочивает обратную связь в одном месте вместо разрозненных сообщений.',
+      needs: ['Выбран канал для предложений'],
+    },
+    '/responder': {
+      does: 'Свои команды и автоматические ответы на ключевые слова (например, «привет» → приветствие, /правила → текст правил).',
+      why: 'Автоматизируете повторяющиеся ответы и создаёте собственные команды без программирования.',
+      tips: [
+        'Custom Commands 2.0 также могут выдавать роли, начислять валюту/XP и иметь условие по роли.',
+      ],
+    },
+    '/birthdays': {
+      does: 'Бот поздравляет участников с днём рождения в их день (по желанию — с ролью на этот день).',
+      why: 'Небольшой жест, который укрепляет сообщество и помогает людям чувствовать, что их замечают.',
+      perms: [
+        { perm: 'Управление ролями', why: 'если вы выдаёте роль «именинник» на день рождения' },
+      ],
+    },
+    '/counters': {
+      does: 'Каналы-счётчики: статистика (участники, бусты, подписчики YouTube/Twitch/Kick) отображается в названиях каналов.',
+      why: 'Живая статистика сервера видна прямо в списке каналов — без захода в панель.',
+      perms: [
+        { perm: 'Управление каналами', why: 'чтобы менять названия каналов на актуальные числа' },
+      ],
+      tips: [
+        'Discord ограничивает переименование канала до 2×/10 мин — счётчик обновляется с задержкой, это нормально.',
+      ],
+    },
+    '/automations': {
+      does: 'Правила «если произошло X, сделай Y», реагирующие на события сервера (например, кто-то получил роль → отправить сообщение).',
+      why: 'Связываете функции в цепочки без кода — автоматизируете процессы, специфичные для вашего сервера.',
+    },
     '/welcome': {
       does: 'Приветственные сообщения и картинки для новых участников + автоматическая выдача роли при входе (autorole).',
       why: 'Первое впечатление о сервере. Autorole сразу даёт новичкам доступ (или роль «гость» до прохождения верификации).',
@@ -1566,6 +1849,39 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   uk: {
+    '/suggestions': {
+      does: 'Збирає ідеї спільноти з голосуванням реакціями та рішенням модерації (схвалити/відхилити).',
+      why: 'Дає учасникам право голосу й упорядковує зворотний зв’язок в одному місці замість розрізнених повідомлень.',
+      needs: ['Вибрано канал для пропозицій'],
+    },
+    '/responder': {
+      does: 'Власні команди та автоматичні відповіді на ключові слова (наприклад, «привіт» → привітання, /правила → текст правил).',
+      why: 'Автоматизуєте повторювані відповіді та створюєте власні команди без програмування.',
+      tips: [
+        'Custom Commands 2.0 також можуть надавати ролі, нараховувати валюту/XP і мати умову за роллю.',
+      ],
+    },
+    '/birthdays': {
+      does: 'Бот вітає учасників із днем народження в їхній день (за бажанням — з роллю на цей день).',
+      why: 'Невеликий жест, який зміцнює спільноту та допомагає людям відчувати, що їх помічають.',
+      perms: [
+        { perm: 'Керування ролями', why: 'якщо ви надаєте роль «іменинник» на день народження' },
+      ],
+    },
+    '/counters': {
+      does: 'Канали-лічильники: статистика (учасники, бусти, підписники YouTube/Twitch/Kick) відображається в назвах каналів.',
+      why: 'Жива статистика сервера видна прямо у списку каналів — без заходу в панель.',
+      perms: [
+        { perm: 'Керування каналами', why: 'щоб змінювати назви каналів на актуальні числа' },
+      ],
+      tips: [
+        'Discord обмежує перейменування каналу до 2×/10 хв — лічильник оновлюється із затримкою, це нормально.',
+      ],
+    },
+    '/automations': {
+      does: 'Правила «якщо сталося X, зроби Y», що реагують на події сервера (наприклад, хтось отримав роль → надіслати повідомлення).',
+      why: 'З’єднуєте функції в ланцюжки без коду — автоматизуєте процеси, специфічні для вашого сервера.',
+    },
     '/welcome': {
       does: 'Привітальні повідомлення та зображення для нових учасників + автоматична видача ролі під час входу (autorole).',
       why: 'Перше враження від сервера. Autorole одразу дає новачкам доступ (або роль «гість» до проходження верифікації).',
@@ -1728,6 +2044,33 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ja: {
+    '/suggestions': {
+      does: 'コミュニティのアイデアを集め、リアクション投票とモデレーションの判断（承認／却下）を行います。',
+      why: 'メンバーに発言の場を与え、散らばったメッセージではなくフィードバックを一か所に整理します。',
+      needs: ['提案チャンネルが選択済み'],
+    },
+    '/responder': {
+      does: 'カスタムコマンドとキーワードへの自動応答（例：「こんにちは」→ あいさつ、/rules → ルール文）。',
+      why: '繰り返しの応答を自動化し、コーディングなしで独自のコマンドを作成できます。',
+      tips: ['Custom Commands 2.0 はロール付与、通貨／XP の付与、ロール条件の設定もできます。'],
+    },
+    '/birthdays': {
+      does: 'ボットがメンバーの誕生日にお祝いを伝えます（任意でその日だけロールを付与）。',
+      why: 'コミュニティを育み、人々が気にかけられていると感じられる小さな心づかいです。',
+      perms: [{ perm: 'ロールの管理', why: '誕生日当日に「お誕生日の人」ロールを付与する場合' }],
+    },
+    '/counters': {
+      does: 'カウンターチャンネル：統計（メンバー、ブースト、YouTube／Twitch／Kick のフォロワー）をチャンネル名に表示します。',
+      why: 'サーバーのライブ統計をチャンネル一覧でそのまま確認——パネルを開く必要はありません。',
+      perms: [{ perm: 'チャンネルの管理', why: 'チャンネル名を最新の数値に変更するため' }],
+      tips: [
+        'Discord はチャンネル名の変更を10分あたり2回に制限しています——カウンターの更新が遅れるのは正常です。',
+      ],
+    },
+    '/automations': {
+      does: 'サーバーのイベントに反応する「X が起きたら Y をする」ルール（例：誰かがロールを取得 → メッセージを送信）。',
+      why: 'コードなしで機能を連鎖させ——サーバー固有のプロセスを自動化します。',
+    },
     '/welcome': {
       does: '新規メンバー向けの歓迎メッセージと画像 + 参加時の自動ロール付与（autorole）。',
       why: 'サーバーの第一印象。autorole は新規メンバーに即座にアクセス権を与えます（または認証までの「ゲスト」ロール）。',
@@ -1877,6 +2220,33 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ar: {
+    '/suggestions': {
+      does: 'يجمع أفكار المجتمع مع التصويت بالتفاعلات وقرار من الإشراف (قبول/رفض).',
+      why: 'يمنح الأعضاء صوتًا ويُنظّم الملاحظات في مكان واحد بدلًا من رسائل متفرقة.',
+      needs: ['تحديد قناة للاقتراحات'],
+    },
+    '/responder': {
+      does: 'أوامر مخصّصة وردود تلقائية على الكلمات المفتاحية (مثلًا «مرحبًا» ← ترحيب، /rules ← نص القوانين).',
+      why: 'تُؤتمت الردود المتكررة وتُنشئ أوامرك الخاصة دون برمجة.',
+      tips: ['يمكن لـ Custom Commands 2.0 أيضًا منح الأدوار، ومنح العملة/XP، واشتراط دور معيّن.'],
+    },
+    '/birthdays': {
+      does: 'يهنّئ البوت الأعضاء بعيد ميلادهم في يومهم (اختياريًا مع دور لذلك اليوم).',
+      why: 'لفتة بسيطة تبني المجتمع وتجعل الناس يشعرون بأنهم محل اهتمام.',
+      perms: [{ perm: 'إدارة الأدوار', why: 'إذا كنت تمنح دور «صاحب عيد الميلاد» لذلك اليوم' }],
+    },
+    '/counters': {
+      does: 'قنوات العدّادات: الإحصائيات (الأعضاء، التعزيزات، متابعو YouTube/Twitch/Kick) تُعرض في أسماء القنوات.',
+      why: 'إحصائيات حية للسيرفر تظهر مباشرةً في قائمة القنوات — دون فتح اللوحة.',
+      perms: [{ perm: 'إدارة القنوات', why: 'لتغيير أسماء القنوات إلى الأرقام الحالية' }],
+      tips: [
+        'يحدّ Discord من إعادة تسمية القناة إلى مرتين/10 دقائق — يتحدّث العدّاد بتأخير، وهذا طبيعي.',
+      ],
+    },
+    '/automations': {
+      does: 'قواعد «إذا حدث X، نفّذ Y» تتفاعل مع أحداث السيرفر (مثلًا حصل شخص على دور ← أرسل رسالة).',
+      why: 'تربط الميزات في سلاسل دون كود — لتُؤتمت العمليات الخاصة بسيرفرك.',
+    },
     '/welcome': {
       does: 'رسائل وصور ترحيبية للأعضاء الجدد + منح تلقائي للرتبة عند الانضمام (autorole).',
       why: 'الانطباع الأول عن الخادم. يمنح autorole القادمين الجدد صلاحية الوصول فورًا (أو رتبة «ضيف» إلى حين التحقق).',
@@ -2015,6 +2385,40 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   id: {
+    '/suggestions': {
+      does: 'Mengumpulkan ide komunitas dengan pemungutan suara lewat reaksi dan keputusan moderasi (setujui/tolak).',
+      why: 'Memberi anggota kesempatan bersuara dan menata masukan di satu tempat alih-alih pesan yang berserakan.',
+      needs: ['Sebuah kanal saran yang dipilih'],
+    },
+    '/responder': {
+      does: 'Perintah khusus dan balasan otomatis untuk kata kunci (mis. “hai” → sebuah sapaan, /aturan → teks peraturan).',
+      why: 'Kamu mengotomatiskan balasan yang berulang dan membuat perintahmu sendiri tanpa coding.',
+      tips: [
+        'Custom Commands 2.0 juga bisa memberikan peran, memberi mata uang/XP, dan punya syarat peran.',
+      ],
+    },
+    '/birthdays': {
+      does: 'Bot mengucapkan selamat ulang tahun kepada anggota pada harinya (opsional dengan sebuah peran untuk hari itu).',
+      why: 'Sebuah gestur kecil yang membangun komunitas dan membuat orang merasa diperhatikan.',
+      perms: [
+        {
+          perm: 'Kelola Peran',
+          why: 'jika kamu memberikan peran “yang berulang tahun” untuk hari ulang tahunnya',
+        },
+      ],
+    },
+    '/counters': {
+      does: 'Kanal-penghitung: statistik (anggota, boost, pengikut YouTube/Twitch/Kick) ditampilkan di nama kanal.',
+      why: 'Statistik server secara langsung yang terlihat tepat di daftar kanal — tanpa membuka panel.',
+      perms: [{ perm: 'Kelola Kanal', why: 'untuk mengganti nama kanal dengan angka terkini' }],
+      tips: [
+        'Discord membatasi penggantian nama kanal hingga 2×/10 mnt — penghitung diperbarui dengan jeda, itu normal.',
+      ],
+    },
+    '/automations': {
+      does: 'Aturan “jika X terjadi, lakukan Y” yang bereaksi terhadap peristiwa di server (mis. seseorang mendapat peran → kirim pesan).',
+      why: 'Kamu merangkai fitur-fitur menjadi satu tanpa kode — mengotomatiskan proses yang khas untuk servermu.',
+    },
     '/welcome': {
       does: 'Pesan dan gambar sambutan untuk anggota baru + pemberian peran otomatis saat bergabung (autorole).',
       why: 'Kesan pertama server. Autorole langsung memberi akses kepada anggota baru (atau peran “tamu” hingga verifikasi).',
