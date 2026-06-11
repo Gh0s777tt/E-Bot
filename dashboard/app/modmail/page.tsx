@@ -2,22 +2,25 @@ import { Mails } from 'lucide-react';
 import ModmailForm from '../../components/ModmailForm';
 import { getModmailConfig } from '../../lib/community';
 import { getGuildMeta } from '../../lib/guild';
+import { tp } from '../../lib/panelI18n';
+import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ModmailPage() {
-  const [cfg, guild] = await Promise.all([getModmailConfig(), getGuildMeta()]);
+  const [cfg, guild, lang] = await Promise.all([
+    getModmailConfig(),
+    getGuildMeta(),
+    getPanelLocale(),
+  ]);
   return (
     <div className="space-y-6">
       <p className="max-w-3xl text-sm text-muted">
-        Modmail — prywatny kanał kontaktu z obsługą przez DM. Użytkownik pisze wiadomość prywatną do
-        bota, a ta trafia jako wątek na kanale obsługi; odpowiedzi obsługi w wątku wracają do
-        użytkownika w DM. Komenda <code className="text-accent">!close</code> w wątku kończy
-        rozmowę.{' '}
+        {tp(lang, 'ui.modmail.intro')}{' '}
         {cfg.enabled ? (
-          <span className="font-semibold text-green-400">Modmail: WŁĄCZONY</span>
+          <span className="font-semibold text-green-400">{tp(lang, 'ui.modmail.statusOn')}</span>
         ) : (
-          <span className="font-semibold text-accent">Modmail: WYŁĄCZONY</span>
+          <span className="font-semibold text-accent">{tp(lang, 'ui.modmail.statusOff')}</span>
         )}
       </p>
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { ModmailConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -16,6 +18,7 @@ export default function ModmailForm({
   initial: ModmailConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<ModmailConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -43,11 +46,11 @@ export default function ModmailForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Modmail włączony</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.modmail.enabledLabel')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał obsługi (wątki modmaila)</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.modmail.channelLabel')}</span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
@@ -56,9 +59,7 @@ export default function ModmailForm({
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">
-          Powitanie w DM (przy pierwszym kontakcie)
-        </span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.modmail.greetingLabel')}</span>
         <textarea
           value={c.greeting}
           onChange={(e) => setC({ ...c, greeting: e.target.value })}
@@ -68,12 +69,7 @@ export default function ModmailForm({
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Użytkownik pisze <strong>DM do bota</strong> → bot tworzy wątek na kanale obsługi i
-        przekazuje wiadomość. Odpowiedź obsługi <strong>w wątku</strong> trafia w DM użytkownika;{' '}
-        <code>!close</code> zamyka rozmowę. Wymaga uruchomienia <code>f6-modmail-schema.sql</code> w
-        Supabase (kanał musi być tekstowy — bot tworzy w nim wątki).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.modmail.footNote')}</p>
     </div>
   );
 }

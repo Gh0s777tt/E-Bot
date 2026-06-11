@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-286-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.216.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-287-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.217.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.217.0] — 🌍 i18n UI panelu — strona /modmail
+
+- `[#287]` 🌍 **i18n UI panelu — kolejna fala: `/modmail` (prywatny kontakt przez DM).**
+  - 🖥️ **Panel**: 7 nowych kluczy `ui.modmail.*` × **14 języków** w `panelI18n.ts` (parzystość 14×7=98). `app/modmail/page.tsx` (serwer) + `ModmailForm.tsx` (klient) na `tp()`. Nagłówek „Modmail" jako nazwa własna zostaje; tokeny `!close`/`f6-modmail-schema.sql`/`Supabase`/`DM` nietłumaczone (przypisy spłaszczone z `<strong>`/`<code>` do tekstu, by działały w 14 językach).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 6/~40 stron.
 
 ## [0.216.0] — 🌍 i18n UI panelu — strona /audit (dziennik zmian)
 
