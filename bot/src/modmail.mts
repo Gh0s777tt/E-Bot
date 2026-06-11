@@ -11,7 +11,7 @@ import {
   type ThreadChannel,
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from './lib/cloud.mts';
-import { getSettings } from './lib/db.mts';
+import { getGuildSettings } from './lib/db.mts';
 
 type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 const DEFAULT: ModmailConfig = {
@@ -19,14 +19,13 @@ const DEFAULT: ModmailConfig = {
   channelId: '',
   greeting: 'Twoja wiadomość trafiła do obsługi. Odpiszemy najszybciej, jak to możliwe. 📨',
 };
-let cfg: ModmailConfig = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings()['modmail_config'];
+// Etap K — config per-serwer: świeży odczyt (low-freq: DM/relay), fallback global.
+function modmailConfig(guildId: string): ModmailConfig {
+  const raw = getGuildSettings(guildId)['modmail_config'];
   try {
-    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) } : { ...DEFAULT };
+    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
@@ -37,11 +36,32 @@ function relayBody(msg: Message): string {
   return `${msg.content || ''}${atts ? `\n${atts}` : ''}`.trim() || '*(brak treści)*';
 }
 
-// DM od użytkownika → wątek na kanale obsługi.
+// DM autora → modmail KAŻDEGO serwera, na którym autor jest członkiem i modmail jest włączony.
+// (DM nie ma kontekstu serwera — dlatego iterujemy po wspólnych serwerach z włączonym modmailem.)
 async function inbound(client: Client, msg: Message): Promise<void> {
-  if (!cfg.enabled || !cfg.channelId || !hasCloud()) return;
-  const parent = await client.channels.fetch(cfg.channelId).catch(() => null);
-  if (!parent || !('threads' in parent) || parent.type !== ChannelType.GuildText) return;
+  if (!hasCloud()) return;
+  let delivered = false;
+  for (const guild of client.guilds.cache.values()) {
+    const gcfg = modmailConfig(guild.id);
+    if (!gcfg.enabled || !gcfg.channelId) continue;
+    const isMember = await guild.members
+      .fetch(msg.author.id)
+      .then(() => true)
+      .catch(() => false);
+    if (!isMember) continue;
+    const ok = await relayInbound(client, msg, gcfg).catch((e) => {
+      console.warn('[modmail] in:', (e as Error).message);
+      return false;
+    });
+    if (ok) delivered = true;
+  }
+  if (delivered) await msg.react('📨').catch(() => {});
+}
+
+// Relay DM do modmaila JEDNEGO serwera (gcfg). Zwraca true, jeśli dostarczono.
+async function relayInbound(client: Client, msg: Message, gcfg: ModmailConfig): Promise<boolean> {
+  const parent = await client.channels.fetch(gcfg.channelId).catch(() => null);
+  if (!parent || !('threads' in parent) || parent.type !== ChannelType.GuildText) return false;
   const text = parent as TextChannel;
 
   const existing = await cloudSelect<Row>(
@@ -73,7 +93,7 @@ async function inbound(client: Client, msg: Message): Promise<void> {
         type: ChannelType.PublicThread,
       })
       .catch(() => null);
-    if (!thread) return;
+    if (!thread) return false;
     isNew = true;
     await cloudInsert('modmail_threads', [
       { guild_id: text.guildId, user_id: msg.author.id, channel_id: thread.id, open: true },
@@ -106,8 +126,8 @@ async function inbound(client: Client, msg: Message): Promise<void> {
     })
     .catch(() => {});
 
-  if (isNew && cfg.greeting) await msg.author.send(cfg.greeting).catch(() => {});
-  await msg.react('📨').catch(() => {});
+  if (isNew && gcfg.greeting) await msg.author.send(gcfg.greeting).catch(() => {});
+  return true;
 }
 
 // Wiadomość obsługi w wątku modmaila → DM do użytkownika (lub !close).
@@ -174,21 +194,23 @@ async function outbound(client: Client, msg: Message): Promise<void> {
 }
 
 export function startModmail(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-
   client.on(Events.MessageCreate, async (msg: Message) => {
-    if (msg.author.bot || !cfg.enabled) return;
+    if (msg.author.bot) return;
     if (!msg.guild) {
+      // DM → inbound sam sprawdza per-serwer (po wszystkich wspólnych serwerach).
       await inbound(client, msg).catch((e) => console.warn('[modmail] in:', (e as Error).message));
       return;
     }
-    if (msg.channel.isThread() && msg.channel.parentId === cfg.channelId) {
-      await outbound(client, msg).catch((e) =>
-        console.warn('[modmail] out:', (e as Error).message),
-      );
+    // Wiadomość w wątku: czy to wątek modmaila TEGO serwera?
+    if (msg.channel.isThread()) {
+      const gcfg = modmailConfig(msg.guild.id);
+      if (gcfg.enabled && msg.channel.parentId === gcfg.channelId) {
+        await outbound(client, msg).catch((e) =>
+          console.warn('[modmail] out:', (e as Error).message),
+        );
+      }
     }
   });
 
-  console.log('[modmail] modmail aktywny (config z panelu).');
+  console.log('[modmail] modmail aktywny (config per-serwer z panelu).');
 }

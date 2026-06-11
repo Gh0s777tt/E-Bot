@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-247-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.177.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-248-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.178.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.178.0] — 🗂️ Modmail per-serwer · Etap K (C-11/?)
+
+- `[#248]` 🗂️ **Modmail (`modmail`) per-serwer** — dziesiąty zmigrowany moduł. Naprawia istotny **bug multi-serwer**: dotąd istniał JEDEN globalny kanał modmaila, więc bot w 2–3 serwerach obsługiwał modmail tylko dla jednego.
+  - 🤖 **Bot**: globalny `cfg` + `refresh()`/`setInterval` → `modmailConfig(guildId)` (świeży odczyt per-serwer, fallback global). **Inbound (DM → wątek):** DM nie ma kontekstu serwera, więc bot **iteruje po wspólnych serwerach** autora i relayuje do KAŻDEGO, na którym modmail jest włączony i autor jest członkiem (`relayInbound` per-serwer; reakcja 📨 raz po dostarczeniu; wątki już są kluczowane `guild_id`+`user_id` w Supabase). **Outbound (wątek → DM)** i dispatcher rozpoznają wątek modmaila po configu **serwera danego wątku** (`thread.guild`), nie po globalnym kanale.
+  - 🖥️ **Panel**: `modmail_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getModmailConfig`/`saveModmailConfig` (`community.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global; 1 serwer = identyczne zachowanie). Etap K (C-11). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.177.0] — 🗂️ Weryfikacja per-serwer · Etap K (C-10/?)
 

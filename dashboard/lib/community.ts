@@ -381,7 +381,7 @@ export const MODMAIL_DEFAULT: ModmailConfig = {
 };
 
 export async function getModmailConfig(): Promise<ModmailConfig> {
-  const raw = await getRawSetting('modmail_config');
+  const raw = await getConfigSetting('modmail_config');
   if (!raw) return structuredClone(MODMAIL_DEFAULT);
   try {
     return { ...MODMAIL_DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) };
@@ -390,7 +390,7 @@ export async function getModmailConfig(): Promise<ModmailConfig> {
   }
 }
 export async function saveModmailConfig(cfg: ModmailConfig): Promise<void> {
-  await setRawSetting('modmail_config', JSON.stringify(cfg));
+  await setConfigSetting('modmail_config', JSON.stringify(cfg));
 }
 
 // ── Sugestie (Faza 7 / F7.1) ──
