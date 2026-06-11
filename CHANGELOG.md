@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-290-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.220.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-291-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.221.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.221.0] — 🌍 i18n UI panelu — strona /notifications (powiadomienia live)
+
+- `[#291]` 🌍 **i18n UI panelu — kolejna fala: `/notifications` (alerty live + rola za sub Twitch).**
+  - 🖥️ **Panel**: 13 nowych kluczy `ui.notify.*` × **14 języków** w `panelI18n.ts` (parzystość 14×13=182). `app/notifications/page.tsx` (serwer) + `NotifSettingsForm.tsx` + `TwitchSubForm.tsx` (klient) na `tp()`. Przyciski zapisu w `NotifSettingsForm` reużywają generyków `ui.save`/`ui.saving`/`ui.saved`/`ui.saveError`; `heading2` służy też za etykietę checkboxa w `TwitchSubForm`. Placeholdery treści (`{mention} {streamer} {platform} {title} {url} {game}`), tokeny (`@here`, `<@&ROLE_ID>`, `/linktwitch`, `EventSub`, `channel:read:subscriptions`, `embed`) i marki nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 11/~40 stron.
 
 ## [0.220.0] — 🌍 i18n UI panelu — strony /appearance + /wishlist
 

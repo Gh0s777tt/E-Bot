@@ -836,6 +836,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Notatka (opcjonalnie)',
     'ui.wishlist.adding': 'Dodaję…',
     'ui.wishlist.add': 'Dodaj',
+    'ui.notify.intro':
+      'Bot sprawdza status „live" przez polling (Twitch/Kick/Rumble co ~60 s; YouTube opcjonalnie). Gdy kanał przechodzi z offline na online, wysyła embed na wskazany kanał Discord. Zmiany zapisują się do bazy i bot stosuje je na żywo.',
+    'ui.notify.heading1': 'Powiadomienia live',
+    'ui.notify.heading2': 'Rola za subskrypcję Twitch',
+    'ui.notify.channelLabel': 'Kanał powiadomień',
+    'ui.notify.channelHelp':
+      'Kanał, na który bot wyśle ogłoszenie o live. Lista pobierana z serwera.',
+    'ui.notify.mentionLabel': 'Wzmianka (opcjonalnie)',
+    'ui.notify.mentionPlaceholder': '@here lub <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Treść ogłoszenia ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Tytuł embeda',
+    'ui.notify.platforms': 'Platformy',
+    'ui.notify.youtubeQuota': '(zużywa quota)',
+    'ui.notify.subRoleLabel': 'Rola dla subskrybentów',
+    'ui.notify.subFootNote':
+      'Subskrybent łączy konto komendą /linktwitch, a po zasubskrybowaniu bot nada mu tę rolę. Wymaga jednorazowo: autoryzacji EventSub subskrypcji u twórcy (scope channel:read:subscriptions) — patrz podsumowanie.',
     'ui.wishlist.empty':
       'Lista życzeń jest pusta. Wyszukaj grę powyżej (wymaga b6-schema.sql w Supabase).',
     'ui.wishlist.noCover': 'brak okładki',
@@ -1006,6 +1023,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Note (optional)',
     'ui.wishlist.adding': 'Adding…',
     'ui.wishlist.add': 'Add',
+    'ui.notify.intro':
+      'The bot checks the “live” status via polling (Twitch/Kick/Rumble every ~60 s; YouTube optional). When a channel goes from offline to online, it sends an embed to the chosen Discord channel. Changes save to the database and the bot applies them live.',
+    'ui.notify.heading1': 'Live notifications',
+    'ui.notify.heading2': 'Twitch subscription role',
+    'ui.notify.channelLabel': 'Notifications channel',
+    'ui.notify.channelHelp':
+      'The channel the bot posts the live announcement to. The list is fetched from the server.',
+    'ui.notify.mentionLabel': 'Mention (optional)',
+    'ui.notify.mentionPlaceholder': '@here or <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Announcement text ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Embed title',
+    'ui.notify.platforms': 'Platforms',
+    'ui.notify.youtubeQuota': '(uses quota)',
+    'ui.notify.subRoleLabel': 'Role for subscribers',
+    'ui.notify.subFootNote':
+      'A subscriber links their account with /linktwitch, and after subscribing the bot grants them this role. Requires once: EventSub subscription authorization from the creator (scope channel:read:subscriptions) — see the summary.',
     'ui.wishlist.empty':
       'Your wishlist is empty. Search for a game above (requires b6-schema.sql in Supabase).',
     'ui.wishlist.noCover': 'no cover',
@@ -1176,6 +1210,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Notiz (optional)',
     'ui.wishlist.adding': 'Wird hinzugefügt…',
     'ui.wishlist.add': 'Hinzufügen',
+    'ui.notify.intro':
+      'Der Bot prüft den „Live“-Status per Polling (Twitch/Kick/Rumble alle ~60 s; YouTube optional). Wenn ein Kanal von offline auf online wechselt, sendet er ein embed an den gewählten Discord-Kanal. Änderungen werden in der Datenbank gespeichert und vom Bot live übernommen.',
+    'ui.notify.heading1': 'Live-Benachrichtigungen',
+    'ui.notify.heading2': 'Twitch-Abonnement-Rolle',
+    'ui.notify.channelLabel': 'Benachrichtigungskanal',
+    'ui.notify.channelHelp':
+      'Der Kanal, in dem der Bot die Live-Ankündigung postet. Die Liste wird vom Server abgerufen.',
+    'ui.notify.mentionLabel': 'Erwähnung (optional)',
+    'ui.notify.mentionPlaceholder': '@here oder <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Ankündigungstext ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Embed-Titel',
+    'ui.notify.platforms': 'Plattformen',
+    'ui.notify.youtubeQuota': '(verbraucht Quota)',
+    'ui.notify.subRoleLabel': 'Rolle für Abonnenten',
+    'ui.notify.subFootNote':
+      'Ein Abonnent verknüpft sein Konto mit dem Befehl /linktwitch, und nach dem Abonnieren verleiht ihm der Bot diese Rolle. Erfordert einmalig: die Autorisierung des EventSub-Abonnements durch den Ersteller (Scope channel:read:subscriptions) — siehe Zusammenfassung.',
     'ui.wishlist.empty':
       'Deine Wunschliste ist leer. Suche oben nach einem Spiel (erfordert b6-schema.sql in Supabase).',
     'ui.wishlist.noCover': 'kein Cover',
@@ -1347,6 +1398,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Nota (opcional)',
     'ui.wishlist.adding': 'Añadiendo…',
     'ui.wishlist.add': 'Añadir',
+    'ui.notify.intro':
+      'El bot comprueba el estado «en directo» mediante sondeo (Twitch/Kick/Rumble cada ~60 s; YouTube opcional). Cuando un canal pasa de desconectado a conectado, envía un embed al canal de Discord elegido. Los cambios se guardan en la base de datos y el bot los aplica en vivo.',
+    'ui.notify.heading1': 'Notificaciones en directo',
+    'ui.notify.heading2': 'Rol por suscripción de Twitch',
+    'ui.notify.channelLabel': 'Canal de notificaciones',
+    'ui.notify.channelHelp':
+      'El canal en el que el bot publica el aviso de directo. La lista se obtiene del servidor.',
+    'ui.notify.mentionLabel': 'Mención (opcional)',
+    'ui.notify.mentionPlaceholder': '@here o <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Texto del aviso ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Título del embed',
+    'ui.notify.platforms': 'Plataformas',
+    'ui.notify.youtubeQuota': '(consume quota)',
+    'ui.notify.subRoleLabel': 'Rol para suscriptores',
+    'ui.notify.subFootNote':
+      'Un suscriptor vincula su cuenta con el comando /linktwitch y, tras suscribirse, el bot le otorga este rol. Requiere una vez: la autorización de la suscripción EventSub por parte del creador (scope channel:read:subscriptions) — consulta el resumen.',
     'ui.wishlist.empty':
       'Tu lista de deseos está vacía. Busca un juego arriba (requiere b6-schema.sql en Supabase).',
     'ui.wishlist.noCover': 'sin portada',
@@ -1518,6 +1586,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Nota (opzionale)',
     'ui.wishlist.adding': 'Aggiunta in corso…',
     'ui.wishlist.add': 'Aggiungi',
+    'ui.notify.intro':
+      'Il bot controlla lo stato «live» tramite polling (Twitch/Kick/Rumble ogni ~60 s; YouTube facoltativo). Quando un canale passa da offline a online, invia un embed al canale Discord scelto. Le modifiche vengono salvate nel database e il bot le applica in tempo reale.',
+    'ui.notify.heading1': 'Notifiche live',
+    'ui.notify.heading2': 'Ruolo per abbonamento Twitch',
+    'ui.notify.channelLabel': 'Canale delle notifiche',
+    'ui.notify.channelHelp':
+      'Il canale in cui il bot pubblica l’annuncio della diretta. L’elenco viene recuperato dal server.',
+    'ui.notify.mentionLabel': 'Menzione (facoltativa)',
+    'ui.notify.mentionPlaceholder': '@here o <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Testo dell’annuncio ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Titolo dell’embed',
+    'ui.notify.platforms': 'Piattaforme',
+    'ui.notify.youtubeQuota': '(consuma quota)',
+    'ui.notify.subRoleLabel': 'Ruolo per gli abbonati',
+    'ui.notify.subFootNote':
+      'Un abbonato collega il proprio account con il comando /linktwitch e, dopo l’abbonamento, il bot gli assegna questo ruolo. Richiede una volta: l’autorizzazione dell’abbonamento EventSub da parte del creatore (scope channel:read:subscriptions) — vedi il riepilogo.',
     'ui.wishlist.empty':
       'La tua lista dei desideri è vuota. Cerca un gioco qui sopra (richiede b6-schema.sql in Supabase).',
     'ui.wishlist.noCover': 'nessuna copertina',
@@ -1689,6 +1774,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Note (facultatif)',
     'ui.wishlist.adding': 'Ajout…',
     'ui.wishlist.add': 'Ajouter',
+    'ui.notify.intro':
+      'Le bot vérifie le statut « live » par interrogation (Twitch/Kick/Rumble toutes les ~60 s ; YouTube en option). Lorsqu’une chaîne passe de hors ligne à en ligne, il envoie un embed sur le salon Discord choisi. Les changements sont enregistrés dans la base de données et le bot les applique en direct.',
+    'ui.notify.heading1': 'Notifications live',
+    'ui.notify.heading2': 'Rôle pour abonnement Twitch',
+    'ui.notify.channelLabel': 'Salon des notifications',
+    'ui.notify.channelHelp':
+      'Le salon où le bot publie l’annonce de live. La liste est récupérée depuis le serveur.',
+    'ui.notify.mentionLabel': 'Mention (optionnel)',
+    'ui.notify.mentionPlaceholder': '@here ou <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Texte de l’annonce ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Titre de l’embed',
+    'ui.notify.platforms': 'Plateformes',
+    'ui.notify.youtubeQuota': '(consomme du quota)',
+    'ui.notify.subRoleLabel': 'Rôle pour les abonnés',
+    'ui.notify.subFootNote':
+      'Un abonné lie son compte avec la commande /linktwitch, et après son abonnement le bot lui attribue ce rôle. Nécessite une fois : l’autorisation de l’abonnement EventSub auprès du créateur (scope channel:read:subscriptions) — voir le résumé.',
     'ui.wishlist.empty':
       'Ta liste de souhaits est vide. Recherche un jeu ci-dessus (nécessite b6-schema.sql dans Supabase).',
     'ui.wishlist.noCover': 'pas de jaquette',
@@ -1860,6 +1962,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Nota (opcional)',
     'ui.wishlist.adding': 'A adicionar…',
     'ui.wishlist.add': 'Adicionar',
+    'ui.notify.intro':
+      'O bot verifica o estado «live» por sondagem (Twitch/Kick/Rumble a cada ~60 s; YouTube opcional). Quando um canal passa de offline para online, envia um embed para o canal do Discord escolhido. As alterações são guardadas na base de dados e o bot aplica-as em direto.',
+    'ui.notify.heading1': 'Notificações live',
+    'ui.notify.heading2': 'Cargo por subscrição Twitch',
+    'ui.notify.channelLabel': 'Canal de notificações',
+    'ui.notify.channelHelp':
+      'O canal onde o bot publica o anúncio de live. A lista é obtida a partir do servidor.',
+    'ui.notify.mentionLabel': 'Menção (opcional)',
+    'ui.notify.mentionPlaceholder': '@here ou <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Texto do anúncio ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Título do embed',
+    'ui.notify.platforms': 'Plataformas',
+    'ui.notify.youtubeQuota': '(consome quota)',
+    'ui.notify.subRoleLabel': 'Cargo para subscritores',
+    'ui.notify.subFootNote':
+      'Um subscritor liga a sua conta com o comando /linktwitch e, depois de subscrever, o bot atribui-lhe este cargo. Requer uma vez: a autorização da subscrição EventSub junto do criador (scope channel:read:subscriptions) — vê o resumo.',
     'ui.wishlist.empty':
       'A tua lista de desejos está vazia. Pesquisa um jogo acima (requer b6-schema.sql no Supabase).',
     'ui.wishlist.noCover': 'sem capa',
@@ -2028,6 +2147,21 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': '备注（可选）',
     'ui.wishlist.adding': '正在添加…',
     'ui.wishlist.add': '添加',
+    'ui.notify.intro':
+      '机器人通过轮询检查“直播”状态（Twitch/Kick/Rumble 每 ~60 秒一次；YouTube 可选）。当频道从离线变为在线时，会向指定的 Discord 频道发送一条 embed。更改保存到数据库，机器人即时生效。',
+    'ui.notify.heading1': '直播通知',
+    'ui.notify.heading2': 'Twitch 订阅身份组',
+    'ui.notify.channelLabel': '通知频道',
+    'ui.notify.channelHelp': '机器人发布直播公告的频道。列表从服务器获取。',
+    'ui.notify.mentionLabel': '提及（可选）',
+    'ui.notify.mentionPlaceholder': '@here 或 <@&ROLE_ID>',
+    'ui.notify.messageLabel': '公告文本（{mention} {streamer} {platform} {title} {url} {game}）',
+    'ui.notify.titleLabel': 'embed 标题',
+    'ui.notify.platforms': '平台',
+    'ui.notify.youtubeQuota': '（消耗配额）',
+    'ui.notify.subRoleLabel': '订阅者身份组',
+    'ui.notify.subFootNote':
+      '订阅者用 /linktwitch 命令关联账号，订阅后机器人会授予其该身份组。需一次性：在创作者处授权 EventSub 订阅（scope channel:read:subscriptions）——参见摘要。',
     'ui.wishlist.empty': '愿望单是空的。请在上方搜索游戏（需要 Supabase 中的 b6-schema.sql）。',
     'ui.wishlist.noCover': '无封面',
     'ui.wishlist.remove': '移除',
@@ -2197,6 +2331,21 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': '메모(선택)',
     'ui.wishlist.adding': '추가 중…',
     'ui.wishlist.add': '추가',
+    'ui.notify.intro':
+      '봇은 폴링으로 “라이브” 상태를 확인합니다(Twitch/Kick/Rumble 약 60초마다; YouTube 선택). 채널이 오프라인에서 온라인으로 전환되면 지정한 Discord 채널로 embed를 보냅니다. 변경 사항은 데이터베이스에 저장되며 봇이 실시간으로 적용합니다.',
+    'ui.notify.heading1': '라이브 알림',
+    'ui.notify.heading2': 'Twitch 구독 역할',
+    'ui.notify.channelLabel': '알림 채널',
+    'ui.notify.channelHelp': '봇이 라이브 공지를 게시할 채널입니다. 목록은 서버에서 가져옵니다.',
+    'ui.notify.mentionLabel': '멘션(선택)',
+    'ui.notify.mentionPlaceholder': '@here 또는 <@&ROLE_ID>',
+    'ui.notify.messageLabel': '공지 내용 ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'embed 제목',
+    'ui.notify.platforms': '플랫폼',
+    'ui.notify.youtubeQuota': '(할당량 소모)',
+    'ui.notify.subRoleLabel': '구독자 역할',
+    'ui.notify.subFootNote':
+      '구독자는 /linktwitch 명령으로 계정을 연결하고, 구독하면 봇이 이 역할을 부여합니다. 한 번 필요: 크리에이터의 EventSub 구독 인증(scope channel:read:subscriptions) — 요약 참고.',
     'ui.wishlist.empty':
       '위시리스트가 비어 있습니다. 위에서 게임을 검색하세요(Supabase에 b6-schema.sql 필요).',
     'ui.wishlist.noCover': '커버 없음',
@@ -2367,6 +2516,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Заметка (необязательно)',
     'ui.wishlist.adding': 'Добавляю…',
     'ui.wishlist.add': 'Добавить',
+    'ui.notify.intro':
+      'Бот проверяет статус «live» через опрос (Twitch/Kick/Rumble примерно каждые 60 с; YouTube опционально). Когда канал переходит из офлайна в онлайн, он отправляет embed в выбранный канал Discord. Изменения сохраняются в базе, и бот применяет их вживую.',
+    'ui.notify.heading1': 'Уведомления о live',
+    'ui.notify.heading2': 'Роль за подписку Twitch',
+    'ui.notify.channelLabel': 'Канал уведомлений',
+    'ui.notify.channelHelp':
+      'Канал, в который бот отправит объявление о live. Список загружается с сервера.',
+    'ui.notify.mentionLabel': 'Упоминание (опционально)',
+    'ui.notify.mentionPlaceholder': '@here или <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Текст объявления ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Заголовок embed',
+    'ui.notify.platforms': 'Платформы',
+    'ui.notify.youtubeQuota': '(расходует quota)',
+    'ui.notify.subRoleLabel': 'Роль для подписчиков',
+    'ui.notify.subFootNote':
+      'Подписчик привязывает аккаунт командой /linktwitch, и после оформления подписки бот выдаёт ему эту роль. Требуется однократно: авторизация EventSub подписок у автора (scope channel:read:subscriptions) — см. сводку.',
     'ui.wishlist.empty':
       'Список желаемого пуст. Найдите игру выше (требуется b6-schema.sql в Supabase).',
     'ui.wishlist.noCover': 'нет обложки',
@@ -2537,6 +2703,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Нотатка (необовʼязково)',
     'ui.wishlist.adding': 'Додаю…',
     'ui.wishlist.add': 'Додати',
+    'ui.notify.intro':
+      'Бот перевіряє статус «live» через опитування (Twitch/Kick/Rumble приблизно кожні 60 с; YouTube опційно). Коли канал переходить з офлайну в онлайн, він надсилає embed у вибраний канал Discord. Зміни зберігаються в базі, і бот застосовує їх наживо.',
+    'ui.notify.heading1': 'Сповіщення про live',
+    'ui.notify.heading2': 'Роль за підписку Twitch',
+    'ui.notify.channelLabel': 'Канал сповіщень',
+    'ui.notify.channelHelp':
+      'Канал, у який бот надішле оголошення про live. Список завантажується із сервера.',
+    'ui.notify.mentionLabel': 'Згадка (опційно)',
+    'ui.notify.mentionPlaceholder': '@here або <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Текст оголошення ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Заголовок embed',
+    'ui.notify.platforms': 'Платформи',
+    'ui.notify.youtubeQuota': '(витрачає quota)',
+    'ui.notify.subRoleLabel': 'Роль для підписників',
+    'ui.notify.subFootNote':
+      'Підписник прив’язує акаунт командою /linktwitch, а після оформлення підписки бот надає йому цю роль. Потрібно одноразово: авторизація EventSub підписок у автора (scope channel:read:subscriptions) — див. підсумок.',
     'ui.wishlist.empty':
       'Список бажань порожній. Знайдіть гру вище (потрібен b6-schema.sql у Supabase).',
     'ui.wishlist.noCover': 'немає обкладинки',
@@ -2707,6 +2890,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'メモ（任意）',
     'ui.wishlist.adding': '追加中…',
     'ui.wishlist.add': '追加',
+    'ui.notify.intro':
+      'ボットはポーリングで「ライブ」状態を確認します（Twitch/Kick/Rumble は約60秒ごと、YouTube は任意）。チャンネルがオフラインからオンラインに変わると、指定した Discord チャンネルに embed を送信します。変更はデータベースに保存され、ボットがリアルタイムで適用します。',
+    'ui.notify.heading1': 'ライブ通知',
+    'ui.notify.heading2': 'Twitch サブスクライブ用ロール',
+    'ui.notify.channelLabel': '通知チャンネル',
+    'ui.notify.channelHelp':
+      'ボットがライブ告知を投稿するチャンネルです。一覧はサーバーから取得されます。',
+    'ui.notify.mentionLabel': 'メンション（任意）',
+    'ui.notify.mentionPlaceholder': '@here または <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      '告知テキスト（{mention} {streamer} {platform} {title} {url} {game}）',
+    'ui.notify.titleLabel': 'embed のタイトル',
+    'ui.notify.platforms': 'プラットフォーム',
+    'ui.notify.youtubeQuota': '（クォータを消費）',
+    'ui.notify.subRoleLabel': 'サブスクライバー用ロール',
+    'ui.notify.subFootNote':
+      'サブスクライバーは /linktwitch コマンドでアカウントを連携し、サブスクライブするとボットがこのロールを付与します。一度だけ必要：クリエイターによる EventSub サブスクリプションの認可（scope channel:read:subscriptions）— 概要を参照。',
     'ui.wishlist.empty':
       'ウィッシュリストは空です。上でゲームを検索してください（Supabase に b6-schema.sql が必要です）。',
     'ui.wishlist.noCover': 'カバーなし',
@@ -2878,6 +3078,22 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'ملاحظة (اختياري)',
     'ui.wishlist.adding': 'جارٍ الإضافة…',
     'ui.wishlist.add': 'إضافة',
+    'ui.notify.intro':
+      'يتحقق البوت من حالة «live» عبر الاستطلاع (Twitch/Kick/Rumble كل 60 ثانية تقريبًا؛ YouTube اختياري). عندما تنتقل القناة من وضع عدم الاتصال إلى الاتصال، يرسل embed إلى قناة Discord المختارة. تُحفظ التغييرات في قاعدة البيانات ويطبّقها البوت مباشرةً.',
+    'ui.notify.heading1': 'إشعارات البث المباشر',
+    'ui.notify.heading2': 'رتبة مقابل اشتراك Twitch',
+    'ui.notify.channelLabel': 'قناة الإشعارات',
+    'ui.notify.channelHelp':
+      'القناة التي يرسل إليها البوت إعلان البث المباشر. تُجلب القائمة من الخادم.',
+    'ui.notify.mentionLabel': 'الإشارة (اختياري)',
+    'ui.notify.mentionPlaceholder': '@here أو <@&ROLE_ID>',
+    'ui.notify.messageLabel': 'نص الإعلان ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'عنوان embed',
+    'ui.notify.platforms': 'المنصّات',
+    'ui.notify.youtubeQuota': '(يستهلك quota)',
+    'ui.notify.subRoleLabel': 'رتبة للمشتركين',
+    'ui.notify.subFootNote':
+      'يربط المشترك حسابه بأمر /linktwitch، وبعد الاشتراك يمنحه البوت هذه الرتبة. يتطلب مرة واحدة: تفويض اشتراكات EventSub من المنشئ (scope channel:read:subscriptions) — انظر الملخّص.',
     'ui.wishlist.empty':
       'قائمة رغباتك فارغة. ابحث عن لعبة في الأعلى (يتطلب b6-schema.sql في Supabase).',
     'ui.wishlist.noCover': 'لا يوجد غلاف',
@@ -3048,6 +3264,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.wishlist.notePlaceholder': 'Catatan (opsional)',
     'ui.wishlist.adding': 'Menambahkan…',
     'ui.wishlist.add': 'Tambah',
+    'ui.notify.intro':
+      'Bot memeriksa status “live” melalui polling (Twitch/Kick/Rumble setiap ~60 d; YouTube opsional). Saat sebuah kanal beralih dari offline ke online, bot mengirim embed ke kanal Discord yang dipilih. Perubahan tersimpan ke basis data dan bot menerapkannya secara langsung.',
+    'ui.notify.heading1': 'Notifikasi live',
+    'ui.notify.heading2': 'Peran untuk langganan Twitch',
+    'ui.notify.channelLabel': 'Kanal notifikasi',
+    'ui.notify.channelHelp':
+      'Kanal tempat bot memposting pengumuman live. Daftar diambil dari server.',
+    'ui.notify.mentionLabel': 'Mention (opsional)',
+    'ui.notify.mentionPlaceholder': '@here atau <@&ROLE_ID>',
+    'ui.notify.messageLabel':
+      'Teks pengumuman ({mention} {streamer} {platform} {title} {url} {game})',
+    'ui.notify.titleLabel': 'Judul embed',
+    'ui.notify.platforms': 'Platform',
+    'ui.notify.youtubeQuota': '(memakai kuota)',
+    'ui.notify.subRoleLabel': 'Peran untuk pelanggan',
+    'ui.notify.subFootNote':
+      'Pelanggan menghubungkan akunnya dengan perintah /linktwitch, dan setelah berlangganan bot memberinya peran ini. Memerlukan sekali: otorisasi langganan EventSub dari kreator (scope channel:read:subscriptions) — lihat ringkasan.',
     'ui.wishlist.empty':
       'Daftar keinginan kamu kosong. Cari game di atas (memerlukan b6-schema.sql di Supabase).',
     'ui.wishlist.noCover': 'tanpa sampul',

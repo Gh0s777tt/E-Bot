@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { TwitchSubConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ export default function TwitchSubForm({
   initial: TwitchSubConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<TwitchSubConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,11 +43,11 @@ export default function TwitchSubForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Rola za subskrypcję Twitch</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.notify.heading2')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Rola dla subskrybentów</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.notify.subRoleLabel')}</span>
         <RoleSelect
           value={c.roleId}
           onChange={(v) => setC({ ...c, roleId: v })}
@@ -53,12 +56,7 @@ export default function TwitchSubForm({
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Subskrybent łączy konto komendą <code className="text-accent">/linktwitch</code>, a po
-        zasubskrybowaniu bot nada mu tę rolę. <strong>Wymaga jednorazowo:</strong> autoryzacji
-        EventSub subskrypcji u twórcy (scope <code>channel:read:subscriptions</code>) — patrz
-        podsumowanie.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.notify.subFootNote')}</p>
     </div>
   );
 }

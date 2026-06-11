@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 
 type Settings = {
@@ -15,11 +17,12 @@ type Settings = {
   notify_title: string;
 };
 
-const PLATFORMS: { key: keyof Settings; label: string; color: string }[] = [
+// Nazwy platform = marki; przy YouTube dochodzi przetłumaczony dopisek o quocie (ui.notify.youtubeQuota).
+const PLATFORMS: { key: keyof Settings; label: string; color: string; quota?: boolean }[] = [
   { key: 'notify_enabled_twitch', label: 'Twitch', color: '#9146ff' },
   { key: 'notify_enabled_kick', label: 'Kick', color: '#53fc18' },
   { key: 'notify_enabled_rumble', label: 'Rumble', color: '#85c742' },
-  { key: 'notify_enabled_youtube', label: 'YouTube (zużywa quota)', color: '#ff0000' },
+  { key: 'notify_enabled_youtube', label: 'YouTube', color: '#ff0000', quota: true },
 ];
 
 function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
@@ -44,6 +47,7 @@ export default function NotifSettingsForm({
   initial: Settings;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [s, setS] = useState<Settings>(initial);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
@@ -69,31 +73,32 @@ export default function NotifSettingsForm({
   return (
     <div className="max-w-2xl space-y-6">
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-white/90">Kanał powiadomień</label>
+        <label className="block text-sm font-semibold text-white/90">
+          {tp(lang, 'ui.notify.channelLabel')}
+        </label>
         <ChannelSelect
           value={s.notify_channel_id}
           onChange={(v) => set('notify_channel_id', v)}
           channels={guild.channels}
         />
-        <p className="text-xs text-muted">
-          Kanał, na który bot wyśle ogłoszenie o live. Lista pobierana z serwera.
-        </p>
+        <p className="text-xs text-muted">{tp(lang, 'ui.notify.channelHelp')}</p>
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-white/90">Wzmianka (opcjonalnie)</label>
+        <label className="block text-sm font-semibold text-white/90">
+          {tp(lang, 'ui.notify.mentionLabel')}
+        </label>
         <input
           value={s.notify_mention}
           onChange={(e) => set('notify_mention', e.target.value)}
-          placeholder="@here lub <@&ID_ROLI>"
+          placeholder={tp(lang, 'ui.notify.mentionPlaceholder')}
           className="w-full rounded-md border border-line bg-elevated px-3 py-2 outline-none focus:border-accent"
         />
       </div>
 
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-white/90">
-          Treść ogłoszenia ({'{mention}'} {'{streamer}'} {'{platform}'} {'{title}'} {'{url}'}{' '}
-          {'{game}'})
+          {tp(lang, 'ui.notify.messageLabel')}
         </label>
         <textarea
           value={s.notify_message}
@@ -104,7 +109,9 @@ export default function NotifSettingsForm({
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-semibold text-white/90">Tytuł embeda</label>
+        <label className="block text-sm font-semibold text-white/90">
+          {tp(lang, 'ui.notify.titleLabel')}
+        </label>
         <input
           value={s.notify_title}
           onChange={(e) => set('notify_title', e.target.value)}
@@ -113,7 +120,9 @@ export default function NotifSettingsForm({
       </div>
 
       <div className="space-y-3">
-        <label className="block text-sm font-semibold text-white/90">Platformy</label>
+        <label className="block text-sm font-semibold text-white/90">
+          {tp(lang, 'ui.notify.platforms')}
+        </label>
         {PLATFORMS.map((p) => (
           <div
             key={p.key}
@@ -121,7 +130,7 @@ export default function NotifSettingsForm({
           >
             <span className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: p.color }} />
-              {p.label}
+              {p.quota ? `${p.label} ${tp(lang, 'ui.notify.youtubeQuota')}` : p.label}
             </span>
             <Toggle on={s[p.key] as boolean} onClick={() => set(p.key, !s[p.key] as never)} />
           </div>
@@ -134,12 +143,14 @@ export default function NotifSettingsForm({
           disabled={status === 'saving'}
           className="rounded bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
-          {status === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
+          {status === 'saving' ? tp(lang, 'ui.saving') : tp(lang, 'ui.save')}
         </button>
         {status === 'saved' && (
-          <span className="text-sm text-green-400">✓ Zapisano — bot zastosuje od razu</span>
+          <span className="text-sm text-green-400">{tp(lang, 'ui.saved')}</span>
         )}
-        {status === 'error' && <span className="text-sm text-accent">Błąd zapisu</span>}
+        {status === 'error' && (
+          <span className="text-sm text-accent">{tp(lang, 'ui.saveError')}</span>
+        )}
       </div>
     </div>
   );
