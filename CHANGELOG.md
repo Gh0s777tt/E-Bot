@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-280-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.210.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-281-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.211.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.211.0] — 🌍 i18n treści: „Jak to działa?" — chunk 7 (Inne) → **KOMPLET 37/37**
+
+- `[#281]` 🌍 **„Jak to działa?" (`HowItWorks`) — chunk 7 domyka całą treść.** Finałowa porcja trzeciej fali i18n treści panelu.
+  - 🖥️ **Panel**: do `HOW_CONTENT_I18N` (`lib/howItWorksI18n.ts`) doszły ostatnie strony grupy „Inne" — `/appearance`, `/commands`, `/custom-commands`, `/integrations`, `/profile`, `/settings` w **14 językach**. **Tym samym wszystkie 37 stron „Jak to działa?" są przetłumaczone na 14 języków** (weryfikacja: 13 locale × 37 stron = pełna parzystość). Marki/tech (`Discord`/`Twitch`/`YouTube`/`AI`/`Supabase`/`Stripe`) i terminy slash-komend nietłumaczone; uprawnienia w oficjalnych nazwach Discorda.
+  - ✅ **Domknięcie 3. fali i18n treści panelu**: po `TourGuide` (#272), `Assistant` (#273) i `HowItWorks` (chunki #274–#281) cała treść pomocy panelu jest wielojęzyczna. Fallback do PL (`HOW_IT_WORKS`) zostaje jako siatka bezpieczeństwa dla bazy `pl` i ewentualnych nowych stron.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0. Wstecznie zgodne (pl niezmienione).
 
 ## [0.210.0] — 🌍 i18n treści: „Jak to działa?" — chunk 6 (Ekonomia + Biblioteka)
 
