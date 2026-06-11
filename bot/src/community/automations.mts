@@ -1,7 +1,7 @@
 // Tor O — automatyzacje IFTTT-lite: reguły „event → akcja" z panelu (settings 'automations_config').
 // Triggery: dołączenie członka, słowo-klucz. Akcje: wyślij wiadomość / nadaj rolę / wyślij DM.
 import { type Client, Events, type GuildMember, type Message, type TextChannel } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Rule = {
   event: 'join' | 'keyword';
@@ -12,8 +12,9 @@ type Rule = {
   text: string;
 };
 
-function rules(): Rule[] {
-  const raw = getSettings()['automations_config'];
+// Etap K — config per-serwer: świeży odczyt (reguły z roleId/channelId są per-serwer), fallback global.
+function rules(guildId: string): Rule[] {
+  const raw = getGuildSettings(guildId)['automations_config'];
   try {
     const c = raw ? (JSON.parse(raw) as { enabled?: boolean; rules?: Rule[] }) : {};
     return c.enabled && Array.isArray(c.rules) ? c.rules : [];
@@ -51,12 +52,12 @@ async function run(rule: Rule, member: GuildMember): Promise<void> {
 export function startAutomations(client: Client): void {
   console.log('[automations] aktywne (reguły z panelu).');
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
-    for (const r of rules()) if (r.event === 'join') await run(r, member);
+    for (const r of rules(member.guild.id)) if (r.event === 'join') await run(r, member);
   });
   client.on(Events.MessageCreate, async (msg: Message) => {
     if (msg.author.bot || !msg.guild || !msg.member) return;
     const content = msg.content.toLowerCase();
-    for (const r of rules()) {
+    for (const r of rules(msg.guild.id)) {
       if (r.event === 'keyword' && r.keyword && content.includes(r.keyword.toLowerCase())) {
         if (onCooldown(`${msg.author.id}|${r.keyword}`)) continue;
         await run(r, msg.member);

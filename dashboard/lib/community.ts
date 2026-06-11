@@ -360,7 +360,7 @@ export type AutomationRule = {
 export type AutomationsConfig = { enabled: boolean; rules: AutomationRule[] };
 export const AUTOMATIONS_DEFAULT: AutomationsConfig = { enabled: false, rules: [] };
 export async function getAutomationsConfig(): Promise<AutomationsConfig> {
-  const raw = await getRawSetting('automations_config');
+  const raw = await getConfigSetting('automations_config');
   if (!raw) return structuredClone(AUTOMATIONS_DEFAULT);
   try {
     return { ...AUTOMATIONS_DEFAULT, ...(JSON.parse(raw) as Partial<AutomationsConfig>) };
@@ -369,7 +369,7 @@ export async function getAutomationsConfig(): Promise<AutomationsConfig> {
   }
 }
 export async function saveAutomationsConfig(cfg: AutomationsConfig): Promise<void> {
-  await setRawSetting('automations_config', JSON.stringify(cfg));
+  await setConfigSetting('automations_config', JSON.stringify(cfg));
 }
 
 // ── Modmail (Faza 7 / F6.4) ──

@@ -2,14 +2,15 @@
 // padnie w wiadomości innej osoby (z poszanowaniem dostępu do kanału). Config 'highlights_config'.
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type HL = { user_id: string; word: string };
 let cache: HL[] = [];
 const cooldown = new Map<string, number>(); // user:channel → ts
 
-export function highlightsEnabled(): boolean {
-  const raw = getSettings()['highlights_config'];
+// Etap K — config per-serwer: świeży odczyt {enabled}, fallback global.
+export function highlightsEnabled(guildId: string): boolean {
+  const raw = getGuildSettings(guildId)['highlights_config'];
   try {
     return raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;
   } catch {
@@ -31,7 +32,7 @@ export function startHighlights(client: Client): void {
   setInterval(() => void refreshCache().catch(() => {}), 60_000);
 
   client.on(Events.MessageCreate, async (msg: Message) => {
-    if (msg.author.bot || !msg.guild || !highlightsEnabled()) return;
+    if (msg.author.bot || !msg.guild || !highlightsEnabled(msg.guild.id)) return;
     const content = (msg.content || '').toLowerCase();
     if (!content || !cache.length) return;
     const ch = msg.channel;

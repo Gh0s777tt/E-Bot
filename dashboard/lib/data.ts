@@ -293,6 +293,8 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'responder_config',
   'counting_config',
   'afk_config',
+  'highlights_config',
+  'automations_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

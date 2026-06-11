@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-254-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.184.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-255-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.185.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.185.0] — 🗂️ Highlighty + automatyzacje per-serwer · Etap K (C-18/?)
+
+- `[#255]` 🗂️ **Highlighty (`highlights`) + automatyzacje IFTTT-lite (`automations`) per-serwer** — siedemnasta fala, batch dwóch modułów społeczności.
+  - 🤖 **Bot**: `highlights` — `highlightsEnabled()` → `highlightsEnabled(guildId)` w handlerze `MessageCreate` (`msg.guild.id`); każdy serwer włącza/wyłącza highlighty osobno. `automations` — `rules()` → `rules(guildId)` w obu handlerach (`GuildMemberAdd` → `member.guild.id`, `MessageCreate` → `msg.guild.id`); **naprawia kolizję**: reguły mają `roleId`/`channelId`, więc bez migracji serwer B wykonywał reguły serwera A (nadawał role/pisał na kanały serwera A).
+  - 🖥️ **Panel**: `highlights_config` i `automations_config` w `MIGRATED_GUILD_KEYS` (panel + bot). `getAutomationsConfig`/`saveAutomationsConfig` (`community.ts`) przez router; highlighty (sam przełącznik) przez `moduleState.ts`.
+  - Wsteczna zgodność (fallback global). Etap K (C-18). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.184.0] — 🗂️ Liczenie + AFK per-serwer · Etap K (C-17/?)
 
