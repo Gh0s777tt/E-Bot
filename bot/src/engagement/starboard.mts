@@ -7,12 +7,18 @@ import {
   type PartialMessageReaction,
   type TextChannel,
 } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 const posted = new Set<string>(); // id wiadomości już na starboardzie (dedup w pamięci)
 
-function cfg(): { on: boolean; channelId: string; threshold: number; emoji: string } {
-  const raw = getSettings()['starboard_config'];
+// Etap K — config per-serwer: świeży odczyt (kanał starboardu i tak per-serwer), fallback global.
+function cfg(guildId: string): {
+  on: boolean;
+  channelId: string;
+  threshold: number;
+  emoji: string;
+} {
+  const raw = getGuildSettings(guildId)['starboard_config'];
   try {
     const c = raw
       ? (JSON.parse(raw) as {
@@ -42,7 +48,7 @@ export function startStarboard(client: Client): void {
   console.log('[starboard] aktywny (config z panelu).');
   client.on(Events.MessageReactionAdd, async (reaction) => {
     try {
-      const c = cfg();
+      const c = cfg(reaction.message.guildId ?? '');
       if (!c.on || !c.channelId) return;
       if (reaction.partial) await reaction.fetch().catch(() => {});
       if (!emojiMatches(reaction, c.emoji)) return;

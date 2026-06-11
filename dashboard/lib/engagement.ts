@@ -38,7 +38,7 @@ export const STARBOARD_DEFAULT: StarboardConfig = {
 };
 
 export async function getStarboard(): Promise<StarboardConfig> {
-  const raw = await getRawSetting('starboard_config');
+  const raw = await getConfigSetting('starboard_config');
   if (!raw) return structuredClone(STARBOARD_DEFAULT);
   try {
     return { ...STARBOARD_DEFAULT, ...(JSON.parse(raw) as Partial<StarboardConfig>) };
@@ -47,7 +47,7 @@ export async function getStarboard(): Promise<StarboardConfig> {
   }
 }
 export async function saveStarboard(cfg: StarboardConfig): Promise<void> {
-  await setRawSetting('starboard_config', JSON.stringify(cfg));
+  await setConfigSetting('starboard_config', JSON.stringify(cfg));
 }
 
 // ── Temp-voice ──

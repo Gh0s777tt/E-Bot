@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-251-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.181.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-252-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.182.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.182.0] — 🗂️ Starboard per-serwer · Etap K (C-15/?)
+
+- `[#252]` 🗂️ **Starboard (`starboard`) per-serwer** — czternasty zmigrowany moduł. Globalny config = jeden kanał/próg/emoji dla wszystkich serwerów.
+  - 🤖 **Bot**: `cfg()` → `cfg(guildId)` (świeży odczyt per-serwer, fallback global) w handlerze `MessageReactionAdd` (`cfg(reaction.message.guildId)`). Każdy serwer ma własny kanał starboardu, próg ⭐ i emoji. (Dedup `posted` w pamięci po ID wiadomości — globalnie unikatowe, bez zmian.)
+  - 🖥️ **Panel**: `starboard_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getStarboard`/`saveStarboard` (`engagement.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-15). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.181.0] — 🗂️ TempVoice per-serwer · Etap K (C-14/?)
 

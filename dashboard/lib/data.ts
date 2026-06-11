@@ -289,6 +289,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'applications_config',
   'tickets_config',
   'tempvoice_config',
+  'starboard_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {
