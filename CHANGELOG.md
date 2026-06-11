@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-244-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.174.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-245-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.175.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.175.0] — 🗂️ Automod per-serwer · Etap K (C-8/?)
+
+- `[#245]` 🗂️ **Automoderacja (`automod`) per-serwer** — siódmy zmigrowany moduł, drugi wysokiej częstotliwości (chodzi na każdej wiadomości):
+  - 🤖 **Bot**: zamiast jednej globalnej cache — **cache per-serwer z TTL 30 s** (`cfgFor(guildId)`), trzymający config **i skompilowane regexy** `bannedRegex`. Każdy serwer ma własne filtry, kary, eskalację, wyjątki, anti-scam, PII i kanał mod-logu. `/mod` czyta kanał mod-logu per-serwer.
+  - 🖥️ **Panel**: `automod_config` w `MIGRATED_GUILD_KEYS` (panel + bot); formularz automoda (`community.ts`) i przełącznik per-serwer. (AI-moderacja i natywny AutoMod Discorda to osobne configi — nietknięte.)
+  - Wsteczna zgodność (fallback global). Etap K (C-8). Bot + panel (bot pierwszy).
 
 ## [0.174.0] — 🗂️ Ekonomia per-serwer (16 miejsc) · Etap K (C-7/?)
 

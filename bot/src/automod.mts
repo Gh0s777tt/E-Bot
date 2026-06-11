@@ -3,7 +3,7 @@
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from './lib/cloud.mts';
 import { findPII, type PiiOpts, piiLabel, scanScam } from './lib/contentScan.mts';
-import { getSettings } from './lib/db.mts';
+import { getGuildSettings } from './lib/db.mts';
 
 type AutomodConfig = {
   enabled: boolean;
@@ -51,13 +51,16 @@ const DEFAULT: AutomodConfig = {
   timeoutMinutes: 10,
   escalation: { enabled: false, threshold: 3, windowMin: 10, action: 'timeout' },
 };
-let cfg: AutomodConfig = { ...DEFAULT };
-let compiled: RegExp[] = [];
-
-function refresh(): void {
-  const raw = getSettings()['automod_config'];
-  cfg = raw ? { ...DEFAULT, ...(safeParse(raw) ?? {}) } : { ...DEFAULT };
-  compiled = (cfg.bannedRegex ?? [])
+// Etap K — config automoda PER-SERWER z cache TTL 30 s (automod chodzi na każdej wiadomości).
+// Cache trzyma cfg + skompilowane regexy. getGuildSettings = override serwera z fallbackiem global.
+type AutomodCached = { cfg: AutomodConfig; compiled: RegExp[]; at: number };
+const cfgCache = new Map<string, AutomodCached>();
+function cfgFor(guildId: string): AutomodCached {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit;
+  const raw = getGuildSettings(guildId)['automod_config'];
+  const cfg = raw ? { ...DEFAULT, ...(safeParse(raw) ?? {}) } : { ...DEFAULT };
+  const compiled = (cfg.bannedRegex ?? [])
     .map((p) => {
       try {
         return new RegExp(p, 'i');
@@ -66,10 +69,13 @@ function refresh(): void {
       }
     })
     .filter((r): r is RegExp => r !== null);
+  const entry: AutomodCached = { cfg, compiled, at: Date.now() };
+  cfgCache.set(guildId, entry);
+  return entry;
 }
 
 // Gdy blockLinks: przepuść, jeśli wszystkie linki są w whiteliscie domen (allowedLinks).
-function linkNotAllowed(content: string): boolean {
+function linkNotAllowed(content: string, cfg: AutomodConfig): boolean {
   const allowed = (cfg.allowedLinks ?? []).map((d) => d.toLowerCase()).filter(Boolean);
   if (!allowed.length) return true;
   const urls = content.match(/https?:\/\/[^\s]+/gi) ?? [];
@@ -166,13 +172,13 @@ async function flushStats(): Promise<void> {
 }
 
 export function startAutomod(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   void loadStats();
   setInterval(() => void flushStats(), 120_000);
 
   client.on(Events.MessageCreate, async (msg: Message) => {
-    if (!cfg.enabled || msg.author.bot || !msg.guild) return;
+    if (msg.author.bot || !msg.guild) return;
+    const { cfg, compiled } = cfgFor(msg.guild.id);
+    if (!cfg.enabled) return;
     const member = msg.member;
     if (member?.permissions.has(PermissionFlagsBits.ManageMessages)) return;
     if (cfg.exemptRoleId && member?.roles.cache.has(cfg.exemptRoleId)) return;
@@ -193,7 +199,7 @@ export function startAutomod(client: Client): void {
     else if (scam) reason = scam;
     else if (piiTypes.length) reason = `dane osobowe: ${piiTypes.map(piiLabel).join(', ')}`;
     else if (cfg.blockInvites && INVITE.test(content)) reason = 'zaproszenie Discord';
-    else if (cfg.blockLinks && LINK.test(content) && linkNotAllowed(content)) reason = 'link';
+    else if (cfg.blockLinks && LINK.test(content) && linkNotAllowed(content, cfg)) reason = 'link';
     else if (
       cfg.maxMentions > 0 &&
       msg.mentions.users.size + msg.mentions.roles.size > cfg.maxMentions

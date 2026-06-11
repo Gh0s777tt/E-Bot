@@ -15,13 +15,13 @@ import {
 } from 'discord.js';
 import { resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
 import { cloudDelete, cloudInsert, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { formatDuration, parseDuration } from '../lib/duration.mts';
 
 const MAX_TEMPBAN_MS = 365 * 86_400_000; // 1 rok
 
-function modlogChannelId(): string {
-  const raw = getSettings()['automod_config'];
+function modlogChannelId(guildId: string): string {
+  const raw = getGuildSettings(guildId)['automod_config'];
   try {
     return raw ? (JSON.parse(raw) as { modlogChannelId?: string }).modlogChannelId || '' : '';
   } catch {
@@ -48,7 +48,7 @@ async function logCase(
       },
     ]).catch((e) => console.warn('[mod]', (e as Error).message));
   }
-  const chId = modlogChannelId();
+  const chId = modlogChannelId(interaction.guildId ?? '');
   if (chId && interaction.guild) {
     const ch = await interaction.guild.channels.fetch(chId).catch(() => null);
     if (ch?.isTextBased() && 'send' in ch) {

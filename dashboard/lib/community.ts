@@ -97,7 +97,8 @@ export const AUTOMOD_DEFAULT: AutomodConfig = {
 };
 
 export async function getAutomodConfig(): Promise<AutomodConfig> {
-  const raw = await getRawSetting('automod_config');
+  // Etap K — automod_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('automod_config');
   if (!raw) return structuredClone(AUTOMOD_DEFAULT);
   try {
     return { ...AUTOMOD_DEFAULT, ...(JSON.parse(raw) as Partial<AutomodConfig>) };
@@ -106,7 +107,7 @@ export async function getAutomodConfig(): Promise<AutomodConfig> {
   }
 }
 export async function saveAutomodConfig(cfg: AutomodConfig): Promise<void> {
-  await setRawSetting('automod_config', JSON.stringify(cfg));
+  await setConfigSetting('automod_config', JSON.stringify(cfg));
 }
 
 // Statystyki automoda zliczane przez bota (cloud 'automod_stats': { 'YYYY-MM-DD': { kat: liczba } }).
