@@ -2,21 +2,19 @@
 
 // Etap K — asystent AI panelu. Pływający przycisk (zawsze dostępny) → panel czatu. Użytkownik
 // opisuje, czego chce, a asystent rozpisuje plan krok-po-kroku z klikalnymi linkami do stron.
-// Odpowiedź w języku użytkownika (model). Bez kluczy AI → uczciwa podpowiedź. Etykiety PL (i18n później).
+// Odpowiedź w języku użytkownika (model). Bez kluczy AI → uczciwa podpowiedź. Etykiety w 14 językach.
 import { Send, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { ASSISTANT_I18N } from '../lib/assistantI18n';
+import { useLang } from './LangContext';
 
 type Step = { title: string; detail: string; href: string | null };
 type Reply = { ok: boolean; summary: string; steps: Step[]; error?: string };
 
-const EXAMPLES = [
-  'Chcę serwer dla społeczności gamingowej: weryfikacja, poziomy i powiadomienia o streamach.',
-  'Jak ustawić ochronę przed nukiem i automoderację spamu?',
-  'Chcę ekonomię z walutą, sklepem ról i petami.',
-];
-
 export default function Assistant() {
+  const { lang } = useLang();
+  const a = ASSISTANT_I18N[lang] ?? ASSISTANT_I18N.pl;
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
@@ -47,7 +45,7 @@ export default function Assistant() {
         type="button"
         data-tour="assistant"
         onClick={() => setOpen((o) => !o)}
-        title="Asystent — opisz, czego chcesz"
+        title={a.tooltip}
         className="fixed bottom-5 right-5 z-[90] flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_30px_-6px_rgb(var(--accent-rgb)/0.8)] transition hover:bg-accent-hover hover:scale-105"
       >
         {open ? <X size={20} /> : <Sparkles size={20} />}
@@ -57,18 +55,15 @@ export default function Assistant() {
         <div className="fixed bottom-20 right-5 z-[90] flex max-h-[70vh] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-card shadow-2xl">
           <div className="flex items-center gap-2 border-b border-line px-4 py-3">
             <Sparkles size={16} className="text-accent" />
-            <span className="text-sm font-semibold">Asystent konfiguracji</span>
+            <span className="text-sm font-semibold">{a.header}</span>
           </div>
 
           <div className="flex-1 space-y-3 overflow-auto p-4 text-sm">
             {!reply && !busy && (
               <>
-                <p className="text-muted">
-                  Opisz, jak chcesz, żeby działał Twój serwer — rozpiszę plan krok po kroku i
-                  wskażę, gdzie to ustawić.
-                </p>
+                <p className="text-muted">{a.intro}</p>
                 <div className="space-y-1.5">
-                  {EXAMPLES.map((ex) => (
+                  {a.examples.map((ex) => (
                     <button
                       key={ex}
                       type="button"
@@ -85,21 +80,21 @@ export default function Assistant() {
               </>
             )}
 
-            {busy && <p className="text-muted">⏳ Układam plan…</p>}
+            {busy && <p className="text-muted">{a.busy}</p>}
 
             {reply && !reply.ok && (
               <div className="rounded-md border border-line bg-bg/40 p-3 text-muted">
                 {reply.error === 'nokey' ? (
                   <>
-                    🔑 Asystent AI wymaga klucza modelu. Dodaj <strong>DEEPSEEK_API_KEY</strong> lub{' '}
-                    <strong>OPENAI_API_KEY</strong> w środowisku panelu (zakładka{' '}
+                    {a.nokeyLead} <strong>DEEPSEEK_API_KEY</strong> /{' '}
+                    <strong>OPENAI_API_KEY</strong> {a.nokeyTail}{' '}
                     <Link href="/integrations" className="text-accent hover:underline">
-                      Integracje
+                      {a.integrations}
                     </Link>
-                    ), a ożyje.
+                    .
                   </>
                 ) : (
-                  <>⚠️ Nie udało się uzyskać odpowiedzi. Spróbuj ponownie za chwilę.</>
+                  <>{a.error}</>
                 )}
               </div>
             )}
@@ -123,7 +118,7 @@ export default function Assistant() {
                           onClick={() => setOpen(false)}
                           className="mt-2 inline-block rounded-md bg-accent/15 px-2.5 py-1 text-xs font-semibold text-accent transition hover:bg-accent/25"
                         >
-                          → Otwórz {s.href}
+                          → {a.open} {s.href}
                         </Link>
                       )}
                     </li>
@@ -137,7 +132,7 @@ export default function Assistant() {
                   }}
                   className="text-xs text-muted hover:text-accent"
                 >
-                  ↺ Zapytaj o coś innego
+                  {a.askAnother}
                 </button>
               </div>
             )}
@@ -150,7 +145,7 @@ export default function Assistant() {
               onKeyDown={(e) => {
                 if (e.key === 'Enter') void ask();
               }}
-              placeholder="Opisz, czego chcesz…"
+              placeholder={a.placeholder}
               className="w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
             />
             <button

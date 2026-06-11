@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-272-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.202.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-273-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.203.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.203.0] — 🌍 i18n treści: asystent AI (14 języków)
+
+- `[#273]` 🌍 **Asystent AI (`Assistant`) w 14 językach** — druga fala i18n treści.
+  - 🖥️ **Panel**: nowy `lib/assistantI18n.ts` z etykietami interfejsu asystenta (tooltip, nagłówek, akapit powitalny, **3 przykładowe zapytania**, stan „układam plan…", komunikaty błędu/braku klucza, „Otwórz", „Zapytaj o coś innego", placeholder) w **14 językach**. `Assistant.tsx` bierze język z `useLang()` (fallback → pl). Sama odpowiedź asystenta i tak jest w języku użytkownika (model) — tu przetłumaczono stały interfejs.
+  - Czysto panel (Vercel). Wstecznie zgodne (pl niezmienione). Zostaje ostatnia, największa fala i18n treści: **HowItWorks** (35 stron × 5 pól).
 
 ## [0.202.0] — 🌍 i18n treści: interaktywny samouczek (14 języków)
 

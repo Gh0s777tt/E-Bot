@@ -1,0 +1,284 @@
+// i18n etykiet asystenta AI (Assistant.tsx) — 14 języków jak reszta panelu. Sama ODPOWIEDŹ
+// asystenta i tak jest w języku użytkownika (model); tu tłumaczymy stały interfejs. Fallback → pl.
+import type { PanelLocale } from './panelI18n';
+
+export type AssistantContent = {
+  tooltip: string; // title pływającego przycisku
+  header: string; // nagłówek panelu
+  intro: string; // akapit powitalny
+  examples: string[]; // 3 przykładowe zapytania
+  busy: string; // trwa generowanie
+  error: string; // ogólny błąd
+  nokeyLead: string; // przed nazwami kluczy
+  nokeyTail: string; // po kluczach, przed linkiem „Integracje"
+  integrations: string; // tekst linku do /integrations
+  open: string; // prefiks linku „Otwórz <strona>"
+  askAnother: string; // reset rozmowy
+  placeholder: string; // placeholder pola tekstowego
+};
+
+export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
+  pl: {
+    tooltip: 'Asystent — opisz, czego chcesz',
+    header: 'Asystent konfiguracji',
+    intro:
+      'Opisz, jak chcesz, żeby działał Twój serwer — rozpiszę plan krok po kroku i wskażę, gdzie to ustawić.',
+    examples: [
+      'Chcę serwer dla społeczności gamingowej: weryfikacja, poziomy i powiadomienia o streamach.',
+      'Jak ustawić ochronę przed nukiem i automoderację spamu?',
+      'Chcę ekonomię z walutą, sklepem ról i petami.',
+    ],
+    busy: '⏳ Układam plan…',
+    error: '⚠️ Nie udało się uzyskać odpowiedzi. Spróbuj ponownie za chwilę.',
+    nokeyLead: '🔑 Asystent AI wymaga klucza modelu. Dodaj',
+    nokeyTail: 'w środowisku panelu — zakładka',
+    integrations: 'Integracje',
+    open: 'Otwórz',
+    askAnother: '↺ Zapytaj o coś innego',
+    placeholder: 'Opisz, czego chcesz…',
+  },
+  en: {
+    tooltip: 'Assistant — describe what you want',
+    header: 'Setup assistant',
+    intro:
+      'Describe how you want your server to work — I’ll write a step-by-step plan and point to where to set it up.',
+    examples: [
+      'I want a server for a gaming community: verification, levels and stream alerts.',
+      'How do I set up anti-nuke protection and spam automoderation?',
+      'I want an economy with currency, a role shop and pets.',
+    ],
+    busy: '⏳ Building a plan…',
+    error: '⚠️ Couldn’t get a response. Please try again in a moment.',
+    nokeyLead: '🔑 The AI assistant needs a model key. Add',
+    nokeyTail: 'in the panel environment — the tab',
+    integrations: 'Integrations',
+    open: 'Open',
+    askAnother: '↺ Ask about something else',
+    placeholder: 'Describe what you want…',
+  },
+  de: {
+    tooltip: 'Assistent — beschreibe, was du willst',
+    header: 'Einrichtungs-Assistent',
+    intro:
+      'Beschreibe, wie dein Server laufen soll — ich erstelle einen Schritt-für-Schritt-Plan und zeige, wo du es einstellst.',
+    examples: [
+      'Ich will einen Server für eine Gaming-Community: Verifizierung, Level und Stream-Benachrichtigungen.',
+      'Wie richte ich Anti-Nuke-Schutz und Spam-Automoderation ein?',
+      'Ich will eine Wirtschaft mit Währung, Rollen-Shop und Pets.',
+    ],
+    busy: '⏳ Erstelle einen Plan…',
+    error: '⚠️ Keine Antwort erhalten. Bitte versuche es gleich noch einmal.',
+    nokeyLead: '🔑 Der KI-Assistent braucht einen Modell-Schlüssel. Füge',
+    nokeyTail: 'in der Panel-Umgebung hinzu — der Tab',
+    integrations: 'Integrationen',
+    open: 'Öffnen',
+    askAnother: '↺ Etwas anderes fragen',
+    placeholder: 'Beschreibe, was du willst…',
+  },
+  es: {
+    tooltip: 'Asistente — describe lo que quieres',
+    header: 'Asistente de configuración',
+    intro:
+      'Describe cómo quieres que funcione tu servidor — escribiré un plan paso a paso e indicaré dónde configurarlo.',
+    examples: [
+      'Quiero un servidor para una comunidad gamer: verificación, niveles y avisos de streams.',
+      '¿Cómo configuro la protección anti-nuke y la automoderación de spam?',
+      'Quiero una economía con moneda, tienda de roles y mascotas.',
+    ],
+    busy: '⏳ Preparando un plan…',
+    error: '⚠️ No se pudo obtener respuesta. Inténtalo de nuevo en un momento.',
+    nokeyLead: '🔑 El asistente IA necesita una clave de modelo. Añade',
+    nokeyTail: 'en el entorno del panel — la pestaña',
+    integrations: 'Integraciones',
+    open: 'Abrir',
+    askAnother: '↺ Preguntar otra cosa',
+    placeholder: 'Describe lo que quieres…',
+  },
+  it: {
+    tooltip: 'Assistente — descrivi cosa vuoi',
+    header: 'Assistente di configurazione',
+    intro:
+      'Descrivi come vuoi che funzioni il tuo server — scriverò un piano passo passo e indicherò dove impostarlo.',
+    examples: [
+      'Voglio un server per una community gaming: verifica, livelli e notifiche di stream.',
+      'Come imposto la protezione anti-nuke e l’automoderazione dello spam?',
+      'Voglio un’economia con valuta, negozio di ruoli e pet.',
+    ],
+    busy: '⏳ Preparo un piano…',
+    error: '⚠️ Impossibile ottenere una risposta. Riprova tra un momento.',
+    nokeyLead: '🔑 L’assistente IA richiede una chiave del modello. Aggiungi',
+    nokeyTail: 'nell’ambiente del pannello — la scheda',
+    integrations: 'Integrazioni',
+    open: 'Apri',
+    askAnother: '↺ Chiedi qualcos’altro',
+    placeholder: 'Descrivi cosa vuoi…',
+  },
+  fr: {
+    tooltip: 'Assistant — décris ce que tu veux',
+    header: 'Assistant de configuration',
+    intro:
+      'Décris comment tu veux que ton serveur fonctionne — je rédige un plan étape par étape et indique où le régler.',
+    examples: [
+      'Je veux un serveur pour une communauté gaming : vérification, niveaux et alertes de stream.',
+      'Comment configurer la protection anti-nuke et l’automodération du spam ?',
+      'Je veux une économie avec monnaie, boutique de rôles et familiers.',
+    ],
+    busy: '⏳ Je prépare un plan…',
+    error: '⚠️ Impossible d’obtenir une réponse. Réessaie dans un instant.',
+    nokeyLead: '🔑 L’assistant IA a besoin d’une clé de modèle. Ajoute',
+    nokeyTail: 'dans l’environnement du panel — l’onglet',
+    integrations: 'Intégrations',
+    open: 'Ouvrir',
+    askAnother: '↺ Demander autre chose',
+    placeholder: 'Décris ce que tu veux…',
+  },
+  pt: {
+    tooltip: 'Assistente — descreva o que quer',
+    header: 'Assistente de configuração',
+    intro:
+      'Descreva como quer que o seu servidor funcione — vou escrever um plano passo a passo e indicar onde configurar.',
+    examples: [
+      'Quero um servidor para uma comunidade gamer: verificação, níveis e avisos de streams.',
+      'Como configuro a proteção anti-nuke e a automoderação de spam?',
+      'Quero uma economia com moeda, loja de cargos e pets.',
+    ],
+    busy: '⏳ A preparar um plano…',
+    error: '⚠️ Não foi possível obter resposta. Tente novamente daqui a pouco.',
+    nokeyLead: '🔑 O assistente de IA precisa de uma chave de modelo. Adicione',
+    nokeyTail: 'no ambiente do painel — o separador',
+    integrations: 'Integrações',
+    open: 'Abrir',
+    askAnother: '↺ Perguntar outra coisa',
+    placeholder: 'Descreva o que quer…',
+  },
+  zh: {
+    tooltip: '助手——描述你想要的',
+    header: '配置助手',
+    intro: '描述你希望服务器如何运作——我会写出逐步计划并指明在哪里设置。',
+    examples: [
+      '我想要一个游戏社区服务器：验证、等级和直播通知。',
+      '如何设置防炸服保护和垃圾信息自动管理？',
+      '我想要带货币、身份组商店和宠物的经济系统。',
+    ],
+    busy: '⏳ 正在制定计划……',
+    error: '⚠️ 无法获取回复，请稍后再试。',
+    nokeyLead: '🔑 AI 助手需要模型密钥。请在面板环境中添加',
+    nokeyTail: '——选项卡',
+    integrations: '集成',
+    open: '打开',
+    askAnother: '↺ 问点别的',
+    placeholder: '描述你想要的……',
+  },
+  ko: {
+    tooltip: '어시스턴트 — 원하는 것을 설명하세요',
+    header: '설정 어시스턴트',
+    intro:
+      '서버를 어떻게 운영하고 싶은지 설명하면 단계별 계획을 작성하고 설정 위치를 알려드립니다.',
+    examples: [
+      '게임 커뮤니티용 서버를 원해요: 인증, 레벨, 스트림 알림.',
+      '서버 파괴 방지와 스팸 자동 관리는 어떻게 설정하나요?',
+      '화폐, 역할 상점, 펫이 있는 경제 시스템을 원해요.',
+    ],
+    busy: '⏳ 계획을 세우는 중…',
+    error: '⚠️ 응답을 가져오지 못했습니다. 잠시 후 다시 시도하세요.',
+    nokeyLead: '🔑 AI 어시스턴트에는 모델 키가 필요합니다. 패널 환경에 추가하세요:',
+    nokeyTail: '— 탭',
+    integrations: '연동',
+    open: '열기',
+    askAnother: '↺ 다른 것 물어보기',
+    placeholder: '원하는 것을 설명하세요…',
+  },
+  ru: {
+    tooltip: 'Ассистент — опишите, что хотите',
+    header: 'Ассистент настройки',
+    intro:
+      'Опишите, как должен работать ваш сервер — я составлю пошаговый план и укажу, где это настроить.',
+    examples: [
+      'Хочу сервер для игрового сообщества: верификация, уровни и уведомления о стримах.',
+      'Как настроить защиту от нюка и автомодерацию спама?',
+      'Хочу экономику с валютой, магазином ролей и питомцами.',
+    ],
+    busy: '⏳ Составляю план…',
+    error: '⚠️ Не удалось получить ответ. Попробуйте ещё раз через мгновение.',
+    nokeyLead: '🔑 ИИ-ассистенту нужен ключ модели. Добавьте',
+    nokeyTail: 'в окружение панели — вкладка',
+    integrations: 'Интеграции',
+    open: 'Открыть',
+    askAnother: '↺ Спросить о другом',
+    placeholder: 'Опишите, что хотите…',
+  },
+  uk: {
+    tooltip: 'Асистент — опишіть, що хочете',
+    header: 'Асистент налаштування',
+    intro:
+      'Опишіть, як має працювати ваш сервер — я складу покроковий план і вкажу, де це налаштувати.',
+    examples: [
+      'Хочу сервер для ігрової спільноти: верифікація, рівні та сповіщення про стріми.',
+      'Як налаштувати захист від нюка та автомодерацію спаму?',
+      'Хочу економіку з валютою, магазином ролей і петами.',
+    ],
+    busy: '⏳ Складаю план…',
+    error: '⚠️ Не вдалося отримати відповідь. Спробуйте ще раз за мить.',
+    nokeyLead: '🔑 ШІ-асистенту потрібен ключ моделі. Додайте',
+    nokeyTail: 'в середовище панелі — вкладка',
+    integrations: 'Інтеграції',
+    open: 'Відкрити',
+    askAnother: '↺ Запитати про інше',
+    placeholder: 'Опишіть, що хочете…',
+  },
+  ja: {
+    tooltip: 'アシスタント — やりたいことを説明',
+    header: 'セットアップアシスタント',
+    intro: 'サーバーをどうしたいか説明すると、手順を立てて設定場所を示します。',
+    examples: [
+      'ゲームコミュニティ向けサーバーが欲しい：認証、レベル、配信通知。',
+      'ニュク対策とスパムの自動モデレーションはどう設定する？',
+      '通貨・ロールショップ・ペットのある経済が欲しい。',
+    ],
+    busy: '⏳ プランを作成中…',
+    error: '⚠️ 応答を取得できませんでした。少ししてからもう一度お試しください。',
+    nokeyLead: '🔑 AI アシスタントにはモデルキーが必要です。パネル環境に追加してください：',
+    nokeyTail: '— タブ',
+    integrations: '連携',
+    open: '開く',
+    askAnother: '↺ 別のことを聞く',
+    placeholder: 'やりたいことを説明…',
+  },
+  ar: {
+    tooltip: 'المساعد — صف ما تريد',
+    header: 'مساعد الإعداد',
+    intro: 'صف كيف تريد أن يعمل خادمك — سأكتب خطة خطوة بخطوة وأشير إلى مكان الإعداد.',
+    examples: [
+      'أريد خادمًا لمجتمع ألعاب: تحقّق، مستويات، وتنبيهات بث.',
+      'كيف أُعدّ الحماية من التدمير والإشراف التلقائي على السبام؟',
+      'أريد اقتصادًا بعملة، ومتجر رتب، وحيوانات أليفة.',
+    ],
+    busy: '⏳ أُعدّ خطة…',
+    error: '⚠️ تعذّر الحصول على رد. حاول مرة أخرى بعد قليل.',
+    nokeyLead: '🔑 يحتاج مساعد الذكاء الاصطناعي إلى مفتاح نموذج. أضِف',
+    nokeyTail: 'في بيئة اللوحة — تبويب',
+    integrations: 'التكاملات',
+    open: 'فتح',
+    askAnother: '↺ اسأل عن شيء آخر',
+    placeholder: 'صف ما تريد…',
+  },
+  id: {
+    tooltip: 'Asisten — jelaskan yang kamu mau',
+    header: 'Asisten penyiapan',
+    intro:
+      'Jelaskan bagaimana kamu ingin servermu berjalan — aku akan menyusun rencana langkah demi langkah dan menunjuk tempat mengaturnya.',
+    examples: [
+      'Aku mau server untuk komunitas gaming: verifikasi, level, dan notifikasi stream.',
+      'Bagaimana menyiapkan proteksi anti-nuke dan automoderasi spam?',
+      'Aku mau ekonomi dengan mata uang, toko role, dan pet.',
+    ],
+    busy: '⏳ Menyusun rencana…',
+    error: '⚠️ Gagal mendapat respons. Coba lagi sebentar.',
+    nokeyLead: '🔑 Asisten AI butuh kunci model. Tambahkan',
+    nokeyTail: 'di environment panel — tab',
+    integrations: 'Integrasi',
+    open: 'Buka',
+    askAnother: '↺ Tanya hal lain',
+    placeholder: 'Jelaskan yang kamu mau…',
+  },
+};
