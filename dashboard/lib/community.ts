@@ -320,7 +320,7 @@ export const APPLICATIONS_DEFAULT: ApplicationsConfig = {
   applications: [],
 };
 export async function getApplicationsConfig(): Promise<ApplicationsConfig> {
-  const raw = await getRawSetting('applications_config');
+  const raw = await getConfigSetting('applications_config');
   if (!raw) return structuredClone(APPLICATIONS_DEFAULT);
   try {
     return { ...APPLICATIONS_DEFAULT, ...(JSON.parse(raw) as Partial<ApplicationsConfig>) };
@@ -329,7 +329,7 @@ export async function getApplicationsConfig(): Promise<ApplicationsConfig> {
   }
 }
 export async function saveApplicationsConfig(cfg: ApplicationsConfig): Promise<void> {
-  await setRawSetting('applications_config', JSON.stringify(cfg));
+  await setConfigSetting('applications_config', JSON.stringify(cfg));
 }
 
 // ── Twitch sub → rola (Tor N) ──

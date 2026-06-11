@@ -25,7 +25,8 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
-  if (!applyEnabled()) {
+  const guildId = interaction.guildId ?? '';
+  if (!applyEnabled(guildId)) {
     await interaction.reply({
       content: '⚠️ Najpierw włącz i skonfiguruj aplikacje w panelu (kanał recenzji + rola).',
       flags: MessageFlags.Ephemeral,
@@ -41,8 +42,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
 
-  const panel = buildApplyPanel();
-  const apps = resolveApps();
+  const panel = buildApplyPanel(guildId);
+  const apps = resolveApps(guildId);
   const rows: ActionRowBuilder<ButtonBuilder>[] = [];
   for (let i = 0; i < apps.length; i += 5) {
     const row = new ActionRowBuilder<ButtonBuilder>();

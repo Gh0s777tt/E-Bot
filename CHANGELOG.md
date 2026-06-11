@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-248-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.178.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-249-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.179.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.179.0] — 🗂️ Aplikacje/rekrutacja per-serwer · Etap K (C-12/?)
+
+- `[#249]` 🗂️ **Aplikacje/rekrutacja (`applications`) per-serwer** — jedenasty zmigrowany moduł. Jak przy weryfikacji: globalny `acceptRoleId`/kanał recenzji oznaczał, że panel aplikacji na serwerze B próbował nadać rolę i pisać na kanał serwera A.
+  - 🤖 **Bot**: `cfg()` → `cfg(guildId)` (świeży odczyt per-serwer, fallback global), przewleczone przez cały łańcuch: `resolveApps(guildId)`, `findApp(id, guildId)`, `applyEnabled(guildId)`, `buildApplyPanel(guildId)` oraz oba handlery (`handleApplicationButton`/`handleApplicationModal` — `interaction.guildId`) i komendę `/applypanel`. Każdy serwer ma własne aplikacje (wiele paneli, pytania, kanały recenzji, role, embed Message Studio).
+  - 🖥️ **Panel**: `applications_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getApplicationsConfig`/`saveApplicationsConfig` (`community.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-12). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.178.0] — 🗂️ Modmail per-serwer · Etap K (C-11/?)
 

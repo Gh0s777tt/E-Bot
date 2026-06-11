@@ -16,7 +16,7 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { buildRichMessage, hasRich, type RichMessage } from '../lib/richMessage.mts';
 
 export type Application = {
@@ -41,8 +41,9 @@ type Cfg = {
 
 const DEFAULT_QS = ['Dlaczego chcesz dołączyć?', 'Co możesz wnieść?'];
 
-function cfg(): Cfg {
-  const raw = getSettings()['applications_config'];
+// Etap K — config per-serwer: świeży odczyt (low-freq: klik/komenda), fallback global.
+function cfg(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['applications_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {
@@ -69,8 +70,8 @@ function cfg(): Cfg {
 }
 
 // Lista aplikacji — z configu (2.0) lub jedna domyślna z pól legacy.
-export function resolveApps(): Application[] {
-  const c = cfg();
+export function resolveApps(guildId: string): Application[] {
+  const c = cfg(guildId);
   if (c.applications.length) {
     return c.applications.map((a) => ({
       id: a.id,
@@ -95,19 +96,19 @@ export function resolveApps(): Application[] {
   ];
 }
 
-function findApp(id: string): Application | undefined {
-  const apps = resolveApps();
+function findApp(id: string, guildId: string): Application | undefined {
+  const apps = resolveApps(guildId);
   if (!id || id === 'default') return apps[0];
   return apps.find((a) => a.id === id) ?? apps[0];
 }
 
-export function applyEnabled(): boolean {
-  return cfg().on && resolveApps().some((a) => a.reviewChannelId);
+export function applyEnabled(guildId: string): boolean {
+  return cfg(guildId).on && resolveApps(guildId).some((a) => a.reviewChannelId);
 }
 
 // Panel: treść/embed (Message Studio lub legacy) — przyciski dokłada /applypanel.
-export function buildApplyPanel(): { content?: string; embeds: APIEmbed[] } {
-  const c = cfg();
+export function buildApplyPanel(guildId: string): { content?: string; embeds: APIEmbed[] } {
+  const c = cfg(guildId);
   if (c.panelSpec && hasRich(c.panelSpec)) return buildRichMessage(c.panelSpec, {});
   return { content: c.panelMessage || '📋 Aplikuj do ekipy — kliknij poniżej.', embeds: [] };
 }
@@ -134,9 +135,10 @@ function questionsModal(app: Application, customId: string): ModalBuilder {
 
 export async function handleApplicationButton(interaction: ButtonInteraction): Promise<void> {
   const id = interaction.customId;
+  const guildId = interaction.guildId ?? '';
 
   if (id === 'app:start' || id.startsWith('app:start:')) {
-    if (!applyEnabled()) {
+    if (!applyEnabled(guildId)) {
       await interaction.reply({
         content: '📋 Aplikacje są wyłączone.',
         flags: MessageFlags.Ephemeral,
@@ -144,7 +146,7 @@ export async function handleApplicationButton(interaction: ButtonInteraction): P
       return;
     }
     const appId = id.startsWith('app:start:') ? id.slice('app:start:'.length) : 'default';
-    const app = findApp(appId);
+    const app = findApp(appId, guildId);
     if (!app) {
       await interaction.reply({
         content: '📋 Nie znaleziono aplikacji.',
@@ -169,7 +171,7 @@ export async function handleApplicationButton(interaction: ButtonInteraction): P
     // app:accept:<appId>:<uid> (4 części) lub legacy app:accept:<uid> (3 części)
     const appId = parts.length >= 4 ? (parts[2] ?? '') : '';
     const uid = parts.length >= 4 ? (parts[3] ?? '') : (parts[2] ?? '');
-    const roleId = findApp(appId)?.acceptRoleId || cfg().roleId;
+    const roleId = findApp(appId, guildId)?.acceptRoleId || cfg(guildId).roleId;
     if (accept && roleId && interaction.guild && uid) {
       const m = await interaction.guild.members.fetch(uid).catch(() => null);
       if (m) await m.roles.add(roleId).catch(() => {});
@@ -196,7 +198,8 @@ export async function handleApplicationButton(interaction: ButtonInteraction): P
 
 export async function handleApplicationModal(interaction: ModalSubmitInteraction): Promise<void> {
   if (!interaction.customId.startsWith('app:submit')) return;
-  if (!applyEnabled() || !interaction.guild) {
+  const guildId = interaction.guildId ?? '';
+  if (!applyEnabled(guildId) || !interaction.guild) {
     await interaction.reply({
       content: '📋 Aplikacje są wyłączone.',
       flags: MessageFlags.Ephemeral,
@@ -206,7 +209,7 @@ export async function handleApplicationModal(interaction: ModalSubmitInteraction
   const appId = interaction.customId.startsWith('app:submit:')
     ? interaction.customId.slice('app:submit:'.length)
     : 'default';
-  const app = findApp(appId);
+  const app = findApp(appId, guildId);
   if (!app?.reviewChannelId) {
     await interaction.reply({
       content: '📋 Aplikacja niedostępna.',
