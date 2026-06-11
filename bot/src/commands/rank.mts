@@ -9,7 +9,7 @@ import { getEquippedStyle } from '../economy/skins.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { type CardStyle, renderRankCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 function xpToNext(l: number): number {
   return 5 * l * l + 50 * l + 100;
@@ -24,8 +24,8 @@ function levelInfo(totalXp: number): { level: number; xpInto: number; xpFor: num
   return { level: lvl, xpInto: totalXp - acc, xpFor: xpToNext(lvl) };
 }
 
-function rankStyle(): Partial<CardStyle> {
-  const raw = getSettings()['rankcard_config'];
+function rankStyle(guildId: string): Partial<CardStyle> {
+  const raw = getGuildSettings(guildId)['rankcard_config'];
   try {
     return raw ? (JSON.parse(raw) as Partial<CardStyle>) : {};
   } catch {
@@ -80,7 +80,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       xpInto,
       xpFor,
       locale,
-      style: userStyle ?? rankStyle(),
+      style: userStyle ?? rankStyle(interaction.guild.id),
     });
     await interaction.editReply({ files: [new AttachmentBuilder(buf, { name: 'rank.png' })] });
   } catch (e) {

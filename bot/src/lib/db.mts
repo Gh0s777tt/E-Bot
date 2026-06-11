@@ -118,6 +118,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'buttonroles_config',
   'rolemenu_config',
   'invites_config',
+  'rankcard_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

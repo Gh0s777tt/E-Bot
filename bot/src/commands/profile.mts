@@ -12,7 +12,7 @@ import { getUser } from '../economy/store.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { type CardStyle, renderProfileCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 const ACCENT = 0xe50914;
 
@@ -28,8 +28,8 @@ function levelInfo(totalXp: number): { level: number; xpInto: number; xpFor: num
   }
   return { level: lvl, xpInto: totalXp - acc, xpFor: xpToNext(lvl) };
 }
-function rankStyle(): Partial<CardStyle> {
-  const raw = getSettings()['rankcard_config'];
+function rankStyle(guildId: string): Partial<CardStyle> {
+  const raw = getGuildSettings(guildId)['rankcard_config'];
   try {
     return raw ? (JSON.parse(raw) as Partial<CardStyle>) : {};
   } catch {
@@ -116,7 +116,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       balance: total.toLocaleString('pl-PL'),
       invites,
       locale,
-      style: (await getEquippedStyle(gid, user.id)) ?? rankStyle(),
+      style: (await getEquippedStyle(gid, user.id)) ?? rankStyle(gid),
     });
 
     const embed = new EmbedBuilder()

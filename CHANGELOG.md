@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-257-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.187.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-258-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.188.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.188.0] — 🗂️ Karty rang (rankcard) per-serwer · Etap K (C-21/?)
+
+- `[#258]` 🗂️ **Wygląd kart rang (`rankcard`) per-serwer** — dwudziesta fala. Każdy serwer ma teraz własny styl karty rangi (kolory/tło) zamiast jednego globalnego.
+  - 🤖 **Bot**: `rankStyle()` → `rankStyle(guildId)` (świeży odczyt per-serwer, fallback global) w obu komendach czytających styl: `/rank` (`interaction.guild.id`) i `/profile` (`gid`). Indywidualny styl wyposażony przez użytkownika (`getEquippedStyle`) ma wciąż pierwszeństwo przed stylem serwera.
+  - 🖥️ **Panel**: `rankcard_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getRankCard`/`saveRankCard` (`appearance.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-21). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.187.0] — 🗂️ Invite Tracker per-serwer · Etap K (C-20/?)
 

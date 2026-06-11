@@ -298,6 +298,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'buttonroles_config',
   'rolemenu_config',
   'invites_config',
+  'rankcard_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {
