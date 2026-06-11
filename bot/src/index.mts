@@ -283,6 +283,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
     await handleContextMenu(interaction).catch((err) => console.error('ctx:', err));
     return;
   }
+  if (interaction.isAutocomplete()) {
+    const ac = registry.get(interaction.commandName);
+    if (ac?.autocomplete)
+      await ac.autocomplete(interaction).catch((err) => console.error('autocomplete:', err));
+    else await interaction.respond([]).catch(() => {});
+    return;
+  }
   if (!interaction.isChatInputCommand()) return;
   const cmd = registry.get(interaction.commandName);
   if (!cmd) {

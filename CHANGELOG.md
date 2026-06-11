@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-264-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.194.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-265-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.195.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.195.0] — 🔎 Wyszukiwarka komend w /help (autocomplete)
+
+- `[#265]` 🔎 **`/help szukaj` — wyszukiwarka komend z autouzupełnianiem** (z roadmapy: „ulepszenia /help"). Pierwszy autocomplete w bocie.
+  - 🤖 **Bot**: opcja `szukaj` w `/help` z `setAutocomplete(true)`; handler `autocomplete` podpowiada do 25 komend dopasowanych po **nazwie LUB opisie** w języku użytkownika (`COMMAND_DESC` × 14 języków). Wybór z listy → embed szczegółów komendy (opis + kategoria). Bez podania frazy `/help` działa jak dotąd (hub kategorii).
+  - 🧩 **Infrastruktura**: typ `Command` dostał opcjonalny `autocomplete?`; dispatcher interakcji (`index.mts`) routuje `isAutocomplete()` do handlera komendy (albo pusta odpowiedź) — gotowe pod autocomplete w kolejnych komendach.
+  - Wymaga `deploy-commands` (zmiana definicji `/help`). Bez zmian zachowania innych funkcji.
 
 ## [0.194.0] — 🗂️ Sezonowe rankingi per-serwer · Etap K (C-27) opcja C — KOMPLET ✅
 

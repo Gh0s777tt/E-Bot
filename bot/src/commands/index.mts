@@ -1,4 +1,4 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { AutocompleteInteraction, ChatInputCommandInteraction } from 'discord.js';
 import { applyCommandLocalizations } from '../i18n/commandDescriptions.mts';
 import * as achievements from './achievements.mts';
 import { hug, kiss, pat, slap } from './actions.mts';
@@ -96,6 +96,8 @@ import * as xpevent from './xpevent.mts';
 export type Command = {
   data: { name: string; toJSON: () => unknown };
   execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
+  // Opcjonalny handler autouzupełniania (np. wyszukiwarka komend w /help).
+  autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>;
 };
 
 export const commands: Command[] = [

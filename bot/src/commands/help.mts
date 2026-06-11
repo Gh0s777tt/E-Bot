@@ -3,6 +3,7 @@
 // Obsługa selecta: handleHelpSelect (routing po customId 'help:cat' w index.mts).
 import {
   ActionRowBuilder,
+  type AutocompleteInteraction,
   type ChatInputCommandInteraction,
   EmbedBuilder,
   MessageFlags,
@@ -46,6 +47,11 @@ const CATEGORIES: { key: string; cmds: string[] }[] = [
 
 const TOTAL = CATEGORIES.reduce((a, c) => a + c.cmds.length, 0);
 
+// Płaska lista wszystkich komend (z kategorią) — do wyszukiwarki /help szukaj (autocomplete).
+const ALL_CMDS: { name: string; cat: string }[] = CATEGORIES.flatMap((c) =>
+  c.cmds.map((name) => ({ name, cat: c.key })),
+);
+
 function cmdDesc(locale: Locale, name: string): string {
   return COMMAND_DESC[locale]?.[name] ?? COMMAND_DESC.en?.[name] ?? COMMAND_DESC.pl?.[name] ?? '';
 }
@@ -88,15 +94,57 @@ function categoryEmbed(locale: Locale, key: string): EmbedBuilder {
 
 export const data = new SlashCommandBuilder()
   .setName('help')
-  .setDescription('Pomoc — wszystkie komendy bota pogrupowane w kategorie.');
+  .setDescription('Pomoc — wszystkie komendy bota pogrupowane w kategorie.')
+  .addStringOption((o) =>
+    o
+      .setName('szukaj')
+      .setDescription('Szukaj komendy po nazwie lub opisie (autouzupełnianie).')
+      .setAutocomplete(true),
+  );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
+  // Wyszukiwarka: /help szukaj:<komenda> → szczegóły komendy (autocomplete podaje dokładną nazwę).
+  const query = interaction.options.getString('szukaj');
+  if (query) {
+    const q = query.toLowerCase().replace(/^\//, '');
+    const entry = ALL_CMDS.find((c) => c.name === q) ?? ALL_CMDS.find((c) => c.name.includes(q));
+    if (entry) {
+      await interaction.reply({
+        embeds: [commandDetailEmbed(locale, entry)],
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+  }
   await interaction.reply({
     embeds: [homeEmbed(locale)],
     components: [menu(locale)],
     flags: MessageFlags.Ephemeral,
   });
+}
+
+// Embed szczegółów pojedynczej komendy (wynik wyszukiwarki).
+function commandDetailEmbed(locale: Locale, entry: { name: string; cat: string }): EmbedBuilder {
+  return new EmbedBuilder()
+    .setColor(ACCENT)
+    .setTitle(`/${entry.name}`)
+    .setDescription(
+      `${cmdDesc(locale, entry.name) || '—'}\n\n📂 ${t(locale, `help.cat.${entry.cat}`)}`,
+    )
+    .setFooter({ text: t(locale, 'help.footer', { count: TOTAL }) });
+}
+
+// Autouzupełnianie nazw komend dla opcji „szukaj" (match po nazwie LUB opisie w języku użytkownika).
+export async function autocomplete(interaction: AutocompleteInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
+  const q = interaction.options.getFocused().toLowerCase().replace(/^\//, '');
+  const choices = ALL_CMDS.filter(
+    (c) => !q || c.name.includes(q) || cmdDesc(locale, c.name).toLowerCase().includes(q),
+  )
+    .slice(0, 25)
+    .map((c) => ({ name: `/${c.name} — ${cmdDesc(locale, c.name)}`.slice(0, 100), value: c.name }));
+  await interaction.respond(choices);
 }
 
 // Routing z dispatchera (index.mts) dla StringSelect o customId 'help:cat'.
