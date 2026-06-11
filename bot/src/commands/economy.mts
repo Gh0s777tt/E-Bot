@@ -157,7 +157,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await interaction.reply(eph(t(locale, 'error.guildOnly')));
     return;
   }
-  const cfg = ecoConfig();
+  const cfg = ecoConfig(interaction.guildId);
   if (!cfg.enabled) {
     await interaction.reply(eph(t(locale, 'eco.disabled')));
     return;

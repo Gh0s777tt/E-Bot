@@ -200,7 +200,7 @@ function row(disabled: boolean, correct = -1): ActionRowBuilder<ButtonBuilder> {
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const cat = interaction.options.getString('kategoria');
   const q = pick(cat);
-  const cur = ecoConfig().currency;
+  const cur = ecoConfig(interaction.guildId ?? '').currency;
   const catName =
     { ogolna: 'Ogólna', gaming: 'Gaming', film: 'Film/Seriale', nauka: 'Nauka', polska: 'Polska' }[
       q.cat
@@ -241,7 +241,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     }
     winner = i.user.id;
     let extra = '';
-    if (hasCloud() && interaction.guildId && ecoConfig().enabled) {
+    if (hasCloud() && interaction.guildId && ecoConfig(interaction.guildId).enabled) {
       const u = await getUser(interaction.guildId, i.user.id);
       await saveUser({
         guild_id: interaction.guildId,

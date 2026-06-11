@@ -281,6 +281,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'suggestions_config',
   'birthday_config',
   'counters_config',
+  'economy_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

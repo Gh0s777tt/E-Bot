@@ -55,7 +55,7 @@ async function snapshot(guild: Guild, endedMonth: string): Promise<void> {
     .slice(0, 10);
   if (!sorted.length) return;
 
-  const cur = ecoConfig().currency;
+  const cur = ecoConfig(guild.id).currency;
   const rewards = [cfg.reward1, cfg.reward2, cfg.reward3];
 
   const ch = await guild.channels.fetch(cfg.channelId).catch(() => null);

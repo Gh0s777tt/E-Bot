@@ -17,12 +17,15 @@ function today(): string {
 
 async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
-  const pct = ecoConfig().bankInterestPct;
-  if (!pct || pct <= 0) return;
   const tag = today();
-  if ((await cloudGetSetting('eco_interest_last').catch(() => null)) === tag) return;
 
+  // Per-serwer: odsetki wg configu danego serwera, dedup osobno (raz dziennie na serwer).
   for (const guild of client.guilds.cache.values()) {
+    const pct = ecoConfig(guild.id).bankInterestPct;
+    if (!pct || pct <= 0) continue;
+    const dedupKey = `eco_interest_last:${guild.id}`;
+    if ((await cloudGetSetting(dedupKey).catch(() => null)) === tag) continue;
+
     const rows = await cloudSelect<{ user_id: string; bank: number }>(
       'economy_users',
       `select=user_id,bank&guild_id=eq.${guild.id}&bank=gt.0`,
@@ -44,8 +47,8 @@ async function tick(client: Client): Promise<void> {
       ).catch(() => {});
       logTx(guild.id, r.user_id, gain, 'odsetki');
     }
+    await cloudSetSetting(dedupKey, tag).catch(() => {});
   }
-  await cloudSetSetting('eco_interest_last', tag).catch(() => {});
 }
 
 export function startEcoInterest(client: Client): void {

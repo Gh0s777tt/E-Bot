@@ -1,6 +1,6 @@
 // Faza 7 / F3 — ekonomia SERWERA (waluta natywna; osobno od GT z GH0ST w lib/economy.ts).
 // Config w settings 'economy_config'; sklep w Supabase 'economy_shop'.
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
 import { getPrimaryGuildId } from './guild';
 import { hasSupabase, supabase } from './supabase';
 
@@ -45,7 +45,8 @@ export const ECONOMY_DEFAULT: EconomyConfig = {
 };
 
 export async function getServerEconomy(): Promise<EconomyConfig> {
-  const raw = await getRawSetting('economy_config');
+  // Etap K — economy_config per-serwer (router rozpoznaje zmigrowany klucz).
+  const raw = await getConfigSetting('economy_config');
   if (!raw) return { ...ECONOMY_DEFAULT };
   try {
     return { ...ECONOMY_DEFAULT, ...(JSON.parse(raw) as Partial<EconomyConfig>) };
@@ -55,7 +56,7 @@ export async function getServerEconomy(): Promise<EconomyConfig> {
 }
 
 export async function saveServerEconomy(cfg: EconomyConfig): Promise<void> {
-  await setRawSetting('economy_config', JSON.stringify(cfg));
+  await setConfigSetting('economy_config', JSON.stringify(cfg));
 }
 
 // ── Sezon ekonomii (miesięczny top-eco + wypłata podium + opcjonalny reset) ──

@@ -216,7 +216,7 @@ async function onLevelUp(
 
   // Most eko↔leveling: nagroda pieniężna za awans (panel ekonomii: levelUpMoney).
   let moneyLine = '';
-  const eco = ecoConfig();
+  const eco = ecoConfig(guildId);
   if (eco.enabled && eco.levelUpMoney > 0) {
     try {
       const u = await getEcoUser(guildId, userId);

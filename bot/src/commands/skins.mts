@@ -47,7 +47,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
   const gid = interaction.guildId;
   const uid = interaction.user.id;
-  const cur = ecoConfig().currency;
+  const cur = ecoConfig(gid).currency;
   const sub = interaction.options.getSubcommand();
 
   if (sub === 'list') {

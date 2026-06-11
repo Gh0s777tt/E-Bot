@@ -101,6 +101,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'suggestions_config',
   'birthday_config',
   'counters_config',
+  'economy_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

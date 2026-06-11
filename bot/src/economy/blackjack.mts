@@ -94,7 +94,7 @@ export async function startBlackjack(
   bet: number,
 ): Promise<void> {
   const locale = resolveLocale(interaction);
-  const cur = ecoConfig().currency;
+  const cur = ecoConfig(gid).currency;
   const u = await getUser(gid, interaction.user.id);
   if (u.wallet < bet) {
     await interaction.reply({
@@ -157,7 +157,7 @@ export async function handleBlackjackButton(interaction: ButtonInteraction): Pro
     });
     return;
   }
-  const cur = ecoConfig().currency;
+  const cur = ecoConfig(gid).currency;
 
   if (interaction.customId === 'bj:hit') {
     g.player.push(draw(g.deck));

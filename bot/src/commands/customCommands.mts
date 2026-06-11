@@ -57,7 +57,7 @@ async function runActions(
       } else if (
         a.kind === 'giveMoney' &&
         (a.amount ?? 0) > 0 &&
-        ecoConfig().enabled &&
+        ecoConfig(gid).enabled &&
         hasCloud()
       ) {
         const u = await getEcoUser(gid, interaction.user.id);

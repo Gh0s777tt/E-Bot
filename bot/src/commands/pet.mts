@@ -104,7 +104,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await interaction.reply(eph(t(locale, 'sticky.guildOnly')));
     return;
   }
-  const cfg = ecoConfig();
+  const cfg = ecoConfig(interaction.guild.id);
   if (!cfg.enabled) {
     await interaction.reply(eph(t(locale, 'pet.disabled')));
     return;

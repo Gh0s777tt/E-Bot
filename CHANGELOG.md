@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-243-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.173.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-244-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.174.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.174.0] — 🗂️ Ekonomia per-serwer (16 miejsc) · Etap K (C-7/?)
+
+- `[#244]` 🗂️ **Ekonomia serwera (`economy`) per-serwer** — szósty i **największy** zmigrowany moduł:
+  - 🤖 **Bot**: `ecoConfig()` → `ecoConfig(guildId)` (świeży odczyt per-serwer z fallbackiem global), przewleczone przez **16 miejsc wołań**: rdzeń (`store.getUser`), wszystkie komendy eko (`/eco`, `/market`, `/lottery`, `/skins`, `/stocks`, `/pet`, `/cards`, `/trivia`, custom-commands), blackjack, most leveling↔eko (nagroda za awans), poller odsetek i sezon eko.
+  - 🏦 **Odsetki bankowe** liczone teraz per-serwer (stawka z configu danego serwera, dedup `eco_interest_last:<serwer>`), więc każdy serwer ma własną ekonomię (waluta, stawki, sklep, hazard, podatki).
+  - 🖥️ **Panel**: `economy_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `serverEconomy.ts` getter/setter i przełącznik per-serwer. Sklep (`economy_shop`) już był per-serwer (guild_id).
+  - Wsteczna zgodność (fallback global). Etap K (C-7). Bot + panel (bot pierwszy).
 
 ## [0.173.0] — 🗂️ Liczniki per-serwer (+ fix kreatora) · Etap K (C-6/?)
 

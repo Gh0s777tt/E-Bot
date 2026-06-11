@@ -1,6 +1,6 @@
 // Faza 7 / F3 — warstwa danych ekonomii serwera (Supabase economy_users + economy_shop).
 import { cloudDelete, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 export type EcoConfig = {
   enabled: boolean;
@@ -42,8 +42,10 @@ export const ECO_DEFAULT: EcoConfig = {
   levelUpMoney: 0,
 };
 
-export function ecoConfig(): EcoConfig {
-  const raw = getSettings()['economy_config'];
+// Etap K — config ekonomii PER-SERWER: czytany świeżo dla danego serwera (komendy = niska
+// częstotliwość). getGuildSettings nadpisuje globalny economy_config override'em serwera (fallback).
+export function ecoConfig(guildId: string): EcoConfig {
+  const raw = getGuildSettings(guildId)['economy_config'];
   try {
     return raw
       ? { ...ECO_DEFAULT, ...(JSON.parse(raw) as Partial<EcoConfig>) }
@@ -70,7 +72,7 @@ export async function getUser(guildId: string, userId: string): Promise<EcoUser>
     guild_id: guildId,
     user_id: userId,
     username: '',
-    wallet: ecoConfig().startBalance,
+    wallet: ecoConfig(guildId).startBalance,
     bank: 0,
     last_daily: null,
     daily_streak: 0,
