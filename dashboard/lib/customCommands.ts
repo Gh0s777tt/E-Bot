@@ -2,7 +2,7 @@
 // przez REST (POST upsert per komenda — NIE rusza wbudowanych) i kasuje usunięte. Bot obsługuje
 // wywołania (bot/src/commands/customCommands.mts). 'custom_commands_registered' = nasze nazwy (do
 // bezpiecznego kasowania tylko swoich).
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, getGuildRawSetting, setConfigSetting, setGuildRawSetting } from './data';
 import { getPrimaryGuildId } from './guild';
 import { normalizeRich, type RichMessage } from './richMessage';
 
@@ -28,7 +28,7 @@ export type CustomCommand = {
 };
 
 export async function getCustomCommands(): Promise<CustomCommand[]> {
-  const raw = await getRawSetting('custom_commands');
+  const raw = await getConfigSetting('custom_commands');
   if (!raw) return [];
   try {
     const a = JSON.parse(raw) as CustomCommand[];
@@ -69,7 +69,7 @@ export async function saveCustomCommands(commands: CustomCommand[]): Promise<Syn
   const guildId = await getPrimaryGuildId();
   if (!appId || !guildId) {
     // bez Discorda: zapisz sam config (bot i tak nie obsłuży bez rejestracji, ale nie tracimy danych)
-    await setRawSetting('custom_commands', JSON.stringify(commands));
+    await setConfigSetting('custom_commands', JSON.stringify(commands));
     return {
       ok: false,
       error: 'Brak appId/guildId (token bota?). Config zapisany, rejestracja pominięta.',
@@ -83,7 +83,9 @@ export async function saveCustomCommands(commands: CustomCommand[]): Promise<Syn
 
   let prevNames: string[] = [];
   try {
-    prevNames = JSON.parse((await getRawSetting('custom_commands_registered')) || '[]') as string[];
+    prevNames = JSON.parse(
+      (await getGuildRawSetting('custom_commands_registered')) || '[]',
+    ) as string[];
   } catch {
     prevNames = [];
   }
@@ -101,7 +103,7 @@ export async function saveCustomCommands(commands: CustomCommand[]): Promise<Syn
     };
   }
 
-  await setRawSetting('custom_commands', JSON.stringify(commands));
+  await setConfigSetting('custom_commands', JSON.stringify(commands));
 
   let registered = 0;
   for (const c of commands) {
@@ -133,6 +135,6 @@ export async function saveCustomCommands(commands: CustomCommand[]): Promise<Syn
     const found = existing.find((e) => e.name === name);
     if (found) await dfetch(`${base}/${found.id}`, { method: 'DELETE' });
   }
-  await setRawSetting('custom_commands_registered', JSON.stringify(newNames));
+  await setGuildRawSetting('custom_commands_registered', JSON.stringify(newNames));
   return { ok: true, registered };
 }

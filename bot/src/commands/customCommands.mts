@@ -7,7 +7,7 @@ import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../ec
 import { logTx } from '../economy/txlog.mts';
 import { levelForXp } from '../leveling.mts';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { buildRichMessage, type RichMessage } from '../lib/richMessage.mts';
 
 type CustomAction = {
@@ -31,8 +31,9 @@ type CustomCommand = {
   actions?: CustomAction[]; // CC 2.0 — akcje wykonywane przy użyciu (max 3)
 };
 
-function load(): CustomCommand[] {
-  const raw = getSettings()['custom_commands'];
+// Etap K — definicje per-serwer: panel rejestruje komendy per-guild i zapisuje pod g:<id>:custom_commands.
+function load(guildId: string): CustomCommand[] {
+  const raw = getGuildSettings(guildId)['custom_commands'];
   try {
     const a = raw ? (JSON.parse(raw) as CustomCommand[]) : [];
     return Array.isArray(a) ? a : [];
@@ -104,7 +105,8 @@ setInterval(() => {
 export async function handleCustomCommand(
   interaction: ChatInputCommandInteraction,
 ): Promise<boolean> {
-  const cmd = load().find((c) => c.name === interaction.commandName);
+  const guildId = interaction.guildId ?? '';
+  const cmd = load(guildId).find((c) => c.name === interaction.commandName);
   if (!cmd) return false;
 
   const cd = cmd.cooldownSec ?? 0;
@@ -183,7 +185,7 @@ export async function handleCustomCommand(
   // Lista komend (/pomoc) — dynamicznie z wszystkich komend custom
   if (type === 'help') {
     const groups = new Map<string, string[]>();
-    for (const c of load()) {
+    for (const c of load(guildId)) {
       if (c.type === 'help') continue;
       const cat = (c.category || 'Ogólne').trim() || 'Ogólne';
       const arr = groups.get(cat) ?? [];

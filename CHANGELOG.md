@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-261-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.191.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-262-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.192.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.192.0] — 🗂️ Komendy własne (no-code) per-serwer · Etap K (C-25/?)
+
+- `[#262]` 🗂️ **Komendy własne / no-code (`custom_commands`) per-serwer** — dwudziesta czwarta fala. Panel **już** rejestrował komendy jako **guild-commands** (`/applications/{app}/guilds/{guildId}/commands`), ale definicje trzymał globalnie — niespójność dla wielu serwerów. Teraz definicje są per-serwer, zgodne z rejestracją.
+  - 🤖 **Bot** (`commands/customCommands.mts`): `load()` → `load(guildId)` (świeży odczyt `g:<id>:custom_commands`, fallback global); `handleCustomCommand` czyta komendy serwera wywołania (`interaction.guildId`), też w gałęzi `/pomoc` (lista komend). Każdy serwer obsługuje wyłącznie własne komendy.
+  - 🖥️ **Panel** (`customCommands.ts`): definicje przez `getConfigSetting`/`setConfigSetting` (`custom_commands` w `MIGRATED_GUILD_KEYS`); rejestr nazw `custom_commands_registered` (bookkeeping do bezpiecznego kasowania tylko swoich) przez `getGuildRawSetting`/`setGuildRawSetting` — per-serwer, spójny z rejestracją per-guild.
+  - Wsteczna zgodność (fallback global). Etap K (C-25). Bot + panel (bot pierwszy). Bez zmian definicji wbudowanych komend.
 
 ## [0.191.0] — 🛡️ Anti-nuke per-serwer (3. moduł SAFETY — komplet) · Etap K (C-24/?)
 
