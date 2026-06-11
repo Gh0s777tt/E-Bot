@@ -436,7 +436,7 @@ export const RESPONDER_DEFAULT: ResponderConfig = {
 };
 
 export async function getResponderConfig(): Promise<ResponderConfig> {
-  const raw = await getRawSetting('responder_config');
+  const raw = await getConfigSetting('responder_config');
   if (!raw) return structuredClone(RESPONDER_DEFAULT);
   try {
     return { ...RESPONDER_DEFAULT, ...(JSON.parse(raw) as Partial<ResponderConfig>) };
@@ -445,7 +445,7 @@ export async function getResponderConfig(): Promise<ResponderConfig> {
   }
 }
 export async function saveResponderConfig(cfg: ResponderConfig): Promise<void> {
-  await setRawSetting('responder_config', JSON.stringify(cfg));
+  await setConfigSetting('responder_config', JSON.stringify(cfg));
 }
 
 // ── Urodziny (Faza 7 / F7.3) ──

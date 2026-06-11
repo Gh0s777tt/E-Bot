@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-252-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.182.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-253-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.183.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.183.0] — 🗂️ Autoresponder/komendy własne per-serwer · Etap K (C-16/?)
+
+- `[#253]` 🗂️ **Autoresponder + komendy własne (`responder`) per-serwer** — piętnasty zmigrowany moduł, czwarty wysokiej częstotliwości (chodzi na każdej wiadomości).
+  - 🤖 **Bot**: globalny `cfg` + `refresh()`/`setInterval` → **cache per-serwer z TTL 30 s** (`cfgFor(guildId)`). Handler `MessageCreate` czyta config danego serwera, więc każdy serwer ma własny prefiks, własne komendy prefiksowe (`!regulamin`) i własne autorespondery (słowa-klucze → odpowiedź).
+  - 🖥️ **Panel**: `responder_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getResponderConfig`/`saveResponderConfig` (`community.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-16). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.182.0] — 🗂️ Starboard per-serwer · Etap K (C-15/?)
 

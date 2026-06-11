@@ -1,7 +1,7 @@
 // Faza 7 / F7.2 — komendy własne (prefiks np. !regulamin) + autoresponder (słowa-klucze → odpowiedź).
 // Config z panelu (settings 'responder_config'). Bez SQL, bez komend slash. Zmienne: {user}, {server}.
 import { type Client, Events, type Message } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cmd = { name: string; response: string };
 type Auto = { trigger: string; response: string; match: 'contains' | 'exact' | 'starts' };
@@ -13,15 +13,21 @@ type ResponderConfig = {
 };
 
 const DEFAULT: ResponderConfig = { enabled: false, prefix: '!', commands: [], autoresponders: [] };
-let cfg: ResponderConfig = { ...DEFAULT };
 
-function refresh(): void {
-  const raw = getSettings()['responder_config'];
+// Etap K — config per-serwer z cache TTL 30 s (handler chodzi na każdej wiadomości).
+const cfgCache = new Map<string, { cfg: ResponderConfig; at: number }>();
+function cfgFor(guildId: string): ResponderConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['responder_config'];
+  let cfg: ResponderConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ResponderConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    cfg = { ...DEFAULT };
   }
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
 function fill(s: string, msg: Message): string {
@@ -31,11 +37,10 @@ function fill(s: string, msg: Message): string {
 }
 
 export function startResponder(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-
   client.on(Events.MessageCreate, async (msg: Message) => {
-    if (!cfg.enabled || msg.author.bot || !msg.guild) return;
+    if (msg.author.bot || !msg.guild) return;
+    const cfg = cfgFor(msg.guild.id);
+    if (!cfg.enabled) return;
     const content = msg.content ?? '';
     if (!content) return;
 
