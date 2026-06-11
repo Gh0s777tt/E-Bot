@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { SuggestionsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ export default function SuggestionsForm({
   initial: SuggestionsConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<SuggestionsConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,11 +43,15 @@ export default function SuggestionsForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Sugestie włączone</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.suggestions.enabledLabel')}
+        </span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał sugestii</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.suggestions.channelLabel')}
+        </span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
@@ -59,15 +66,11 @@ export default function SuggestionsForm({
           onChange={(e) => setC({ ...c, anonymous: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Anonimowe sugestie (ukryj autora)</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.suggestions.anonLabel')}</span>
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Użytkownicy zgłaszają przez <code className="text-accent">/suggest</code> — bot publikuje
-        embed z głosowaniem (👍/👎) i przyciskami decyzji dla moderacji (Zatwierdź/Odrzuć/Rozważ).
-        Wymaga <code>f7-suggestions-schema.sql</code> (lub <code>_ALL.sql</code>) w Supabase.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.suggestions.footNote')}</p>
     </div>
   );
 }

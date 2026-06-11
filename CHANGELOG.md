@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-288-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.218.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-289-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.219.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.219.0] — 🌍 i18n UI panelu — strona /suggestions
+
+- `[#289]` 🌍 **i18n UI panelu — kolejna fala: `/suggestions` (skrzynka sugestii + tabela statusów).**
+  - 🖥️ **Panel**: 18 nowych kluczy `ui.suggestions.*` × **14 języków** w `panelI18n.ts` (parzystość 14×18=252). `app/suggestions/page.tsx` (serwer) + `SuggestionsForm.tsx` (klient) na `tp()`. Statusy sugestii (Otwarta/Zatwierdzona/Odrzucona/Rozważana) przez mapę kod→klucz `SUG_KEY`; daty `toLocaleString(lang,…)`. Tokeny komend (`/suggest`, `/poll`), `_ALL.sql`, `f7-suggestions-schema.sql`, `Supabase`, `embed` i emoji 👍/👎/1️⃣/🔟 nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 8/~40 stron.
 
 ## [0.218.0] — 🌍 i18n UI panelu — strona /birthdays
 
