@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-256-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.186.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-257-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.187.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.187.0] — 🗂️ Invite Tracker per-serwer · Etap K (C-20/?)
+
+- `[#257]` 🗂️ **Invite Tracker (`invites`) per-serwer** — dziewiętnasta fala. Globalny config = wspólny kanał logów i wspólne nagrody-role dla wszystkich serwerów → nagrody za zaproszenia nadawały role z innego serwera.
+  - 🤖 **Bot**: `cfg()` → `cfg(guildId)` (świeży odczyt per-serwer, fallback global) w obu handlerach (`GuildMemberAdd` i `GuildMemberRemove` → `member.guild.id`). Każdy serwer ma własny kanał logów, próg „fejka" (młode konto) i progi nagród-ról. (Snapshot zaproszeń w pamięci już był per-guild.)
+  - 🖥️ **Panel**: `invites_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getInvitesConfig`/`saveInvitesConfig` (`engagement.ts`) przez router. **`engagement.ts` jest teraz w pełni zmigrowany** — usunięto nieużywany już import `getRawSetting`/`setRawSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-20). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.186.0] — 🗂️ Role za przyciski + menu ról per-serwer · Etap K (C-19/?)
 

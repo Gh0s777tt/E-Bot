@@ -10,13 +10,14 @@ import {
   type TextChannel,
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { bumpQuest } from './quests.mts';
 
 type Reward = { count: number; roleId: string };
 type Cfg = { on: boolean; logChannelId: string; fakeMinAgeDays: number; rewards: Reward[] };
-function cfg(): Cfg {
-  const raw = getSettings()['invites_config'];
+// Etap K — config per-serwer: świeży odczyt (nagrody mają roleId — per-serwer), fallback global.
+function cfg(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['invites_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {
@@ -64,7 +65,7 @@ export function startInvites(client: Client): void {
 
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     try {
-      const c = cfg();
+      const c = cfg(member.guild.id);
       if (!c.on) return;
       const before = cache.get(member.guild.id) ?? new Map<string, number>();
       const after = await snapshot(member.guild);
@@ -140,7 +141,7 @@ export function startInvites(client: Client): void {
 
   client.on(Events.GuildMemberRemove, async (member: GuildMember | PartialGuildMember) => {
     try {
-      if (!cfg().on || !hasCloud()) return;
+      if (!cfg(member.guild.id).on || !hasCloud()) return;
       await cloudUpdate('invites', `guild_id=eq.${member.guild.id}&invited_id=eq.${member.id}`, {
         has_left: true,
       }).catch(() => {});

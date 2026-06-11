@@ -1,5 +1,5 @@
 // Faza 6 / B5 — engagement: button-role, starboard, temp-voice (config w settings) + lista giveawayów.
-import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
+import { getConfigSetting, setConfigSetting } from './data';
 import { hasSupabase, supabase } from './supabase';
 
 // ── Button-role ──
@@ -118,7 +118,7 @@ export const INVITES_DEFAULT: InvitesConfig = {
   rewards: [],
 };
 export async function getInvitesConfig(): Promise<InvitesConfig> {
-  const raw = await getRawSetting('invites_config');
+  const raw = await getConfigSetting('invites_config');
   if (!raw) return structuredClone(INVITES_DEFAULT);
   try {
     return { ...INVITES_DEFAULT, ...(JSON.parse(raw) as Partial<InvitesConfig>) };
@@ -127,7 +127,7 @@ export async function getInvitesConfig(): Promise<InvitesConfig> {
   }
 }
 export async function saveInvitesConfig(cfg: InvitesConfig): Promise<void> {
-  await setRawSetting('invites_config', JSON.stringify(cfg));
+  await setConfigSetting('invites_config', JSON.stringify(cfg));
 }
 
 // ── Menu ról (dropdown, Tor F) ──
