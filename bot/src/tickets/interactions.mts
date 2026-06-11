@@ -16,9 +16,10 @@ import { closeTicket, openTicket, ticketConfig } from './service.mts';
 
 export async function handleTicketButton(interaction: ButtonInteraction): Promise<void> {
   const id = interaction.customId;
+  const guildId = interaction.guildId ?? '';
 
   if (id === 'ticket:new' || id.startsWith('ticket:new:')) {
-    if (!ticketConfig().enabled) {
+    if (!ticketConfig(guildId).enabled) {
       await interaction.reply({
         content: '🎟️ Tickety są wyłączone.',
         flags: MessageFlags.Ephemeral,
@@ -37,7 +38,7 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
       .setRequired(true);
     modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(input));
     // Etap H — dodatkowe pytania formularza z panelu (max 4; modal mieści 5 pól).
-    const questions = (ticketConfig().questions ?? []).slice(0, 4);
+    const questions = (ticketConfig(guildId).questions ?? []).slice(0, 4);
     questions.forEach((q, i) => {
       const qi = new TextInputBuilder()
         .setCustomId(`q${i}`)
@@ -60,7 +61,7 @@ export async function handleTicketButton(interaction: ButtonInteraction): Promis
       });
       return;
     }
-    const cfg = ticketConfig();
+    const cfg = ticketConfig(guildId);
     const gm = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
     const supportRoleIds = [
       cfg.supportRoleId,
@@ -120,6 +121,7 @@ export async function handleTicketModal(interaction: ModalSubmitInteraction): Pr
     ? interaction.customId.slice('ticketModal:'.length)
     : '';
   const subject = interaction.fields.getTextInputValue('subject');
+  const guildId = interaction.guildId ?? '';
   const ch = interaction.channel;
   if (!ch || !('threads' in ch)) {
     await interaction.reply({
@@ -133,7 +135,7 @@ export async function handleTicketModal(interaction: ModalSubmitInteraction): Pr
 
   // Odpowiedzi z formularza → embed w wątku (pytania z panelu, max 4).
   if (thread) {
-    const questions = (ticketConfig().questions ?? []).slice(0, 4);
+    const questions = (ticketConfig(guildId).questions ?? []).slice(0, 4);
     const fields = questions
       .map((q, i) => {
         let answer = '';

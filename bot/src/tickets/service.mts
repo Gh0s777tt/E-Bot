@@ -10,7 +10,7 @@ import {
   type User,
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import type { RichMessage } from '../lib/richMessage.mts';
 
 export type TicketCategory = {
@@ -34,7 +34,8 @@ export type TicketsConfig = {
   questions?: string[]; // Etap H — dodatkowe pytania formularza przed otwarciem (max 4)
 };
 
-export function ticketConfig(): TicketsConfig {
+// Etap K — config per-serwer: świeży odczyt (low-freq: klik/komenda/poller), fallback global.
+export function ticketConfig(guildId: string): TicketsConfig {
   const def: TicketsConfig = {
     enabled: false,
     supportRoleId: '',
@@ -46,7 +47,7 @@ export function ticketConfig(): TicketsConfig {
     slaHours: 0,
     questions: [],
   };
-  const raw = getSettings()['tickets_config'];
+  const raw = getGuildSettings(guildId)['tickets_config'];
   try {
     return raw ? { ...def, ...(JSON.parse(raw) as Partial<TicketsConfig>) } : def;
   } catch {
@@ -89,7 +90,7 @@ export async function openTicket(
   subject: string,
   catId?: string,
 ): Promise<ThreadChannel | null> {
-  const cfg = ticketConfig();
+  const cfg = ticketConfig(channel.guildId);
   const cat = (cfg.categories ?? []).find((c) => c.id === catId);
   const roleId = cat?.supportRoleId || cfg.supportRoleId;
   const welcomeRaw = (cat?.welcome || cfg.welcome || '').trim();
@@ -151,7 +152,7 @@ export async function closeTicket(
   thread: ThreadChannel,
   opts: { skipStatusUpdate?: boolean } = {},
 ): Promise<void> {
-  const cfg = ticketConfig();
+  const cfg = ticketConfig(thread.guild.id);
   let openerId = '';
   if (hasCloud()) {
     const rows = await cloudSelect<{ user_id: string }>(

@@ -119,7 +119,7 @@ export const TICKETS_DEFAULT: TicketsConfig = {
 };
 
 export async function getTicketsConfig(): Promise<TicketsConfig> {
-  const raw = await getRawSetting('tickets_config');
+  const raw = await getConfigSetting('tickets_config');
   if (!raw) return structuredClone(TICKETS_DEFAULT);
   try {
     return { ...TICKETS_DEFAULT, ...(JSON.parse(raw) as Partial<TicketsConfig>) };
@@ -129,7 +129,7 @@ export async function getTicketsConfig(): Promise<TicketsConfig> {
 }
 
 export async function saveTicketsConfig(cfg: TicketsConfig): Promise<void> {
-  await setRawSetting('tickets_config', JSON.stringify(cfg));
+  await setConfigSetting('tickets_config', JSON.stringify(cfg));
 }
 
 export type TicketRow = {

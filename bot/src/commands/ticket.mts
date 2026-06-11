@@ -7,7 +7,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { cloudInsert, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { closeTicket } from '../tickets/service.mts';
 
 type TicketsConfig = {
@@ -16,8 +16,8 @@ type TicketsConfig = {
   welcome: string;
 };
 
-function readConfig(): TicketsConfig {
-  const raw = getSettings()['tickets_config'];
+function readConfig(guildId: string): TicketsConfig {
+  const raw = getGuildSettings(guildId)['tickets_config'];
   const def: TicketsConfig = {
     enabled: false,
     supportRoleId: '',
@@ -52,7 +52,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const sub = interaction.options.getSubcommand();
-  const cfg = readConfig();
+  const cfg = readConfig(interaction.guildId ?? '');
 
   if (sub === 'otworz') {
     if (!cfg.enabled) {

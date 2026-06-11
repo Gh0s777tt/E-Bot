@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-249-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.179.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-250-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.180.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.180.0] — 🗂️ Tickety per-serwer (5 plików) · Etap K (C-13/?)
+
+- `[#250]` 🗂️ **Tickety (`tickets`) per-serwer** — dwunasty zmigrowany moduł, jeden z większych (5 plików bota). Globalny config oznaczał, że na 2–3 serwerach tickety używały wspólnej kategorii/roli wsparcia/kanału logów → panel ticketów na serwerze B pingował rolę i logował na serwerze A.
+  - 🤖 **Bot**: `ticketConfig()` → `ticketConfig(guildId)` (świeży odczyt per-serwer, fallback global), przewleczone przez: `openTicket` (`channel.guildId`), `closeTicket` (`thread.guild.id`), oba handlery interakcji (`handleTicketButton`/`handleTicketModal` — `interaction.guildId`), `/ticketpanel`, `/ticket` (własny `readConfig(guildId)`). **SLA-poller** (auto-zamykanie) czyta teraz `guild_id` każdego ticketu z Supabase i stosuje `slaHours` **z configu jego serwera** (zamiast jednego globalnego). Każdy serwer ma własne kategorie, role wsparcia, pytania formularza, oceny, kanał transkryptów i SLA.
+  - 🖥️ **Panel**: `tickets_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getTicketsConfig`/`saveTicketsConfig` (`faza4.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-13). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.179.0] — 🗂️ Aplikacje/rekrutacja per-serwer · Etap K (C-12/?)
 

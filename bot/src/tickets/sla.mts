@@ -8,20 +8,21 @@ export function startTicketSla(client: Client): void {
   console.log('[ticket-sla] aktywne (config z panelu).');
   setInterval(async () => {
     try {
-      const cfg = ticketConfig();
-      if (!cfg.enabled || !cfg.slaHours || !hasCloud()) return;
-      const rows = await cloudSelect<{ channel_id: string }>(
+      if (!hasCloud()) return;
+      // Etap K — SLA per-serwer: każdy ticket ma guild_id, slaHours czytamy z configu jego serwera.
+      const rows = await cloudSelect<{ channel_id: string; guild_id: string }>(
         'tickets',
-        'select=channel_id&status=in.(open,claimed)&limit=100',
-      ).catch(() => [] as { channel_id: string }[]);
-      const cutoff = Date.now() - cfg.slaHours * 3_600_000;
+        'select=channel_id,guild_id&status=in.(open,claimed)&limit=100',
+      ).catch(() => [] as { channel_id: string; guild_id: string }[]);
       for (const r of rows) {
         if (!r.channel_id) continue;
+        const cfg = ticketConfig(r.guild_id ?? '');
+        if (!cfg.enabled || !cfg.slaHours) continue;
         const ch = await client.channels.fetch(r.channel_id).catch(() => null);
         if (!ch?.isThread()) continue;
         const last = await ch.messages.fetch({ limit: 1 }).catch(() => null);
         const lastTs = last?.first()?.createdTimestamp ?? ch.createdTimestamp ?? 0;
-        if (lastTs < cutoff) {
+        if (lastTs < Date.now() - cfg.slaHours * 3_600_000) {
           await ch.send('🕒 Ticket zamknięty automatycznie po bezczynności (SLA).').catch(() => {});
           await closeTicket(ch);
         }

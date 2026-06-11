@@ -287,6 +287,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'verification_config',
   'modmail_config',
   'applications_config',
+  'tickets_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {
