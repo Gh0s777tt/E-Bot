@@ -28,6 +28,8 @@ type AutomodConfig = {
     windowMin: number;
     action: 'timeout' | 'kick' | 'ban';
   };
+  antiCaps?: { enabled: boolean; percent: number; minLength: number }; // % WIELKICH liter ≥ próg
+  antiSpoiler?: { enabled: boolean; maxSpoilers: number }; // limit znaczników ||spoiler|| (anty-spam)
 };
 const DEFAULT: AutomodConfig = {
   enabled: false,
@@ -50,6 +52,8 @@ const DEFAULT: AutomodConfig = {
   action: 'delete',
   timeoutMinutes: 10,
   escalation: { enabled: false, threshold: 3, windowMin: 10, action: 'timeout' },
+  antiCaps: { enabled: false, percent: 70, minLength: 10 },
+  antiSpoiler: { enabled: false, maxSpoilers: 5 },
 };
 // Etap K — config automoda PER-SERWER z cache TTL 30 s (automod chodzi na każdej wiadomości).
 // Cache trzyma cfg + skompilowane regexy. getGuildSettings = override serwera z fallbackiem global.
@@ -72,6 +76,14 @@ function cfgFor(guildId: string): AutomodCached {
   const entry: AutomodCached = { cfg, compiled, at: Date.now() };
   cfgCache.set(guildId, entry);
   return entry;
+}
+
+// Anti-caps: udział WIELKICH liter ≥ próg, przy min. długości (ignoruje krótkie / bez liter).
+function capsViolation(content: string, c: NonNullable<AutomodConfig['antiCaps']>): boolean {
+  const letters = content.match(/\p{L}/gu)?.length ?? 0;
+  if (letters < Math.max(1, c.minLength)) return false;
+  const upper = content.match(/\p{Lu}/gu)?.length ?? 0;
+  return upper / letters >= Math.max(1, Math.min(100, c.percent)) / 100;
 }
 
 // Gdy blockLinks: przepuść, jeśli wszystkie linki są w whiteliscie domen (allowedLinks).
@@ -141,6 +153,8 @@ function categoryOf(reason: string): string {
   if (reason === 'zaproszenie Discord') return 'invite';
   if (reason === 'link') return 'link';
   if (reason === 'zbyt wiele wzmianek') return 'mention';
+  if (reason === 'nadmiar wielkich liter') return 'caps';
+  if (reason === 'spam spoilerów') return 'spoiler';
   if (reason === 'spam') return 'spam';
   return 'inne';
 }
@@ -205,6 +219,13 @@ export function startAutomod(client: Client): void {
       msg.mentions.users.size + msg.mentions.roles.size > cfg.maxMentions
     )
       reason = 'zbyt wiele wzmianek';
+    else if (cfg.antiCaps?.enabled && capsViolation(content, cfg.antiCaps))
+      reason = 'nadmiar wielkich liter';
+    else if (
+      cfg.antiSpoiler?.enabled &&
+      (content.match(/\|\|[^|]+\|\|/g)?.length ?? 0) > Math.max(0, cfg.antiSpoiler.maxSpoilers)
+    )
+      reason = 'spam spoilerów';
     else if (cfg.antiSpamCount > 0) {
       const now = Date.now();
       const arr = (recent.get(msg.author.id) ?? []).filter((t) => now - t < cfg.antiSpamSec * 1000);

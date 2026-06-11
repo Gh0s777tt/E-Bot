@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-265-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.195.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-266-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.196.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.196.0] — 🛡️ Automod: anty-caps + anty-spoiler
+
+- `[#266]` 🛡️ **Automod — dwa nowe filtry: anty-caps i anty-spoiler** (z roadmapy sek.4: „Automod: anty-spoiler, anty-caps"). Oba **wyłączone domyślnie**, konfigurowalne per-serwer.
+  - 🤖 **Bot** (`automod.mts`): `antiCaps` — blokuje wiadomości z udziałem WIELKICH liter ≥ próg (domyślnie 70%) przy min. długości (domyślnie 10 znaków); liczy litery przez Unicode `\p{L}`/`\p{Lu}` (działa dla polskich znaków). `antiSpoiler` — blokuje spam znaczników `||spoiler||` powyżej limitu (domyślnie 5). Wpięte w istniejący łańcuch kar (usuń/timeout/kick/ban + eskalacja) i statystyki moderacji (`caps`/`spoiler`).
+  - 🖥️ **Panel** (`AutomodForm.tsx` + `community.ts` typ/default + `schemas.ts` zod): nowa sekcja „Anty-caps i anty-spoiler" z przełącznikami i polami (próg %, min. długość, maks. spoilerów). Walidacja zod (caps 10–100%, spoilers 0–50). `automod_config` już per-serwer (od C-8), więc filtry też.
+  - Wsteczna zgodność (pola opcjonalne, domyślnie off). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.195.0] — 🔎 Wyszukiwarka komend w /help (autocomplete)
 

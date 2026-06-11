@@ -445,6 +445,19 @@ export const automodSchema = z.object({
       action: z.enum(['timeout', 'kick', 'ban']),
     })
     .optional(),
+  antiCaps: z
+    .object({
+      enabled: z.boolean(),
+      percent: z.number().int().min(10).max(100),
+      minLength: z.number().int().min(1).max(500),
+    })
+    .optional(),
+  antiSpoiler: z
+    .object({
+      enabled: z.boolean(),
+      maxSpoilers: z.number().int().min(0).max(50),
+    })
+    .optional(),
 });
 export type AutomodInput = z.infer<typeof automodSchema>;
 

@@ -52,15 +52,29 @@ type Cfg = {
     windowMin: number;
     action: 'timeout' | 'kick' | 'ban';
   };
+  antiCaps: { enabled: boolean; percent: number; minLength: number };
+  antiSpoiler: { enabled: boolean; maxSpoilers: number };
 };
 type ListKey = 'bannedWords' | 'bannedRegex' | 'allowedLinks' | 'ignoreChannels';
-type Init = Omit<Cfg, ListKey | 'antiScam' | 'pii' | 'action' | 'timeoutMinutes' | 'escalation'> &
+type Init = Omit<
+  Cfg,
+  | ListKey
+  | 'antiScam'
+  | 'pii'
+  | 'action'
+  | 'timeoutMinutes'
+  | 'escalation'
+  | 'antiCaps'
+  | 'antiSpoiler'
+> &
   Partial<Pick<Cfg, ListKey>> & {
     antiScam?: { enabled?: boolean; customDomains?: string[] };
     pii?: { enabled?: boolean; types?: Partial<PiiTypes> };
     action?: Cfg['action'];
     timeoutMinutes?: number;
     escalation?: Partial<Cfg['escalation']>;
+    antiCaps?: Partial<Cfg['antiCaps']>;
+    antiSpoiler?: Partial<Cfg['antiSpoiler']>;
   };
 
 const inputCls =
@@ -95,6 +109,15 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
       threshold: initial.escalation?.threshold ?? 3,
       windowMin: initial.escalation?.windowMin ?? 10,
       action: initial.escalation?.action ?? 'timeout',
+    },
+    antiCaps: {
+      enabled: initial.antiCaps?.enabled ?? false,
+      percent: initial.antiCaps?.percent ?? 70,
+      minLength: initial.antiCaps?.minLength ?? 10,
+    },
+    antiSpoiler: {
+      enabled: initial.antiSpoiler?.enabled ?? false,
+      maxSpoilers: initial.antiSpoiler?.maxSpoilers ?? 5,
     },
   });
   const [wordsText, setWordsText] = useState(toLines(initial.bannedWords ?? []));
@@ -290,6 +313,87 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
               „{c.escalation.action}" (nawet gdy akcja bazowa to „usuń").
             </p>
           </>
+        )}
+      </div>
+
+      {/* Anty-caps i anty-spoiler */}
+      <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
+        <span className="font-semibold text-white/90">Anty-caps i anty-spoiler</span>
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.antiCaps.enabled}
+            onChange={(e) => setC({ ...c, antiCaps: { ...c.antiCaps, enabled: e.target.checked } })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span>
+            Blokuj nadmiar <strong>WIELKICH LITER</strong>{' '}
+            <span className="text-muted">(krzyk)</span>
+          </span>
+        </label>
+        {c.antiCaps.enabled && (
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="space-y-1 text-sm">
+              <span className="text-muted">Próg % wielkich liter</span>
+              <input
+                type="number"
+                value={c.antiCaps.percent}
+                onChange={(e) =>
+                  setC({
+                    ...c,
+                    antiCaps: {
+                      ...c.antiCaps,
+                      percent: Math.min(100, Math.max(10, num(e.target.value))),
+                    },
+                  })
+                }
+                className={inputCls}
+              />
+            </label>
+            <label className="space-y-1 text-sm">
+              <span className="text-muted">Min. długość wiadomości</span>
+              <input
+                type="number"
+                value={c.antiCaps.minLength}
+                onChange={(e) =>
+                  setC({
+                    ...c,
+                    antiCaps: { ...c.antiCaps, minLength: Math.max(1, num(e.target.value)) },
+                  })
+                }
+                className={inputCls}
+              />
+            </label>
+          </div>
+        )}
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.antiSpoiler.enabled}
+            onChange={(e) =>
+              setC({ ...c, antiSpoiler: { ...c.antiSpoiler, enabled: e.target.checked } })
+            }
+            className="h-4 w-4 accent-accent"
+          />
+          <span>
+            Blokuj spam <strong>spoilerów</strong> <span className="text-muted">(||tekst||)</span>
+          </span>
+        </label>
+        {c.antiSpoiler.enabled && (
+          <label className="space-y-1 text-sm sm:max-w-xs">
+            <span className="text-muted">Maks. liczba spoilerów w wiadomości</span>
+            <input
+              type="number"
+              value={c.antiSpoiler.maxSpoilers}
+              onChange={(e) =>
+                setC({
+                  ...c,
+                  antiSpoiler: { ...c.antiSpoiler, maxSpoilers: Math.max(0, num(e.target.value)) },
+                })
+              }
+              className={inputCls}
+            />
+          </label>
         )}
       </div>
 

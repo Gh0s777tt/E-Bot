@@ -72,6 +72,8 @@ export type AutomodConfig = {
     windowMin: number;
     action: 'timeout' | 'kick' | 'ban';
   };
+  antiCaps?: { enabled: boolean; percent: number; minLength: number };
+  antiSpoiler?: { enabled: boolean; maxSpoilers: number };
 };
 export const AUTOMOD_DEFAULT: AutomodConfig = {
   enabled: false,
@@ -94,6 +96,8 @@ export const AUTOMOD_DEFAULT: AutomodConfig = {
   action: 'delete',
   timeoutMinutes: 10,
   escalation: { enabled: false, threshold: 3, windowMin: 10, action: 'timeout' },
+  antiCaps: { enabled: false, percent: 70, minLength: 10 },
+  antiSpoiler: { enabled: false, maxSpoilers: 5 },
 };
 
 export async function getAutomodConfig(): Promise<AutomodConfig> {
