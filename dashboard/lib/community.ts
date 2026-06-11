@@ -181,7 +181,7 @@ export const VERIFICATION_DEFAULT: VerificationConfig = {
 };
 
 export async function getVerificationConfig(): Promise<VerificationConfig> {
-  const raw = await getRawSetting('verification_config');
+  const raw = await getConfigSetting('verification_config');
   if (!raw) return structuredClone(VERIFICATION_DEFAULT);
   try {
     return { ...VERIFICATION_DEFAULT, ...(JSON.parse(raw) as Partial<VerificationConfig>) };
@@ -190,7 +190,7 @@ export async function getVerificationConfig(): Promise<VerificationConfig> {
   }
 }
 export async function saveVerificationConfig(cfg: VerificationConfig): Promise<void> {
-  await setRawSetting('verification_config', JSON.stringify(cfg));
+  await setConfigSetting('verification_config', JSON.stringify(cfg));
 }
 
 // ── Anti-raid (Faza 7 / F6.3) ──

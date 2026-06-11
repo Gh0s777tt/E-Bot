@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-246-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.176.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-247-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.177.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.177.0] — 🗂️ Weryfikacja per-serwer · Etap K (C-10/?)
+
+- `[#247]` 🗂️ **Weryfikacja (`verification`) per-serwer** — dziewiąty zmigrowany moduł. Naprawia realny **bug multi-serwer**: dotychczas globalny `roleId` oznaczał, że przycisk weryfikacji na serwerze B próbował nadać rolę z serwera A (błąd „nieznana rola / brak uprawnień").
+  - 🤖 **Bot**: `verifyConfig()` → `verifyConfig(guildId)` (świeży odczyt per-serwer z fallbackiem global — low-freq: klik/komenda). Przewleczone przez 3 miejsca: `handleVerifyButton`, `handleVerifyModal` (`security/verification.mts`) i komendę `/verifypanel`. Każdy serwer ma własną rolę, tryb (przycisk/captcha/hasło), treść, etykietę, min. wiek konta i hasło.
+  - 🖥️ **Panel**: `verification_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getVerificationConfig`/`saveVerificationConfig` (`community.ts`) zroutowane przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-10). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.176.0] — 🗂️ Logi serwera per-serwer · Etap K (C-9/?)
 

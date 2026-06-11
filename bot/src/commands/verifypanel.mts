@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
-  const cfg = verifyConfig();
+  const cfg = verifyConfig(interaction.guildId ?? '');
   const ch = interaction.channel as TextChannel | null;
   if (!ch || !('send' in ch)) {
     await interaction.reply({

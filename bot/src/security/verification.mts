@@ -13,7 +13,7 @@ import {
   TextInputStyle,
 } from 'discord.js';
 import { generateCaptchaCode, renderCaptcha } from '../lib/captcha.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 export type VerificationConfig = {
   enabled: boolean;
@@ -35,8 +35,9 @@ const DEFAULT: VerificationConfig = {
   phrase: '',
 };
 
-export function verifyConfig(): VerificationConfig {
-  const raw = getSettings()['verification_config'];
+// Etap K — config per-serwer: czytamy świeżo (low-freq: klik/komenda), fallback global.
+export function verifyConfig(guildId: string): VerificationConfig {
+  const raw = getGuildSettings(guildId)['verification_config'];
   try {
     return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<VerificationConfig>) } : DEFAULT;
   } catch {
@@ -85,7 +86,7 @@ async function grantRole(
 }
 
 export async function handleVerifyButton(interaction: ButtonInteraction): Promise<void> {
-  const cfg = verifyConfig();
+  const cfg = verifyConfig(interaction.guildId ?? '');
   if (!cfg.enabled || !cfg.roleId) {
     await interaction.reply({
       content: '⚠️ Weryfikacja jest wyłączona.',
@@ -198,7 +199,7 @@ export async function handleVerifyModal(interaction: ModalSubmitInteraction): Pr
     interaction.customId !== 'verify:phrase:submit'
   )
     return;
-  const cfg = verifyConfig();
+  const cfg = verifyConfig(interaction.guildId ?? '');
   if (!cfg.enabled || !cfg.roleId || !interaction.guild) {
     await interaction.reply({
       content: '⚠️ Weryfikacja jest wyłączona.',
