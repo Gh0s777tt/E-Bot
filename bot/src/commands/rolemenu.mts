@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
-  const row = buildRoleMenu();
+  const row = buildRoleMenu(interaction.guildId ?? '');
   if (!row) {
     await interaction.reply({
       content: '⚠️ Najpierw skonfiguruj role w panelu → Role (menu ról).',
@@ -30,6 +30,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     return;
   }
-  await (ch as TextChannel).send({ content: roleMenuConfig().message, components: [row] });
+  await (ch as TextChannel).send({
+    content: roleMenuConfig(interaction.guildId ?? '').message,
+    components: [row],
+  });
   await interaction.reply({ content: '✅ Opublikowano menu ról.', flags: MessageFlags.Ephemeral });
 }

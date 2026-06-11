@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles);
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
-  const cfg = buttonRolesConfig();
+  const cfg = buttonRolesConfig(interaction.guildId ?? '');
   if (!cfg.buttons.length) {
     await interaction.reply({
       content: '❌ Brak skonfigurowanych przycisków. Ustaw je w panelu web → Engagement.',

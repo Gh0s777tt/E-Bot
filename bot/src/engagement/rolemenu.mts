@@ -7,13 +7,14 @@ import {
   StringSelectMenuBuilder,
   type StringSelectMenuInteraction,
 } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 export type RoleOption = { label: string; roleId: string; description?: string; emoji?: string };
 export type RoleMenuConfig = { message: string; placeholder: string; options: RoleOption[] };
 
-export function roleMenuConfig(): RoleMenuConfig {
-  const raw = getSettings()['rolemenu_config'];
+// Etap K — config per-serwer: świeży odczyt (komenda /rolemenu + handler select), fallback global.
+export function roleMenuConfig(guildId: string): RoleMenuConfig {
+  const raw = getGuildSettings(guildId)['rolemenu_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Partial<RoleMenuConfig>) : {};
     return {
@@ -26,8 +27,8 @@ export function roleMenuConfig(): RoleMenuConfig {
   }
 }
 
-export function buildRoleMenu(): ActionRowBuilder<StringSelectMenuBuilder> | null {
-  const { placeholder, options } = roleMenuConfig();
+export function buildRoleMenu(guildId: string): ActionRowBuilder<StringSelectMenuBuilder> | null {
+  const { placeholder, options } = roleMenuConfig(guildId);
   if (!options.length) return null;
   const menu = new StringSelectMenuBuilder()
     .setCustomId('rolemenu')
@@ -53,7 +54,7 @@ export async function handleRoleMenu(interaction: StringSelectMenuInteraction): 
     await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
     return;
   }
-  const menuRoleIds = roleMenuConfig().options.map((o) => o.roleId);
+  const menuRoleIds = roleMenuConfig(interaction.guildId ?? '').options.map((o) => o.roleId);
   const chosen = new Set(interaction.values);
   const added: string[] = [];
   const removed: string[] = [];

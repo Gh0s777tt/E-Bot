@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-255-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.185.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-256-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.186.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.186.0] — 🗂️ Role za przyciski + menu ról per-serwer · Etap K (C-19/?)
+
+- `[#256]` 🗂️ **Role za przyciski (`buttonroles`) + menu ról (`rolemenu`) per-serwer** — osiemnasta fala, batch dwóch modułów ról.
+  - 🤖 **Bot**: `buttonroles` — `buttonRolesConfig()` → `buttonRolesConfig(guildId)` (czytane tylko w `/buttonpanel` → `interaction.guildId`; handler kliknięcia toggluje rolę po ID z `customId`, już per-serwer). `rolemenu` — `roleMenuConfig()` → `roleMenuConfig(guildId)`, `buildRoleMenu()` → `buildRoleMenu(guildId)`; przewleczone przez `/rolemenu` i handler select-menu (`handleRoleMenu` → `interaction.guildId`). Każdy serwer ma własny zestaw przycisków/opcji ról i własną treść panelu.
+  - 🖥️ **Panel**: `buttonroles_config` i `rolemenu_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getButtonRoles`/`saveButtonRoles` i `getRoleMenu`/`saveRoleMenu` (`engagement.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-19). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.185.0] — 🗂️ Highlighty + automatyzacje per-serwer · Etap K (C-18/?)
 

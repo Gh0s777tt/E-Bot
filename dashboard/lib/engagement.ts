@@ -11,7 +11,7 @@ export const BUTTONROLES_DEFAULT: ButtonRolesConfig = {
 };
 
 export async function getButtonRoles(): Promise<ButtonRolesConfig> {
-  const raw = await getRawSetting('buttonroles_config');
+  const raw = await getConfigSetting('buttonroles_config');
   if (!raw) return structuredClone(BUTTONROLES_DEFAULT);
   try {
     return { ...BUTTONROLES_DEFAULT, ...(JSON.parse(raw) as Partial<ButtonRolesConfig>) };
@@ -20,7 +20,7 @@ export async function getButtonRoles(): Promise<ButtonRolesConfig> {
   }
 }
 export async function saveButtonRoles(cfg: ButtonRolesConfig): Promise<void> {
-  await setRawSetting('buttonroles_config', JSON.stringify(cfg));
+  await setConfigSetting('buttonroles_config', JSON.stringify(cfg));
 }
 
 // ── Starboard ──
@@ -139,7 +139,7 @@ export const ROLEMENU_DEFAULT: RoleMenuConfig = {
   options: [],
 };
 export async function getRoleMenu(): Promise<RoleMenuConfig> {
-  const raw = await getRawSetting('rolemenu_config');
+  const raw = await getConfigSetting('rolemenu_config');
   if (!raw) return structuredClone(ROLEMENU_DEFAULT);
   try {
     return { ...ROLEMENU_DEFAULT, ...(JSON.parse(raw) as Partial<RoleMenuConfig>) };
@@ -148,7 +148,7 @@ export async function getRoleMenu(): Promise<RoleMenuConfig> {
   }
 }
 export async function saveRoleMenu(cfg: RoleMenuConfig): Promise<void> {
-  await setRawSetting('rolemenu_config', JSON.stringify(cfg));
+  await setConfigSetting('rolemenu_config', JSON.stringify(cfg));
 }
 
 // ── Lista giveawayów (read) ──

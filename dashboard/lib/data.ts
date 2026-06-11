@@ -295,6 +295,8 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'afk_config',
   'highlights_config',
   'automations_config',
+  'buttonroles_config',
+  'rolemenu_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

@@ -8,12 +8,13 @@ import {
   type GuildMember,
   MessageFlags,
 } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 export type BtnRole = { label: string; roleId: string; emoji?: string };
 
-export function buttonRolesConfig(): { message: string; buttons: BtnRole[] } {
-  const raw = getSettings()['buttonroles_config'];
+// Etap K — config per-serwer: świeży odczyt (komenda /buttonpanel), fallback global.
+export function buttonRolesConfig(guildId: string): { message: string; buttons: BtnRole[] } {
+  const raw = getGuildSettings(guildId)['buttonroles_config'];
   try {
     const c = raw ? (JSON.parse(raw) as { message?: string; buttons?: BtnRole[] }) : {};
     return {
