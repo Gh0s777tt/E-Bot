@@ -2,11 +2,12 @@
 // + rekord serwera + kamienie milowe. Config 'counting_config'; stan w Supabase 'counting_state'.
 import { type Client, Events, type Message, type TextChannel } from 'discord.js';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cfg = { on: boolean; channelId: string; allowSameUser: boolean; resetOnFail: boolean };
-function cfg(): Cfg {
-  const raw = getSettings()['counting_config'];
+// Etap K — config per-serwer: świeży odczyt (stan gry i tak per-guild), fallback global.
+function cfg(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['counting_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {
@@ -53,7 +54,7 @@ export function startCounting(client: Client): void {
   client.on(Events.MessageCreate, async (msg: Message) => {
     try {
       if (msg.author.bot || !msg.guild) return;
-      const c = cfg();
+      const c = cfg(msg.guild.id);
       if (!c.on || msg.channelId !== c.channelId) return;
 
       const content = msg.content.trim();

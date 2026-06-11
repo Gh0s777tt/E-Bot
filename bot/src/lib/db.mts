@@ -111,6 +111,8 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'tempvoice_config',
   'starboard_config',
   'responder_config',
+  'counting_config',
+  'afk_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-253-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.183.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-254-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.184.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.184.0] — 🗂️ Liczenie + AFK per-serwer · Etap K (C-17/?)
+
+- `[#254]` 🗂️ **Gra w liczenie (`counting`) + AFK (`afk`) per-serwer** — szesnasta fala migracji, batch dwóch małych modułów społeczności (oba czytały config na każdej wiadomości już wcześniej, więc threading `guildId` jest bez regresji).
+  - 🤖 **Bot**: `counting` — `cfg()` → `cfg(guildId)` (`msg.guild.id`), każdy serwer ma własny kanał liczenia i zasady anti-cheat (stan gry już był per-guild w Supabase). `afk` — `afkEnabled()` → `afkEnabled(guildId)` w handlerze `MessageCreate` i w komendzie `/afk` (`interaction.guildId`).
+  - 🖥️ **Panel**: `counting_config` i `afk_config` w `MIGRATED_GUILD_KEYS` (panel + bot). `getCounting`/`saveCounting` (`engagement.ts`) przez router; AFK (sam przełącznik `{enabled}`) idzie przez `moduleState.ts`, który już routuje klucze z MIGRATED per-serwer.
+  - Wsteczna zgodność (fallback global). Etap K (C-17). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.183.0] — 🗂️ Autoresponder/komendy własne per-serwer · Etap K (C-16/?)
 

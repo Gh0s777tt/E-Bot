@@ -12,7 +12,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
-  if (!afkEnabled()) {
+  if (!afkEnabled(interaction.guildId ?? '')) {
     await interaction.reply({ content: t(locale, 'afk.disabled'), flags: MessageFlags.Ephemeral });
     return;
   }

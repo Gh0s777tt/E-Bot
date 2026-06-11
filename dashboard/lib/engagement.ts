@@ -91,7 +91,7 @@ export const COUNTING_DEFAULT: CountingConfig = {
   resetOnFail: true,
 };
 export async function getCounting(): Promise<CountingConfig> {
-  const raw = await getRawSetting('counting_config');
+  const raw = await getConfigSetting('counting_config');
   if (!raw) return structuredClone(COUNTING_DEFAULT);
   try {
     return { ...COUNTING_DEFAULT, ...(JSON.parse(raw) as Partial<CountingConfig>) };
@@ -100,7 +100,7 @@ export async function getCounting(): Promise<CountingConfig> {
   }
 }
 export async function saveCounting(cfg: CountingConfig): Promise<void> {
-  await setRawSetting('counting_config', JSON.stringify(cfg));
+  await setConfigSetting('counting_config', JSON.stringify(cfg));
 }
 
 // ── Invite Tracker (Tor 3) ──
