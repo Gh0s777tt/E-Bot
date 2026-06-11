@@ -2,11 +2,12 @@
 // i wysyła embed na wybrany kanał. Dedup przez setting 'digest_last' (tag tygodnia).
 import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cfg = { on: boolean; channelId: string };
-function cfg(): Cfg {
-  const raw = getSettings()['digest_config'];
+// Etap K — config per-serwer: świeży odczyt (poller tygodniowy), fallback global.
+function cfg(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['digest_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return { on: !!c.enabled, channelId: String(c.channelId || '') };
@@ -24,40 +25,12 @@ function weekTag(now: Date): string {
 
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
-  const c = cfg();
-  if (!c.on || !c.channelId) return;
   const now = new Date();
   if (now.getUTCDay() !== 1) return; // tylko poniedziałek
   const tag = weekTag(now);
-  if ((await cloudGetSetting('digest_last').catch(() => null)) === tag) return;
-
   const since = new Date(now.getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
-  const rows = await cloudSelect<Row>('activity_daily', `select=*&day=gte.${since}`).catch(
-    () => [] as Row[],
-  );
-  const s = rows.reduce(
-    (a, r) => ({
-      m: a.m + (r.messages ?? 0),
-      j: a.j + (r.joins ?? 0),
-      l: a.l + (r.leaves ?? 0),
-      v: a.v + (r.voice_minutes ?? 0),
-    }),
-    { m: 0, j: 0, l: 0, v: 0 },
-  );
-  // 🏆 Najaktywniejszy (per-user, 7 dni) + ⭐ top reputacja — wzbogacenie recapu.
-  const ua = await cloudSelect<{ user_id: string; username?: string; messages?: number }>(
-    'user_activity',
-    `select=user_id,username,messages&day=gte.${since}`,
-  ).catch(() => [] as { user_id: string; username?: string; messages?: number }[]);
-  const byUser = new Map<string, { name: string; msgs: number }>();
-  for (const r of ua) {
-    const cu = byUser.get(r.user_id) ?? { name: r.username || r.user_id, msgs: 0 };
-    cu.msgs += r.messages ?? 0;
-    if (r.username) cu.name = r.username;
-    byUser.set(r.user_id, cu);
-  }
-  const topUser = [...byUser.values()].sort((a, b) => b.msgs - a.msgs)[0];
 
+  // ⭐ Reputacja jest GLOBALNA (feature /rep, klucz 'reputation' bot-wide) — wspólna dla wszystkich.
   let topRep: { name: string; points: number } | null = null;
   try {
     const raw = await cloudGetSetting('reputation');
@@ -70,37 +43,74 @@ async function maybePost(client: Client): Promise<void> {
     /* brak repów */
   }
 
-  const ch = await client.channels.fetch(c.channelId).catch(() => null);
-  if (ch?.isTextBased() && 'send' in ch) {
-    const net = s.j - s.l;
-    const embed = new EmbedBuilder()
-      .setColor(0xe50914)
-      .setTitle('📊 Tygodniowe podsumowanie serwera')
-      .addFields(
-        { name: '💬 Wiadomości', value: s.m.toLocaleString('pl-PL'), inline: true },
-        { name: '🎙️ Minuty voice', value: s.v.toLocaleString('pl-PL'), inline: true },
-        {
-          name: '👥 Wzrost',
-          value: `+${s.j} / -${s.l} (netto ${net >= 0 ? '+' : ''}${net})`,
-          inline: true,
-        },
-      )
-      .setTimestamp(now);
-    if (topUser && topUser.msgs > 0)
-      embed.addFields({
-        name: '🏆 Najaktywniejszy',
-        value: `${topUser.name} — ${topUser.msgs.toLocaleString('pl-PL')} wiad.`,
-        inline: false,
-      });
-    if (topRep)
-      embed.addFields({
-        name: '⭐ Najwyższa reputacja',
-        value: `${topRep.name} — ${topRep.points} ⭐`,
-        inline: false,
-      });
-    await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});
+  // Etap K — digest PER-SERWER: iterujemy serwery, sumujemy activity_daily/user_activity danego
+  // serwera (oba mają guild_id), dedup per-serwer (digest_last:<guildId>).
+  for (const guild of client.guilds.cache.values()) {
+    const c = cfg(guild.id);
+    if (!c.on || !c.channelId) continue;
+    const dedupKey = `digest_last:${guild.id}`;
+    if ((await cloudGetSetting(dedupKey).catch(() => null)) === tag) continue;
+
+    const rows = await cloudSelect<Row>(
+      'activity_daily',
+      `select=*&guild_id=eq.${guild.id}&day=gte.${since}`,
+    ).catch(() => [] as Row[]);
+    const s = rows.reduce(
+      (a, r) => ({
+        m: a.m + (r.messages ?? 0),
+        j: a.j + (r.joins ?? 0),
+        l: a.l + (r.leaves ?? 0),
+        v: a.v + (r.voice_minutes ?? 0),
+      }),
+      { m: 0, j: 0, l: 0, v: 0 },
+    );
+    // 🏆 Najaktywniejszy (per-user, 7 dni) danego serwera.
+    const ua = await cloudSelect<{ user_id: string; username?: string; messages?: number }>(
+      'user_activity',
+      `select=user_id,username,messages&guild_id=eq.${guild.id}&day=gte.${since}`,
+    ).catch(() => [] as { user_id: string; username?: string; messages?: number }[]);
+    const byUser = new Map<string, { name: string; msgs: number }>();
+    for (const r of ua) {
+      const cu = byUser.get(r.user_id) ?? { name: r.username || r.user_id, msgs: 0 };
+      cu.msgs += r.messages ?? 0;
+      if (r.username) cu.name = r.username;
+      byUser.set(r.user_id, cu);
+    }
+    const topUser = [...byUser.values()].sort((a, b) => b.msgs - a.msgs)[0];
+
+    const ch = await client.channels.fetch(c.channelId).catch(() => null);
+    // Kanał musi należeć do TEGO serwera (config mógł zostać po przeniesieniu/zmianie).
+    if (ch?.isTextBased() && 'send' in ch && 'guildId' in ch && ch.guildId === guild.id) {
+      const net = s.j - s.l;
+      const embed = new EmbedBuilder()
+        .setColor(0xe50914)
+        .setTitle('📊 Tygodniowe podsumowanie serwera')
+        .addFields(
+          { name: '💬 Wiadomości', value: s.m.toLocaleString('pl-PL'), inline: true },
+          { name: '🎙️ Minuty voice', value: s.v.toLocaleString('pl-PL'), inline: true },
+          {
+            name: '👥 Wzrost',
+            value: `+${s.j} / -${s.l} (netto ${net >= 0 ? '+' : ''}${net})`,
+            inline: true,
+          },
+        )
+        .setTimestamp(now);
+      if (topUser && topUser.msgs > 0)
+        embed.addFields({
+          name: '🏆 Najaktywniejszy',
+          value: `${topUser.name} — ${topUser.msgs.toLocaleString('pl-PL')} wiad.`,
+          inline: false,
+        });
+      if (topRep)
+        embed.addFields({
+          name: '⭐ Najwyższa reputacja',
+          value: `${topRep.name} — ${topRep.points} ⭐`,
+          inline: false,
+        });
+      await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});
+    }
+    await cloudSetSetting(dedupKey, tag).catch(() => {});
   }
-  await cloudSetSetting('digest_last', tag).catch(() => {});
 }
 
 export function startDigest(client: Client): void {

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-262-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.192.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-263-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.193.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.193.0] — 🗂️ Tygodniowy digest per-serwer · Etap K (C-26/?)
+
+- `[#263]` 🗂️ **Tygodniowy auto-digest (`digest`) per-serwer** — dwudziesta piąta fala. Poller (poniedziałek UTC) **nie iterował serwerów**: czytał jeden globalny kanał i sumował `activity_daily`/`user_activity` ze WSZYSTKICH serwerów razem (statystyki jednego serwera zawierały dane innych) z jednym globalnym dedupem.
+  - 🤖 **Bot** (`analytics/digest.mts`): `cfg()` → `cfg(guildId)`; `maybePost` **iteruje serwery** (`client.guilds.cache`), sumuje aktywność **danego serwera** (oba zapytania scope'owane `guild_id=eq.<id>` — tabele mają guild_id), dedup per-serwer (`digest_last:<guildId>`) i guard „kanał należy do tego serwera". Reputacja (`/rep`, klucz `reputation`) jest z założenia globalna (bot-wide) — liczona raz, wspólna dla wszystkich digestów.
+  - 🖥️ **Panel**: `digest_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getDigestConfig`/`saveDigestConfig` (`community.ts`) przez `getConfigSetting`/`setConfigSetting`.
+  - Wsteczna zgodność (fallback global). Etap K (C-26). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.192.0] — 🗂️ Komendy własne (no-code) per-serwer · Etap K (C-25/?)
 

@@ -123,6 +123,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'antiraid_config',
   'antinuke',
   'custom_commands',
+  'digest_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

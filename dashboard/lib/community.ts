@@ -254,7 +254,7 @@ export async function saveAiHelpConfig(cfg: AiHelpConfig): Promise<void> {
 export type DigestConfig = { enabled: boolean; channelId: string };
 export const DIGEST_DEFAULT: DigestConfig = { enabled: false, channelId: '' };
 export async function getDigestConfig(): Promise<DigestConfig> {
-  const raw = await getRawSetting('digest_config');
+  const raw = await getConfigSetting('digest_config');
   if (!raw) return structuredClone(DIGEST_DEFAULT);
   try {
     return { ...DIGEST_DEFAULT, ...(JSON.parse(raw) as Partial<DigestConfig>) };
@@ -263,7 +263,7 @@ export async function getDigestConfig(): Promise<DigestConfig> {
   }
 }
 export async function saveDigestConfig(cfg: DigestConfig): Promise<void> {
-  await setRawSetting('digest_config', JSON.stringify(cfg));
+  await setConfigSetting('digest_config', JSON.stringify(cfg));
 }
 
 // ── Dzienny AI-digest (Tor J) ──
