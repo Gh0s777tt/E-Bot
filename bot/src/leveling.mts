@@ -43,6 +43,7 @@ type LevelingConfig = {
   prestigeEnabled: boolean;
   prestigeLevel: number; // poziom wymagany do prestiżu
   prestigeRoleId: string; // rola za prestiż
+  difficulty: 'easy' | 'normal' | 'hard'; // preset tempa XP (łatwa ×1.5 / normalna ×1 / trudna ×0.6)
 };
 
 const DEFAULT: LevelingConfig = {
@@ -64,6 +65,14 @@ const DEFAULT: LevelingConfig = {
   prestigeEnabled: false,
   prestigeLevel: 100,
   prestigeRoleId: '',
+  difficulty: 'normal',
+};
+
+// Preset tempa zdobywania XP (mnożnik na wierzchu pozostałych): łatwa = szybciej, trudna = wolniej.
+const DIFFICULTY_MULT: Record<'easy' | 'normal' | 'hard', number> = {
+  easy: 1.5,
+  normal: 1,
+  hard: 0.6,
 };
 
 // ── Config PER-SERWER (Etap K): cache z TTL 30 s per guild — nie otwiera SQLite na każdą wiadomość,
@@ -142,6 +151,7 @@ function effectiveXp(member: GuildMember, base: number): number {
   if (isWeekend() && cfg.weekendBonus > 1) mult *= cfg.weekendBonus;
   mult *= xpMultiplier(member.guild.id, member.id); // Tor B — item XP-boost
   mult *= eventMult(); // Double-XP event (globalny, czasowy)
+  mult *= DIFFICULTY_MULT[cfg.difficulty] ?? 1; // preset trudności (krzywa XP)
   return Math.max(0, Math.round(base * mult));
 }
 function noXpMember(member: GuildMember): boolean {

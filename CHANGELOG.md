@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-266-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.196.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-267-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.197.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.197.0] — 📈 Krzywa XP levelingu (presety trudności)
+
+- `[#267]` 📈 **Leveling — preset tempa zdobywania XP (łatwa/normalna/trudna)** (z roadmapy sek.4: „konfigurowalna krzywa XP"). Per-serwer (`leveling_config`).
+  - 🤖 **Bot** (`leveling.mts`): nowe pole `difficulty` z mnożnikiem nakładanym w `effectiveXp` **na wierzchu** pozostałych (role/weekend/item-boost/event): **łatwa ×1.5** (szybsze poziomy), **normalna ×1**, **trudna ×0.6** (wolniejsze). Działa jednolicie na XP z wiadomości i z voice. Domyślnie `normal` (zero zmian dla istniejących serwerów).
+  - 🖥️ **Panel** (`LevelingForm.tsx` + `faza4.ts` typ/default + `schemas.ts` zod): selektor „Tempo zdobywania XP (krzywa)" z 3 opcjami + tooltip. Zapis przez istniejący `{...b}` (pole leci automatycznie), walidacja zod (`enum` z fallbackiem `normal`).
+  - Wsteczna zgodność (fallback `normal`). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.196.0] — 🛡️ Automod: anty-caps + anty-spoiler
 

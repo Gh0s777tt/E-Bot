@@ -86,6 +86,7 @@ export const levelingSchema = z.object({
   prestigeEnabled: z.boolean(),
   prestigeLevel: z.number().int().min(1).max(1000),
   prestigeRoleId: z.string().max(40),
+  difficulty: z.enum(['easy', 'normal', 'hard']).optional().default('normal'),
 });
 export type LevelingInput = z.infer<typeof levelingSchema>;
 

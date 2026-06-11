@@ -27,6 +27,7 @@ export type LevelingConfig = {
   prestigeEnabled: boolean;
   prestigeLevel: number;
   prestigeRoleId: string;
+  difficulty: 'easy' | 'normal' | 'hard';
 };
 
 export const LEVELING_DEFAULT: LevelingConfig = {
@@ -48,6 +49,7 @@ export const LEVELING_DEFAULT: LevelingConfig = {
   prestigeEnabled: false,
   prestigeLevel: 100,
   prestigeRoleId: '',
+  difficulty: 'normal',
 };
 
 export async function getLevelingConfig(): Promise<LevelingConfig> {

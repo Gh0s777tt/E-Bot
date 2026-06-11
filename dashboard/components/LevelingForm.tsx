@@ -132,6 +132,23 @@ export default function LevelingForm({
             className={inputCls}
           />
         </label>
+        <label className="space-y-1 text-sm">
+          <span className="font-semibold text-white/90">
+            Tempo zdobywania XP (krzywa)
+            <Hint text="Preset trudności mnożący całe XP: Łatwa = szybsze poziomy (×1.5), Normalna = standard, Trudna = wolniejsze (×0.6). Działa na wierzchu pozostałych mnożników." />
+          </span>
+          <select
+            value={b.difficulty}
+            onChange={(e) =>
+              setB({ ...b, difficulty: e.target.value as LevelingConfig['difficulty'] })
+            }
+            className={inputCls}
+          >
+            <option value="easy">🟢 Łatwa (×1.5 — szybciej)</option>
+            <option value="normal">⚪ Normalna (×1)</option>
+            <option value="hard">🔴 Trudna (×0.6 — wolniej)</option>
+          </select>
+        </label>
         <label className="space-y-1 text-sm sm:col-span-2">
           <span className="font-semibold text-white/90">Kanał ogłoszeń awansu</span>
           <ChannelSelect
