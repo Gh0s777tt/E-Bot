@@ -10,6 +10,50 @@ import GradientField from './GradientField';
 const GF_URL =
   'https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Lobster&family=Pacifico&family=Poppins:wght@400;700&display=swap';
 
+// Gotowe motywy — jeden klik wypełnia cały styl (gradient + czcionka + kolor tekstu); potem można dostroić.
+const THEMES: { name: string; emoji: string; style: CardStyle }[] = [
+  {
+    name: 'Netflix',
+    emoji: '🔴',
+    style: { from: '#E50914', to: '#0A0A0A', angle: 135, font: 'Poppins', textColor: '#FFFFFF' },
+  },
+  {
+    name: 'Ocean',
+    emoji: '🌊',
+    style: { from: '#2E3192', to: '#1BFFFF', angle: 135, font: 'Poppins', textColor: '#FFFFFF' },
+  },
+  {
+    name: 'Zachód',
+    emoji: '🌅',
+    style: { from: '#FF512F', to: '#DD2476', angle: 135, font: 'Bebas Neue', textColor: '#FFFFFF' },
+  },
+  {
+    name: 'Las',
+    emoji: '🌲',
+    style: { from: '#134E5E', to: '#71B280', angle: 135, font: 'Poppins', textColor: '#FFFFFF' },
+  },
+  {
+    name: 'Północ',
+    emoji: '🌌',
+    style: { from: '#0F2027', to: '#2C5364', angle: 135, font: 'Anton', textColor: '#FFFFFF' },
+  },
+  {
+    name: 'Złoto',
+    emoji: '✨',
+    style: { from: '#F7971E', to: '#FFD200', angle: 135, font: 'Anton', textColor: '#1A1A1A' },
+  },
+  {
+    name: 'Neon',
+    emoji: '💜',
+    style: { from: '#8E2DE2', to: '#4A00E0', angle: 135, font: 'Bebas Neue', textColor: '#FFFFFF' },
+  },
+  {
+    name: 'Mono',
+    emoji: '⬛',
+    style: { from: '#232526', to: '#414345', angle: 135, font: 'Poppins', textColor: '#FFFFFF' },
+  },
+];
+
 export default function CardStyleEditor({
   value,
   onChange,
@@ -40,6 +84,27 @@ export default function CardStyleEditor({
         >
           {previewText}
         </span>
+      </div>
+
+      <div className="space-y-1">
+        <span className="text-xs text-muted">Gotowe motywy (kliknij, by zastosować):</span>
+        <div className="flex flex-wrap gap-2">
+          {THEMES.map((th) => (
+            <button
+              key={th.name}
+              type="button"
+              onClick={() => onChange(th.style)}
+              title={`Zastosuj motyw „${th.name}"`}
+              className="rounded-md border border-line px-2.5 py-1 text-xs font-semibold transition hover:scale-105 hover:border-accent"
+              style={{
+                background: `linear-gradient(${th.style.angle}deg, ${th.style.from}, ${th.style.to})`,
+                color: th.style.textColor,
+              }}
+            >
+              {th.emoji} {th.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       <GradientField

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-267-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.197.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-268-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.198.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.198.0] — 🎨 Gotowe motywy kart (powitania + rangi)
+
+- `[#268]` 🎨 **8 gotowych motywów stylu kart** (z roadmapy sek.4: „Welcome: warianty motywów"). Dodane do wspólnego edytora `CardStyleEditor`, więc działają **i na banerach powitalnych, i na kartach rang**.
+  - 🖥️ **Panel** (`CardStyleEditor.tsx`): rząd klikalnych chipów-motywów (Netflix, Ocean, Zachód, Las, Północ, Złoto, Neon, Mono) — każdy chip pokazuje swój gradient, a klik **wypełnia cały styl** (gradient + kąt + czcionka + kolor tekstu) jednym ruchem; potem można dostroić istniejącymi kontrolkami. Live-preview działa od razu.
+  - 🤖 **Bot**: bez zmian — renderer `renderWelcomeBanner`/`renderRankCard` (`lib/cards.mts`) już obsługuje dowolny `CardStyle` (gradient/czcionka/kolor). Motywy to wygodne presety istniejącego stylu.
+  - Czysto panel (Vercel). Wstecznie zgodne (styl domyślny niezmieniony; presety opcjonalne).
 
 ## [0.197.0] — 📈 Krzywa XP levelingu (presety trudności)
 
