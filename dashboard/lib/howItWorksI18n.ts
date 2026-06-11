@@ -4,7 +4,8 @@
 // /logging, /audit (grupa „Bezpieczeństwo"). Chunk 3: /tickets, /modmail, /applications, /ai
 // (grupa „Wsparcie"). Chunk 4a: /welcome, /levels, /leaderboard, /roles, /engagement +
 // chunk 4b: /suggestions, /responder, /birthdays, /counters, /automations (grupa „Społeczność"
-// KOMPLET). Kolejne chunki dokładają strony.
+// KOMPLET). Chunk 5: /notifications, /creator, /live, /scheduled, /donations (grupa
+// „Powiadomienia"). Kolejne chunki dokładają strony.
 import type { HowEntry } from './howItWorks';
 import type { PanelLocale } from './panelI18n';
 
@@ -135,6 +136,38 @@ export const HOW_LABELS: Record<PanelLocale, HowLabels> = {
 // Tłumaczenia treści stron — przyrostowo. Pominięte strony/języki → fallback do PL (HOW_IT_WORKS).
 export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEntry>>> = {
   en: {
+    '/notifications': {
+      does: 'Alerts when a stream goes live (Twitch / Kick / YouTube / Rumble) to a chosen channel, with a role ping.',
+      why: 'Viewers won’t miss the start — the bot announces the live automatically the moment you go on air.',
+      needs: ['Platform API keys in Integrations', 'A notifications channel selected'],
+      perms: [
+        {
+          perm: 'Send Messages (+ Publish in an announcement channel)',
+          why: 'to announce the live, and on a News channel — broadcast to those who follow the server',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Notifications about new posts (RSS / social media) from you and your favorite creators; auto-syncs the Twitch schedule to Discord events.',
+      why: 'Your community gets new content as it drops, without manually pasting links.',
+      needs: ['API keys for the relevant platforms (some work without keys, e.g. RSS)'],
+    },
+    '/live': {
+      does: 'A real-time view of stream statuses and notification channels.',
+      why: 'You see live who the bot is watching and whether they’re online — a quick check.',
+    },
+    '/scheduled': {
+      does: 'Scheduled, recurring announcements (one-off / daily / weekly) sent at a set time; supports rich messages and Components V2.',
+      why: 'Regular messages (e.g. an “event reminder”) go out on their own, at a fixed time, without you being present.',
+      needs: ['Cloud configured (Supabase) — the schedule is kept in the database'],
+      perms: [
+        { perm: 'Send Messages in the target channel', why: 'to publish the scheduled posts' },
+      ],
+    },
+    '/donations': {
+      does: 'Shows ways to support (Ko-fi, PayPal, Patreon) and announces donations in a channel.',
+      why: 'Makes it easy to support the creator and publicly appreciates donors.',
+    },
     '/suggestions': {
       does: 'Collects community ideas with reaction voting and a moderation decision (approve/reject).',
       why: 'Gives members a voice and organizes feedback in one place instead of scattered messages.',
@@ -309,6 +342,46 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   de: {
+    '/notifications': {
+      does: 'Benachrichtigungen, wenn ein Stream live geht (Twitch / Kick / YouTube / Rumble), in einem ausgewählten Kanal, mit Rollen-Ping.',
+      why: 'Zuschauer verpassen den Start nicht — der Bot kündigt den Live-Stream automatisch an, sobald du auf Sendung gehst.',
+      needs: [
+        'Plattform-API-Schlüssel in den Integrationen',
+        'Ein ausgewählter Benachrichtigungskanal',
+      ],
+      perms: [
+        {
+          perm: 'Nachrichten senden (+ Nachrichten veröffentlichen in einem Ankündigungskanal)',
+          why: 'um den Live-Stream anzukündigen, und in einem Ankündigungskanal — an alle zu senden, die dem Server folgen',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Benachrichtigungen über neue Beiträge (RSS / Social Media) von dir und deinen Lieblings-Creatorn; synchronisiert den Twitch-Zeitplan automatisch mit Discord-Events.',
+      why: 'Deine Community bekommt neue Inhalte sofort, sobald sie erscheinen, ohne Links manuell einzufügen.',
+      needs: [
+        'API-Schlüssel der jeweiligen Plattformen (manches funktioniert ohne Schlüssel, z. B. RSS)',
+      ],
+    },
+    '/live': {
+      does: 'Eine Echtzeit-Ansicht der Stream-Status und Benachrichtigungskanäle.',
+      why: 'Du siehst live, wen der Bot beobachtet und ob er online ist — eine schnelle Kontrolle.',
+    },
+    '/scheduled': {
+      does: 'Geplante, wiederkehrende Ankündigungen (einmalig / täglich / wöchentlich), die zu einer festgelegten Zeit gesendet werden; unterstützt umfangreiche Nachrichten und Components V2.',
+      why: 'Regelmäßige Nachrichten (z. B. eine „Event-Erinnerung“) werden von selbst zu einer festen Uhrzeit versendet, ohne dass du anwesend sein musst.',
+      needs: ['Konfigurierte Cloud (Supabase) — der Zeitplan wird in der Datenbank gespeichert'],
+      perms: [
+        {
+          perm: 'Nachrichten senden im Zielkanal',
+          why: 'um die geplanten Beiträge zu veröffentlichen',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Zeigt Unterstützungsmöglichkeiten (Ko-fi, PayPal, Patreon) an und kündigt Spenden in einem Kanal an.',
+      why: 'Erleichtert die Unterstützung des Creators und würdigt Spender öffentlich.',
+    },
     '/suggestions': {
       does: 'Sammelt Ideen der Community mit Reaktions-Voting und einer Moderationsentscheidung (annehmen/ablehnen).',
       why: 'Gibt Mitgliedern eine Stimme und bündelt Feedback an einem Ort statt in verstreuten Nachrichten.',
@@ -521,6 +594,46 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   es: {
+    '/notifications': {
+      does: 'Avisos cuando un stream se pone en directo (Twitch / Kick / YouTube / Rumble) en un canal elegido, con mención de rol.',
+      why: 'Los espectadores no se perderán el inicio — el bot anuncia el directo automáticamente en cuanto sales en antena.',
+      needs: [
+        'Claves de API de la plataforma en las Integraciones',
+        'Un canal de notificaciones seleccionado',
+      ],
+      perms: [
+        {
+          perm: 'Enviar mensajes (+ Publicar mensajes en un canal de anuncios)',
+          why: 'para anunciar el directo y, en un canal de anuncios, difundirlo a quienes siguen el servidor',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Notificaciones sobre nuevas publicaciones (RSS / redes sociales) tuyas y de tus creadores favoritos; sincroniza automáticamente el horario de Twitch con los eventos de Discord.',
+      why: 'Tu comunidad recibe el contenido nuevo al momento, sin pegar enlaces a mano.',
+      needs: [
+        'Claves de API de las plataformas correspondientes (algunas funcionan sin claves, p. ej. RSS)',
+      ],
+    },
+    '/live': {
+      does: 'Una vista en tiempo real del estado de los streams y de los canales de notificaciones.',
+      why: 'Ves en directo a quién observa el bot y si está en línea — una comprobación rápida.',
+    },
+    '/scheduled': {
+      does: 'Anuncios programados y recurrentes (puntuales / diarios / semanales) enviados a una hora fijada; admite mensajes enriquecidos y Components V2.',
+      why: 'Los mensajes regulares (p. ej. un «recordatorio de evento») se envían solos, a una hora fija, sin que estés presente.',
+      needs: ['Nube configurada (Supabase) — el calendario se guarda en la base de datos'],
+      perms: [
+        {
+          perm: 'Enviar mensajes en el canal de destino',
+          why: 'para publicar las publicaciones programadas',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Muestra formas de apoyar (Ko-fi, PayPal, Patreon) y anuncia las donaciones en un canal.',
+      why: 'Facilita apoyar al creador y reconoce públicamente a los donantes.',
+    },
     '/suggestions': {
       does: 'Recopila ideas de la comunidad con votación por reacciones y una decisión de moderación (aprobar/rechazar).',
       why: 'Da voz a los miembros y organiza el feedback en un solo lugar en lugar de mensajes dispersos.',
@@ -722,6 +835,46 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   it: {
+    '/notifications': {
+      does: 'Avvisi quando uno stream va in diretta (Twitch / Kick / YouTube / Rumble) su un canale scelto, con ping al ruolo.',
+      why: 'Gli spettatori non perderanno l’inizio — il bot annuncia la diretta automaticamente non appena vai in onda.',
+      needs: [
+        'Chiavi API della piattaforma nelle Integrazioni',
+        'Un canale di notifiche selezionato',
+      ],
+      perms: [
+        {
+          perm: 'Inviare messaggi (+ Pubblicare messaggi in un canale annunci)',
+          why: 'per annunciare la diretta e, in un canale annunci, diffonderla a chi segue il server',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Notifiche sui nuovi post (RSS / social media) tuoi e dei tuoi creator preferiti; sincronizza automaticamente il calendario di Twitch con gli eventi di Discord.',
+      why: 'La tua community riceve i nuovi contenuti in tempo reale, senza incollare link a mano.',
+      needs: [
+        'Chiavi API delle piattaforme pertinenti (alcune funzionano senza chiavi, ad es. RSS)',
+      ],
+    },
+    '/live': {
+      does: 'Una vista in tempo reale dello stato degli stream e dei canali di notifiche.',
+      why: 'Vedi in diretta chi sta osservando il bot e se è online — un controllo rapido.',
+    },
+    '/scheduled': {
+      does: 'Annunci programmati e ricorrenti (una tantum / giornalieri / settimanali) inviati a un orario stabilito; supporta messaggi avanzati e Components V2.',
+      why: 'I messaggi regolari (ad es. un «promemoria evento») vengono inviati da soli, a un orario fisso, senza la tua presenza.',
+      needs: ['Cloud configurato (Supabase) — il calendario è conservato nel database'],
+      perms: [
+        {
+          perm: 'Inviare messaggi nel canale di destinazione',
+          why: 'per pubblicare i post programmati',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Mostra i modi per sostenere (Ko-fi, PayPal, Patreon) e annuncia le donazioni in un canale.',
+      why: 'Rende facile sostenere il creator e ringrazia pubblicamente i donatori.',
+    },
     '/suggestions': {
       does: 'Raccoglie le idee della community con voto tramite reazioni e una decisione di moderazione (approva/rifiuta).',
       why: 'Dà voce ai membri e organizza il feedback in un unico posto invece che in messaggi sparsi.',
@@ -925,6 +1078,44 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   fr: {
+    '/notifications': {
+      does: 'Alertes au démarrage d’un stream (Twitch / Kick / YouTube / Rumble) sur un salon choisi, avec un ping de rôle.',
+      why: 'Tes spectateurs ne rateront pas le début — le bot annonce le live automatiquement dès que tu passes à l’antenne.',
+      needs: [
+        'Clés API de la plateforme dans les Intégrations',
+        'Un salon de notifications sélectionné',
+      ],
+      perms: [
+        {
+          perm: 'Envoyer des messages (+ Publier des messages dans un salon d’annonces)',
+          why: 'pour annoncer le live, et sur un salon d’annonces — diffuser à celles et ceux qui suivent le serveur',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Notifications sur les nouveaux posts (RSS / réseaux sociaux) de toi et de tes créateurs favoris ; synchronisation automatique du planning Twitch vers les événements Discord.',
+      why: 'Ta communauté reçoit les nouveaux contenus en temps réel, sans coller les liens à la main.',
+      needs: ['Clés API des plateformes concernées (certaines fonctionnent sans clés, p. ex. RSS)'],
+    },
+    '/live': {
+      does: 'Un aperçu en temps réel du statut des streams et des salons de notifications.',
+      why: 'Tu vois en direct qui le bot surveille et s’ils sont en ligne — un contrôle rapide.',
+    },
+    '/scheduled': {
+      does: 'Annonces planifiées et récurrentes (ponctuelles / quotidiennes / hebdomadaires) envoyées à une heure définie ; prend en charge les messages enrichis et Components V2.',
+      why: 'Les messages réguliers (p. ex. un « rappel d’événement ») partent tout seuls, à heure fixe, sans que tu sois présent.',
+      needs: ['Cloud configuré (Supabase) — le planning est conservé dans la base de données'],
+      perms: [
+        {
+          perm: 'Envoyer des messages dans le salon cible',
+          why: 'pour publier les posts planifiés',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Affiche les moyens de soutien (Ko-fi, PayPal, Patreon) et annonce les dons sur un salon.',
+      why: 'Facilite le soutien au créateur et remercie publiquement les donateurs.',
+    },
     '/suggestions': {
       does: 'Recueille les idées de la communauté avec un vote par réactions et une décision de modération (approuver/rejeter).',
       why: 'Donne la parole aux membres et organise les retours au même endroit au lieu de messages éparpillés.',
@@ -1142,6 +1333,46 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   pt: {
+    '/notifications': {
+      does: 'Alertas quando uma transmissão começa (Twitch / Kick / YouTube / Rumble) num canal à escolha, com ping de cargo.',
+      why: 'Os teus espectadores não vão perder o início — o bot anuncia o live automaticamente assim que entras no ar.',
+      needs: [
+        'Chaves de API da plataforma nas Integrações',
+        'Um canal de notificações selecionado',
+      ],
+      perms: [
+        {
+          perm: 'Enviar mensagens (+ Publicar mensagens num canal de anúncios)',
+          why: 'para anunciar o live e, num canal de anúncios, divulgar a quem segue o servidor',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Notificações sobre novas publicações (RSS / redes sociais) tuas e dos teus criadores favoritos; sincronização automática do calendário da Twitch com os eventos do Discord.',
+      why: 'A tua comunidade recebe os novos conteúdos em tempo real, sem teres de colar os links à mão.',
+      needs: [
+        'Chaves de API das plataformas relevantes (algumas funcionam sem chaves, p. ex. RSS)',
+      ],
+    },
+    '/live': {
+      does: 'Uma visão em tempo real do estado das transmissões e dos canais de notificações.',
+      why: 'Vês ao vivo quem o bot está a acompanhar e se está online — uma verificação rápida.',
+    },
+    '/scheduled': {
+      does: 'Anúncios agendados e recorrentes (únicos / diários / semanais) enviados a uma hora definida; suporta mensagens ricas e Components V2.',
+      why: 'As mensagens regulares (p. ex. um “lembrete de evento”) são enviadas sozinhas, a uma hora fixa, sem precisares de estar presente.',
+      needs: ['Cloud configurada (Supabase) — o agendamento é guardado na base de dados'],
+      perms: [
+        {
+          perm: 'Enviar mensagens no canal de destino',
+          why: 'para publicar as mensagens agendadas',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Mostra formas de apoiar (Ko-fi, PayPal, Patreon) e anuncia os donativos num canal.',
+      why: 'Facilita o apoio ao criador e agradece publicamente a quem doa.',
+    },
     '/suggestions': {
       does: 'Recolhe as ideias da comunidade com votação por reações e uma decisão de moderação (aprovar/rejeitar).',
       why: 'Dá voz aos membros e organiza o feedback num só lugar, em vez de mensagens dispersas.',
@@ -1336,6 +1567,36 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   zh: {
+    '/notifications': {
+      does: '当直播开始时（Twitch / Kick / YouTube / Rumble）向所选频道推送提醒，并附带身份组提及。',
+      why: '观众不会错过开播——只要你一上线，机器人就会自动公告直播。',
+      needs: ['在「集成」中填写平台 API 密钥', '已选择的通知频道'],
+      perms: [
+        {
+          perm: '发送消息（+ 在公告频道发布消息）',
+          why: '用于公告直播；在公告频道还能将消息推送给关注本服务器的成员',
+        },
+      ],
+    },
+    '/creator': {
+      does: '推送你和喜爱创作者的新动态（RSS / 社交媒体）；自动将 Twitch 日程同步为 Discord 活动。',
+      why: '社群在内容发布的第一时间就能看到，无需手动粘贴链接。',
+      needs: ['相应平台的 API 密钥（部分功能无需密钥即可使用，例如 RSS）'],
+    },
+    '/live': {
+      does: '实时查看各直播状态与通知频道。',
+      why: '你能实时看到机器人正在关注谁、对方是否在线——快速一览。',
+    },
+    '/scheduled': {
+      does: '在设定的时间发送定时、周期性的公告（单次 / 每日 / 每周）；支持富文本消息和 Components V2。',
+      why: '常规消息（例如「活动提醒」）会在固定时间自动发出，无需你在场。',
+      needs: ['已配置云端（Supabase）——日程保存在数据库中'],
+      perms: [{ perm: '在目标频道发送消息', why: '用于发布定时帖子' }],
+    },
+    '/donations': {
+      does: '展示支持方式（Ko-fi、PayPal、Patreon）并在频道中公告捐助。',
+      why: '让支持创作者变得简单，并公开致谢捐助者。',
+    },
     '/suggestions': {
       does: '收集社区创意，支持反应投票，并由管理团队做出决定（批准／拒绝）。',
       why: '让成员拥有发言权，把反馈集中归整在一处，而不是散落的零碎消息。',
@@ -1491,6 +1752,36 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ko: {
+    '/notifications': {
+      does: '방송이 시작되면(Twitch / Kick / YouTube / Rumble) 선택한 채널로 역할 멘션과 함께 알림을 보냅니다.',
+      why: '시청자가 시작을 놓치지 않습니다 — 방송을 켜는 순간 봇이 자동으로 라이브를 알립니다.',
+      needs: ['통합에 등록한 플랫폼 API 키', '선택한 알림 채널'],
+      perms: [
+        {
+          perm: '메시지 보내기 (+ 공지 채널에 메시지 게시)',
+          why: '라이브를 알리고, 공지 채널에서는 서버를 팔로우하는 사람들에게 전파하기 위해',
+        },
+      ],
+    },
+    '/creator': {
+      does: '나와 좋아하는 크리에이터의 새 게시물(RSS / 소셜 미디어)을 알리고, Twitch 일정을 Discord 이벤트로 자동 동기화합니다.',
+      why: '커뮤니티가 콘텐츠가 올라오는 즉시 받아볼 수 있어, 링크를 직접 붙여 넣을 필요가 없습니다.',
+      needs: ['해당 플랫폼의 API 키(일부는 키 없이도 동작합니다, 예: RSS)'],
+    },
+    '/live': {
+      does: '방송 상태와 알림 채널을 실시간으로 확인합니다.',
+      why: '봇이 누구를 지켜보고 있는지, 온라인인지를 실시간으로 볼 수 있습니다 — 빠른 점검.',
+    },
+    '/scheduled': {
+      does: '정해진 시간에 보내는 예약·반복 공지(1회 / 매일 / 매주); 리치 메시지와 Components V2를 지원합니다.',
+      why: '정기 메시지(예: 「이벤트 알림」)가 정해진 시간에 알아서 발송됩니다, 당신이 없어도.',
+      needs: ['클라우드 구성 완료(Supabase) — 일정은 데이터베이스에 저장됩니다'],
+      perms: [{ perm: '대상 채널에서 메시지 보내기', why: '예약된 게시물을 발행하기 위해' }],
+    },
+    '/donations': {
+      does: '후원 방법(Ko-fi, PayPal, Patreon)을 보여주고 채널에서 후원을 알립니다.',
+      why: '크리에이터를 쉽게 후원하게 하고 후원자에게 공개적으로 감사를 표합니다.',
+    },
     '/suggestions': {
       does: '커뮤니티의 아이디어를 모으고 리액션 투표와 운영진 결정(승인／거절)을 진행합니다.',
       why: '구성원에게 발언권을 주고 흩어진 메시지 대신 피드백을 한곳에 정리합니다.',
@@ -1654,6 +1945,41 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ru: {
+    '/notifications': {
+      does: 'Оповещения о начале стрима (Twitch / Kick / YouTube / Rumble) в выбранный канал, с пингом роли.',
+      why: 'Зрители не пропустят начало — бот объявляет о трансляции автоматически, как только вы выходите в эфир.',
+      needs: ['Ключи API платформы в Интеграциях', 'Выбранный канал уведомлений'],
+      perms: [
+        {
+          perm: 'Отправка сообщений (+ Публикация сообщений в канале анонсов)',
+          why: 'чтобы объявить о трансляции, а в канале анонсов — разослать тем, кто подписан на сервер',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Уведомления о новых публикациях (RSS / соцсети) ваших и любимых авторов; авто-синхронизация расписания Twitch с событиями Discord.',
+      why: 'Ваше сообщество получает новый контент сразу, без ручной вставки ссылок.',
+      needs: ['Ключи API соответствующих платформ (часть работает без ключей, например RSS)'],
+    },
+    '/live': {
+      does: 'Просмотр статуса стримов и каналов уведомлений в реальном времени.',
+      why: 'Вы видите вживую, за кем следит бот и онлайн ли он — быстрая проверка.',
+    },
+    '/scheduled': {
+      does: 'Запланированные, повторяющиеся анонсы (разовые / ежедневные / еженедельные), отправляемые в заданное время; поддерживает насыщенные сообщения и Components V2.',
+      why: 'Регулярные сообщения (например, «напоминание о событии») уходят сами, в установленное время, без вашего присутствия.',
+      needs: ['Настроенное облако (Supabase) — расписание хранится в базе'],
+      perms: [
+        {
+          perm: 'Отправка сообщений в целевом канале',
+          why: 'чтобы публиковать запланированные посты',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Показывает способы поддержки (Ko-fi, PayPal, Patreon) и объявляет о пожертвованиях в канале.',
+      why: 'Упрощает поддержку автора и публично благодарит жертвователей.',
+    },
     '/suggestions': {
       does: 'Собирает идеи сообщества с голосованием реакциями и решением модерации (одобрить/отклонить).',
       why: 'Даёт участникам право голоса и упорядочивает обратную связь в одном месте вместо разрозненных сообщений.',
@@ -1849,6 +2175,41 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   uk: {
+    '/notifications': {
+      does: 'Сповіщення про початок стріму (Twitch / Kick / YouTube / Rumble) у вибраний канал, з пінгом ролі.',
+      why: 'Глядачі не пропустять початок — бот оголошує про трансляцію автоматично, щойно ви виходите в ефір.',
+      needs: ['Ключі API платформи в Інтеграціях', 'Вибраний канал сповіщень'],
+      perms: [
+        {
+          perm: 'Надсилання повідомлень (+ Публікація повідомлень у каналі оголошень)',
+          why: 'щоб оголосити про трансляцію, а в каналі оголошень — розіслати тим, хто стежить за сервером',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Сповіщення про нові публікації (RSS / соцмережі) ваших та улюблених авторів; авто-синхронізація розкладу Twitch з подіями Discord.',
+      why: 'Ваша спільнота отримує новий контент одразу, без ручного вставляння посилань.',
+      needs: ['Ключі API відповідних платформ (частина працює без ключів, наприклад RSS)'],
+    },
+    '/live': {
+      does: 'Перегляд статусу стрімів і каналів сповіщень у реальному часі.',
+      why: 'Ви бачите наживо, за ким стежить бот і чи він онлайн — швидка перевірка.',
+    },
+    '/scheduled': {
+      does: 'Заплановані, повторювані оголошення (разові / щоденні / щотижневі), що надсилаються у встановлений час; підтримує насичені повідомлення та Components V2.',
+      why: 'Регулярні повідомлення (наприклад, «нагадування про подію») надходять самі, у фіксований час, без вашої присутності.',
+      needs: ['Налаштована хмара (Supabase) — розклад зберігається в базі'],
+      perms: [
+        {
+          perm: 'Надсилання повідомлень у цільовому каналі',
+          why: 'щоб публікувати заплановані пости',
+        },
+      ],
+    },
+    '/donations': {
+      does: 'Показує способи підтримки (Ko-fi, PayPal, Patreon) та оголошує про пожертви в каналі.',
+      why: 'Спрощує підтримку автора й публічно дякує жертводавцям.',
+    },
     '/suggestions': {
       does: 'Збирає ідеї спільноти з голосуванням реакціями та рішенням модерації (схвалити/відхилити).',
       why: 'Дає учасникам право голосу й упорядковує зворотний зв’язок в одному місці замість розрізнених повідомлень.',
@@ -2044,6 +2405,36 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ja: {
+    '/notifications': {
+      does: '配信が始まると（Twitch / Kick / YouTube / Rumble）、選んだチャンネルにロールメンション付きで通知します。',
+      why: '視聴者が開始を見逃しません — 配信を始めた瞬間に、ボットが自動でライブを告知します。',
+      needs: ['連携に登録したプラットフォームの API キー', '選択した通知チャンネル'],
+      perms: [
+        {
+          perm: 'メッセージを送信（+ アナウンスチャンネルでメッセージの公開）',
+          why: 'ライブを告知し、アナウンスチャンネルではサーバーをフォローしている人に配信するため',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'あなたやお気に入りのクリエイターの新着投稿（RSS / ソーシャルメディア）を通知し、Twitch のスケジュールを Discord イベントに自動同期します。',
+      why: 'コンテンツが公開された瞬間にコミュニティへ届き、リンクを手作業で貼る必要がありません。',
+      needs: ['対応プラットフォームの API キー（一部はキーなしでも動作します、例: RSS）'],
+    },
+    '/live': {
+      does: '配信ステータスと通知チャンネルをリアルタイムで確認します。',
+      why: 'ボットが誰を監視しているか、オンラインかどうかをリアルタイムで確認できます — すばやくチェック。',
+    },
+    '/scheduled': {
+      does: '決まった時刻に送る予約・定期アナウンス（単発 / 毎日 / 毎週）。リッチメッセージと Components V2 に対応します。',
+      why: '定期的なメッセージ（例:「イベントのリマインド」）が決まった時刻に自動で送られます、あなたがいなくても。',
+      needs: ['クラウド構成済み（Supabase）— スケジュールはデータベースに保存されます'],
+      perms: [{ perm: '対象チャンネルでメッセージを送信', why: '予約した投稿を公開するため' }],
+    },
+    '/donations': {
+      does: '支援方法（Ko-fi、PayPal、Patreon）を表示し、チャンネルで寄付を告知します。',
+      why: 'クリエイターを支援しやすくし、寄付者を公の場で称えます。',
+    },
     '/suggestions': {
       does: 'コミュニティのアイデアを集め、リアクション投票とモデレーションの判断（承認／却下）を行います。',
       why: 'メンバーに発言の場を与え、散らばったメッセージではなくフィードバックを一か所に整理します。',
@@ -2220,6 +2611,36 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ar: {
+    '/notifications': {
+      does: 'تنبيهات عند بدء البث (Twitch / Kick / YouTube / Rumble) إلى قناة مختارة، مع إشارة للرتبة.',
+      why: 'لن يفوّت المشاهدون البداية — يعلن البوت عن البث المباشر تلقائيًا بمجرد دخولك على الهواء.',
+      needs: ['مفاتيح API الخاصة بالمنصة في التكاملات', 'قناة إشعارات مختارة'],
+      perms: [
+        {
+          perm: 'إرسال الرسائل (+ نشر الرسائل في قناة الإعلانات)',
+          why: 'للإعلان عن البث المباشر، وفي قناة الإعلانات — لبثّه إلى من يتابعون الخادم',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'إشعارات عن المنشورات الجديدة (RSS / وسائل التواصل الاجتماعي) منك ومن صنّاع المحتوى المفضّلين لديك؛ مزامنة تلقائية لجدول Twitch مع فعاليات Discord.',
+      why: 'يحصل مجتمعك على المحتوى الجديد فور نشره، دون لصق الروابط يدويًا.',
+      needs: ['مفاتيح API للمنصات المعنيّة (بعضها يعمل دون مفاتيح، مثل RSS)'],
+    },
+    '/live': {
+      does: 'عرض حالة عمليات البث وقنوات الإشعارات في الوقت الفعلي.',
+      why: 'ترى مباشرةً مَن يراقبهم البوت وهل هم متصلون — فحص سريع.',
+    },
+    '/scheduled': {
+      does: 'إعلانات مجدولة ومتكرّرة (لمرة واحدة / يومية / أسبوعية) تُرسَل في وقت محدّد؛ تدعم الرسائل الغنية وComponents V2.',
+      why: 'الرسائل المنتظمة (مثل «تذكير بفعالية») تُرسَل من تلقاء نفسها، في وقت ثابت، دون حضورك.',
+      needs: ['سحابة مُهيّأة (Supabase) — يُحفَظ الجدول في قاعدة البيانات'],
+      perms: [{ perm: 'إرسال الرسائل في القناة المستهدفة', why: 'لنشر المنشورات المجدولة' }],
+    },
+    '/donations': {
+      does: 'يعرض طرق الدعم (Ko-fi, PayPal, Patreon) ويعلن عن التبرعات في قناة.',
+      why: 'يسهّل دعم صانع المحتوى ويقدّر المتبرّعين علنًا.',
+    },
     '/suggestions': {
       does: 'يجمع أفكار المجتمع مع التصويت بالتفاعلات وقرار من الإشراف (قبول/رفض).',
       why: 'يمنح الأعضاء صوتًا ويُنظّم الملاحظات في مكان واحد بدلًا من رسائل متفرقة.',
@@ -2385,6 +2806,38 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   id: {
+    '/notifications': {
+      does: 'Peringatan saat siaran dimulai (Twitch / Kick / YouTube / Rumble) ke kanal pilihan, dengan ping peran.',
+      why: 'Penontonmu tidak akan melewatkan awal siaran — bot mengumumkan live secara otomatis begitu kamu mengudara.',
+      needs: ['Kunci API platform di Integrasi', 'Kanal notifikasi yang dipilih'],
+      perms: [
+        {
+          perm: 'Kirim Pesan (+ Terbitkan Pesan di kanal pengumuman)',
+          why: 'untuk mengumumkan live, dan di kanal pengumuman — menyebarkannya ke para pengikut server',
+        },
+      ],
+    },
+    '/creator': {
+      does: 'Notifikasi tentang unggahan baru (RSS / media sosial) milikmu dan kreator favoritmu; sinkronisasi otomatis jadwal Twitch ke acara Discord.',
+      why: 'Komunitasmu mendapatkan konten baru secara langsung, tanpa menempelkan tautan secara manual.',
+      needs: ['Kunci API platform terkait (sebagian berfungsi tanpa kunci, mis. RSS)'],
+    },
+    '/live': {
+      does: 'Tampilan status siaran dan kanal notifikasi secara waktu nyata.',
+      why: 'Kamu melihat secara langsung siapa yang dipantau bot dan apakah mereka online — pemeriksaan cepat.',
+    },
+    '/scheduled': {
+      does: 'Pengumuman terjadwal dan berulang (sekali / harian / mingguan) yang dikirim pada waktu yang ditentukan; mendukung pesan kaya dan Components V2.',
+      why: 'Pesan rutin (mis. “pengingat acara”) terkirim sendiri, pada jam tetap, tanpa kehadiranmu.',
+      needs: ['Cloud yang dikonfigurasi (Supabase) — jadwal disimpan di basis data'],
+      perms: [
+        { perm: 'Kirim Pesan di kanal tujuan', why: 'untuk memublikasikan unggahan terjadwal' },
+      ],
+    },
+    '/donations': {
+      does: 'Menampilkan cara untuk mendukung (Ko-fi, PayPal, Patreon) dan mengumumkan donasi di sebuah kanal.',
+      why: 'Memudahkan dukungan kepada kreator dan menghargai para donatur secara publik.',
+    },
     '/suggestions': {
       does: 'Mengumpulkan ide komunitas dengan pemungutan suara lewat reaksi dan keputusan moderasi (setujui/tolak).',
       why: 'Memberi anggota kesempatan bersuara dan menata masukan di satu tempat alih-alih pesan yang berserakan.',

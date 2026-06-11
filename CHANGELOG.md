@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-278-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.208.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-279-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.209.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.209.0] — 🌍 i18n treści: „Jak to działa?" — chunk 5 (Powiadomienia)
+
+- `[#279]` 🌍 **„Jak to działa?" (`HowItWorks`) — chunk 5 treści: grupa Powiadomienia.** Kolejna porcja przyrostowej, trzeciej fali i18n treści.
+  - 🖥️ **Panel**: do `HOW_CONTENT_I18N` (`lib/howItWorksI18n.ts`) doszły strony `/notifications`, `/creator`, `/live`, `/scheduled`, `/donations` w **14 językach** (pl bazowo + 13 tłumaczeń). Nazwy własne usług/tech (`Twitch`/`Kick`/`YouTube`/`Rumble`/`RSS`/`Supabase`/`Components V2`/`Ko-fi`/`PayPal`/`Patreon`/`Discord`) nietłumaczone; uprawnienia (m.in. „Send Messages + Publish") w oficjalnych zlokalizowanych nazwach Discorda.
+  - 🧱 Wzorzec przyrostowy bez zmian: strony jeszcze nieprzetłumaczone wciąż spadają na PL (`HOW_IT_WORKS`). Przetłumaczono 26/37 stron; zostaje **11 stron** treści do przetłumaczenia (Ekonomia: `/eco /economy`; Biblioteka: `/library /wishlist /gaming`; Inne: `/appearance /commands /custom-commands /integrations /profile /settings`).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0. Wstecznie zgodne (pl niezmienione).
 
 ## [0.208.0] — 🌍 i18n treści: „Jak to działa?" — chunk 4b (Społeczność KOMPLET)
 
