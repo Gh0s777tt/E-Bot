@@ -823,6 +823,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Skrzynka sugestii społeczności: /suggest publikuje propozycję z głosowaniem 👍/👎; moderacja decyduje przyciskami. Dodatkowo /poll tworzy szybką ankietę (reakcje 1️⃣–🔟 lub 👍/👎).',
     'ui.suggestions.statusOn': 'Sugestie: WŁĄCZONE',
+    'ui.appearance.intro':
+      'Wygląd grafik bota — tu działają prawdziwe gradienty i czcionki (renderowane w obrazie). Karta rangi pokazuje się po komendzie /rank. Baner powitalny ustawisz w Powitaniach.',
+    'ui.appearance.heading': 'Karta rangi (/rank)',
+    'ui.appearance.previewText': 'Twój Nick',
+    'ui.appearance.footNote':
+      'Styl używany przez komendę bota /rank (obrazek karty rangi z gradientem i czcionką).',
+    'ui.wishlist.intro':
+      'Lista życzeń gier — wyszukaj tytuł (autouzupełnianie z IGDB), zapisz z okładką i rokiem. Widoczna też z poziomu bota: /wishlist.',
+    'ui.wishlist.addTitle': 'Dodaj do listy życzeń',
+    'ui.wishlist.searchPlaceholder': 'Szukaj gry…',
+    'ui.wishlist.notePlaceholder': 'Notatka (opcjonalnie)',
+    'ui.wishlist.adding': 'Dodaję…',
+    'ui.wishlist.add': 'Dodaj',
+    'ui.wishlist.empty':
+      'Lista życzeń jest pusta. Wyszukaj grę powyżej (wymaga b6-schema.sql w Supabase).',
+    'ui.wishlist.noCover': 'brak okładki',
+    'ui.wishlist.remove': 'Usuń',
     'ui.suggestions.statusOff': 'Sugestie: WYŁĄCZONE',
     'ui.suggestions.heading': 'Sugestie',
     'ui.suggestions.recentTitle': 'Ostatnie sugestie',
@@ -976,6 +993,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Community suggestion box: /suggest posts a proposal with 👍/👎 voting; moderation decides with buttons. Additionally, /poll creates a quick poll (1️⃣–🔟 or 👍/👎 reactions).',
     'ui.suggestions.statusOn': 'Suggestions: ON',
+    'ui.appearance.intro':
+      'The look of the bot’s graphics — real gradients and fonts work here (rendered into the image). The rank card shows up after the /rank command. You set the welcome banner in Welcomes.',
+    'ui.appearance.heading': 'Rank card (/rank)',
+    'ui.appearance.previewText': 'Your Nick',
+    'ui.appearance.footNote':
+      'The style used by the bot’s /rank command (a rank card image with a gradient and font).',
+    'ui.wishlist.intro':
+      'Game wishlist — search a title (autocomplete from IGDB), save it with cover art and year. Also visible from the bot: /wishlist.',
+    'ui.wishlist.addTitle': 'Add to wishlist',
+    'ui.wishlist.searchPlaceholder': 'Search for a game…',
+    'ui.wishlist.notePlaceholder': 'Note (optional)',
+    'ui.wishlist.adding': 'Adding…',
+    'ui.wishlist.add': 'Add',
+    'ui.wishlist.empty':
+      'Your wishlist is empty. Search for a game above (requires b6-schema.sql in Supabase).',
+    'ui.wishlist.noCover': 'no cover',
+    'ui.wishlist.remove': 'Remove',
     'ui.suggestions.statusOff': 'Suggestions: OFF',
     'ui.suggestions.heading': 'Suggestions',
     'ui.suggestions.recentTitle': 'Recent suggestions',
@@ -1129,6 +1163,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Vorschlagsbox der Community: /suggest veröffentlicht einen Vorschlag mit 👍/👎-Abstimmung; die Moderation entscheidet per Buttons. Zusätzlich erstellt /poll eine schnelle Umfrage (Reaktionen 1️⃣–🔟 oder 👍/👎).',
     'ui.suggestions.statusOn': 'Vorschläge: AN',
+    'ui.appearance.intro':
+      'Das Aussehen der Bot-Grafiken — hier funktionieren echte Farbverläufe und Schriftarten (ins Bild gerendert). Die Rangkarte erscheint nach dem Befehl /rank. Das Willkommensbanner stellst du in den Willkommensnachrichten ein.',
+    'ui.appearance.heading': 'Rangkarte (/rank)',
+    'ui.appearance.previewText': 'Dein Nick',
+    'ui.appearance.footNote':
+      'Der Stil, den der /rank-Befehl des Bots verwendet (ein Rangkarten-Bild mit Farbverlauf und Schriftart).',
+    'ui.wishlist.intro':
+      'Spiele-Wunschliste — suche einen Titel (Autovervollständigung von IGDB) und speichere ihn mit Cover und Jahr. Auch über den Bot sichtbar: /wishlist.',
+    'ui.wishlist.addTitle': 'Zur Wunschliste hinzufügen',
+    'ui.wishlist.searchPlaceholder': 'Spiel suchen…',
+    'ui.wishlist.notePlaceholder': 'Notiz (optional)',
+    'ui.wishlist.adding': 'Wird hinzugefügt…',
+    'ui.wishlist.add': 'Hinzufügen',
+    'ui.wishlist.empty':
+      'Deine Wunschliste ist leer. Suche oben nach einem Spiel (erfordert b6-schema.sql in Supabase).',
+    'ui.wishlist.noCover': 'kein Cover',
+    'ui.wishlist.remove': 'Entfernen',
     'ui.suggestions.statusOff': 'Vorschläge: AUS',
     'ui.suggestions.heading': 'Vorschläge',
     'ui.suggestions.recentTitle': 'Letzte Vorschläge',
@@ -1283,6 +1334,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Buzón de sugerencias de la comunidad: /suggest publica una propuesta con votación 👍/👎; la moderación decide con botones. Además, /poll crea una encuesta rápida (reacciones 1️⃣–🔟 o 👍/👎).',
     'ui.suggestions.statusOn': 'Sugerencias: ACTIVADAS',
+    'ui.appearance.intro':
+      'El aspecto de los gráficos del bot — aquí funcionan gradientes y fuentes reales (renderizados en la imagen). La tarjeta de rango aparece tras el comando /rank. El banner de bienvenida se configura en Bienvenidas.',
+    'ui.appearance.heading': 'Tarjeta de rango (/rank)',
+    'ui.appearance.previewText': 'Tu apodo',
+    'ui.appearance.footNote':
+      'El estilo que usa el comando /rank del bot (una imagen de tarjeta de rango con gradiente y fuente).',
+    'ui.wishlist.intro':
+      'Lista de deseos de juegos — busca un título (autocompletado desde IGDB) y guárdalo con su portada y año. También visible desde el bot: /wishlist.',
+    'ui.wishlist.addTitle': 'Añadir a la lista de deseos',
+    'ui.wishlist.searchPlaceholder': 'Buscar un juego…',
+    'ui.wishlist.notePlaceholder': 'Nota (opcional)',
+    'ui.wishlist.adding': 'Añadiendo…',
+    'ui.wishlist.add': 'Añadir',
+    'ui.wishlist.empty':
+      'Tu lista de deseos está vacía. Busca un juego arriba (requiere b6-schema.sql en Supabase).',
+    'ui.wishlist.noCover': 'sin portada',
+    'ui.wishlist.remove': 'Quitar',
     'ui.suggestions.statusOff': 'Sugerencias: DESACTIVADAS',
     'ui.suggestions.heading': 'Sugerencias',
     'ui.suggestions.recentTitle': 'Sugerencias recientes',
@@ -1437,6 +1505,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Cassetta dei suggerimenti della community: /suggest pubblica una proposta con votazione 👍/👎; la moderazione decide tramite i pulsanti. Inoltre /poll crea un sondaggio rapido (reazioni 1️⃣–🔟 o 👍/👎).',
     'ui.suggestions.statusOn': 'Suggerimenti: ATTIVI',
+    'ui.appearance.intro':
+      'L’aspetto della grafica del bot — qui funzionano gradienti e font reali (renderizzati nell’immagine). La scheda del grado compare dopo il comando /rank. Il banner di benvenuto si imposta nei Benvenuti.',
+    'ui.appearance.heading': 'Scheda del grado (/rank)',
+    'ui.appearance.previewText': 'Il tuo nick',
+    'ui.appearance.footNote':
+      'Lo stile usato dal comando /rank del bot (un’immagine della scheda del grado con gradiente e font).',
+    'ui.wishlist.intro':
+      'Lista dei desideri di giochi — cerca un titolo (completamento automatico da IGDB) e salvalo con copertina e anno. Visibile anche dal bot: /wishlist.',
+    'ui.wishlist.addTitle': 'Aggiungi alla lista dei desideri',
+    'ui.wishlist.searchPlaceholder': 'Cerca un gioco…',
+    'ui.wishlist.notePlaceholder': 'Nota (opzionale)',
+    'ui.wishlist.adding': 'Aggiunta in corso…',
+    'ui.wishlist.add': 'Aggiungi',
+    'ui.wishlist.empty':
+      'La tua lista dei desideri è vuota. Cerca un gioco qui sopra (richiede b6-schema.sql in Supabase).',
+    'ui.wishlist.noCover': 'nessuna copertina',
+    'ui.wishlist.remove': 'Rimuovi',
     'ui.suggestions.statusOff': 'Suggerimenti: DISATTIVATI',
     'ui.suggestions.heading': 'Suggerimenti',
     'ui.suggestions.recentTitle': 'Suggerimenti recenti',
@@ -1591,6 +1676,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Boîte à suggestions de la communauté : /suggest publie une proposition avec un vote 👍/👎 ; la modération tranche à l’aide de boutons. De plus, /poll crée un sondage rapide (réactions 1️⃣–🔟 ou 👍/👎).',
     'ui.suggestions.statusOn': 'Suggestions : ACTIVÉES',
+    'ui.appearance.intro':
+      'L’apparence des graphismes du bot — les vrais dégradés et polices fonctionnent ici (rendus dans l’image). La carte de rang s’affiche après la commande /rank. La bannière de bienvenue se règle dans Accueils.',
+    'ui.appearance.heading': 'Carte de rang (/rank)',
+    'ui.appearance.previewText': 'Ton pseudo',
+    'ui.appearance.footNote':
+      'Le style utilisé par la commande /rank du bot (une image de carte de rang avec un dégradé et une police).',
+    'ui.wishlist.intro':
+      'Liste de souhaits de jeux — recherche un titre (autocomplétion depuis IGDB), enregistre-le avec la jaquette et l’année. Visible aussi depuis le bot : /wishlist.',
+    'ui.wishlist.addTitle': 'Ajouter à la liste de souhaits',
+    'ui.wishlist.searchPlaceholder': 'Rechercher un jeu…',
+    'ui.wishlist.notePlaceholder': 'Note (facultatif)',
+    'ui.wishlist.adding': 'Ajout…',
+    'ui.wishlist.add': 'Ajouter',
+    'ui.wishlist.empty':
+      'Ta liste de souhaits est vide. Recherche un jeu ci-dessus (nécessite b6-schema.sql dans Supabase).',
+    'ui.wishlist.noCover': 'pas de jaquette',
+    'ui.wishlist.remove': 'Supprimer',
     'ui.suggestions.statusOff': 'Suggestions : DÉSACTIVÉES',
     'ui.suggestions.heading': 'Suggestions',
     'ui.suggestions.recentTitle': 'Suggestions récentes',
@@ -1745,6 +1847,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Caixa de sugestões da comunidade: /suggest publica uma proposta com votação 👍/👎; a moderação decide com botões. Além disso, /poll cria uma sondagem rápida (reações 1️⃣–🔟 ou 👍/👎).',
     'ui.suggestions.statusOn': 'Sugestões: ATIVADAS',
+    'ui.appearance.intro':
+      'O aspeto dos gráficos do bot — aqui funcionam gradientes e tipos de letra reais (renderizados na imagem). O cartão de rank aparece depois do comando /rank. O banner de boas-vindas defines nas Boas-vindas.',
+    'ui.appearance.heading': 'Cartão de rank (/rank)',
+    'ui.appearance.previewText': 'O teu nick',
+    'ui.appearance.footNote':
+      'O estilo usado pelo comando /rank do bot (uma imagem de cartão de rank com gradiente e tipo de letra).',
+    'ui.wishlist.intro':
+      'Lista de desejos de jogos — pesquisa um título (preenchimento automático do IGDB), guarda-o com a capa e o ano. Também visível a partir do bot: /wishlist.',
+    'ui.wishlist.addTitle': 'Adicionar à lista de desejos',
+    'ui.wishlist.searchPlaceholder': 'Procurar um jogo…',
+    'ui.wishlist.notePlaceholder': 'Nota (opcional)',
+    'ui.wishlist.adding': 'A adicionar…',
+    'ui.wishlist.add': 'Adicionar',
+    'ui.wishlist.empty':
+      'A tua lista de desejos está vazia. Pesquisa um jogo acima (requer b6-schema.sql no Supabase).',
+    'ui.wishlist.noCover': 'sem capa',
+    'ui.wishlist.remove': 'Remover',
     'ui.suggestions.statusOff': 'Sugestões: DESATIVADAS',
     'ui.suggestions.heading': 'Sugestões',
     'ui.suggestions.recentTitle': 'Sugestões recentes',
@@ -1897,6 +2016,21 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       '社区建议箱：/suggest 发布带 👍/👎 投票的提案；由管理团队用按钮做出决定。此外，/poll 可创建快速投票（1️⃣–🔟 或 👍/👎 反应）。',
     'ui.suggestions.statusOn': '建议：已开启',
+    'ui.appearance.intro':
+      '机器人图像的外观 — 这里的渐变和字体是真实生效的（会渲染进图片）。等级卡会在 /rank 命令后显示。欢迎横幅请在 Welcomes 中设置。',
+    'ui.appearance.heading': '等级卡（/rank）',
+    'ui.appearance.previewText': '你的昵称',
+    'ui.appearance.footNote': '机器人 /rank 命令所使用的样式（带渐变和字体的等级卡图片）。',
+    'ui.wishlist.intro':
+      '游戏愿望单 — 搜索标题（由 IGDB 自动补全），连同封面与年份一起保存。也可从机器人查看：/wishlist。',
+    'ui.wishlist.addTitle': '添加到愿望单',
+    'ui.wishlist.searchPlaceholder': '搜索游戏…',
+    'ui.wishlist.notePlaceholder': '备注（可选）',
+    'ui.wishlist.adding': '正在添加…',
+    'ui.wishlist.add': '添加',
+    'ui.wishlist.empty': '愿望单是空的。请在上方搜索游戏（需要 Supabase 中的 b6-schema.sql）。',
+    'ui.wishlist.noCover': '无封面',
+    'ui.wishlist.remove': '移除',
     'ui.suggestions.statusOff': '建议：已关闭',
     'ui.suggestions.heading': '建议',
     'ui.suggestions.recentTitle': '最近的建议',
@@ -2050,6 +2184,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       '커뮤니티 건의함: /suggest 는 👍/👎 투표가 포함된 제안을 게시하고, 관리진이 버튼으로 결정합니다. 또한 /poll 로 빠른 설문을 만들 수 있습니다(1️⃣–🔟 또는 👍/👎 반응).',
     'ui.suggestions.statusOn': '건의: 켜짐',
+    'ui.appearance.intro':
+      '봇 그래픽의 외관 — 여기서는 실제 그라데이션과 글꼴이 적용됩니다(이미지로 렌더링됨). 등급 카드는 /rank 명령 후에 표시됩니다. 환영 배너는 Welcomes에서 설정합니다.',
+    'ui.appearance.heading': '등급 카드(/rank)',
+    'ui.appearance.previewText': '내 닉네임',
+    'ui.appearance.footNote':
+      '봇의 /rank 명령에서 사용하는 스타일(그라데이션과 글꼴이 적용된 등급 카드 이미지).',
+    'ui.wishlist.intro':
+      '게임 위시리스트 — 제목을 검색하고(IGDB 자동 완성) 커버 아트와 연도와 함께 저장하세요. 봇에서도 볼 수 있습니다: /wishlist.',
+    'ui.wishlist.addTitle': '위시리스트에 추가',
+    'ui.wishlist.searchPlaceholder': '게임 검색…',
+    'ui.wishlist.notePlaceholder': '메모(선택)',
+    'ui.wishlist.adding': '추가 중…',
+    'ui.wishlist.add': '추가',
+    'ui.wishlist.empty':
+      '위시리스트가 비어 있습니다. 위에서 게임을 검색하세요(Supabase에 b6-schema.sql 필요).',
+    'ui.wishlist.noCover': '커버 없음',
+    'ui.wishlist.remove': '삭제',
     'ui.suggestions.statusOff': '건의: 꺼짐',
     'ui.suggestions.heading': '건의',
     'ui.suggestions.recentTitle': '최근 건의',
@@ -2203,6 +2354,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Ящик предложений сообщества: /suggest публикует предложение с голосованием 👍/👎; модерация принимает решение кнопками. Дополнительно /poll создаёт быстрый опрос (реакции 1️⃣–🔟 или 👍/👎).',
     'ui.suggestions.statusOn': 'Предложения: ВКЛЮЧЕНЫ',
+    'ui.appearance.intro':
+      'Внешний вид графики бота — здесь работают настоящие градиенты и шрифты (отрисовываются в изображении). Карточка ранга появляется после команды /rank. Приветственный баннер настраивается в Приветствиях.',
+    'ui.appearance.heading': 'Карточка ранга (/rank)',
+    'ui.appearance.previewText': 'Ваш ник',
+    'ui.appearance.footNote':
+      'Стиль, используемый командой бота /rank (изображение карточки ранга с градиентом и шрифтом).',
+    'ui.wishlist.intro':
+      'Список желаемых игр — найдите название (автодополнение из IGDB), сохраните с обложкой и годом. Доступен также из бота: /wishlist.',
+    'ui.wishlist.addTitle': 'Добавить в список желаемого',
+    'ui.wishlist.searchPlaceholder': 'Поиск игры…',
+    'ui.wishlist.notePlaceholder': 'Заметка (необязательно)',
+    'ui.wishlist.adding': 'Добавляю…',
+    'ui.wishlist.add': 'Добавить',
+    'ui.wishlist.empty':
+      'Список желаемого пуст. Найдите игру выше (требуется b6-schema.sql в Supabase).',
+    'ui.wishlist.noCover': 'нет обложки',
+    'ui.wishlist.remove': 'Удалить',
     'ui.suggestions.statusOff': 'Предложения: ВЫКЛЮЧЕНЫ',
     'ui.suggestions.heading': 'Предложения',
     'ui.suggestions.recentTitle': 'Последние предложения',
@@ -2356,6 +2524,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Скринька пропозицій спільноти: /suggest публікує пропозицію з голосуванням 👍/👎; модерація ухвалює рішення кнопками. Додатково /poll створює швидке опитування (реакції 1️⃣–🔟 або 👍/👎).',
     'ui.suggestions.statusOn': 'Пропозиції: УВІМКНЕНО',
+    'ui.appearance.intro':
+      'Вигляд графіки бота — тут працюють справжні градієнти та шрифти (рендеряться в зображення). Картка рангу зʼявляється після команди /rank. Привітальний банер налаштовується у Привітаннях.',
+    'ui.appearance.heading': 'Картка рангу (/rank)',
+    'ui.appearance.previewText': 'Ваш нік',
+    'ui.appearance.footNote':
+      'Стиль, який використовує команда бота /rank (зображення картки рангу з градієнтом і шрифтом).',
+    'ui.wishlist.intro':
+      'Список бажаних ігор — знайдіть назву (автодоповнення з IGDB), збережіть з обкладинкою та роком. Доступний також з бота: /wishlist.',
+    'ui.wishlist.addTitle': 'Додати до списку бажань',
+    'ui.wishlist.searchPlaceholder': 'Пошук гри…',
+    'ui.wishlist.notePlaceholder': 'Нотатка (необовʼязково)',
+    'ui.wishlist.adding': 'Додаю…',
+    'ui.wishlist.add': 'Додати',
+    'ui.wishlist.empty':
+      'Список бажань порожній. Знайдіть гру вище (потрібен b6-schema.sql у Supabase).',
+    'ui.wishlist.noCover': 'немає обкладинки',
+    'ui.wishlist.remove': 'Видалити',
     'ui.suggestions.statusOff': 'Пропозиції: ВИМКНЕНО',
     'ui.suggestions.heading': 'Пропозиції',
     'ui.suggestions.recentTitle': 'Останні пропозиції',
@@ -2509,6 +2694,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'コミュニティ提案ボックス：/suggest は 👍/👎 投票付きの提案を投稿し、モデレーションがボタンで判断します。さらに /poll で素早いアンケートを作成できます（1️⃣–🔟 または 👍/👎 のリアクション）。',
     'ui.suggestions.statusOn': '提案：オン',
+    'ui.appearance.intro':
+      'ボットの画像の見た目 — ここではグラデーションとフォントが実際に反映されます（画像にレンダリングされます）。ランクカードは /rank コマンドの後に表示されます。ウェルカムバナーは Welcomes で設定します。',
+    'ui.appearance.heading': 'ランクカード（/rank）',
+    'ui.appearance.previewText': 'あなたのニックネーム',
+    'ui.appearance.footNote':
+      'ボットの /rank コマンドで使われるスタイル（グラデーションとフォントが適用されたランクカード画像）。',
+    'ui.wishlist.intro':
+      'ゲームのウィッシュリスト — タイトルを検索して（IGDB の自動補完）、カバーアートと発売年と一緒に保存します。ボットからも見られます：/wishlist。',
+    'ui.wishlist.addTitle': 'ウィッシュリストに追加',
+    'ui.wishlist.searchPlaceholder': 'ゲームを検索…',
+    'ui.wishlist.notePlaceholder': 'メモ（任意）',
+    'ui.wishlist.adding': '追加中…',
+    'ui.wishlist.add': '追加',
+    'ui.wishlist.empty':
+      'ウィッシュリストは空です。上でゲームを検索してください（Supabase に b6-schema.sql が必要です）。',
+    'ui.wishlist.noCover': 'カバーなし',
+    'ui.wishlist.remove': '削除',
     'ui.suggestions.statusOff': '提案：オフ',
     'ui.suggestions.heading': '提案',
     'ui.suggestions.recentTitle': '最近の提案',
@@ -2663,6 +2865,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'صندوق اقتراحات المجتمع: ينشر /suggest اقتراحًا مع تصويت 👍/👎؛ ويتخذ الإشراف القرار عبر الأزرار. إضافةً إلى ذلك، يُنشئ /poll استطلاعًا سريعًا (تفاعلات 1️⃣–🔟 أو 👍/👎).',
     'ui.suggestions.statusOn': 'الاقتراحات: مُفعّلة',
+    'ui.appearance.intro':
+      'مظهر رسوميات البوت — هنا تعمل التدرجات اللونية والخطوط الحقيقية (تُرسَم داخل الصورة). تظهر بطاقة الرتبة بعد الأمر /rank. ويمكنك ضبط لافتة الترحيب في صفحة الترحيب.',
+    'ui.appearance.heading': 'بطاقة الرتبة (/rank)',
+    'ui.appearance.previewText': 'اسمك المستعار',
+    'ui.appearance.footNote':
+      'النمط الذي يستخدمه أمر البوت /rank (صورة بطاقة رتبة بتدرج لوني وخط).',
+    'ui.wishlist.intro':
+      'قائمة الألعاب المرغوبة — ابحث عن عنوان (إكمال تلقائي من IGDB)، واحفظه مع صورة الغلاف والسنة. مرئية أيضًا من البوت: /wishlist.',
+    'ui.wishlist.addTitle': 'إضافة إلى قائمة الرغبات',
+    'ui.wishlist.searchPlaceholder': 'ابحث عن لعبة…',
+    'ui.wishlist.notePlaceholder': 'ملاحظة (اختياري)',
+    'ui.wishlist.adding': 'جارٍ الإضافة…',
+    'ui.wishlist.add': 'إضافة',
+    'ui.wishlist.empty':
+      'قائمة رغباتك فارغة. ابحث عن لعبة في الأعلى (يتطلب b6-schema.sql في Supabase).',
+    'ui.wishlist.noCover': 'لا يوجد غلاف',
+    'ui.wishlist.remove': 'إزالة',
     'ui.suggestions.statusOff': 'الاقتراحات: معطّلة',
     'ui.suggestions.heading': 'الاقتراحات',
     'ui.suggestions.recentTitle': 'أحدث الاقتراحات',
@@ -2816,6 +3035,23 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.suggestions.intro':
       'Kotak saran komunitas: /suggest memposting usulan dengan voting 👍/👎; moderasi memutuskan lewat tombol. Selain itu, /poll membuat jajak pendapat cepat (reaksi 1️⃣–🔟 atau 👍/👎).',
     'ui.suggestions.statusOn': 'Saran: AKTIF',
+    'ui.appearance.intro':
+      'Tampilan grafik bot — gradien dan font asli berfungsi di sini (dirender ke dalam gambar). Kartu rank muncul setelah perintah /rank. Banner sambutan kamu atur di Sambutan.',
+    'ui.appearance.heading': 'Kartu rank (/rank)',
+    'ui.appearance.previewText': 'Nick Kamu',
+    'ui.appearance.footNote':
+      'Gaya yang dipakai oleh perintah /rank bot (gambar kartu rank dengan gradien dan font).',
+    'ui.wishlist.intro':
+      'Daftar keinginan game — cari judul (pelengkapan otomatis dari IGDB), simpan dengan sampul dan tahunnya. Terlihat juga dari bot: /wishlist.',
+    'ui.wishlist.addTitle': 'Tambahkan ke daftar keinginan',
+    'ui.wishlist.searchPlaceholder': 'Cari game…',
+    'ui.wishlist.notePlaceholder': 'Catatan (opsional)',
+    'ui.wishlist.adding': 'Menambahkan…',
+    'ui.wishlist.add': 'Tambah',
+    'ui.wishlist.empty':
+      'Daftar keinginan kamu kosong. Cari game di atas (memerlukan b6-schema.sql di Supabase).',
+    'ui.wishlist.noCover': 'tanpa sampul',
+    'ui.wishlist.remove': 'Hapus',
     'ui.suggestions.statusOff': 'Saran: NONAKTIF',
     'ui.suggestions.heading': 'Saran',
     'ui.suggestions.recentTitle': 'Saran terbaru',

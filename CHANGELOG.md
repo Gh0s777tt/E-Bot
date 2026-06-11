@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-289-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.219.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-290-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.220.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.220.0] — 🌍 i18n UI panelu — strony /appearance + /wishlist
+
+- `[#290]` 🌍 **i18n UI panelu — kolejna fala (batch): `/appearance` (wygląd karty rangi) + `/wishlist` (lista życzeń gier).**
+  - 🖥️ **Panel**: 13 nowych kluczy (`ui.appearance.*` ×4 + `ui.wishlist.*` ×9) × **14 języków** w `panelI18n.ts` (parzystość 56 + 126). Strony serwerowe + `RankCardForm`/`WishlistManager` (klient) na `tp()`; błąd zapisu w `WishlistManager` reużywa generycznego `ui.saveError`. Tokeny (`/rank`, `/wishlist`, `IGDB`, `Supabase`, `b6-schema.sql`) nietłumaczone. (Wewnętrzne etykiety współdzielonego `CardStyleEditor` — osobna, późniejsza fala.)
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 10/~40 stron.
 
 ## [0.219.0] — 🌍 i18n UI panelu — strona /suggestions
 

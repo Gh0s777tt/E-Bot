@@ -2,10 +2,13 @@
 
 import { useState } from 'react';
 import type { CardStyle } from '../lib/cardStyle';
+import { tp } from '../lib/panelI18n';
 import CardStyleEditor from './CardStyleEditor';
+import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
 
 export default function RankCardForm({ initial }: { initial: CardStyle }) {
+  const { lang } = useLang();
   const [s, setS] = useState<CardStyle>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -26,12 +29,13 @@ export default function RankCardForm({ initial }: { initial: CardStyle }) {
 
   return (
     <div className="max-w-xl space-y-4">
-      <CardStyleEditor value={s} onChange={setS} previewText="Twój Nick" />
+      <CardStyleEditor
+        value={s}
+        onChange={setS}
+        previewText={tp(lang, 'ui.appearance.previewText')}
+      />
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Styl używany przez komendę bota <code className="text-accent">/rank</code> (obrazek karty
-        rangi z gradientem i czcionką).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.appearance.footNote')}</p>
     </div>
   );
 }

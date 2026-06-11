@@ -2,7 +2,9 @@
 
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import IgdbSearch, { type IgdbResult } from './IgdbSearch';
+import { useLang } from './LangContext';
 
 type Item = {
   id: string;
@@ -20,6 +22,7 @@ const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
 export default function WishlistManager({ initial }: { initial: Item[] }) {
+  const { lang } = useLang();
   const [items, setItems] = useState<Item[]>(initial);
   const [picked, setPicked] = useState<IgdbResult | null>(null);
   const [store, setStore] = useState('steam');
@@ -65,9 +68,9 @@ export default function WishlistManager({ initial }: { initial: Item[] }) {
     <div className="space-y-5">
       <div className="space-y-3 rounded-2xl border border-line bg-card p-4">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-accent">
-          Dodaj do listy życzeń
+          {tp(lang, 'ui.wishlist.addTitle')}
         </h3>
-        <IgdbSearch onPick={setPicked} placeholder="Szukaj gry…" />
+        <IgdbSearch onPick={setPicked} placeholder={tp(lang, 'ui.wishlist.searchPlaceholder')} />
         {picked && (
           <div className="flex flex-wrap items-center gap-3 rounded-md border border-line bg-elevated p-3">
             {picked.cover_url && (
@@ -82,7 +85,7 @@ export default function WishlistManager({ initial }: { initial: Item[] }) {
               <input
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="Notatka (opcjonalnie)"
+                placeholder={tp(lang, 'ui.wishlist.notePlaceholder')}
                 className={`${inputCls} mt-1`}
               />
             </div>
@@ -99,18 +102,15 @@ export default function WishlistManager({ initial }: { initial: Item[] }) {
               disabled={st === 'saving'}
               className="rounded-md bg-accent px-5 py-2 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
             >
-              {st === 'saving' ? 'Dodaję…' : 'Dodaj'}
+              {st === 'saving' ? tp(lang, 'ui.wishlist.adding') : tp(lang, 'ui.wishlist.add')}
             </button>
           </div>
         )}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
+        {st === 'err' && <span className="text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
       </div>
 
       {items.length === 0 ? (
-        <p className="text-sm text-muted">
-          Lista życzeń jest pusta. Wyszukaj grę powyżej (wymaga <code>b6-schema.sql</code> w
-          Supabase).
-        </p>
+        <p className="text-sm text-muted">{tp(lang, 'ui.wishlist.empty')}</p>
       ) : (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {items.map((it) => (
@@ -127,14 +127,14 @@ export default function WishlistManager({ initial }: { initial: Item[] }) {
                 />
               ) : (
                 <div className="flex aspect-[2/3] w-full items-center justify-center bg-elevated text-xs text-muted">
-                  brak okładki
+                  {tp(lang, 'ui.wishlist.noCover')}
                 </div>
               )}
               <button
                 type="button"
                 onClick={() => remove(it.id)}
                 className="absolute right-1.5 top-1.5 rounded-md bg-black/60 p-1.5 text-white/80 opacity-0 transition hover:text-accent group-hover:opacity-100"
-                aria-label="Usuń"
+                aria-label={tp(lang, 'ui.wishlist.remove')}
               >
                 <Trash2 size={14} />
               </button>
