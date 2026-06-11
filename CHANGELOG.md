@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-271-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.201.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-272-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.202.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.202.0] — 🌍 i18n treści: interaktywny samouczek (14 języków)
+
+- `[#272]` 🌍 **Samouczek panelu (`TourGuide`) w 14 językach** — start dużej fali i18n treści (dotąd HowItWorks/Assistant/Tour były PL-only, choć panel i bot są wielojęzyczne).
+  - 🖥️ **Panel**: nowy `lib/tourI18n.ts` z treścią 9 kroków samouczka + etykietami przycisków (Pomiń/Wstecz/Dalej/Zakończ) w **14 językach** (pl, en, de, es, it, fr, pt, zh, ko, ru, uk, ja, ar, id — spójnie z `pageInfo.i18n.ts`). `TourGuide.tsx` bierze język z `useLang()` i składa kroki: **selektory zostają w kodzie**, a tłumaczona treść dochodzi po indeksie kroku (fallback → pl). Auto-start, paleta ⌘K i pomijanie nieobecnych kroków działają jak dotąd.
+  - Czysto panel (Vercel). Wstecznie zgodne (pl niezmienione). Kolejne fale i18n treści: HowItWorks (35 stron) + Asystent AI.
 
 ## [0.201.0] — 🎟️ Transkrypty ticketów na web (panel)
 

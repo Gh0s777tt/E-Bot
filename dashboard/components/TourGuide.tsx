@@ -3,58 +3,21 @@
 // Etap K — interaktywny samouczek panelu. Podświetla realne elementy (spotlight przez box-shadow),
 // prowadzi krok po kroku z dymkiem. Auto-start przy 1. wizycie; ponownie z palety (zdarzenie
 // 'tour:start'). Kroki bez selektora są wyśrodkowane; kroki, których elementu nie ma (np. ukryty
-// przełącznik serwerów), są pomijane. Treść PL (i18n później).
-import { useCallback, useEffect, useState } from 'react';
+// przełącznik serwerów), są pomijane. Treść w 14 językach (lib/tourI18n.ts) wg języka panelu.
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { TOUR_I18N, TOUR_SELECTORS } from '../lib/tourI18n';
+import { useLang } from './LangContext';
 
 type Step = { selector?: string; title: string; body: string };
 
-const STEPS: Step[] = [
-  {
-    title: '👋 Witaj w panelu E-Bota!',
-    body: 'Krótkie oprowadzanie po najważniejszych miejscach. Zajmie kilkanaście sekund — możesz przerwać w każdej chwili.',
-  },
-  {
-    selector: '[data-tour="nav"]',
-    title: '🧭 Nawigacja',
-    body: 'Tu przełączasz się między modułami bota, pogrupowanymi tematycznie (moderacja, społeczność, ekonomia, twórca…).',
-  },
-  {
-    selector: '[data-tour="modes"]',
-    title: '🎚️ Tryby panelu',
-    body: 'Prosty → Zaawansowany → Developer. Im wyższy, tym więcej opcji. Zacznij od Prostego — pokazuje tylko to, co najważniejsze.',
-  },
-  {
-    selector: '[data-tour="lang"]',
-    title: '🌍 Język',
-    body: 'Zmień język panelu — dostępnych jest 14 języków. Język odpowiedzi bota ustawisz osobno w Ustawieniach.',
-  },
-  {
-    selector: '[data-tour="guild"]',
-    title: '🔀 Wybór serwera',
-    body: 'Masz bota na kilku serwerach? Tu wybierasz, który właśnie konfigurujesz, i przełączasz się między nimi.',
-  },
-  {
-    selector: '[data-tour="search"]',
-    title: '⌘ Szybkie wyszukiwanie',
-    body: 'Ctrl+K otwiera paletę — wpisz nazwę strony lub akcji i przeskocz tam jednym Enterem. Tu też uruchomisz ten samouczek ponownie.',
-  },
-  {
-    selector: '[data-tour="how"]',
-    title: '🧭 „Jak to działa?"',
-    body: 'Na każdej stronie rozwiniesz ten panel: co robi funkcja, po co, co musi być włączone i jakie uprawnienia nadać botowi — oraz dlaczego.',
-  },
-  {
-    selector: '[data-tour="assistant"]',
-    title: '🤖 Asystent AI',
-    body: 'Nie wiesz, od czego zacząć? Opisz, jak chcesz, żeby działał Twój serwer — asystent rozpisze plan krok po kroku i wskaże, gdzie to ustawić.',
-  },
-  {
-    title: '🎉 To wszystko!',
-    body: 'Samouczek wywołasz ponownie w każdej chwili: Ctrl+K → „Samouczek panelu". Powodzenia w konfiguracji!',
-  },
-];
-
 export default function TourGuide() {
+  const { lang } = useLang();
+  const content = TOUR_I18N[lang] ?? TOUR_I18N.pl;
+  // Łączy selektory (w kodzie) z przetłumaczoną treścią (po indeksie kroku).
+  const allSteps = useMemo<Step[]>(
+    () => TOUR_SELECTORS.map((selector, idx) => ({ selector, ...content.steps[idx] })),
+    [content],
+  );
   const [steps, setSteps] = useState<Step[]>([]);
   const [i, setI] = useState(0);
   const [active, setActive] = useState(false);
@@ -62,11 +25,11 @@ export default function TourGuide() {
 
   // Buduje listę widocznych kroków (pomija te, których elementu nie ma na stronie) i startuje.
   const start = useCallback(() => {
-    const visible = STEPS.filter((s) => !s.selector || document.querySelector(s.selector));
+    const visible = allSteps.filter((s) => !s.selector || document.querySelector(s.selector));
     setSteps(visible);
     setI(0);
     setActive(true);
-  }, []);
+  }, [allSteps]);
 
   // Auto-start przy pierwszej wizycie + nasłuch na ręczne wywołanie z palety.
   useEffect(() => {
@@ -183,7 +146,7 @@ export default function TourGuide() {
               onClick={finish}
               className="text-xs text-muted transition hover:text-accent"
             >
-              Pomiń
+              {content.skip}
             </button>
             {i > 0 && (
               <button
@@ -191,7 +154,7 @@ export default function TourGuide() {
                 onClick={() => setI((n) => n - 1)}
                 className="rounded-md border border-line px-3 py-1.5 text-xs font-semibold transition hover:border-accent"
               >
-                Wstecz
+                {content.back}
               </button>
             )}
             <button
@@ -199,7 +162,7 @@ export default function TourGuide() {
               onClick={() => (last ? finish() : setI((n) => n + 1))}
               className="rounded-md bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-accent-hover"
             >
-              {last ? 'Zakończ' : 'Dalej'}
+              {last ? content.finish : content.next}
             </button>
           </div>
         </div>
