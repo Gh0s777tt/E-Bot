@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-285-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.215.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-286-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.216.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.216.0] — 🌍 i18n UI panelu — strona /audit (dziennik zmian)
+
+- `[#286]` 🌍 **i18n UI panelu — kolejna fala: `/audit` (dziennik zmian konfiguracji).**
+  - 🖥️ **Panel**: 17 nowych kluczy `ui.audit.*` × **14 języków** w `panelI18n.ts` (parzystość 14×17=238). `app/audit/page.tsx` (serwer) na `tp()` — nagłówek, kolumny tabeli, stan pusty, 9 etykiet obszarów (mapa `AREA_KEYS` kod→klucz i18n; `Anti-Nuke`/`Automod`/`Modmail` nietłumaczone). **Data sformatowana w języku panelu** (`toLocaleString(lang, …)` zamiast `'pl-PL'` na sztywno). `settings_audit`/`Supabase` nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 5/~40 stron.
 
 ## [0.215.0] — 🌍 i18n UI panelu — strona /logging (logi serwera)
 
