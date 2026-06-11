@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-281-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.211.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-282-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.212.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.212.0] — 🌍 i18n strony web (GameVault) — 14 języków + RTL + przełącznik
+
+- `[#282]` 🌍 **Strona web „GameVault" (Netflix dla gier) wielojęzyczna — start Partii N (web).** Dotąd `web/app/layout.tsx` miał `lang="pl"` na sztywno, a cały UI był PL-only.
+  - 🖥️ **Web**: nowy `lib/i18n.ts` (31 kluczy UI × **14 języków**, baza pl, fallback locale → en → pl, `RTL_LOCALES`, natywne nazwy języków). Model wyboru: **przełącznik dla odwiedzających** (`components/LangSwitcher.tsx` 🌐 → cookie `lang` + reload). Aktywny język czytany serwerowo z cookie (`lib/serverLocale.ts`, `next/headers`) i wstrzykiwany do komponentów klienckich przez `LangProvider`/`useT()` (zero rozjazdu SSR/CSR).
+  - 🔤 **`<html lang dir>` dynamiczne**: `dir="rtl"` automatycznie dla arabskiego; `generateMetadata` lokalizuje `<title>`/`description`. Przetłumaczono nawigację, hero, kafelki+modal, karuzele (aria), stan pustej biblioteki, stopkę i całą stronę ustawień powiadomień. Marki (Steam/PlayStation/GOG/Twitch/Kick/Rumble/YouTube/Discord/IGDB) i tokeny (`@here`, `<@&ROLE_ID>`) nietłumaczone.
+  - Czysto web (osobny Next.js). Bramki: biome czysto, `web tsc` exit 0, `next build` exit 0; weryfikacja runtime: `lang/dir` i stringi poprawne dla pl/en/ar/de (RTL działa). Wstecznie zgodne (domyślnie `pl`).
 
 ## [0.211.0] — 🌍 i18n treści: „Jak to działa?" — chunk 7 (Inne) → **KOMPLET 37/37**
 

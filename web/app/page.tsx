@@ -2,6 +2,8 @@ import Hero from '../components/Hero';
 import Row from '../components/Row';
 import TopNav from '../components/TopNav';
 import { getGames } from '../lib/db';
+import { t } from '../lib/i18n';
+import { getServerLocale } from '../lib/serverLocale';
 import type { Game, Shelf } from '../lib/types';
 
 // Zawsze czytaj świeże dane z bazy (nie cache'uj na buildzie).
@@ -28,7 +30,8 @@ const PLATFORM_LABEL: Record<string, string> = {
   ubisoft: 'Ubisoft',
 };
 
-export default function Page() {
+export default async function Page() {
+  const lang = await getServerLocale();
   const games = getGames();
 
   const byPlaytime = [...games].sort((a, b) => b.playtime_min - a.playtime_min);
@@ -41,8 +44,8 @@ export default function Page() {
   const platforms = [...new Set(games.map((g) => g.platform))];
 
   const shelves: Shelf[] = [
-    recentlyPlayed.length >= 1 ? { title: 'Kontynuuj granie', items: recentlyPlayed } : null,
-    byPlaytime.length ? { title: 'Najczęściej grane', items: byPlaytime } : null,
+    recentlyPlayed.length >= 1 ? { title: t(lang, 'shelf.continue'), items: recentlyPlayed } : null,
+    byPlaytime.length ? { title: t(lang, 'shelf.mostPlayed'), items: byPlaytime } : null,
     ...platforms.map((p) => ({
       title: PLATFORM_LABEL[p] ?? p,
       items: games.filter((g) => g.platform === p),
@@ -64,15 +67,16 @@ export default function Page() {
 
       {games.length === 0 && (
         <div className="px-6 md:px-12 py-20 text-center text-muted">
-          <p className="text-xl mb-2">Biblioteka jest pusta.</p>
+          <p className="text-xl mb-2">{t(lang, 'empty.title')}</p>
           <p>
-            Uruchom ingestię: <code className="text-accent">node ingest/sync.mts</code>
+            {t(lang, 'empty.run')} <code className="text-accent">node ingest/sync.mts</code>
           </p>
         </div>
       )}
 
       <footer className="px-4 md:px-12 mt-12 text-xs text-muted/60">
-        GameVault · {games.length} gier · dane: Steam + IGDB
+        GameVault · {games.length} {t(lang, 'footer.games')} · {t(lang, 'footer.dataLabel')}: Steam
+        + IGDB
       </footer>
     </main>
   );

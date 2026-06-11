@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useT } from './LangProvider';
+import LangSwitcher from './LangSwitcher';
 
 export default function TopNav() {
+  const tt = useT();
   const [solid, setSolid] = useState(false);
 
   useEffect(() => {
@@ -25,16 +28,17 @@ export default function TopNav() {
         </a>
         <nav className="hidden gap-5 text-sm text-white/80 md:flex">
           <a className="transition hover:text-white" href="/">
-            Biblioteka
+            {tt('nav.library')}
           </a>
           <a className="transition hover:text-white" href="/settings">
-            Ustawienia
+            {tt('nav.settings')}
           </a>
         </nav>
-        <div className="ml-auto flex items-center gap-4">
+        <div className="ml-auto flex items-center gap-3">
           <div className="hidden h-8 items-center rounded bg-white/10 px-3 text-xs text-white/70 sm:flex">
-            Szukaj…
+            {tt('nav.search')}
           </div>
+          <LangSwitcher />
           <img src="/ghost-skull.png" alt="" className="h-8 w-8 rounded object-cover" />
         </div>
       </div>

@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import type { Game } from '../lib/types';
 import CoverImg from './CoverImg';
+import { useT } from './LangProvider';
 
 function hours(min: number): string {
   const h = min / 60;
@@ -11,6 +12,7 @@ function hours(min: number): string {
 }
 
 function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
+  const tt = useT();
   return (
     <motion.div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
@@ -33,7 +35,7 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
           <button
             onClick={onClose}
             className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white hover:bg-accent"
-            aria-label="Zamknij"
+            aria-label={tt('card.close')}
           >
             ✕
           </button>
@@ -45,7 +47,9 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             {game.release_year && <span>{game.release_year}</span>}
             <span className="rounded bg-white/10 px-2 py-0.5 capitalize">{game.platform}</span>
-            <span>{hours(game.playtime_min)} w grze</span>
+            <span>
+              {hours(game.playtime_min)} {tt('game.played')}
+            </span>
           </div>
           {game.genres.length > 0 && (
             <div className="flex flex-wrap gap-2">
@@ -65,7 +69,7 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
               href={game.platform === 'steam' ? `steam://run/${game.platform_app_id}` : '#'}
               className="flex items-center gap-2 rounded bg-white px-6 py-2 font-semibold text-black transition hover:bg-white/85"
             >
-              ▶ Graj
+              ▶ {tt('hero.play')}
             </a>
             <a
               href={
@@ -77,7 +81,7 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
               rel="noreferrer"
               className="rounded bg-white/15 px-6 py-2 font-semibold text-white transition hover:bg-white/25"
             >
-              Sklep
+              {tt('card.store')}
             </a>
           </div>
         </div>
