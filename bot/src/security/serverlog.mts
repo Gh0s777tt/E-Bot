@@ -16,7 +16,7 @@ import {
   type TextChannel,
   type VoiceState,
 } from 'discord.js';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type LoggingConfig = {
   enabled: boolean;
@@ -47,19 +47,20 @@ const RED = 0xe50914;
 const GREEN = 0x3ba55d;
 const AMBER = 0xfaa61a;
 
-let cfg: LoggingConfig = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings()['logging_config'];
-  if (!raw) {
-    cfg = { ...DEFAULT };
-    return;
-  }
+// Etap K — config per-serwer z cache TTL 30 s (logging reaguje na wiele zdarzeń).
+const cfgCache = new Map<string, { cfg: LoggingConfig; at: number }>();
+function cfgFor(guildId: string): LoggingConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['logging_config'];
+  let cfg: LoggingConfig;
   try {
-    cfg = { ...DEFAULT, ...(JSON.parse(raw) as Partial<LoggingConfig>) };
+    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<LoggingConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    cfg = { ...DEFAULT };
   }
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
 function trunc(s: string, n = 500): string {
@@ -73,6 +74,7 @@ async function post(
   description: string,
   footer?: string,
 ): Promise<void> {
+  const cfg = cfgFor(guild.id);
   if (!cfg.channelId) return;
   const ch = await guild.channels.fetch(cfg.channelId).catch(() => null);
   if (!ch?.isTextBased() || !('send' in ch)) return;
@@ -86,12 +88,11 @@ async function post(
 }
 
 export function startServerLog(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-
   // ── Wiadomości ──
   client.on(Events.MessageDelete, async (msg: Message | PartialMessage) => {
-    if (!cfg.enabled || !cfg.messages || !msg.guild) return;
+    if (!msg.guild) return;
+    const cfg = cfgFor(msg.guild.id);
+    if (!cfg.enabled || !cfg.messages) return;
     if (msg.channelId === cfg.channelId || cfg.ignoreChannels.includes(msg.channelId)) return;
     if (msg.author?.bot) return;
     const who = msg.author ? `<@${msg.author.id}>` : 'nieznany (niecache’owana)';
@@ -108,7 +109,9 @@ export function startServerLog(client: Client): void {
   client.on(
     Events.MessageUpdate,
     async (oldMsg: Message | PartialMessage, newMsg: Message | PartialMessage) => {
-      if (!cfg.enabled || !cfg.messages || !newMsg.guild) return;
+      if (!newMsg.guild) return;
+      const cfg = cfgFor(newMsg.guild.id);
+      if (!cfg.enabled || !cfg.messages) return;
       if (newMsg.channelId === cfg.channelId || cfg.ignoreChannels.includes(newMsg.channelId))
         return;
       if (newMsg.author?.bot) return;
@@ -129,7 +132,9 @@ export function startServerLog(client: Client): void {
   client.on(Events.MessageBulkDelete, async (messages) => {
     const first = messages.first();
     const guild = first?.guild;
-    if (!cfg.enabled || !cfg.messages || !guild) return;
+    if (!guild) return;
+    const cfg = cfgFor(guild.id);
+    if (!cfg.enabled || !cfg.messages) return;
     const channelId = first?.channelId ?? '';
     if (channelId === cfg.channelId || cfg.ignoreChannels.includes(channelId)) return;
     await post(
@@ -142,6 +147,7 @@ export function startServerLog(client: Client): void {
 
   // ── Członkowie ──
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
+    const cfg = cfgFor(member.guild.id);
     if (!cfg.enabled || !cfg.members) return;
     const created = Math.floor(member.user.createdTimestamp / 1000);
     await post(
@@ -154,6 +160,7 @@ export function startServerLog(client: Client): void {
   });
 
   client.on(Events.GuildMemberRemove, async (member: GuildMember | PartialGuildMember) => {
+    const cfg = cfgFor(member.guild.id);
     if (!cfg.enabled || !cfg.members) return;
     const roles = member.roles?.cache
       ? [...member.roles.cache.values()].filter((r) => r.name !== '@everyone').map((r) => r.name)
@@ -170,6 +177,7 @@ export function startServerLog(client: Client): void {
   client.on(
     Events.GuildMemberUpdate,
     async (oldM: GuildMember | PartialGuildMember, newM: GuildMember) => {
+      const cfg = cfgFor(newM.guild.id);
       if (!cfg.enabled || !cfg.memberUpdates) return;
       const lines: string[] = [];
       if (oldM.nickname !== newM.nickname) {
@@ -195,6 +203,7 @@ export function startServerLog(client: Client): void {
 
   // ── Moderacja (bany) ──
   client.on(Events.GuildBanAdd, async (ban: GuildBan) => {
+    const cfg = cfgFor(ban.guild.id);
     if (!cfg.enabled || !cfg.moderation) return;
     await post(
       ban.guild,
@@ -206,6 +215,7 @@ export function startServerLog(client: Client): void {
   });
 
   client.on(Events.GuildBanRemove, async (ban: GuildBan) => {
+    const cfg = cfgFor(ban.guild.id);
     if (!cfg.enabled || !cfg.moderation) return;
     await post(
       ban.guild,
@@ -218,7 +228,9 @@ export function startServerLog(client: Client): void {
 
   // ── Serwer (kanały / role) ──
   client.on(Events.ChannelCreate, async (channel: GuildChannel) => {
-    if (!cfg.enabled || !cfg.server || !channel.guild) return;
+    if (!channel.guild) return;
+    const cfg = cfgFor(channel.guild.id);
+    if (!cfg.enabled || !cfg.server) return;
     await post(
       channel.guild,
       GREEN,
@@ -228,24 +240,29 @@ export function startServerLog(client: Client): void {
   });
 
   client.on(Events.ChannelDelete, async (channel) => {
-    if (!cfg.enabled || !cfg.server || !('guild' in channel) || !channel.guild) return;
+    if (!('guild' in channel) || !channel.guild) return;
+    const cfg = cfgFor(channel.guild.id);
+    if (!cfg.enabled || !cfg.server) return;
     await post(channel.guild, RED, '📁 Kanał usunięty', `**Kanał:** #${channel.name}`);
   });
 
   client.on(Events.GuildRoleCreate, async (role: Role) => {
+    const cfg = cfgFor(role.guild.id);
     if (!cfg.enabled || !cfg.server) return;
     await post(role.guild, GREEN, '🏷️ Rola utworzona', `**Rola:** ${role.name}`);
   });
 
   client.on(Events.GuildRoleDelete, async (role: Role) => {
+    const cfg = cfgFor(role.guild.id);
     if (!cfg.enabled || !cfg.server) return;
     await post(role.guild, RED, '🏷️ Rola usunięta', `**Rola:** ${role.name}`);
   });
 
   // ── Voice ──
   client.on(Events.VoiceStateUpdate, async (oldState: VoiceState, newState: VoiceState) => {
-    if (!cfg.enabled || !cfg.voice) return;
     const guild = newState.guild;
+    const cfg = cfgFor(guild.id);
+    if (!cfg.enabled || !cfg.voice) return;
     const uid = newState.id;
     if (!oldState.channelId && newState.channelId) {
       await post(guild, GREEN, '🔊 Dołączył na voice', `<@${uid}> → <#${newState.channelId}>`);

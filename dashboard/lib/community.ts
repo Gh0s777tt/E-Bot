@@ -148,7 +148,7 @@ export const LOGGING_DEFAULT: LoggingConfig = {
 };
 
 export async function getLoggingConfig(): Promise<LoggingConfig> {
-  const raw = await getRawSetting('logging_config');
+  const raw = await getConfigSetting('logging_config');
   if (!raw) return structuredClone(LOGGING_DEFAULT);
   try {
     return { ...LOGGING_DEFAULT, ...(JSON.parse(raw) as Partial<LoggingConfig>) };
@@ -157,7 +157,7 @@ export async function getLoggingConfig(): Promise<LoggingConfig> {
   }
 }
 export async function saveLoggingConfig(cfg: LoggingConfig): Promise<void> {
-  await setRawSetting('logging_config', JSON.stringify(cfg));
+  await setConfigSetting('logging_config', JSON.stringify(cfg));
 }
 
 // ── Weryfikacja (Faza 7 / F6.3) ──

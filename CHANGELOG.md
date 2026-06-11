@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-245-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.175.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-246-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.176.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.176.0] — 🗂️ Logi serwera per-serwer · Etap K (C-9/?)
+
+- `[#246]` 🗂️ **Logi serwera (`logging`) per-serwer** — ósmy zmigrowany moduł, trzeci wysokiej częstotliwości (reaguje na kilkanaście typów zdarzeń: wiadomości, członkowie, bany, role, kanały, voice):
+  - 🤖 **Bot**: globalny `cfg` + `refresh()`/`setInterval` zastąpione **cache per-serwer z TTL 30 s** (`cfgFor(guildId)`). Wszystkie 13 listenerów + helper `post()` czytają config danego serwera, więc każdy serwer ma własny kanał logów, własne grupy zdarzeń (wiadomości/członkowie/moderacja/serwer/voice) i własną listę ignorowanych kanałów. Sprawdzenia `guild` przeniesione przed odczyt configu.
+  - 🖥️ **Panel**: `logging_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getLoggingConfig`/`saveLoggingConfig` (`community.ts`) zroutowane przez `getConfigSetting`/`setConfigSetting` (per-serwer). Provisioning Architekta (`provision.mts`) zapisuje teraz `logging_config` per-serwer (był już na `configWriteKey`).
+  - Wsteczna zgodność (fallback global). Etap K (C-9). Bot + panel (bot pierwszy).
 
 ## [0.175.0] — 🗂️ Automod per-serwer · Etap K (C-8/?)
 
