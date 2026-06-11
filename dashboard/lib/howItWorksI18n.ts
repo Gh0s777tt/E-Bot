@@ -5,7 +5,8 @@
 // (grupa „Wsparcie"). Chunk 4a: /welcome, /levels, /leaderboard, /roles, /engagement +
 // chunk 4b: /suggestions, /responder, /birthdays, /counters, /automations (grupa „Społeczność"
 // KOMPLET). Chunk 5: /notifications, /creator, /live, /scheduled, /donations (grupa
-// „Powiadomienia"). Kolejne chunki dokładają strony.
+// „Powiadomienia"). Chunk 6: /eco, /economy (Ekonomia) + /library, /wishlist, /gaming
+// (Biblioteka). Zostaje grupa „Inne" (6 stron). Kolejne chunki dokładają strony.
 import type { HowEntry } from './howItWorks';
 import type { PanelLocale } from './panelI18n';
 
@@ -136,6 +137,39 @@ export const HOW_LABELS: Record<PanelLocale, HowLabels> = {
 // Tłumaczenia treści stron — przyrostowo. Pominięte strony/języki → fallback do PL (HOW_IT_WORKS).
 export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEntry>>> = {
   en: {
+    '/eco': {
+      does: 'Server economy: currency, work, shop, gambling, marketplace, lottery, and in eco 2.0 — a stock market, pets and collectible cards.',
+      why: 'Gamification: currency gives a reason to be active, and the shop (e.g. roles for currency) — a goal worth saving for.',
+      needs: [
+        'Economy enabled',
+        'For the stock market/pets/cards and a database-backed shop: cloud configured (Supabase) and the SQL schemas run',
+      ],
+      perms: [
+        { perm: 'Manage Roles', why: 'if you sell roles in the shop (including timed ones)' },
+      ],
+      tips: [
+        'Set timed roles in the shop as a “subscription” for currency — a strong reason to earn.',
+        'Balance sources (daily/work/pet gifts) and sinks (shop, card gacha) so the currency doesn’t lose value.',
+      ],
+    },
+    '/economy': {
+      does: 'Integration with the GH0ST Tokens system — earning for Discord activity in an external system.',
+      why: 'Links server activity with a broader token ecosystem (if you use one).',
+      needs: ['GH0ST API configured (keys in Integrations)'],
+    },
+    '/library': {
+      does: 'Your game collection (Steam + IGDB) in a “Netflix for games” style — cover art, descriptions, a library.',
+      why: 'You show the community what you play/own in a nice form instead of a dry list.',
+      needs: ['IGDB/Steam keys in Integrations (for cover art and metadata)'],
+    },
+    '/wishlist': {
+      does: 'A list of games you want to get, with cover art and price tracking.',
+      why: 'The community sees your wishlist — handy e.g. for gifts/group buys.',
+    },
+    '/gaming': {
+      does: 'Game patch notes and free-game notifications (Epic / Steam / GOG).',
+      why: 'Your gaming community gets the freshest info about updates and freebies automatically.',
+    },
     '/notifications': {
       does: 'Alerts when a stream goes live (Twitch / Kick / YouTube / Rumble) to a chosen channel, with a role ping.',
       why: 'Viewers won’t miss the start — the bot announces the live automatically the moment you go on air.',
@@ -342,6 +376,42 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   de: {
+    '/eco': {
+      does: 'Server-Wirtschaft: Währung, Arbeit, Shop, Glücksspiel, Marktplatz, Lotterie und in eco 2.0 — Börse, Haustiere und Sammelkarten.',
+      why: 'Gamification: Die Währung gibt einen Grund, aktiv zu sein, und der Shop (z. B. Rollen für Währung) ein Ziel, auf das sich das Sparen lohnt.',
+      needs: [
+        'Aktivierte Wirtschaft',
+        'Für Börse/Haustiere/Karten und einen datenbankgestützten Shop: konfigurierte Cloud (Supabase) und ausgeführte SQL-Schemata',
+      ],
+      perms: [
+        {
+          perm: 'Rollen verwalten',
+          why: 'wenn du im Shop Rollen verkaufst (auch zeitlich begrenzte)',
+        },
+      ],
+      tips: [
+        'Richte zeitlich begrenzte Rollen im Shop als „Abonnement“ gegen Währung ein — ein starker Grund, um zu verdienen.',
+        'Halte Quellen (daily/work/Haustiergeschenke) und Senken (Shop, Karten-gacha) im Gleichgewicht, damit die Währung nicht an Wert verliert.',
+      ],
+    },
+    '/economy': {
+      does: 'Integration mit dem GH0ST Tokens-System — Verdienen für Discord-Aktivität in einem externen System.',
+      why: 'Verbindet die Serveraktivität mit einem umfassenderen Token-Ökosystem (falls du eines nutzt).',
+      needs: ['Konfigurierte GH0ST-API (Schlüssel in den Integrationen)'],
+    },
+    '/library': {
+      does: 'Deine Spielesammlung (Steam + IGDB) im Stil von „Netflix für Spiele“ — Cover, Beschreibungen, eine Bibliothek.',
+      why: 'Du zeigst der Community in ansprechender Form, was du spielst/besitzt, statt einer trockenen Liste.',
+      needs: ['IGDB/Steam-Schlüssel in den Integrationen (für Cover und Metadaten)'],
+    },
+    '/wishlist': {
+      does: 'Eine Liste der Spiele, die du dir wünschst, mit Covern und Preisüberwachung.',
+      why: 'Die Community sieht deine Wunschliste — praktisch z. B. bei Geschenken/Sammelkäufen.',
+    },
+    '/gaming': {
+      does: 'Patch Notes von Spielen und Benachrichtigungen über kostenlose Spiele (Epic / Steam / GOG).',
+      why: 'Deine Gaming-Community erhält automatisch die neuesten Infos zu Updates und Gratisspielen.',
+    },
     '/notifications': {
       does: 'Benachrichtigungen, wenn ein Stream live geht (Twitch / Kick / YouTube / Rumble), in einem ausgewählten Kanal, mit Rollen-Ping.',
       why: 'Zuschauer verpassen den Start nicht — der Bot kündigt den Live-Stream automatisch an, sobald du auf Sendung gehst.',
@@ -594,6 +664,39 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   es: {
+    '/eco': {
+      does: 'Economía del servidor: moneda, trabajo, tienda, apuestas, mercado, lotería y, en eco 2.0 — bolsa, mascotas y cartas coleccionables.',
+      why: 'Gamificación: la moneda da un motivo para estar activo, y la tienda (p. ej. roles por moneda) un objetivo por el que vale la pena ahorrar.',
+      needs: [
+        'Economía activada',
+        'Para la bolsa/mascotas/cartas y una tienda con base de datos: nube configurada (Supabase) y esquemas SQL ejecutados',
+      ],
+      perms: [
+        { perm: 'Gestionar roles', why: 'si vendes roles en la tienda (también temporales)' },
+      ],
+      tips: [
+        'Configura roles temporales en la tienda como una «suscripción» a cambio de moneda — un motivo poderoso para ganar.',
+        'Equilibra las fuentes (daily/work/regalos de mascotas) y los sumideros (tienda, gacha de cartas) para que la moneda no pierda valor.',
+      ],
+    },
+    '/economy': {
+      does: 'Integración con el sistema GH0ST Tokens — ganar por la actividad en Discord en un sistema externo.',
+      why: 'Conecta la actividad del servidor con un ecosistema de tokens más amplio (si usas uno).',
+      needs: ['API de GH0ST configurada (claves en las Integraciones)'],
+    },
+    '/library': {
+      does: 'Tu colección de juegos (Steam + IGDB) al estilo «Netflix para juegos» — portadas, descripciones, una biblioteca.',
+      why: 'Muestras a la comunidad a qué juegas/qué tienes de forma atractiva en lugar de una lista sosa.',
+      needs: ['Claves de IGDB/Steam en las Integraciones (para portadas y metadatos)'],
+    },
+    '/wishlist': {
+      does: 'Una lista de juegos que quieres conseguir, con portadas y seguimiento de precios.',
+      why: 'La comunidad ve tu lista de deseos — útil p. ej. para regalos/compras en grupo.',
+    },
+    '/gaming': {
+      does: 'Notas de parche de juegos y notificaciones de juegos gratis (Epic / Steam / GOG).',
+      why: 'Tu comunidad gamer recibe automáticamente la información más reciente sobre actualizaciones y juegos gratis.',
+    },
     '/notifications': {
       does: 'Avisos cuando un stream se pone en directo (Twitch / Kick / YouTube / Rumble) en un canal elegido, con mención de rol.',
       why: 'Los espectadores no se perderán el inicio — el bot anuncia el directo automáticamente en cuanto sales en antena.',
@@ -835,6 +938,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   it: {
+    '/eco': {
+      does: 'Economia del server: valuta, lavoro, negozio, azzardo, mercato, lotteria e, in eco 2.0 — borsa, animali domestici e carte collezionabili.',
+      why: 'Gamification: la valuta dà un motivo per essere attivi e il negozio (ad es. ruoli in cambio di valuta) un obiettivo per cui vale la pena risparmiare.',
+      needs: [
+        'Economia attivata',
+        'Per la borsa/animali domestici/carte e un negozio con database: cloud configurato (Supabase) e schemi SQL eseguiti',
+      ],
+      perms: [{ perm: 'Gestire i ruoli', why: 'se nel negozio vendi ruoli (anche temporanei)' }],
+      tips: [
+        'Imposta ruoli temporanei nel negozio come un «abbonamento» in cambio di valuta — un motivo forte per guadagnare.',
+        'Bilancia le fonti (daily/work/regali degli animali domestici) e gli sbocchi (negozio, gacha di carte) affinché la valuta non perda valore.',
+      ],
+    },
+    '/economy': {
+      does: 'Integrazione con il sistema GH0ST Tokens — guadagnare per l’attività su Discord in un sistema esterno.',
+      why: 'Collega l’attività del server con un ecosistema di token più ampio (se ne usi uno).',
+      needs: ['API GH0ST configurata (chiavi nelle Integrazioni)'],
+    },
+    '/library': {
+      does: 'La tua collezione di giochi (Steam + IGDB) in stile «Netflix per i giochi» — copertine, descrizioni, una libreria.',
+      why: 'Mostri alla community a cosa giochi/cosa possiedi in una forma gradevole invece di un elenco arido.',
+      needs: ['Chiavi IGDB/Steam nelle Integrazioni (per copertine e metadati)'],
+    },
+    '/wishlist': {
+      does: 'Un elenco di giochi che desideri ottenere, con copertine e monitoraggio dei prezzi.',
+      why: 'La community vede la tua lista dei desideri — utile ad es. per regali/acquisti di gruppo.',
+    },
+    '/gaming': {
+      does: 'Patch notes dei giochi e notifiche sui giochi gratuiti (Epic / Steam / GOG).',
+      why: 'La tua community di gaming riceve automaticamente le informazioni più recenti su aggiornamenti e giochi gratuiti.',
+    },
     '/notifications': {
       does: 'Avvisi quando uno stream va in diretta (Twitch / Kick / YouTube / Rumble) su un canale scelto, con ping al ruolo.',
       why: 'Gli spettatori non perderanno l’inizio — il bot annuncia la diretta automaticamente non appena vai in onda.',
@@ -1078,6 +1212,42 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   fr: {
+    '/eco': {
+      does: 'Économie du serveur : monnaie, travail, boutique, jeux d’argent, marché, loterie, et en eco 2.0 — une bourse, des familiers et des cartes à collectionner.',
+      why: 'Gamification : la monnaie donne une raison d’être actif, et la boutique (p. ex. des rôles contre de la monnaie) — un objectif pour lequel il vaut la peine d’économiser.',
+      needs: [
+        'Économie activée',
+        'Pour la bourse/les familiers/les cartes et une boutique adossée à une base de données : cloud configuré (Supabase) et schémas SQL exécutés',
+      ],
+      perms: [
+        {
+          perm: 'Gérer les rôles',
+          why: 'si tu vends des rôles dans la boutique (y compris temporaires)',
+        },
+      ],
+      tips: [
+        'Configure des rôles temporaires dans la boutique comme un « abonnement » contre de la monnaie — une forte raison de gagner.',
+        'Équilibre les sources (daily/work/cadeaux des familiers) et les puits (boutique, gacha de cartes) pour que la monnaie ne perde pas de valeur.',
+      ],
+    },
+    '/economy': {
+      does: 'Intégration avec le système GH0ST Tokens — gagner pour ton activité sur Discord dans un système externe.',
+      why: 'Relie l’activité sur le serveur à un écosystème de tokens plus large (si tu en utilises un).',
+      needs: ['API GH0ST configurée (clés dans les Intégrations)'],
+    },
+    '/library': {
+      does: 'Ta collection de jeux (Steam + IGDB) dans un style « Netflix pour les jeux » — jaquettes, descriptions, une bibliothèque.',
+      why: 'Tu montres à la communauté ce à quoi tu joues / ce que tu possèdes sous une belle forme plutôt qu’une liste austère.',
+      needs: ['Clés IGDB/Steam dans les Intégrations (pour les jaquettes et les métadonnées)'],
+    },
+    '/wishlist': {
+      does: 'Une liste de jeux que tu veux obtenir, avec jaquettes et suivi des prix.',
+      why: 'La communauté voit ta liste de souhaits — pratique p. ex. pour les cadeaux/achats groupés.',
+    },
+    '/gaming': {
+      does: 'Notes de mise à jour des jeux et notifications de jeux gratuits (Epic / Steam / GOG).',
+      why: 'Ta communauté de joueurs reçoit automatiquement les infos les plus fraîches sur les mises à jour et les jeux gratuits.',
+    },
     '/notifications': {
       does: 'Alertes au démarrage d’un stream (Twitch / Kick / YouTube / Rumble) sur un salon choisi, avec un ping de rôle.',
       why: 'Tes spectateurs ne rateront pas le début — le bot annonce le live automatiquement dès que tu passes à l’antenne.',
@@ -1333,6 +1503,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   pt: {
+    '/eco': {
+      does: 'Economia do servidor: moeda, trabalho, loja, jogos de azar, mercado, lotaria, e no eco 2.0 — uma bolsa, animais de estimação e cartas colecionáveis.',
+      why: 'Gamificação: a moeda dá um motivo para estar ativo, e a loja (p. ex. cargos por moeda) — um objetivo pelo qual vale a pena poupar.',
+      needs: [
+        'Economia ativada',
+        'Para a bolsa/animais/cartas e uma loja com base de dados: cloud configurada (Supabase) e os esquemas SQL executados',
+      ],
+      perms: [{ perm: 'Gerir cargos', why: 'se vendes cargos na loja (incluindo temporários)' }],
+      tips: [
+        'Define cargos temporários na loja como uma “subscrição” por moeda — um forte motivo para ganhares.',
+        'Equilibra as fontes (daily/work/presentes dos animais) e os sumidouros (loja, gacha de cartas) para que a moeda não perca valor.',
+      ],
+    },
+    '/economy': {
+      does: 'Integração com o sistema GH0ST Tokens — ganhar pela tua atividade no Discord num sistema externo.',
+      why: 'Liga a atividade no servidor a um ecossistema de tokens mais amplo (se usares um).',
+      needs: ['API GH0ST configurada (chaves nas Integrações)'],
+    },
+    '/library': {
+      does: 'A tua coleção de jogos (Steam + IGDB) ao estilo “Netflix para jogos” — capas, descrições, uma biblioteca.',
+      why: 'Mostras à comunidade aquilo a que jogas / o que tens de forma bonita em vez de uma lista seca.',
+      needs: ['Chaves IGDB/Steam nas Integrações (para as capas e os metadados)'],
+    },
+    '/wishlist': {
+      does: 'Uma lista de jogos que queres obter, com capas e acompanhamento de preços.',
+      why: 'A comunidade vê a tua lista de desejos — útil p. ex. para presentes/compras em grupo.',
+    },
+    '/gaming': {
+      does: 'Notas de atualização dos jogos e notificações de jogos grátis (Epic / Steam / GOG).',
+      why: 'A tua comunidade gamer recebe automaticamente as informações mais recentes sobre atualizações e jogos grátis.',
+    },
     '/notifications': {
       does: 'Alertas quando uma transmissão começa (Twitch / Kick / YouTube / Rumble) num canal à escolha, com ping de cargo.',
       why: 'Os teus espectadores não vão perder o início — o bot anuncia o live automaticamente assim que entras no ar.',
@@ -1567,6 +1768,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   zh: {
+    '/eco': {
+      does: '服务器经济系统：货币、work、商店、博彩、交易市场、彩票，以及在 eco 2.0 中——股票市场、宠物和收藏卡牌。',
+      why: '游戏化机制：货币给成员保持活跃的理由，而商店（例如用货币兑换身份组）——则是值得攒钱去实现的目标。',
+      needs: [
+        '已启用经济系统',
+        '若要使用股票市场／宠物／卡牌和带数据库的商店：需配置云端（Supabase）并运行 SQL 架构',
+      ],
+      perms: [{ perm: '管理身份组', why: '如果你在商店中出售身份组（包括限时身份组）' }],
+      tips: [
+        '把商店里的限时身份组设为用货币购买的「订阅」——这是赚钱的强力理由。',
+        '平衡产出来源（daily／work／宠物赠礼）与消耗去向（商店、卡牌 gacha），让货币不至于贬值。',
+      ],
+    },
+    '/economy': {
+      does: '与 GH0ST Tokens 系统的集成——在外部系统中通过 Discord 活跃度赚取收益。',
+      why: '将服务器活跃度与更广阔的代币生态（如果你在使用的话）连接起来。',
+      needs: ['已配置 GH0ST API（密钥填写在集成中）'],
+    },
+    '/library': {
+      does: '你的游戏收藏（Steam + IGDB），采用「游戏界的 Netflix」风格——封面图、简介、游戏库。',
+      why: '以美观的形式向社区展示你在玩／拥有哪些游戏，而不是干巴巴的清单。',
+      needs: ['集成中填写 IGDB／Steam 密钥（用于封面图和元数据）'],
+    },
+    '/wishlist': {
+      does: '你想入手的游戏清单，附带封面图和价格追踪。',
+      why: '社区可以看到你的愿望单——例如在送礼／众筹时很有用。',
+    },
+    '/gaming': {
+      does: '游戏更新日志（patch notes）以及免费游戏通知（Epic／Steam／GOG）。',
+      why: '游戏社区可自动获取关于更新和免费领取活动的最新资讯。',
+    },
     '/notifications': {
       does: '当直播开始时（Twitch / Kick / YouTube / Rumble）向所选频道推送提醒，并附带身份组提及。',
       why: '观众不会错过开播——只要你一上线，机器人就会自动公告直播。',
@@ -1752,6 +1984,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ko: {
+    '/eco': {
+      does: '서버 경제 시스템: 화폐, work, 상점, 도박, 거래소, 복권, 그리고 eco 2.0 에서는——주식 시장, 펫, 수집형 카드.',
+      why: '게이미피케이션: 화폐는 활동할 이유를 주고, 상점（예: 화폐로 역할 구매）은——모을 만한 가치가 있는 목표가 됩니다.',
+      needs: [
+        '경제 시스템 활성화',
+        '주식 시장／펫／카드와 데이터베이스 기반 상점을 쓰려면: 클라우드（Supabase） 구성 및 SQL 스키마 실행 필요',
+      ],
+      perms: [{ perm: '역할 관리', why: '상점에서 역할（기간제 포함）을 판매하는 경우' }],
+      tips: [
+        '상점의 기간제 역할을 화폐로 구매하는 「구독」으로 설정하세요——돈을 벌 강력한 이유가 됩니다.',
+        '공급원（daily／work／펫 선물）과 소비처（상점, 카드 gacha）의 균형을 맞춰 화폐 가치가 떨어지지 않게 하세요.',
+      ],
+    },
+    '/economy': {
+      does: 'GH0ST Tokens 시스템과의 통합——외부 시스템에서 Discord 활동으로 수익을 얻습니다.',
+      why: '서버 활동을 더 넓은 토큰 생태계（사용하는 경우）와 연결합니다.',
+      needs: ['GH0ST API 구성 완료（키는 통합에 입력）'],
+    },
+    '/library': {
+      does: '당신의 게임 컬렉션（Steam + IGDB）을 「게임을 위한 Netflix」 스타일로——커버 아트, 설명, 라이브러리.',
+      why: '밋밋한 목록 대신 보기 좋은 형태로 커뮤니티에 무엇을 플레이하는지／소유하는지 보여 줍니다.',
+      needs: ['통합에 IGDB／Steam 키 입력（커버 아트와 메타데이터용）'],
+    },
+    '/wishlist': {
+      does: '갖고 싶은 게임 목록, 커버 아트와 가격 추적 기능 포함.',
+      why: '커뮤니티가 당신의 위시리스트를 볼 수 있습니다——예: 선물／공동 구매에 유용합니다.',
+    },
+    '/gaming': {
+      does: '게임 패치 노트와 무료 게임 알림（Epic／Steam／GOG）.',
+      why: '게이밍 커뮤니티가 업데이트와 무료 배포에 관한 최신 정보를 자동으로 받습니다.',
+    },
     '/notifications': {
       does: '방송이 시작되면(Twitch / Kick / YouTube / Rumble) 선택한 채널로 역할 멘션과 함께 알림을 보냅니다.',
       why: '시청자가 시작을 놓치지 않습니다 — 방송을 켜는 순간 봇이 자동으로 라이브를 알립니다.',
@@ -1945,6 +2208,42 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ru: {
+    '/eco': {
+      does: 'Экономика сервера: валюта, работа, магазин, азартные игры, торговая площадка, лотерея, а в eco 2.0 — биржа, питомцы и коллекционные карты.',
+      why: 'Геймификация: валюта даёт повод проявлять активность, а магазин (например, роли за валюту) — цель, ради которой стоит копить.',
+      needs: [
+        'Включённая экономика',
+        'Для биржи/питомцев/карт и магазина с базой данных: настроенное облако (Supabase) и запущенные схемы SQL',
+      ],
+      perms: [
+        {
+          perm: 'Управление ролями',
+          why: 'если в магазине вы продаёте роли (в том числе временные)',
+        },
+      ],
+      tips: [
+        'Настройте временные роли в магазине как «подписку» за валюту — весомый повод зарабатывать.',
+        'Балансируйте источники (daily/work/подарки питомцев) и расходы (магазин, gacha карт), чтобы валюта не теряла ценность.',
+      ],
+    },
+    '/economy': {
+      does: 'Интеграция с системой GH0ST Tokens — заработок за активность в Discord во внешней системе.',
+      why: 'Связывает активность на сервере с более широкой экосистемой токенов (если вы её используете).',
+      needs: ['Настроенный API GH0ST (ключи в Интеграциях)'],
+    },
+    '/library': {
+      does: 'Ваша коллекция игр (Steam + IGDB) в стиле «Netflix для игр» — обложки, описания, библиотека.',
+      why: 'Вы показываете сообществу, во что играете/что имеете, в красивой форме вместо сухого списка.',
+      needs: ['Ключи IGDB/Steam в Интеграциях (для обложек и метаданных)'],
+    },
+    '/wishlist': {
+      does: 'Список игр, которые вы хотите получить, с обложками и отслеживанием цен.',
+      why: 'Сообщество видит ваш список желаний — удобно, например, для подарков/совместных покупок.',
+    },
+    '/gaming': {
+      does: 'Патчноуты игр и уведомления о бесплатных играх (Epic / Steam / GOG).',
+      why: 'Игровое сообщество автоматически получает самую свежую информацию об обновлениях и раздачах.',
+    },
     '/notifications': {
       does: 'Оповещения о начале стрима (Twitch / Kick / YouTube / Rumble) в выбранный канал, с пингом роли.',
       why: 'Зрители не пропустят начало — бот объявляет о трансляции автоматически, как только вы выходите в эфир.',
@@ -2175,6 +2474,39 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   uk: {
+    '/eco': {
+      does: 'Економіка сервера: валюта, робота, магазин, азартні ігри, торговий майданчик, лотерея, а в eco 2.0 — біржа, улюбленці та колекційні картки.',
+      why: 'Гейміфікація: валюта дає привід проявляти активність, а магазин (наприклад, ролі за валюту) — мету, заради якої варто збирати.',
+      needs: [
+        'Увімкнена економіка',
+        'Для біржі/улюбленців/карток і магазину з базою даних: налаштована хмара (Supabase) і запущені схеми SQL',
+      ],
+      perms: [
+        { perm: 'Керування ролями', why: 'якщо в магазині ви продаєте ролі (зокрема тимчасові)' },
+      ],
+      tips: [
+        'Налаштуйте тимчасові ролі в магазині як «підписку» за валюту — вагомий привід заробляти.',
+        'Балансуйте джерела (daily/work/подарунки улюбленців) і витрати (магазин, gacha карток), щоб валюта не втрачала цінності.',
+      ],
+    },
+    '/economy': {
+      does: 'Інтеграція із системою GH0ST Tokens — заробіток за активність у Discord у зовнішній системі.',
+      why: 'Поєднує активність на сервері з ширшою екосистемою токенів (якщо ви її використовуєте).',
+      needs: ['Налаштований API GH0ST (ключі в Інтеграціях)'],
+    },
+    '/library': {
+      does: 'Ваша колекція ігор (Steam + IGDB) у стилі «Netflix для ігор» — обкладинки, описи, бібліотека.',
+      why: 'Ви показуєте спільноті, у що граєте/що маєте, у гарній формі замість сухого списку.',
+      needs: ['Ключі IGDB/Steam в Інтеграціях (для обкладинок і метаданих)'],
+    },
+    '/wishlist': {
+      does: 'Список ігор, які ви хочете отримати, з обкладинками та відстеженням цін.',
+      why: 'Спільнота бачить ваш список бажань — зручно, наприклад, для подарунків/спільних покупок.',
+    },
+    '/gaming': {
+      does: 'Патчноути ігор і сповіщення про безкоштовні ігри (Epic / Steam / GOG).',
+      why: 'Ігрова спільнота автоматично отримує найсвіжішу інформацію про оновлення та роздачі.',
+    },
     '/notifications': {
       does: 'Сповіщення про початок стріму (Twitch / Kick / YouTube / Rumble) у вибраний канал, з пінгом ролі.',
       why: 'Глядачі не пропустять початок — бот оголошує про трансляцію автоматично, щойно ви виходите в ефір.',
@@ -2405,6 +2737,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ja: {
+    '/eco': {
+      does: 'サーバー経済システム：通貨、work、ショップ、ギャンブル、マーケット、宝くじ、そして eco 2.0 では——株式市場、ペット、コレクションカード。',
+      why: 'ゲーミフィケーション：通貨は活動する理由を与え、ショップ（例：通貨で役職を購入）は——貯める価値のある目標になります。',
+      needs: [
+        '経済システムが有効',
+        '株式市場／ペット／カードとデータベース連動ショップを使うには：クラウド（Supabase）の設定と SQL スキーマの実行が必要',
+      ],
+      perms: [{ perm: 'ロールの管理', why: 'ショップで役職（期間限定を含む）を販売する場合' }],
+      tips: [
+        'ショップの期間限定役職を通貨で買う「サブスク」として設定しましょう——稼ぐ強力な理由になります。',
+        '供給源（daily／work／ペットのプレゼント）と消費先（ショップ、カード gacha）のバランスを取り、通貨の価値が下がらないようにしましょう。',
+      ],
+    },
+    '/economy': {
+      does: 'GH0ST Tokens システムとの連携——外部システムで Discord の活動に応じて報酬を得ます。',
+      why: 'サーバーの活動を、より広いトークンのエコシステム（利用している場合）とつなげます。',
+      needs: ['GH0ST API を設定済み（キーは連携に入力）'],
+    },
+    '/library': {
+      does: 'あなたのゲームコレクション（Steam + IGDB）を「ゲームのための Netflix」スタイルで——カバーアート、説明、ライブラリ。',
+      why: '味気ないリストの代わりに、見栄えのよい形でコミュニティに何をプレイ／所有しているか見せられます。',
+      needs: ['連携に IGDB／Steam のキーを入力（カバーアートとメタデータ用）'],
+    },
+    '/wishlist': {
+      does: '欲しいゲームのリスト。カバーアートと価格追跡つき。',
+      why: 'コミュニティがあなたのウィッシュリストを見られます——例：プレゼントや共同購入に便利です。',
+    },
+    '/gaming': {
+      does: 'ゲームのパッチノートと無料ゲームの通知（Epic／Steam／GOG）。',
+      why: 'ゲーミングコミュニティが、アップデートや無料配布に関する最新情報を自動で受け取れます。',
+    },
     '/notifications': {
       does: '配信が始まると（Twitch / Kick / YouTube / Rumble）、選んだチャンネルにロールメンション付きで通知します。',
       why: '視聴者が開始を見逃しません — 配信を始めた瞬間に、ボットが自動でライブを告知します。',
@@ -2611,6 +2974,37 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ar: {
+    '/eco': {
+      does: 'اقتصاد الخادم: العملة، العمل، المتجر، المقامرة، السوق، اليانصيب، وفي eco 2.0 — سوق الأسهم والحيوانات الأليفة وبطاقات قابلة للتجميع.',
+      why: 'التحفيز باللعب: العملة تمنح سببًا للنشاط، والمتجر (مثل الأدوار مقابل العملة) — هدفًا يستحق الادخار من أجله.',
+      needs: [
+        'تفعيل الاقتصاد',
+        'لسوق الأسهم/الحيوانات الأليفة/البطاقات والمتجر المعتمد على قاعدة بيانات: سحابة مُهيَّأة (Supabase) ومخططات SQL مُشغَّلة',
+      ],
+      perms: [{ perm: 'إدارة الأدوار', why: 'إذا كنت تبيع أدوارًا في المتجر (بما في ذلك المؤقتة)' }],
+      tips: [
+        'اضبط الأدوار المؤقتة في المتجر كـ «اشتراك» مقابل العملة — سبب قوي للكسب.',
+        'وازِن بين المصادر (daily/work/هدايا الحيوانات الأليفة) والمصارف (المتجر، gacha البطاقات) كي لا تفقد العملة قيمتها.',
+      ],
+    },
+    '/economy': {
+      does: 'التكامل مع نظام GH0ST Tokens — الكسب مقابل النشاط على Discord في نظام خارجي.',
+      why: 'يربط النشاط على الخادم بنظام بيئي أوسع للرموز (إذا كنت تستخدمه).',
+      needs: ['واجهة برمجة GH0ST مُهيَّأة (المفاتيح في التكاملات)'],
+    },
+    '/library': {
+      does: 'مجموعتك من الألعاب (Steam + IGDB) بأسلوب «Netflix للألعاب» — صور الأغلفة والأوصاف والمكتبة.',
+      why: 'تُظهر للمجتمع ما تلعبه/ما تملكه بشكل جميل بدلًا من قائمة جافة.',
+      needs: ['مفاتيح IGDB/Steam في التكاملات (لصور الأغلفة والبيانات الوصفية)'],
+    },
+    '/wishlist': {
+      does: 'قائمة بالألعاب التي ترغب في الحصول عليها، مع صور الأغلفة وتتبُّع الأسعار.',
+      why: 'يرى المجتمع قائمة أمنياتك — مفيدة مثلًا للهدايا/الشراء الجماعي.',
+    },
+    '/gaming': {
+      does: 'ملاحظات تحديثات الألعاب وإشعارات الألعاب المجانية (Epic / Steam / GOG).',
+      why: 'يحصل مجتمع الألعاب تلقائيًا على أحدث المعلومات عن التحديثات والعروض المجانية.',
+    },
     '/notifications': {
       does: 'تنبيهات عند بدء البث (Twitch / Kick / YouTube / Rumble) إلى قناة مختارة، مع إشارة للرتبة.',
       why: 'لن يفوّت المشاهدون البداية — يعلن البوت عن البث المباشر تلقائيًا بمجرد دخولك على الهواء.',
@@ -2806,6 +3200,42 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   id: {
+    '/eco': {
+      does: 'Ekonomi server: mata uang, work, toko, judi, pasar, lotre, dan di eco 2.0 — bursa saham, pet, dan kartu koleksi.',
+      why: 'Gamifikasi: mata uang memberi alasan untuk aktif, dan toko (mis. role yang dibeli dengan mata uang) — tujuan yang layak ditabung.',
+      needs: [
+        'Ekonomi diaktifkan',
+        'Untuk bursa saham/pet/kartu dan toko berbasis basis data: cloud dikonfigurasi (Supabase) dan skema SQL dijalankan',
+      ],
+      perms: [
+        {
+          perm: 'Kelola Peran',
+          why: 'jika kamu menjual role di toko (termasuk yang berbatas waktu)',
+        },
+      ],
+      tips: [
+        'Atur role berbatas waktu di toko sebagai “langganan” dengan mata uang — alasan kuat untuk mencari penghasilan.',
+        'Seimbangkan sumber (daily/work/hadiah pet) dan penyerap (toko, gacha kartu) agar mata uang tidak kehilangan nilai.',
+      ],
+    },
+    '/economy': {
+      does: 'Integrasi dengan sistem GH0ST Tokens — mendapatkan imbalan atas aktivitas di Discord lewat sistem eksternal.',
+      why: 'Menghubungkan aktivitas di server dengan ekosistem token yang lebih luas (jika kamu menggunakannya).',
+      needs: ['API GH0ST dikonfigurasi (kunci di Integrasi)'],
+    },
+    '/library': {
+      does: 'Koleksi game-mu (Steam + IGDB) bergaya “Netflix untuk game” — sampul, deskripsi, sebuah pustaka.',
+      why: 'Kamu menunjukkan kepada komunitas apa yang kamu mainkan/miliki dalam bentuk menarik alih-alih daftar yang membosankan.',
+      needs: ['Kunci IGDB/Steam di Integrasi (untuk sampul dan metadata)'],
+    },
+    '/wishlist': {
+      does: 'Daftar game yang ingin kamu dapatkan, lengkap dengan sampul dan pelacakan harga.',
+      why: 'Komunitas melihat daftar keinginanmu — berguna mis. untuk hadiah/patungan.',
+    },
+    '/gaming': {
+      does: 'Catatan pembaruan game dan notifikasi game gratis (Epic / Steam / GOG).',
+      why: 'Komunitas gaming-mu otomatis mendapatkan info terbaru tentang pembaruan dan game gratis.',
+    },
     '/notifications': {
       does: 'Peringatan saat siaran dimulai (Twitch / Kick / YouTube / Rumble) ke kanal pilihan, dengan ping peran.',
       why: 'Penontonmu tidak akan melewatkan awal siaran — bot mengumumkan live secara otomatis begitu kamu mengudara.',

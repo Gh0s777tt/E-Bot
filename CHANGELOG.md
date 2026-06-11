@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-279-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.209.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-280-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.210.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.210.0] — 🌍 i18n treści: „Jak to działa?" — chunk 6 (Ekonomia + Biblioteka)
+
+- `[#280]` 🌍 **„Jak to działa?" (`HowItWorks`) — chunk 6 treści: grupy Ekonomia + Biblioteka.** Kolejna porcja przyrostowej, trzeciej fali i18n treści.
+  - 🖥️ **Panel**: do `HOW_CONTENT_I18N` (`lib/howItWorksI18n.ts`) doszły strony `/eco`, `/economy`, `/library`, `/wishlist`, `/gaming` w **14 językach** (pl bazowo + 13 tłumaczeń). Marki/tech/nazwy funkcji (`GH0ST Tokens`/`Supabase`/`SQL`/`Steam`/`IGDB`/`Epic`/`GOG`/`Netflix`/`gacha`/`eco 2.0`/`daily`/`work`/`Discord`) nietłumaczone; uprawnienia w oficjalnych zlokalizowanych nazwach Discorda.
+  - 🧱 Wzorzec przyrostowy bez zmian: strony jeszcze nieprzetłumaczone wciąż spadają na PL (`HOW_IT_WORKS`). Przetłumaczono 31/37 stron; zostaje **6 stron** (ostatnia grupa „Inne": `/appearance /commands /custom-commands /integrations /profile /settings`).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0. Wstecznie zgodne (pl niezmienione).
 
 ## [0.209.0] — 🌍 i18n treści: „Jak to działa?" — chunk 5 (Powiadomienia)
 
