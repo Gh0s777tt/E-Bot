@@ -2,7 +2,8 @@
 // treści stron dodawane chunkami. Brak tłumaczenia strony/języka → fallback do PL (HOW_IT_WORKS).
 // Chunk 1: etykiety + strony /setup, /modules, /diagnostics. Chunk 2: /security, /moderation,
 // /logging, /audit (grupa „Bezpieczeństwo"). Chunk 3: /tickets, /modmail, /applications, /ai
-// (grupa „Wsparcie"). Kolejne chunki dokładają strony.
+// (grupa „Wsparcie"). Chunk 4a: /welcome, /levels, /leaderboard, /roles, /engagement (grupa
+// „Społeczność", część 1). Kolejne chunki dokładają strony.
 import type { HowEntry } from './howItWorks';
 import type { PanelLocale } from './panelI18n';
 
@@ -133,6 +134,46 @@ export const HOW_LABELS: Record<PanelLocale, HowLabels> = {
 // Tłumaczenia treści stron — przyrostowo. Pominięte strony/języki → fallback do PL (HOW_IT_WORKS).
 export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEntry>>> = {
   en: {
+    '/welcome': {
+      does: 'Welcome messages and images for new members + automatic role grant on join (autorole).',
+      why: 'The server’s first impression. Autorole instantly gives newcomers access (or a “guest” role until verification).',
+      needs: ['A welcome channel selected', 'An autorole role specified (if you use it)'],
+      perms: [
+        { perm: 'Manage Roles', why: 'to grant the welcome role/autorole' },
+        { perm: 'Send Messages + Embed Links', why: 'to send the welcome with an image' },
+      ],
+      tips: [
+        'The bot’s role must be ABOVE the role it grants on join.',
+        'Use variables ({user}, {server}, {memberCount}) to personalize the text.',
+      ],
+    },
+    '/levels': {
+      does: 'Levels and XP system: rewards activity (messages, time in voice channels) with points, per-level roles and rank cards.',
+      why: 'Motivates participation and builds progression — people come back to “hit” the next level and role.',
+      needs: ['Levels module enabled'],
+      perms: [{ perm: 'Manage Roles', why: 'to grant roles for the level reached' }],
+      tips: [
+        'Set XP multipliers for roles (e.g. boosters earn faster).',
+        'No-XP channels disable point collection (e.g. in a spam room).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'A ranking of your community’s most active members (by XP).',
+      why: 'Healthy competition — a visible ranking drives activity.',
+    },
+    '/roles': {
+      does: 'Reaction roles, buttons and role-select menus — members give themselves colors, ranks and interests.',
+      why: 'Self-service: zero moderator work for “give me role X”. The “pick one” mode keeps e.g. the color to just one.',
+      perms: [{ perm: 'Manage Roles', why: 'to grant and remove roles at the user’s request' }],
+      tips: ['The bot’s role must be ABOVE every role it hands out via the panel.'],
+    },
+    '/engagement': {
+      does: 'Engagement tools: starboard (best messages), giveaways, reminders and more.',
+      why: 'They keep the server active — contests and highlights give a reason to come back.',
+      perms: [
+        { perm: 'Add Reactions / Manage Messages', why: 'for the starboard and running giveaways' },
+      ],
+    },
     '/tickets': {
       does: 'Ticket system: a user opens a private ticket channel (with categories, a form, a rating and a transcript), and the staff reply.',
       why: 'Order in support: instead of DMs and chat chaos, every case gets its own channel and history.',
@@ -238,6 +279,60 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   de: {
+    '/welcome': {
+      does: 'Begrüßungsnachrichten und -bilder für neue Mitglieder + automatische Rollenvergabe beim Beitritt (autorole).',
+      why: 'Der erste Eindruck des Servers. Autorole gibt Neulingen sofort Zugang (oder eine „Gast“-Rolle bis zur Verifizierung).',
+      needs: [
+        'Ein ausgewählter Begrüßungskanal',
+        'Eine angegebene autorole-Rolle (falls verwendet)',
+      ],
+      perms: [
+        { perm: 'Rollen verwalten', why: 'um die Begrüßungsrolle/autorole zu vergeben' },
+        {
+          perm: 'Nachrichten senden + Links einbetten',
+          why: 'um die Begrüßung mit einem Bild zu senden',
+        },
+      ],
+      tips: [
+        'Die Rolle des Bots muss ÜBER der Rolle stehen, die er beim Beitritt vergibt.',
+        'Verwende Variablen ({user}, {server}, {memberCount}), um den Text zu personalisieren.',
+      ],
+    },
+    '/levels': {
+      does: 'Level- und XP-System: belohnt Aktivität (Nachrichten, Zeit in Sprachkanälen) mit Punkten, Rollen pro Level und Rang-Karten.',
+      why: 'Motiviert zur Teilnahme und schafft Progression — Leute kommen zurück, um das nächste Level und die nächste Rolle zu „knacken“.',
+      needs: ['Level-Modul aktiviert'],
+      perms: [{ perm: 'Rollen verwalten', why: 'um Rollen für das erreichte Level zu vergeben' }],
+      tips: [
+        'Lege XP-Multiplikatoren für Rollen fest (z. B. verdienen Booster schneller).',
+        'Kanäle ohne XP deaktivieren das Sammeln von Punkten (z. B. in einem Spam-Raum).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Eine Rangliste der aktivsten Mitglieder deiner Community (nach XP).',
+      why: 'Gesunder Wettbewerb — eine sichtbare Rangliste fördert die Aktivität.',
+    },
+    '/roles': {
+      does: 'Reaction-Roles, Buttons und Rollen-Auswahlmenüs — Mitglieder geben sich selbst Farben, Ränge und Interessen.',
+      why: 'Selbstbedienung: null Moderatorenaufwand bei „gib mir Rolle X“. Der „eine auswählen“-Modus sorgt z. B. dafür, dass nur eine Farbe gilt.',
+      perms: [
+        {
+          perm: 'Rollen verwalten',
+          why: 'um Rollen auf Wunsch des Nutzers zu vergeben und zu entfernen',
+        },
+      ],
+      tips: ['Die Rolle des Bots muss ÜBER jeder Rolle stehen, die er über das Panel vergibt.'],
+    },
+    '/engagement': {
+      does: 'Engagement-Tools: starboard (beste Nachrichten), Giveaways, Erinnerungen und mehr.',
+      why: 'Sie halten den Server aktiv — Wettbewerbe und Hervorhebungen geben einen Grund zurückzukommen.',
+      perms: [
+        {
+          perm: 'Reaktionen hinzufügen / Nachrichten verwalten',
+          why: 'für das starboard und das Durchführen von Giveaways',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Ticket-System: Ein Nutzer öffnet einen privaten Ticket-Kanal (mit Kategorien, einem Formular, einer Bewertung und einem Transkript), und das Team antwortet.',
       why: 'Ordnung im Support: statt DMs und Chaos im Chat bekommt jeder Fall einen eigenen Kanal und einen eigenen Verlauf.',
@@ -362,6 +457,54 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   es: {
+    '/welcome': {
+      does: 'Mensajes e imágenes de bienvenida para los nuevos miembros + asignación automática de rol al entrar (autorole).',
+      why: 'La primera impresión del servidor. Autorole da acceso inmediato a los recién llegados (o un rol «invitado» hasta la verificación).',
+      needs: ['Un canal de bienvenida seleccionado', 'Un rol autorole indicado (si lo usas)'],
+      perms: [
+        { perm: 'Gestionar roles', why: 'para asignar el rol de bienvenida/autorole' },
+        {
+          perm: 'Enviar mensajes + Insertar enlaces',
+          why: 'para enviar la bienvenida con una imagen',
+        },
+      ],
+      tips: [
+        'El rol del bot debe estar POR ENCIMA del rol que asigna al entrar.',
+        'Usa variables ({user}, {server}, {memberCount}) para personalizar el texto.',
+      ],
+    },
+    '/levels': {
+      does: 'Sistema de niveles y XP: recompensa la actividad (mensajes, tiempo en canales de voz) con puntos, roles por nivel y tarjetas de rango.',
+      why: 'Motiva la participación y crea progresión — la gente vuelve para «subir» al siguiente nivel y rol.',
+      needs: ['Módulo de niveles activado'],
+      perms: [{ perm: 'Gestionar roles', why: 'para asignar roles según el nivel alcanzado' }],
+      tips: [
+        'Configura multiplicadores de XP para roles (p. ej. los boosters ganan más rápido).',
+        'Los canales sin XP desactivan la acumulación de puntos (p. ej. en una sala de spam).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Una clasificación de los miembros más activos de tu comunidad (por XP).',
+      why: 'Competencia sana — una clasificación visible impulsa la actividad.',
+    },
+    '/roles': {
+      does: 'Reaction roles, botones y menús de selección de roles — los miembros se asignan a sí mismos colores, rangos e intereses.',
+      why: 'Autoservicio: cero trabajo para los moderadores con «dame el rol X». El modo «elegir uno» mantiene, por ejemplo, un solo color.',
+      perms: [
+        { perm: 'Gestionar roles', why: 'para asignar y quitar roles a petición del usuario' },
+      ],
+      tips: ['El rol del bot debe estar POR ENCIMA de cada rol que reparte a través del panel.'],
+    },
+    '/engagement': {
+      does: 'Herramientas de participación: starboard (mejores mensajes), sorteos, recordatorios y más.',
+      why: 'Mantienen el servidor activo — los concursos y las menciones destacadas dan un motivo para volver.',
+      perms: [
+        {
+          perm: 'Añadir reacciones / Gestionar mensajes',
+          why: 'para el starboard y la gestión de sorteos',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Sistema de tickets: un usuario abre un canal de ticket privado (con categorías, un formulario, una valoración y una transcripción), y el equipo responde.',
       why: 'Orden en el soporte: en lugar de DMs y caos en el chat, cada caso tiene su propio canal y su propio historial.',
@@ -482,6 +625,57 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   it: {
+    '/welcome': {
+      does: 'Messaggi e immagini di benvenuto per i nuovi membri + assegnazione automatica del ruolo all’ingresso (autorole).',
+      why: 'La prima impressione del server. Autorole dà subito accesso ai nuovi arrivati (o un ruolo «ospite» fino alla verifica).',
+      needs: ['Un canale di benvenuto selezionato', 'Un ruolo autorole indicato (se lo usi)'],
+      perms: [
+        { perm: 'Gestire i ruoli', why: 'per assegnare il ruolo di benvenuto/autorole' },
+        {
+          perm: 'Inviare messaggi + Incorporare link',
+          why: 'per inviare il benvenuto con un’immagine',
+        },
+      ],
+      tips: [
+        'Il ruolo del bot deve essere SOPRA il ruolo che assegna all’ingresso.',
+        'Usa le variabili ({user}, {server}, {memberCount}) per personalizzare il testo.',
+      ],
+    },
+    '/levels': {
+      does: 'Sistema di livelli e XP: premia l’attività (messaggi, tempo nei canali vocali) con punti, ruoli per livello e schede di grado.',
+      why: 'Motiva la partecipazione e crea progressione — le persone tornano per «sbloccare» il livello e il ruolo successivo.',
+      needs: ['Modulo livelli attivato'],
+      perms: [{ perm: 'Gestire i ruoli', why: 'per assegnare ruoli in base al livello raggiunto' }],
+      tips: [
+        'Imposta moltiplicatori di XP per i ruoli (es. i booster guadagnano più velocemente).',
+        'I canali senza XP disattivano la raccolta dei punti (es. in una stanza spam).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Una classifica dei membri più attivi della tua community (per XP).',
+      why: 'Competizione sana — una classifica visibile stimola l’attività.',
+    },
+    '/roles': {
+      does: 'Reaction role, pulsanti e menu di selezione dei ruoli — i membri si assegnano da soli colori, gradi e interessi.',
+      why: 'Self-service: zero lavoro per i moderatori con «dammi il ruolo X». La modalità «scegline uno» fa sì che, ad esempio, il colore resti uno solo.',
+      perms: [
+        {
+          perm: 'Gestire i ruoli',
+          why: 'per assegnare e rimuovere ruoli su richiesta dell’utente',
+        },
+      ],
+      tips: ['Il ruolo del bot deve essere SOPRA ogni ruolo che distribuisce tramite il pannello.'],
+    },
+    '/engagement': {
+      does: 'Strumenti di coinvolgimento: starboard (messaggi migliori), giveaway, promemoria e altro.',
+      why: 'Mantengono il server attivo — concorsi e messaggi in evidenza danno un motivo per tornare.',
+      perms: [
+        {
+          perm: 'Aggiungere reazioni / Gestire i messaggi',
+          why: 'per lo starboard e la gestione dei giveaway',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Sistema di ticket: un utente apre un canale-ticket privato (con categorie, un modulo, una valutazione e una trascrizione), e lo staff risponde.',
       why: 'Ordine nel supporto: invece di DM e caos in chat, ogni richiesta ha un proprio canale e una propria cronologia.',
@@ -603,6 +797,57 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   fr: {
+    '/welcome': {
+      does: 'Messages et images de bienvenue pour les nouveaux membres + attribution automatique d’un rôle à l’arrivée (autorole).',
+      why: 'La première impression du serveur. L’autorole donne immédiatement accès aux nouveaux venus (ou un rôle « invité » jusqu’à la vérification).',
+      needs: ['Un salon de bienvenue sélectionné', 'Un rôle autorole indiqué (si tu l’utilises)'],
+      perms: [
+        { perm: 'Gérer les rôles', why: 'pour attribuer le rôle de bienvenue/autorole' },
+        {
+          perm: 'Envoyer des messages + Intégrer des liens',
+          why: 'pour envoyer le message de bienvenue avec une image',
+        },
+      ],
+      tips: [
+        'Le rôle du bot doit être AU-DESSUS du rôle qu’il attribue à l’arrivée.',
+        'Utilise les variables ({user}, {server}, {memberCount}) pour personnaliser le texte.',
+      ],
+    },
+    '/levels': {
+      does: 'Système de niveaux et d’XP : récompense l’activité (messages, temps passé dans les salons vocaux) par des points, des rôles par niveau et des cartes de rang.',
+      why: 'Motive la participation et crée une progression — les gens reviennent pour « décrocher » le niveau et le rôle suivants.',
+      needs: ['Module de niveaux activé'],
+      perms: [{ perm: 'Gérer les rôles', why: 'pour attribuer des rôles selon le niveau atteint' }],
+      tips: [
+        'Définis des multiplicateurs d’XP pour les rôles (par ex. les boosters gagnent plus vite).',
+        'Les salons sans XP désactivent la collecte de points (par ex. dans un salon de spam).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Un classement des membres les plus actifs de ta communauté (selon l’XP).',
+      why: 'Une compétition saine — un classement visible stimule l’activité.',
+    },
+    '/roles': {
+      does: 'Reaction roles, boutons et menus de sélection de rôles — les membres s’attribuent eux-mêmes des couleurs, des rangs et des centres d’intérêt.',
+      why: 'En libre-service : zéro travail pour les modérateurs face aux « donne-moi le rôle X ». Le mode « en choisir un » garde par ex. une seule couleur à la fois.',
+      perms: [
+        {
+          perm: 'Gérer les rôles',
+          why: 'pour attribuer et retirer les rôles à la demande de l’utilisateur',
+        },
+      ],
+      tips: ['Le rôle du bot doit être AU-DESSUS de chaque rôle qu’il distribue via le panneau.'],
+    },
+    '/engagement': {
+      does: 'Outils d’engagement : starboard (les meilleurs messages), giveaways, rappels et plus encore.',
+      why: 'Ils maintiennent l’activité du serveur — concours et mises en avant donnent une raison de revenir.',
+      perms: [
+        {
+          perm: 'Ajouter des réactions / Gérer les messages',
+          why: 'pour le starboard et la gestion des giveaways',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Système de tickets : un utilisateur ouvre un salon-ticket privé (avec catégories, formulaire, évaluation et transcription), et le staff répond.',
       why: 'De l’ordre dans le support : au lieu de MP et de chaos dans le chat, chaque demande a son propre salon et son historique.',
@@ -733,6 +978,54 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   pt: {
+    '/welcome': {
+      does: 'Mensagens e imagens de boas-vindas para novos membros + atribuição automática de um cargo à entrada (autorole).',
+      why: 'A primeira impressão do servidor. O autorole dá acesso imediato aos recém-chegados (ou um cargo “convidado” até à verificação).',
+      needs: ['Um canal de boas-vindas selecionado', 'Um cargo de autorole indicado (se o usares)'],
+      perms: [
+        { perm: 'Gerir cargos', why: 'para atribuir o cargo de boas-vindas/autorole' },
+        {
+          perm: 'Enviar mensagens + Incorporar ligações',
+          why: 'para enviar as boas-vindas com uma imagem',
+        },
+      ],
+      tips: [
+        'O cargo do bot tem de estar ACIMA do cargo que atribui à entrada.',
+        'Usa as variáveis ({user}, {server}, {memberCount}) para personalizar o texto.',
+      ],
+    },
+    '/levels': {
+      does: 'Sistema de níveis e XP: recompensa a atividade (mensagens, tempo em canais de voz) com pontos, cargos por nível e cartões de classificação.',
+      why: 'Motiva a participação e cria progressão — as pessoas voltam para “alcançar” o próximo nível e cargo.',
+      needs: ['Módulo de níveis ativado'],
+      perms: [{ perm: 'Gerir cargos', why: 'para atribuir cargos consoante o nível atingido' }],
+      tips: [
+        'Define multiplicadores de XP para os cargos (por ex. os boosters ganham mais depressa).',
+        'Os canais sem XP desativam a recolha de pontos (por ex. numa sala de spam).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Uma classificação dos membros mais ativos da tua comunidade (por XP).',
+      why: 'Competição saudável — uma classificação visível impulsiona a atividade.',
+    },
+    '/roles': {
+      does: 'Reaction roles, botões e menus de seleção de cargos — os membros atribuem a si próprios cores, postos e interesses.',
+      why: 'Autosserviço: zero trabalho para os moderadores com os “dá-me o cargo X”. O modo “escolher um” mantém, por ex., uma só cor.',
+      perms: [
+        { perm: 'Gerir cargos', why: 'para atribuir e remover cargos a pedido do utilizador' },
+      ],
+      tips: ['O cargo do bot tem de estar ACIMA de cada cargo que distribui através do painel.'],
+    },
+    '/engagement': {
+      does: 'Ferramentas de envolvimento: starboard (as melhores mensagens), giveaways, lembretes e muito mais.',
+      why: 'Mantêm o servidor ativo — concursos e destaques dão um motivo para voltar.',
+      perms: [
+        {
+          perm: 'Adicionar reações / Gerir mensagens',
+          why: 'para o starboard e a gestão dos giveaways',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Sistema de tickets: um utilizador abre um canal-ticket privado (com categorias, formulário, avaliação e transcrição), e o staff responde.',
       why: 'Ordem no suporte: em vez de DMs e caos no chat, cada caso tem o seu próprio canal e histórico.',
@@ -845,6 +1138,44 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   zh: {
+    '/welcome': {
+      does: '为新成员发送欢迎消息和图片，并在加入时自动授予身份组（autorole）。',
+      why: '服务器的第一印象。autorole 让新人立即获得访问权限（或在验证前给予「访客」身份组）。',
+      needs: ['已选择欢迎频道', '已指定 autorole 身份组（如果使用）'],
+      perms: [
+        { perm: '管理身份组', why: '用于授予欢迎身份组/autorole' },
+        { perm: '发送消息 + 嵌入链接', why: '用于发送带图片的欢迎消息' },
+      ],
+      tips: [
+        '机器人的身份组必须高于它在加入时授予的身份组。',
+        '使用变量（{user}、{server}、{memberCount}）来个性化文本。',
+      ],
+    },
+    '/levels': {
+      does: '等级与 XP 系统：用积分、按等级身份组和等级卡奖励活跃度（发言、语音频道时长）。',
+      why: '激励参与并构建进度感——人们会回来「冲」下一个等级和身份组。',
+      needs: ['已启用等级模块'],
+      perms: [{ perm: '管理身份组', why: '用于授予达到等级所对应的身份组' }],
+      tips: [
+        '为身份组设置 XP 倍率（例如助力者获取更快）。',
+        '无 XP 频道会停止积分收集（例如在刷屏房间）。',
+      ],
+    },
+    '/leaderboard': {
+      does: '按 XP 排列你社区中最活跃成员的排行榜。',
+      why: '良性竞争——可见的排行榜能带动活跃度。',
+    },
+    '/roles': {
+      does: '反应身份组、按钮和身份组选择菜单——成员自行获取颜色、等级和兴趣身份组。',
+      why: '自助服务：处理「给我 X 身份组」无需任何管理工作。「只选一个」模式确保例如颜色只有一个。',
+      perms: [{ perm: '管理身份组', why: '用于按用户请求授予和移除身份组' }],
+      tips: ['机器人的身份组必须高于它通过面板分发的每个身份组。'],
+    },
+    '/engagement': {
+      does: '互动工具：starboard（最佳消息）、抽奖、提醒等。',
+      why: '保持服务器活跃——比赛和精选给了大家回来的理由。',
+      perms: [{ perm: '添加反应 / 管理消息', why: '用于 starboard 和运行抽奖' }],
+    },
     '/tickets': {
       does: '工单系统：用户开启一个私密的工单频道（含分类、表单、评分与记录存档），由客服人员回复。',
       why: '让支持井然有序：不再依赖私信和混乱的聊天，每个问题都有独立的频道与历史记录。',
@@ -937,6 +1268,44 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ko: {
+    '/welcome': {
+      does: '새 멤버를 위한 환영 메시지와 이미지 + 입장 시 자동 역할 부여(autorole).',
+      why: '서버의 첫인상. autorole은 새 멤버에게 즉시 접근 권한을 줍니다(또는 인증 전까지 「게스트」 역할).',
+      needs: ['환영 채널 선택됨', 'autorole 역할 지정됨(사용하는 경우)'],
+      perms: [
+        { perm: '역할 관리', why: '환영 역할/autorole을 부여하기 위해' },
+        { perm: '메시지 보내기 + 링크 첨부', why: '이미지가 포함된 환영을 보내기 위해' },
+      ],
+      tips: [
+        '봇의 역할은 입장 시 부여하는 역할보다 위에 있어야 합니다.',
+        '변수({user}, {server}, {memberCount})를 사용해 문구를 개인화하세요.',
+      ],
+    },
+    '/levels': {
+      does: '레벨 및 XP 시스템: 활동(메시지, 음성 채널 이용 시간)을 포인트, 레벨별 역할, 랭크 카드로 보상합니다.',
+      why: '참여를 유도하고 성장감을 만듭니다 — 사람들은 다음 레벨과 역할을 「찍기」 위해 다시 돌아옵니다.',
+      needs: ['레벨 모듈 활성화됨'],
+      perms: [{ perm: '역할 관리', why: '도달한 레벨에 대한 역할을 부여하기 위해' }],
+      tips: [
+        '역할에 XP 배율을 설정하세요(예: 부스터는 더 빠르게 획득).',
+        'XP 미적용 채널은 포인트 수집을 비활성화합니다(예: 도배 방).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'XP 기준으로 커뮤니티에서 가장 활발한 멤버의 순위표.',
+      why: '건전한 경쟁 — 눈에 보이는 순위표가 활동을 촉진합니다.',
+    },
+    '/roles': {
+      does: '반응 역할, 버튼, 역할 선택 메뉴 — 멤버가 직접 색상, 등급, 관심사 역할을 받습니다.',
+      why: '셀프 서비스: 「X 역할 주세요」에 대한 모더레이터 작업이 전혀 필요 없습니다. 「하나만 선택」 모드는 예를 들어 색상을 하나로 유지합니다.',
+      perms: [{ perm: '역할 관리', why: '사용자 요청에 따라 역할을 부여하고 회수하기 위해' }],
+      tips: ['봇의 역할은 패널을 통해 나눠주는 모든 역할보다 위에 있어야 합니다.'],
+    },
+    '/engagement': {
+      does: '참여 도구: starboard(베스트 메시지), 경품 추첨, 알림 등.',
+      why: '서버를 활발하게 유지합니다 — 이벤트와 하이라이트가 다시 찾아올 이유를 줍니다.',
+      perms: [{ perm: '반응 추가 / 메시지 관리', why: 'starboard와 경품 추첨 운영을 위해' }],
+    },
     '/tickets': {
       does: '티켓 시스템: 사용자가 비공개 티켓 채널(카테고리, 양식, 평가, 기록 포함)을 열면 운영진이 응답합니다.',
       why: '지원 업무 정리: DM과 혼란스러운 채팅 대신, 모든 문의가 각자의 채널과 기록을 갖습니다.',
@@ -1035,6 +1404,54 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ru: {
+    '/welcome': {
+      does: 'Приветственные сообщения и картинки для новых участников + автоматическая выдача роли при входе (autorole).',
+      why: 'Первое впечатление о сервере. Autorole сразу даёт новичкам доступ (или роль «гость» до прохождения верификации).',
+      needs: ['Выбранный канал приветствий', 'Указанная роль autorole (если используете)'],
+      perms: [
+        { perm: 'Управление ролями', why: 'чтобы выдать приветственную роль/autorole' },
+        {
+          perm: 'Отправка сообщений + Встраивание ссылок',
+          why: 'чтобы отправить приветствие с картинкой',
+        },
+      ],
+      tips: [
+        'Роль бота должна быть ВЫШЕ роли, которую он выдаёт при входе.',
+        'Используйте переменные ({user}, {server}, {memberCount}), чтобы персонализировать текст.',
+      ],
+    },
+    '/levels': {
+      does: 'Система уровней и XP: вознаграждает активность (сообщения, время в голосовых каналах) очками, ролями за уровень и карточками ранга.',
+      why: 'Мотивирует участвовать и выстраивает прогресс — люди возвращаются, чтобы «выбить» следующий уровень и роль.',
+      needs: ['Включённый модуль уровней'],
+      perms: [{ perm: 'Управление ролями', why: 'чтобы выдавать роли за достигнутый уровень' }],
+      tips: [
+        'Задайте множители XP для ролей (например, бустеры получают быстрее).',
+        'Каналы без XP отключают начисление очков (например, в спам-комнате).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Рейтинг самых активных участников (по XP) вашего сообщества.',
+      why: 'Здоровая конкуренция — видимый рейтинг подстёгивает активность.',
+    },
+    '/roles': {
+      does: 'Reaction-role, кнопки и меню выбора ролей — участники сами выдают себе цвета, ранги и интересы.',
+      why: 'Самообслуживание: ноль работы модераторов при «дай мне роль X». Режим «выбери одну» следит, чтобы, например, цвет был только один.',
+      perms: [
+        { perm: 'Управление ролями', why: 'чтобы выдавать и снимать роли по запросу пользователя' },
+      ],
+      tips: ['Роль бота должна быть ВЫШЕ каждой роли, которую он раздаёт через панель.'],
+    },
+    '/engagement': {
+      does: 'Инструменты вовлечения: starboard (лучшие сообщения), розыгрыши, напоминания и другое.',
+      why: 'Поддерживают активность на сервере — конкурсы и отметки дают повод возвращаться.',
+      perms: [
+        {
+          perm: 'Добавление реакций / Управление сообщениями',
+          why: 'для starboard и проведения розыгрышей',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Система обращений: пользователь открывает приватный канал-тикет (с категориями, формой, оценкой и транскриптом), а персонал отвечает.',
       why: 'Порядок в поддержке: вместо личных сообщений и хаоса в чате у каждого обращения есть отдельный канал и история.',
@@ -1149,6 +1566,54 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   uk: {
+    '/welcome': {
+      does: 'Привітальні повідомлення та зображення для нових учасників + автоматична видача ролі під час входу (autorole).',
+      why: 'Перше враження від сервера. Autorole одразу дає новачкам доступ (або роль «гість» до проходження верифікації).',
+      needs: ['Вибраний канал привітань', 'Зазначена роль autorole (якщо використовуєте)'],
+      perms: [
+        { perm: 'Керування ролями', why: 'щоб видати привітальну роль/autorole' },
+        {
+          perm: 'Надсилання повідомлень + Вбудовування посилань',
+          why: 'щоб надіслати привітання із зображенням',
+        },
+      ],
+      tips: [
+        'Роль бота має бути ВИЩЕ за роль, яку вона видає під час входу.',
+        'Використовуйте змінні ({user}, {server}, {memberCount}), щоб персоналізувати текст.',
+      ],
+    },
+    '/levels': {
+      does: 'Система рівнів та XP: винагороджує активність (повідомлення, час у голосових каналах) очками, ролями за рівень і картками рангу.',
+      why: 'Мотивує до участі та вибудовує прогрес — люди повертаються, щоб «вибити» наступний рівень і роль.',
+      needs: ['Увімкнений модуль рівнів'],
+      perms: [{ perm: 'Керування ролями', why: 'щоб видавати ролі за досягнутий рівень' }],
+      tips: [
+        'Задайте множники XP для ролей (наприклад, бустери отримують швидше).',
+        'Канали без XP вимикають нарахування очок (наприклад, у спам-кімнаті).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Рейтинг найактивніших учасників (за XP) вашої спільноти.',
+      why: 'Здорова конкуренція — видимий рейтинг підштовхує активність.',
+    },
+    '/roles': {
+      does: 'Reaction-role, кнопки та меню вибору ролей — учасники самі видають собі кольори, ранги та інтереси.',
+      why: 'Самообслуговування: нуль роботи модераторів при «дай мені роль X». Режим «вибери одну» стежить, щоб, наприклад, колір був лише один.',
+      perms: [
+        { perm: 'Керування ролями', why: 'щоб видавати та знімати ролі на запит користувача' },
+      ],
+      tips: ['Роль бота має бути ВИЩЕ за кожну роль, яку вона роздає через панель.'],
+    },
+    '/engagement': {
+      does: 'Інструменти залучення: starboard (найкращі повідомлення), розіграші, нагадування та інше.',
+      why: 'Підтримують активність на сервері — конкурси та відзнаки дають привід повертатися.',
+      perms: [
+        {
+          perm: 'Додавання реакцій / Керування повідомленнями',
+          why: 'для starboard та проведення розіграшів',
+        },
+      ],
+    },
     '/tickets': {
       does: 'Система звернень: користувач відкриває приватний канал-тикет (з категоріями, формою, оцінкою та транскриптом), а команда підтримки відповідає.',
       why: 'Порядок у підтримці: замість особистих повідомлень і хаосу в чаті кожна справа має окремий канал та історію.',
@@ -1263,6 +1728,51 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ja: {
+    '/welcome': {
+      does: '新規メンバー向けの歓迎メッセージと画像 + 参加時の自動ロール付与（autorole）。',
+      why: 'サーバーの第一印象。autorole は新規メンバーに即座にアクセス権を与えます（または認証までの「ゲスト」ロール）。',
+      needs: ['歓迎チャンネルが選択済み', 'autorole ロールが指定済み（使用する場合）'],
+      perms: [
+        { perm: 'ロールの管理', why: '歓迎ロール/autorole を付与するため' },
+        { perm: 'メッセージを送信 + 埋め込みリンク', why: '画像付きの歓迎を送信するため' },
+      ],
+      tips: [
+        'ボットのロールは、参加時に付与するロールより上位にある必要があります。',
+        '変数（{user}、{server}、{memberCount}）を使ってテキストをパーソナライズしましょう。',
+      ],
+    },
+    '/levels': {
+      does: 'レベルと XP のシステム：アクティビティ（メッセージ、ボイスチャンネルの滞在時間）をポイント、レベル別ロール、ランクカードで報酬します。',
+      why: '参加を促し、成長を生み出します — 次のレベルとロールを「上げる」ために人々が戻ってきます。',
+      needs: ['レベルモジュールが有効'],
+      perms: [{ perm: 'ロールの管理', why: '到達したレベルに対応するロールを付与するため' }],
+      tips: [
+        'ロールに XP 倍率を設定しましょう（例：ブースターはより速く獲得）。',
+        'XP なしのチャンネルはポイント収集を無効にします（例：スパム部屋）。',
+      ],
+    },
+    '/leaderboard': {
+      does: 'XP 順に並んだ、コミュニティで最もアクティブなメンバーのランキング。',
+      why: '健全な競争 — 見えるランキングがアクティビティを促進します。',
+    },
+    '/roles': {
+      does: 'リアクションロール、ボタン、ロール選択メニュー — メンバーが自分で色、ランク、興味のロールを取得します。',
+      why: 'セルフサービス：「X ロールをください」にモデレーターの作業は一切不要。「1つだけ選択」モードは、例えば色を1つに保ちます。',
+      perms: [
+        { perm: 'ロールの管理', why: 'ユーザーのリクエストに応じてロールを付与・剥奪するため' },
+      ],
+      tips: ['ボットのロールは、パネルで配布するすべてのロールより上位にある必要があります。'],
+    },
+    '/engagement': {
+      does: 'エンゲージメントツール：starboard（ベストメッセージ）、giveaway、リマインダーなど。',
+      why: 'サーバーを活発に保ちます — コンテストやハイライトが戻ってくる理由になります。',
+      perms: [
+        {
+          perm: 'リアクションの追加 / メッセージの管理',
+          why: 'starboard と giveaway の運営のため',
+        },
+      ],
+    },
     '/tickets': {
       does: 'チケットシステム：ユーザーがプライベートなチケットチャンネル（カテゴリー、フォーム、評価、記録付き）を開き、スタッフが対応します。',
       why: 'サポートの整理：DMやチャットの混乱の代わりに、各案件が専用のチャンネルと履歴を持ちます。',
@@ -1367,6 +1877,44 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   ar: {
+    '/welcome': {
+      does: 'رسائل وصور ترحيبية للأعضاء الجدد + منح تلقائي للرتبة عند الانضمام (autorole).',
+      why: 'الانطباع الأول عن الخادم. يمنح autorole القادمين الجدد صلاحية الوصول فورًا (أو رتبة «ضيف» إلى حين التحقق).',
+      needs: ['تحديد قناة الترحيب', 'تحديد رتبة autorole (إذا كنت تستخدمها)'],
+      perms: [
+        { perm: 'إدارة الأدوار', why: 'لمنح رتبة الترحيب/autorole' },
+        { perm: 'إرسال الرسائل + تضمين الروابط', why: 'لإرسال الترحيب مع صورة' },
+      ],
+      tips: [
+        'يجب أن تكون رتبة البوت أعلى من الرتبة التي يمنحها عند الانضمام.',
+        'استخدم المتغيرات ({user}, {server}, {memberCount}) لتخصيص النص.',
+      ],
+    },
+    '/levels': {
+      does: 'نظام المستويات وXP: يكافئ النشاط (الرسائل، الوقت في القنوات الصوتية) بالنقاط ورتب لكل مستوى وبطاقات الرتبة.',
+      why: 'يحفّز على المشاركة ويبني تقدمًا — يعود الناس لـ«بلوغ» المستوى والرتبة التاليين.',
+      needs: ['تفعيل وحدة المستويات'],
+      perms: [{ perm: 'إدارة الأدوار', why: 'لمنح الرتب وفقًا للمستوى المُحقَّق' }],
+      tips: [
+        'اضبط مضاعفات XP للرتب (مثلًا يكسب الداعمون أسرع).',
+        'القنوات الخالية من XP تعطّل جمع النقاط (مثلًا في غرفة السبام).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'تصنيف لأكثر أعضاء مجتمعك نشاطًا (حسب XP).',
+      why: 'منافسة صحية — التصنيف الظاهر يدفع النشاط.',
+    },
+    '/roles': {
+      does: 'reaction-role وأزرار وقوائم اختيار الرتب — يمنح الأعضاء أنفسهم الألوان والرتب والاهتمامات بأنفسهم.',
+      why: 'خدمة ذاتية: صفر عمل للمشرفين عند «أعطني رتبة X». يحرص وضع «اختر واحدة» على أن يكون اللون مثلًا واحدًا فقط.',
+      perms: [{ perm: 'إدارة الأدوار', why: 'لمنح الرتب وسحبها بناءً على طلب المستخدم' }],
+      tips: ['يجب أن تكون رتبة البوت أعلى من كل رتبة يوزّعها عبر اللوحة.'],
+    },
+    '/engagement': {
+      does: 'أدوات التفاعل: starboard (أفضل الرسائل)، السحوبات، التذكيرات والمزيد.',
+      why: 'تُبقي الخادم نشطًا — المسابقات والتمييز تمنح سببًا للعودة.',
+      perms: [{ perm: 'إضافة التفاعلات / إدارة الرسائل', why: 'لـ starboard وإجراء السحوبات' }],
+    },
     '/tickets': {
       does: 'نظام التذاكر: يفتح المستخدم قناة تذكرة خاصة (مع الفئات ونموذج وتقييم ونص محفوظ للمحادثة)، ويرد فريق الدعم.',
       why: 'تنظيم الدعم: بدلاً من الرسائل الخاصة والفوضى في الدردشة، تحصل كل حالة على قناتها الخاصة وسجلها.',
@@ -1467,6 +2015,54 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
     },
   },
   id: {
+    '/welcome': {
+      does: 'Pesan dan gambar sambutan untuk anggota baru + pemberian peran otomatis saat bergabung (autorole).',
+      why: 'Kesan pertama server. Autorole langsung memberi akses kepada anggota baru (atau peran “tamu” hingga verifikasi).',
+      needs: [
+        'Saluran sambutan yang dipilih',
+        'Peran autorole yang ditentukan (jika kamu memakainya)',
+      ],
+      perms: [
+        { perm: 'Kelola Peran', why: 'untuk memberikan peran sambutan/autorole' },
+        { perm: 'Kirim Pesan + Sematkan Tautan', why: 'untuk mengirim sambutan beserta gambar' },
+      ],
+      tips: [
+        'Peran bot harus berada DI ATAS peran yang diberikannya saat bergabung.',
+        'Gunakan variabel ({user}, {server}, {memberCount}) untuk mempersonalisasi teks.',
+      ],
+    },
+    '/levels': {
+      does: 'Sistem level dan XP: memberi imbalan atas keaktifan (pesan, waktu di saluran suara) berupa poin, peran per level, dan kartu peringkat.',
+      why: 'Mendorong partisipasi dan membangun progres — orang kembali untuk “mencapai” level dan peran berikutnya.',
+      needs: ['Modul level diaktifkan'],
+      perms: [{ perm: 'Kelola Peran', why: 'untuk memberikan peran sesuai level yang dicapai' }],
+      tips: [
+        'Atur pengali XP untuk peran (mis. booster mendapatkannya lebih cepat).',
+        'Saluran tanpa XP menonaktifkan pengumpulan poin (mis. di ruang spam).',
+      ],
+    },
+    '/leaderboard': {
+      does: 'Peringkat anggota paling aktif di komunitasmu (berdasarkan XP).',
+      why: 'Persaingan yang sehat — peringkat yang terlihat mendorong keaktifan.',
+    },
+    '/roles': {
+      does: 'Reaction role, tombol, dan menu pemilihan peran — anggota memberi sendiri warna, pangkat, dan minat mereka.',
+      why: 'Swalayan: nol kerja moderator untuk “beri aku peran X”. Mode “pilih satu” menjaga, mis., warna tetap satu saja.',
+      perms: [
+        {
+          perm: 'Kelola Peran',
+          why: 'untuk memberikan dan mencabut peran atas permintaan pengguna',
+        },
+      ],
+      tips: ['Peran bot harus berada DI ATAS setiap peran yang dibagikannya melalui panel.'],
+    },
+    '/engagement': {
+      does: 'Alat keterlibatan: starboard (pesan terbaik), giveaway, pengingat, dan lainnya.',
+      why: 'Menjaga server tetap aktif — kontes dan sorotan memberi alasan untuk kembali.',
+      perms: [
+        { perm: 'Tambah Reaksi / Kelola Pesan', why: 'untuk starboard dan menjalankan giveaway' },
+      ],
+    },
     '/tickets': {
       does: 'Sistem tiket: pengguna membuka kanal-tiket pribadi (dengan kategori, formulir, penilaian, dan transkrip), lalu staf membalas.',
       why: 'Bantuan jadi rapi: alih-alih DM dan kekacauan di obrolan, setiap kasus punya kanal dan riwayatnya sendiri.',

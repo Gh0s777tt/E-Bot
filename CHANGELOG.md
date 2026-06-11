@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-276-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.206.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-277-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.207.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.207.0] — 🌍 i18n treści: „Jak to działa?" — chunk 4a (Społeczność, cz. 1)
+
+- `[#277]` 🌍 **„Jak to działa?" (`HowItWorks`) — chunk 4a treści: grupa Społeczność (część 1).** Kolejna porcja przyrostowej, trzeciej fali i18n treści.
+  - 🖥️ **Panel**: do `HOW_CONTENT_I18N` (`lib/howItWorksI18n.ts`) doszły strony `/welcome`, `/levels`, `/leaderboard`, `/roles`, `/engagement` w **14 językach** (pl bazowo + 13 tłumaczeń). **Placeholdery powitań `{user}`/`{server}`/`{memberCount}` zachowane dosłownie** we wszystkich językach; terminy-funkcje (`autorole`, `starboard`, `XP`) i `Discord` nietłumaczone; uprawnienia w oficjalnych zlokalizowanych nazwach Discorda.
+  - 🧱 Wzorzec przyrostowy bez zmian: strony jeszcze nieprzetłumaczone wciąż spadają na PL (`HOW_IT_WORKS`). Po tym chunku zostają **19 stron** treści do przetłumaczenia (m.in. druga połowa grupy Społeczność).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0. Wstecznie zgodne (pl niezmienione).
 
 ## [0.206.0] — 🌍 i18n treści: „Jak to działa?" — chunk 3 (Wsparcie)
 
