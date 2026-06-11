@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-284-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.214.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-285-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.215.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.215.0] — 🌍 i18n UI panelu — strona /logging (logi serwera)
+
+- `[#285]` 🌍 **i18n UI panelu — kolejna fala: `/logging` (dziennik zdarzeń serwera).**
+  - 🖥️ **Panel**: 23 nowe klucze `ui.logging.*` × **14 języków** w `panelI18n.ts` (parzystość 14×23=322). `app/logging/page.tsx` (serwer) + `LoggingForm.tsx` (klient) na `tp()` — w tym 6 grup logowania (label+hint każda) przeniesionych z literałów na klucze i18n (`GROUPS` trzyma `labelKey`/`hintKey`, render tłumaczy). `embed`/`Voice`/`intents`/`~30 s`/`·` nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 4/~40 stron.
 
 ## [0.214.0] — 🌍 i18n UI panelu — strony /modules + /leaderboard
 

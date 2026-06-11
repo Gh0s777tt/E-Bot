@@ -4,16 +4,27 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import type { LoggingConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
-const GROUPS: { key: keyof LoggingConfig; label: string; hint: string }[] = [
-  { key: 'messages', label: 'Wiadomości', hint: 'usunięcie · edycja · masowe usunięcie' },
-  { key: 'members', label: 'Członkowie', hint: 'dołączenie · wyjście' },
-  { key: 'memberUpdates', label: 'Zmiany członków', hint: 'nick · role' },
-  { key: 'moderation', label: 'Moderacja', hint: 'ban · unban' },
-  { key: 'server', label: 'Serwer', hint: 'kanały · role (utworzenie/usunięcie)' },
-  { key: 'voice', label: 'Voice', hint: 'dołączenie · wyjście · przeniesienie' },
+// Etykiety/podpowiedzi grup po kluczach i18n (tłumaczone w renderze przez tp).
+const GROUPS: { key: keyof LoggingConfig; labelKey: string; hintKey: string }[] = [
+  { key: 'messages', labelKey: 'ui.logging.grpMessages', hintKey: 'ui.logging.grpMessagesHint' },
+  { key: 'members', labelKey: 'ui.logging.grpMembers', hintKey: 'ui.logging.grpMembersHint' },
+  {
+    key: 'memberUpdates',
+    labelKey: 'ui.logging.grpMemberUpdates',
+    hintKey: 'ui.logging.grpMemberUpdatesHint',
+  },
+  {
+    key: 'moderation',
+    labelKey: 'ui.logging.grpModeration',
+    hintKey: 'ui.logging.grpModerationHint',
+  },
+  { key: 'server', labelKey: 'ui.logging.grpServer', hintKey: 'ui.logging.grpServerHint' },
+  { key: 'voice', labelKey: 'ui.logging.grpVoice', hintKey: 'ui.logging.grpVoiceHint' },
 ];
 
 export default function LoggingForm({
@@ -23,6 +34,7 @@ export default function LoggingForm({
   initial: LoggingConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<LoggingConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -52,11 +64,11 @@ export default function LoggingForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Logi serwera włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.logging.enabledLabel')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał logów</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.logging.channelLabel')}</span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
@@ -65,7 +77,9 @@ export default function LoggingForm({
       </label>
 
       <div className="space-y-2">
-        <span className="text-sm font-semibold text-white/90">Co logować</span>
+        <span className="text-sm font-semibold text-white/90">
+          {tp(lang, 'ui.logging.whatToLog')}
+        </span>
         <div className="grid gap-2 sm:grid-cols-2">
           {GROUPS.map((g) => (
             <label
@@ -79,8 +93,8 @@ export default function LoggingForm({
                 className="mt-0.5 h-4 w-4 accent-accent"
               />
               <span>
-                <span className="font-semibold text-white/90">{g.label}</span>
-                <span className="block text-xs text-muted">{g.hint}</span>
+                <span className="font-semibold text-white/90">{tp(lang, g.labelKey)}</span>
+                <span className="block text-xs text-muted">{tp(lang, g.hintKey)}</span>
               </span>
             </label>
           ))}
@@ -89,7 +103,7 @@ export default function LoggingForm({
 
       <div className="space-y-2">
         <span className="text-sm font-semibold text-white/90">
-          Kanały ignorowane (dla zdarzeń wiadomości)
+          {tp(lang, 'ui.logging.ignoredLabel')}
         </span>
         <ChannelSelect
           value=""
@@ -99,7 +113,7 @@ export default function LoggingForm({
             setC({ ...c, ignoreChannels: [...c.ignoreChannels, v] })
           }
           channels={guild.channels}
-          placeholder="+ dodaj kanał"
+          placeholder={tp(lang, 'ui.logging.addChannel')}
         />
         <div className="flex flex-wrap gap-1.5">
           {c.ignoreChannels.map((id) => (
@@ -114,7 +128,7 @@ export default function LoggingForm({
                   setC({ ...c, ignoreChannels: c.ignoreChannels.filter((x) => x !== id) })
                 }
                 className="text-muted hover:text-accent"
-                aria-label="Usuń"
+                aria-label={tp(lang, 'ui.logging.remove')}
               >
                 <X size={11} />
               </button>
@@ -124,11 +138,7 @@ export default function LoggingForm({
       </div>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Bot wysyła embed na kanał logów przy każdym zdarzeniu z włączonych grup. Kanał logów i
-        kanały ignorowane są pomijane dla zdarzeń wiadomości. Wymaga włączonych intencji (są
-        aktywne) — konfigurację bot pobiera na żywo (~30 s).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.logging.footNote')}</p>
     </div>
   );
 }
