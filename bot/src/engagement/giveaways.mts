@@ -2,10 +2,14 @@
 // Wejście sprawdza wymagania (rola/poziom/zaproszenia). Kolumny req/bonus + weight są opcjonalne
 // (select=* + fallback upsert) → brak regresji, jeśli ALTER jeszcze nie odpalony.
 import { type ButtonInteraction, type Client, MessageFlags, type TextChannel } from 'discord.js';
+import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
+import { logTx } from '../economy/txlog.mts';
 import { cloudSelect, cloudUpdate, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { getSettings, setSetting } from '../lib/db.mts';
 
 type Gw = {
   id: string;
+  guild_id?: string | null;
   channel_id: string;
   prize: string;
   winners: number;
@@ -125,7 +129,7 @@ async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const due = await cloudSelect<Gw>(
     'giveaways',
-    `select=id,channel_id,prize,winners&ended=eq.false&ends_at=lte.${new Date().toISOString()}&limit=10`,
+    `select=id,guild_id,channel_id,prize,winners&ended=eq.false&ends_at=lte.${new Date().toISOString()}&limit=10`,
   );
   for (const g of due) {
     await cloudUpdate('giveaways', `id=eq.${g.id}`, { ended: true }).catch(() => {});
@@ -147,7 +151,72 @@ async function tick(client: Client): Promise<void> {
         `🎉 Giveaway **${g.prize}** zakończony!\nGratulacje: ${winners.map((w) => `<@${w}>`).join(', ')}`,
       )
       .catch(() => {});
+    await awardReward(client, g.id, g.guild_id ?? '', winners, ch as TextChannel).catch((e) =>
+      console.warn('[giveaway] reward:', (e as Error).message),
+    );
   }
+}
+
+// Wypłata bonusu $/XP zwycięzcom (klucz settings 'gwreward:<id>' ustawiony przez /giveaway start).
+// Most do ekonomii/levelingu — ten sam mechanizm co akcje custom-commands. Bez zmian schematu Supabase.
+async function awardReward(
+  client: Client,
+  giveawayId: string,
+  guildId: string,
+  winners: string[],
+  ch: TextChannel,
+): Promise<void> {
+  if (!guildId || !winners.length) return;
+  const raw = getSettings()[`gwreward:${giveawayId}`];
+  if (!raw) return;
+  let reward: { kind?: string; amount?: number };
+  try {
+    reward = JSON.parse(raw) as { kind?: string; amount?: number };
+  } catch {
+    return;
+  }
+  const amount = Math.floor(reward.amount ?? 0);
+  if (amount <= 0) return;
+
+  if (reward.kind === 'money') {
+    if (!ecoConfig(guildId).enabled) return;
+    for (const uid of winners) {
+      const u = await getEcoUser(guildId, uid);
+      const user = await client.users.fetch(uid).catch(() => null);
+      await saveEcoUser({
+        guild_id: guildId,
+        user_id: uid,
+        username: user?.username ?? uid,
+        wallet: u.wallet + amount,
+      });
+      logTx(guildId, uid, amount, 'giveaway');
+    }
+    await ch.send(`💰 Każdy zwycięzca otrzymał **${amount}** monet!`).catch(() => {});
+  } else if (reward.kind === 'xp') {
+    for (const uid of winners) {
+      const rows = await cloudSelect<{ xp: number }>(
+        'user_levels',
+        `select=xp&guild_id=eq.${guildId}&user_id=eq.${uid}`,
+      ).catch(() => [] as { xp: number }[]);
+      const newXp = (rows[0]?.xp ?? 0) + amount;
+      const user = await client.users.fetch(uid).catch(() => null);
+      await cloudUpsert(
+        'user_levels',
+        [
+          {
+            guild_id: guildId,
+            user_id: uid,
+            username: user?.username ?? uid,
+            xp: newXp,
+            level: levelForXp(newXp),
+          },
+        ],
+        'guild_id,user_id',
+      ).catch(() => {});
+    }
+    await ch.send(`⭐ Każdy zwycięzca otrzymał **${amount}** XP!`).catch(() => {});
+  }
+  setSetting(`gwreward:${giveawayId}`, ''); // sprzątanie klucza po wypłacie
 }
 
 export function startGiveaways(client: Client): void {

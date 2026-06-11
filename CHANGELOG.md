@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-268-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.198.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-269-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.199.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.199.0] — 🎁 Giveaway: nagrody pieniężne i XP
+
+- `[#269]` 🎁 **Giveaway — bonus dla zwycięzców: monety lub XP** (z roadmapy sek.4: „Giveaway: nagrody pieniężne/XP, nie tylko tekst"). **Bez zmian schematu Supabase** i bez ryzyka regresji.
+  - 🤖 **Bot** (`/giveaway start`): dwie nowe opcje — `nagroda_typ` (💬 tekst / 💰 monety / ⭐ XP) i `nagroda_kwota` (dla każdego zwycięzcy). Embed pokazuje bonus. Przy losowaniu (`engagement/giveaways.mts`) bot **wypłaca** każdemu zwycięzcy monety (przez most ekonomii, z `logTx`) lub XP (upsert `user_levels`) i ogłasza to na kanale.
+  - 🔒 **Bezpieczeństwo zmiany**: bonus trzymany w `settings['gwreward:<id>']` (nie w tabeli `giveaways`), więc **insert giveawayu jest nietknięty** — zero ryzyka dla istniejących konkursów. Monety respektują `economy.enabled` danego serwera; klucz sprzątany po wypłacie.
+  - Wymaga `deploy-commands` (nowe opcje `/giveaway`). Bot-only (giveaway sterowany komendą). Wstecznie zgodne (domyślnie „tekst").
 
 ## [0.198.0] — 🎨 Gotowe motywy kart (powitania + rangi)
 

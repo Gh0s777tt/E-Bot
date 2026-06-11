@@ -14,6 +14,7 @@ import {
 } from 'discord.js';
 import { weightedPick } from '../engagement/giveaways.mts';
 import { cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { setSetting } from '../lib/db.mts';
 import { formatDuration, parseDuration } from '../lib/duration.mts';
 
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
@@ -56,6 +57,23 @@ export const data = new SlashCommandBuilder()
           .setDescription('Losów dla bonus-roli (2–10)')
           .setMinValue(2)
           .setMaxValue(10),
+      )
+      .addStringOption((o) =>
+        o
+          .setName('nagroda_typ')
+          .setDescription('Dodatkowa nagroda wypłacana zwycięzcom (oprócz tekstu)')
+          .addChoices(
+            { name: '💬 Tylko tekst', value: 'text' },
+            { name: '💰 Monety (ekonomia)', value: 'money' },
+            { name: '⭐ XP (poziomy)', value: 'xp' },
+          ),
+      )
+      .addIntegerOption((o) =>
+        o
+          .setName('nagroda_kwota')
+          .setDescription('Ile monet/XP dla KAŻDEGO zwycięzcy')
+          .setMinValue(1)
+          .setMaxValue(1000000),
       ),
   )
   .addSubcommand((s) =>
@@ -126,6 +144,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const reqInvites = interaction.options.getInteger('wymagane_zaproszenia') ?? 0;
   const bonusRole = interaction.options.getRole('bonus_rola');
   const bonusWeight = interaction.options.getInteger('bonus_losy') ?? 1;
+  const rewardKind = interaction.options.getString('nagroda_typ') ?? 'text';
+  const rewardAmount = interaction.options.getInteger('nagroda_kwota') ?? 0;
+  const hasBonus = (rewardKind === 'money' || rewardKind === 'xp') && rewardAmount > 0;
+  const rewardNote = hasBonus
+    ? `\n**+ Bonus dla każdego:** ${rewardKind === 'money' ? `💰 ${rewardAmount} monet` : `⭐ ${rewardAmount} XP`}`
+    : '';
 
   const id = randomUUID();
   const endsAt = Date.now() + ms;
@@ -139,7 +163,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     .setColor(0xe50914)
     .setTitle('🎉 GIVEAWAY 🎉')
     .setDescription(
-      `**Nagroda:** ${prize}\n**Zwycięzców:** ${winners}\n**Koniec:** <t:${Math.floor(endsAt / 1000)}:R>${
+      `**Nagroda:** ${prize}${rewardNote}\n**Zwycięzców:** ${winners}\n**Koniec:** <t:${Math.floor(endsAt / 1000)}:R>${
         reqLines.length ? `\n\n**Wymagania:**\n${reqLines.join('\n')}` : ''
       }\n\nKliknij 🎉 aby dołączyć!`,
     )
@@ -171,5 +195,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       bonus_weight: bonusWeight,
     },
   ]);
+  // Bonus $/XP: zapis poza tabelą giveaways (klucz settings 'gwreward:<id>') — insert wyżej nietknięty,
+  // więc brak ryzyka regresji. Poller wypłaca przy losowaniu. Bez zmian schematu Supabase.
+  if (hasBonus)
+    setSetting(`gwreward:${id}`, JSON.stringify({ kind: rewardKind, amount: rewardAmount }));
   await interaction.reply(eph(`✅ Giveaway wystartował! Koniec za **${formatDuration(ms)}**.`));
 }
