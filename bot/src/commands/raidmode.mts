@@ -31,6 +31,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
   const on = interaction.options.getString('stan', true) === 'on';
-  setRaidmode(on);
+  setRaidmode(interaction.guild.id, on);
   await interaction.reply({ content: t(locale, on ? 'raidmode.on' : 'raidmode.off') });
 }

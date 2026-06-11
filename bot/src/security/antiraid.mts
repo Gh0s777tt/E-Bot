@@ -3,7 +3,7 @@
 import { type Client, Events, type Guild, type GuildMember, type TextChannel } from 'discord.js';
 import { applyLockdown } from '../commands/lockdown.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings, setSetting } from '../lib/db.mts';
+import { getGuildSettings, guildKey, setGuildSetting } from '../lib/db.mts';
 
 type Action = 'kick' | 'ban' | 'timeout';
 type AntiRaidConfig = {
@@ -35,60 +35,78 @@ const DEFAULT: AntiRaidConfig = {
   autoLockdown: false,
 };
 
-let cfg: AntiRaidConfig = { ...DEFAULT };
-
-// Ręczny tryb raid (/raidmode) — kick każdego nowego wejścia do odwołania. Działa niezależnie
-// od cfg.enabled; stan trwały w settings 'raidmode' (przeżywa restart, widoczny dla panelu).
-let manualRaid = false;
-export function setRaidmode(on: boolean): void {
-  manualRaid = on;
-  setSetting('raidmode', on ? '1' : '');
-}
-
-function refresh(): void {
-  const raw = getSettings()['antiraid_config'];
+// Etap K — config per-serwer z cache TTL 30 s (handler reaguje na każde wejście).
+const cfgCache = new Map<string, { cfg: AntiRaidConfig; at: number }>();
+function cfgFor(guildId: string): AntiRaidConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['antiraid_config'];
+  let cfg: AntiRaidConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<AntiRaidConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    cfg = { ...DEFAULT };
   }
-  manualRaid = getSettings().raidmode === '1';
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
-const recent: { m: GuildMember; at: number }[] = [];
-let raidUntil = 0;
-let lastManualAlert = 0; // throttle alertów raidmode (1/min — fala nie zaleje kanału)
+// Ręczny tryb raid (/raidmode) — kick każdego nowego wejścia do odwołania. PER-SERWER: stan trwały
+// w settings danego serwera (g:<id>:raidmode). Czytany świeżo przy wejściu (łapie też zmianę z
+// panelu); niezależny od cfg.enabled.
+export function setRaidmode(guildId: string, on: boolean): void {
+  setGuildSetting(guildId, 'raidmode', on ? '1' : '');
+}
+function raidModeOn(guildId: string): boolean {
+  return getGuildSettings(guildId).raidmode === '1';
+}
 
-// ── Log zdarzeń do chmury ('antiraid_state') → panel pokazuje alarm + historię ──
+// Stan detekcji fali — PER-SERWER (inaczej wejścia z różnych serwerów wpadałyby do jednego okna,
+// a tryb obronny jednego serwera karałby wejścia na innym).
+const recentByGuild = new Map<string, { m: GuildMember; at: number }[]>();
+const raidUntilByGuild = new Map<string, number>();
+const lastManualAlertByGuild = new Map<string, number>(); // throttle alertów raidmode (1/min)
+
+// ── Log zdarzeń do chmury (PER-SERWER 'g:<id>:antiraid_state') → panel pokazuje alarm + historię ──
 type RaidEvent = { ts: number; type: 'raid' | 'alt' | 'young'; detail: string; count: number };
-let events: RaidEvent[] = [];
-let lastRaidAt = 0;
-let evLoaded = false;
+const eventsByGuild = new Map<string, RaidEvent[]>();
+const lastRaidAtByGuild = new Map<string, number>();
+const evLoaded = new Set<string>();
 
-async function loadEvents(): Promise<void> {
-  if (evLoaded) return;
-  evLoaded = true;
+async function loadEvents(guildId: string): Promise<void> {
+  if (evLoaded.has(guildId)) return;
+  evLoaded.add(guildId);
   if (!hasCloud()) return;
   try {
-    const raw = await cloudGetSetting('antiraid_state');
+    const raw = await cloudGetSetting(guildKey(guildId, 'antiraid_state'));
     if (raw) {
       const d = JSON.parse(raw) as { events?: RaidEvent[]; lastRaidAt?: number };
-      events = d.events ?? [];
-      lastRaidAt = d.lastRaidAt ?? 0;
+      eventsByGuild.set(guildId, d.events ?? []);
+      lastRaidAtByGuild.set(guildId, d.lastRaidAt ?? 0);
     }
   } catch {
     /* brak / błąd → puste */
   }
 }
 
-async function record(type: RaidEvent['type'], detail: string, count = 1): Promise<void> {
+async function record(
+  guildId: string,
+  type: RaidEvent['type'],
+  detail: string,
+  count = 1,
+): Promise<void> {
   if (!hasCloud()) return;
-  await loadEvents();
+  await loadEvents(guildId);
+  const events = eventsByGuild.get(guildId) ?? [];
   events.unshift({ ts: Date.now(), type, detail, count });
-  if (events.length > 30) events = events.slice(0, 30);
-  if (type === 'raid') lastRaidAt = Date.now();
+  const trimmed = events.slice(0, 30);
+  eventsByGuild.set(guildId, trimmed);
+  if (type === 'raid') lastRaidAtByGuild.set(guildId, Date.now());
   try {
-    await cloudSetSetting('antiraid_state', JSON.stringify({ events, lastRaidAt }));
+    await cloudSetSetting(
+      guildKey(guildId, 'antiraid_state'),
+      JSON.stringify({ events: trimmed, lastRaidAt: lastRaidAtByGuild.get(guildId) ?? 0 }),
+    );
   } catch {
     /* trudno — kolejne zdarzenie spróbuje ponownie */
   }
@@ -103,34 +121,32 @@ async function punishWith(member: GuildMember, action: Action, reason: string): 
     /* brak uprawnień / już wyszedł — ignoruj */
   }
 }
-async function punish(member: GuildMember, reason: string): Promise<void> {
-  await punishWith(member, cfg.action, reason);
-}
-
-async function alert(guild: Guild, text: string): Promise<void> {
-  if (!cfg.alertChannelId) return;
-  const ch = await guild.channels.fetch(cfg.alertChannelId).catch(() => null);
+async function alert(guild: Guild, channelId: string, text: string): Promise<void> {
+  if (!channelId) return;
+  const ch = await guild.channels.fetch(channelId).catch(() => null);
   if (ch?.isTextBased() && 'send' in ch) await (ch as TextChannel).send(text).catch(() => {});
 }
 
 export function startAntiRaid(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
+    const gid = member.guild.id;
+
     // Ręczny tryb raid — kick natychmiast, zanim cokolwiek innego (działa też przy cfg.enabled=false).
-    if (manualRaid) {
+    if (raidModeOn(gid)) {
       await punishWith(member, 'kick', 'Raidmode: ręczna blokada nowych wejść');
       const now0 = Date.now();
-      if (now0 - lastManualAlert > 60_000) {
-        lastManualAlert = now0;
+      if (now0 - (lastManualAlertByGuild.get(gid) ?? 0) > 60_000) {
+        lastManualAlertByGuild.set(gid, now0);
         await alert(
           member.guild,
+          cfgFor(gid).alertChannelId,
           '🛡️ **Raidmode aktywny** — wyrzucam nowe wejścia. Wyłącz: `/raidmode stan:off`.',
         );
       }
       return;
     }
+
+    const cfg = cfgFor(gid);
     if (!cfg.enabled) return;
     const now = Date.now();
 
@@ -138,12 +154,18 @@ export function startAntiRaid(client: Client): void {
     if (cfg.minAccountAgeDays > 0) {
       const ageDays = (now - member.user.createdTimestamp) / 86_400_000;
       if (ageDays < cfg.minAccountAgeDays) {
-        await punish(member, `Anti-raid: konto młodsze niż ${cfg.minAccountAgeDays} dni`);
+        await punishWith(
+          member,
+          cfg.action,
+          `Anti-raid: konto młodsze niż ${cfg.minAccountAgeDays} dni`,
+        );
         await alert(
           member.guild,
+          cfg.alertChannelId,
           `🛡️ **Anti-raid:** <@${member.id}> — konto < ${cfg.minAccountAgeDays}d → ${cfg.action}.`,
         );
         void record(
+          gid,
           'young',
           `${member.user.tag} — konto < ${cfg.minAccountAgeDays}d → ${cfg.action}`,
         );
@@ -161,48 +183,54 @@ export function startAntiRaid(client: Client): void {
       if (reasons.length) {
         await alert(
           member.guild,
+          cfg.alertChannelId,
           `🕵️ **Możliwy alt:** <@${member.id}> (\`${member.user.tag}\`) — ${reasons.join(', ')}.${
             cfg.altAction !== 'alert' ? ` → ${cfg.altAction}` : ''
           }`,
         );
         if (cfg.altAction !== 'alert')
           await punishWith(member, cfg.altAction, `Alt-detection: ${reasons.join(', ')}`);
-        void record('alt', `${member.user.tag} — ${reasons.join(', ')}`);
+        void record(gid, 'alt', `${member.user.tag} — ${reasons.join(', ')}`);
       }
     }
 
-    // Okno przesuwne wejść.
+    // Okno przesuwne wejść — per-serwer.
+    const recent = recentByGuild.get(gid) ?? [];
     recent.push({ m: member, at: now });
     const cut = now - cfg.windowSec * 1000;
     while (recent.length && recent[0].at < cut) recent.shift();
+    recentByGuild.set(gid, recent);
 
     // Już w trybie obronnym — karz każde kolejne wejście.
-    if (now < raidUntil) {
-      await punish(member, 'Anti-raid (fala wejść)');
+    if (now < (raidUntilByGuild.get(gid) ?? 0)) {
+      await punishWith(member, cfg.action, 'Anti-raid (fala wejść)');
       return;
     }
 
     // Próg przekroczony — start trybu obronnego + kara dla całej fali.
     if (cfg.joinCount > 0 && recent.length >= cfg.joinCount) {
       const count = recent.length;
-      raidUntil = now + Math.max(cfg.windowSec, 30) * 1000;
+      const until = now + Math.max(cfg.windowSec, 30) * 1000;
+      raidUntilByGuild.set(gid, until);
       await alert(
         member.guild,
-        `🚨 **Anti-raid:** ${count} wejść w ${cfg.windowSec}s — tryb obronny (${cfg.action}) na ~${Math.round((raidUntil - now) / 1000)}s.`,
+        cfg.alertChannelId,
+        `🚨 **Anti-raid:** ${count} wejść w ${cfg.windowSec}s — tryb obronny (${cfg.action}) na ~${Math.round((until - now) / 1000)}s.`,
       );
-      void record('raid', `${count} wejść w ${cfg.windowSec}s → ${cfg.action}`, count);
+      void record(gid, 'raid', `${count} wejść w ${cfg.windowSec}s → ${cfg.action}`, count);
       if (cfg.autoLockdown) {
         const locked = await applyLockdown(member.guild, true, 'Auto anti-raid: fala wejść');
         await alert(
           member.guild,
+          cfg.alertChannelId,
           `🔒 **Auto-lockdown:** zablokowano ${locked} kanałów. Zdejmij ręcznie: \`/lockdown off\``,
         );
       }
       const wave = [...recent];
-      recent.length = 0;
-      for (const r of wave) await punish(r.m, 'Anti-raid (fala wejść)');
+      recentByGuild.set(gid, []);
+      for (const r of wave) await punishWith(r.m, cfg.action, 'Anti-raid (fala wejść)');
     }
   });
 
-  console.log('[antiraid] anti-raid aktywny (config z panelu).');
+  console.log('[antiraid] anti-raid aktywny (config per-serwer z panelu).');
 }

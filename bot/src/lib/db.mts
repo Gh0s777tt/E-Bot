@@ -120,6 +120,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'invites_config',
   'rankcard_config',
   'heat_config',
+  'antiraid_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

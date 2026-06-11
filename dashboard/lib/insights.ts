@@ -1,6 +1,6 @@
 // Insights pulpitu: wzrost serwera + alarm anti-raid. Czyta klucze pisane przez bota
-// ('server_history', 'antiraid_state') przez getRawSetting (Supabase, server-side).
-import { getRawSetting } from './data';
+// ('server_history' globalnie, 'antiraid_state' PER-SERWER) z Supabase, server-side.
+import { getGuildRawSetting, getRawSetting } from './data';
 
 export type GrowthPoint = { day: string; members: number; boosts: number; channels: number };
 
@@ -25,7 +25,7 @@ export type AntiraidState = { events: RaidEvent[]; lastRaidAt: number };
 
 export async function getAntiraidState(): Promise<AntiraidState> {
   try {
-    const raw = await getRawSetting('antiraid_state');
+    const raw = await getGuildRawSetting('antiraid_state');
     if (!raw) return { events: [], lastRaidAt: 0 };
     const d = JSON.parse(raw) as Partial<AntiraidState>;
     return { events: Array.isArray(d.events) ? d.events : [], lastRaidAt: d.lastRaidAt ?? 0 };

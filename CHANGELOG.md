@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-259-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.189.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-260-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.190.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.190.0] — 🛡️ Anti-raid per-serwer (2. moduł SAFETY, 7 plików) · Etap K (C-23/?)
+
+- `[#260]` 🛡️ **Anti-raid (`antiraid` + raidmode) per-serwer** — dwudziesta druga fala i **najbardziej złożona migracja w projekcie** (7 plików). Globalny stan oznaczał realne bugi multi-serwer: wejścia z różnych serwerów wpadały do **jednego okna detekcji** fali, tryb obronny jednego serwera karał wejścia na innym, a `/raidmode` był globalny (włączenie na serwerze A wyrzucało nowych na B).
+  - 🤖 **Bot** (`security/antiraid.mts`): cały globalny stan przerobiony na **per-serwer**: config → cache `cfgFor(guildId)` TTL 30 s; okno wejść (`recentByGuild`), tryb obronny (`raidUntilByGuild`), throttle alertu (`lastManualAlertByGuild`), log zdarzeń (`eventsByGuild` + cloud `g:<id>:antiraid_state`) — wszystko `Map` po `guildId`. Flaga **raidmode** trzymana per-serwer (`g:<id>:raidmode`), czytana świeżo przy każdym wejściu (łapie zmianę z `/raidmode`, `/panic` i panelu). `setRaidmode()` → `setRaidmode(guildId, on)`; `alert()`/`record()` przyjmują kanał/`guildId`. Komendy `/raidmode` i `/panic` przekazują `guild.id`.
+  - 🖥️ **Panel**: `antiraid_config` w `MIGRATED_GUILD_KEYS` (panel + bot); `getAntiRaidConfig`/`saveAntiRaidConfig` (`community.ts`) przez router. `/api/raidmode` (przełącznik pulpitu) i `getAntiraidState` (alarm/historia w `insights.ts`) czytają/piszą **per-serwer** (`getGuildRawSetting`/`setGuildRawSetting` — wybrany serwer z cookie). Wzrost serwera (`server_history`) zostaje globalny (osobna analityka).
+  - Wsteczna zgodność (fallback global). Etap K (C-23). Bot + panel (bot pierwszy). Bez zmian definicji komend.
 
 ## [0.189.0] — 🛡️ Heat system per-serwer (1. moduł SAFETY) · Etap K (C-22/?)
 

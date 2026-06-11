@@ -300,6 +300,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'invites_config',
   'rankcard_config',
   'heat_config',
+  'antiraid_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

@@ -222,7 +222,7 @@ export const ANTIRAID_DEFAULT: AntiRaidConfig = {
 };
 
 export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {
-  const raw = await getRawSetting('antiraid_config');
+  const raw = await getConfigSetting('antiraid_config');
   if (!raw) return structuredClone(ANTIRAID_DEFAULT);
   try {
     return { ...ANTIRAID_DEFAULT, ...(JSON.parse(raw) as Partial<AntiRaidConfig>) };
@@ -231,7 +231,7 @@ export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {
   }
 }
 export async function saveAntiRaidConfig(cfg: AntiRaidConfig): Promise<void> {
-  await setRawSetting('antiraid_config', JSON.stringify(cfg));
+  await setConfigSetting('antiraid_config', JSON.stringify(cfg));
 }
 
 // ── AI-pomoc (RAG-lite, Tor C) ──

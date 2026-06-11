@@ -35,7 +35,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
   const on = interaction.options.getString('stan', true) === 'on';
   await interaction.deferReply();
-  setRaidmode(on);
+  setRaidmode(guild.id, on);
   const channels = await applyLockdown(
     guild,
     on,
