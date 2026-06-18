@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { FreeGamesConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ export default function FreeGamesForm({
   initial: FreeGamesConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<FreeGamesConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,14 +43,15 @@ export default function FreeGamesForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Feed darmowych gier (Epic) włączony</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.gaming.freeEnabled')}</span>
       </label>
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał ogłoszeń</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.gaming.channelAnnounce')}</span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
+          placeholder={tp(lang, 'ui.gaming.channelPh')}
         />
       </label>
       <label className="flex items-center gap-3 text-sm">
@@ -57,16 +61,10 @@ export default function FreeGamesForm({
           onChange={(e) => setC({ ...c, multiStore: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">
-          Multi-store (Steam / GOG / … przez ITAD — wymaga klucza ITAD)
-        </span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.gaming.multiStore')}</span>
       </label>
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Bot co ~6 h sprawdza darmowe gry w Epic Games Store (publiczne API, bez klucza) i ogłasza
-        nowe na wybranym kanale. Z opcją <strong>multi-store</strong> dochodzą darmowe rozdania
-        (−100%) z innych sklepów (Steam/GOG/…) przez ITAD.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.gaming.freeHelp')}</p>
     </div>
   );
 }

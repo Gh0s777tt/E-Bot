@@ -4,6 +4,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { PatchApp, PatchNotesConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -20,6 +22,7 @@ export default function PatchNotesForm({
   initial: PatchNotesConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const [channelId, setChannelId] = useState(initial.channelId);
   const idRef = useRef(0);
@@ -57,22 +60,29 @@ export default function PatchNotesForm({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Patch-notes (Steam) włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.gaming.patchEnabled')}</span>
       </label>
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał ogłoszeń</span>
-        <ChannelSelect value={channelId} onChange={setChannelId} channels={guild.channels} />
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.gaming.channelAnnounce')}</span>
+        <ChannelSelect
+          value={channelId}
+          onChange={setChannelId}
+          channels={guild.channels}
+          placeholder={tp(lang, 'ui.gaming.channelPh')}
+        />
       </label>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Śledzone gry (Steam appID)</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.gaming.trackedLabel')}
+          </span>
           <button
             type="button"
             onClick={() => setRows([...rows, { appId: 0, name: '', k: `p${idRef.current++}` }])}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
           >
-            <Plus size={12} /> Dodaj
+            <Plus size={12} /> {tp(lang, 'ui.gaming.addBtn')}
           </button>
         </div>
         {rows.map((r) => (
@@ -91,14 +101,14 @@ export default function PatchNotesForm({
               onChange={(e) =>
                 setRows(rows.map((x) => (x.k === r.k ? { ...x, name: e.target.value } : x)))
               }
-              placeholder="Nazwa gry"
+              placeholder={tp(lang, 'ui.gaming.namePh')}
               className={inputCls}
             />
             <button
               type="button"
               onClick={() => setRows(rows.filter((x) => x.k !== r.k))}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.gaming.delAria')}
             >
               <Trash2 size={14} />
             </button>
@@ -108,12 +118,9 @@ export default function PatchNotesForm({
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Bot co ~1 h sprawdza aktualności Steam dla podanych gier i ogłasza nowe wpisy. AppID
-        znajdziesz w adresie sklepu Steam (np.{' '}
-        <code>
-          store.steampowered.com/app/<strong>730</strong>/
-        </code>{' '}
-        → CS2).
+        {tp(lang, 'ui.gaming.patchHelpPre')}
+        <code>store.steampowered.com/app/730/</code>
+        {tp(lang, 'ui.gaming.patchHelpPost')}
       </p>
     </div>
   );

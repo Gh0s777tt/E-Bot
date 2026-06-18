@@ -766,6 +766,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Powitania: WŁĄCZONE',
     'ui.welcome.statusOff': 'Powitania: WYŁĄCZONE',
     'ui.welcome.heading': 'Powitania + autorole',
+    'ui.gaming.intro':
+      'Funkcje gamingowe oparte na publicznych API (bez kluczy): automatyczny feed darmowych gier z Epic Games Store oraz patch-notes / aktualności wybranych gier ze Steam. Bot ogłasza nowości na wskazanych kanałach.',
+    'ui.gaming.freeHeading': 'Darmowe gry (Epic)',
+    'ui.gaming.patchHeading': 'Patch-notes (Steam)',
+    'ui.gaming.priceHeading': 'Śledzenie cen (ITAD)',
+    'ui.gaming.backlogHeading': 'Backlog gier',
+    'ui.gaming.backlogHelpPre': 'Osobista lista „do ogrania" — komenda ',
+    'ui.gaming.backlogHelpMid':
+      'ze statusami: do ogrania / w trakcie / ukończone / porzucone. Włącz moduł „Backlog gier" w Centrum sterowania (wymaga ',
+    'ui.gaming.backlogHelpPost': ' w Supabase).',
+    'ui.gaming.channelAnnounce': 'Kanał ogłoszeń',
+    'ui.gaming.channelPh': '— wybierz kanał —',
+    'ui.gaming.freeEnabled': 'Feed darmowych gier (Epic) włączony',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … przez ITAD — wymaga klucza ITAD)',
+    'ui.gaming.freeHelp':
+      'Bot co ~6 h sprawdza darmowe gry w Epic Games Store (publiczne API, bez klucza) i ogłasza nowe na wybranym kanale. Z opcją multi-store dochodzą darmowe rozdania (−100%) z innych sklepów (Steam/GOG/…) przez ITAD.',
+    'ui.gaming.patchEnabled': 'Patch-notes (Steam) włączone',
+    'ui.gaming.trackedLabel': 'Śledzone gry (Steam appID)',
+    'ui.gaming.addBtn': 'Dodaj',
+    'ui.gaming.namePh': 'Nazwa gry',
+    'ui.gaming.delAria': 'Usuń',
+    'ui.gaming.patchHelpPre':
+      'Bot co ~1 h sprawdza aktualności Steam dla podanych gier i ogłasza nowe wpisy. AppID znajdziesz w adresie sklepu Steam (np. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Śledzenie cen (ITAD) włączone',
+    'ui.gaming.priceChannelLabel': 'Kanał alertów o promocjach',
+    'ui.gaming.priceHelp':
+      'Bot co ~12 h sprawdza w IsThereAnyDeal ceny gier z Listy życzeń i ogłasza nowe promocje (z najniższą ceną i sklepem). Wymaga klucza ITAD_API_KEY po stronie bota (skonfigurowany) oraz uruchomionego _ALL.sql (tabela wishlist).',
     'ui.integrations.intro':
       'Status = czy klucz/konfiguracja jest w env (sekrety zostają w env). Przełącznik = włącz/wyłącz (zapis w bazie).',
     'ui.integrations.errorPrefix': 'Błąd:',
@@ -1533,6 +1561,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Welcomes: ON',
     'ui.welcome.statusOff': 'Welcomes: OFF',
     'ui.welcome.heading': 'Welcomes + autorole',
+    'ui.gaming.intro':
+      'Gaming features based on public APIs (no keys): an automatic feed of free games from the Epic Games Store and patch notes / news for selected games from Steam. The bot announces updates in the chosen channels.',
+    'ui.gaming.freeHeading': 'Free games (Epic)',
+    'ui.gaming.patchHeading': 'Patch notes (Steam)',
+    'ui.gaming.priceHeading': 'Price tracking (ITAD)',
+    'ui.gaming.backlogHeading': 'Game backlog',
+    'ui.gaming.backlogHelpPre': 'A personal “to-play” list — the ',
+    'ui.gaming.backlogHelpMid':
+      'command with statuses: to play / in progress / completed / dropped. Enable the “Game backlog” module in the Control Center (requires ',
+    'ui.gaming.backlogHelpPost': ' in Supabase).',
+    'ui.gaming.channelAnnounce': 'Announcement channel',
+    'ui.gaming.channelPh': '— select channel —',
+    'ui.gaming.freeEnabled': 'Free games feed (Epic) enabled',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … via ITAD — requires an ITAD key)',
+    'ui.gaming.freeHelp':
+      'Every ~6 h the bot checks for free games on the Epic Games Store (public API, no key) and announces new ones in the chosen channel. With the multi-store option, free giveaways (−100%) from other stores (Steam/GOG/…) via ITAD are added.',
+    'ui.gaming.patchEnabled': 'Patch notes (Steam) enabled',
+    'ui.gaming.trackedLabel': 'Tracked games (Steam appID)',
+    'ui.gaming.addBtn': 'Add',
+    'ui.gaming.namePh': 'Game name',
+    'ui.gaming.delAria': 'Delete',
+    'ui.gaming.patchHelpPre':
+      'Every ~1 h the bot checks Steam news for the listed games and announces new entries. You’ll find the appID in the Steam store URL (e.g. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Price tracking (ITAD) enabled',
+    'ui.gaming.priceChannelLabel': 'Deal alerts channel',
+    'ui.gaming.priceHelp':
+      'Every ~12 h the bot checks IsThereAnyDeal for prices of games on the Wishlist and announces new deals (with the lowest price and store). Requires the ITAD_API_KEY on the bot side (configured) and a run of _ALL.sql (the wishlist table).',
     'ui.integrations.intro':
       'Status = whether the key/config is in env (secrets stay in env). The toggle = on/off (saved in the database).',
     'ui.integrations.errorPrefix': 'Error:',
@@ -2300,6 +2356,35 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Begrüßungen: AN',
     'ui.welcome.statusOff': 'Begrüßungen: AUS',
     'ui.welcome.heading': 'Begrüßungen + autorole',
+    'ui.gaming.intro':
+      'Gaming-Funktionen auf Basis öffentlicher APIs (ohne Schlüssel): ein automatischer Feed kostenloser Spiele aus dem Epic Games Store sowie Patch Notes / News ausgewählter Spiele von Steam. Der Bot kündigt Neuigkeiten in den angegebenen Kanälen an.',
+    'ui.gaming.freeHeading': 'Kostenlose Spiele (Epic)',
+    'ui.gaming.patchHeading': 'Patch Notes (Steam)',
+    'ui.gaming.priceHeading': 'Preis-Tracking (ITAD)',
+    'ui.gaming.backlogHeading': 'Spiele-Backlog',
+    'ui.gaming.backlogHelpPre': 'Eine persönliche „Zu spielen“-Liste — der Befehl ',
+    'ui.gaming.backlogHelpMid':
+      'mit Status: zu spielen / läuft / abgeschlossen / abgebrochen. Aktiviere das Modul „Spiele-Backlog“ im Control Center (erfordert ',
+    'ui.gaming.backlogHelpPost': ' in Supabase).',
+    'ui.gaming.channelAnnounce': 'Ankündigungskanal',
+    'ui.gaming.channelPh': '— Kanal wählen —',
+    'ui.gaming.freeEnabled': 'Feed kostenloser Spiele (Epic) aktiviert',
+    'ui.gaming.multiStore':
+      'Multi-Store (Steam / GOG / … über ITAD — erfordert einen ITAD-Schlüssel)',
+    'ui.gaming.freeHelp':
+      'Alle ~6 Std. prüft der Bot kostenlose Spiele im Epic Games Store (öffentliche API, ohne Schlüssel) und kündigt neue im gewählten Kanal an. Mit der Multi-Store-Option kommen kostenlose Aktionen (−100 %) aus anderen Stores (Steam/GOG/…) über ITAD hinzu.',
+    'ui.gaming.patchEnabled': 'Patch Notes (Steam) aktiviert',
+    'ui.gaming.trackedLabel': 'Verfolgte Spiele (Steam appID)',
+    'ui.gaming.addBtn': 'Hinzufügen',
+    'ui.gaming.namePh': 'Spielname',
+    'ui.gaming.delAria': 'Löschen',
+    'ui.gaming.patchHelpPre':
+      'Alle ~1 Std. prüft der Bot Steam-News für die gelisteten Spiele und kündigt neue Einträge an. Die appID findest du in der Steam-Store-URL (z. B. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Preis-Tracking (ITAD) aktiviert',
+    'ui.gaming.priceChannelLabel': 'Kanal für Deal-Benachrichtigungen',
+    'ui.gaming.priceHelp':
+      'Alle ~12 Std. prüft der Bot bei IsThereAnyDeal die Preise der Spiele auf der Wunschliste und kündigt neue Angebote an (mit niedrigstem Preis und Store). Erfordert den ITAD_API_KEY auf Bot-Seite (konfiguriert) und einen Lauf von _ALL.sql (Tabelle wishlist).',
     'ui.integrations.intro':
       'Status = ob der Schlüssel/die Konfiguration in env liegt (Secrets bleiben in env). Der Schalter = an/aus (in der Datenbank gespeichert).',
     'ui.integrations.errorPrefix': 'Fehler:',
@@ -3071,6 +3156,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenidas: ACTIVADAS',
     'ui.welcome.statusOff': 'Bienvenidas: DESACTIVADAS',
     'ui.welcome.heading': 'Bienvenidas + autorole',
+    'ui.gaming.intro':
+      'Funciones gaming basadas en API públicas (sin claves): un feed automático de juegos gratis de Epic Games Store y patch notes / novedades de juegos seleccionados de Steam. El bot anuncia las novedades en los canales indicados.',
+    'ui.gaming.freeHeading': 'Juegos gratis (Epic)',
+    'ui.gaming.patchHeading': 'Patch notes (Steam)',
+    'ui.gaming.priceHeading': 'Seguimiento de precios (ITAD)',
+    'ui.gaming.backlogHeading': 'Backlog de juegos',
+    'ui.gaming.backlogHelpPre': 'Una lista personal «por jugar» — el comando ',
+    'ui.gaming.backlogHelpMid':
+      'con estados: por jugar / en curso / completado / abandonado. Activa el módulo «Backlog de juegos» en el Centro de control (requiere ',
+    'ui.gaming.backlogHelpPost': ' en Supabase).',
+    'ui.gaming.channelAnnounce': 'Canal de anuncios',
+    'ui.gaming.channelPh': '— elige canal —',
+    'ui.gaming.freeEnabled': 'Feed de juegos gratis (Epic) activado',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … vía ITAD — requiere una clave ITAD)',
+    'ui.gaming.freeHelp':
+      'Cada ~6 h el bot busca juegos gratis en Epic Games Store (API pública, sin clave) y anuncia los nuevos en el canal elegido. Con la opción multi-store se añaden regalos gratuitos (−100 %) de otras tiendas (Steam/GOG/…) vía ITAD.',
+    'ui.gaming.patchEnabled': 'Patch notes (Steam) activadas',
+    'ui.gaming.trackedLabel': 'Juegos seguidos (Steam appID)',
+    'ui.gaming.addBtn': 'Añadir',
+    'ui.gaming.namePh': 'Nombre del juego',
+    'ui.gaming.delAria': 'Eliminar',
+    'ui.gaming.patchHelpPre':
+      'Cada ~1 h el bot revisa las novedades de Steam de los juegos indicados y anuncia las nuevas entradas. El appID está en la URL de la tienda de Steam (p. ej. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Seguimiento de precios (ITAD) activado',
+    'ui.gaming.priceChannelLabel': 'Canal de alertas de ofertas',
+    'ui.gaming.priceHelp':
+      'Cada ~12 h el bot consulta en IsThereAnyDeal los precios de los juegos de la Lista de deseos y anuncia nuevas ofertas (con el precio más bajo y la tienda). Requiere la ITAD_API_KEY en el lado del bot (configurada) y ejecutar _ALL.sql (la tabla wishlist).',
     'ui.integrations.intro':
       'Estado = si la clave/configuración está en env (los secretos quedan en env). El interruptor = activar/desactivar (se guarda en la base de datos).',
     'ui.integrations.errorPrefix': 'Error:',
@@ -3846,6 +3959,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Benvenuti: ATTIVI',
     'ui.welcome.statusOff': 'Benvenuti: DISATTIVATI',
     'ui.welcome.heading': 'Benvenuti + autorole',
+    'ui.gaming.intro':
+      'Funzioni gaming basate su API pubbliche (senza chiavi): un feed automatico di giochi gratis dall’Epic Games Store e patch notes / novità di giochi selezionati da Steam. Il bot annuncia le novità nei canali indicati.',
+    'ui.gaming.freeHeading': 'Giochi gratis (Epic)',
+    'ui.gaming.patchHeading': 'Patch notes (Steam)',
+    'ui.gaming.priceHeading': 'Monitoraggio prezzi (ITAD)',
+    'ui.gaming.backlogHeading': 'Backlog giochi',
+    'ui.gaming.backlogHelpPre': 'Una lista personale «da giocare» — il comando ',
+    'ui.gaming.backlogHelpMid':
+      'con stati: da giocare / in corso / completato / abbandonato. Attiva il modulo «Backlog giochi» nel Centro di controllo (richiede ',
+    'ui.gaming.backlogHelpPost': ' in Supabase).',
+    'ui.gaming.channelAnnounce': 'Canale annunci',
+    'ui.gaming.channelPh': '— scegli canale —',
+    'ui.gaming.freeEnabled': 'Feed giochi gratis (Epic) attivo',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … tramite ITAD — richiede una chiave ITAD)',
+    'ui.gaming.freeHelp':
+      'Ogni ~6 h il bot controlla i giochi gratis sull’Epic Games Store (API pubblica, senza chiave) e annuncia i nuovi nel canale scelto. Con l’opzione multi-store si aggiungono regali gratuiti (−100 %) da altri store (Steam/GOG/…) tramite ITAD.',
+    'ui.gaming.patchEnabled': 'Patch notes (Steam) attive',
+    'ui.gaming.trackedLabel': 'Giochi monitorati (Steam appID)',
+    'ui.gaming.addBtn': 'Aggiungi',
+    'ui.gaming.namePh': 'Nome del gioco',
+    'ui.gaming.delAria': 'Elimina',
+    'ui.gaming.patchHelpPre':
+      'Ogni ~1 h il bot controlla le novità Steam per i giochi indicati e annuncia le nuove voci. Trovi l’appID nell’URL dello store Steam (es. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Monitoraggio prezzi (ITAD) attivo',
+    'ui.gaming.priceChannelLabel': 'Canale avvisi offerte',
+    'ui.gaming.priceHelp':
+      'Ogni ~12 h il bot controlla su IsThereAnyDeal i prezzi dei giochi nella Lista dei desideri e annuncia nuove offerte (con il prezzo più basso e lo store). Richiede la ITAD_API_KEY lato bot (configurata) e l’esecuzione di _ALL.sql (la tabella wishlist).',
     'ui.integrations.intro':
       'Stato = se la chiave/configurazione è in env (i segreti restano in env). L’interruttore = on/off (salvato nel database).',
     'ui.integrations.errorPrefix': 'Errore:',
@@ -4621,6 +4762,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenue : ACTIVÉ',
     'ui.welcome.statusOff': 'Bienvenue : DÉSACTIVÉ',
     'ui.welcome.heading': 'Bienvenue + autorole',
+    'ui.gaming.intro':
+      'Fonctionnalités gaming basées sur des API publiques (sans clés) : un feed automatique de jeux gratuits de l’Epic Games Store et des patch notes / actus de jeux sélectionnés depuis Steam. Le bot annonce les nouveautés dans les salons indiqués.',
+    'ui.gaming.freeHeading': 'Jeux gratuits (Epic)',
+    'ui.gaming.patchHeading': 'Patch notes (Steam)',
+    'ui.gaming.priceHeading': 'Suivi des prix (ITAD)',
+    'ui.gaming.backlogHeading': 'Backlog de jeux',
+    'ui.gaming.backlogHelpPre': 'Une liste personnelle « à jouer » — la commande ',
+    'ui.gaming.backlogHelpMid':
+      'avec statuts : à jouer / en cours / terminé / abandonné. Active le module « Backlog de jeux » dans le Centre de contrôle (nécessite ',
+    'ui.gaming.backlogHelpPost': ' dans Supabase).',
+    'ui.gaming.channelAnnounce': 'Salon d’annonces',
+    'ui.gaming.channelPh': '— choisir un salon —',
+    'ui.gaming.freeEnabled': 'Feed de jeux gratuits (Epic) activé',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … via ITAD — nécessite une clé ITAD)',
+    'ui.gaming.freeHelp':
+      'Toutes les ~6 h, le bot vérifie les jeux gratuits sur l’Epic Games Store (API publique, sans clé) et annonce les nouveaux dans le salon choisi. Avec l’option multi-store, des offres gratuites (−100 %) d’autres boutiques (Steam/GOG/…) via ITAD s’ajoutent.',
+    'ui.gaming.patchEnabled': 'Patch notes (Steam) activées',
+    'ui.gaming.trackedLabel': 'Jeux suivis (Steam appID)',
+    'ui.gaming.addBtn': 'Ajouter',
+    'ui.gaming.namePh': 'Nom du jeu',
+    'ui.gaming.delAria': 'Supprimer',
+    'ui.gaming.patchHelpPre':
+      'Toutes les ~1 h, le bot vérifie les actus Steam des jeux listés et annonce les nouvelles entrées. Tu trouves l’appID dans l’URL de la boutique Steam (p. ex. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Suivi des prix (ITAD) activé',
+    'ui.gaming.priceChannelLabel': 'Salon des alertes de promos',
+    'ui.gaming.priceHelp':
+      'Toutes les ~12 h, le bot consulte IsThereAnyDeal pour les prix des jeux de la Liste de souhaits et annonce les nouvelles promos (avec le prix le plus bas et la boutique). Nécessite la ITAD_API_KEY côté bot (configurée) et l’exécution de _ALL.sql (la table wishlist).',
     'ui.integrations.intro':
       'Statut = si la clé/config est dans env (les secrets restent dans env). L’interrupteur = activer/désactiver (enregistré en base).',
     'ui.integrations.errorPrefix': 'Erreur :',
@@ -5397,6 +5566,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Boas-vindas: LIGADAS',
     'ui.welcome.statusOff': 'Boas-vindas: DESLIGADAS',
     'ui.welcome.heading': 'Boas-vindas + autorole',
+    'ui.gaming.intro':
+      'Funcionalidades gaming baseadas em APIs públicas (sem chaves): um feed automático de jogos grátis da Epic Games Store e patch notes / novidades de jogos selecionados da Steam. O bot anuncia as novidades nos canais indicados.',
+    'ui.gaming.freeHeading': 'Jogos grátis (Epic)',
+    'ui.gaming.patchHeading': 'Patch notes (Steam)',
+    'ui.gaming.priceHeading': 'Monitorização de preços (ITAD)',
+    'ui.gaming.backlogHeading': 'Backlog de jogos',
+    'ui.gaming.backlogHelpPre': 'Uma lista pessoal «para jogar» — o comando ',
+    'ui.gaming.backlogHelpMid':
+      'com estados: para jogar / em curso / concluído / abandonado. Ativa o módulo «Backlog de jogos» no Centro de controlo (requer ',
+    'ui.gaming.backlogHelpPost': ' no Supabase).',
+    'ui.gaming.channelAnnounce': 'Canal de anúncios',
+    'ui.gaming.channelPh': '— escolher canal —',
+    'ui.gaming.freeEnabled': 'Feed de jogos grátis (Epic) ativado',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … via ITAD — requer uma chave ITAD)',
+    'ui.gaming.freeHelp':
+      'A cada ~6 h o bot verifica jogos grátis na Epic Games Store (API pública, sem chave) e anuncia os novos no canal escolhido. Com a opção multi-store, juntam-se ofertas grátis (−100 %) de outras lojas (Steam/GOG/…) via ITAD.',
+    'ui.gaming.patchEnabled': 'Patch notes (Steam) ativadas',
+    'ui.gaming.trackedLabel': 'Jogos seguidos (Steam appID)',
+    'ui.gaming.addBtn': 'Adicionar',
+    'ui.gaming.namePh': 'Nome do jogo',
+    'ui.gaming.delAria': 'Eliminar',
+    'ui.gaming.patchHelpPre':
+      'A cada ~1 h o bot verifica as novidades da Steam dos jogos indicados e anuncia as novas entradas. O appID está no URL da loja Steam (ex. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Monitorização de preços (ITAD) ativada',
+    'ui.gaming.priceChannelLabel': 'Canal de alertas de promoções',
+    'ui.gaming.priceHelp':
+      'A cada ~12 h o bot consulta o IsThereAnyDeal pelos preços dos jogos da Lista de desejos e anuncia novas promoções (com o preço mais baixo e a loja). Requer a ITAD_API_KEY no lado do bot (configurada) e a execução de _ALL.sql (a tabela wishlist).',
     'ui.integrations.intro':
       'Estado = se a chave/configuração está em env (os segredos ficam em env). O interruptor = ligar/desligar (guardado na base de dados).',
     'ui.integrations.errorPrefix': 'Erro:',
@@ -6170,6 +6367,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '欢迎消息：已开启',
     'ui.welcome.statusOff': '欢迎消息：已关闭',
     'ui.welcome.heading': '欢迎消息 + autorole',
+    'ui.gaming.intro':
+      '基于公开 API 的游戏功能（无需密钥）：自动推送 Epic Games Store 的免费游戏，以及来自 Steam 所选游戏的补丁说明 / 新闻。机器人会在指定频道发布更新。',
+    'ui.gaming.freeHeading': '免费游戏（Epic）',
+    'ui.gaming.patchHeading': '补丁说明（Steam）',
+    'ui.gaming.priceHeading': '价格追踪（ITAD）',
+    'ui.gaming.backlogHeading': '游戏待玩清单',
+    'ui.gaming.backlogHelpPre': '个人「待玩」清单 —— ',
+    'ui.gaming.backlogHelpMid':
+      '命令，状态包括：待玩 / 进行中 / 已完成 / 已弃坑。在控制中心启用「游戏待玩清单」模块（需要 Supabase 中的 ',
+    'ui.gaming.backlogHelpPost': '）。',
+    'ui.gaming.channelAnnounce': '公告频道',
+    'ui.gaming.channelPh': '— 选择频道 —',
+    'ui.gaming.freeEnabled': '免费游戏推送（Epic）已启用',
+    'ui.gaming.multiStore': '多商店（Steam / GOG / … 通过 ITAD —— 需要 ITAD 密钥）',
+    'ui.gaming.freeHelp':
+      '机器人每隔约 6 小时检查 Epic Games Store 的免费游戏（公开 API，无需密钥），并在所选频道发布新内容。启用多商店选项后，还会通过 ITAD 加入其他商店（Steam/GOG/…）的免费赠送（−100%）。',
+    'ui.gaming.patchEnabled': '补丁说明（Steam）已启用',
+    'ui.gaming.trackedLabel': '追踪的游戏（Steam appID）',
+    'ui.gaming.addBtn': '添加',
+    'ui.gaming.namePh': '游戏名称',
+    'ui.gaming.delAria': '删除',
+    'ui.gaming.patchHelpPre':
+      '机器人每隔约 1 小时检查所列游戏的 Steam 新闻，并发布新条目。appID 可在 Steam 商店网址中找到（例如 ',
+    'ui.gaming.patchHelpPost': ' → CS2）。',
+    'ui.gaming.priceEnabled': '价格追踪（ITAD）已启用',
+    'ui.gaming.priceChannelLabel': '促销提醒频道',
+    'ui.gaming.priceHelp':
+      '机器人每隔约 12 小时在 IsThereAnyDeal 查询愿望清单中游戏的价格，并发布新促销（含最低价和商店）。需要机器人端的 ITAD_API_KEY（已配置）以及已运行的 _ALL.sql（wishlist 表）。',
     'ui.integrations.intro':
       '状态 = 密钥/配置是否在 env 中（密钥保留在 env）。开关 = 开启/关闭（保存在数据库）。',
     'ui.integrations.errorPrefix': '错误：',
@@ -6913,6 +7138,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '환영 메시지: 켜짐',
     'ui.welcome.statusOff': '환영 메시지: 꺼짐',
     'ui.welcome.heading': '환영 메시지 + autorole',
+    'ui.gaming.intro':
+      '공개 API 기반 게이밍 기능(키 불필요): Epic Games Store의 무료 게임을 자동 피드하고, Steam에서 선택한 게임의 패치 노트 / 소식을 제공합니다. 봇이 지정한 채널에 새 소식을 공지합니다.',
+    'ui.gaming.freeHeading': '무료 게임 (Epic)',
+    'ui.gaming.patchHeading': '패치 노트 (Steam)',
+    'ui.gaming.priceHeading': '가격 추적 (ITAD)',
+    'ui.gaming.backlogHeading': '게임 백로그',
+    'ui.gaming.backlogHelpPre': '개인 "할 게임" 목록 — ',
+    'ui.gaming.backlogHelpMid':
+      '명령, 상태: 할 예정 / 진행 중 / 완료 / 중단. 제어 센터에서 "게임 백로그" 모듈을 켜세요 (Supabase의 ',
+    'ui.gaming.backlogHelpPost': ' 필요).',
+    'ui.gaming.channelAnnounce': '공지 채널',
+    'ui.gaming.channelPh': '— 채널 선택 —',
+    'ui.gaming.freeEnabled': '무료 게임 피드 (Epic) 켜짐',
+    'ui.gaming.multiStore': '멀티 스토어 (Steam / GOG / … ITAD 경유 — ITAD 키 필요)',
+    'ui.gaming.freeHelp':
+      '봇이 약 6시간마다 Epic Games Store의 무료 게임을 확인하고(공개 API, 키 불필요) 선택한 채널에 새 게임을 공지합니다. 멀티 스토어 옵션을 켜면 ITAD를 통해 다른 스토어(Steam/GOG/…)의 무료 배포(−100%)도 추가됩니다.',
+    'ui.gaming.patchEnabled': '패치 노트 (Steam) 켜짐',
+    'ui.gaming.trackedLabel': '추적 게임 (Steam appID)',
+    'ui.gaming.addBtn': '추가',
+    'ui.gaming.namePh': '게임 이름',
+    'ui.gaming.delAria': '삭제',
+    'ui.gaming.patchHelpPre':
+      '봇이 약 1시간마다 지정한 게임의 Steam 소식을 확인하고 새 항목을 공지합니다. appID는 Steam 상점 URL에서 찾을 수 있습니다 (예: ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': '가격 추적 (ITAD) 켜짐',
+    'ui.gaming.priceChannelLabel': '할인 알림 채널',
+    'ui.gaming.priceHelp':
+      '봇이 약 12시간마다 IsThereAnyDeal에서 위시리스트 게임의 가격을 확인하고 새 할인을 공지합니다(최저가와 상점 포함). 봇 측의 ITAD_API_KEY(설정됨)와 실행된 _ALL.sql(wishlist 테이블)이 필요합니다.',
     'ui.integrations.intro':
       '상태 = 키/설정이 env에 있는지 여부(시크릿은 env에 유지). 토글 = 켜기/끄기(데이터베이스에 저장).',
     'ui.integrations.errorPrefix': '오류:',
@@ -7672,6 +7925,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Приветствия: ВКЛЮЧЕНЫ',
     'ui.welcome.statusOff': 'Приветствия: ВЫКЛЮЧЕНЫ',
     'ui.welcome.heading': 'Приветствия + autorole',
+    'ui.gaming.intro':
+      'Игровые функции на основе публичных API (без ключей): автоматическая лента бесплатных игр из Epic Games Store и патч-ноуты / новости выбранных игр из Steam. Бот объявляет новости в указанных каналах.',
+    'ui.gaming.freeHeading': 'Бесплатные игры (Epic)',
+    'ui.gaming.patchHeading': 'Патч-ноуты (Steam)',
+    'ui.gaming.priceHeading': 'Отслеживание цен (ITAD)',
+    'ui.gaming.backlogHeading': 'Бэклог игр',
+    'ui.gaming.backlogHelpPre': 'Личный список «сыграть» — команда ',
+    'ui.gaming.backlogHelpMid':
+      'со статусами: сыграть / в процессе / пройдено / брошено. Включите модуль «Бэклог игр» в Центре управления (требуется ',
+    'ui.gaming.backlogHelpPost': ' в Supabase).',
+    'ui.gaming.channelAnnounce': 'Канал объявлений',
+    'ui.gaming.channelPh': '— выберите канал —',
+    'ui.gaming.freeEnabled': 'Лента бесплатных игр (Epic) включена',
+    'ui.gaming.multiStore': 'Мульти-магазин (Steam / GOG / … через ITAD — требуется ключ ITAD)',
+    'ui.gaming.freeHelp':
+      'Каждые ~6 ч бот проверяет бесплатные игры в Epic Games Store (публичный API, без ключа) и объявляет новые в выбранном канале. С опцией мульти-магазина добавляются бесплатные раздачи (−100 %) из других магазинов (Steam/GOG/…) через ITAD.',
+    'ui.gaming.patchEnabled': 'Патч-ноуты (Steam) включены',
+    'ui.gaming.trackedLabel': 'Отслеживаемые игры (Steam appID)',
+    'ui.gaming.addBtn': 'Добавить',
+    'ui.gaming.namePh': 'Название игры',
+    'ui.gaming.delAria': 'Удалить',
+    'ui.gaming.patchHelpPre':
+      'Каждый ~1 ч бот проверяет новости Steam для указанных игр и объявляет новые записи. appID найдёте в URL магазина Steam (напр. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Отслеживание цен (ITAD) включено',
+    'ui.gaming.priceChannelLabel': 'Канал оповещений о скидках',
+    'ui.gaming.priceHelp':
+      'Каждые ~12 ч бот проверяет в IsThereAnyDeal цены игр из Списка желаемого и объявляет новые скидки (с минимальной ценой и магазином). Требуется ITAD_API_KEY на стороне бота (настроен) и запущенный _ALL.sql (таблица wishlist).',
     'ui.integrations.intro':
       'Статус = есть ли ключ/конфигурация в env (секреты остаются в env). Переключатель = вкл/выкл (сохраняется в базе).',
     'ui.integrations.errorPrefix': 'Ошибка:',
@@ -8441,6 +8722,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Привітання: УВІМКНЕНО',
     'ui.welcome.statusOff': 'Привітання: ВИМКНЕНО',
     'ui.welcome.heading': 'Привітання + autorole',
+    'ui.gaming.intro':
+      'Ігрові функції на основі публічних API (без ключів): автоматична стрічка безкоштовних ігор з Epic Games Store та патч-ноути / новини вибраних ігор зі Steam. Бот оголошує новини у вказаних каналах.',
+    'ui.gaming.freeHeading': 'Безкоштовні ігри (Epic)',
+    'ui.gaming.patchHeading': 'Патч-ноути (Steam)',
+    'ui.gaming.priceHeading': 'Відстеження цін (ITAD)',
+    'ui.gaming.backlogHeading': 'Беклог ігор',
+    'ui.gaming.backlogHelpPre': 'Особистий список «зіграти» — команда ',
+    'ui.gaming.backlogHelpMid':
+      'зі статусами: зіграти / у процесі / пройдено / покинуто. Увімкніть модуль «Беклог ігор» у Центрі керування (потрібен ',
+    'ui.gaming.backlogHelpPost': ' у Supabase).',
+    'ui.gaming.channelAnnounce': 'Канал оголошень',
+    'ui.gaming.channelPh': '— оберіть канал —',
+    'ui.gaming.freeEnabled': 'Стрічка безкоштовних ігор (Epic) увімкнена',
+    'ui.gaming.multiStore': 'Мульти-магазин (Steam / GOG / … через ITAD — потрібен ключ ITAD)',
+    'ui.gaming.freeHelp':
+      'Кожні ~6 год бот перевіряє безкоштовні ігри в Epic Games Store (публічний API, без ключа) та оголошує нові у вибраному каналі. З опцією мульти-магазину додаються безкоштовні роздачі (−100 %) з інших магазинів (Steam/GOG/…) через ITAD.',
+    'ui.gaming.patchEnabled': 'Патч-ноути (Steam) увімкнені',
+    'ui.gaming.trackedLabel': 'Відстежувані ігри (Steam appID)',
+    'ui.gaming.addBtn': 'Додати',
+    'ui.gaming.namePh': 'Назва гри',
+    'ui.gaming.delAria': 'Видалити',
+    'ui.gaming.patchHelpPre':
+      'Кожну ~1 год бот перевіряє новини Steam для вказаних ігор та оголошує нові записи. appID знайдете в URL магазину Steam (напр. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Відстеження цін (ITAD) увімкнено',
+    'ui.gaming.priceChannelLabel': 'Канал сповіщень про знижки',
+    'ui.gaming.priceHelp':
+      'Кожні ~12 год бот перевіряє в IsThereAnyDeal ціни ігор зі Списку бажаного та оголошує нові знижки (з найнижчою ціною та магазином). Потрібен ITAD_API_KEY на стороні бота (налаштований) і запущений _ALL.sql (таблиця wishlist).',
     'ui.integrations.intro':
       'Статус = чи є ключ/конфігурація в env (секрети залишаються в env). Перемикач = увімк/вимк (зберігається в базі).',
     'ui.integrations.errorPrefix': 'Помилка:',
@@ -9210,6 +9519,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '歓迎メッセージ：オン',
     'ui.welcome.statusOff': '歓迎メッセージ：オフ',
     'ui.welcome.heading': '歓迎メッセージ + autorole',
+    'ui.gaming.intro':
+      '公開 API ベースのゲーミング機能（キー不要）：Epic Games Store の無料ゲームを自動配信し、Steam の選択したゲームのパッチノート / ニュースを提供します。ボットが指定チャンネルに新着を告知します。',
+    'ui.gaming.freeHeading': '無料ゲーム（Epic）',
+    'ui.gaming.patchHeading': 'パッチノート（Steam）',
+    'ui.gaming.priceHeading': '価格トラッキング（ITAD）',
+    'ui.gaming.backlogHeading': 'ゲームバックログ',
+    'ui.gaming.backlogHelpPre': '個人の「積みゲー」リスト — ',
+    'ui.gaming.backlogHelpMid':
+      'コマンド、ステータス：未プレイ / 進行中 / クリア / 中断。コントロールセンターで「ゲームバックログ」モジュールを有効にしてください（Supabase の ',
+    'ui.gaming.backlogHelpPost': ' が必要）。',
+    'ui.gaming.channelAnnounce': '告知チャンネル',
+    'ui.gaming.channelPh': '— チャンネルを選択 —',
+    'ui.gaming.freeEnabled': '無料ゲーム配信（Epic）有効',
+    'ui.gaming.multiStore': 'マルチストア（Steam / GOG / … ITAD 経由 — ITAD キーが必要）',
+    'ui.gaming.freeHelp':
+      'ボットは約 6 時間ごとに Epic Games Store の無料ゲームを確認し（公開 API、キー不要）、選択したチャンネルに新着を告知します。マルチストアを有効にすると、ITAD 経由で他ストア（Steam/GOG/…）の無料配布（−100%）も追加されます。',
+    'ui.gaming.patchEnabled': 'パッチノート（Steam）有効',
+    'ui.gaming.trackedLabel': '追跡するゲーム（Steam appID）',
+    'ui.gaming.addBtn': '追加',
+    'ui.gaming.namePh': 'ゲーム名',
+    'ui.gaming.delAria': '削除',
+    'ui.gaming.patchHelpPre':
+      'ボットは約 1 時間ごとに指定ゲームの Steam ニュースを確認し、新しいエントリを告知します。appID は Steam ストアの URL で確認できます（例: ',
+    'ui.gaming.patchHelpPost': ' → CS2）。',
+    'ui.gaming.priceEnabled': '価格トラッキング（ITAD）有効',
+    'ui.gaming.priceChannelLabel': 'セール通知チャンネル',
+    'ui.gaming.priceHelp':
+      'ボットは約 12 時間ごとに IsThereAnyDeal でウィッシュリストのゲーム価格を確認し、新しいセールを告知します（最安値とストアを含む）。ボット側の ITAD_API_KEY（設定済み）と実行済みの _ALL.sql（wishlist テーブル）が必要です。',
     'ui.integrations.intro':
       'ステータス = キー/設定が env にあるか（シークレットは env に保持）。トグル = オン/オフ（データベースに保存）。',
     'ui.integrations.errorPrefix': 'エラー：',
@@ -9978,6 +10315,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'الترحيب: مُفعَّل',
     'ui.welcome.statusOff': 'الترحيب: مُعطَّل',
     'ui.welcome.heading': 'الترحيب + autorole',
+    'ui.gaming.intro':
+      'ميزات الألعاب المبنية على واجهات API العامة (بدون مفاتيح): تغذية تلقائية للألعاب المجانية من Epic Games Store وملاحظات التحديث / أخبار ألعاب مختارة من Steam. يعلن البوت الجديد في القنوات المحددة.',
+    'ui.gaming.freeHeading': 'ألعاب مجانية (Epic)',
+    'ui.gaming.patchHeading': 'ملاحظات التحديث (Steam)',
+    'ui.gaming.priceHeading': 'تتبّع الأسعار (ITAD)',
+    'ui.gaming.backlogHeading': 'قائمة الألعاب المؤجَّلة',
+    'ui.gaming.backlogHelpPre': 'قائمة شخصية «للعب لاحقًا» — الأمر ',
+    'ui.gaming.backlogHelpMid':
+      'بالحالات: للعب / قيد التقدّم / مكتملة / متروكة. فعّل وحدة «قائمة الألعاب المؤجَّلة» في مركز التحكم (يتطلب ',
+    'ui.gaming.backlogHelpPost': ' في Supabase).',
+    'ui.gaming.channelAnnounce': 'قناة الإعلانات',
+    'ui.gaming.channelPh': '— اختر قناة —',
+    'ui.gaming.freeEnabled': 'تغذية الألعاب المجانية (Epic) مفعّلة',
+    'ui.gaming.multiStore': 'متعدد المتاجر (Steam / GOG / … عبر ITAD — يتطلب مفتاح ITAD)',
+    'ui.gaming.freeHelp':
+      'كل ~6 ساعات يتحقق البوت من الألعاب المجانية في Epic Games Store (API عام، بدون مفتاح) ويعلن الجديدة في القناة المختارة. مع خيار متعدد المتاجر تُضاف الهدايا المجانية (−100%) من متاجر أخرى (Steam/GOG/…) عبر ITAD.',
+    'ui.gaming.patchEnabled': 'ملاحظات التحديث (Steam) مفعّلة',
+    'ui.gaming.trackedLabel': 'الألعاب المتتبَّعة (Steam appID)',
+    'ui.gaming.addBtn': 'إضافة',
+    'ui.gaming.namePh': 'اسم اللعبة',
+    'ui.gaming.delAria': 'حذف',
+    'ui.gaming.patchHelpPre':
+      'كل ~1 ساعة يتحقق البوت من أخبار Steam للألعاب المدرجة ويعلن الإدخالات الجديدة. تجد appID في رابط متجر Steam (مثل ',
+    'ui.gaming.patchHelpPost': ' ← CS2).',
+    'ui.gaming.priceEnabled': 'تتبّع الأسعار (ITAD) مفعّل',
+    'ui.gaming.priceChannelLabel': 'قناة تنبيهات العروض',
+    'ui.gaming.priceHelp':
+      'كل ~12 ساعة يتحقق البوت من IsThereAnyDeal لأسعار ألعاب قائمة الرغبات ويعلن العروض الجديدة (مع أقل سعر والمتجر). يتطلب ITAD_API_KEY في جانب البوت (مضبوط) وتشغيل _ALL.sql (جدول wishlist).',
     'ui.integrations.intro':
       'الحالة = هل المفتاح/الإعداد موجود في env (تبقى الأسرار في env). المفتاح = تشغيل/إيقاف (يُحفظ في قاعدة البيانات).',
     'ui.integrations.errorPrefix': 'خطأ:',
@@ -10735,6 +11100,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Sambutan: AKTIF',
     'ui.welcome.statusOff': 'Sambutan: NONAKTIF',
     'ui.welcome.heading': 'Sambutan + autorole',
+    'ui.gaming.intro':
+      'Fitur gaming berbasis API publik (tanpa kunci): feed otomatis game gratis dari Epic Games Store serta patch notes / berita game terpilih dari Steam. Bot mengumumkan pembaruan di saluran yang ditentukan.',
+    'ui.gaming.freeHeading': 'Game gratis (Epic)',
+    'ui.gaming.patchHeading': 'Patch notes (Steam)',
+    'ui.gaming.priceHeading': 'Pelacakan harga (ITAD)',
+    'ui.gaming.backlogHeading': 'Backlog game',
+    'ui.gaming.backlogHelpPre': 'Daftar pribadi «untuk dimainkan» — perintah ',
+    'ui.gaming.backlogHelpMid':
+      'dengan status: untuk dimainkan / sedang berjalan / selesai / ditinggalkan. Aktifkan modul «Backlog game» di Pusat kendali (memerlukan ',
+    'ui.gaming.backlogHelpPost': ' di Supabase).',
+    'ui.gaming.channelAnnounce': 'Saluran pengumuman',
+    'ui.gaming.channelPh': '— pilih saluran —',
+    'ui.gaming.freeEnabled': 'Feed game gratis (Epic) aktif',
+    'ui.gaming.multiStore': 'Multi-store (Steam / GOG / … via ITAD — memerlukan kunci ITAD)',
+    'ui.gaming.freeHelp':
+      'Setiap ~6 jam bot memeriksa game gratis di Epic Games Store (API publik, tanpa kunci) dan mengumumkan yang baru di saluran terpilih. Dengan opsi multi-store, giveaway gratis (−100%) dari toko lain (Steam/GOG/…) via ITAD ikut ditambahkan.',
+    'ui.gaming.patchEnabled': 'Patch notes (Steam) aktif',
+    'ui.gaming.trackedLabel': 'Game yang dilacak (Steam appID)',
+    'ui.gaming.addBtn': 'Tambah',
+    'ui.gaming.namePh': 'Nama game',
+    'ui.gaming.delAria': 'Hapus',
+    'ui.gaming.patchHelpPre':
+      'Setiap ~1 jam bot memeriksa berita Steam untuk game yang terdaftar dan mengumumkan entri baru. appID ada di URL toko Steam (mis. ',
+    'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.priceEnabled': 'Pelacakan harga (ITAD) aktif',
+    'ui.gaming.priceChannelLabel': 'Saluran peringatan promo',
+    'ui.gaming.priceHelp':
+      'Setiap ~12 jam bot memeriksa IsThereAnyDeal untuk harga game di Wishlist dan mengumumkan promo baru (dengan harga terendah dan toko). Memerlukan ITAD_API_KEY di sisi bot (terkonfigurasi) dan _ALL.sql yang sudah dijalankan (tabel wishlist).',
     'ui.integrations.intro':
       'Status = apakah kunci/konfigurasi ada di env (rahasia tetap di env). Sakelar = aktif/nonaktif (disimpan di basis data).',
     'ui.integrations.errorPrefix': 'Error:',

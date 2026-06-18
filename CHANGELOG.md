@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-307-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.237.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-308-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.238.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.238.0] — 🌍 i18n UI panelu — strona /gaming (darmowe gry · patch-notes · ceny)
+
+- `[#308]` 🌍 **i18n UI panelu — kolejna fala: `/gaming` (powiadomienia gamingowe — Epic / Steam / ITAD).**
+  - 🖥️ **Panel**: 23 nowe klucze `ui.gaming.*` × **14 języków** w `panelI18n.ts` (parzystość 14×23=322). `app/gaming/page.tsx` (serwer) + `FreeGamesForm.tsx` + `PatchNotesForm.tsx` + `PriceTrackerForm.tsx` (klient) na `tp()`: intro, sekcje (darmowe gry Epic + multi-store, patch-notes Steam z listą appID, śledzenie cen ITAD), opisy mechaniki i blurb „Backlog gier" z segmentami wokół `/backlog`/`_ALL.sql`. Przyciski zapisu reużywają `SaveButton`. Nietłumaczone: marki (`Epic`/`Steam`/`GOG`/`ITAD`/`IsThereAnyDeal`), subkomendy `/backlog`, `appID`, przykładowy URL Steam + `CS2`, tokeny (`ITAD_API_KEY`, `_ALL.sql`, `wishlist`).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 28/~40 stron.
 
 ## [0.237.0] — 🌍 i18n UI panelu — strona /integrations (statusy + webhook relay)
 

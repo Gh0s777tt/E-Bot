@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { PriceTrackerConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ export default function PriceTrackerForm({
   initial: PriceTrackerConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<PriceTrackerConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,23 +43,21 @@ export default function PriceTrackerForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Śledzenie cen (ITAD) włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.gaming.priceEnabled')}</span>
       </label>
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał alertów o promocjach</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.gaming.priceChannelLabel')}
+        </span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
+          placeholder={tp(lang, 'ui.gaming.channelPh')}
         />
       </label>
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Bot co ~12 h sprawdza w IsThereAnyDeal ceny gier z <strong>Listy życzeń</strong> i ogłasza
-        nowe promocje (z najniższą ceną i sklepem). Wymaga klucza <code>ITAD_API_KEY</code> po
-        stronie bota (skonfigurowany) oraz uruchomionego <code>_ALL.sql</code> (tabela{' '}
-        <code>wishlist</code>).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.gaming.priceHelp')}</p>
     </div>
   );
 }
