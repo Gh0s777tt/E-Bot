@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-293-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.223.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-294-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.224.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.224.0] — 🌍 i18n UI panelu — strona /security (Anti-Nuke / weryfikacja / anti-raid)
+
+- `[#294]` 🌍 **i18n UI panelu — kolejna fala: `/security` (3 formularze bezpieczeństwa).**
+  - 🖥️ **Panel**: 57 nowych kluczy `ui.security.*` × **14 języków** w `panelI18n.ts` (parzystość 14×57=798). `app/security/page.tsx` (serwer) + `AntinukeForm.tsx`, `AntiRaidForm.tsx`, `VerificationForm.tsx` (klient) na `tp()`. Przyciski zapisu reużywają generyków `ui.save`/`ui.saving`/`ui.saveError`. Pokryte: 9 ochron anti-nuke, 5 kar, whitelisty, progi anti-raid, wykrywanie altów, auto-lockdown oraz 3 tryby weryfikacji (przycisk/captcha/hasło). Nazwy własne i terminy (`Anti-Nuke`, `Anti-raid`, `Ban`, `Kick`, `Timeout`, `Captcha`, `Webhook`, `Emoji`, `/lockdown off`, `/verifypanel`, `Discord`, `Supabase`, ID) nietłumaczone; nazwy uprawnień Discorda zlokalizowane.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 14/~40 stron.
 
 ## [0.223.0] — 🌍 i18n UI panelu — strona /tickets (system zgłoszeń)
 

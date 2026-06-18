@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { VerificationConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -16,6 +18,7 @@ export default function VerificationForm({
   initial: VerificationConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<VerificationConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -43,21 +46,21 @@ export default function VerificationForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Weryfikacja włączona</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.security.verifyEnabled')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Rola po weryfikacji</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.security.verifyRole')}</span>
         <RoleSelect
           value={c.roleId}
           onChange={(v) => setC({ ...c, roleId: v })}
           roles={guild.roles}
-          placeholder="— wybierz rolę dostępu —"
+          placeholder={tp(lang, 'ui.security.verifyRolePh')}
         />
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Treść panelu</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.security.panelText')}</span>
         <textarea
           value={c.message}
           onChange={(e) => setC({ ...c, message: e.target.value })}
@@ -67,7 +70,7 @@ export default function VerificationForm({
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Etykieta przycisku</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.security.buttonLabel')}</span>
         <input
           value={c.buttonLabel}
           onChange={(e) => setC({ ...c, buttonLabel: e.target.value })}
@@ -78,19 +81,21 @@ export default function VerificationForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Tryb</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.security.mode')}</span>
           <select
             value={c.mode}
             onChange={(e) => setC({ ...c, mode: e.target.value as VerificationConfig['mode'] })}
             className={inputCls}
           >
-            <option value="button">Przycisk (1 klik)</option>
-            <option value="captcha">Captcha obrazkowa</option>
-            <option value="phrase">Hasło (pass-phrase)</option>
+            <option value="button">{tp(lang, 'ui.security.modeButton')}</option>
+            <option value="captcha">{tp(lang, 'ui.security.modeCaptcha')}</option>
+            <option value="phrase">{tp(lang, 'ui.security.modePhrase')}</option>
           </select>
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Min. wiek konta (dni, 0 = off)</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.security.minAccountAge')}
+          </span>
           <input
             type="number"
             value={c.minAccountAgeDays}
@@ -107,27 +112,20 @@ export default function VerificationForm({
 
       {c.mode === 'phrase' && (
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Hasło weryfikacyjne</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.security.phrase')}</span>
           <input
             value={c.phrase}
             onChange={(e) => setC({ ...c, phrase: e.target.value })}
             maxLength={100}
-            placeholder="np. tajne-haslo-serwera"
+            placeholder={tp(lang, 'ui.security.phrasePh')}
             className={inputCls}
           />
-          <span className="block text-xs text-muted">
-            Użytkownik musi wpisać to hasło w okienku po kliknięciu przycisku (wielkość liter bez
-            znaczenia). Podaj je np. w regulaminie.
-          </span>
+          <span className="block text-xs text-muted">{tp(lang, 'ui.security.phraseHelp')}</span>
         </label>
       )}
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Po zapisaniu wyślij panel komendą <code className="text-accent">/verifypanel</code> na
-        wybranym kanale. Kliknięcie przycisku nada użytkownikowi rolę dostępu. Bot potrzebuje
-        uprawnienia „Zarządzanie rolami", a jego rola musi być wyżej niż nadawana.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.security.verifyFootNote')}</p>
     </div>
   );
 }

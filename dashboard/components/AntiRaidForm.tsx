@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { AntiRaidConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -23,6 +25,7 @@ export default function AntiRaidForm({
   initial: AntiRaidConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<AntiRaidConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -50,12 +53,12 @@ export default function AntiRaidForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Anti-raid włączony</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.security.raidEnabled')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Próg wejść</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.security.joinCount')}</span>
           <input
             type="number"
             value={c.joinCount}
@@ -64,7 +67,7 @@ export default function AntiRaidForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">…w oknie (s)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.security.windowSec')}</span>
           <input
             type="number"
             value={c.windowSec}
@@ -73,7 +76,7 @@ export default function AntiRaidForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Akcja na falę</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.security.raidAction')}</span>
           <select
             value={c.action}
             onChange={(e) => setC({ ...c, action: e.target.value as AntiRaidConfig['action'] })}
@@ -87,7 +90,9 @@ export default function AntiRaidForm({
           </select>
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Min. wiek konta (dni, 0 = off)</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.security.minAccountAge')}
+          </span>
           <input
             type="number"
             value={c.minAccountAgeDays}
@@ -98,12 +103,12 @@ export default function AntiRaidForm({
       </div>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał alertów</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.security.alertChannel')}</span>
         <ChannelSelect
           value={c.alertChannelId}
           onChange={(v) => setC({ ...c, alertChannelId: v })}
           channels={guild.channels}
-          placeholder="— brak alertów —"
+          placeholder={tp(lang, 'ui.security.noAlerts')}
         />
       </label>
 
@@ -115,13 +120,11 @@ export default function AntiRaidForm({
             onChange={(e) => setC({ ...c, altDetect: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">
-            Wykrywanie altów (podejrzane dołączenia → kanał alertów)
-          </span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.security.altDetect')}</span>
         </label>
         <div className="grid gap-4 sm:grid-cols-3">
           <label className="space-y-1 text-sm">
-            <span className="font-semibold text-white/90">Podejrzany wiek (dni)</span>
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.security.altAge')}</span>
             <input
               type="number"
               value={c.altMinAgeDays}
@@ -130,7 +133,7 @@ export default function AntiRaidForm({
             />
           </label>
           <label className="space-y-1 text-sm">
-            <span className="font-semibold text-white/90">Akcja</span>
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.security.action')}</span>
             <select
               value={c.altAction}
               onChange={(e) =>
@@ -138,7 +141,7 @@ export default function AntiRaidForm({
               }
               className={inputCls}
             >
-              <option value="alert">Tylko alert</option>
+              <option value="alert">{tp(lang, 'ui.security.altAlertOnly')}</option>
               <option value="kick">Kick</option>
               <option value="ban">Ban</option>
               <option value="timeout">Timeout</option>
@@ -151,7 +154,9 @@ export default function AntiRaidForm({
               onChange={(e) => setC({ ...c, altNoAvatar: e.target.checked })}
               className="h-4 w-4 accent-accent"
             />
-            <span className="font-semibold text-white/90">Brak avatara = podejrzany</span>
+            <span className="font-semibold text-white/90">
+              {tp(lang, 'ui.security.altNoAvatar')}
+            </span>
           </label>
         </div>
       </div>
@@ -164,20 +169,15 @@ export default function AntiRaidForm({
           className="h-4 w-4 accent-accent"
         />
         <span>
-          <span className="font-semibold text-white/90">🔒 Auto-lockdown przy wykryciu fali</span>
-          <span className="ml-1 text-muted">
-            — automatycznie blokuje pisanie na całym serwerze (zdejmiesz przez{' '}
-            <code>/lockdown off</code>).
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.security.autoLockdown')}
           </span>
+          <span className="ml-1 text-muted">{tp(lang, 'ui.security.autoLockdownHelp')}</span>
         </span>
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Gdy w oknie pojawi się ≥ próg wejść, bot wchodzi w tryb obronny i stosuje wybraną akcję do
-        całej fali oraz kolejnych wejść (do ~max(okno, 30 s)). „Min. wiek konta" działa też poza
-        falą — młodsze konta dostają akcję od razu. Bot potrzebuje uprawnień Kick/Ban/Timeout.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.security.raidFootNote')}</p>
     </div>
   );
 }

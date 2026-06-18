@@ -1,4 +1,4 @@
-<!-- SYNC: v0.223.0 · #293 · 2026-06-18 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.224.0 · #294 · 2026-06-18 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.223.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.224.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -40,7 +40,7 @@ gantt
   section i18n treści + UI (bieżące)
   Samouczek · asystent · „Jak działa" 37/37 :done, i1, 2026-06-11, 1d
   Web GameVault (14 jęz. + RTL)        :done, i2, 2026-06-11, 1d
-  i18n UI panelu (13/~40 stron)        :active, i3, 2026-06-12, 8d
+  i18n UI panelu (14/~40 stron)        :active, i3, 2026-06-12, 8d
   section Otwarte
   Marketplace / multi-guild jako usługa :        mk, 2026-06-25, 10d
 ```
@@ -55,7 +55,7 @@ gantt
 | **8** | Fundament customizacji: Message Studio + 14 epików „2.0" | ✅ done |
 | **A–J** | Architekt serwera, fun/safety/gaming, customization 2.0, **i18n bota (14 jęz.)** | ✅ done |
 | **K** | Przyjazność 2.0 + **config per‑serwer** (C‑1…C‑27 — fundament multi‑guild) | ✅ done |
-| **i18n** | Treść panelu/web w 14 językach: pomoc 37/37 ✓, web ✓, **UI panelu 13/~40** | 🔄 w toku |
+| **i18n** | Treść panelu/web w 14 językach: pomoc 37/37 ✓, web ✓, **UI panelu 14/~40** | 🔄 w toku |
 | **Wzrost** | Marketplace pluginów / multi‑guild jako usługa, retencja, infra prod | 🧭 plan |
 
 ## ✅ Zrealizowane — stan na v0.222
@@ -74,7 +74,7 @@ flowchart LR
 
 ## 🔭 W toku — i18n UI panelu
 
-Tłumaczenie etykiet/formularzy stron ustawień na 14 języków (powłoka + pomoc + web już gotowe). **Zrobione 13/~40 stron**; pozostaje **~25** (`/ai /applications /automations /commands /counters /creator /custom-commands /diagnostics /donations /eco /economy /engagement /gaming /integrations /levels /library /moderation /profile /responder /roles /scheduled /security /settings /setup /stats`). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02230).
+Tłumaczenie etykiet/formularzy stron ustawień na 14 języków (powłoka + pomoc + web już gotowe). **Zrobione 14/~40 stron**; pozostaje **~24** (`/ai /applications /automations /commands /counters /creator /custom-commands /diagnostics /donations /eco /economy /engagement /gaming /integrations /levels /library /moderation /profile /responder /roles /scheduled /settings /setup /stats`). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02240).
 
 ## 🧭 Wzrost (plan / opcjonalne)
 
@@ -86,4 +86,4 @@ Tłumaczenie etykiet/formularzy stron ustawień na 14 języków (powłoka + pomo
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑18 · v0.223.0 (#293) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑18 · v0.224.0 (#294) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
