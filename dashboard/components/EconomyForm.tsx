@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import type { EconomyConfig } from '../lib/serverEconomy';
 import AdvancedOnly from './AdvancedOnly';
 import Hint from './Hint';
+import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
 
 const inputCls =
@@ -11,6 +13,7 @@ const inputCls =
 const num = (v: string): number => Math.max(0, Math.floor(Number(v) || 0));
 
 export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
+  const { lang } = useLang();
   const [c, setC] = useState<EconomyConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -57,10 +60,10 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
 
   return (
     <div className="max-w-2xl space-y-5">
-      {Toggle('Ekonomia włączona', 'enabled')}
+      {Toggle(tp(lang, 'ui.eco.enabledToggle'), 'enabled')}
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Waluta (emoji/tekst)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.eco.currencyLabel')}</span>
           <input
             value={c.currency}
             onChange={(e) => setC({ ...c, currency: e.target.value })}
@@ -68,82 +71,69 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
             placeholder="🪙"
           />
         </label>
-        {N('Saldo startowe', 'startBalance', 'Tyle waluty dostaje każdy nowy gracz na start.')}
         {N(
-          'Maks. stawka hazardu',
-          'gambleMax',
-          'Górny limit zakładu w /eco gamble, slots, highlow itd.',
+          tp(lang, 'ui.eco.startBalanceLabel'),
+          'startBalance',
+          tp(lang, 'ui.eco.startBalanceHint'),
         )}
+        {N(tp(lang, 'ui.eco.gambleMaxLabel'), 'gambleMax', tp(lang, 'ui.eco.gambleMaxHint'))}
       </div>
 
       <div className="rounded-xl border border-line bg-bg/40 p-4">
-        <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-accent">Zarobki</p>
+        <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-accent">
+          {tp(lang, 'ui.eco.earningsHeading')}
+        </p>
         <div className="grid gap-4 sm:grid-cols-3">
-          {N('Dzienna kwota', 'dailyAmount', 'Bazowa wypłata /eco daily.')}
           {N(
-            'Bonus za streak',
+            tp(lang, 'ui.eco.dailyAmountLabel'),
+            'dailyAmount',
+            tp(lang, 'ui.eco.dailyAmountHint'),
+          )}
+          {N(
+            tp(lang, 'ui.eco.dailyStreakBonusLabel'),
             'dailyStreakBonus',
-            'Dodatek za każdy kolejny dzień serii daily (motywuje do codziennego wbijania).',
-          )}
-          {N('Cooldown pracy (min)', 'workCooldownMin', 'Co ile minut można użyć /eco work.')}
-          {N(
-            'Praca: min',
-            'workMin',
-            'Dolna granica losowanej wypłaty z /eco work (i bazy /eco crime).',
+            tp(lang, 'ui.eco.dailyStreakBonusHint'),
           )}
           {N(
-            'Praca: max',
-            'workMax',
-            'Górna granica losowanej wypłaty z /eco work (i bazy /eco crime).',
+            tp(lang, 'ui.eco.workCooldownLabel'),
+            'workCooldownMin',
+            tp(lang, 'ui.eco.workCooldownHint'),
           )}
+          {N(tp(lang, 'ui.eco.workMinLabel'), 'workMin', tp(lang, 'ui.eco.workMinHint'))}
+          {N(tp(lang, 'ui.eco.workMaxLabel'), 'workMax', tp(lang, 'ui.eco.workMaxHint'))}
           {N(
-            'Odsetki bank / dzień (%)',
+            tp(lang, 'ui.eco.bankInterestLabel'),
             'bankInterestPct',
-            'Dzienny % doliczany do salda w banku (pasywny dochód). 0 = wyłączone.',
+            tp(lang, 'ui.eco.bankInterestHint'),
           )}
+          {N(tp(lang, 'ui.eco.payTaxLabel'), 'payTaxPct', tp(lang, 'ui.eco.payTaxHint'))}
           {N(
-            'Podatek od przelewów (%)',
-            'payTaxPct',
-            'Potrącany z kwoty /eco pay. 0 = brak podatku.',
-          )}
-          {N(
-            'Nagroda za awans poziomu',
+            tp(lang, 'ui.eco.levelUpMoneyLabel'),
             'levelUpMoney',
-            'Tyle waluty dostaje użytkownik przy każdym level-upie. 0 = wyłączone.',
+            tp(lang, 'ui.eco.levelUpMoneyHint'),
           )}
         </div>
-        <p className="mt-2 text-xs text-muted">
-          💰 <strong>Odsetki bankowe</strong> — co dzień dolicza ten % do salda w banku każdej osoby
-          (pasywny dochód). 0 = wyłączone. Trafia też do historii transakcji jako „odsetki".
-        </p>
-        <p className="mt-1 text-xs text-muted">
-          🧾 <strong>Podatek od przelewów</strong> — potrącany z kwoty <code>/eco pay</code> (0 =
-          brak). 💰 <strong>Nagroda za awans</strong> — tyle waluty dostaje użytkownik przy każdym
-          awansie poziomu (0 = wyłączone).
-        </p>
+        <p className="mt-2 text-xs text-muted">{tp(lang, 'ui.eco.bankInterestNote')}</p>
+        <p className="mt-1 text-xs text-muted">{tp(lang, 'ui.eco.taxNote')}</p>
       </div>
 
       <AdvancedOnly>
         <div className="rounded-xl border border-line bg-bg/40 p-4 space-y-3">
           <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-            Rabunki i hazard
+            {tp(lang, 'ui.eco.advHeading')}
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
-            {Toggle('Rabunki włączone', 'robEnabled')}
-            {Toggle('Hazard włączony', 'gambleEnabled')}
+            {Toggle(tp(lang, 'ui.eco.robEnabledToggle'), 'robEnabled')}
+            {Toggle(tp(lang, 'ui.eco.gambleEnabledToggle'), 'gambleEnabled')}
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
-            {N('Szansa rabunku (%)', 'robChance', 'Prawdopodobieństwo udanego /eco rob.')}
+            {N(tp(lang, 'ui.eco.robChanceLabel'), 'robChance', tp(lang, 'ui.eco.robChanceHint'))}
             {N(
-              'Cooldown rabunku (min)',
+              tp(lang, 'ui.eco.robCooldownLabel'),
               'robCooldownMin',
-              'Wspólny cooldown dla /eco rob i /eco crime.',
+              tp(lang, 'ui.eco.robCooldownHint'),
             )}
-            {N(
-              'Maks. łup (% portfela)',
-              'robMaxPercent',
-              'Ile maksymalnie % portfela ofiary można ukraść.',
-            )}
+            {N(tp(lang, 'ui.eco.robMaxLabel'), 'robMaxPercent', tp(lang, 'ui.eco.robMaxHint'))}
           </div>
         </div>
       </AdvancedOnly>

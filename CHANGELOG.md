@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-304-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.234.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-305-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.235.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.235.0] — 🌍 i18n UI panelu — strona /eco (ekonomia serwera: config + sezon + sklep)
+
+- `[#305]` 🌍 **i18n UI panelu — kolejna fala: `/eco` (ekonomia serwerowa — konfiguracja, sezon, sklep ról).**
+  - 🖥️ **Panel**: 69 nowych kluczy `ui.eco.*` × **14 języków** w `panelI18n.ts` (parzystość 14×69=966) — największa fala dotąd. `app/eco/page.tsx` (serwer) + `EconomyForm.tsx` + `EcoSeasonForm.tsx` + `ShopManager.tsx` (klient) na `tp()`: intro + status, konfiguracja ekonomii (waluta, saldo, hazard, zarobki: daily/streak/praca/odsetki/podatek/level-up + podpowiedzi `Hint`, sekcja Zaawansowane: rabunki/hazard), sezon (włącznik, kanał, nagrody podium 🥇🥈🥉, reset, opis) i menedżer sklepu (formularz dodawania, efekty przedmiotów, rola czasowa, tabela, usuwanie). Przycisk błędu reużywa generyka `ui.saveError`. Nietłumaczone: subkomendy `/eco *` (balance/daily/work/rob/…), nazwy tabel (`f3-economy-schema.sql`), endpointy, format `pl-PL`, emoji walut.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 25/~40 stron.
 
 ## [0.234.0] — 🌍 i18n UI panelu — strona /economy (stawki Ghost Tokens)
 

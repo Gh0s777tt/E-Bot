@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import type { EcoSeasonConfig } from '../lib/serverEconomy';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -19,6 +21,7 @@ export default function EcoSeasonForm({
   guild: GuildMeta;
   currency: string;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<EcoSeasonConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -58,23 +61,25 @@ export default function EcoSeasonForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Sezon ekonomii włączony</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.eco.seasonEnabledToggle')}
+        </span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał ogłoszeń sezonu</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.eco.seasonChannelLabel')}</span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
-          placeholder="— wybierz kanał —"
+          placeholder={tp(lang, 'ui.eco.channelPh')}
         />
       </label>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        {Reward(`🥇 Nagroda #1 (${currency})`, 'reward1')}
-        {Reward(`🥈 Nagroda #2 (${currency})`, 'reward2')}
-        {Reward(`🥉 Nagroda #3 (${currency})`, 'reward3')}
+        {Reward(`${tp(lang, 'ui.eco.reward1Label')} (${currency})`, 'reward1')}
+        {Reward(`${tp(lang, 'ui.eco.reward2Label')} (${currency})`, 'reward2')}
+        {Reward(`${tp(lang, 'ui.eco.reward3Label')} (${currency})`, 'reward3')}
       </div>
 
       <label className="flex items-center gap-2.5 rounded-xl border border-line bg-bg/40 p-3 text-sm">
@@ -85,19 +90,13 @@ export default function EcoSeasonForm({
           className="h-4 w-4 accent-accent"
         />
         <span>
-          <span className="font-semibold text-white/90">Reset sald po sezonie</span>
-          <span className="ml-1 text-muted">
-            — zeruje portfele i banki wszystkich (podium dostaje nagrodę już w nowym sezonie).
-          </span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.eco.resetLabel')}</span>
+          <span className="ml-1 text-muted">{tp(lang, 'ui.eco.resetHint')}</span>
         </span>
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Co miesiąc (1. dnia) bot ogłasza top‑10 najbogatszych, wypłaca nagrody podium (trafiają do
-        historii jako „sezon") i — jeśli włączysz — resetuje salda. Nagroda 0 = bez wypłaty dla
-        danego miejsca.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.eco.seasonHelp')}</p>
     </div>
   );
 }

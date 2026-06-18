@@ -3,7 +3,9 @@
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import type { ShopItem } from '../lib/serverEconomy';
+import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 
 const inputCls =
@@ -18,6 +20,7 @@ export default function ShopManager({
   guild: GuildMeta;
   currency: string;
 }) {
+  const { lang } = useLang();
   const [items, setItems] = useState<ShopItem[]>(initial);
   const [name, setName] = useState('');
   const [price, setPrice] = useState(1000);
@@ -72,39 +75,37 @@ export default function ShopManager({
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Nazwa przedmiotu"
+          placeholder={tp(lang, 'ui.eco.namePh')}
           className={inputCls}
         />
         <input
           type="number"
           value={price}
           onChange={(e) => setPrice(Math.max(0, Math.floor(Number(e.target.value) || 0)))}
-          placeholder="Cena"
+          placeholder={tp(lang, 'ui.eco.pricePh')}
           className={inputCls}
         />
         <RoleSelect
           value={roleId}
           onChange={setRoleId}
           roles={guild.roles}
-          placeholder="— rola do nadania (opcjonalnie) —"
+          placeholder={tp(lang, 'ui.eco.rolePh')}
         />
         <input
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
-          placeholder="Opis (opcjonalnie)"
+          placeholder={tp(lang, 'ui.eco.descPh')}
           className={inputCls}
         />
         <select value={effect} onChange={(e) => setEffect(e.target.value)} className={inputCls}>
-          <option value="">Bez efektu (kolekcjonerski / rola)</option>
-          <option value="xp2">⚡ Podwójne XP (1h)</option>
-          <option value="shield">🛡️ Tarcza anty-rabunek (24h)</option>
-          <option value="lootbox">🎁 Lootbox (losowa waluta)</option>
+          <option value="">{tp(lang, 'ui.eco.effectNone')}</option>
+          <option value="xp2">{tp(lang, 'ui.eco.effectXp2')}</option>
+          <option value="shield">{tp(lang, 'ui.eco.effectShield')}</option>
+          <option value="lootbox">{tp(lang, 'ui.eco.effectLootbox')}</option>
         </select>
         {roleId && (
           <label className="space-y-1 text-sm sm:col-span-2">
-            <span className="font-semibold text-white/90">
-              ⏳ Rola czasowa — dni (0 = na stałe)
-            </span>
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.eco.durationLabel')}</span>
             <input
               type="number"
               min={0}
@@ -115,7 +116,7 @@ export default function ShopManager({
                   Math.max(0, Math.min(3650, Math.floor(Number(e.target.value) || 0))),
                 )
               }
-              placeholder="np. 30 — bot zdejmie rolę po 30 dniach"
+              placeholder={tp(lang, 'ui.eco.durationPh')}
               className={inputCls}
             />
           </label>
@@ -127,23 +128,20 @@ export default function ShopManager({
         disabled={st === 'saving' || !name.trim()}
         className="rounded-md bg-accent px-5 py-2 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
       >
-        {st === 'saving' ? 'Dodaję…' : 'Dodaj do sklepu'}
+        {st === 'saving' ? tp(lang, 'ui.eco.addingBtn') : tp(lang, 'ui.eco.addBtn')}
       </button>
-      {st === 'err' && <span className="ml-3 text-sm text-accent">Błąd zapisu</span>}
+      {st === 'err' && <span className="ml-3 text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
 
       {items.length === 0 ? (
-        <p className="text-sm text-muted">
-          Sklep pusty. Dodaj przedmioty powyżej (wymaga <code>f3-economy-schema.sql</code> w
-          Supabase).
-        </p>
+        <p className="text-sm text-muted">{tp(lang, 'ui.eco.shopEmpty')}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="text-xs uppercase tracking-wide text-muted">
               <tr className="border-b border-line">
-                <th className="px-3 py-2">Nazwa</th>
-                <th className="px-3 py-2">Cena</th>
-                <th className="px-3 py-2">Rola</th>
+                <th className="px-3 py-2">{tp(lang, 'ui.eco.thName')}</th>
+                <th className="px-3 py-2">{tp(lang, 'ui.eco.thPrice')}</th>
+                <th className="px-3 py-2">{tp(lang, 'ui.eco.thRole')}</th>
                 <th className="px-3 py-2" />
               </tr>
             </thead>
@@ -166,7 +164,7 @@ export default function ShopManager({
                   </td>
                   <td className="px-3 py-2 text-muted">
                     {i.role_id
-                      ? `@${guild.roles.find((r) => r.id === i.role_id)?.name ?? 'rola'}`
+                      ? `@${guild.roles.find((r) => r.id === i.role_id)?.name ?? tp(lang, 'ui.eco.roleFallback')}`
                       : '—'}
                     {i.duration_days ? (
                       <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
@@ -179,7 +177,7 @@ export default function ShopManager({
                       type="button"
                       onClick={() => remove(i.id)}
                       className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-                      aria-label="Usuń"
+                      aria-label={tp(lang, 'ui.eco.delAria')}
                     >
                       <Trash2 size={14} />
                     </button>
