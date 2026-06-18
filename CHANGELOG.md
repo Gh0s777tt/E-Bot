@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-294-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.224.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-295-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.225.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.225.0] — 🌍 i18n UI panelu — strona /levels (leveling + sezony)
+
+- `[#295]` 🌍 **i18n UI panelu — kolejna fala: `/levels` (leveling + sezonowe rankingi).**
+  - 🖥️ **Panel**: 58 nowych kluczy `ui.levels.*` × **14 języków** w `panelI18n.ts` (parzystość 14×58=812). `app/levels/page.tsx` (serwer) + `LevelingForm.tsx` i `SeasonsForm.tsx` (klient) na `tp()`. Pokryte: XP/cooldown/mnożniki/krzywa trudności, anti-AFK voice, kumulacja ról, DM awansu, osiągnięcia, role-nagrody, mnożniki za rolę, kanały/role bez XP, prestiż oraz hall of fame (reset sezonu). Liczby XP w języku panelu (`toLocaleString(lang)`). Tokeny (`{user}`, `{level}`, `/prestige`, `/hof`, `f4-leveling-schema.sql`, `_ALL.sql`, `scripts/faza4-schema.sql`, `XP`, `VIP`, `hall of fame`, `Discord`, `Supabase`) nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 15/~40 stron.
 
 ## [0.224.0] — 🌍 i18n UI panelu — strona /security (Anti-Nuke / weryfikacja / anti-raid)
 

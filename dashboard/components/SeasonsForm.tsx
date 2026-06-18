@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { SeasonsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -16,6 +18,7 @@ export default function SeasonsForm({
   initial: SeasonsConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<SeasonsConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -43,12 +46,12 @@ export default function SeasonsForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Sezonowe rankingi włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.seasonsEnabled')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał ogłoszeń (hall of fame)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.hofChannel')}</span>
           <ChannelSelect
             value={c.channelId}
             onChange={(v) => setC({ ...c, channelId: v })}
@@ -56,7 +59,7 @@ export default function SeasonsForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Ilu w hall of fame (1–25)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.hofTop')}</span>
           <input
             type="number"
             value={c.top}
@@ -79,20 +82,13 @@ export default function SeasonsForm({
           className="mt-0.5 h-4 w-4 accent-accent"
         />
         <span>
-          <span className="font-semibold text-white/90">Reset XP po sezonie</span>
-          <span className="block text-xs text-accent">
-            ⚠️ Zeruje XP i poziomy wszystkich po archiwizacji miesiąca (prestiż zostaje). Bez tego
-            hall of fame zapisuje aktualny ranking co miesiąc, ale XP rośnie dalej.
-          </span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.resetXp')}</span>
+          <span className="block text-xs text-accent">{tp(lang, 'ui.levels.resetXpHint')}</span>
         </span>
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Na przełomie miesiąca bot zapisuje top XP do hall of fame, ogłasza na kanale i (opcjonalnie)
-        resetuje sezon. Podgląd: komenda <code className="text-accent">/hof</code>. Wymaga{' '}
-        <code>_ALL.sql</code> w Supabase.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.levels.seasonsFootNote')}</p>
     </div>
   );
 }

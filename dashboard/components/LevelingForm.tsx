@@ -4,8 +4,10 @@ import { Plus, Trash2, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { LevelingConfig } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import AdvancedOnly from './AdvancedOnly';
 import Hint from './Hint';
+import { useLang } from './LangContext';
 import MessageEditor from './MessageEditor';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -25,6 +27,7 @@ export default function LevelingForm({
   initial: LevelingConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const { rewards, multipliers, noXpChannels, noXpRoles, ...rest } = initial;
   const [b, setB] = useState(rest);
   const idRef = useRef(0);
@@ -69,7 +72,7 @@ export default function LevelingForm({
         type="button"
         onClick={onX}
         className="text-muted hover:text-accent"
-        aria-label="Usuń"
+        aria-label={tp(lang, 'ui.levels.remove')}
       >
         <X size={11} />
       </button>
@@ -85,12 +88,12 @@ export default function LevelingForm({
           onChange={(e) => setB({ ...b, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Leveling włączony</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.enabled')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">XP za wiadomość</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.xpMsg')}</span>
           <input
             type="number"
             value={b.xpPerMessage}
@@ -99,7 +102,7 @@ export default function LevelingForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">XP za minutę voice</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.xpVoice')}</span>
           <input
             type="number"
             value={b.xpPerVoiceMin}
@@ -109,8 +112,8 @@ export default function LevelingForm({
         </label>
         <label className="space-y-1 text-sm">
           <span className="font-semibold text-white/90">
-            Cooldown wiadomości (s)
-            <Hint text="Minimalny odstęp między wiadomościami liczonymi do XP — chroni przed spamem dla XP." />
+            {tp(lang, 'ui.levels.cooldown')}
+            <Hint text={tp(lang, 'ui.levels.cooldownHint')} />
           </span>
           <input
             type="number"
@@ -121,8 +124,8 @@ export default function LevelingForm({
         </label>
         <label className="space-y-1 text-sm">
           <span className="font-semibold text-white/90">
-            Mnożnik weekendowy (1 = off)
-            <Hint text="W soboty i niedziele XP jest mnożone przez tę wartość — np. 2 = podwójne XP w weekendy." />
+            {tp(lang, 'ui.levels.weekend')}
+            <Hint text={tp(lang, 'ui.levels.weekendHint')} />
           </span>
           <input
             type="number"
@@ -134,8 +137,8 @@ export default function LevelingForm({
         </label>
         <label className="space-y-1 text-sm">
           <span className="font-semibold text-white/90">
-            Tempo zdobywania XP (krzywa)
-            <Hint text="Preset trudności mnożący całe XP: Łatwa = szybsze poziomy (×1.5), Normalna = standard, Trudna = wolniejsze (×0.6). Działa na wierzchu pozostałych mnożników." />
+            {tp(lang, 'ui.levels.curve')}
+            <Hint text={tp(lang, 'ui.levels.curveHint')} />
           </span>
           <select
             value={b.difficulty}
@@ -144,18 +147,20 @@ export default function LevelingForm({
             }
             className={inputCls}
           >
-            <option value="easy">🟢 Łatwa (×1.5 — szybciej)</option>
-            <option value="normal">⚪ Normalna (×1)</option>
-            <option value="hard">🔴 Trudna (×0.6 — wolniej)</option>
+            <option value="easy">{tp(lang, 'ui.levels.diffEasy')}</option>
+            <option value="normal">{tp(lang, 'ui.levels.diffNormal')}</option>
+            <option value="hard">{tp(lang, 'ui.levels.diffHard')}</option>
           </select>
         </label>
         <label className="space-y-1 text-sm sm:col-span-2">
-          <span className="font-semibold text-white/90">Kanał ogłoszeń awansu</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.levels.announceChannel')}
+          </span>
           <ChannelSelect
             value={b.announceChannelId}
             onChange={(v) => setB({ ...b, announceChannelId: v })}
             channels={guild.channels}
-            placeholder="— ten sam kanał —"
+            placeholder={tp(lang, 'ui.levels.sameChannel')}
           />
         </label>
       </div>
@@ -169,8 +174,8 @@ export default function LevelingForm({
             className="h-4 w-4 accent-accent"
           />
           <span className="font-semibold text-white/90">
-            Anti‑AFK voice (≥2 osób, bez mute)
-            <Hint text="XP za voice tylko, gdy na kanale są min. 2 osoby i użytkownik nie jest wyciszony — blokuje farmienie AFK." />
+            {tp(lang, 'ui.levels.antiAfk')}
+            <Hint text={tp(lang, 'ui.levels.antiAfkHint')} />
           </span>
         </label>
         <label className="flex items-center gap-3 text-sm">
@@ -181,8 +186,8 @@ export default function LevelingForm({
             className="h-4 w-4 accent-accent"
           />
           <span className="font-semibold text-white/90">
-            Kumuluj role‑nagrody
-            <Hint text="Włączone: użytkownik trzyma wszystkie role-nagrody do swojego poziomu. Wyłączone: tylko najwyższą." />
+            {tp(lang, 'ui.levels.stackRewards')}
+            <Hint text={tp(lang, 'ui.levels.stackRewardsHint')} />
           </span>
         </label>
         <label className="flex items-center gap-3 text-sm">
@@ -192,7 +197,7 @@ export default function LevelingForm({
             onChange={(e) => setB({ ...b, levelUpDm: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">DM do użytkownika przy awansie</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.levelUpDm')}</span>
         </label>
         <label className="flex items-center gap-3 text-sm">
           <input
@@ -201,22 +206,20 @@ export default function LevelingForm({
             onChange={(e) => setB({ ...b, achievementsEnabled: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">
-            🏆 Osiągnięcia — ogłaszaj odznaki-tiery (poziom 5/10/25/50/100/200) na kanale awansów
-          </span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.achievements')}</span>
         </label>
       </div>
 
       <div className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Wiadomość awansu (puste = domyślna)</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.levels.levelUpMsg')}</span>
         <MessageEditor
           value={b.levelUpMessage}
           onChange={(v) => setB({ ...b, levelUpMessage: v })}
           rows={2}
-          placeholder="🏆 {user} osiągnął poziom {level}!"
+          placeholder={tp(lang, 'ui.levels.levelUpMsgPh')}
           variables={[
-            { token: '{user}', label: 'Użytkownik', sample: '@Gracz' },
-            { token: '{level}', label: 'Poziom', sample: '12' },
+            { token: '{user}', label: tp(lang, 'ui.levels.varUser'), sample: '@Gracz' },
+            { token: '{level}', label: tp(lang, 'ui.levels.varLevel'), sample: '12' },
           ]}
         />
       </div>
@@ -224,13 +227,15 @@ export default function LevelingForm({
       {/* Role-nagrody */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Role‑nagrody (poziom → rola)</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.levels.rewardsLabel')}
+          </span>
           <button
             type="button"
             onClick={() => setRws([...rws, { level: 5, roleId: '', k: `r${idRef.current++}` }])}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
           >
-            <Plus size={12} /> Dodaj
+            <Plus size={12} /> {tp(lang, 'ui.levels.add')}
           </button>
         </div>
         {rws.map((r) => (
@@ -246,7 +251,7 @@ export default function LevelingForm({
                 )
               }
               className={`${inputCls} w-24`}
-              placeholder="poziom"
+              placeholder={tp(lang, 'ui.levels.levelPh')}
             />
             <RoleSelect
               value={r.roleId}
@@ -257,7 +262,7 @@ export default function LevelingForm({
               type="button"
               onClick={() => setRws(rws.filter((x) => x.k !== r.k))}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.levels.remove')}
             >
               <Trash2 size={14} />
             </button>
@@ -270,8 +275,8 @@ export default function LevelingForm({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-white/90">
-              Mnożniki XP za rolę
-              <Hint text="Posiadacze roli zdobywają XP szybciej (brany najwyższy mnożnik, np. VIP ×2)." />
+              {tp(lang, 'ui.levels.multsLabel')}
+              <Hint text={tp(lang, 'ui.levels.multsHint')} />
             </span>
             <button
               type="button"
@@ -280,7 +285,7 @@ export default function LevelingForm({
               }
               className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
             >
-              <Plus size={12} /> Dodaj
+              <Plus size={12} /> {tp(lang, 'ui.levels.add')}
             </button>
           </div>
           {mults.map((m) => (
@@ -308,7 +313,7 @@ export default function LevelingForm({
                 type="button"
                 onClick={() => setMults(mults.filter((x) => x.k !== m.k))}
                 className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-                aria-label="Usuń"
+                aria-label={tp(lang, 'ui.levels.remove')}
               >
                 <Trash2 size={14} />
               </button>
@@ -319,12 +324,14 @@ export default function LevelingForm({
         {/* No-XP kanały / role */}
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <span className="text-sm font-semibold text-white/90">Kanały bez XP</span>
+            <span className="text-sm font-semibold text-white/90">
+              {tp(lang, 'ui.levels.noXpChannels')}
+            </span>
             <ChannelSelect
               value=""
               onChange={(v) => v && !noCh.includes(v) && setNoCh([...noCh, v])}
               channels={guild.channels}
-              placeholder="+ dodaj kanał"
+              placeholder={tp(lang, 'ui.levels.addChannel')}
             />
             <div className="flex flex-wrap gap-1.5">
               {noCh.map((id) => (
@@ -337,12 +344,14 @@ export default function LevelingForm({
             </div>
           </div>
           <div className="space-y-2">
-            <span className="text-sm font-semibold text-white/90">Role bez XP</span>
+            <span className="text-sm font-semibold text-white/90">
+              {tp(lang, 'ui.levels.noXpRoles')}
+            </span>
             <RoleSelect
               value=""
               onChange={(v) => v && !noRo.includes(v) && setNoRo([...noRo, v])}
               roles={guild.roles}
-              placeholder="+ dodaj rolę"
+              placeholder={tp(lang, 'ui.levels.addRole')}
             />
             <div className="flex flex-wrap gap-1.5">
               {noRo.map((id) => (
@@ -366,13 +375,15 @@ export default function LevelingForm({
               className="h-4 w-4 accent-accent"
             />
             <span className="font-semibold text-white/90">
-              Prestiż włączony (/prestige resetuje XP za odznakę)
+              {tp(lang, 'ui.levels.prestigeEnabled')}
             </span>
           </label>
           {b.prestigeEnabled && (
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-1 text-sm">
-                <span className="font-semibold text-white/90">Poziom wymagany</span>
+                <span className="font-semibold text-white/90">
+                  {tp(lang, 'ui.levels.prestigeLevel')}
+                </span>
                 <input
                   type="number"
                   value={b.prestigeLevel}
@@ -381,12 +392,14 @@ export default function LevelingForm({
                 />
               </label>
               <label className="space-y-1 text-sm">
-                <span className="font-semibold text-white/90">Rola za prestiż</span>
+                <span className="font-semibold text-white/90">
+                  {tp(lang, 'ui.levels.prestigeRole')}
+                </span>
                 <RoleSelect
                   value={b.prestigeRoleId}
                   onChange={(v) => setB({ ...b, prestigeRoleId: v })}
                   roles={guild.roles}
-                  placeholder="— brak —"
+                  placeholder={tp(lang, 'ui.levels.noRole')}
                 />
               </label>
             </div>
@@ -395,10 +408,7 @@ export default function LevelingForm({
       </AdvancedOnly>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Wymaga jednorazowo <code>f4-leveling-schema.sql</code> dla prestiżu. Resztę bot stosuje na
-        żywo (settings‑sync).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.levels.footNote')}</p>
     </div>
   );
 }
