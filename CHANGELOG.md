@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-292-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-293-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.223.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.223.0] — 🌍 i18n UI panelu — strona /tickets (system zgłoszeń)
+
+- `[#293]` 🌍 **i18n UI panelu — kolejna fala: `/tickets` (system zgłoszeń + konfiguracja).**
+  - 🖥️ **Panel**: 46 nowych kluczy `ui.tickets.*` × **14 języków** w `panelI18n.ts` (parzystość 14×46=644). `app/tickets/page.tsx` (serwer) + `TicketsConfigForm.tsx` i `TicketCloseButton.tsx` (klient) na `tp()`. Etykiety statusów (Otwarty/Przejęty/Zamknięty), statystyki (Otwarte/Przejęte/Zamknięte), kolumny tabeli, style przycisków kategorii (Niebieski/Szary/Zielony/Czerwony), placeholdery i przypisy. **Data utworzenia w języku panelu** (`toLocaleString(lang)` zamiast `'pl-PL'`). Tokeny (`{user}`, `{subject}`, `/ticketpanel`, `scripts/faza4-schema.sql`, `f5-tickets-schema.sql`, `Emoji`, `Discord`, `Supabase`) i emoji (📄/📋/⭐) nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 13/~40 stron.
 
 ## [0.222.0] — 🌍 i18n UI panelu — strona /live (status streamów)
 

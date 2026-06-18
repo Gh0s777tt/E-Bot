@@ -4,7 +4,9 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { TicketCategory } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
+import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -32,14 +34,15 @@ type Init = Omit<Cfg, 'panelSpec' | 'categories' | 'questions'> & {
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-const STYLES: { value: TicketCategory['style']; label: string }[] = [
-  { value: 'primary', label: 'Niebieski' },
-  { value: 'secondary', label: 'Szary' },
-  { value: 'success', label: 'Zielony' },
-  { value: 'danger', label: 'Czerwony' },
+const STYLES: { value: TicketCategory['style']; key: string }[] = [
+  { value: 'primary', key: 'ui.tickets.styleBlue' },
+  { value: 'secondary', key: 'ui.tickets.styleGray' },
+  { value: 'success', key: 'ui.tickets.styleGreen' },
+  { value: 'danger', key: 'ui.tickets.styleRed' },
 ];
 
 export default function TicketsConfigForm({ initial, guild }: { initial: Init; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>({
     ...initial,
     panelSpec: initial.panelSpec
@@ -96,12 +99,14 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">System ticketów włączony</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.tickets.enabledLabel')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kategoria kanałów (Discord)</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.tickets.categoryLabel')}
+          </span>
           <ChannelSelect
             value={c.categoryId}
             onChange={(v) => setC({ ...c, categoryId: v })}
@@ -110,7 +115,9 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Domyślna rola obsługi</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.tickets.supportRoleLabel')}
+          </span>
           <RoleSelect
             value={c.supportRoleId}
             onChange={(v) => setC({ ...c, supportRoleId: v })}
@@ -118,7 +125,9 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał logów</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.tickets.logChannelLabel')}
+          </span>
           <ChannelSelect
             value={c.logChannelId}
             onChange={(v) => setC({ ...c, logChannelId: v })}
@@ -128,25 +137,19 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
       </div>
 
       <label className="block space-y-1 text-sm">
-        <span className="font-semibold text-white/90">
-          Domyślna wiadomość powitalna w ticketcie
-        </span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.tickets.welcomeLabel')}</span>
         <textarea
           value={c.welcome}
           onChange={(e) => setC({ ...c, welcome: e.target.value })}
           rows={2}
           className={inputCls}
-          placeholder="Dzięki za zgłoszenie! {user} — obsługa odezwie się wkrótce."
+          placeholder={tp(lang, 'ui.tickets.welcomePlaceholder')}
         />
-        <span className="text-xs text-muted">
-          Zmienne: {'{user}'}, {'{subject}'}. Używana, gdy kategoria nie ma własnej.
-        </span>
+        <span className="text-xs text-muted">{tp(lang, 'ui.tickets.welcomeHelp')}</span>
       </label>
 
       <div className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">
-          Wiadomość panelu (komenda <code className="text-accent">/ticketpanel</code>)
-        </span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.tickets.panelMsgLabel')}</span>
         <MessageStudio
           value={c.panelSpec}
           onChange={(panelSpec) => setC({ ...c, panelSpec })}
@@ -157,20 +160,15 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <span className="font-semibold text-white/90">
-              Kategorie ticketów (przyciski panelu)
-            </span>
-            <p className="text-xs text-muted">
-              Każda kategoria = osobny przycisk (np. Pomoc, IT, Nagrody) z własną rolą i powitaniem.
-              Brak kategorii = jeden przycisk „Otwórz ticket".
-            </p>
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.tickets.catsLabel')}</span>
+            <p className="text-xs text-muted">{tp(lang, 'ui.tickets.catsHelp')}</p>
           </div>
           <button
             type="button"
             onClick={addCategory}
             className="flex shrink-0 items-center gap-1 rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated"
           >
-            <Plus size={13} /> Dodaj
+            <Plus size={13} /> {tp(lang, 'ui.tickets.add')}
           </button>
         </div>
         {c.categories.map((cat) => (
@@ -179,7 +177,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
               <input
                 value={cat.label}
                 onChange={(e) => setCategory(cat.id, { label: e.target.value })}
-                placeholder="Nazwa przycisku (np. Pomoc)"
+                placeholder={tp(lang, 'ui.tickets.catNamePlaceholder')}
                 className={inputCls}
                 maxLength={80}
               />
@@ -199,7 +197,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
               >
                 {STYLES.map((s) => (
                   <option key={s.value} value={s.value}>
-                    {s.label}
+                    {tp(lang, s.key)}
                   </option>
                 ))}
               </select>
@@ -209,13 +207,13 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
                 value={cat.supportRoleId}
                 onChange={(v) => setCategory(cat.id, { supportRoleId: v })}
                 roles={guild.roles}
-                placeholder="— rola obsługi kategorii —"
+                placeholder={tp(lang, 'ui.tickets.catRolePlaceholder')}
               />
               <div className="flex gap-2">
                 <input
                   value={cat.welcome}
                   onChange={(e) => setCategory(cat.id, { welcome: e.target.value })}
-                  placeholder="Powitanie (opcjonalne, {user}/{subject})"
+                  placeholder={tp(lang, 'ui.tickets.catWelcomePlaceholder')}
                   className={inputCls}
                   maxLength={1000}
                 />
@@ -223,7 +221,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
                   type="button"
                   onClick={() => removeCategory(cat.id)}
                   className="rounded-md border border-line px-2 text-muted transition hover:border-accent hover:text-accent"
-                  title="Usuń kategorię"
+                  title={tp(lang, 'ui.tickets.removeCat')}
                 >
                   <Trash2 size={14} />
                 </button>
@@ -235,9 +233,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">
-            Auto-zamknij po bezczynności (godziny, 0 = off)
-          </span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.tickets.slaLabel')}</span>
           <input
             type="number"
             value={c.slaHours}
@@ -254,14 +250,14 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
             onChange={(e) => setC({ ...c, ratingEnabled: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Proś o ocenę (1–5 ⭐)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.tickets.ratingLabel')}</span>
         </label>
       </div>
 
       <div className="space-y-2 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-white/90">
-            📋 Pytania formularza przed otwarciem (max 4)
+            {tp(lang, 'ui.tickets.questionsLabel')}
           </span>
           <button
             type="button"
@@ -271,14 +267,11 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
             disabled={c.questions.length >= 4}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
-            <Plus size={12} /> Dodaj
+            <Plus size={12} /> {tp(lang, 'ui.tickets.add')}
           </button>
         </div>
         {c.questions.length === 0 && (
-          <p className="text-xs text-muted">
-            Brak pytań — użytkownik poda tylko temat. Dodaj pytania (np. „Jaki masz nick w grze?"),
-            a bot zada je w okienku przed otwarciem ticketu i wklei odpowiedzi do wątku.
-          </p>
+          <p className="text-xs text-muted">{tp(lang, 'ui.tickets.questionsEmpty')}</p>
         )}
         {c.questions.map((q, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: lista edytowalna po indeksie
@@ -288,7 +281,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
               onChange={(e) =>
                 setC({ ...c, questions: c.questions.map((x, j) => (j === i ? e.target.value : x)) })
               }
-              placeholder={`Pytanie ${i + 1}`}
+              placeholder={`${tp(lang, 'ui.tickets.questionPlaceholder')} ${i + 1}`}
               maxLength={100}
               className={inputCls}
             />
@@ -296,7 +289,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
               type="button"
               onClick={() => setC({ ...c, questions: c.questions.filter((_, j) => j !== i) })}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń pytanie"
+              aria-label={tp(lang, 'ui.tickets.removeQuestion')}
             >
               <Trash2 size={14} />
             </button>
@@ -305,10 +298,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
       </div>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Po zapisie wyślij/odśwież panel komendą <code className="text-accent">/ticketpanel</code> na
-        docelowym kanale. Ocena wymaga <code>f5-tickets-schema.sql</code>.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.tickets.footNote')}</p>
     </div>
   );
 }
