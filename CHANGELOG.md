@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-296-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.226.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-297-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.227.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.227.0] — 🌍 i18n UI panelu — strona /responder (komendy własne + autoresponder)
+
+- `[#297]` 🌍 **i18n UI panelu — kolejna fala: `/responder` (komendy własne + autoresponder).**
+  - 🖥️ **Panel**: 17 nowych kluczy `ui.responder.*` × **14 języków** w `panelI18n.ts` (parzystość 14×17=238). `app/responder/page.tsx` (serwer) + `ResponderForm.tsx` (klient) na `tp()`. Typy dopasowania (Zawiera/Dokładnie/Zaczyna się) na klucze; prefiks komend interpolowany w etykiecie i przypisie przez `.replace('{prefix}', …)`. Tokeny (`{user}`, `{server}`, przykłady `!regulamin`) nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 17/~40 stron.
 
 ## [0.226.0] — 🌍 i18n UI panelu — strona /counters (liczniki kanałów)
 
