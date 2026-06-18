@@ -2,6 +2,7 @@ import { Trophy } from 'lucide-react';
 import Link from 'next/link';
 import ProfileCard from '../../../../components/ProfileCard';
 import { profileCard } from '../../../../lib/public';
+import { getPanelLocale } from '../../../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const card = await profileCard(id);
+  const lang = await getPanelLocale();
   return (
     <div className="mx-auto max-w-xl px-5 py-10">
       <header className="mb-6 flex items-center justify-between">
@@ -30,7 +32,7 @@ export default async function PublicProfilePage({ params }: { params: Promise<{ 
         </Link>
       </header>
 
-      <ProfileCard data={card} uname={card.username} />
+      <ProfileCard data={card} uname={card.username} lang={lang} />
 
       {!card.found && (
         <p className="mt-4 text-center text-sm text-muted">

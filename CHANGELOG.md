@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-301-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.231.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-302-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.232.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.232.0] — 🌍 i18n UI panelu — strona /profile (profil + karta gracza)
+
+- `[#302]` 🌍 **i18n UI panelu — kolejna fala: `/profile` (profil właściciela + karta gracza).**
+  - 🖥️ **Panel**: 41 nowych kluczy × **14 języków** w `panelI18n.ts` — `ui.profile.*` (30 kluczy, parzystość 14×30=420) + współdzielone `ui.tx.*` (11 powodów transakcji ekonomii, 14×11=154). `app/profile/page.tsx` + `components/ProfileCard.tsx` (oba serwerowe) na `tp()`: nagłówek, identyfikator, wylogowanie, sekcja konta GH0ST (połączono / instrukcja `/link`), kafelki (wiadomości, voice, portfel, bank, majątek, streak, przedmioty, zaproszenia), pasek poziomu, odznaki + „najbliższe", historia ekonomii i wykres salda. `ProfileCard` przyjmuje teraz `lang`; publiczna `app/p/u/[id]/page.tsx` przekazuje locale (fallback PL). Marki (`GH0ST EMPIRE`, `Ghost Tokens`, `GT`, `Discord`, `XP`), token `/link` i format `pl-PL` nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 22/~40 stron.
 
 ## [0.231.0] — 🌍 i18n UI panelu — strona /stats (statystyki + digest)
 

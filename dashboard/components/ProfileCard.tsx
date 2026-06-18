@@ -1,31 +1,35 @@
 import { BADGE_COUNT, nextBadges, resolveBadges } from '../lib/badges';
 import { relTime } from '../lib/insights';
+import { type PanelLocale, tp } from '../lib/panelI18n';
 import type { ProfileCardData } from '../lib/public';
 import AreaChart from './AreaChart';
 
-const TX_LABEL: Record<string, string> = {
-  daily: '💸 Dzienna',
-  praca: '💼 Praca',
-  rabunek: '🦹 Rabunek',
-  okradziono: '😱 Okradziono',
-  mandat: '🚓 Mandat',
-  przelew: '🤝 Przelew',
-  gamble: '🎲 Zakład',
-  slots: '🎰 Sloty',
-  sklep: '🛒 Sklep',
-  lootbox: '🎁 Lootbox',
-  ruletka: '🎡 Ruletka',
-};
+// Znane powody transakcji ekonomii → klucze i18n `ui.tx.*`; nieznane wyświetlamy jako surowy kod.
+const TX_REASONS = new Set([
+  'daily',
+  'praca',
+  'rabunek',
+  'okradziono',
+  'mandat',
+  'przelew',
+  'gamble',
+  'slots',
+  'sklep',
+  'lootbox',
+  'ruletka',
+]);
 
 // Karta profilu w dashboardzie — odpowiednik karty z serwera, wzbogacona o ekonomię i aktywność.
 export default function ProfileCard({
   data,
   avatar,
   uname,
+  lang,
 }: {
   data: ProfileCardData;
   avatar?: string;
   uname: string;
+  lang: PanelLocale;
 }) {
   const pct = data.forLevel ? Math.min(100, Math.round((data.inLevel / data.forLevel) * 100)) : 0;
   const vh = Math.floor(data.voiceMin / 60);
@@ -40,14 +44,17 @@ export default function ProfileCard({
     invites: data.invites,
   });
   const tiles: { label: string; value: string | number }[] = [
-    { label: 'Wiadomości', value: data.messages.toLocaleString('pl-PL') },
-    { label: 'Czas na voice', value: vh ? `${vh}h ${vm}m` : `${vm}m` },
-    { label: 'Portfel', value: data.wallet.toLocaleString('pl-PL') },
-    { label: 'Bank', value: data.bank.toLocaleString('pl-PL') },
-    { label: 'Majątek', value: netWorth.toLocaleString('pl-PL') },
-    { label: '🔥 Streak', value: data.dailyStreak ? `${data.dailyStreak} dni` : '—' },
-    { label: '🎒 Przedmioty', value: data.items },
-    { label: 'Zaproszenia', value: data.invites },
+    { label: tp(lang, 'ui.profile.tileMessages'), value: data.messages.toLocaleString('pl-PL') },
+    { label: tp(lang, 'ui.profile.tileVoice'), value: vh ? `${vh}h ${vm}m` : `${vm}m` },
+    { label: tp(lang, 'ui.profile.tileWallet'), value: data.wallet.toLocaleString('pl-PL') },
+    { label: tp(lang, 'ui.profile.tileBank'), value: data.bank.toLocaleString('pl-PL') },
+    { label: tp(lang, 'ui.profile.tileNetWorth'), value: netWorth.toLocaleString('pl-PL') },
+    {
+      label: tp(lang, 'ui.profile.tileStreak'),
+      value: data.dailyStreak ? `${data.dailyStreak} ${tp(lang, 'ui.profile.streakDays')}` : '—',
+    },
+    { label: tp(lang, 'ui.profile.tileItems'), value: data.items },
+    { label: tp(lang, 'ui.profile.tileInvites'), value: data.invites },
   ];
 
   return (
@@ -74,11 +81,11 @@ export default function ProfileCard({
           <h3 className="truncate font-display text-2xl tracking-wide">{uname}</h3>
           <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm">
             <span className="rounded-md bg-accent/15 px-2 py-0.5 font-semibold text-accent">
-              Poziom {data.level}
+              {tp(lang, 'ui.profile.level')} {data.level}
             </span>
             {data.rank > 0 && (
               <span className="rounded-md border border-line px-2 py-0.5 text-muted">
-                #{data.rank} w rankingu XP
+                #{data.rank} {tp(lang, 'ui.profile.rankSuffix')}
               </span>
             )}
           </div>
@@ -87,7 +94,7 @@ export default function ProfileCard({
 
       <div className="relative mt-4">
         <div className="flex justify-between text-[11px] text-muted">
-          <span>Postęp poziomu</span>
+          <span>{tp(lang, 'ui.profile.levelProgress')}</span>
           <span>
             {data.inLevel.toLocaleString('pl-PL')} / {data.forLevel.toLocaleString('pl-PL')} XP
           </span>
@@ -111,7 +118,7 @@ export default function ProfileCard({
 
       <div className="relative mt-4">
         <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-wide text-muted">
-          <span>Odznaki</span>
+          <span>{tp(lang, 'ui.profile.badges')}</span>
           <span className="font-semibold text-accent">
             {data.badges}/{BADGE_COUNT}
           </span>
@@ -130,16 +137,14 @@ export default function ProfileCard({
             ))}
           </div>
         ) : (
-          <p className="text-xs text-muted">
-            Brak odznak — zdobywaj poziomy, ekonomię i zapraszaj znajomych, a pojawią się tutaj.
-          </p>
+          <p className="text-xs text-muted">{tp(lang, 'ui.profile.noBadges')}</p>
         )}
       </div>
 
       {upcoming.length > 0 && (
         <div className="relative mt-4">
           <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
-            Najbliższe odznaki
+            {tp(lang, 'ui.profile.upcomingBadges')}
           </div>
           <div className="space-y-2">
             {upcoming.map((u) => (
@@ -167,12 +172,14 @@ export default function ProfileCard({
       {data.history.length > 0 && (
         <div className="relative mt-4">
           <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
-            Historia ekonomii
+            {tp(lang, 'ui.profile.ecoHistory')}
           </div>
           <ul className="space-y-1">
             {data.history.map((h) => (
               <li key={`${h.ts}-${h.reason}`} className="flex items-center gap-2 text-sm">
-                <span className="min-w-0 flex-1 truncate">{TX_LABEL[h.reason] ?? h.reason}</span>
+                <span className="min-w-0 flex-1 truncate">
+                  {TX_REASONS.has(h.reason) ? tp(lang, `ui.tx.${h.reason}`) : h.reason}
+                </span>
                 <span className="shrink-0 text-[11px] text-muted">{relTime(h.ts, now)}</span>
                 <span
                   className={`w-24 shrink-0 text-right font-semibold tabular-nums ${h.delta >= 0 ? 'text-green-400' : 'text-accent'}`}
@@ -189,19 +196,15 @@ export default function ProfileCard({
       {data.flowSeries.length >= 2 && (
         <div className="relative mt-4">
           <div className="mb-1 text-[11px] uppercase tracking-wide text-muted">
-            ≈ Saldo w czasie
+            {tp(lang, 'ui.profile.balanceOverTime')}
           </div>
           <AreaChart values={data.flowSeries} height={90} />
-          <p className="mt-1 text-[10px] text-muted">
-            Przybliżone — odtworzone z logowanych transakcji ekonomii.
-          </p>
+          <p className="mt-1 text-[10px] text-muted">{tp(lang, 'ui.profile.balanceApprox')}</p>
         </div>
       )}
 
       {!data.found && (
-        <p className="relative mt-3 text-xs text-muted">
-          Brak danych — napisz coś na serwerze albo użyj ekonomii/leveli, a karta się wypełni.
-        </p>
+        <p className="relative mt-3 text-xs text-muted">{tp(lang, 'ui.profile.cardEmpty')}</p>
       )}
     </div>
   );
