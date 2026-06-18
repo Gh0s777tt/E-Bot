@@ -94,7 +94,7 @@ export default function Assistant() {
                     .
                   </>
                 ) : (
-                  <>{a.error}</>
+                  a.error
                 )}
               </div>
             )}
