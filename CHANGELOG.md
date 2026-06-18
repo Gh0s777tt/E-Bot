@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-306-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.236.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-307-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.237.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.237.0] — 🌍 i18n UI panelu — strona /integrations (statusy + webhook relay)
+
+- `[#307]` 🌍 **i18n UI panelu — kolejna fala: `/integrations` (statusy integracji + AI runtime + webhook przychodzący).**
+  - 🖥️ **Panel**: 24 nowe klucze `ui.integrations.*` × **14 języków** w `panelI18n.ts` (parzystość 14×24=336). `IntegrationsManager.tsx` + `WebhookRelayForm.tsx` (klient) na `tp()`: intro (env vs baza), karty statusu (OK/brak + włącznik), AI runtime (dostawca/model), formularz webhooka (włącznik, kanał, token + Generuj, szablon, instrukcja URL z segmentami wokół `POST`/JSON/`x-webhook-token`). Przyciski/komunikat zapisu reużywają generyków `ui.save`/`ui.saving`/`ui.saved`. Nietłumaczone: nazwy integracji/grup z `lib/` (dane), marki (`Zapier`/`Make`/`GitHub`/`IFTTT`/`OpenAI`/`DeepSeek`), tokeny (`POST`, `x-webhook-token`, nazwy modeli, JSON przykładowy).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 27/~40 stron.
 
 ## [0.236.0] — 🌍 i18n UI panelu — strona /library (biblioteka gier)
 
