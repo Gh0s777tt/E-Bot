@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-300-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.230.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-301-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.231.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.231.0] — 🌍 i18n UI panelu — strona /stats (statystyki + digest)
+
+- `[#301]` 🌍 **i18n UI panelu — kolejna fala: `/stats` (statystyki serwera + tygodniowy digest).**
+  - 🖥️ **Panel**: 31 nowych kluczy `ui.stats.*` × **14 języków** w `panelI18n.ts` (parzystość 14×31=434). `app/stats/page.tsx` (serwer) + `DigestForm.tsx` (klient) na `tp()`: intro, 4 karty KPI, nagłówki sekcji (AI 14 dni, aktywność, Top XP, Top aktywni, heatmapa godzinowa, tickety, biblioteka), liczniki aktywności (wiadomości/wejścia/wyjścia/voice), stany pustych danych oraz formularz digestu (włącznik, kanał, opis). Przycisk zapisu reużywa generyków `ui.save*` (`SaveButton`). Skróty `lvl`/`wiad` jako klucze; `/ai`, nazwy tabel (`_ALL.sql`, `user_activity`, `activity_daily`), `Supabase`, etykiety platform (`Steam`/`PlayStation`/`GOG`/`Ubisoft`) i format liczb `pl-PL` nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 21/~40 stron.
 
 ## [0.230.0] — 🌍 i18n UI panelu — strona /diagnostics (zdrowie konfiguracji)
 

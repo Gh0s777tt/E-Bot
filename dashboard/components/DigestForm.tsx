@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { DigestConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ export default function DigestForm({
   initial: DigestConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<DigestConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,24 +43,21 @@ export default function DigestForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Tygodniowy digest włączony</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.stats.digestEnabled')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał podsumowań</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.stats.digestChannel')}</span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
-          placeholder="— wybierz kanał —"
+          placeholder={tp(lang, 'ui.stats.digestChannelPh')}
         />
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        W każdy poniedziałek bot wysyła na wybrany kanał podsumowanie tygodnia (wiadomości, minuty
-        voice, wzrost serwera) z danych <code>activity_daily</code>.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.stats.digestHelp')}</p>
     </div>
   );
 }
