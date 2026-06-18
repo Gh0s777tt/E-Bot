@@ -4,6 +4,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { CounterItem, CountersConfig, CounterType } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -12,25 +14,29 @@ type Row = CounterItem & { k: string };
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-const TYPES: { v: CounterType; l: string; tpl: string }[] = [
-  { v: 'members', l: 'Członkowie', tpl: '👥 Członków: {count}' },
-  { v: 'humans', l: 'Ludzie (bez botów)', tpl: '🧑 Ludzi: {count}' },
-  { v: 'bots', l: 'Boty', tpl: '🤖 Botów: {count}' },
-  { v: 'boosts', l: 'Boosty', tpl: '🚀 Boostów: {count}' },
-  { v: 'boostTier', l: 'Poziom boost', tpl: '💜 Poziom: {count}' },
-  { v: 'channels', l: 'Kanały', tpl: '📁 Kanałów: {count}' },
-  { v: 'roles', l: 'Role', tpl: '🏷️ Ról: {count}' },
-  { v: 'emojis', l: 'Emoji', tpl: '😀 Emoji: {count}' },
-  { v: 'stickers', l: 'Naklejki', tpl: '🏷️ Naklejek: {count}' },
-  { v: 'voice', l: 'Na voice (teraz)', tpl: '🎙️ Na voice: {count}' },
-  { v: 'ytSubs', l: '▶️ YouTube — suby', tpl: '▶️ Subów: {count}' },
-  { v: 'ytViews', l: '▶️ YouTube — wyświetlenia', tpl: '👁️ Wyświetleń: {count}' },
-  { v: 'ytVideos', l: '▶️ YouTube — filmy', tpl: '🎬 Filmów: {count}' },
-  { v: 'twFollowers', l: '🟣 Twitch — followy', tpl: '🟣 Followów: {count}' },
-  { v: 'twSubs', l: '🟣 Twitch — suby', tpl: '🟣 Subów: {count}' },
-  { v: 'twViewers', l: '🟣 Twitch — widzowie (live)', tpl: '🟣 Widzów: {count}' },
-  { v: 'kickFollowers', l: '🟢 Kick — followy', tpl: '🟢 Followów: {count}' },
-  { v: 'kickViewers', l: '🟢 Kick — widzowie (live)', tpl: '🟢 Widzów: {count}' },
+const TYPES: { v: CounterType; lKey: string; tplKey: string }[] = [
+  { v: 'members', lKey: 'ui.counters.lblMembers', tplKey: 'ui.counters.tplMembers' },
+  { v: 'humans', lKey: 'ui.counters.lblHumans', tplKey: 'ui.counters.tplHumans' },
+  { v: 'bots', lKey: 'ui.counters.lblBots', tplKey: 'ui.counters.tplBots' },
+  { v: 'boosts', lKey: 'ui.counters.lblBoosts', tplKey: 'ui.counters.tplBoosts' },
+  { v: 'boostTier', lKey: 'ui.counters.lblBoostTier', tplKey: 'ui.counters.tplBoostTier' },
+  { v: 'channels', lKey: 'ui.counters.lblChannels', tplKey: 'ui.counters.tplChannels' },
+  { v: 'roles', lKey: 'ui.counters.lblRoles', tplKey: 'ui.counters.tplRoles' },
+  { v: 'emojis', lKey: 'ui.counters.lblEmojis', tplKey: 'ui.counters.tplEmojis' },
+  { v: 'stickers', lKey: 'ui.counters.lblStickers', tplKey: 'ui.counters.tplStickers' },
+  { v: 'voice', lKey: 'ui.counters.lblVoice', tplKey: 'ui.counters.tplVoice' },
+  { v: 'ytSubs', lKey: 'ui.counters.lblYtSubs', tplKey: 'ui.counters.tplYtSubs' },
+  { v: 'ytViews', lKey: 'ui.counters.lblYtViews', tplKey: 'ui.counters.tplYtViews' },
+  { v: 'ytVideos', lKey: 'ui.counters.lblYtVideos', tplKey: 'ui.counters.tplYtVideos' },
+  { v: 'twFollowers', lKey: 'ui.counters.lblTwFollowers', tplKey: 'ui.counters.tplTwFollowers' },
+  { v: 'twSubs', lKey: 'ui.counters.lblTwSubs', tplKey: 'ui.counters.tplTwSubs' },
+  { v: 'twViewers', lKey: 'ui.counters.lblTwViewers', tplKey: 'ui.counters.tplTwViewers' },
+  {
+    v: 'kickFollowers',
+    lKey: 'ui.counters.lblKickFollowers',
+    tplKey: 'ui.counters.tplKickFollowers',
+  },
+  { v: 'kickViewers', lKey: 'ui.counters.lblKickViewers', tplKey: 'ui.counters.tplKickViewers' },
 ];
 
 const ARG_TYPES = new Set<CounterType>([
@@ -44,12 +50,6 @@ const ARG_TYPES = new Set<CounterType>([
   'kickViewers',
 ]);
 const needsArg = (t: CounterType) => ARG_TYPES.has(t);
-const argPlaceholder = (t: CounterType) =>
-  t.startsWith('yt')
-    ? 'ID kanału YouTube (UC…) lub @handle — puste = domyślny z env bota'
-    : t.startsWith('kick')
-      ? 'Slug kanału Kick (np. xqc) — puste = domyślny z env bota'
-      : 'Login Twitch (np. xqc) — puste = domyślny z env bota';
 
 export default function CountersForm({
   initial,
@@ -58,12 +58,20 @@ export default function CountersForm({
   initial: CountersConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const idRef = useRef(0);
   const [rows, setRows] = useState<Row[]>(() =>
     initial.items.map((i) => ({ ...i, k: `n${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+
+  const argPlaceholder = (t: CounterType) =>
+    t.startsWith('yt')
+      ? tp(lang, 'ui.counters.argYt')
+      : t.startsWith('kick')
+        ? tp(lang, 'ui.counters.argKick')
+        : tp(lang, 'ui.counters.argTwitch');
 
   async function save() {
     setSt('saving');
@@ -93,12 +101,14 @@ export default function CountersForm({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Liczniki włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.counters.enabled')}</span>
       </label>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Liczniki (kanał → statystyka)</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.counters.rowsLabel')}
+          </span>
           <button
             type="button"
             onClick={() =>
@@ -107,14 +117,14 @@ export default function CountersForm({
                 {
                   channelId: '',
                   type: 'members',
-                  template: '👥 Członków: {count}',
+                  template: tp(lang, 'ui.counters.tplMembers'),
                   k: `n${idRef.current++}`,
                 },
               ])
             }
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
           >
-            <Plus size={12} /> Dodaj
+            <Plus size={12} /> {tp(lang, 'ui.counters.add')}
           </button>
         </div>
         {rows.map((r) => (
@@ -134,14 +144,15 @@ export default function CountersForm({
                 value={r.type}
                 onChange={(e) => {
                   const type = e.target.value as CounterType;
-                  const tpl = TYPES.find((t) => t.v === type)?.tpl ?? r.template;
+                  const tplKey = TYPES.find((t) => t.v === type)?.tplKey;
+                  const tpl = tplKey ? tp(lang, tplKey) : r.template;
                   setRows(rows.map((x) => (x.k === r.k ? { ...x, type, template: tpl } : x)));
                 }}
                 className={`${inputCls} w-36`}
               >
                 {TYPES.map((t) => (
                   <option key={t.v} value={t.v}>
-                    {t.l}
+                    {tp(lang, t.lKey)}
                   </option>
                 ))}
               </select>
@@ -150,14 +161,14 @@ export default function CountersForm({
                 onChange={(e) =>
                   setRows(rows.map((x) => (x.k === r.k ? { ...x, template: e.target.value } : x)))
                 }
-                placeholder="Szablon ({count})"
+                placeholder={tp(lang, 'ui.counters.templatePh')}
                 className={inputCls}
               />
               <button
                 type="button"
                 onClick={() => setRows(rows.filter((x) => x.k !== r.k))}
                 className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-                aria-label="Usuń"
+                aria-label={tp(lang, 'ui.counters.remove')}
               >
                 <Trash2 size={14} />
               </button>
@@ -177,26 +188,9 @@ export default function CountersForm({
       </div>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Najlepiej użyj <strong>zablokowanych kanałów głosowych</strong> (bez prawa łączenia) jako
-        liczników. Zmienna <code>{'{count}'}</code> wstawia liczbę. Bot odświeża co ~10 min (limit
-        Discorda na zmianę nazwy kanału). Potrzebuje uprawnienia <em>Zarządzanie kanałami</em>.
-      </p>
-      <p className="text-xs text-muted">
-        ▶️ <strong>YouTube</strong> (suby / wyświetlenia / filmy) — wymaga klucza{' '}
-        <code>YOUTUBE_API_KEY</code>. W polu pod licznikiem wpisz <strong>ID kanału</strong> (
-        <code>UC…</code>) albo <code>@handle</code>. <em>Uwaga:</em> YouTube podaje subskrybentów
-        zaokrąglone (np. 12,3 tys.).
-      </p>
-      <p className="text-xs text-muted">
-        🟣 <strong>Twitch</strong> / 🟢 <strong>Kick</strong> — w polu wpisz{' '}
-        <strong>login Twitch</strong> lub <strong>slug Kick</strong> (puste = z env bota). Od ręki
-        (token aplikacyjny): <strong>widzowie na żywo</strong> (Twitch i Kick) oraz{' '}
-        <strong>followy Kick</strong>. <strong>Followy/suby Twitch</strong> wymagają tokena twórcy{' '}
-        <code>TWITCH_USER_TOKEN</code> (scope <code>moderator:read:followers</code> /{' '}
-        <code>channel:read:subscriptions</code>) — bez niego są pomijane. Suby Kick nie są
-        publicznie dostępne.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.counters.footMain')}</p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.counters.footYouTube')}</p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.counters.footTwitchKick')}</p>
     </div>
   );
 }

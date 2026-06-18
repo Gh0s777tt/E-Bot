@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-295-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.225.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-296-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.226.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.226.0] — 🌍 i18n UI panelu — strona /counters (liczniki kanałów)
+
+- `[#296]` 🌍 **i18n UI panelu — kolejna fala: `/counters` (liczniki kanałów).**
+  - 🖥️ **Panel**: 51 nowych kluczy `ui.counters.*` × **14 języków** w `panelI18n.ts` (parzystość 14×51=714). `app/counters/page.tsx` (serwer) + `CountersForm.tsx` (klient) na `tp()`. 18 typów liczników (etykiety + domyślne szablony nazw kanałów) przeniesione na klucze i18n; 3 przypisy (Discord/YouTube/Twitch/Kick) spłaszczone do tekstu. Placeholder `{count}`, nazwy usług (`YouTube`/`Twitch`/`Kick`/`Discord`/`Supabase`), tokeny (`YOUTUBE_API_KEY`, `TWITCH_USER_TOKEN`, scope'y, `UC…`, `@handle`, slug) i emoji nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 16/~40 stron.
 
 ## [0.225.0] — 🌍 i18n UI panelu — strona /levels (leveling + sezony)
 
