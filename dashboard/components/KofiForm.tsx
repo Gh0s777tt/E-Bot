@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { KofiConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -11,6 +13,7 @@ const inputCls =
 const WEBHOOK_URL = 'https://e-bot-dc.vercel.app/api/kofi';
 
 export default function KofiForm({ initial, guild }: { initial: KofiConfig; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<KofiConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -38,31 +41,37 @@ export default function KofiForm({ initial, guild }: { initial: KofiConfig; guil
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Donejty Ko-fi włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.donations.kofiEnabled')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał ogłoszeń</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.donations.announceChannel')}
+        </span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
+          placeholder={tp(lang, 'ui.donations.channelPh')}
         />
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Verification token (z panelu Ko-fi)</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.donations.verifTokenLabel')}
+        </span>
         <input
           value={c.verificationToken}
           onChange={(e) => setC({ ...c, verificationToken: e.target.value })}
-          placeholder="wklej z Ko-fi → Settings → API/Webhooks"
+          placeholder={tp(lang, 'ui.donations.verifTokenPh')}
           className={inputCls}
         />
       </label>
 
       <label className="space-y-1 text-sm">
         <span className="font-semibold text-white/90">
-          Wiadomość ({'{name}'} {'{amount}'} {'{currency}'} {'{message}'} {'{type}'})
+          {tp(lang, 'ui.donations.messageLabel')} ({'{name}'} {'{amount}'} {'{currency}'}{' '}
+          {'{message}'} {'{type}'})
         </span>
         <textarea
           value={c.message}
@@ -75,10 +84,12 @@ export default function KofiForm({ initial, guild }: { initial: KofiConfig; guil
       <SaveButton st={st} onClick={save} />
 
       <div className="rounded-lg border border-line bg-bg/40 p-3 text-xs text-muted">
-        <p className="mb-1 font-semibold text-white/90">Konfiguracja w Ko-fi:</p>
+        <p className="mb-1 font-semibold text-white/90">
+          {tp(lang, 'ui.donations.kofiConfigHeading')}
+        </p>
         <p>
-          Ko-fi → <em>Settings → API / Webhooks</em>: wklej URL webhooka i skopiuj stąd verification
-          token.
+          Ko-fi → <em>Settings → API / Webhooks</em>
+          {tp(lang, 'ui.donations.kofiConfigHelp')}
         </p>
         <code className="mt-1 block break-all rounded bg-elevated px-2 py-1 text-accent">
           {WEBHOOK_URL}

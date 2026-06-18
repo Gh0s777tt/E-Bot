@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-302-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.232.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-303-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.233.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.233.0] — 🌍 i18n UI panelu — strona /donations (Ko-fi + linki /donate)
+
+- `[#303]` 🌍 **i18n UI panelu — kolejna fala: `/donations` (donejty Ko-fi + linki wsparcia `/donate`).**
+  - 🖥️ **Panel**: 21 nowych kluczy `ui.donations.*` × **14 języków** w `panelI18n.ts` (parzystość 14×21=294). `app/donations/page.tsx` (serwer) + `KofiForm.tsx` + `DonateLinksForm.tsx` (klient) na `tp()`: intro + status donejtów, formularz Ko-fi (włącznik, kanał, verification token, szablon wiadomości, instrukcja konfiguracji) oraz edytor linków `/donate` (tytuł, opis, lista linków, przycisk „Własny", pomoc). Przyciski zapisu reużywają generyków `ui.save*`. Marki/tokeny nietłumaczone: `Ko-fi`, presety (`PayPal`/`Patreon`/`Buy Me a Coffee`), menu Ko-fi (`Settings → API/Webhooks`), komenda `/donate`, placeholdery `{name}`/`{amount}`/`{currency}`/`{message}`/`{type}`, URL webhooka i `http(s)://`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 23/~40 stron.
 
 ## [0.232.0] — 🌍 i18n UI panelu — strona /profile (profil + karta gracza)
 

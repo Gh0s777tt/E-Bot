@@ -3,6 +3,8 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { DonateConfig } from '../lib/community';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
 
 const inputCls =
@@ -19,6 +21,7 @@ const PRESETS = [
 ];
 
 export default function DonateLinksForm({ initial }: { initial: DonateConfig }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const [title, setTitle] = useState(initial.title);
   const [description, setDescription] = useState(initial.description);
@@ -74,17 +77,19 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Komenda /donate włączona</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.donations.donateEnabled')}
+        </span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Tytuł</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.donations.titleLabel')}</span>
           <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} />
         </label>
       </div>
       <label className="block space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Opis</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.donations.descLabel')}</span>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -96,7 +101,7 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
       <div className="space-y-2 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="text-sm font-semibold text-white/90">
-            Linki wsparcia ({rows.length}/10)
+            {tp(lang, 'ui.donations.linksLabel')} ({rows.length}/10)
           </span>
           <div className="flex flex-wrap gap-1">
             {PRESETS.map((p) => (
@@ -116,7 +121,7 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
               disabled={rows.length >= 10}
               className="inline-flex items-center gap-1 rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated disabled:opacity-40"
             >
-              <Plus size={12} /> Własny
+              <Plus size={12} /> {tp(lang, 'ui.donations.customBtn')}
             </button>
           </div>
         </div>
@@ -132,7 +137,7 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
             <input
               value={r.label}
               onChange={(e) => setRow(r.id, { label: e.target.value })}
-              placeholder="Nazwa"
+              placeholder={tp(lang, 'ui.donations.namePh')}
               className={inputCls}
               maxLength={80}
             />
@@ -147,7 +152,7 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
               type="button"
               onClick={() => del(r.id)}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.donations.delAria')}
             >
               <Trash2 size={14} />
             </button>
@@ -157,8 +162,9 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Komenda <code className="text-accent">/donate</code> pokaże embed z przyciskami-linkami do
-        powyższych miejsc. URL musi zaczynać się od http(s)://.
+        {tp(lang, 'ui.donations.helpPre')}
+        <code className="text-accent">/donate</code>
+        {tp(lang, 'ui.donations.helpPost')}
       </p>
     </div>
   );
