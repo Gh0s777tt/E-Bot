@@ -1,3 +1,4 @@
+<!-- SYNC: v0.222.0 · #292 · 2026-06-18 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -12,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.9.1-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -53,7 +54,7 @@ ramieniem GH0ST EMPIRE** — nalicza **Ghost Tokens (GT)** za aktywność i łą
 |:--|:--|:--:|
 | 🎮 **Biblioteka gier** | Steam (58) + PlayStation (121) = **179**, okładki/metadane z IGDB → SQLite/Supabase | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
 | 🖥️ **Dashboard** | Panel GH0ST (Przegląd, Biblioteka, Live, Bezpieczeństwo, Integracje, Komendy, Ekonomia, Profil, Ustawienia) | ![](https://img.shields.io/badge/-live-E50914?labelColor=0a0a0a) |
-| 🤖 **Bot Discord** | `/ping` `/library` `/link` `/portal` `/antinuke` + powiadomienia live | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
+| 🤖 **Bot Discord** | ~95 slash‑komend (moderacja, ekonomia, leveling, tickety, AI, gry…), ~40 usług w tle, **i18n 14 języków** | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
 | 🛡️ **Anti‑Nuke** | Detekcja audit‑log, progi, kary, whitelist | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
 | 📡 **Powiadomienia live** | Twitch · Kick · YouTube · Rumble (polling) | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
 | 💰 **Ekonomia GH0ST** | GT za czat/voice, `/link`, stawki z portalu | ![](https://img.shields.io/badge/-aktywny-E50914?labelColor=0a0a0a) |
@@ -160,11 +161,11 @@ cd bot && npm start                       # bot online + powiadomienia
 ```mermaid
 timeline
   title Roadmapa E-Bot
-  Faza 0 — Fundamenty (✅) : Ingest gier : Web Netflix : Rdzeń bota : Szkielet panelu
-  Faza 1 — Chmura i bezpieczeństwo (✅) : Discord OAuth : Anti-Nuke : GH0ST /link : Supabase + Vercel
-  Faza 2 — Pełny panel (✅) : Look GH0ST : Live : Ekonomia : Personalizacja : Motywy
-  Faza 3 — Integracja bot↔chmura (🔄) : Heartbeat : Presence apply : Whitelist sync
-  Faza 4 — Wzrost (🧭) : Tickety : Leveling : Komendy AI : Marketplace
+  Fazy 0–3 — Fundament + chmura (✅) : Ingest · web · bot · panel : OAuth · Anti-Nuke : Supabase + Vercel : Heartbeat/Presence/Sync
+  Fazy 4–8 — Funkcje + „2.0" (✅) : Leveling · tickety · AI : EventSub · staty · bot 24/7 : Message Studio + 14 epików
+  Etapy A–K — Rozbudowa (✅) : Architekt serwera : i18n bota (14 jęz.) : Config per-serwer
+  i18n treści + UI (🔄) : Pomoc 37/37 : Web GameVault : UI panelu 12/~40
+  Wzrost (🧭) : Marketplace : Multi-guild : Retencja
 ```
 
 Pełna roadmapa i fazy → [`docs/ROADMAP.md`](docs/ROADMAP.md) · [`docs/PHASES.md`](docs/PHASES.md)
@@ -183,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.9.1** — Faza 4 komplet (leveling, tickety dwukier., AI z limitem, reaction roles, link‑status) + **bot 24/7 na Railway**. Wcześniej **v0.6.0** — modernizacja stacku (Next 16 / React 19 / Tailwind 4 / TS 6).
+Najnowsze: **v0.222.0** — 🌍 i18n UI panelu (kolejne strony, 14 języków). Wcześniej: i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K) oraz 14 epików „2.0" (Faza 8).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

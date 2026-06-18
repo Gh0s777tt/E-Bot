@@ -10,6 +10,7 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "check": "biome check --write .",
+    "docs:check": "node scripts/check-docs-sync.mjs",
     "typecheck": "pnpm -r --if-present exec tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",

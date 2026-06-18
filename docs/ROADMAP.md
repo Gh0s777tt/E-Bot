@@ -1,13 +1,18 @@
+<!-- SYNC: v0.222.0 · #292 · 2026-06-18 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
 
-![Faza](https://img.shields.io/badge/fazy_0–4-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Fazy](https://img.shields.io/badge/fazy_0–8-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
+![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
-> Roadmapa żywa — aktualizowana przy każdym istotnym update. Status faz: `docs/PHASES.md`.
+> Roadmapa żywa — aktualizowana przy każdym istotnym update. Szczegółowy status zadań: [`PHASES.md`](PHASES.md). Numeracja/wersje: [`CHANGELOG.md`](../CHANGELOG.md).
+> 🔄 **Synchronizacja z CHANGELOG pilnowana przez `pnpm docs:check`** (zasada: [`CLAUDE.md`](../CLAUDE.md)).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -17,72 +22,68 @@
 
 ```mermaid
 gantt
-  title Roadmapa E-Bot
+  title Roadmapa E-Bot (skrót)
   dateFormat YYYY-MM-DD
   axisFormat %d %b
-  section Faza 0 · Fundamenty
-  Ingest gier (Steam/PSN/IGDB) :done,  f0a, 2026-06-01, 2d
-  Web „Netflix dla gier"       :done,  f0b, 2026-06-02, 2d
-  Rdzeń bota (discord.js)      :done,  f0c, 2026-06-03, 2d
-  Szkielet dashboardu          :done,  f0d, 2026-06-04, 2d
-  section Faza 1 · Chmura + bezpieczeństwo
-  Discord OAuth (panel)        :done,  f1a, 2026-06-05, 1d
-  Anti-Nuke                    :done,  f1b, 2026-06-05, 1d
-  Supabase + Vercel (live)     :done,  f1c, 2026-06-06, 1d
-  GH0ST /link                  :done,  f1d, 2026-06-06, 1d
-  section Faza 2 · Pełny panel
-  Look GH0ST + responsywność   :done,  f2a, 2026-06-06, 1d
-  Live + Ekonomia              :done,  f2b, 2026-06-06, 1d
-  Personalizacja + motywy      :done,  f2c, 2026-06-06, 1d
-  section Faza 3 · Integracja bot↔chmura
-  Heartbeat bota → Supabase    :done, f3a, 2026-06-06, 1d
-  Presence apply (status z panelu) :done, f3b, 2026-06-06, 1d
-  Sync whitelisty/configu      :done, f3c, 2026-06-06, 1d
-  section Faza 4 · Funkcje społeczności
-  Leveling + role-nagrody      :done, f4a, 2026-06-06, 1d
-  Tickety (dwukierunkowo)      :done, f4b, 2026-06-06, 1d
-  Komendy AI (limit kosztów)   :done, f4c, 2026-06-06, 1d
-  Reaction roles               :done, f4d, 2026-06-06, 1d
-  Bot 24/7 (Railway)           :done, f4e, 2026-06-06, 1d
-  section Faza 5 · Wzrost
-  EventSub (webhooki live)     :done, f5a, 2026-06-06, 1d
-  Statystyki (panel)           :done, f5b, 2026-06-06, 1d
-  Marketplace pluginów         :     f5c, 2026-06-20, 7d
+  section Fazy 0–5 · Fundament + chmura
+  Ingest · web · rdzeń bota · panel    :done, f0, 2026-06-01, 4d
+  OAuth · anti-nuke · Supabase · /link :done, f1, 2026-06-05, 2d
+  Leveling · tickety · AI · EventSub   :done, f4, 2026-06-06, 1d
+  Bot 24/7 (Railway)                   :done, f5, 2026-06-06, 1d
+  section Fazy 6–8 · Wszystko + 2.0
+  „Zrób wszystko" B1–B7 + F1–F10       :done, f7, 2026-06-07, 2d
+  Message Studio + 14 epików „2.0"     :done, f8, 2026-06-08, 2d
+  section Etapy A–K · Rozbudowa + i18n bota
+  Architekt serwera + i18n bota (14)   :done, ek1, 2026-06-09, 2d
+  Etapy A–J (przyjazność/safety/gry)   :done, ek2, 2026-06-10, 1d
+  Config per-serwer (Etap K, C-1…C-27) :done, ek3, 2026-06-10, 1d
+  section i18n treści + UI (bieżące)
+  Samouczek · asystent · „Jak działa" 37/37 :done, i1, 2026-06-11, 1d
+  Web GameVault (14 jęz. + RTL)        :done, i2, 2026-06-11, 1d
+  i18n UI panelu (12/~40 stron)        :active, i3, 2026-06-12, 8d
+  section Otwarte
+  Marketplace / multi-guild jako usługa :        mk, 2026-06-25, 10d
 ```
 
-## 🧭 Fazy
+## 🧭 Fazy / etapy
 
-| Faza | Cel | Status |
+| Etap | Cel | Status |
 |:--:|:--|:--:|
-| **0** | Fundamenty: ingest, web, rdzeń bota, szkielet panelu | ✅ done |
-| **1** | OAuth, Anti‑Nuke, chmura (Supabase + Vercel), `/link` | ✅ done |
-| **2** | Pełny panel GH0ST: live, ekonomia, personalizacja, motywy | ✅ done |
-| **3** | Integracja bot↔chmura: heartbeat, presence, sync configu | ✅ done |
-| **4** | Funkcje: leveling, tickety, AI, reaction roles, link‑status, bot 24/7 | ✅ done |
-| **5** | Wzrost: EventSub ✓, statystyki ✓, marketplace | 🟢 w toku |
+| **0–3** | Fundamenty: ingest, web, rdzeń bota, panel; OAuth, anti‑nuke, chmura, heartbeat/presence/sync | ✅ done |
+| **4–5** | Leveling, tickety, AI, reaction roles, EventSub, statystyki, **bot 24/7** | ✅ done |
+| **6–7** | „Zrób wszystko" (B1–B7) + pełna personalizacja (F1–F10) | ✅ done |
+| **8** | Fundament customizacji: Message Studio + 14 epików „2.0" | ✅ done |
+| **A–J** | Architekt serwera, fun/safety/gaming, customization 2.0, **i18n bota (14 jęz.)** | ✅ done |
+| **K** | Przyjazność 2.0 + **config per‑serwer** (C‑1…C‑27 — fundament multi‑guild) | ✅ done |
+| **i18n** | Treść panelu/web w 14 językach: pomoc 37/37 ✓, web ✓, **UI panelu 12/~40** | 🔄 w toku |
+| **Wzrost** | Marketplace pluginów / multi‑guild jako usługa, retencja, infra prod | 🧭 plan |
 
-## ✅ Zrealizowane (Fazy 0–4) — wszystko LIVE
+## ✅ Zrealizowane — stan na v0.222
 
-Stack zmodernizowany (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler · pnpm · Biome · Zod), branding GH0ST (logo/baner/favicon/avatar bota), panel na Vercel (**e-bot-dc.vercel.app**), **bot 24/7 na Railway**, tabele Supabase, integracja GH0ST (`/link`, `link-status`). Funkcje: leveling + role‑nagrody, tickety (dwukierunkowo), komendy AI (z twardym limitem kosztów), reaction roles, anti‑nuke, powiadomienia live.
+Stack zmodernizowany (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler · pnpm · Biome · Zod), branding GH0ST, panel na Vercel (**e‑bot‑dc.vercel.app**), **bot 24/7 na Railway**, ~95 slash‑komend, ~40 usług w tle, tabele Supabase, integracja GH0ST (`/link`, `link-status`). Pełen zestaw: moderacja + bezpieczeństwo (anti‑nuke/anti‑raid/heat/automod/weryfikacja/modmail/logi), leveling+ekonomia (eco/sklep/giełda/pety/karty), tickety, AI (czat/vision/moderacja/`/imagine`), powiadomienia live + EventSub, biblioteka gier 2.0, narzędzia twórcy, Architekt serwera, **config per‑serwer** oraz **i18n bota w 14 językach** (komendy + runtime).
 
 ```mermaid
 flowchart LR
-  P[🖥️ Panel] -->|config| SB[(Supabase)]
-  SB -->|settings-sync| B[🤖 Bot 24/7 Railway]
-  B -->|dane: levele / tickety / AI| SB
+  P[🖥️ Panel] -->|config per-serwer| SB[(Supabase)]
+  SB -->|settings-sync + Realtime| B[🤖 Bot 24/7 Railway]
+  B -->|dane: levele / tickety / AI / eko| SB
   SB -->|ranking / listy / staty| P
-  B -->|akcje| DC[Discord]
+  B -->|akcje + i18n 14 jęz.| DC[Discord]
   P -->|link-status| GH[GH0ST EMPIRE]
 ```
 
-## 🧭 Faza 5 — Wzrost (plan / opcjonalne)
+## 🔭 W toku — i18n UI panelu
 
-- ✅ **EventSub** — webhooki Twitch (`/api/twitch/eventsub`) → natychmiastowe powiadomienia live.
-- ✅ **Statystyki** — panel `/stats` (AI 14 dni, top XP, tickety, biblioteka).
-- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild *(plan)*.
-- 📈 Retencja / więcej wykresów w czasie *(plan)*.
+Tłumaczenie etykiet/formularzy stron ustawień na 14 języków (powłoka + pomoc + web już gotowe). **Zrobione 12/~40 stron**; pozostaje **~26** (`/ai /applications /automations /commands /counters /creator /custom-commands /diagnostics /donations /eco /economy /engagement /gaming /integrations /levels /library /moderation /profile /responder /roles /scheduled /security /settings /setup /stats /tickets`). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02220).
+
+## 🧭 Wzrost (plan / opcjonalne)
+
+- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild jako usługa. *Config* per‑serwer już jest (Etap K) — brakuje produktyzacji.
+- 📈 **Retencja + więcej wykresów w czasie** (`/stats`).
+- 🧱 **Produkcyjna infra** — pełny Sentry (DSN), Redis (instancja), Supabase Realtime push (szkielety gotowe).
+- 🔗 **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Aktualizuj przy każdym kamieniu milowym · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑18 · v0.222.0 (#292) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

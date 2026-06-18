@@ -1,3 +1,4 @@
+<!-- SYNC: v0.222.0 · #292 · 2026-06-18 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -10,34 +11,58 @@
 ![Faza 5](https://img.shields.io/badge/Faza_5-✅-E50914?labelColor=0a0a0a)
 ![Faza 6](https://img.shields.io/badge/Faza_6-✅-E50914?labelColor=0a0a0a)
 ![Faza 7](https://img.shields.io/badge/Faza_7-✅-E50914?labelColor=0a0a0a)
-![Ulepszenia](https://img.shields.io/badge/Ulepszenia_5×-✅-E50914?labelColor=0a0a0a)
-![Rozbudowa](https://img.shields.io/badge/Rozbudowa_A–F-✅-E50914?labelColor=0a0a0a)
+![Faza 8](https://img.shields.io/badge/Faza_8-✅-E50914?labelColor=0a0a0a)
+<br/>
+![Etapy A–K](https://img.shields.io/badge/Etapy_A–K-✅-E50914?labelColor=0a0a0a)
+![Architekt serwera](https://img.shields.io/badge/Architekt_serwera-✅-E50914?labelColor=0a0a0a)
+![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
+![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
+![i18n panelu](https://img.shields.io/badge/i18n_panelu-🔄_12%2F~40-FFB020?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?labelColor=0a0a0a)
 
 </div>
 
-> Status zadań — **aktualizowany na bieżąco** (`[x]` zrobione, `[ ]` w planie). Wersjonowanie: `CHANGELOG.md`.
+> Status zadań — **aktualizowany na bieżąco** (`[x]` zrobione, `[ ]` w planie). Źródło prawdy dla numeracji/wersji: [`CHANGELOG.md`](../CHANGELOG.md).
+> 🔄 **Ten plik + [`ROADMAP.md`](ROADMAP.md) są synchronizowane z CHANGELOG przy każdym update** — weryfikacja: `pnpm docs:check`. Zasada utrzymania: [`CLAUDE.md`](../CLAUDE.md).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## ✅ Po Fazie 7 — 5 torów ulepszeń (analiza popularnych botów)
-- [x] Tor 1 — bezpieczeństwo: fail‑closed auth (`AUTH_SECRET`/właściciel) + `timingSafeEqual` Ko‑fi + audit log (`/audit`)
-- [x] Tor 2 — captcha obrazkowa + min. wiek konta + alt‑detection w anti‑raid
-- [x] Tor 3 — gra w liczenie + `/fun` + Invite Tracker (`/invites`)
-- [x] Tor 4 — ekonomia++: interaktywny blackjack + ekwipunek/itemy
-- [x] Tor 5 — infra: cache sweepers + zero‑dep logger strukturalny + detekcja zmian w sync
-- [ ] (opcjonalnie, odłożone) Realtime push (supabase‑js) · pino · i18n PL/EN · Playwright E2E
+## 🔭 Bieżący tor (v0.222.0)
 
-## ✅ Rozbudowa „każda funkcja" — 7 torów (A–F)
-- [x] A1 — profil `/profile` (karta canvas) + silnik 13 odznak
-- [x] A2 — questy dzienne/tygodniowe (`/quests`) + punkty sezonu
-- [x] B — ekonomia++: itemy z efektem + marketplace (`/market`) + ruletka
-- [x] C — AI asystent: persona + vision (`/describe`) + RAG-lite pomoc
-- [x] D — tickety: przejmowanie (claim) + auto-close SLA
-- [x] E — analityka: minuty voice + tygodniowy digest
-- [x] F — menu ról dropdown (`/rolemenu`) + zaplanowane ogłoszenia (`/schedule`)
-- [x] G giveaway++ · H loteria · I skórki kart · J dzienny AI-digest · K aplikacje/Appy · L analityka per-user (top+heatmapa) · M publiczny web · N Twitch sub→rola (kod; aktywacja = OAuth twórcy) · O automatyzacje IFTTT
+**🌍 i18n UI panelu** — tłumaczenie etykiet i formularzy stron ustawień na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37) i strona web GameVault są już wielojęzyczne — teraz idą strony ustawień, falami (`page.tsx` server-side + komponenty‑formularze).
+
+- [x] **Zrobione 12/~40 stron**: `/welcome` `/modules` `/leaderboard` `/logging` `/audit` `/modmail` `/birthdays` `/suggestions` `/appearance` `/wishlist` `/notifications` `/live`
+- [ ] **Pozostało ~26 stron**: `/ai` `/applications` `/automations` `/commands` `/counters` `/creator` `/custom-commands` `/diagnostics` `/donations` `/eco` `/economy` `/engagement` `/gaming` `/integrations` `/levels` `/library` `/moderation` `/profile` `/responder` `/roles` `/scheduled` `/security` `/settings` `/setup` `/stats` `/tickets`
+- [ ] Osobna, późniejsza fala: wewnętrzne etykiety współdzielonego `CardStyleEditor`
+
+### 🧭 Otwarte / strategiczne (poza torem i18n)
+- [ ] **Marketplace pluginów / efekt sieciowy** — *config* multi‑serwer gotowy (Etap K, C‑1…C‑27); brakuje produktyzacji marketplace i modelu multi‑guild jako usługi
+- [ ] **Retencja + więcej wykresów w czasie** (panel `/stats`)
+- [ ] **Produkcyjne wpięcie infry**: pełny Sentry (realny DSN), Redis (instancja), Supabase Realtime push — szkielety/wersje gated już są
+- [ ] **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy (scope `channel:read:subscriptions`)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+## 🗂️ Mapa er → wersje (źródło: CHANGELOG)
+
+| Era | Zakres | Co przyniosła | Status |
+|:--|:--|:--|:--:|
+| **Fazy 0–5** | `0.1`–`0.10` | Ingest, web, rdzeń bota, panel, chmura, OAuth, anti‑nuke, `/link`, leveling, tickety, AI, EventSub, bot 24/7 | ✅ |
+| **Fazy 6–7** | `0.11`–`0.37` | „Zrób wszystko" (B1–B7) + pełna personalizacja (F1–F10): moderacja, logi, weryfikacja, modmail, sugestie, AI++, gaming, analityka, Sentry | ✅ |
+| **Faza 8** | `0.46`–`0.59` | Fundament customizacji: Message Studio + 14 epików „2.0" (Tickets/Applications/Reaction‑roles/Automod/Levels/AI/Library/Notifications/Donate/Creator/Integracje) | ✅ |
+| **Pozostałości + Ulepszenia** | `0.60`–`0.99` | Profil 2.0, Realtime sync, multi‑user panelu, nowy look „Obsidian/Crimson", staty, interakcje, onboarding | ✅ |
+| **Architekt Serwera** | `0.100`–`0.104` | Silnik provisioningu, AI‑kreator struktury, blueprinty, dry‑run, `/undo` | ✅ |
+| **i18n bota** | `0.105`–`0.113`, `0.154`–`0.157` | Fundament i18n + opisy komend + runtime‑stringi + przełącznik — **14 języków** | ✅ |
+| **Etapy A–K** | `0.114`–`0.194` | Przyjazność (`/help`, `/tutorial`), fun‑pack, info/mod‑utils, Architekt++, social, **safety (Etap G)**, customization 2.0 (Etap H/I), gospodarka‑gry (Etap J: stocks/pets/cards/meme), **config per‑serwer (Etap K, C‑1…C‑27)** | ✅ |
+| **i18n treści + UI** | `0.202`–`0.222` | Samouczek, asystent, „Jak to działa?" 37/37, web GameVault (+RTL), **UI panelu (w toku, 12/~40)** | 🔄 |
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ## ✅ Faza 0 — Fundamenty
 - [x] Kolektor Steam (Web API, 58 gier)
@@ -67,75 +92,94 @@
 - [x] Status/aktywność (presence config) + motyw/kolor akcentu
 - [x] Strony loading/error/404 w stylu GH0ST
 
-## 🔄 Faza 3 — Integracja bot↔chmura *(rdzeń gotowy)*
+## ✅ Faza 3 — Integracja bot↔chmura
 - [x] Bot pisze heartbeat `bot_status` do Supabase (panel czyta status na żywo; offline przy zamknięciu)
 - [x] Bot stosuje `bot_presence` (`setPresence`) — synchronizacja z panelu co 60 s
 - [x] Bot czyta whitelistę anti‑nuke + ustawienia powiadomień z Supabase (`settings-sync` → lokalny SQLite; zmiany z bota wracają mirror‑upem)
-- [x] Endpoint GH0ST `link-status` → realny status powiązania w Profilu (endpoint w ghost-empire + panel `/profile`)
-- [x] Endpoint zdrowia bota → `/api/health` (+ alert „bot down" przez Vercel Cron) *(Faza 6/B7)*
+- [x] Endpoint GH0ST `link-status` → realny status powiązania w Profilu
+- [x] Endpoint zdrowia bota → `/api/health` (+ alert „bot down" przez Vercel Cron)
+- [x] **Realtime sync** (zero‑dep) — natychmiastowy push panel → bot (`0.65`)
 
-## ✅ Faza 4 — Wzrost
-> 📋 Szczegółowy plan (architektura, model danych, podział bot↔panel): [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
-- [x] Tickety — panel (config + lista) **+ bot** (`/ticket otwórz/zamknij`, prywatne wątki → Supabase)
-- [x] Leveling / XP — panel (config + ranking) **+ bot** (XP czat/voice, awanse, role‑nagrody → Supabase)
-- [x] Reaction roles — panel `/roles` + bot (role za reakcje, `GuildMessageReactions`)
-- [x] Komendy AI — `/ai` (DeepSeek/OpenAI) z twardym dziennym limitem (panel `/ai` + `ai_usage`)
-- [x] Webhooki EventSub (zamiast pollingu) — webhook na Vercel + subskrypcja `stream.online` *(Faza 5)*
-- [x] Statystyki — strona `/stats` (XP/AI/tickety/biblioteka) *(Faza 5)*
+## ✅ Faza 4 — Wzrost (funkcje społeczności)
+> 📋 Szczegółowy plan: [`FAZA-4-PLAN.md`](FAZA-4-PLAN.md)
+- [x] Tickety — panel + bot (`/ticket`, prywatne wątki → Supabase)
+- [x] Leveling / XP — panel + bot (XP czat/voice, awanse, role‑nagrody → Supabase)
+- [x] Reaction roles — panel `/roles` + bot
+- [x] Komendy AI — `/ai` z twardym dziennym limitem (panel `/ai` + `ai_usage`)
+- [x] Webhooki EventSub (zamiast pollingu) — `stream.online`
+- [x] Statystyki — strona `/stats`
 
 ## ✅ Faza 5 — Statystyki + EventSub
-- [x] Strona `/stats` — wykresy zużycia AI (14 dni), top XP, tickety, biblioteka (CSS/SVG)
-- [x] Twitch EventSub — webhook `/api/twitch/eventsub` (HMAC + challenge), subskrypcja `stream.online` → natychmiastowe ogłoszenie live
+- [x] Strona `/stats` — wykresy zużycia AI (14 dni), top XP, tickety, biblioteka
+- [x] Twitch EventSub — webhook `/api/twitch/eventsub` (HMAC + challenge) → natychmiastowe ogłoszenie live
 - [x] Hosting bota 24/7 — Railway (Dockerfile, heartbeat zweryfikowany)
+- [ ] **Marketplace pluginów / multi‑guild jako usługa** *(otwarte — patrz „Bieżący tor")*
 
-## ✅ Faza 6 — „Zrób wszystko" (rozbudowa partiami B1–B7)
+## ✅ Faza 6 — „Zrób wszystko" (B1–B7)
 - [x] **B1** — Powitania + autorole (`/welcome`) + Automod (`/moderation`)
-- [x] **B2** — Komendy moderacji `/mod warn|timeout|clear|warnings` + historia (`mod_cases`)
+- [x] **B2** — Moderacja `/mod warn|timeout|clear|warnings` + historia (`mod_cases`)
 - [x] **B3** — Pickery ról/kanałów w panelu (dropdowny zamiast ID)
 - [x] **B4** — Narzędzia twórcy (`/creator`): auto‑wydarzenie na live + relay klipów
 - [x] **B5** — Engagement: button‑role, `/remind`, `/giveaway`, starboard, temp‑voice
 - [x] **B6** — Biblioteka 2.0: lista życzeń (`/wishlist`) + ręczne dodawanie gier z IGDB
-- [x] **B7** — Infra/jakość: Vitest+CI, alert „bot down" (health+cron), handlery błędów, cache TTL
-- [x] **Playwright E2E** (0.45.2: proxy/login/`/p/*`/health) · [ ] (przyszłość) pełny Sentry (DSN), Redis (instancja), Supabase Realtime
+- [x] **B7** — Infra/jakość: Vitest+CI, alert „bot down", handlery błędów, cache TTL
+- [x] **Playwright E2E** (proxy/login/`/p/*`/health)
 
-## 🔄 Faza 7 — „Wszystko + pełna personalizacja" (partiami F1–F10)
-- [x] **F1** — Centrum sterowania (`/modules` on/off) + MessageEditor (markdown/emoji/czcionki Unicode/zmienne/live‑preview) + ColorField/GradientField + własny HEX akcentu
-- [x] **F2** — Karty rang `/rank` (canvas: gradient + czcionka) + baner powitalny + panel `/appearance`
-- [x] **F3** — Ekonomia serwera `/eco` (daily/work/rob/pay/bank/gamble/slots/shop/buy/top) + panel + sklep ról
+## ✅ Faza 7 — „Wszystko + pełna personalizacja" (F1–F10)
+- [x] **F1** — Centrum sterowania (`/modules`) + MessageEditor + ColorField/GradientField + własny HEX akcentu
+- [x] **F2** — Karty rang `/rank` (canvas) + baner powitalny + panel `/appearance`
+- [x] **F3** — Ekonomia serwera `/eco` (daily/work/rob/pay/bank/gamble/slots/shop/buy/top) + sklep ról
 - [x] **F4** — Leveling++ (mnożniki XP, no‑XP, anti‑AFK voice, custom level‑up, stack ról, `/prestige`)
-- [x] **F5** — Tickety++ (`/ticketpanel` przycisk→modal, transkrypty HTML→log+DM, oceny ⭐)
-- [x] **F6** — Bezpieczeństwo++
-  - [x] **F6.1** — Kary + sprawy: `/mod kick|ban|tempban|unban|note`, `/case`, auto‑unban (`temp_bans`)
-  - [x] **F6.2** — Logi serwera: zdarzenia (wiadomości/członkowie/bany/role/kanały/voice) → kanał, panel `/logging`
-  - [x] **F6.3** — Weryfikacja (gate‑przycisk `/verifypanel` → rola) + anti‑raid (fala wejść → akcja, bramka wieku konta)
-  - [x] **F6.4** — Modmail (DM ↔ wątek na serwerze; relay obustronny, `!close`)
-- [x] **F7** — Społeczność
-  - [x] **F7.1** — Sugestie (`/suggest` + głosowanie + decyzje moderacji) + ankiety (`/poll`)
-  - [x] **F7.2** — Komendy własne (prefiks → odpowiedź) + autoresponder (słowa-klucze)
-  - [x] **F7.3** — Urodziny (`/birthday`) + AFK (`/afk`) + highlighty (`/highlight`)
-  - [x] **F7.4** — Liczniki kanałów (`/counters`: członkowie/boosty/kanały/role w nazwach)
-- [x] **F8** — AI++
-  - [x] **F8.1** — `/tldr` (podsumowanie kanału) + `/translate` (tłumaczenie) + wspólny `lib/ai.mts`
-  - [x] **F8.2** — Czat z pamięcią (`/ai` + `nowa`) + `/imagine` (OpenAI dall-e-3)
-  - [x] **F8.3** — AI‑moderacja (OpenAI moderation → usuń/ostrzeż/loguj)
-- [x] **F9** — Gaming unikat
-  - [x] **F9.1** — Free‑games feed (Epic) + patch‑notes (Steam news)
-  - [x] **F9.2** — Backlog gier (`/backlog add|list|set|remove`)
-  - [x] **F9.3** — Donejty Ko-fi (webhook → kanał) + price‑tracking ITAD (lista życzeń → alerty promocji). ℹ️ Twitch sub→rola odłożone (OAuth twórcy)
-- [x] **F10** — Analityka + Infra
-  - [x] **F10.1** — Wykresy aktywności serwera (`activity_daily` → `/stats`)
-  - [x] **F10.2** — Sezonowe rankingi levelingu (`/hof` + miesięczny hall of fame + opcjonalny reset)
-  - [x] **F10.3** — Sentry (zero‑dep, DSN‑gated) w bocie + panelu. ✅ Playwright E2E dodane (0.45.2). ℹ️ i18n pominięte (opcjonalne na przyszłość)
+- [x] **F5** — Tickety++ (`/ticketpanel`, transkrypty HTML→log+DM, oceny ⭐)
+- [x] **F6** — Bezpieczeństwo++: kary+sprawy (`/case`, `temp_bans`), logi serwera (`/logging`), weryfikacja (`/verifypanel`) + anti‑raid, modmail
+- [x] **F7** — Społeczność: sugestie (`/suggest`) + ankiety (`/poll`), komendy własne + autoresponder, urodziny/AFK/highlighty, liczniki kanałów
+- [x] **F8** — AI++: `/tldr` + `/translate` + `lib/ai.mts`, czat z pamięcią + `/imagine`, AI‑moderacja
+- [x] **F9** — Gaming unikat: free‑games feed (Epic), patch‑notes (Steam), backlog (`/backlog`), donejty Ko‑fi + price‑tracking ITAD
+- [x] **F10** — Analityka + Infra: wykresy aktywności, sezonowe rankingi (`/hof`), Sentry (zero‑dep, DSN‑gated)
 
-## 🔜 Faza 8 — Fundament customizacji + pogłębienie (partiami)
-> Cel: maks. customizacja każdej funkcji, zaawansowany edytor wszędzie, lepszy UX + jakość.
-- [x] **Inline toggle modułów** — włącz/wyłącz na stronie funkcji (auto-pasek `ModuleBar`; źródło prawdy = Centrum sterowania) *(0.46.0, [#098])*
-- [x] **Message Studio** — uniwersalny edytor embed+tekst (live-preview 1:1, licznik znaków, smallcaps/fonty, emoji+custom emoji, szablony) *(0.47.0, [#100]; 1. odbiorca: Powitania)*
-- [ ] **Pickery/emoji wszędzie** — emoji (std + serwerowe) w Studio + `getGuildMeta.emojis` ✅ (0.47.0); rozszerzanie na pozostałe formularze w toku
-- [x] **Smallcaps** (+ czcionki Unicode) w edytorze *(0.47.0)* · [x] smallcaps w UI (0.60.0, [#114]) · [x] **Compact UI** (0.58.0, [#111])
-- [x] Epiki: ✅ **Tickets 2.0** (0.48.0, [#101]) · ✅ **Applications 2.0** (0.49.0, [#102]) · ✅ **Reaction roles 2.0** (0.50.0, [#103]) · ✅ **Automod/Security 2.0** (0.51.0, [#104]) · ✅ **Creator + Social** (0.53.0, [#106]) · ✅ **Notifications 2.0** (0.54.0, [#107]) · ✅ **Donate 2.0** (0.52.0, [#105]) · ✅ **Levels 2.0** (0.55.0, [#108]) · ✅ **AI 2.0** (0.56.0, [#109]) · ✅ **Game Library 2.0** (0.57.0, [#110]) · ✅ **Integracje** (0.59.0, [#112])
+## ✅ Faza 8 — Fundament customizacji + 14 epików „2.0" (`0.46`–`0.59`)
+- [x] **Inline toggle modułów** (`ModuleBar`; źródło prawdy = Centrum sterowania)
+- [x] **Message Studio** — uniwersalny edytor embed+tekst (live‑preview 1:1, smallcaps/fonty Unicode, emoji + serwerowe, szablony, **Components V2**)
+- [x] **Smallcaps** w edytorze i UI · **Compact UI**
+- [x] Epiki 2.0: ✅ Tickets · ✅ Applications · ✅ Reaction roles · ✅ Automod/Security · ✅ Creator+Social · ✅ Notifications · ✅ Donate · ✅ Levels · ✅ AI (`/ask`+`/rewrite`) · ✅ Game Library (klikalne gry) · ✅ Integracje (generic incoming webhook)
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑07 · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a></sub></div>
+
+## ✅ Po Fazie 8 — rozbudowa ciągła (`0.60`–`0.222`)
+
+### 🧱 Pozostałości + Ulepszenia (`0.60`–`0.99`)
+- [x] Profil 2.0 + Smallcaps w UI · free‑games multi‑store (ITAD) · hartowanie (testy, parser RSS)
+- [x] Realtime panel→bot (zero‑dep) · no‑code komendy slash · uprawnienia panelu (admin/editor/viewer, multi‑user)
+- [x] Nowy look „Obsidian / Crimson" + mikro‑interakcje + ekran logowania · tryb focus · glass topbar
+- [x] Statystyki: trendy 14 dni, wykresy area SVG · automod (eskalacja, anty‑scam/PII) · liczniki Twitch/Kick/YouTube
+- [x] Interakcje: `/trivia` `/rep` `/confess` `/xpevent` `/event` (RSVP) · onboarding (Diagnostyka + kreator startowy) · historia ekonomii na profilu
+
+### 🏗️ Architekt Serwera (`0.100`–`0.104`)
+- [x] Silnik provisioningu (twórz + auto‑wpinanie) · AI‑kreator (opis → blueprint) · blueprinty + eksport/import · podgląd (dry‑run) · `/undo` (rollback)
+
+### 🌍 i18n bota — 14 języków (`0.105`–`0.113`, `0.154`–`0.157`)
+- [x] Fundament i18n + opisy komend (Discord‑localizations) · runtime‑stringi (~40 słowników) · przełącznik języka w panelu · błędy bota i cała ekonomia/moderacja/profil na `t()`
+
+### 🅰️ Etapy A–K (`0.114`–`0.194`)
+- [x] **A „Przyjazność"** — `/help` (hub), opisy „co/po co" na stronach, `/tutorial`
+- [x] **B** — 3 tryby dashboardu (Prosty/Zaawansowany/Developer)
+- [x] **C** — fun‑pack (`/rps /flip /dadjoke /cat /dog`), `/sticky`, Polls v2, `/farewell`, `/search`, `/persona`, pakiet info (`/avatar /userinfo /serverinfo`), mod‑utils (`/slowmode /lock /unlock`)
+- [x] **D** — `/healthcheck`, `/roleperms`, `/rolecopy`, `/blueprint`, `/aiserver`, `/undo`
+- [x] **E/F** — osiągnięcia‑tiery, reaction‑roles „wybierz jedną", social pack (`/ship /hug /kiss /slap /pat`), `/marry`, gry (`/eco crime/highlow`, `/ttt`), mosty eko + `/math`
+- [x] **G (SAFETY)** — `/raidmode`, `/backup` (snapshot+restore), `/heat` (adaptacyjny anty‑spam), bypass‑guard + weryfikacja hasłem, `/panic`
+- [x] **H** — TempVoice 2.0, `/imageonly`, context‑menu (PPM), formularz przed ticketem, Custom Commands 2.0 (akcje+warunki)
+- [x] **I** — Pulpit 2.0 (health‑score), tooltipsy/pola wg trybu, Twitch Schedule→Events, Discord AutoMod natywny, Components V2, live‑rola/vanity‑rola, **i18n panelu (nawigacja + paleta ⌘K)**
+- [x] **J** — `/stocks` (giełda), role czasowe w sklepie, `/pet`, `/cards`, `/meme`
+- [x] **K „Przyjazność 2.0" + config per‑serwer** — przełącznik serwerów, „Jak to działa?" na każdej stronie, asystent AI panelu, tryby 2.0, oraz **C‑1…C‑27: każdy moduł konfigurowalny per‑serwer** (powitania, leveling, sugestie, urodziny, liczniki, ekonomia, automod, logi, weryfikacja, modmail, aplikacje, tickety, TempVoice, starboard, autoresponder, liczenie/AFK, highlighty, automatyzacje, role‑menu, invite‑tracker, rankcard, heat, anti‑raid, anti‑nuke, komendy własne, digest, sezony)
+
+### 🎁 Funkcje końcowe + i18n treści (`0.195`–`0.222`)
+- [x] Wyszukiwarka komend w `/help` · automod anty‑caps/anty‑spoiler · krzywa XP (presety) · 8 motywów kart · giveaway (kasa+XP) · onboarding DM właściciela · transkrypty ticketów na web
+- [x] i18n treści: samouczek, asystent AI, **„Jak to działa?" 37/37 stron × 14 jęz.**, web GameVault (+RTL +przełącznik)
+- [🔄] **i18n UI panelu** — 12/~40 stron *(patrz „Bieżący tor" u góry)*
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑18 · v0.222.0 (#292) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

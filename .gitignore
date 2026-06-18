@@ -41,5 +41,7 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
-.claude/
+# .claude/ — ignoruj lokalne (launch.json, settings.local.json), ale śledź współdzielony settings.json (hook sync docs)
+.claude/*
+!.claude/settings.json
 .vercel/
