@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-297-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.227.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-298-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.228.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.228.0] — 🌍 i18n UI panelu — strona /automations (automatyzacje jeśli–to)
+
+- `[#298]` 🌍 **i18n UI panelu — kolejna fala: `/automations` (automatyzacje „jeśli–to").**
+  - 🖥️ **Panel**: 14 nowych kluczy `ui.automations.*` × **14 języków** w `panelI18n.ts` (parzystość 14×14=196). `app/automations/page.tsx` (serwer) + `AutomationsForm.tsx` (klient) na `tp()`. Wyzwalacze (dołączenie / słowo-klucz) i akcje (wiadomość / rola / DM) przeniesione na klucze. Placeholder `{user}` nietłumaczony.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 18/~40 stron.
 
 ## [0.227.0] — 🌍 i18n UI panelu — strona /responder (komendy własne + autoresponder)
 

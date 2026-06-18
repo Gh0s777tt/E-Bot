@@ -4,6 +4,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { AutomationRule, AutomationsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -27,6 +29,7 @@ export default function AutomationsForm({
   initial: AutomationsConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const idRef = useRef(0);
   const [rows, setRows] = useState<Row[]>(() =>
@@ -65,18 +68,20 @@ export default function AutomationsForm({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Automatyzacje włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.automations.enabled')}</span>
       </label>
 
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-white/90">Reguły (max 20)</span>
+        <span className="text-sm font-semibold text-white/90">
+          {tp(lang, 'ui.automations.rulesLabel')}
+        </span>
         <button
           type="button"
           onClick={() => setRows([...rows, { ...blank(), k: `r${idRef.current++}` }])}
           disabled={rows.length >= 20}
           className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
         >
-          <Plus size={12} /> Dodaj regułę
+          <Plus size={12} /> {tp(lang, 'ui.automations.addRule')}
         </button>
       </div>
 
@@ -88,14 +93,14 @@ export default function AutomationsForm({
               onChange={(e) => patch(r.k, { event: e.target.value as AutomationRule['event'] })}
               className={inputCls}
             >
-              <option value="join">Gdy: ktoś dołączy</option>
-              <option value="keyword">Gdy: słowo-klucz</option>
+              <option value="join">{tp(lang, 'ui.automations.eventJoin')}</option>
+              <option value="keyword">{tp(lang, 'ui.automations.eventKeyword')}</option>
             </select>
             {r.event === 'keyword' ? (
               <input
                 value={r.keyword}
                 onChange={(e) => patch(r.k, { keyword: e.target.value })}
-                placeholder="słowo-klucz"
+                placeholder={tp(lang, 'ui.automations.keywordPh')}
                 className={inputCls}
               />
             ) : (
@@ -106,9 +111,9 @@ export default function AutomationsForm({
               onChange={(e) => patch(r.k, { action: e.target.value as AutomationRule['action'] })}
               className={inputCls}
             >
-              <option value="message">Akcja: wyślij wiadomość</option>
-              <option value="role">Akcja: nadaj rolę</option>
-              <option value="dm">Akcja: wyślij DM</option>
+              <option value="message">{tp(lang, 'ui.automations.actionMessage')}</option>
+              <option value="role">{tp(lang, 'ui.automations.actionRole')}</option>
+              <option value="dm">{tp(lang, 'ui.automations.actionDm')}</option>
             </select>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -125,13 +130,13 @@ export default function AutomationsForm({
                 channels={guild.channels}
               />
             ) : (
-              <div className="text-xs text-muted">DM trafi do osoby wyzwalającej regułę.</div>
+              <div className="text-xs text-muted">{tp(lang, 'ui.automations.dmNote')}</div>
             )}
             {r.action !== 'role' && (
               <input
                 value={r.text}
                 onChange={(e) => patch(r.k, { text: e.target.value })}
-                placeholder="Treść ({user} = wzmianka)"
+                placeholder={tp(lang, 'ui.automations.textPh')}
                 className={inputCls}
               />
             )}
@@ -141,7 +146,7 @@ export default function AutomationsForm({
             onClick={() => setRows(rows.filter((x) => x.k !== r.k))}
             className="inline-flex items-center gap-1 text-xs text-muted transition hover:text-accent"
           >
-            <Trash2 size={12} /> Usuń regułę
+            <Trash2 size={12} /> {tp(lang, 'ui.automations.removeRule')}
           </button>
         </div>
       ))}
