@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-303-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.233.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-304-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.234.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.234.0] — 🌍 i18n UI panelu — strona /economy (stawki Ghost Tokens)
+
+- `[#304]` 🌍 **i18n UI panelu — kolejna fala: `/economy` (ekonomia Ghost Tokens — stawki naliczania).**
+  - 🖥️ **Panel**: 23 nowe klucze `ui.economy.*` × **14 języków** w `panelI18n.ts` (parzystość 14×23=322). `app/economy/page.tsx` (serwer) na `tp()`: intro + status ekonomii, 3 karty KPI (GT/wiadomość, GT/min voice, status) z podpisami (cooldown/tick), zasady naliczania (wiadomość, voice, AFK, wyciszony — tak/nie), data ostatniej zmiany stawek, przyciski portalu i instrukcja `/link`. Marki/tokeny nietłumaczone: `Ghost Tokens`/`GT`, `GT/min`, `ON`/`OFF`, route `/api/bot/config`, komenda `/link`, `GH0ST` oraz format daty/liczb `pl-PL`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 24/~40 stron.
 
 ## [0.233.0] — 🌍 i18n UI panelu — strona /donations (Ko-fi + linki /donate)
 
