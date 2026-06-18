@@ -2,13 +2,16 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import IgdbSearch, { type IgdbResult } from './IgdbSearch';
+import { useLang } from './LangContext';
 
 const STORES = ['steam', 'gog', 'xbox', 'epic', 'psn', 'ubisoft', 'other'];
 const selectCls =
   'rounded-md border border-line bg-elevated px-3 py-2 text-sm uppercase tracking-wide outline-none focus:border-accent';
 
 export default function AddGameForm() {
+  const { lang } = useLang();
   const router = useRouter();
   const [picked, setPicked] = useState<IgdbResult | null>(null);
   const [store, setStore] = useState('xbox');
@@ -46,7 +49,7 @@ export default function AddGameForm() {
 
   return (
     <div className="space-y-3">
-      <IgdbSearch onPick={setPicked} placeholder="Wpisz tytuł (Xbox / Epic / Ubisoft / dowolny)…" />
+      <IgdbSearch onPick={setPicked} placeholder={tp(lang, 'ui.library.igdbPlaceholder')} />
       {picked && (
         <div className="flex flex-wrap items-center gap-3 rounded-md border border-line bg-elevated p-3">
           {picked.cover_url && (
@@ -73,12 +76,14 @@ export default function AddGameForm() {
             disabled={st === 'saving'}
             className="rounded-md bg-accent px-5 py-2 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
           >
-            {st === 'saving' ? 'Dodaję…' : 'Dodaj'}
+            {st === 'saving' ? tp(lang, 'ui.library.addingBtn') : tp(lang, 'ui.library.addBtn')}
           </button>
         </div>
       )}
-      {st === 'ok' && <span className="text-sm text-green-400">✓ Dodano do biblioteki</span>}
-      {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
+      {st === 'ok' && (
+        <span className="text-sm text-green-400">{tp(lang, 'ui.library.addedOk')}</span>
+      )}
+      {st === 'err' && <span className="text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
     </div>
   );
 }

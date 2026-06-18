@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-305-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.235.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-306-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.236.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.236.0] — 🌍 i18n UI panelu — strona /library (biblioteka gier)
+
+- `[#306]` 🌍 **i18n UI panelu — kolejna fala: `/library` (biblioteka gier — dodawanie + przeglądarka).**
+  - 🖥️ **Panel**: 12 nowych kluczy `ui.library.*` × **14 języków** w `panelI18n.ts` (parzystość 14×12=168). `app/library/page.tsx` (serwer) + `AddGameForm.tsx` + `LibraryBrowser.tsx` (klient) na `tp()`: nagłówek dodawania (Xbox/Epic/Ubisoft), stan pusty z komendą ingestu, formularz IGDB (placeholder, przyciski, „dodano"), przeglądarka (szukaj, filtry platform/gatunków, licznik, brak wyników). Błąd zapisu reużywa generyka `ui.saveError`. Nietłumaczone: nazwy sklepów/platform (`Steam`/`PlayStation`/`Xbox`/…), gatunki z IGDB (dane), komenda `node ingest/sync.mts`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 26/~40 stron.
 
 ## [0.235.0] — 🌍 i18n UI panelu — strona /eco (ekonomia serwera: config + sezon + sklep)
 

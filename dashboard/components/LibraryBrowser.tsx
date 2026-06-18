@@ -3,8 +3,10 @@
 import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Game } from '../lib/data';
+import { tp } from '../lib/panelI18n';
 import GameCard from './GameCard';
 import GameDetailModal from './GameDetailModal';
+import { useLang } from './LangContext';
 
 const PLATFORM_LABEL: Record<string, string> = {
   steam: 'Steam',
@@ -14,6 +16,7 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default function LibraryBrowser({ games }: { games: Game[] }) {
+  const { lang } = useLang();
   const [q, setQ] = useState('');
   const [platform, setPlatform] = useState('all');
   const [genre, setGenre] = useState('all');
@@ -50,7 +53,7 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Szukaj gry…"
+            placeholder={tp(lang, 'ui.library.searchPlaceholder')}
             className="w-full rounded-md border border-line bg-elevated py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
           />
         </div>
@@ -59,7 +62,7 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
           onChange={(e) => setPlatform(e.target.value)}
           className={selectCls}
         >
-          <option value="all">Wszystkie platformy</option>
+          <option value="all">{tp(lang, 'ui.library.allPlatforms')}</option>
           {platforms.map((p) => (
             <option key={p} value={p}>
               {PLATFORM_LABEL[p] ?? p}
@@ -67,7 +70,7 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
           ))}
         </select>
         <select value={genre} onChange={(e) => setGenre(e.target.value)} className={selectCls}>
-          <option value="all">Wszystkie gatunki</option>
+          <option value="all">{tp(lang, 'ui.library.allGenres')}</option>
           {genres.map((g) => (
             <option key={g} value={g}>
               {g}
@@ -77,7 +80,7 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
       </div>
 
       <p className="text-xs uppercase tracking-wide text-muted">
-        {filtered.length} / {games.length} gier
+        {filtered.length} / {games.length} {tp(lang, 'ui.library.countSuffix')}
       </p>
 
       {filtered.length ? (
@@ -91,7 +94,7 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
           ))}
         </div>
       ) : (
-        <p className="py-10 text-center text-muted">Brak wyników dla wybranych filtrów.</p>
+        <p className="py-10 text-center text-muted">{tp(lang, 'ui.library.noResults')}</p>
       )}
 
       <GameDetailModal game={selected} onClose={() => setSelected(null)} />
