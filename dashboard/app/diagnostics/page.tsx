@@ -2,6 +2,8 @@ import { AlertTriangle, Bot, CheckCircle2, Database, Plug, XCircle } from 'lucid
 import Link from 'next/link';
 import { activeSource, getRawSetting, getSetupChecklist } from '../../lib/data';
 import { getIntegrations } from '../../lib/integrations';
+import { tp } from '../../lib/panelI18n';
+import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,11 +16,12 @@ function Dot({ ok }: { ok: boolean }) {
 }
 
 export default async function DiagnosticsPage() {
-  const [src, integrations, checklist, rawStatus] = await Promise.all([
+  const [src, integrations, checklist, rawStatus, lang] = await Promise.all([
     activeSource(),
     Promise.resolve(getIntegrations()),
     getSetupChecklist(),
     getRawSetting('bot_status'),
+    getPanelLocale(),
   ]);
 
   let botOnline = false;
@@ -37,7 +40,17 @@ export default async function DiagnosticsPage() {
   const health = Math.round((100 * (connOk + doneCfg)) / (2 + checklist.length));
   const tone = health >= 80 ? 'text-green-400' : health >= 50 ? 'text-amber-400' : 'text-accent';
   const verdict =
-    health >= 80 ? 'Wszystko gotowe' : health >= 50 ? 'Prawie gotowe' : 'Sporo do zrobienia';
+    health >= 80
+      ? tp(lang, 'ui.diagnostics.verdictReady')
+      : health >= 50
+        ? tp(lang, 'ui.diagnostics.verdictAlmost')
+        : tp(lang, 'ui.diagnostics.verdictTodo');
+  const srcNote =
+    src === 'supabase'
+      ? 'Supabase'
+      : src === 'sqlite'
+        ? 'SQLite'
+        : tp(lang, 'ui.diagnostics.srcNone');
 
   // Integracje pogrupowane.
   const groups = new Map<string, typeof integrations>();
@@ -60,14 +73,15 @@ export default async function DiagnosticsPage() {
         <div className="relative flex flex-wrap items-center gap-6">
           <div className="flex flex-col">
             <span className={`font-display text-6xl font-bold ${tone}`}>{health}%</span>
-            <span className="text-sm text-muted">Kondycja konfiguracji</span>
+            <span className="text-sm text-muted">{tp(lang, 'ui.diagnostics.healthLabel')}</span>
           </div>
           <div className="min-w-0">
             <h2 className="font-display text-2xl tracking-wide">{verdict}</h2>
             <p className="mt-1 text-sm text-muted">
-              Bot {botOnline ? 'online' : 'offline'} · źródło danych:{' '}
-              {src === 'supabase' ? 'Supabase' : src === 'sqlite' ? 'SQLite' : 'brak'} · integracje{' '}
-              {okInt}/{integrations.length} · moduły {doneCfg}/{checklist.length}
+              Bot {botOnline ? tp(lang, 'ui.online') : tp(lang, 'ui.offline')} ·{' '}
+              {tp(lang, 'ui.diagnostics.srcLabel')} {srcNote} ·{' '}
+              {tp(lang, 'ui.diagnostics.sumIntegrations')} {okInt}/{integrations.length} ·{' '}
+              {tp(lang, 'ui.diagnostics.sumModules')} {doneCfg}/{checklist.length}
             </p>
           </div>
         </div>
@@ -83,33 +97,32 @@ export default async function DiagnosticsPage() {
         {/* Połączenia */}
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-            <Bot size={16} className="text-accent" /> Połączenia
+            <Bot size={16} className="text-accent" /> {tp(lang, 'ui.diagnostics.connHeading')}
           </h2>
           <ul className="space-y-2.5 text-sm">
             <li className="flex items-center gap-2">
               <Dot ok={botOnline} />
-              <span className="flex-1">Bot połączony z Discordem</span>
+              <span className="flex-1">{tp(lang, 'ui.diagnostics.connBot')}</span>
               <span className="text-xs text-muted">
-                {botOnline ? 'online' : 'offline / brak pulsu'}
+                {botOnline ? tp(lang, 'ui.online') : tp(lang, 'ui.diagnostics.connBotOffline')}
               </span>
             </li>
             <li className="flex items-center gap-2">
               <Dot ok={src !== 'none'} />
-              <span className="flex-1">Baza danych</span>
+              <span className="flex-1">{tp(lang, 'ui.diagnostics.connDb')}</span>
               <span className="text-xs text-muted">
                 {src === 'supabase'
-                  ? 'Supabase (chmura)'
+                  ? tp(lang, 'ui.diagnostics.dbSupabase')
                   : src === 'sqlite'
-                    ? 'SQLite (lokalnie)'
-                    : 'brak'}
+                    ? tp(lang, 'ui.diagnostics.dbSqlite')
+                    : tp(lang, 'ui.diagnostics.srcNone')}
               </span>
             </li>
           </ul>
           {!botOnline && (
             <p className="mt-3 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
               <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-              Bot nie wysłał pulsu w ostatnich 2 min. Sprawdź, czy proces działa (Railway) i czy ma
-              ustawione zmienne Supabase.
+              {tp(lang, 'ui.diagnostics.botWarning')}
             </p>
           )}
         </section>
@@ -117,7 +130,8 @@ export default async function DiagnosticsPage() {
         {/* Integracje */}
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-            <Plug size={16} className="text-accent" /> Integracje ({okInt}/{integrations.length})
+            <Plug size={16} className="text-accent" /> {tp(lang, 'ui.diagnostics.intHeading')} (
+            {okInt}/{integrations.length})
           </h2>
           <div className="space-y-3">
             {[...groups.entries()].map(([group, items]) => (
@@ -141,8 +155,8 @@ export default async function DiagnosticsPage() {
       {/* Konfiguracja modułów */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Database size={16} className="text-accent" /> Konfiguracja modułów ({doneCfg}/
-          {checklist.length})
+          <Database size={16} className="text-accent" /> {tp(lang, 'ui.diagnostics.cfgHeading')} (
+          {doneCfg}/{checklist.length})
         </h2>
         <div className="grid gap-2 sm:grid-cols-2">
           {checklist.map((c) => (
@@ -158,7 +172,7 @@ export default async function DiagnosticsPage() {
               </div>
               {!c.done && (
                 <span className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-accent">
-                  Ustaw →
+                  {tp(lang, 'ui.diagnostics.setBtn')}
                 </span>
               )}
             </Link>

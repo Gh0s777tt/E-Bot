@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-299-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.229.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-300-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.230.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.230.0] — 🌍 i18n UI panelu — strona /diagnostics (zdrowie konfiguracji)
+
+- `[#300]` 🌍 **i18n UI panelu — kolejna fala: `/diagnostics` (panel diagnostyki / zdrowie konfiguracji).**
+  - 🖥️ **Panel**: 18 nowych kluczy `ui.diagnostics.*` × **14 języków** w `panelI18n.ts` (parzystość 14×18=252). `app/diagnostics/page.tsx` (serwer) na `tp()`: werdykt zdrowia (gotowe/prawie/sporo do zrobienia), sekcje Połączenia / Integracje / Konfiguracja modułów, ostrzeżenie o braku pulsu bota oraz przycisk „Ustaw →". Status bota reużywa generyków `ui.online`/`ui.offline`. Nazwy integracji/grup i etykiety checklisty modułów pochodzą z `lib/` (dane) — nietłumaczone w tej fali (jak przy `/scheduled`); nazwy `Supabase`/`SQLite`/`Railway` jako własne.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 20/~40 stron.
 
 ## [0.229.0] — 🌍 i18n UI panelu — strona /scheduled (zaplanowane posty)
 
