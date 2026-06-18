@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-298-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.228.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-299-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.229.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.229.0] — 🌍 i18n UI panelu — strona /scheduled (zaplanowane posty)
+
+- `[#299]` 🌍 **i18n UI panelu — kolejna fala: `/scheduled` (zaplanowane ogłoszenia).**
+  - 🖥️ **Panel**: 36 nowych kluczy `ui.scheduled.*` × **14 języków** w `panelI18n.ts` (parzystość 14×36=504). `app/scheduled/page.tsx` (serwer) + `ScheduledPostsForm.tsx` (klient) na `tp()`. Tryby (jednorazowo/codziennie/co tydzień), dni tygodnia i dynamiczne podsumowanie reguły (`summary()`) na klucze; przyciski zapisu reużywają generyków `ui.saving`/`ui.saved`/`ui.saveError`. Strefa `Europe/Warsaw` oraz placeholdery `{server}`/`{memberCount}` nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 19/~40 stron.
 
 ## [0.228.0] — 🌍 i18n UI panelu — strona /automations (automatyzacje jeśli–to)
 

@@ -3,14 +3,24 @@
 import { CalendarClock, ChevronDown, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { type PanelLocale, tp } from '../lib/panelI18n';
 import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
 import type { ScheduledPost } from '../lib/scheduledPosts';
+import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect } from './pickers';
 
 const inp =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
-const WEEKDAYS = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+const WEEKDAY_KEYS = [
+  'ui.scheduled.weekday0',
+  'ui.scheduled.weekday1',
+  'ui.scheduled.weekday2',
+  'ui.scheduled.weekday3',
+  'ui.scheduled.weekday4',
+  'ui.scheduled.weekday5',
+  'ui.scheduled.weekday6',
+];
 
 function toLocalInput(ms?: number): string {
   if (!ms) return '';
@@ -37,13 +47,14 @@ function newPost(): ScheduledPost {
   };
 }
 
-function summary(p: ScheduledPost): string {
+function summary(p: ScheduledPost, lang: PanelLocale): string {
   if (p.mode === 'once')
     return p.runAt
-      ? `jednorazowo · ${toLocalInput(p.runAt).replace('T', ' ')}`
-      : 'jednorazowo · brak daty';
-  if (p.mode === 'weekly') return `co tydzień · ${WEEKDAYS[p.weekday ?? 0]} ${p.time ?? '--:--'}`;
-  return `codziennie · ${p.time ?? '--:--'}`;
+      ? `${tp(lang, 'ui.scheduled.sumOnce')} · ${toLocalInput(p.runAt).replace('T', ' ')}`
+      : `${tp(lang, 'ui.scheduled.sumOnce')} · ${tp(lang, 'ui.scheduled.sumNoDate')}`;
+  if (p.mode === 'weekly')
+    return `${tp(lang, 'ui.scheduled.sumWeekly')} · ${tp(lang, WEEKDAY_KEYS[p.weekday ?? 0])} ${p.time ?? '--:--'}`;
+  return `${tp(lang, 'ui.scheduled.sumDaily')} · ${p.time ?? '--:--'}`;
 }
 
 export default function ScheduledPostsForm({
@@ -53,6 +64,7 @@ export default function ScheduledPostsForm({
   initial: ScheduledPost[];
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [posts, setPosts] = useState<ScheduledPost[]>(initial);
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
@@ -97,7 +109,7 @@ export default function ScheduledPostsForm({
     <div className="space-y-4">
       {posts.length === 0 && (
         <p className="rounded-lg border border-dashed border-line bg-bg/30 p-6 text-center text-sm text-muted">
-          Brak zaplanowanych postów. Dodaj pierwszy, aby bot wysyłał ogłoszenia automatycznie.
+          {tp(lang, 'ui.scheduled.emptyState')}
         </p>
       )}
 
@@ -112,7 +124,9 @@ export default function ScheduledPostsForm({
                 checked={p.enabled}
                 onChange={(e) => update(p.id, { enabled: e.target.checked })}
                 className="h-4 w-4 shrink-0 accent-accent"
-                title={p.enabled ? 'Włączony' : 'Wyłączony'}
+                title={
+                  p.enabled ? tp(lang, 'ui.scheduled.titleOn') : tp(lang, 'ui.scheduled.titleOff')
+                }
               />
               <button
                 type="button"
@@ -121,9 +135,9 @@ export default function ScheduledPostsForm({
               >
                 <CalendarClock size={15} className="shrink-0 text-accent" />
                 <span className="truncate text-sm font-semibold text-white/90">
-                  {p.label || 'Bez nazwy'}
+                  {p.label || tp(lang, 'ui.scheduled.noName')}
                 </span>
-                <span className="truncate text-xs text-muted">· {summary(p)}</span>
+                <span className="truncate text-xs text-muted">· {summary(p, lang)}</span>
                 <ChevronDown
                   size={15}
                   className={`ml-auto shrink-0 text-muted transition ${isOpen ? 'rotate-180' : ''}`}
@@ -133,7 +147,7 @@ export default function ScheduledPostsForm({
                 type="button"
                 onClick={() => remove(p.id)}
                 className="shrink-0 rounded-md border border-line px-2 py-1.5 text-muted transition hover:border-accent hover:text-accent"
-                title="Usuń"
+                title={tp(lang, 'ui.scheduled.remove')}
               >
                 <Trash2 size={14} />
               </button>
@@ -143,17 +157,17 @@ export default function ScheduledPostsForm({
               <div className="space-y-4 border-t border-line p-4">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="space-y-1 text-sm">
-                    <span className="text-muted">Nazwa (tylko dla Ciebie)</span>
+                    <span className="text-muted">{tp(lang, 'ui.scheduled.labelName')}</span>
                     <input
                       value={p.label}
                       onChange={(e) => update(p.id, { label: e.target.value })}
-                      placeholder="np. Cotygodniowe podsumowanie"
+                      placeholder={tp(lang, 'ui.scheduled.labelNamePh')}
                       className={inp}
                       maxLength={80}
                     />
                   </label>
                   <label className="space-y-1 text-sm">
-                    <span className="text-muted">Kanał</span>
+                    <span className="text-muted">{tp(lang, 'ui.scheduled.channel')}</span>
                     <ChannelSelect
                       value={p.channelId}
                       onChange={(v) => update(p.id, { channelId: v })}
@@ -164,7 +178,7 @@ export default function ScheduledPostsForm({
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <label className="space-y-1 text-sm">
-                    <span className="text-muted">Tryb</span>
+                    <span className="text-muted">{tp(lang, 'ui.scheduled.mode')}</span>
                     <select
                       value={p.mode}
                       onChange={(e) =>
@@ -172,15 +186,15 @@ export default function ScheduledPostsForm({
                       }
                       className={inp}
                     >
-                      <option value="once">Jednorazowo</option>
-                      <option value="daily">Codziennie</option>
-                      <option value="weekly">Co tydzień</option>
+                      <option value="once">{tp(lang, 'ui.scheduled.modeOnce')}</option>
+                      <option value="daily">{tp(lang, 'ui.scheduled.modeDaily')}</option>
+                      <option value="weekly">{tp(lang, 'ui.scheduled.modeWeekly')}</option>
                     </select>
                   </label>
 
                   {p.mode === 'once' ? (
                     <label className="space-y-1 text-sm sm:col-span-2">
-                      <span className="text-muted">Data i godzina (Twoja strefa)</span>
+                      <span className="text-muted">{tp(lang, 'ui.scheduled.onceDate')}</span>
                       <input
                         type="datetime-local"
                         value={toLocalInput(p.runAt)}
@@ -192,22 +206,24 @@ export default function ScheduledPostsForm({
                     <>
                       {p.mode === 'weekly' && (
                         <label className="space-y-1 text-sm">
-                          <span className="text-muted">Dzień tygodnia</span>
+                          <span className="text-muted">
+                            {tp(lang, 'ui.scheduled.weekdayLabel')}
+                          </span>
                           <select
                             value={p.weekday ?? 1}
                             onChange={(e) => update(p.id, { weekday: Number(e.target.value) })}
                             className={inp}
                           >
-                            {WEEKDAYS.map((d, i) => (
-                              <option key={d} value={i}>
-                                {d}
+                            {WEEKDAY_KEYS.map((key, i) => (
+                              <option key={key} value={i}>
+                                {tp(lang, key)}
                               </option>
                             ))}
                           </select>
                         </label>
                       )}
                       <label className="space-y-1 text-sm">
-                        <span className="text-muted">Godzina (HH:MM)</span>
+                        <span className="text-muted">{tp(lang, 'ui.scheduled.timeLabel')}</span>
                         <input
                           type="time"
                           value={p.time ?? '12:00'}
@@ -220,15 +236,25 @@ export default function ScheduledPostsForm({
                 </div>
 
                 <div className="space-y-1 text-sm">
-                  <span className="font-semibold text-white/90">Treść wiadomości</span>
+                  <span className="font-semibold text-white/90">
+                    {tp(lang, 'ui.scheduled.content')}
+                  </span>
                   <MessageStudio
                     value={p.message}
                     onChange={(message: RichMessage) => update(p.id, { message })}
                     emojis={guild.emojis}
                     allowV2
                     variables={[
-                      { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
-                      { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
+                      {
+                        token: '{server}',
+                        label: tp(lang, 'ui.scheduled.varServer'),
+                        sample: 'GH0ST EMPIRE',
+                      },
+                      {
+                        token: '{memberCount}',
+                        label: tp(lang, 'ui.scheduled.varMemberCount'),
+                        sample: '1234',
+                      },
                     ]}
                   />
                 </div>
@@ -244,7 +270,7 @@ export default function ScheduledPostsForm({
           onClick={add}
           className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated"
         >
-          <Plus size={15} /> Dodaj zaplanowany post
+          <Plus size={15} /> {tp(lang, 'ui.scheduled.addPost')}
         </button>
         <button
           type="button"
@@ -252,17 +278,13 @@ export default function ScheduledPostsForm({
           disabled={st === 'saving'}
           className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz wszystko'}
+          {st === 'saving' ? tp(lang, 'ui.saving') : tp(lang, 'ui.scheduled.saveAll')}
         </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
-        {st === 'err' && <span className="text-sm text-accent">Błąd zapisu</span>}
+        {st === 'ok' && <span className="text-sm text-green-400">{tp(lang, 'ui.saved')}</span>}
+        {st === 'err' && <span className="text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
       </div>
 
-      <p className="text-xs text-muted">
-        Godziny w Twojej strefie czasowej (Europe/Warsaw). Tryb „codziennie/co tydzień" wysyła raz w
-        danym dniu w oknie do 10 min od ustawionej godziny. Zmienne {'{server}'} / {'{memberCount}'}{' '}
-        podstawiane są realnymi danymi serwera.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.scheduled.footNote')}</p>
     </div>
   );
 }
