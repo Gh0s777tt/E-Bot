@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-338-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.268.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-339-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.269.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.269.0] — 🔐 M1: twardy strażnik dostępu per-guild w getPrimaryGuildId (chokepoint)
+
+- `[#339]` 🔐 **Marketplace M1 — egzekwowanie izolacji per-guild na jednym chokepoincie + acykliczny refaktor warstwy.**
+  - `getPrimaryGuildId` ([`lib/guild.ts`](dashboard/lib/guild.ts)) zawęża wybór serwera do **dostępnych dla zalogowanego użytkownika** (cookie `panel_guild`, env i fallback honorowane tylko w obrębie dostępnych). Ponieważ **wszystkie odczyty i zapisy** per-serwer wyprowadzają `guild_id` z tej funkcji, ręczne podstawienie cudzego `guild_id` w cookie jest **odrzucane u źródła** — strażnik chroni też akcje zapisu, bez rozsiewania go po akcjach.
+  - **Owner i konteksty bez sesji = zachowanie identyczne** (fail-open do pełnej listy serwerów bota); zawężenie dotyczy wyłącznie zalogowanego nie-właściciela.
+  - **Acykliczny refaktor**: `lib/tenant.ts` → moduł-liść (fakty: `isOwner`, `getMemberGuildIds`); orkiestracja (`getAccessibleGuildIds`, `canAccessGuild`) przeniesiona do `guild.ts`; sesja czytana wprost z leaf-`session.ts` (nie przez `panelRoles`), by nie tworzyć cyklu `guild→panelRoles→data→guild`. `/api/guilds` importuje teraz z `guild`.
+  - `canAccessGuild(guildId)` zostaje jako jawny strażnik pod akcje przyjmujące explicit `guild_id` (M2+).
+  - Bramki: biome czysto (301), `tsc` exit 0, docs:check exit 0.
 
 ## [0.268.0] — 🔐 M1: warstwa multi-tenant (dostęp per-guild) + zawężenie przełącznika serwerów
 

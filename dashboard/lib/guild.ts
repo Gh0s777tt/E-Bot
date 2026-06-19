@@ -3,6 +3,8 @@
 // (Etap K — przełącznik serwerów), inaczej jawne DISCORD_GUILD_ID, inaczej pierwszy serwer bota.
 import { cookies } from 'next/headers';
 import { cache } from 'react';
+import { getAuthSecret, verifySession } from './session';
+import { getMemberGuildIds, isOwner } from './tenant';
 
 export type GuildRole = { id: string; name: string; color: number; position: number };
 export type GuildChannel = { id: string; name: string; type: number; position: number };
@@ -42,25 +44,61 @@ export const getBotGuilds = cache(async (): Promise<BotGuild[]> => {
   }
 });
 
-// Wybrany serwer: cookie 'panel_guild' (tylko jeśli bot tam jest) → DISCORD_GUILD_ID → pierwszy.
+// uid bieżącej sesji — czytany wprost z leaf-session.ts (NIE przez panelRoles), by nie wciągać
+// łańcucha panelRoles→data→guild w cykl importów. Brak kontekstu/żądania → null (fail-open).
+async function sessionUid(): Promise<string | null> {
+  try {
+    const token = (await cookies()).get('ebot_session')?.value;
+    if (!token) return null;
+    return (await verifySession(token, getAuthSecret()))?.uid ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// Wybrany serwer: cookie 'panel_guild' (jeśli DOSTĘPNY) → DISCORD_GUILD_ID → pierwszy dostępny.
+// M1: zalogowany NIE-właściciel jest zawężony do swoich serwerów (guild_members ∩ bot). Owner
+// oraz konteksty bez sesji → pełna lista serwerów bota (zachowanie sprzed M1, zero regresji).
 export const getPrimaryGuildId = cache(async (): Promise<string> => {
   const token = process.env.DISCORD_BOT_TOKEN;
   if (!token) return '';
-  const guilds = await getBotGuilds();
-  const ids = guilds.map((g) => g.id);
-  // 1) Wybór z przełącznika — tylko gdy bot faktycznie jest na tym serwerze.
+  const botIds = (await getBotGuilds()).map((g) => g.id);
+  const uid = await sessionUid();
+  let ids = botIds;
+  if (uid && !isOwner(uid)) {
+    const mine = new Set(await getMemberGuildIds(uid));
+    ids = botIds.filter((id) => mine.has(id));
+  }
+  // 1) Wybór z przełącznika — tylko gdy w dostępnych.
   try {
     const sel = (await cookies()).get('panel_guild')?.value;
     if (sel && ids.includes(sel)) return sel;
   } catch {
     /* brak kontekstu żądania (np. statyczny render) — pomijamy cookie */
   }
-  // 2) Jawny serwer z env (snowflake).
+  // 2) Jawny serwer z env (snowflake) — owner/bez sesji bez zmian; nie-właściciel tylko gdy dostępny.
   const envId = (process.env.DISCORD_GUILD_ID || '').trim();
-  if (/^\d{15,}$/.test(envId)) return envId;
-  // 3) Pierwszy serwer bota.
+  if (/^\d{15,}$/.test(envId) && (!uid || isOwner(uid) || ids.includes(envId))) return envId;
+  // 3) Pierwszy dostępny serwer.
   return ids[0] ?? '';
 });
+
+// ID serwerów dostępnych dla BIEŻĄCEJ sesji (owner → wszystkie serwery bota; inaczej przecięcie
+// serwery bota ∩ członkostwo). Brak sesji → [] (używane przez authenticated /api/guilds).
+export const getAccessibleGuildIds = cache(async (): Promise<string[]> => {
+  const uid = await sessionUid();
+  if (!uid) return [];
+  const botIds = (await getBotGuilds()).map((g) => g.id);
+  if (isOwner(uid)) return botIds;
+  const mine = new Set(await getMemberGuildIds(uid));
+  return botIds.filter((id) => mine.has(id));
+});
+
+// Czy bieżący użytkownik ma dostęp do danego serwera (twardy strażnik do scope'owania akcji w M1+).
+export async function canAccessGuild(guildId: string): Promise<boolean> {
+  if (!guildId) return false;
+  return (await getAccessibleGuildIds()).includes(guildId);
+}
 
 // Cache TTL w pamięci (60 s) — React cache() dedupuje tylko w obrębie jednego renderu;
 // to ogranicza realne wywołania Discord API między żądaniami (lekki odpowiednik Redisa).

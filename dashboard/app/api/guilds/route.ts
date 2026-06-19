@@ -1,8 +1,7 @@
 // Etap K — lista serwerów + aktualnie wybrany (do przełącznika serwerów w Topbarze).
 // M1 — zawężone do serwerów DOSTĘPNYCH dla zalogowanego użytkownika: właściciel widzi
 // wszystkie serwery bota (bypass), pozostali tylko swoje (guild_members ∩ serwery bota).
-import { getBotGuilds, getPrimaryGuildId } from '../../../lib/guild';
-import { getAccessibleGuildIds } from '../../../lib/tenant';
+import { getAccessibleGuildIds, getBotGuilds, getPrimaryGuildId } from '../../../lib/guild';
 
 export const dynamic = 'force-dynamic';
 

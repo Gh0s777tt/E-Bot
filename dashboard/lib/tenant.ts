@@ -1,14 +1,12 @@
-// M1 — warstwa multi-tenant: dostęp per-guild dla zalogowanego użytkownika.
+// M1 — fakty członkostwa multi-tenant (moduł-LIŚĆ: bez zależności od guild.ts, by uniknąć
+// cyklu importów). Orkiestracja dostępu — getAccessibleGuildIds / canAccessGuild / scope
+// w getPrimaryGuildId — żyje w guild.ts, które importuje stąd te dwie czyste funkcje.
 //
-// Model: właściciele (env DASHBOARD_OWNER_IDS) widzą WSZYSTKIE serwery bota (bypass —
-// zero regresji dla obecnego panelu jednowłaścicielskiego). Pozostali użytkownicy widzą
-// tylko serwery, w których są w tabeli `guild_members` (schemat M1) ORAZ bot jest obecny.
-// Tabela startuje pusta → dziś realnie działa wyłącznie owner-bypass; enrollment (M4
-// onboarding) doda wiersze. Tylko po stronie serwera (czyta cookie sesji + Supabase).
+// Model: właściciele (env DASHBOARD_OWNER_IDS) mają pełny dostęp (bypass w guild.ts); pozostali
+// użytkownicy — tylko serwery z tabeli `guild_members` (schemat M1) ∩ serwery bota. Tabela startuje
+// pusta → dziś realnie działa wyłącznie owner-bypass; enrollment (M4 onboarding) doda wiersze.
 import { cache } from 'react';
 import { authConfig } from './auth';
-import { getBotGuilds } from './guild';
-import { currentSession } from './panelRoles';
 import { hasSupabase, supabase } from './supabase';
 
 export type GuildRole = 'admin' | 'editor' | 'viewer';
@@ -32,21 +30,3 @@ export const getMemberGuildIds = cache(async (uid: string): Promise<string[]> =>
     return []; // brak tabeli / błąd API → brak dodatkowych serwerów (owner-bypass nietknięty)
   }
 });
-
-// ID serwerów dostępnych dla BIEŻĄCEJ sesji. Owner → wszystkie serwery bota; inaczej
-// przecięcie (serwery bota ∩ członkostwo użytkownika). Brak sesji → [].
-export const getAccessibleGuildIds = cache(async (): Promise<string[]> => {
-  const session = await currentSession();
-  const uid = session?.uid;
-  if (!uid) return [];
-  const botIds = (await getBotGuilds()).map((g) => g.id);
-  if (isOwner(uid)) return botIds; // bypass właściciela — zero regresji
-  const mine = new Set(await getMemberGuildIds(uid));
-  return botIds.filter((id) => mine.has(id));
-});
-
-// Czy bieżący użytkownik ma dostęp do danego serwera (do scope'owania zapytań/akcji w M1+).
-export async function canAccessGuild(guildId: string): Promise<boolean> {
-  if (!guildId) return false;
-  return (await getAccessibleGuildIds()).includes(guildId);
-}
