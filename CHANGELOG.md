@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-308-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.238.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-309-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.239.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.239.0] — 🌍 i18n UI panelu — strona /creator (narzędzia twórcy + social/RSS)
+
+- `[#309]` 🌍 **i18n UI panelu — kolejna fala: `/creator` (narzędzia twórcy — Twitch eventy/klipy + powiadomienia social/RSS).**
+  - 🖥️ **Panel**: 22 nowe klucze `ui.creator.*` × **14 języków** w `panelI18n.ts` (parzystość 14×22=308). `app/creator/page.tsx` (serwer) + `CreatorForm.tsx` + `SocialFeedsForm.tsx` (klient) na `tp()`: intro, auto-wydarzenie Discord przy live (nazwa-szablon + podpowiedź `{name}`, uprawnienie), relay klipów Twitch (kanał, interwał), feedy social/RSS (włącznik, kanał, szablon, lista źródeł, pomoc o mostkach RSS). Przyciski zapisu reużywają `SaveButton`. Nietłumaczone: marki (`Twitch`/`Discord`/`YouTube`/`TikTok`/`rss.app`/`RSSHub`/`Railway`), `EventSub`/`Helix`, placeholder `🔴 {name} — LIVE`, tokeny `{name}`/`{label}`/`{title}`/`{link}`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 29/~40 stron.
 
 ## [0.238.0] — 🌍 i18n UI panelu — strona /gaming (darmowe gry · patch-notes · ceny)
 

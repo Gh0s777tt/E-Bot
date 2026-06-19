@@ -4,6 +4,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { SocialFeedsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -20,6 +22,7 @@ export default function SocialFeedsForm({
   initial: SocialFeedsConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const [channelId, setChannelId] = useState(initial.channelId);
   const [message, setMessage] = useState(initial.message);
@@ -63,17 +66,24 @@ export default function SocialFeedsForm({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Powiadomienia o nowych postach włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.creator.socialEnabled')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał ogłoszeń</span>
-        <ChannelSelect value={channelId} onChange={setChannelId} channels={guild.channels} />
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.creator.channelAnnounce')}
+        </span>
+        <ChannelSelect
+          value={channelId}
+          onChange={setChannelId}
+          channels={guild.channels}
+          placeholder={tp(lang, 'ui.creator.channelPh')}
+        />
       </label>
 
       <label className="block space-y-1 text-sm">
         <span className="font-semibold text-white/90">
-          Wiadomość ({'{label}'} {'{title}'} {'{link}'})
+          {tp(lang, 'ui.creator.msgTemplate')} ({'{label}'} {'{title}'} {'{link}'})
         </span>
         <textarea
           value={message}
@@ -85,34 +95,34 @@ export default function SocialFeedsForm({
 
       <div className="space-y-2 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Źródła RSS ({rows.length}/15)</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.creator.rssSourcesLabel')} ({rows.length}/15)
+          </span>
           <button
             type="button"
             onClick={add}
             disabled={rows.length >= 15}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
-            <Plus size={12} /> Dodaj feed
+            <Plus size={12} /> {tp(lang, 'ui.creator.addFeedBtn')}
           </button>
         </div>
         {rows.length === 0 && (
-          <p className="text-xs text-muted">
-            Brak źródeł. Dodaj URL RSS/Atom (np. kanał YouTube, rss.app dla TikTok/IG/X/FB/Threads).
-          </p>
+          <p className="text-xs text-muted">{tp(lang, 'ui.creator.noFeeds')}</p>
         )}
         {rows.map((r) => (
           <div key={r.id} className="grid grid-cols-[8rem_1fr_auto] gap-2">
             <input
               value={r.label}
               onChange={(e) => setRow(r.id, { label: e.target.value })}
-              placeholder="Etykieta (np. TikTok)"
+              placeholder={tp(lang, 'ui.creator.labelPh')}
               className={inputCls}
               maxLength={60}
             />
             <input
               value={r.url}
               onChange={(e) => setRow(r.id, { url: e.target.value })}
-              placeholder="https://… (URL RSS/Atom)"
+              placeholder={tp(lang, 'ui.creator.urlPh')}
               className={inputCls}
               maxLength={500}
             />
@@ -120,7 +130,7 @@ export default function SocialFeedsForm({
               type="button"
               onClick={() => del(r.id)}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.creator.delAria')}
             >
               <Trash2 size={14} />
             </button>
@@ -129,11 +139,7 @@ export default function SocialFeedsForm({
       </div>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        TikTok/Instagram/Facebook/Threads/X nie mają darmowego API „nowy post" → użyj mostka RSS
-        (np. rss.app, RSSHub) i wklej URL feedu. YouTube ma natywny RSS. Bot sprawdza co 10 min,
-        pierwsze uruchomienie tylko zapamiętuje (bez spamu historią).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.creator.socialHelp')}</p>
     </div>
   );
 }

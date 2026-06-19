@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -18,6 +20,7 @@ const inputCls =
 const num = (v: string): number => Math.max(0, Math.floor(Number(v) || 0));
 
 export default function CreatorForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -48,11 +51,13 @@ export default function CreatorForm({ initial, guild }: { initial: Cfg; guild: G
             className="h-4 w-4 accent-accent"
           />
           <span className="font-semibold text-white/90">
-            Auto-wydarzenie Discord przy wejściu na live (Twitch)
+            {tp(lang, 'ui.creator.autoEventToggle')}
           </span>
         </label>
         <label className="block space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Nazwa wydarzenia (szablon)</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.creator.eventNameLabel')}
+          </span>
           <input
             value={c.eventName}
             onChange={(e) => setC({ ...c, eventName: e.target.value })}
@@ -60,13 +65,11 @@ export default function CreatorForm({ initial, guild }: { initial: Cfg; guild: G
             className={inputCls}
           />
           <span className="text-xs text-muted">
-            <code className="text-accent">{'{name}'}</code> = nick kanału. Pusto → domyślny.
+            <code className="text-accent">{'{name}'}</code>
+            {tp(lang, 'ui.creator.eventNameHint')}
           </span>
         </label>
-        <p className="text-xs text-muted">
-          Działa przez Twitch EventSub (natychmiast). Bot musi mieć uprawnienie{' '}
-          <strong>„Zarządzanie wydarzeniami"</strong>.
-        </p>
+        <p className="text-xs text-muted">{tp(lang, 'ui.creator.autoEventHelp')}</p>
       </div>
 
       {/* Relay klipów */}
@@ -78,19 +81,24 @@ export default function CreatorForm({ initial, guild }: { initial: Cfg; guild: G
             onChange={(e) => setC({ ...c, clipRelay: e.target.checked })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Relay nowych klipów Twitch na Discord</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.creator.clipRelayToggle')}
+          </span>
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="space-y-1 text-sm">
-            <span className="font-semibold text-white/90">Kanał na klipy</span>
+            <span className="font-semibold text-white/90">
+              {tp(lang, 'ui.creator.clipChannelLabel')}
+            </span>
             <ChannelSelect
               value={c.clipChannelId}
               onChange={(v) => setC({ ...c, clipChannelId: v })}
               channels={guild.channels}
+              placeholder={tp(lang, 'ui.creator.channelPh')}
             />
           </label>
           <label className="space-y-1 text-sm">
-            <span className="font-semibold text-white/90">Sprawdzaj co (min)</span>
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.creator.pollLabel')}</span>
             <input
               type="number"
               value={c.pollMin}
@@ -101,9 +109,7 @@ export default function CreatorForm({ initial, guild }: { initial: Cfg; guild: G
             />
           </label>
         </div>
-        <p className="text-xs text-muted">
-          Bot (24/7 na Railway) odpytuje Twitch Helix i wrzuca tylko nowe klipy (bez duplikatów).
-        </p>
+        <p className="text-xs text-muted">{tp(lang, 'ui.creator.clipHelp')}</p>
       </div>
 
       <SaveButton st={st} onClick={save} />

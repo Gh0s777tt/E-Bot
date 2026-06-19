@@ -766,6 +766,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Powitania: WŁĄCZONE',
     'ui.welcome.statusOff': 'Powitania: WYŁĄCZONE',
     'ui.welcome.heading': 'Powitania + autorole',
+    'ui.creator.intro':
+      'Narzędzia twórcy: automatyczne wydarzenie Discord gdy wejdziesz na live (Twitch EventSub) oraz relay klipów — bot wrzuca nowe klipy z Twitcha na wskazany kanał. Konfigurację zapisujesz tu (Supabase); bot stosuje ją na żywo.',
+    'ui.creator.creatorHeading': 'Narzędzia twórcy',
+    'ui.creator.socialHeading': 'Powiadomienia o nowych postach (social / RSS)',
+    'ui.creator.autoEventToggle': 'Auto-wydarzenie Discord przy wejściu na live (Twitch)',
+    'ui.creator.eventNameLabel': 'Nazwa wydarzenia (szablon)',
+    'ui.creator.eventNameHint': ' = nick kanału. Pusto → domyślny.',
+    'ui.creator.autoEventHelp':
+      'Działa przez Twitch EventSub (natychmiast). Bot musi mieć uprawnienie „Zarządzanie wydarzeniami".',
+    'ui.creator.clipRelayToggle': 'Relay nowych klipów Twitch na Discord',
+    'ui.creator.clipChannelLabel': 'Kanał na klipy',
+    'ui.creator.pollLabel': 'Sprawdzaj co (min)',
+    'ui.creator.clipHelp':
+      'Bot (24/7 na Railway) odpytuje Twitch Helix i wrzuca tylko nowe klipy (bez duplikatów).',
+    'ui.creator.channelPh': '— wybierz kanał —',
+    'ui.creator.socialEnabled': 'Powiadomienia o nowych postach włączone',
+    'ui.creator.channelAnnounce': 'Kanał ogłoszeń',
+    'ui.creator.msgTemplate': 'Wiadomość',
+    'ui.creator.rssSourcesLabel': 'Źródła RSS',
+    'ui.creator.addFeedBtn': 'Dodaj feed',
+    'ui.creator.noFeeds':
+      'Brak źródeł. Dodaj URL RSS/Atom (np. kanał YouTube, rss.app dla TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Etykieta (np. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Usuń',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X nie mają darmowego API „nowy post" → użyj mostka RSS (np. rss.app, RSSHub) i wklej URL feedu. YouTube ma natywny RSS. Bot sprawdza co 10 min, pierwsze uruchomienie tylko zapamiętuje (bez spamu historią).',
     'ui.gaming.intro':
       'Funkcje gamingowe oparte na publicznych API (bez kluczy): automatyczny feed darmowych gier z Epic Games Store oraz patch-notes / aktualności wybranych gier ze Steam. Bot ogłasza nowości na wskazanych kanałach.',
     'ui.gaming.freeHeading': 'Darmowe gry (Epic)',
@@ -1561,6 +1588,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Welcomes: ON',
     'ui.welcome.statusOff': 'Welcomes: OFF',
     'ui.welcome.heading': 'Welcomes + autorole',
+    'ui.creator.intro':
+      'Creator tools: an automatic Discord event when you go live (Twitch EventSub) and a clip relay — the bot posts new Twitch clips to the chosen channel. You save the configuration here (Supabase); the bot applies it live.',
+    'ui.creator.creatorHeading': 'Creator tools',
+    'ui.creator.socialHeading': 'New post notifications (social / RSS)',
+    'ui.creator.autoEventToggle': 'Auto Discord event when going live (Twitch)',
+    'ui.creator.eventNameLabel': 'Event name (template)',
+    'ui.creator.eventNameHint': ' = channel nick. Empty → default.',
+    'ui.creator.autoEventHelp':
+      'Works via Twitch EventSub (instantly). The bot must have the “Manage Events” permission.',
+    'ui.creator.clipRelayToggle': 'Relay new Twitch clips to Discord',
+    'ui.creator.clipChannelLabel': 'Clips channel',
+    'ui.creator.pollLabel': 'Check every (min)',
+    'ui.creator.clipHelp':
+      'The bot (24/7 on Railway) polls Twitch Helix and posts only new clips (no duplicates).',
+    'ui.creator.channelPh': '— select channel —',
+    'ui.creator.socialEnabled': 'New post notifications enabled',
+    'ui.creator.channelAnnounce': 'Announcement channel',
+    'ui.creator.msgTemplate': 'Message',
+    'ui.creator.rssSourcesLabel': 'RSS sources',
+    'ui.creator.addFeedBtn': 'Add feed',
+    'ui.creator.noFeeds':
+      'No sources. Add an RSS/Atom URL (e.g. a YouTube channel, rss.app for TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Label (e.g. TikTok)',
+    'ui.creator.urlPh': 'https://… (RSS/Atom URL)',
+    'ui.creator.delAria': 'Delete',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X have no free “new post” API → use an RSS bridge (e.g. rss.app, RSSHub) and paste the feed URL. YouTube has native RSS. The bot checks every 10 min; the first run only memorizes (no history spam).',
     'ui.gaming.intro':
       'Gaming features based on public APIs (no keys): an automatic feed of free games from the Epic Games Store and patch notes / news for selected games from Steam. The bot announces updates in the chosen channels.',
     'ui.gaming.freeHeading': 'Free games (Epic)',
@@ -2356,6 +2410,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Begrüßungen: AN',
     'ui.welcome.statusOff': 'Begrüßungen: AUS',
     'ui.welcome.heading': 'Begrüßungen + autorole',
+    'ui.creator.intro':
+      'Creator-Tools: ein automatisches Discord-Event, wenn du live gehst (Twitch EventSub), und ein Clip-Relay — der Bot postet neue Twitch-Clips im gewählten Kanal. Die Konfiguration speicherst du hier (Supabase); der Bot wendet sie live an.',
+    'ui.creator.creatorHeading': 'Creator-Tools',
+    'ui.creator.socialHeading': 'Benachrichtigungen zu neuen Posts (Social / RSS)',
+    'ui.creator.autoEventToggle': 'Automatisches Discord-Event beim Livegang (Twitch)',
+    'ui.creator.eventNameLabel': 'Event-Name (Vorlage)',
+    'ui.creator.eventNameHint': ' = Kanal-Nick. Leer → Standard.',
+    'ui.creator.autoEventHelp':
+      'Funktioniert über Twitch EventSub (sofort). Der Bot benötigt die Berechtigung „Events verwalten“.',
+    'ui.creator.clipRelayToggle': 'Neue Twitch-Clips zu Discord weiterleiten',
+    'ui.creator.clipChannelLabel': 'Clips-Kanal',
+    'ui.creator.pollLabel': 'Prüfen alle (Min.)',
+    'ui.creator.clipHelp':
+      'Der Bot (24/7 auf Railway) fragt Twitch Helix ab und postet nur neue Clips (ohne Duplikate).',
+    'ui.creator.channelPh': '— Kanal wählen —',
+    'ui.creator.socialEnabled': 'Benachrichtigungen zu neuen Posts aktiviert',
+    'ui.creator.channelAnnounce': 'Ankündigungskanal',
+    'ui.creator.msgTemplate': 'Nachricht',
+    'ui.creator.rssSourcesLabel': 'RSS-Quellen',
+    'ui.creator.addFeedBtn': 'Feed hinzufügen',
+    'ui.creator.noFeeds':
+      'Keine Quellen. Füge eine RSS/Atom-URL hinzu (z. B. einen YouTube-Kanal, rss.app für TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Label (z. B. TikTok)',
+    'ui.creator.urlPh': 'https://… (RSS/Atom-URL)',
+    'ui.creator.delAria': 'Löschen',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X haben keine kostenlose „Neuer Post“-API → nutze eine RSS-Bridge (z. B. rss.app, RSSHub) und füge die Feed-URL ein. YouTube hat natives RSS. Der Bot prüft alle 10 Min.; der erste Lauf merkt sich nur (kein Verlaufs-Spam).',
     'ui.gaming.intro':
       'Gaming-Funktionen auf Basis öffentlicher APIs (ohne Schlüssel): ein automatischer Feed kostenloser Spiele aus dem Epic Games Store sowie Patch Notes / News ausgewählter Spiele von Steam. Der Bot kündigt Neuigkeiten in den angegebenen Kanälen an.',
     'ui.gaming.freeHeading': 'Kostenlose Spiele (Epic)',
@@ -3156,6 +3237,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenidas: ACTIVADAS',
     'ui.welcome.statusOff': 'Bienvenidas: DESACTIVADAS',
     'ui.welcome.heading': 'Bienvenidas + autorole',
+    'ui.creator.intro':
+      'Herramientas de creador: un evento de Discord automático cuando empiezas a emitir (Twitch EventSub) y un relay de clips — el bot publica nuevos clips de Twitch en el canal indicado. La configuración la guardas aquí (Supabase); el bot la aplica en vivo.',
+    'ui.creator.creatorHeading': 'Herramientas de creador',
+    'ui.creator.socialHeading': 'Avisos de nuevas publicaciones (social / RSS)',
+    'ui.creator.autoEventToggle': 'Evento de Discord automático al emitir (Twitch)',
+    'ui.creator.eventNameLabel': 'Nombre del evento (plantilla)',
+    'ui.creator.eventNameHint': ' = nick del canal. Vacío → predeterminado.',
+    'ui.creator.autoEventHelp':
+      'Funciona mediante Twitch EventSub (al instante). El bot necesita el permiso «Gestionar eventos».',
+    'ui.creator.clipRelayToggle': 'Reenviar nuevos clips de Twitch a Discord',
+    'ui.creator.clipChannelLabel': 'Canal de clips',
+    'ui.creator.pollLabel': 'Comprobar cada (min)',
+    'ui.creator.clipHelp':
+      'El bot (24/7 en Railway) consulta Twitch Helix y publica solo clips nuevos (sin duplicados).',
+    'ui.creator.channelPh': '— elige canal —',
+    'ui.creator.socialEnabled': 'Avisos de nuevas publicaciones activados',
+    'ui.creator.channelAnnounce': 'Canal de anuncios',
+    'ui.creator.msgTemplate': 'Mensaje',
+    'ui.creator.rssSourcesLabel': 'Fuentes RSS',
+    'ui.creator.addFeedBtn': 'Añadir feed',
+    'ui.creator.noFeeds':
+      'Sin fuentes. Añade una URL RSS/Atom (p. ej. un canal de YouTube, rss.app para TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Etiqueta (p. ej. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Eliminar',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X no tienen una API gratuita de «nueva publicación» → usa un puente RSS (p. ej. rss.app, RSSHub) y pega la URL del feed. YouTube tiene RSS nativo. El bot comprueba cada 10 min; la primera ejecución solo memoriza (sin spam de historial).',
     'ui.gaming.intro':
       'Funciones gaming basadas en API públicas (sin claves): un feed automático de juegos gratis de Epic Games Store y patch notes / novedades de juegos seleccionados de Steam. El bot anuncia las novedades en los canales indicados.',
     'ui.gaming.freeHeading': 'Juegos gratis (Epic)',
@@ -3959,6 +4067,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Benvenuti: ATTIVI',
     'ui.welcome.statusOff': 'Benvenuti: DISATTIVATI',
     'ui.welcome.heading': 'Benvenuti + autorole',
+    'ui.creator.intro':
+      'Strumenti per creator: un evento Discord automatico quando vai in live (Twitch EventSub) e un relay di clip — il bot pubblica le nuove clip di Twitch nel canale indicato. La configurazione la salvi qui (Supabase); il bot la applica in tempo reale.',
+    'ui.creator.creatorHeading': 'Strumenti per creator',
+    'ui.creator.socialHeading': 'Notifiche di nuovi post (social / RSS)',
+    'ui.creator.autoEventToggle': 'Evento Discord automatico quando vai in live (Twitch)',
+    'ui.creator.eventNameLabel': 'Nome evento (modello)',
+    'ui.creator.eventNameHint': ' = nick del canale. Vuoto → predefinito.',
+    'ui.creator.autoEventHelp':
+      'Funziona tramite Twitch EventSub (immediato). Il bot deve avere il permesso «Gestione eventi».',
+    'ui.creator.clipRelayToggle': 'Inoltra le nuove clip Twitch su Discord',
+    'ui.creator.clipChannelLabel': 'Canale per le clip',
+    'ui.creator.pollLabel': 'Controlla ogni (min)',
+    'ui.creator.clipHelp':
+      'Il bot (24/7 su Railway) interroga Twitch Helix e pubblica solo le clip nuove (senza duplicati).',
+    'ui.creator.channelPh': '— scegli canale —',
+    'ui.creator.socialEnabled': 'Notifiche di nuovi post attive',
+    'ui.creator.channelAnnounce': 'Canale annunci',
+    'ui.creator.msgTemplate': 'Messaggio',
+    'ui.creator.rssSourcesLabel': 'Fonti RSS',
+    'ui.creator.addFeedBtn': 'Aggiungi feed',
+    'ui.creator.noFeeds':
+      'Nessuna fonte. Aggiungi un URL RSS/Atom (es. un canale YouTube, rss.app per TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Etichetta (es. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Elimina',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X non hanno un’API gratuita «nuovo post» → usa un bridge RSS (es. rss.app, RSSHub) e incolla l’URL del feed. YouTube ha RSS nativo. Il bot controlla ogni 10 min; la prima esecuzione memorizza soltanto (senza spam dello storico).',
     'ui.gaming.intro':
       'Funzioni gaming basate su API pubbliche (senza chiavi): un feed automatico di giochi gratis dall’Epic Games Store e patch notes / novità di giochi selezionati da Steam. Il bot annuncia le novità nei canali indicati.',
     'ui.gaming.freeHeading': 'Giochi gratis (Epic)',
@@ -4762,6 +4897,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenue : ACTIVÉ',
     'ui.welcome.statusOff': 'Bienvenue : DÉSACTIVÉ',
     'ui.welcome.heading': 'Bienvenue + autorole',
+    'ui.creator.intro':
+      'Outils créateur : un événement Discord automatique quand tu passes en live (Twitch EventSub) et un relais de clips — le bot publie les nouveaux clips Twitch dans le salon indiqué. Tu enregistres la configuration ici (Supabase) ; le bot l’applique en direct.',
+    'ui.creator.creatorHeading': 'Outils créateur',
+    'ui.creator.socialHeading': 'Notifications de nouveaux posts (réseaux / RSS)',
+    'ui.creator.autoEventToggle': 'Événement Discord automatique au passage en live (Twitch)',
+    'ui.creator.eventNameLabel': 'Nom de l’événement (modèle)',
+    'ui.creator.eventNameHint': ' = pseudo de la chaîne. Vide → par défaut.',
+    'ui.creator.autoEventHelp':
+      'Fonctionne via Twitch EventSub (instantané). Le bot doit avoir la permission « Gérer les événements ».',
+    'ui.creator.clipRelayToggle': 'Relayer les nouveaux clips Twitch vers Discord',
+    'ui.creator.clipChannelLabel': 'Salon des clips',
+    'ui.creator.pollLabel': 'Vérifier toutes les (min)',
+    'ui.creator.clipHelp':
+      'Le bot (24/7 sur Railway) interroge Twitch Helix et publie seulement les nouveaux clips (sans doublons).',
+    'ui.creator.channelPh': '— choisir un salon —',
+    'ui.creator.socialEnabled': 'Notifications de nouveaux posts activées',
+    'ui.creator.channelAnnounce': 'Salon d’annonces',
+    'ui.creator.msgTemplate': 'Message',
+    'ui.creator.rssSourcesLabel': 'Sources RSS',
+    'ui.creator.addFeedBtn': 'Ajouter un flux',
+    'ui.creator.noFeeds':
+      'Aucune source. Ajoute une URL RSS/Atom (p. ex. une chaîne YouTube, rss.app pour TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Libellé (p. ex. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Supprimer',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X n’ont pas d’API gratuite « nouveau post » → utilise un pont RSS (p. ex. rss.app, RSSHub) et colle l’URL du flux. YouTube a un RSS natif. Le bot vérifie toutes les 10 min ; la première exécution ne fait que mémoriser (sans spam d’historique).',
     'ui.gaming.intro':
       'Fonctionnalités gaming basées sur des API publiques (sans clés) : un feed automatique de jeux gratuits de l’Epic Games Store et des patch notes / actus de jeux sélectionnés depuis Steam. Le bot annonce les nouveautés dans les salons indiqués.',
     'ui.gaming.freeHeading': 'Jeux gratuits (Epic)',
@@ -5566,6 +5728,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Boas-vindas: LIGADAS',
     'ui.welcome.statusOff': 'Boas-vindas: DESLIGADAS',
     'ui.welcome.heading': 'Boas-vindas + autorole',
+    'ui.creator.intro':
+      'Ferramentas de criador: um evento de Discord automático quando entras em live (Twitch EventSub) e um relay de clipes — o bot publica novos clipes da Twitch no canal indicado. A configuração guardas aqui (Supabase); o bot aplica-a em tempo real.',
+    'ui.creator.creatorHeading': 'Ferramentas de criador',
+    'ui.creator.socialHeading': 'Avisos de novas publicações (social / RSS)',
+    'ui.creator.autoEventToggle': 'Evento de Discord automático ao entrar em live (Twitch)',
+    'ui.creator.eventNameLabel': 'Nome do evento (modelo)',
+    'ui.creator.eventNameHint': ' = nick do canal. Vazio → predefinido.',
+    'ui.creator.autoEventHelp':
+      'Funciona via Twitch EventSub (imediato). O bot precisa da permissão «Gerir eventos».',
+    'ui.creator.clipRelayToggle': 'Reenviar novos clipes da Twitch para o Discord',
+    'ui.creator.clipChannelLabel': 'Canal de clipes',
+    'ui.creator.pollLabel': 'Verificar a cada (min)',
+    'ui.creator.clipHelp':
+      'O bot (24/7 no Railway) consulta a Twitch Helix e publica apenas clipes novos (sem duplicados).',
+    'ui.creator.channelPh': '— escolher canal —',
+    'ui.creator.socialEnabled': 'Avisos de novas publicações ativados',
+    'ui.creator.channelAnnounce': 'Canal de anúncios',
+    'ui.creator.msgTemplate': 'Mensagem',
+    'ui.creator.rssSourcesLabel': 'Fontes RSS',
+    'ui.creator.addFeedBtn': 'Adicionar feed',
+    'ui.creator.noFeeds':
+      'Sem fontes. Adiciona um URL RSS/Atom (ex. um canal do YouTube, rss.app para TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Etiqueta (ex. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Eliminar',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X não têm uma API gratuita de «nova publicação» → usa uma ponte RSS (ex. rss.app, RSSHub) e cola o URL do feed. O YouTube tem RSS nativo. O bot verifica a cada 10 min; a primeira execução apenas memoriza (sem spam de histórico).',
     'ui.gaming.intro':
       'Funcionalidades gaming baseadas em APIs públicas (sem chaves): um feed automático de jogos grátis da Epic Games Store e patch notes / novidades de jogos selecionados da Steam. O bot anuncia as novidades nos canais indicados.',
     'ui.gaming.freeHeading': 'Jogos grátis (Epic)',
@@ -6367,6 +6556,32 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '欢迎消息：已开启',
     'ui.welcome.statusOff': '欢迎消息：已关闭',
     'ui.welcome.heading': '欢迎消息 + autorole',
+    'ui.creator.intro':
+      '创作者工具：开播时自动创建 Discord 活动（Twitch EventSub），以及剪辑转发 —— 机器人将新的 Twitch 剪辑发布到指定频道。配置在此保存（Supabase），机器人实时应用。',
+    'ui.creator.creatorHeading': '创作者工具',
+    'ui.creator.socialHeading': '新帖子通知（社交 / RSS）',
+    'ui.creator.autoEventToggle': '开播时自动创建 Discord 活动（Twitch）',
+    'ui.creator.eventNameLabel': '活动名称（模板）',
+    'ui.creator.eventNameHint': ' = 频道昵称。留空 → 默认。',
+    'ui.creator.autoEventHelp': '通过 Twitch EventSub 工作（即时）。机器人需要「管理活动」权限。',
+    'ui.creator.clipRelayToggle': '将新的 Twitch 剪辑转发到 Discord',
+    'ui.creator.clipChannelLabel': '剪辑频道',
+    'ui.creator.pollLabel': '检查间隔（分钟）',
+    'ui.creator.clipHelp':
+      '机器人（在 Railway 上 24/7）轮询 Twitch Helix，仅发布新剪辑（不重复）。',
+    'ui.creator.channelPh': '— 选择频道 —',
+    'ui.creator.socialEnabled': '新帖子通知已启用',
+    'ui.creator.channelAnnounce': '公告频道',
+    'ui.creator.msgTemplate': '消息',
+    'ui.creator.rssSourcesLabel': 'RSS 源',
+    'ui.creator.addFeedBtn': '添加源',
+    'ui.creator.noFeeds':
+      '暂无源。添加 RSS/Atom URL（例如 YouTube 频道，TikTok/IG/X/FB/Threads 可用 rss.app）。',
+    'ui.creator.labelPh': '标签（例如 TikTok）',
+    'ui.creator.urlPh': 'https://…（RSS/Atom URL）',
+    'ui.creator.delAria': '删除',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X 没有免费的「新帖子」API → 请使用 RSS 桥接（例如 rss.app、RSSHub）并粘贴源 URL。YouTube 有原生 RSS。机器人每 10 分钟检查一次，首次运行只记录（不刷历史）。',
     'ui.gaming.intro':
       '基于公开 API 的游戏功能（无需密钥）：自动推送 Epic Games Store 的免费游戏，以及来自 Steam 所选游戏的补丁说明 / 新闻。机器人会在指定频道发布更新。',
     'ui.gaming.freeHeading': '免费游戏（Epic）',
@@ -7138,6 +7353,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '환영 메시지: 켜짐',
     'ui.welcome.statusOff': '환영 메시지: 꺼짐',
     'ui.welcome.heading': '환영 메시지 + autorole',
+    'ui.creator.intro':
+      '크리에이터 도구: 방송을 시작하면 자동으로 Discord 이벤트를 생성하고(Twitch EventSub), 클립 릴레이로 새 Twitch 클립을 지정한 채널에 게시합니다. 설정은 여기에 저장하며(Supabase) 봇이 실시간으로 적용합니다.',
+    'ui.creator.creatorHeading': '크리에이터 도구',
+    'ui.creator.socialHeading': '새 게시물 알림 (소셜 / RSS)',
+    'ui.creator.autoEventToggle': '방송 시작 시 Discord 이벤트 자동 생성 (Twitch)',
+    'ui.creator.eventNameLabel': '이벤트 이름 (템플릿)',
+    'ui.creator.eventNameHint': ' = 채널 닉네임. 비우면 → 기본값.',
+    'ui.creator.autoEventHelp':
+      'Twitch EventSub로 작동합니다(즉시). 봇에 "이벤트 관리" 권한이 필요합니다.',
+    'ui.creator.clipRelayToggle': '새 Twitch 클립을 Discord로 릴레이',
+    'ui.creator.clipChannelLabel': '클립 채널',
+    'ui.creator.pollLabel': '확인 주기 (분)',
+    'ui.creator.clipHelp':
+      '봇(Railway에서 24/7)이 Twitch Helix를 폴링하여 새 클립만 게시합니다(중복 없음).',
+    'ui.creator.channelPh': '— 채널 선택 —',
+    'ui.creator.socialEnabled': '새 게시물 알림 켜짐',
+    'ui.creator.channelAnnounce': '공지 채널',
+    'ui.creator.msgTemplate': '메시지',
+    'ui.creator.rssSourcesLabel': 'RSS 소스',
+    'ui.creator.addFeedBtn': '피드 추가',
+    'ui.creator.noFeeds':
+      '소스가 없습니다. RSS/Atom URL을 추가하세요(예: YouTube 채널, TikTok/IG/X/FB/Threads는 rss.app).',
+    'ui.creator.labelPh': '라벨 (예: TikTok)',
+    'ui.creator.urlPh': 'https://… (RSS/Atom URL)',
+    'ui.creator.delAria': '삭제',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X에는 무료 "새 게시물" API가 없습니다 → RSS 브리지(예: rss.app, RSSHub)를 사용하고 피드 URL을 붙여넣으세요. YouTube는 기본 RSS를 제공합니다. 봇은 10분마다 확인하며, 첫 실행은 기록만 합니다(과거 스팸 없음).',
     'ui.gaming.intro':
       '공개 API 기반 게이밍 기능(키 불필요): Epic Games Store의 무료 게임을 자동 피드하고, Steam에서 선택한 게임의 패치 노트 / 소식을 제공합니다. 봇이 지정한 채널에 새 소식을 공지합니다.',
     'ui.gaming.freeHeading': '무료 게임 (Epic)',
@@ -7925,6 +8167,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Приветствия: ВКЛЮЧЕНЫ',
     'ui.welcome.statusOff': 'Приветствия: ВЫКЛЮЧЕНЫ',
     'ui.welcome.heading': 'Приветствия + autorole',
+    'ui.creator.intro':
+      'Инструменты автора: автоматическое событие Discord при выходе в эфир (Twitch EventSub) и релей клипов — бот публикует новые клипы Twitch в указанном канале. Конфигурацию вы сохраняете здесь (Supabase); бот применяет её в реальном времени.',
+    'ui.creator.creatorHeading': 'Инструменты автора',
+    'ui.creator.socialHeading': 'Уведомления о новых постах (соцсети / RSS)',
+    'ui.creator.autoEventToggle': 'Авто-событие Discord при выходе в эфир (Twitch)',
+    'ui.creator.eventNameLabel': 'Название события (шаблон)',
+    'ui.creator.eventNameHint': ' = ник канала. Пусто → по умолчанию.',
+    'ui.creator.autoEventHelp':
+      'Работает через Twitch EventSub (мгновенно). Боту нужно право «Управление событиями».',
+    'ui.creator.clipRelayToggle': 'Релей новых клипов Twitch в Discord',
+    'ui.creator.clipChannelLabel': 'Канал для клипов',
+    'ui.creator.pollLabel': 'Проверять каждые (мин)',
+    'ui.creator.clipHelp':
+      'Бот (24/7 на Railway) опрашивает Twitch Helix и публикует только новые клипы (без дубликатов).',
+    'ui.creator.channelPh': '— выберите канал —',
+    'ui.creator.socialEnabled': 'Уведомления о новых постах включены',
+    'ui.creator.channelAnnounce': 'Канал объявлений',
+    'ui.creator.msgTemplate': 'Сообщение',
+    'ui.creator.rssSourcesLabel': 'Источники RSS',
+    'ui.creator.addFeedBtn': 'Добавить фид',
+    'ui.creator.noFeeds':
+      'Нет источников. Добавьте URL RSS/Atom (напр. канал YouTube, rss.app для TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Метка (напр. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Удалить',
+    'ui.creator.socialHelp':
+      'У TikTok/Instagram/Facebook/Threads/X нет бесплатного API «новый пост» → используйте RSS-мост (напр. rss.app, RSSHub) и вставьте URL фида. У YouTube есть нативный RSS. Бот проверяет каждые 10 мин; первый запуск только запоминает (без спама историей).',
     'ui.gaming.intro':
       'Игровые функции на основе публичных API (без ключей): автоматическая лента бесплатных игр из Epic Games Store и патч-ноуты / новости выбранных игр из Steam. Бот объявляет новости в указанных каналах.',
     'ui.gaming.freeHeading': 'Бесплатные игры (Epic)',
@@ -8722,6 +8991,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Привітання: УВІМКНЕНО',
     'ui.welcome.statusOff': 'Привітання: ВИМКНЕНО',
     'ui.welcome.heading': 'Привітання + autorole',
+    'ui.creator.intro':
+      'Інструменти автора: автоматична подія Discord під час виходу в ефір (Twitch EventSub) та релей кліпів — бот публікує нові кліпи Twitch у вказаному каналі. Конфігурацію ви зберігаєте тут (Supabase); бот застосовує її в реальному часі.',
+    'ui.creator.creatorHeading': 'Інструменти автора',
+    'ui.creator.socialHeading': 'Сповіщення про нові пости (соцмережі / RSS)',
+    'ui.creator.autoEventToggle': 'Авто-подія Discord під час виходу в ефір (Twitch)',
+    'ui.creator.eventNameLabel': 'Назва події (шаблон)',
+    'ui.creator.eventNameHint': ' = нік каналу. Порожньо → за замовчуванням.',
+    'ui.creator.autoEventHelp':
+      'Працює через Twitch EventSub (миттєво). Боту потрібен дозвіл «Керування подіями».',
+    'ui.creator.clipRelayToggle': 'Релей нових кліпів Twitch у Discord',
+    'ui.creator.clipChannelLabel': 'Канал для кліпів',
+    'ui.creator.pollLabel': 'Перевіряти кожні (хв)',
+    'ui.creator.clipHelp':
+      'Бот (24/7 на Railway) опитує Twitch Helix і публікує лише нові кліпи (без дублікатів).',
+    'ui.creator.channelPh': '— оберіть канал —',
+    'ui.creator.socialEnabled': 'Сповіщення про нові пости увімкнені',
+    'ui.creator.channelAnnounce': 'Канал оголошень',
+    'ui.creator.msgTemplate': 'Повідомлення',
+    'ui.creator.rssSourcesLabel': 'Джерела RSS',
+    'ui.creator.addFeedBtn': 'Додати фід',
+    'ui.creator.noFeeds':
+      'Немає джерел. Додайте URL RSS/Atom (напр. канал YouTube, rss.app для TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Мітка (напр. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Видалити',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X не мають безкоштовного API «новий пост» → скористайтеся RSS-мостом (напр. rss.app, RSSHub) і вставте URL фіду. YouTube має нативний RSS. Бот перевіряє кожні 10 хв; перший запуск лише запам’ятовує (без спаму історією).',
     'ui.gaming.intro':
       'Ігрові функції на основі публічних API (без ключів): автоматична стрічка безкоштовних ігор з Epic Games Store та патч-ноути / новини вибраних ігор зі Steam. Бот оголошує новини у вказаних каналах.',
     'ui.gaming.freeHeading': 'Безкоштовні ігри (Epic)',
@@ -9519,6 +9815,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '歓迎メッセージ：オン',
     'ui.welcome.statusOff': '歓迎メッセージ：オフ',
     'ui.welcome.heading': '歓迎メッセージ + autorole',
+    'ui.creator.intro':
+      'クリエイター向けツール：配信開始時に Discord イベントを自動作成（Twitch EventSub）し、クリップリレーで新しい Twitch クリップを指定チャンネルに投稿します。設定はここに保存し（Supabase）、ボットがリアルタイムで適用します。',
+    'ui.creator.creatorHeading': 'クリエイター向けツール',
+    'ui.creator.socialHeading': '新規投稿の通知（ソーシャル / RSS）',
+    'ui.creator.autoEventToggle': '配信開始時に Discord イベントを自動作成（Twitch）',
+    'ui.creator.eventNameLabel': 'イベント名（テンプレート）',
+    'ui.creator.eventNameHint': ' = チャンネルのニックネーム。空 → デフォルト。',
+    'ui.creator.autoEventHelp':
+      'Twitch EventSub で動作します（即時）。ボットに「イベントの管理」権限が必要です。',
+    'ui.creator.clipRelayToggle': '新しい Twitch クリップを Discord にリレー',
+    'ui.creator.clipChannelLabel': 'クリップ用チャンネル',
+    'ui.creator.pollLabel': '確認間隔（分）',
+    'ui.creator.clipHelp':
+      'ボット（Railway で 24/7）が Twitch Helix をポーリングし、新しいクリップのみ投稿します（重複なし）。',
+    'ui.creator.channelPh': '— チャンネルを選択 —',
+    'ui.creator.socialEnabled': '新規投稿の通知 有効',
+    'ui.creator.channelAnnounce': '告知チャンネル',
+    'ui.creator.msgTemplate': 'メッセージ',
+    'ui.creator.rssSourcesLabel': 'RSS ソース',
+    'ui.creator.addFeedBtn': 'フィードを追加',
+    'ui.creator.noFeeds':
+      'ソースがありません。RSS/Atom の URL を追加してください（例: YouTube チャンネル、TikTok/IG/X/FB/Threads は rss.app）。',
+    'ui.creator.labelPh': 'ラベル（例: TikTok）',
+    'ui.creator.urlPh': 'https://…（RSS/Atom URL）',
+    'ui.creator.delAria': '削除',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X には無料の「新規投稿」API がありません → RSS ブリッジ（例: rss.app、RSSHub）を使い、フィードの URL を貼り付けてください。YouTube はネイティブ RSS があります。ボットは 10 分ごとに確認し、初回実行は記憶するだけです（履歴スパムなし）。',
     'ui.gaming.intro':
       '公開 API ベースのゲーミング機能（キー不要）：Epic Games Store の無料ゲームを自動配信し、Steam の選択したゲームのパッチノート / ニュースを提供します。ボットが指定チャンネルに新着を告知します。',
     'ui.gaming.freeHeading': '無料ゲーム（Epic）',
@@ -10315,6 +10638,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'الترحيب: مُفعَّل',
     'ui.welcome.statusOff': 'الترحيب: مُعطَّل',
     'ui.welcome.heading': 'الترحيب + autorole',
+    'ui.creator.intro':
+      'أدوات المُنشئ: حدث Discord تلقائي عند بدء البث المباشر (Twitch EventSub) وترحيل المقاطع — ينشر البوت مقاطع Twitch الجديدة في القناة المحددة. تحفظ الإعدادات هنا (Supabase) ويطبّقها البوت مباشرةً.',
+    'ui.creator.creatorHeading': 'أدوات المُنشئ',
+    'ui.creator.socialHeading': 'إشعارات المنشورات الجديدة (التواصل / RSS)',
+    'ui.creator.autoEventToggle': 'حدث Discord تلقائي عند بدء البث (Twitch)',
+    'ui.creator.eventNameLabel': 'اسم الحدث (قالب)',
+    'ui.creator.eventNameHint': ' = اسم القناة. فارغ → افتراضي.',
+    'ui.creator.autoEventHelp':
+      'يعمل عبر Twitch EventSub (فوريًا). يحتاج البوت إلى صلاحية «إدارة الأحداث».',
+    'ui.creator.clipRelayToggle': 'ترحيل مقاطع Twitch الجديدة إلى Discord',
+    'ui.creator.clipChannelLabel': 'قناة المقاطع',
+    'ui.creator.pollLabel': 'التحقق كل (دقيقة)',
+    'ui.creator.clipHelp':
+      'البوت (24/7 على Railway) يستعلم من Twitch Helix وينشر المقاطع الجديدة فقط (بدون تكرار).',
+    'ui.creator.channelPh': '— اختر قناة —',
+    'ui.creator.socialEnabled': 'إشعارات المنشورات الجديدة مفعّلة',
+    'ui.creator.channelAnnounce': 'قناة الإعلانات',
+    'ui.creator.msgTemplate': 'الرسالة',
+    'ui.creator.rssSourcesLabel': 'مصادر RSS',
+    'ui.creator.addFeedBtn': 'إضافة موجز',
+    'ui.creator.noFeeds':
+      'لا مصادر. أضف رابط RSS/Atom (مثل قناة YouTube، أو rss.app لـ TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'تسمية (مثل TikTok)',
+    'ui.creator.urlPh': 'https://… (رابط RSS/Atom)',
+    'ui.creator.delAria': 'حذف',
+    'ui.creator.socialHelp':
+      'لا تملك TikTok/Instagram/Facebook/Threads/X واجهة API مجانية «منشور جديد» ← استخدم جسر RSS (مثل rss.app وRSSHub) والصق رابط الموجز. YouTube لديه RSS أصلي. يتحقق البوت كل 10 دقائق؛ التشغيل الأول يتذكّر فقط (بدون إغراق بالسجل).',
     'ui.gaming.intro':
       'ميزات الألعاب المبنية على واجهات API العامة (بدون مفاتيح): تغذية تلقائية للألعاب المجانية من Epic Games Store وملاحظات التحديث / أخبار ألعاب مختارة من Steam. يعلن البوت الجديد في القنوات المحددة.',
     'ui.gaming.freeHeading': 'ألعاب مجانية (Epic)',
@@ -11100,6 +11450,33 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Sambutan: AKTIF',
     'ui.welcome.statusOff': 'Sambutan: NONAKTIF',
     'ui.welcome.heading': 'Sambutan + autorole',
+    'ui.creator.intro':
+      'Alat kreator: event Discord otomatis saat kamu mulai siaran (Twitch EventSub) dan relay klip — bot memposting klip Twitch baru ke saluran yang ditentukan. Konfigurasi kamu simpan di sini (Supabase); bot menerapkannya secara langsung.',
+    'ui.creator.creatorHeading': 'Alat kreator',
+    'ui.creator.socialHeading': 'Notifikasi postingan baru (sosial / RSS)',
+    'ui.creator.autoEventToggle': 'Event Discord otomatis saat mulai siaran (Twitch)',
+    'ui.creator.eventNameLabel': 'Nama event (templat)',
+    'ui.creator.eventNameHint': ' = nick saluran. Kosong → default.',
+    'ui.creator.autoEventHelp':
+      'Bekerja via Twitch EventSub (instan). Bot harus punya izin «Kelola Event».',
+    'ui.creator.clipRelayToggle': 'Relay klip Twitch baru ke Discord',
+    'ui.creator.clipChannelLabel': 'Saluran klip',
+    'ui.creator.pollLabel': 'Periksa setiap (mnt)',
+    'ui.creator.clipHelp':
+      'Bot (24/7 di Railway) menjajak Twitch Helix dan hanya memposting klip baru (tanpa duplikat).',
+    'ui.creator.channelPh': '— pilih saluran —',
+    'ui.creator.socialEnabled': 'Notifikasi postingan baru aktif',
+    'ui.creator.channelAnnounce': 'Saluran pengumuman',
+    'ui.creator.msgTemplate': 'Pesan',
+    'ui.creator.rssSourcesLabel': 'Sumber RSS',
+    'ui.creator.addFeedBtn': 'Tambah feed',
+    'ui.creator.noFeeds':
+      'Tidak ada sumber. Tambahkan URL RSS/Atom (mis. saluran YouTube, rss.app untuk TikTok/IG/X/FB/Threads).',
+    'ui.creator.labelPh': 'Label (mis. TikTok)',
+    'ui.creator.urlPh': 'https://… (URL RSS/Atom)',
+    'ui.creator.delAria': 'Hapus',
+    'ui.creator.socialHelp':
+      'TikTok/Instagram/Facebook/Threads/X tidak punya API «postingan baru» gratis → gunakan bridge RSS (mis. rss.app, RSSHub) dan tempel URL feed. YouTube punya RSS native. Bot memeriksa setiap 10 mnt; jalan pertama hanya mengingat (tanpa spam riwayat).',
     'ui.gaming.intro':
       'Fitur gaming berbasis API publik (tanpa kunci): feed otomatis game gratis dari Epic Games Store serta patch notes / berita game terpilih dari Steam. Bot mengumumkan pembaruan di saluran yang ditentukan.',
     'ui.gaming.freeHeading': 'Game gratis (Epic)',
