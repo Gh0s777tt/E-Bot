@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-351-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.281.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-352-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.282.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.282.0] — 🧩 M3 (reframe): plugin_config = config community; first-party bez migracji
+
+- `[#352]` 🧩 **Marketplace M3 — domknięcie modelu configu (reframe: bez ryzykownej migracji).**
+  - **Ustalenie**: config first-party JEST już per-gildia — tabela `settings` z kluczem `g:<guildId>:<key>` (override + fallback globalny) + chokepoint `getPrimaryGuildId`. Migracja `settings`→`plugin_config` byłaby zbędna i ryzykowna → **świadomie odrzucona**.
+  - Nowy [`lib/pluginConfig.ts`](dashboard/lib/pluginConfig.ts): `getPluginConfig`/`setPluginConfig` — `plugin_config` jako **dom konfiguracji community** (3rd-party nie mają `settingsKey` w `modules.ts`). Idempotentny upsert, graceful bez chmury.
+  - Zaktualizowane: komentarz schematu SQL + plan (M3). Tabela `plugin_config` przestaje być martwa — ma jasny cel (community).
+  - Bramki: biome czysto (318), `tsc` exit 0, docs:check exit 0.
 
 ## [0.281.0] — 🌍 i18n moderacji + zgłoszeń community (17 kluczy × 14) — dług i18n marketplace domknięty
 

@@ -1,4 +1,4 @@
-<!-- SYNC: v0.281.0 · #351 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.282.0 · #352 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.281.0)
+## 🔭 Bieżący tor (v0.282.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -43,7 +43,7 @@
 - [x] **RTL — KOMPLETNY** 🏁: chrom nawigacyjny (v0.255–256) + Pulpit/widgety (v0.257.0) + 14 stron `app/*` (v0.258.0) + 22 komponenty (v0.259.0) + knoby przełączników (v0.260.0). Cała powierzchnia na logicznych klasach Tailwind v4; finalny grep — zero fizycznych klas kierunkowych poza 2 wyśrodkowaniami. ✅
 
 ### 🧭 Otwarte / strategiczne (poza torem i18n)
-- [ ] **Marketplace pluginów / multi-guild — 🚧 M1 ✓ · M2 ✓ · M4 ✓ · M5 ✓ · M6 ✓ (bez sandboxa)** — decyzje: ✅ **płatne** (tiery) + ✅ **community** (3rd-party) → pełny zakres **M1–M6**. **Zrobione:** schemat + multi-tenant + chokepoint izolacji (v0.267–269) + katalog + strona `/marketplace` + toggle (v0.270–272) + self-serve login [`lib/enroll.ts`](../dashboard/lib/enroll.ts) + **onboarding `/onboarding`** (dodaj bota + Twoje serwery, v0.273+279) + **billing Stripe** (v0.274–275; [`AKTYWACJA-STRIPE.md`](AKTYWACJA-STRIPE.md)) + community pipeline `/marketplace/submit`+`/review` (zgłoszenie→moderacja→katalog, v0.276–278) + **i18n WSZYSTKICH powierzchni ×14** (onboarding/review/submit, 25 kluczy, v0.280–281). **Sandbox wykonania obcego kodu = świadomie poza zakresem** (ryzyko bezpieczeństwa). Plan: [`PLAN-MARKETPLACE.md`](PLAN-MARKETPLACE.md)
+- [ ] **Marketplace pluginów / multi-guild — 🚧 M1 ✓ · M2 ✓ · M3 ✓ · M4 ✓ · M5 ✓ · M6 ✓ (bez sandboxa)** — decyzje: ✅ **płatne** (tiery) + ✅ **community** (3rd-party) → pełny zakres **M1–M6**. **Zrobione:** schemat + multi-tenant + chokepoint izolacji (v0.267–269) + katalog + strona `/marketplace` + toggle (v0.270–272) + self-serve login [`lib/enroll.ts`](../dashboard/lib/enroll.ts) + **onboarding `/onboarding`** (dodaj bota + Twoje serwery, v0.273+279) + **billing Stripe** (v0.274–275; [`AKTYWACJA-STRIPE.md`](AKTYWACJA-STRIPE.md)) + community pipeline `/marketplace/submit`+`/review` (zgłoszenie→moderacja→katalog, v0.276–278) + **i18n WSZYSTKICH powierzchni ×14** (onboarding/review/submit, 25 kluczy, v0.280–281) + **M3 config pluginów** ([`lib/pluginConfig.ts`](../dashboard/lib/pluginConfig.ts): `plugin_config`=community; first-party bez migracji, v0.282.0). **Sandbox wykonania obcego kodu = świadomie poza zakresem** (ryzyko bezpieczeństwa). Plan: [`PLAN-MARKETPLACE.md`](PLAN-MARKETPLACE.md)
 - [ ] **Retencja + więcej wykresów w czasie** (panel `/stats`) — przyrosty 1–3 ✅ **v0.261–263** (wzrost członków + komplet trendów + **konfigurowalny zakres 7/14/30/90d** + **eksport CSV**); opcjonalnie dalej: kohortowa retencja
 - [ ] **Produkcyjne wpięcie infry** — szkielety **kompletne i gated** (audyt v0.265.0, przewodnik [`AKTYWACJA-INFRA.md`](AKTYWACJA-INFRA.md)): Sentry no-op bez `SENTRY_DSN`; Realtime z fallbackiem poll 60 s (aktywacja = `ALTER PUBLICATION … ADD TABLE settings`); Redis niewpięty (opcja na skalę). Aktywacja Sentry/Realtime wymaga **Twoich** zasobów
 - [ ] **Twitch sub → rola** — kod **kompletny + gotowy do aktywacji** (v0.264.0): runtime obsługuje `channel.subscribe`→rola, `eventsub-setup.mts` rejestruje obie subskrypcje, przewodnik [`AKTYWACJA-TWITCH-SUB.md`](AKTYWACJA-TWITCH-SUB.md). Aktywacja czeka na **Twoje** zasoby: aplikacja Twitch + OAuth broadcastera (scope `channel:read:subscriptions`)
@@ -187,4 +187,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.281.0 (#351) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.282.0 (#352) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

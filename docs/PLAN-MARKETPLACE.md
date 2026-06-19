@@ -100,7 +100,7 @@ Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie modu
 
 1. **M1 — Multi-tenant auth**: OAuth gildii usera + RLS + scope per-guild. *(Bez marketplace — sam fundament izolacji.)*
 2. **M2 — Rejestr pluginów**: tabela `PLUGINS` + `GUILD_PLUGINS`; katalog UI (enable/disable) mapowany na istniejące moduły.
-3. **M3 — Migracja configu**: `settings`→`plugin_config` per guild; kompatybilność wsteczna.
+3. **M3 — Config pluginów** *(reframe — v0.282.0)*: first-party trzyma config w `settings` per-serwer (`g:<guildId>:<key>` + chokepoint — **już izolowany, bez ryzykownej migracji**); `plugin_config` to dom konfiguracji **community** ([`lib/pluginConfig.ts`](../dashboard/lib/pluginConfig.ts): `getPluginConfig`/`setPluginConfig`).
 4. **M4 — Onboarding self-serve** *(gotowe — v0.273+279)*: admin serwera (MANAGE_GUILD) loguje się → auto-enrollment do `guild_members` ([`lib/enroll.ts`](../dashboard/lib/enroll.ts)) → zarządza swoim serwerem (izolacja przez chokepoint). Ekran [`/onboarding`](../dashboard/app/onboarding/page.tsx): „dodaj bota" + lista Twoich serwerów (klik = wybór kontekstu). Aktywacja self-serve: env `MARKETPLACE_SELF_SERVE=1`.
 5. **M5 — Tiery + billing** (Stripe; ✅ w zakresie): gating `tier_required`, Checkout, webhook → `guilds.tier`.
 6. **M6 — Community plugins** *(warstwa danych gotowa — v0.276.0)*: zgłoszenia + moderacja ([`lib/communityPlugins.ts`](../dashboard/lib/communityPlugins.ts): manifest Zod, submit→`pending`, review→`approved`/`rejected`; zatwierdzone wpadają do katalogu z M2). Gated env `MARKETPLACE_COMMUNITY`. **Sandbox wykonania obcego kodu = świadomie odłożony** (osobny, duży temat bezpieczeństwa). Najwyższe ryzyko.

@@ -51,7 +51,8 @@ create table if not exists guild_plugins (
   primary key (guild_id, plugin_key)
 );
 
--- Konfiguracja pluginu per-gildia (migracja z `settings` — M3).
+-- Konfiguracja pluginów COMMUNITY per-gildia (M3). First-party trzyma config w `settings`
+-- (per-serwer: klucz `g:<guildId>:<key>` + chokepoint getPrimaryGuildId — już izolowany, BEZ migracji).
 create table if not exists plugin_config (
   guild_id   text not null references guilds(guild_id) on delete cascade,
   plugin_key text not null references plugins(key) on delete cascade,
