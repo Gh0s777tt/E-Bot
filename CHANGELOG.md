@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-318-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.248.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-319-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.249.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.249.0] — 🎨 i18n współdzielonego `CardStyleEditor` + `GradientField` (domyka opcjonalną falę po 38/38)
+
+- `[#319]` 🎨 **i18n współdzielonego edytora stylu karty/banera — `CardStyleEditor` + `GradientField` (gradient · czcionka · kolor tekstu · gotowe motywy).**
+  - 🖥️ **Panel**: 15 nowych kluczy `ui.cardstyle.*` × **14 języków** w `panelI18n.ts` (parzystość 14×15=210). `CardStyleEditor.tsx` + `GradientField.tsx` (klient, `useLang()` + `tp()`): etykieta „Gotowe motywy", `title` przycisku „Zastosuj motyw „…"", etykiety `Czcionka`/`Kolor tekstu`, pola gradientu `Od`/`Do`/`Kąt:`. Tablica `THEMES` przebudowana z `name` na `nameKey` (8 motywów: Netflix/Ocean/Zachód/Las/Północ/Złoto/Neon/Mono) renderowanych przez `tp(lang, th.nameKey)`. Nietłumaczone: nazwy czcionek (`CARD_FONTS`), kody kolorów/gradientów, emoji motywów, `previewText` (`GH0ST EMPIRE`).
+  - 🏁 **Domyka opcjonalną falę** zapowiedzianą przy kamieniu milowym v0.248.0 — i18n UI panelu pozostaje **38/38 stron** (`CardStyleEditor` to współdzielony komponent kart rang/powitań, nie osobna strona).
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL).
 
 ## [0.248.0] — 🌍🏁 i18n UI panelu UKOŃCZONE — strona /setup (kreator startowy · Architekt · Blueprinty)
 

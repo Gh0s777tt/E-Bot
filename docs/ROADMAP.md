@@ -1,4 +1,4 @@
-<!-- SYNC: v0.248.0 · #318 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.249.0 · #319 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.248.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.249.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -74,7 +74,7 @@ flowchart LR
 
 ## 🏁 Ukończone — i18n UI panelu
 
-Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków (powłoka + pomoc 37/37 + web GameVault + strony ustawień). **Komplet: 38/38 stron.** Pozostaje tylko osobna, opcjonalna fala etykiet współdzielonego `CardStyleEditor`. Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02480).
+Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków (powłoka + pomoc 37/37 + web GameVault + strony ustawień). **Komplet: 38/38 stron.** Domknięta też opcjonalna fala — etykiety współdzielonego `CardStyleEditor` + `GradientField` (15 kluczy × 14 jęz., v0.249.0). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02490).
 
 ## 🧭 Wzrost (plan / opcjonalne)
 
@@ -86,4 +86,4 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.248.0 (#318) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.249.0 (#319) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
