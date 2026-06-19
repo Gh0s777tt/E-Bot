@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-342-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.272.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-343-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.273.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.273.0] — 🔓 M4: self-serve multi-tenant login (env-gated) + enrollment guild_members
+
+- `[#343]` 🔓 **Marketplace M4 — samoobsługowe logowanie adminów serwerów + zaludnienie `guild_members` (env-gated, domyślnie OFF).**
+  - **Keystone multi-tenant**: gdy `MARKETPLACE_SELF_SERVE=1`, admin serwera (uprawnienie MANAGE_GUILD) z botem może zalogować się do panelu i zarządzać **swoim** serwerem; izolację wymusza chokepoint `getPrimaryGuildId` (M1). **Domyślnie WYŁĄCZONE** — bez env panel jest jednowłaścicielski (owner/staff), zachowanie bajt-w-bajt jak dotąd.
+  - [`lib/auth.ts`](dashboard/lib/auth.ts): `selfServeEnabled()`, `fetchUserGuilds()` (scope `guilds`), `canManageGuild()` (właściciel serwera lub bit `MANAGE_GUILD`); `authorizeUrl` dokłada scope `guilds` **tylko** przy włączonym self-serve.
+  - Nowy [`lib/enroll.ts`](dashboard/lib/enroll.ts): `enrollGuild()` (idempotentny upsert `guilds` + `guild_members`, bez nadpisywania) + `enrollFromDiscord()` (serwery usera ∩ serwery bota z MANAGE_GUILD → admin). Best-effort: brak chmury/tabel → no-op.
+  - [`callback/route.ts`](dashboard/app/api/auth/callback/route.ts): gdy `resolveRole` = null **i** self-serve on → próba enrollmentu; sukces = sesja `admin`. Ścieżka owner/staff nietknięta.
+  - Aktywacja wymaga **Twojej** decyzji: env `MARKETPLACE_SELF_SERVE=1` (+ uruchomiony schemat M1). Udokumentowane w `.env.example` + planie. Bramki: biome czysto (305), `tsc` exit 0, docs:check exit 0.
 
 ## [0.272.0] — 🛒 M2: interaktywny marketplace — toggle enable/disable per-serwer
 

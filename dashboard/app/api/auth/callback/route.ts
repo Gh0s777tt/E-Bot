@@ -7,7 +7,9 @@ import {
   parseCookie,
   SESSION_COOKIE,
   STATE_COOKIE,
+  selfServeEnabled,
 } from '../../../../lib/auth';
+import { enrollFromDiscord } from '../../../../lib/enroll';
 import { resolveRole } from '../../../../lib/panelRoles';
 import { signSession } from '../../../../lib/session';
 
@@ -26,7 +28,12 @@ export async function GET(request: Request) {
   try {
     const tok = await exchangeCode(origin, code);
     const user = await fetchDiscordUser(tok.access_token);
-    const role = await resolveRole(user.id);
+    let role = await resolveRole(user.id);
+    // M4 — self-serve (env-gated): nie-owner/staff, ale admin serwera z botem → wejście + enrollment.
+    if (!role && selfServeEnabled()) {
+      const enrolled = await enrollFromDiscord(user.id, tok.access_token);
+      if (enrolled) role = 'admin';
+    }
     if (!role) return NextResponse.redirect(`${origin}/login?e=denied`);
 
     const avatar = user.avatar

@@ -101,7 +101,7 @@ Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie modu
 1. **M1 — Multi-tenant auth**: OAuth gildii usera + RLS + scope per-guild. *(Bez marketplace — sam fundament izolacji.)*
 2. **M2 — Rejestr pluginów**: tabela `PLUGINS` + `GUILD_PLUGINS`; katalog UI (enable/disable) mapowany na istniejące moduły.
 3. **M3 — Migracja configu**: `settings`→`plugin_config` per guild; kompatybilność wsteczna.
-4. **M4 — Onboarding self-serve**: „dodaj bota" → wybór pluginów → gotowe.
+4. **M4 — Onboarding self-serve** *(rdzeń gotowy, env-gated — v0.273.0)*: admin serwera (MANAGE_GUILD) loguje się → auto-enrollment do `guild_members` ([`lib/enroll.ts`](../dashboard/lib/enroll.ts)) → zarządza swoim serwerem (izolacja przez chokepoint). Aktywacja: env `MARKETPLACE_SELF_SERVE=1`. Dalej (opcjonalnie): strona „dodaj bota" + wybór pakietu pluginów.
 5. **M5 — Tiery + billing** (Stripe; ✅ w zakresie): gating `tier_required`, Checkout, webhook → `guilds.tier`.
 6. **M6 — Community plugins** (✅ w zakresie): manifest/SDK 3rd-party, sandbox wykonania, review (`review_status`). Najwyższe ryzyko → ostatnie.
 

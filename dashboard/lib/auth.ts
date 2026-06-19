@@ -38,7 +38,7 @@ export function authorizeUrl(origin: string, state: string): string {
     client_id: c.clientId,
     redirect_uri: `${origin}/api/auth/callback`,
     response_type: 'code',
-    scope: 'identify',
+    scope: selfServeEnabled() ? 'identify guilds' : 'identify',
     state,
     prompt: 'consent',
   });
@@ -79,4 +79,41 @@ export async function fetchDiscordUser(
     global_name?: string;
     avatar?: string | null;
   };
+}
+
+// ── M4 — self-serve multi-tenant (env-gated) ────────────────────────────────
+// Gdy włączone, admini serwerów (MANAGE_GUILD) mogą logować się do panelu i zarządzać
+// SWOIM serwerem (izolacja przez guild_members + chokepoint getPrimaryGuildId). Domyślnie
+// WYŁĄCZONE — panel pozostaje jednowłaścicielski (owner/staff). Aktywacja: env
+// MARKETPLACE_SELF_SERVE=1 (wtedy OAuth prosi dodatkowo o scope `guilds`).
+export function selfServeEnabled(): boolean {
+  const v = process.env.MARKETPLACE_SELF_SERVE;
+  return v === '1' || v === 'true';
+}
+
+export const MANAGE_GUILD = 0x20n; // bit uprawnienia „Zarządzanie serwerem" (Manage Guild)
+
+export type UserGuild = { id: string; name: string; owner?: boolean; permissions?: string };
+
+// Serwery użytkownika z OAuth (scope `guilds`). Pusto przy błędzie / braku scope.
+export async function fetchUserGuilds(accessToken: string): Promise<UserGuild[]> {
+  try {
+    const r = await fetch('https://discord.com/api/v10/users/@me/guilds', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!r.ok) return [];
+    return (await r.json()) as UserGuild[];
+  } catch {
+    return [];
+  }
+}
+
+// Czy user może zarządzać serwerem (właściciel serwera lub uprawnienie MANAGE_GUILD).
+export function canManageGuild(g: UserGuild): boolean {
+  if (g.owner) return true;
+  try {
+    return (BigInt(g.permissions ?? '0') & MANAGE_GUILD) !== 0n;
+  } catch {
+    return false;
+  }
 }
