@@ -31,7 +31,7 @@ export default function MobileNav() {
         <div className="fixed inset-0 z-[60] md:hidden" onClick={() => setOpen(false)}>
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
           <aside
-            className="absolute inset-y-0 left-0 flex w-64 flex-col border-r border-line bg-surface"
+            className="absolute inset-y-0 start-0 flex w-64 flex-col border-e border-line bg-surface"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex shrink-0 items-center justify-between border-b border-line p-4">

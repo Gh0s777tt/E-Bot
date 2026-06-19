@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-325-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.255.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-326-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.256.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.256.0] — ↔️ Lustrzane RTL — przyrost 2: MobileNav + GuildSwitcher (chrom nawigacyjny domknięty)
+
+- `[#326]` ↔️ **Drugi przyrost lustrzanego układu RTL — dokończenie chromu nawigacyjnego.**
+  - `MobileNav.tsx`: drawer `left-0`→`start-0`, `border-r`→`border-e` — mobilne menu wysuwa się z właściwej krawędzi (w RTL = z prawej; render warunkowy, bez animacji translate).
+  - `GuildSwitcher.tsx`: dropdown `left-0`→`start-0` (wyrównanie do krawędzi start przycisku), pozycje listy `text-left`→`text-start`.
+  - Wszystkie konwersje wizualnie identyczne w LTR (zero regresji dla 13 jęz.), odbijają się w RTL (logiczne właściwości Tailwind v4). **Chrom nawigacyjny (desktop + mobile) RTL-gotowy.**
+  - ⏭️ Pozostaje: klasy kierunkowe na poszczególnych stronach/widgetach (~100 komponentów) + wyśrodkowania/`hover:translate-x`.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0. Weryfikacja wizualna — przy preview‑deployu.
 
 ## [0.255.0] — ↔️ Pełne lustrzane RTL — przyrost 1: powłoka panelu (Sidebar/Shell/Topbar)
 

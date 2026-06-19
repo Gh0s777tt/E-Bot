@@ -79,7 +79,7 @@ export default function GuildSwitcher() {
         <ChevronDown size={12} className="shrink-0 text-muted" />
       </button>
       {open && (
-        <div className="absolute left-0 z-50 mt-1 max-h-72 w-60 overflow-auto rounded-lg border border-line bg-card p-1 shadow-2xl">
+        <div className="absolute start-0 z-50 mt-1 max-h-72 w-60 overflow-auto rounded-lg border border-line bg-card p-1 shadow-2xl">
           <p className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted">
             {tp(lang, 'ui.server')}
           </p>
@@ -88,7 +88,7 @@ export default function GuildSwitcher() {
               key={g.id}
               type="button"
               onClick={() => pick(g.id)}
-              className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition ${
+              className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-start text-sm transition ${
                 g.id === current ? 'bg-elevated text-white' : 'text-white/80 hover:bg-elevated'
               }`}
             >
