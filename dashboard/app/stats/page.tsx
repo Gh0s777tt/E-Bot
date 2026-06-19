@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import AreaChart from '../../components/AreaChart';
 import DigestForm from '../../components/DigestForm';
+import ExportStatsButton from '../../components/ExportStatsButton';
 import StatCard from '../../components/StatCard';
 import { getDigestConfig } from '../../lib/community';
 import { getStats } from '../../lib/data';
@@ -38,7 +39,15 @@ const PLATFORM_LABEL: Record<string, string> = {
   ubisoft: 'Ubisoft',
 };
 
-export default async function StatsPage() {
+const RANGES = [7, 14, 30, 90] as const;
+
+export default async function StatsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string }>;
+}) {
+  const sp = await searchParams;
+  const range = (RANGES as readonly number[]).includes(Number(sp?.range)) ? Number(sp.range) : 14;
   const [
     stats,
     aiSeries,
@@ -50,22 +59,23 @@ export default async function StatsPage() {
     guild,
     topUsers,
     hourly,
-    history,
+    historyAll,
     lang,
   ] = await Promise.all([
     getStats(),
-    getAiUsageSeries(14),
+    getAiUsageSeries(range),
     getAiUsageToday(),
     getLeaderboard(8),
     getTickets(200),
-    getActivitySeries(14),
+    getActivitySeries(range),
     getDigestConfig(),
     getGuildMeta(),
-    getTopActiveUsers(14, 10),
+    getTopActiveUsers(range, 10),
     getHourlyActivity(),
     getServerHistory(),
     getPanelLocale(),
   ]);
+  const history = historyAll.slice(-range);
   const hourMax = Math.max(1, ...hourly);
   const heat = hourly.map((count, hour) => ({ hour, count }));
   const tk = ticketStats(tickets);
@@ -92,7 +102,25 @@ export default async function StatsPage() {
 
   return (
     <div className="space-y-6">
-      <p className="max-w-3xl text-sm text-muted">{tp(lang, 'ui.stats.intro')}</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-2xl text-sm text-muted">{tp(lang, 'ui.stats.intro')}</p>
+        <div className="flex flex-wrap items-center gap-1.5 text-xs">
+          {RANGES.map((n) => (
+            <a
+              key={n}
+              href={n === 14 ? '/stats' : `/stats?range=${n}`}
+              className={`rounded-md border px-3 py-1 font-semibold transition ${
+                range === n
+                  ? 'border-accent bg-accent/15 text-accent'
+                  : 'border-line text-muted hover:border-accent'
+              }`}
+            >
+              {n} {tp(lang, 'ui.home.sgDays')}
+            </a>
+          ))}
+          <ExportStatsButton rows={activity} />
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard

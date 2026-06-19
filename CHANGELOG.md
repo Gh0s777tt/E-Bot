@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-332-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.262.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-333-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.263.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.263.0] — 📊 /stats: konfigurowalny zakres (7/14/30/90 dni) + eksport CSV
+
+- `[#333]` 📊 **`/stats` — wybór zakresu czasu i eksport danych.** Trzeci przyrost toru „Wzrost".
+  - **Konfigurowalny zakres**: selektor 7/14/30/90 dni (`?range=`) przekazywany do `getActivitySeries`/`getAiUsageSeries`/`getTopActiveUsers`; `server_history` cięty do zakresu (`slice(-range)`). Aktywny zakres podświetlony; reużycie `ui.home.sgDays` — zero nowych tłumaczeń dla selektora.
+  - **Eksport CSV**: przycisk `ExportStatsButton` (klient) generuje plik CSV serii aktywności (`day/messages/joins/leaves/voice`) przez `Blob` — bez API route. 1 nowy klucz `ui.stats.exportCsv` × 14 jęz.
+  - Czysto panel (Vercel). Bramki: biome czysto (326 plików), `tsc` exit 0; parzystość klucza OK.
 
 ## [0.262.0] — 📈 /stats: domknięcie pokrycia metryk wykresami (voice + boosty/kanały)
 

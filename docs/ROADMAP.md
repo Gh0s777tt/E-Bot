@@ -1,4 +1,4 @@
-<!-- SYNC: v0.262.0 · #332 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.263.0 · #333 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.262.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.263.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -79,7 +79,7 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ## 🧭 Wzrost (plan / opcjonalne)
 
 - 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild jako usługa. *Config* per‑serwer już jest (Etap K) — brakuje produktyzacji.
-- 📈 **Retencja + więcej wykresów w czasie** (`/stats`) — przyrosty 1–2 gotowe (v0.261–262): wzrost członków + komplet trendów (wiadomości/przyjścia/odejścia/voice + boosty/kanały); dalej opcjonalnie kohortowa retencja / dłuższe zakresy / eksport.
+- 📈 **Retencja + więcej wykresów w czasie** (`/stats`) — przyrosty 1–3 gotowe (v0.261–263): wzrost członków + komplet trendów + konfigurowalny zakres 7/14/30/90d + eksport CSV; dalej opcjonalnie kohortowa retencja.
 - 🧱 **Produkcyjna infra** — pełny Sentry (DSN), Redis (instancja), Supabase Realtime push (szkielety gotowe).
 - 🔗 **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy.
 - ↔️ **Lustrzane RTL — ✅ KOMPLETNE (v0.260.0)** — cała powierzchnia (chrom + strony + komponenty + przełączniki) na klasach logicznych Tailwind v4; zostaje tylko weryfikacja wizualna arabskiego na preview‑deployu.
@@ -87,4 +87,4 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.262.0 (#332) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.263.0 (#333) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
