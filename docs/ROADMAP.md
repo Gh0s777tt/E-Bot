@@ -1,4 +1,4 @@
-<!-- SYNC: v0.273.0 · #343 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.274.0 · #344 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.273.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.274.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -78,7 +78,7 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 
 ## 🧭 Wzrost (plan / opcjonalne)
 
-- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild jako usługa. *Config* per‑serwer już jest (Etap K). **Decyzje: płatne (tiery) + community (3rd-party)** → pełny zakres M1–M6. **M1 ✓ · M2 ✓ · M4 rdzeń ✓:** schemat + multi-tenant + chokepoint (v0.267–269) + katalog + strona + toggle per-serwer (v0.270–272) + **self-serve login adminów serwerów** [`lib/enroll.ts`](../dashboard/lib/enroll.ts) (env-gated, zaludnia `guild_members`, v0.273.0); dalej tiery/billing (M5) → community SDK (M6). Plan: [`PLAN-MARKETPLACE.md`](PLAN-MARKETPLACE.md).
+- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild jako usługa. *Config* per‑serwer już jest (Etap K). **Decyzje: płatne (tiery) + community (3rd-party)** → pełny zakres M1–M6. **M1 ✓ · M2 ✓ · M4 rdzeń ✓ · M5 tiery ✓:** schemat + multi-tenant + chokepoint (v0.267–269) + katalog + strona + toggle (v0.270–272) + self-serve login (v0.273.0) + **gating tierów** [`lib/billing.ts`](../dashboard/lib/billing.ts) (env-gated, premium na free zablokowany, v0.274.0); dalej Stripe checkout/webhook (M5 cz.2) → community SDK (M6). Plan: [`PLAN-MARKETPLACE.md`](PLAN-MARKETPLACE.md).
 - 📈 **Retencja + więcej wykresów w czasie** (`/stats`) — przyrosty 1–3 gotowe (v0.261–263): wzrost członków + komplet trendów + konfigurowalny zakres 7/14/30/90d + eksport CSV; dalej opcjonalnie kohortowa retencja.
 - 🧱 **Produkcyjna infra** — szkielety **kompletne + gated** (audyt v0.265.0, [`AKTYWACJA-INFRA.md`](AKTYWACJA-INFRA.md)): Sentry (env `SENTRY_DSN`), Realtime (`ALTER PUBLICATION … ADD TABLE settings`, fallback poll), Redis niewpięty (opcja na skalę).
 - 🔗 **Twitch sub → rola** — kod **kompletny + gotowy do aktywacji** (v0.264.0, `eventsub-setup.mts` rejestruje `channel.subscribe`, przewodnik `AKTYWACJA-TWITCH-SUB.md`); aktywacja wymaga aplikacji Twitch + OAuth broadcastera (`channel:read:subscriptions`).
@@ -87,4 +87,4 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.273.0 (#343) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.274.0 (#344) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

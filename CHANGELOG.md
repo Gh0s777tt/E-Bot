@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-343-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.273.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-344-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.274.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.274.0] — 💳 M5 (tiery): odczyt tieru serwera + gating premium-pluginów (env-gated)
+
+- `[#344]` 💳 **Marketplace M5 (część 1/2: tiery) — gating premium per-serwer; billing uśpiony bez Stripe.**
+  - Nowy [`lib/billing.ts`](dashboard/lib/billing.ts): `billingEnabled()` (aktywne tylko z `STRIPE_SECRET_KEY`), `getGuildTier(guildId)` (czyta `guilds.tier`, brak → `free`), `canUsePlugin(tierRequired, guildTier)`.
+  - Marketplace ([`page.tsx`](dashboard/app/marketplace/page.tsx) + [`MarketplaceGrid`](dashboard/components/MarketplaceGrid.tsx)): premium-plugin na serwerze `free` → toggle **zablokowany** (odznaka „premium" już była). Tier czytany dla aktualnego serwera przez chokepoint `getPrimaryGuildId`.
+  - **Degradacja bezpieczna**: bez `STRIPE_SECRET_KEY` `canUsePlugin` zwraca zawsze `true` → **zero paywalla**, panel jak dziś. Domyślnie żaden first-party nie jest premium → wizualnie inertne; mechanizm gotowy pod premium-pluginy + Stripe.
+  - Następny przyrost M5 (2/2): Stripe Checkout + webhook (`Stripe-Signature` HMAC) → `guilds.tier` + przycisk „upgrade". Bramki: biome czysto (306), `tsc` exit 0, docs:check exit 0.
 
 ## [0.273.0] — 🔓 M4: self-serve multi-tenant login (env-gated) + enrollment guild_members
 

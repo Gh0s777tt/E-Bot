@@ -36,9 +36,13 @@ function Toggle({
 export default function MarketplaceGrid({
   entries,
   initial,
+  guildTier = 'free',
+  billingOn = false,
 }: {
   entries: PluginCatalogEntry[];
   initial: Record<string, boolean>;
+  guildTier?: 'free' | 'premium';
+  billingOn?: boolean;
 }) {
   const { lang } = useLang();
   const [states, setStates] = useState<Record<string, boolean>>(initial);
@@ -74,6 +78,8 @@ export default function MarketplaceGrid({
               .filter((p) => p.group === group)
               .map((p) => {
                 const community = p.source === 'community';
+                // M5 — premium-plugin na serwerze 'free' (gdy billing włączony) → zablokowany.
+                const locked = billingOn && p.tierRequired === 'premium' && guildTier !== 'premium';
                 return (
                   <div
                     key={p.key}
@@ -113,7 +119,7 @@ export default function MarketplaceGrid({
                       <Toggle
                         on={!!states[p.key]}
                         onClick={() => flip(p.key)}
-                        disabled={community}
+                        disabled={community || locked}
                       />
                     </div>
                   </div>
