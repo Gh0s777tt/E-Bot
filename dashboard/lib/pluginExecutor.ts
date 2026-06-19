@@ -1,10 +1,11 @@
 // M6b — wykonanie zwalidowanych akcji pluginu (z pluginRunner), SCOPED do guild_id + pluginKey.
 //
-// Bezpieczeństwo: wykonujemy wyłącznie akcje jawnie zaimplementowane i wyłącznie w granicach jednej
-// gildii. Na start — TYLKO `setConfig` (zapis do plugin_config tego pluginu+gildii: zero efektów
-// w Discordzie, brak cross-guild, brak eskalacji). Akcje z efektami zewnętrznymi (`sendMessage`/
-// `addRole`) są na razie POMIJANE — wymagają per-akcja sprawdzenia, że kanał/rola należą do gildii,
-// + bot-tokenu i ostrożności; wdrożenie w kolejnym przyroście. Caller bramkuje env (communityEnabled).
+// Bezpieczeństwo: wykonujemy wyłącznie w granicach jednej gildii, z per-akcja authz:
+//  • setConfig   → zapis do plugin_config tego pluginu+gildii (zero efektów w Discordzie),
+//  • sendMessage → tylko gdy kanał należy do gildii,
+//  • addRole     → tylko gdy rola należy do gildii i nie niesie groźnych uprawnień (anty-eskalacja).
+// Caller bramkuje env (communityEnabled) i wywołuje tylko dla pluginów włączonych na gildii (M6c).
+import { addGuildRole, sendGuildMessage } from './discordActions';
 import { getPluginConfig, setPluginConfig } from './pluginConfig';
 import type { PluginAction } from './pluginRunner';
 
@@ -12,7 +13,6 @@ export type ExecuteContext = { guildId: string; pluginKey: string };
 export type ActionResult = {
   type: PluginAction['type'];
   ok: boolean;
-  skipped?: boolean;
   error?: string;
 };
 
@@ -24,16 +24,27 @@ export async function executePluginActions(
   if (!ctx.guildId || !ctx.pluginKey) return [];
   const results: ActionResult[] = [];
 
-  // setConfig batchujemy w jeden obiekt configu (mniej zapisów, spójność). Reszta = pominięta.
+  // setConfig batchujemy w jeden obiekt configu (mniej zapisów, spójność).
   let cfg: Record<string, unknown> | null = null;
   for (const a of actions) {
     if (a.type === 'setConfig') {
       if (cfg === null) cfg = await getPluginConfig(ctx.guildId, ctx.pluginKey);
       cfg[a.key] = a.value;
       results.push({ type: a.type, ok: true });
-    } else {
-      // Efekty w Discordzie — niezaimplementowane jeszcze (M6b cz.2: per-akcja authz + bot token).
-      results.push({ type: a.type, ok: false, skipped: true, error: 'akcja jeszcze niewspierana' });
+    } else if (a.type === 'sendMessage') {
+      const ok = await sendGuildMessage(ctx.guildId, a.channelId, a.content);
+      results.push({
+        type: a.type,
+        ok,
+        error: ok ? undefined : 'odrzucono (kanał spoza gildii / błąd)',
+      });
+    } else if (a.type === 'addRole') {
+      const ok = await addGuildRole(ctx.guildId, a.userId, a.roleId);
+      results.push({
+        type: a.type,
+        ok,
+        error: ok ? undefined : 'odrzucono (rola niedozwolona / błąd)',
+      });
     }
   }
 

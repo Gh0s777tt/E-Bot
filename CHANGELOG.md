@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-356-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.286.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-357-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.287.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.287.0] — 🧪 M6b (cz.2): akcje pluginu z efektami w Discordzie — per-akcja authz + anty-eskalacja
+
+- `[#357]` 🧪 **Marketplace M6b — wykonanie `sendMessage`/`addRole` z zero-zaufania (per-akcja authz).**
+  - Nowy [`lib/discordActions.ts`](dashboard/lib/discordActions.ts) (bot-token REST, scoped do `guild_id`): `sendGuildMessage` (kanał **musi należeć do gildii**), `addGuildRole` (rola musi należeć do gildii, **nie być `managed`**, i **NIE nieść groźnych uprawnień** — Administrator/ManageGuild/ManageRoles/Ban/Kick/ManageChannels/ManageWebhooks/ManageMessages → plugin **nigdy** nie nada uprzywilejowanej roli; hierarchię egzekwuje dodatkowo Discord).
+  - [`lib/pluginExecutor.ts`](dashboard/lib/pluginExecutor.ts) wykonuje teraz `sendMessage`/`addRole` przez te strażniki (wcześniej pomijane); zwraca wynik per akcja.
+  - **Anty-eskalacja:** obcy plugin nie nada roli z groźnymi uprawnieniami ani nie zadziała poza swoją gildią. Nadal bez konsumenta (orchestrator = M6c) → kod inert.
+  - Bramki: biome czysto (321), `tsc` exit 0, docs:check exit 0.
 
 ## [0.286.0] — 🧪 M6b (start): wykonanie akcji pluginu — setConfig (scoped, bez efektów w Discordzie)
 
