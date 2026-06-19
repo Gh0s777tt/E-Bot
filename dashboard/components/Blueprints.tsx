@@ -89,7 +89,7 @@ export default function Blueprints() {
               type="button"
               disabled={working}
               onClick={() => pick(b)}
-              className={`flex flex-col rounded-2xl border p-4 text-left transition disabled:opacity-50 ${
+              className={`flex flex-col rounded-2xl border p-4 text-start transition disabled:opacity-50 ${
                 active
                   ? 'border-accent bg-accent/10 shadow-glow'
                   : 'border-line bg-bg/40 hover:border-accent/40'
@@ -98,7 +98,7 @@ export default function Blueprints() {
               <div className="flex items-center gap-2">
                 <span className="text-xl">{b.emoji}</span>
                 <span className="font-display tracking-wide">{b.name}</span>
-                {active && <Check size={15} className="ml-auto text-accent" />}
+                {active && <Check size={15} className="ms-auto text-accent" />}
               </div>
               <p className="mt-1.5 text-xs text-muted">{b.desc}</p>
               <div className="mt-2 flex flex-wrap gap-1">

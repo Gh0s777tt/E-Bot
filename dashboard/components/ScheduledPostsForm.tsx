@@ -131,7 +131,7 @@ export default function ScheduledPostsForm({
               <button
                 type="button"
                 onClick={() => toggleOpen(p.id)}
-                className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                className="flex min-w-0 flex-1 items-center gap-2 text-start"
               >
                 <CalendarClock size={15} className="shrink-0 text-accent" />
                 <span className="truncate text-sm font-semibold text-white/90">
@@ -140,7 +140,7 @@ export default function ScheduledPostsForm({
                 <span className="truncate text-xs text-muted">· {summary(p, lang)}</span>
                 <ChevronDown
                   size={15}
-                  className={`ml-auto shrink-0 text-muted transition ${isOpen ? 'rotate-180' : ''}`}
+                  className={`ms-auto shrink-0 text-muted transition ${isOpen ? 'rotate-180' : ''}`}
                 />
               </button>
               <button

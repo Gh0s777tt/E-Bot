@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-328-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.258.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-329-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.259.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.259.0] — ↔️ Lustrzane RTL — przyrost 5: 22 współdzielone komponenty (formularze/modale/MessageStudio)
+
+- `[#329]` ↔️ **Piąty przyrost RTL — 22 współdzielone komponenty.** Sweep fizycznych klas Tailwind → logiczne (sed po jednoznacznych tokenach + weryfikacja grep/tsc/biome; 42 zamiany):
+  - Wyrównanie: `text-left`→`text-start`, `text-right`→`text-end` (tabele `ShopManager`/`AutomodStats`/`LeaderboardBoard`/`ProfileCard`, listy `CommandPalette`/`IgdbSearch`/`Assistant`, karty `Blueprints`/`ServerArchitect`/`GameCard`).
+  - Marginesy/padding: `ml-auto`→`ms-auto` (`MessageStudio`/`Navbar`/`HowItWorks`/`CustomCommandsForm`/`ScheduledPostsForm`), `ml-1..4`→`ms-*`, `pl-9 pr-3`→`ps-9 pe-3` (`LibraryBrowser`).
+  - Obramowania: `border-l-2/-4`→`border-s-*` (cytat `MessageEditor`, paski embedów `MessageStudio`).
+  - Pozycjonowanie: poświaty `-right-*`→`-end-*` (`LeaderboardBoard`/`ProfileCard`), FAB asystenta `right-5`→`end-5`, zamknięcie modala `right-3`→`end-3` (`GameDetailModal`), badge `WishlistManager` `right-1.5`→`end-1.5`, ikona szukania `LibraryBrowser` `left-3`→`start-3`, plakietka `GameCard` `left-2`→`start-2`.
+  - ⏭️ **Świadomie odroczone**: knob przełączników (`left-[22px]`/`left-0.5`) w `AntinukeForm`/`ControlCenter`/`ModuleBar`/`NotifSettingsForm` — lustrzane odbicie toggle to decyzja wizualna, najlepiej potwierdzić na preview‑deployu.
+  - 22 pliki, 42 czyste przemianowania; `pl-PL`/wyśrodkowania nietknięte (potwierdzone grepem). Czysto panel. Bramki: biome czysto (325), `tsc` exit 0.
 
 ## [0.258.0] — ↔️ Lustrzane RTL — przyrost 4: strony tras `/app` (tabele, poświaty, ml-auto)
 

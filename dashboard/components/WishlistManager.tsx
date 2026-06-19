@@ -133,7 +133,7 @@ export default function WishlistManager({ initial }: { initial: Item[] }) {
               <button
                 type="button"
                 onClick={() => remove(it.id)}
-                className="absolute right-1.5 top-1.5 rounded-md bg-black/60 p-1.5 text-white/80 opacity-0 transition hover:text-accent group-hover:opacity-100"
+                className="absolute end-1.5 top-1.5 rounded-md bg-black/60 p-1.5 text-white/80 opacity-0 transition hover:text-accent group-hover:opacity-100"
                 aria-label={tp(lang, 'ui.wishlist.remove')}
               >
                 <Trash2 size={14} />

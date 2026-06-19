@@ -44,7 +44,7 @@ export default function Navbar() {
         </Link>
 
         {/* nav (desktop) */}
-        <nav className="ml-2 hidden items-center gap-1 lg:flex">
+        <nav className="ms-2 hidden items-center gap-1 lg:flex">
           {items.map(({ href, label, icon: Icon }) => {
             const active = p === href;
             return (
@@ -63,7 +63,7 @@ export default function Navbar() {
         </nav>
 
         {/* actions */}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ms-auto flex items-center gap-2">
           <span className="hidden items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-xs sm:flex">
             <span className="h-2 w-2 rounded-full bg-green-500" />
             E-Bot

@@ -60,7 +60,7 @@ export default function ProfileCard({
   return (
     <div className="panel-glow relative overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card to-bg p-5">
       <div
-        className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full"
+        className="pointer-events-none absolute -end-16 -top-16 h-48 w-48 rounded-full"
         style={{
           background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.18), transparent 70%)',
         }}
@@ -182,7 +182,7 @@ export default function ProfileCard({
                 </span>
                 <span className="shrink-0 text-[11px] text-muted">{relTime(h.ts, now, lang)}</span>
                 <span
-                  className={`w-24 shrink-0 text-right font-semibold tabular-nums ${h.delta >= 0 ? 'text-green-400' : 'text-accent'}`}
+                  className={`w-24 shrink-0 text-end font-semibold tabular-nums ${h.delta >= 0 ? 'text-green-400' : 'text-accent'}`}
                 >
                   {h.delta >= 0 ? '+' : ''}
                   {h.delta.toLocaleString('pl-PL')}

@@ -49,12 +49,12 @@ export default function LibraryBrowser({ games }: { games: Game[] }) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-card p-3">
         <div className="relative min-w-[200px] flex-1">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+          <Search size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder={tp(lang, 'ui.library.searchPlaceholder')}
-            className="w-full rounded-md border border-line bg-elevated py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
+            className="w-full rounded-md border border-line bg-elevated py-2 ps-9 pe-3 text-sm outline-none focus:border-accent"
           />
         </div>
         <select

@@ -68,7 +68,7 @@ export default function IgdbSearch({
                 setQ('');
                 setResults([]);
               }}
-              className="flex w-full items-center gap-3 rounded-md p-2 text-left text-sm transition hover:bg-card"
+              className="flex w-full items-center gap-3 rounded-md p-2 text-start text-sm transition hover:bg-card"
             >
               {r.cover_url ? (
                 // eslint-disable-next-line @next/next/no-img-element

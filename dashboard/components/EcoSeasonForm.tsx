@@ -91,7 +91,7 @@ export default function EcoSeasonForm({
         />
         <span>
           <span className="font-semibold text-white/90">{tp(lang, 'ui.eco.resetLabel')}</span>
-          <span className="ml-1 text-muted">{tp(lang, 'ui.eco.resetHint')}</span>
+          <span className="ms-1 text-muted">{tp(lang, 'ui.eco.resetHint')}</span>
         </span>
       </label>
 

@@ -1,4 +1,4 @@
-<!-- SYNC: v0.258.0 · #328 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.259.0 · #329 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.258.0)
+## 🔭 Bieżący tor (v0.259.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -40,14 +40,14 @@
 - [x] Boilerplate frameworka: `error.tsx` + `not-found.tsx` (404) + `loading.tsx` (Suspense) + metadane `layout.tsx` — 8 kluczy `ui.sys.*` × 14 jęz. ✅ **v0.252.0**
 - [x] Obraz OG profilu (`opengraph-image.tsx`): dynamiczne fonty Google per-skrypt (fail-safe, subset TTF) + etykiety — 5 kluczy `ui.og.*` × 14 jęz. ✅ **v0.253.0**. **KONIEC i18n CAŁEJ powierzchni web** — nie zostaje żaden niezlokalizowany element UI.
 - [x] **Audyt i18n 14 jęz.** — parzystość **1394×14** (0 brakujących), 0 duplikatów, tokeny `{…}` 100% spójne; **naprawiony RTL** (arabski: `dir="rtl"` na `<html>` — SSR z cookie + klient na zmianę języka). ✅ **v0.254.0**
-- [x] **RTL — chrom + strona główna + strony tras**: `Sidebar`/`Shell`/`Topbar` (v0.255.0) + `MobileNav`/`GuildSwitcher` (v0.256.0) + Pulpit `/` i widgety (v0.257.0) + 14 stron `app/*` (tabele/poświaty/`ms-auto`, v0.258.0) na logiczne klasy Tailwind v4. ✅
+- [x] **RTL — niemal kompletny**: chrom nawigacyjny (v0.255–256) + Pulpit/widgety (v0.257.0) + 14 stron `app/*` (v0.258.0) + 22 współdzielone komponenty — formularze/modale/`MessageStudio` (v0.259.0) na logiczne klasy Tailwind v4. Zostają tylko knoby 4 przełączników (decyzja wizualna). ✅
 
 ### 🧭 Otwarte / strategiczne (poza torem i18n)
 - [ ] **Marketplace pluginów / efekt sieciowy** — *config* multi‑serwer gotowy (Etap K, C‑1…C‑27); brakuje produktyzacji marketplace i modelu multi‑guild jako usługi
 - [ ] **Retencja + więcej wykresów w czasie** (panel `/stats`)
 - [ ] **Produkcyjne wpięcie infry**: pełny Sentry (realny DSN), Redis (instancja), Supabase Realtime push — szkielety/wersje gated już są
 - [ ] **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy (scope `channel:read:subscriptions`)
-- [ ] **Pełne lustrzane RTL** — fundament `dir="rtl"` (v0.254.0) + chrom nawigacyjny (v0.255–256) + strona główna/widgety (v0.257.0) + 14 stron tras `app/*` (v0.258.0) gotowe; pozostają klasy kierunkowe w ~26 współdzielonych komponentach (formularze/modale/`MessageStudio`)
+- [ ] **Lustrzane RTL — domknięcie**: cała powierzchnia (chrom + strony + 22 komponenty) zlustrowana na klasy logiczne (v0.254–259); zostaje tylko knob 4 przełączników (`left-[22px]`/`left-0.5` w `AntinukeForm`/`ControlCenter`/`ModuleBar`/`NotifSettingsForm`) — odbicie toggle to decyzja wizualna do potwierdzenia na preview
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -188,4 +188,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.258.0 (#328) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.259.0 (#329) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

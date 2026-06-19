@@ -486,7 +486,7 @@ function V2Editor({
         >
           🧱 Sekcja + miniatura
         </button>
-        <span className="ml-auto">
+        <span className="ms-auto">
           <Counter len={total} limit={LIMITS_V2.textTotal} />
         </span>
       </div>
@@ -502,7 +502,7 @@ function V2Editor({
         >
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-semibold text-white/80">{KIND_LABEL[b.kind]}</span>
-            <div className="ml-auto flex items-center gap-1">
+            <div className="ms-auto flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => move(i, -1)}
@@ -759,7 +759,7 @@ export default function MessageStudio({
               className="h-4 w-4 accent-accent"
             />
             <span className="font-semibold text-white/90">Dołącz embed</span>
-            <span className="ml-auto">
+            <span className="ms-auto">
               <Counter len={total} limit={LIMITS.embedTotal} />
             </span>
           </label>
@@ -995,7 +995,7 @@ export default function MessageStudio({
         <p className="mb-2 text-[10px] uppercase tracking-wide text-white/40">Podgląd</p>
         {isV2 && (
           <div
-            className={`max-w-lg space-y-2 ${v2.accentColor ? 'rounded border-l-4 bg-[#2b2d31] p-3' : ''}`}
+            className={`max-w-lg space-y-2 ${v2.accentColor ? 'rounded border-s-4 bg-[#2b2d31] p-3' : ''}`}
             style={v2.accentColor ? { borderLeftColor: v2.accentColor } : undefined}
           >
             {v2.blocks.length === 0 && <p className="text-sm text-white/40">— dodaj bloki —</p>}
@@ -1046,7 +1046,7 @@ export default function MessageStudio({
         )}
         {!isV2 && showEmbed ? (
           <div
-            className="max-w-lg rounded border-l-4 bg-[#2b2d31] p-3"
+            className="max-w-lg rounded border-s-4 bg-[#2b2d31] p-3"
             style={{ borderLeftColor: embed.color || '#E50914' }}
           >
             <div className="flex gap-3">

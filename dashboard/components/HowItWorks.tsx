@@ -53,7 +53,7 @@ export default function HowItWorks() {
         {L.title}
         <ChevronDown
           size={15}
-          className={`ml-auto text-muted transition-transform ${open ? '' : '-rotate-90'}`}
+          className={`ms-auto text-muted transition-transform ${open ? '' : '-rotate-90'}`}
         />
       </button>
 

@@ -46,13 +46,13 @@ export default function Assistant() {
         data-tour="assistant"
         onClick={() => setOpen((o) => !o)}
         title={a.tooltip}
-        className="fixed bottom-5 right-5 z-[90] flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_30px_-6px_rgb(var(--accent-rgb)/0.8)] transition hover:bg-accent-hover hover:scale-105"
+        className="fixed bottom-5 end-5 z-[90] flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_30px_-6px_rgb(var(--accent-rgb)/0.8)] transition hover:bg-accent-hover hover:scale-105"
       >
         {open ? <X size={20} /> : <Sparkles size={20} />}
       </button>
 
       {open && (
-        <div className="fixed bottom-20 right-5 z-[90] flex max-h-[70vh] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-card shadow-2xl">
+        <div className="fixed bottom-20 end-5 z-[90] flex max-h-[70vh] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-card shadow-2xl">
           <div className="flex items-center gap-2 border-b border-line px-4 py-3">
             <Sparkles size={16} className="text-accent" />
             <span className="text-sm font-semibold">{a.header}</span>
@@ -71,7 +71,7 @@ export default function Assistant() {
                         setQ(ex);
                         void ask(ex);
                       }}
-                      className="block w-full rounded-md border border-line px-3 py-2 text-left text-xs text-muted transition hover:border-accent hover:text-white"
+                      className="block w-full rounded-md border border-line px-3 py-2 text-start text-xs text-muted transition hover:border-accent hover:text-white"
                     >
                       💬 {ex}
                     </button>

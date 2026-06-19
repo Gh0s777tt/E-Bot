@@ -75,7 +75,7 @@ export default function AutomodStats({
                   style={{ width: `${Math.round((n / max) * 100)}%` }}
                 />
               </div>
-              <span className="w-10 text-right tabular-nums">{n}</span>
+              <span className="w-10 text-end tabular-nums">{n}</span>
             </div>
           ))}
         </div>

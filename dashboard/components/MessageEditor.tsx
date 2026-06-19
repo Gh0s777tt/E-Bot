@@ -68,7 +68,7 @@ function renderPreview(raw: string, vars: EditorVar[]): string {
   s = s.replace(/^### (.*)$/gm, '<span class="text-sm font-bold">$1</span>');
   s = s.replace(/^## (.*)$/gm, '<span class="text-base font-bold">$1</span>');
   s = s.replace(/^# (.*)$/gm, '<span class="text-lg font-bold">$1</span>');
-  s = s.replace(/^&gt; (.*)$/gm, '<span class="border-l-2 border-line pl-2 text-muted">$1</span>');
+  s = s.replace(/^&gt; (.*)$/gm, '<span class="border-s-2 border-line ps-2 text-muted">$1</span>');
   return s.replace(/\n/g, '<br/>');
 }
 

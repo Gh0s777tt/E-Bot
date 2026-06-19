@@ -21,7 +21,7 @@ export default function LeaderboardBoard({
   return (
     <section className="panel-glow relative overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card to-bg p-5">
       <div
-        className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full"
+        className="pointer-events-none absolute -end-12 -top-12 h-40 w-40 rounded-full"
         style={{
           background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.14), transparent 70%)',
         }}
@@ -58,14 +58,14 @@ export default function LeaderboardBoard({
                       style={{ width: `${Math.max(4, (r.value / max) * 100)}%` }}
                     />
                   </div>
-                  <span className="shrink-0 text-right font-semibold tabular-nums text-accent">
+                  <span className="shrink-0 text-end font-semibold tabular-nums text-accent">
                     {r.value.toLocaleString('pl-PL')}
                     {unit ? (
-                      <span className="ml-1 text-[11px] font-normal text-muted">{unit}</span>
+                      <span className="ms-1 text-[11px] font-normal text-muted">{unit}</span>
                     ) : null}
                   </span>
                   {r.sub && (
-                    <span className="hidden w-24 shrink-0 truncate text-right text-[11px] text-muted md:block">
+                    <span className="hidden w-24 shrink-0 truncate text-end text-[11px] text-muted md:block">
                       {r.sub}
                     </span>
                   )}

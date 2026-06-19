@@ -14,13 +14,13 @@ export default function GameCard({ game, onClick }: { game: Game; onClick?: () =
     <button
       type="button"
       onClick={onClick}
-      className="group relative block aspect-[2/3] w-full overflow-hidden rounded-lg bg-elevated text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-glow hover:ring-2 hover:ring-accent"
+      className="group relative block aspect-[2/3] w-full overflow-hidden rounded-lg bg-elevated text-start shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-glow hover:ring-2 hover:ring-accent"
     >
       <CoverImg
         game={game}
         className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
       />
-      <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+      <span className="absolute start-2 top-2 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
         {PLATFORM_BADGE[game.platform] ?? game.platform}
       </span>
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent p-2 opacity-0 transition group-hover:opacity-100">

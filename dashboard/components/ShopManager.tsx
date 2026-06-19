@@ -130,13 +130,13 @@ export default function ShopManager({
       >
         {st === 'saving' ? tp(lang, 'ui.eco.addingBtn') : tp(lang, 'ui.eco.addBtn')}
       </button>
-      {st === 'err' && <span className="ml-3 text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
+      {st === 'err' && <span className="ms-3 text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
 
       {items.length === 0 ? (
         <p className="text-sm text-muted">{tp(lang, 'ui.eco.shopEmpty')}</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead className="text-xs uppercase tracking-wide text-muted">
               <tr className="border-b border-line">
                 <th className="px-3 py-2">{tp(lang, 'ui.eco.thName')}</th>
@@ -151,7 +151,7 @@ export default function ShopManager({
                   <td className="px-3 py-2">
                     {i.name}
                     {i.effect ? (
-                      <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                      <span className="ms-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
                         {i.effect}
                       </span>
                     ) : null}
@@ -167,7 +167,7 @@ export default function ShopManager({
                       ? `@${guild.roles.find((r) => r.id === i.role_id)?.name ?? tp(lang, 'ui.eco.roleFallback')}`
                       : '—'}
                     {i.duration_days ? (
-                      <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                      <span className="ms-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
                         ⏳ {i.duration_days}d
                       </span>
                     ) : null}

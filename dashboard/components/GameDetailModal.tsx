@@ -52,7 +52,7 @@ export default function GameDetailModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-3 top-3 rounded-md border border-line p-1 text-muted transition hover:border-accent hover:text-accent"
+          className="absolute end-3 top-3 rounded-md border border-line p-1 text-muted transition hover:border-accent hover:text-accent"
           aria-label="Zamknij"
         >
           <X size={16} />

@@ -172,7 +172,7 @@ export default function AntiRaidForm({
           <span className="font-semibold text-white/90">
             {tp(lang, 'ui.security.autoLockdown')}
           </span>
-          <span className="ml-1 text-muted">{tp(lang, 'ui.security.autoLockdownHelp')}</span>
+          <span className="ms-1 text-muted">{tp(lang, 'ui.security.autoLockdownHelp')}</span>
         </span>
       </label>
 

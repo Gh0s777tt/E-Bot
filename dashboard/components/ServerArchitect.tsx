@@ -148,7 +148,7 @@ export default function ServerArchitect() {
               type="button"
               disabled={working}
               onClick={() => toggle(b.id)}
-              className={`flex items-center gap-3 rounded-xl border p-3 text-left transition disabled:opacity-50 ${
+              className={`flex items-center gap-3 rounded-xl border p-3 text-start transition disabled:opacity-50 ${
                 on ? 'border-accent bg-accent/10' : 'border-line bg-bg/40 hover:border-accent/40'
               }`}
             >
@@ -185,7 +185,7 @@ export default function ServerArchitect() {
                 {preview.channels
                   .filter((ch) => ch.categoryKey === cat.key)
                   .map((ch) => (
-                    <div key={ch.name} className="ml-4">
+                    <div key={ch.name} className="ms-4">
                       {icon(ch.kind)} {ch.name}
                     </div>
                   ))}
