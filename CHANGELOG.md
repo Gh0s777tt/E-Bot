@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-335-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.265.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-336-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.266.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.266.0] — 🛒 Plan: Marketplace pluginów + multi-guild jako usługa
+
+- `[#336]` 🛒 **Plan architektoniczny produktyzacji multi-guild** (do akceptacji — plan, nie implementacja).
+  - Nowy dokument [`docs/PLAN-MARKETPLACE.md`](docs/PLAN-MARKETPLACE.md): stan obecny (config per-serwer = fundament), luki do SaaS, **model danych** (ERD: `guilds`/`plugins`/`guild_plugins`/`plugin_config`/`guild_members`), auth + izolacja per-guild (Supabase RLS), marketplace pluginów (first-party → tiery → community), fazowanie **M1–M6**, ryzyka, **decyzje do podjęcia** (płatne?, community?, sharding?).
+  - Rekomendacja: start od **M1 (multi-tenant auth + izolacja RLS)** jako pierwszy konkretny przyrost; community-marketplace + billing odłożone.
+  - Docs-only. Bramki: docs:check exit 0.
 
 ## [0.265.0] — 🧱 Infra prod: audyt gotowości (Sentry/Realtime/Redis) + przewodnik aktywacji
 
