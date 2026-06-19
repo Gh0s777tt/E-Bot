@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-321-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.251.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-322-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.252.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,19 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.252.0] — 🌍🏁 i18n boilerplate frameworka (error + 404 + loading + metadata) — KONIEC i18n powierzchni web
+
+- `[#322]` 🌍 **i18n stron systemowych Next.js: granica błędu, 404, ekran ładowania i metadane root layoutu — domyka całość i18n powierzchni webowej.**
+  - 🖥️ **Panel**: 8 nowych kluczy `ui.sys.*` × **14 języków** w `panelI18n.ts` (parzystość 14×8=112).
+    - `app/error.tsx` (klient, `useLang()`): „Coś poszło nie tak", fallback komunikatu błędu, „Spróbuj ponownie".
+    - `app/not-found.tsx` (serwer → `async` + `getPanelLocale()`): „Nie znaleziono", „Ta strona nie istnieje.", „Wróć do przeglądu".
+    - `app/loading.tsx` (**przerobiony na komponent kliencki** + `useLang()`, by pozostać natychmiastowym fallbackiem Suspense — `getPanelLocale()` by go zawiesił): „Ładowanie…".
+    - `app/layout.tsx`: `metadata` → `async generateMetadata()` + `getPanelLocale()` — tytuł karty (`E-Bot — ` + reużyty `ui.pub.loginSubtitle`) i opis SEO/OG (`ui.sys.metaDesc`).
+  - 🛡️ **Bezpieczne w stanie zdegradowanym**: `useLang()` = `useContext` z wartością domyślną (`DEFAULT_PANEL_LOCALE`), więc nie rzuca nawet w granicy błędu bez providera; `getPanelLocale()` czyta cookie `panel_lang` z fallbackiem.
+  - 🎨 **`opengraph-image.tsx` świadomie pominięty** — Satori (`next/og`) renderuje domyślnym fontem bez glifów CJK/arabskich/diakrytyki; pełna lokalizacja wymagałaby bundlowania fontów per-skrypt (wielomegabajtowe CJK). Tekstowy podgląd OG (tytuł/opis) jest już zlokalizowany przez `generateMetadata` profilu (v0.251.0).
+  - 🏁 **Komplet i18n powierzchni web**: panel 39/39 + współdzielone edytory + powierzchnia publiczna + boilerplate systemowy. Nietłumaczone: marki (E-Bot/Discord/GH0ST), tokeny, format `pl-PL`, emoji, obraz OG (font).
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL).
 
 ## [0.251.0] — 🌍 i18n powierzchni publicznej / pre-auth: login + ranking publiczny + profil publiczny
 

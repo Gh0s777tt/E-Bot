@@ -4,6 +4,8 @@ import { Montserrat, Oswald } from 'next/font/google';
 import type { ReactNode } from 'react';
 import Shell from '../components/Shell';
 import { botInviteUrl } from '../lib/invite';
+import { tp } from '../lib/panelI18n';
+import { getPanelLocale } from '../lib/serverPanelLocale';
 
 const display = Oswald({
   subsets: ['latin', 'latin-ext'],
@@ -16,10 +18,13 @@ const body = Montserrat({
   variable: '--font-body',
 });
 
-export const metadata: Metadata = {
-  title: 'E-Bot — Dashboard',
-  description: 'Panel sterowania bota (gry, powiadomienia live, bezpieczeństwo)',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getPanelLocale();
+  return {
+    title: `E-Bot — ${tp(lang, 'ui.pub.loginSubtitle')}`,
+    description: tp(lang, 'ui.sys.metaDesc'),
+  };
+}
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
