@@ -2,12 +2,14 @@
 
 # 🛒 Plan: Marketplace pluginów + multi-guild jako usługa
 
-![Etap](https://img.shields.io/badge/status-PLAN_do_akceptacji-9146FF?style=for-the-badge&labelColor=0a0a0a)
+![Etap](https://img.shields.io/badge/status-M1_w_toku-9146FF?style=for-the-badge&labelColor=0a0a0a)
 ![Fundament](https://img.shields.io/badge/fundament-config_per--serwer_(Etap_K)-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
-> Dokument **planistyczny** (nie implementacja). Cel: przekształcić panel z trybu „jeden właściciel / jeden serwer" w **usługę multi-guild** z **marketplace pluginów**. Decyzje oznaczone ❓ wymagają Twojego wyboru przed startem.
+> Cel: przekształcić panel z trybu „jeden właściciel / jeden serwer" w **usługę multi-guild** z **marketplace pluginów**.
+>
+> ✅ **Decyzje podjęte (v0.267.0):** model **PŁATNY** (tiery free/premium → billing M5) + pluginy **COMMUNITY** (3rd-party: SDK/sandbox/review → M6). Pełny zakres **M1–M6**. **M1 wystartował** — schemat danych [`m1-marketplace-schema.sql`](../dashboard/scripts/m1-marketplace-schema.sql).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -42,7 +44,9 @@ erDiagram
   GUILDS {
     string guild_id PK
     string name
-    string tier
+    string tier "free|premium"
+    string stripe_customer_id "M5"
+    string stripe_sub_id "M5"
     timestamptz created_at
   }
   GUILD_MEMBERS {
@@ -53,8 +57,11 @@ erDiagram
   PLUGINS {
     string key PK "np. leveling, automod"
     string title
-    string tier_required
-    jsonb schema
+    string source "first_party|community"
+    string author_id "community"
+    string tier_required "free|premium"
+    jsonb manifest
+    string review_status "approved|pending|rejected"
   }
   GUILD_PLUGINS {
     string guild_id FK
@@ -70,6 +77,8 @@ erDiagram
 
 Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie moduł→plugin_key). Klucze globalne zostają jako konfiguracja instancji.
 
+> 🧱 **Zrealizowane (M1):** powyższy model istnieje jako migracja [`dashboard/scripts/m1-marketplace-schema.sql`](../dashboard/scripts/m1-marketplace-schema.sql) — **additive** (nie rusza `settings` ani działającego panelu; nowe tabele zaczynają puste).
+
 ## 🔐 Auth & izolacja (kluczowe)
 
 1. Discord OAuth → pobierz listę gildii użytkownika z uprawnieniem `MANAGE_GUILD`.
@@ -81,12 +90,11 @@ Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie modu
 
 - **Faza 1 — first-party**: każdy istniejący moduł (C-1…C-27) = wpis w `PLUGINS`. UI: katalog z kartami (ikona, opis, tier), toggle enable per guild → odsłania istniejący formularz konfiguracji.
 - **Faza 2 — tiery**: `tier_required` na pluginie + `tier` na gildii; gating w UI + na backendzie.
-- **Faza 3 (opcjonalnie) — community**: SDK/manifest dla pluginów 3rd-party (sandbox, review). **Duże ryzyko** — rekomendacja: odłożyć.
+- **Faza 3 — community** ✅ *(w zakresie, M6)*: SDK/manifest dla pluginów 3rd-party (`source='community'`, `author_id`, `manifest`, `review_status` już w schemacie). Sandbox wykonania + proces review przed publikacją. Najwyższe ryzyko → wdrażane **na końcu**, po dojrzałym M1–M5.
 
-## 💳 Rozliczenia (❓ decyzja)
+## 💳 Rozliczenia (✅ płatne — M5)
 
-- ❓ **Czy w ogóle płatne?** Jeśli tak: Stripe Checkout + webhook → `guilds.tier`. Limity (np. liczba aktywnych pluginów, retencja statystyk) egzekwowane per tier.
-- Jeśli nie: pomiń całą warstwę billing (prościej, szybciej).
+- ✅ **Decyzja: płatne** (tiery free/premium). Stripe Checkout + webhook → `guilds.tier` (kolumny `stripe_customer_id`/`stripe_sub_id` **już w schemacie M1**). Limity (liczba aktywnych pluginów, retencja statystyk, pluginy `tier_required='premium'`) egzekwowane per tier w UI i backendzie.
 
 ## 🚀 Fazowanie (przyrostowo, każda faza = działający przyrost)
 
@@ -94,7 +102,8 @@ Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie modu
 2. **M2 — Rejestr pluginów**: tabela `PLUGINS` + `GUILD_PLUGINS`; katalog UI (enable/disable) mapowany na istniejące moduły.
 3. **M3 — Migracja configu**: `settings`→`plugin_config` per guild; kompatybilność wsteczna.
 4. **M4 — Onboarding self-serve**: „dodaj bota" → wybór pluginów → gotowe.
-5. **M5 (opc.) — Tiery + billing** / **M6 (opc.) — community plugins**.
+5. **M5 — Tiery + billing** (Stripe; ✅ w zakresie): gating `tier_required`, Checkout, webhook → `guilds.tier`.
+6. **M6 — Community plugins** (✅ w zakresie): manifest/SDK 3rd-party, sandbox wykonania, review (`review_status`). Najwyższe ryzyko → ostatnie.
 
 ## ⚠️ Ryzyka
 
@@ -103,14 +112,14 @@ Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie modu
 - **Migracja** istniejących `settings` bez przestoju.
 - **Zakres**: M1–M4 to solidny SaaS bez community/billing. Pełne community-marketplace to osobny, duży projekt.
 
-## ❓ Decyzje do podjęcia (zanim zacznę M1)
+## ✅ Decyzje podjęte (v0.267.0)
 
-1. **Płatne czy darmowe?** (przesądza o M5/billing)
-2. **Community plugins teraz czy nigdy?** (rekomendacja: nie teraz)
-3. **Sharding od razu czy później?** (zależy od docelowej skali)
-4. **Start od M1 (auth/izolacja)** — potwierdź, to pierwszy konkretny przyrost.
+1. **Płatne?** → ✅ **TAK** — tiery free/premium (billing Stripe = M5).
+2. **Community plugins?** → ✅ **TAK** — 3rd-party SDK/sandbox/review (M6, ostatnie ze względu na ryzyko).
+3. **Sharding?** → później (jeden proces do <2500 gildii; sharding po przekroczeniu progu).
+4. **Start od M1?** → ✅ **TAK — wystartował**: schemat danych [`m1-marketplace-schema.sql`](../dashboard/scripts/m1-marketplace-schema.sql) (additive). Następny przyrost M1: multi-tenant auth (OAuth listy gildii usera + scope per-guild).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Plan do akceptacji · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="PHASES.md">PHASES</a></sub></div>
+<div align="center"><sub>Decyzje podjęte · M1 w toku (v0.267.0) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="PHASES.md">PHASES</a></sub></div>

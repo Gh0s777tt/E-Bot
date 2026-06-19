@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-336-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.266.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-337-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.267.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.267.0] — 🛒 M1 start: schemat danych multi-guild + marketplace (decyzje: płatne + community)
+
+- `[#337]` 🛒 **Marketplace M1 — fundament danych + rozstrzygnięte decyzje produktowe.**
+  - **Decyzje (Ty):** model **PŁATNY** (tiery free/premium) + pluginy **COMMUNITY** (3rd-party) → pełny zakres **M1–M6** (wcześniej rekomendowałem lean: darmowy + tylko first-party; wybór rozszerza zakres o billing Stripe oraz SDK/sandbox/review).
+  - Nowa migracja [`dashboard/scripts/m1-marketplace-schema.sql`](dashboard/scripts/m1-marketplace-schema.sql) — **additive** (nie rusza `settings` ani działającego panelu jednowłaścicielskiego; nowe tabele zaczynają puste): `guilds` (`tier` + `stripe_customer_id`/`stripe_sub_id` pod M5), `guild_members` (role `admin|editor|viewer`), `plugins` (`source` `first_party|community`, `author_id`, `tier_required`, `manifest`, `review_status` pod M6), `guild_plugins` (enable/disable per gildia), `plugin_config` (migracja z `settings` — M3).
+  - **Izolacja per-guild**: dziś na warstwie aplikacji (auth = Discord OAuth); szkic polityk **RLS** w komentarzu pliku (po ewentualnej migracji na Supabase Auth).
+  - Zaktualizowany [`docs/PLAN-MARKETPLACE.md`](docs/PLAN-MARKETPLACE.md): decyzje oznaczone jako podjęte, ERD zsynchronizowany ze schematem, fazy **M5 (billing)** + **M6 (community)** w zakresie.
+  - Następny przyrost M1: multi-tenant auth (OAuth listy gildii usera + scope per-guild). Bramki: biome czysto, docs:check exit 0.
 
 ## [0.266.0] — 🛒 Plan: Marketplace pluginów + multi-guild jako usługa
 
