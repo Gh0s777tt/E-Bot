@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-314-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.244.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-315-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.245.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.245.0] — 🌍 i18n UI panelu — strona /custom-commands (własne komendy slash)
+
+- `[#315]` 🌍 **i18n UI panelu — kolejna fala: `/custom-commands` (kreator własnych komend slash bez kodu — Message Studio, argumenty, akcje, typy odpowiedzi).**
+  - 🖥️ **Panel**: 60 nowych kluczy `ui.cc.*` × **14 języków** w `panelI18n.ts` (parzystość 14×60=840). `app/custom-commands/page.tsx` (serwer) + `CustomCommandsForm.tsx` (klient) na `tp()`: intro z licznikiem, nagłówek, pusty stan z `/twoja-nazwa`, nazwa/opis komendy, ephemeral, cooldown, kategoria, warunek roli + akcje (nadaj/zabierz rolę, daj walutę/XP), argumenty (`{nazwa}`), typy odpowiedzi (wiadomość/embed, losowa, rola, lista `/pomoc`), Message Studio + tłumaczone etykiety zmiennych (`{user}`/`{username}`/`{server}`/`{memberCount}`/argumenty), self-role, komunikaty zapisu/rejestracji/błędu, stopka. Nietłumaczone: tokeny (`{user}`/`{server}`/`{memberCount}`/`{nazwa}`), komendy/przykłady w `<code>` (`/twoja-nazwa`/`pomoc`/`komendy`/`/pomoc`), termin `Self-role`, `sample` zmiennych (dane), `XP`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 35/~40 stron.
 
 ## [0.244.0] — 🌍 i18n UI panelu — strona /engagement (zaangażowanie społeczności)
 

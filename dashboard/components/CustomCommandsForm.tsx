@@ -4,7 +4,9 @@ import { ChevronDown, Plus, TerminalSquare, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { CustomAction, CustomCommand } from '../lib/customCommands';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
+import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { RoleSelect } from './pickers';
 
@@ -28,6 +30,7 @@ export default function CustomCommandsForm({
   initial: CustomCommand[];
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [cmds, setCmds] = useState<CustomCommand[]>(initial);
   const keys = useRef<number[]>(initial.map((_, i) => i + 1)); // stabilne klucze React
   const nextKey = useRef(initial.length + 1);
@@ -73,14 +76,14 @@ export default function CustomCommandsForm({
       const j = (await r.json()) as { ok?: boolean; error?: string; registered?: number };
       if (r.ok && j.ok) {
         setSt('ok');
-        setMsg(`Zarejestrowano ${j.registered ?? 0} komend w Discordzie.`);
+        setMsg(`${tp(lang, 'ui.cc.savedPre')} ${j.registered ?? 0} ${tp(lang, 'ui.cc.savedPost')}`);
       } else {
         setSt('err');
-        setMsg(j.error || 'Błąd zapisu/rejestracji.');
+        setMsg(j.error || tp(lang, 'ui.cc.saveError'));
       }
     } catch {
       setSt('err');
-      setMsg('Błąd sieci.');
+      setMsg(tp(lang, 'ui.cc.netError'));
     }
     setTimeout(() => setSt('idle'), 4000);
   }
@@ -89,8 +92,8 @@ export default function CustomCommandsForm({
     <div className="space-y-4">
       {cmds.length === 0 && (
         <p className="rounded-lg border border-dashed border-line bg-bg/30 p-6 text-center text-sm text-muted">
-          Brak własnych komend. Dodaj pierwszą — pojawi się w Discordzie jako{' '}
-          <code>/twoja-nazwa</code>.
+          {tp(lang, 'ui.cc.emptyPre')} <code>/twoja-nazwa</code>
+          {tp(lang, 'ui.cc.emptyPost')}
         </p>
       )}
 
@@ -106,10 +109,10 @@ export default function CustomCommandsForm({
               >
                 <TerminalSquare size={15} className="shrink-0 text-accent" />
                 <span className="truncate text-sm font-semibold text-white/90">
-                  /{c.name || 'nazwa'}
+                  /{c.name || tp(lang, 'ui.cc.namePlaceholder')}
                 </span>
                 <span className="truncate text-xs text-muted">
-                  · {c.description || 'bez opisu'}
+                  · {c.description || tp(lang, 'ui.cc.noDescription')}
                 </span>
                 <ChevronDown
                   size={15}
@@ -120,7 +123,7 @@ export default function CustomCommandsForm({
                 type="button"
                 onClick={() => remove(i)}
                 className="shrink-0 rounded-md border border-line px-2 py-1.5 text-muted transition hover:border-accent hover:text-accent"
-                title="Usuń"
+                title={tp(lang, 'ui.cc.delTitle')}
               >
                 <Trash2 size={14} />
               </button>
@@ -130,24 +133,24 @@ export default function CustomCommandsForm({
               <div className="space-y-4 border-t border-line p-4">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label className="space-y-1 text-sm">
-                    <span className="text-muted">Nazwa komendy (bez /)</span>
+                    <span className="text-muted">{tp(lang, 'ui.cc.nameLabel')}</span>
                     <div className="flex items-center gap-1">
                       <span className="text-muted">/</span>
                       <input
                         value={c.name}
                         onChange={(e) => update(i, { name: sanitizeName(e.target.value) })}
-                        placeholder="np. zasady"
+                        placeholder={tp(lang, 'ui.cc.namePh')}
                         className={`${inp} font-mono`}
                         maxLength={32}
                       />
                     </div>
                   </label>
                   <label className="space-y-1 text-sm">
-                    <span className="text-muted">Opis (widoczny w Discordzie)</span>
+                    <span className="text-muted">{tp(lang, 'ui.cc.descLabel')}</span>
                     <input
                       value={c.description}
                       onChange={(e) => update(i, { description: e.target.value })}
-                      placeholder="Krótki opis komendy"
+                      placeholder={tp(lang, 'ui.cc.descPh')}
                       className={inp}
                       maxLength={100}
                     />
@@ -161,12 +164,12 @@ export default function CustomCommandsForm({
                     onChange={(e) => update(i, { ephemeral: e.target.checked })}
                     className="h-4 w-4 accent-accent"
                   />
-                  Odpowiedź widoczna tylko dla wywołującego (ephemeral)
+                  {tp(lang, 'ui.cc.ephemeralLabel')}
                 </label>
 
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
                   <label className="flex items-center gap-2">
-                    <span>Cooldown / użytkownika (s, 0 = brak):</span>
+                    <span>{tp(lang, 'ui.cc.cooldownLabel')}</span>
                     <input
                       type="number"
                       value={c.cooldownSec ?? 0}
@@ -179,11 +182,11 @@ export default function CustomCommandsForm({
                     />
                   </label>
                   <label className="flex items-center gap-2">
-                    <span>Kategoria (grupy w /pomoc):</span>
+                    <span>{tp(lang, 'ui.cc.categoryLabel')}</span>
                     <input
                       value={c.category ?? ''}
                       onChange={(e) => update(i, { category: e.target.value })}
-                      placeholder="np. Zabawa"
+                      placeholder={tp(lang, 'ui.cc.categoryPh')}
                       maxLength={40}
                       className="w-36 rounded-md border border-line bg-elevated px-3 py-1.5 text-sm outline-none focus:border-accent"
                     />
@@ -193,10 +196,10 @@ export default function CustomCommandsForm({
                 {/* CC 2.0 — warunek roli + akcje przy użyciu */}
                 <div className="space-y-2 rounded-lg border border-line/60 bg-bg/30 p-2.5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-muted">
-                    Warunek i akcje
+                    {tp(lang, 'ui.cc.condActionsLabel')}
                   </span>
                   <label className="block space-y-1 text-sm">
-                    <span className="text-muted">Wymagana rola (puste = każdy może użyć)</span>
+                    <span className="text-muted">{tp(lang, 'ui.cc.requiredRoleLabel')}</span>
                     <RoleSelect
                       value={c.requiredRoleId ?? ''}
                       onChange={(v) => update(i, { requiredRoleId: v })}
@@ -204,9 +207,7 @@ export default function CustomCommandsForm({
                     />
                   </label>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted">
-                      Akcje przy użyciu (max 3): rola / waluta / XP
-                    </span>
+                    <span className="text-xs text-muted">{tp(lang, 'ui.cc.actionsHint')}</span>
                     <button
                       type="button"
                       onClick={() =>
@@ -221,7 +222,7 @@ export default function CustomCommandsForm({
                       disabled={(c.actions ?? []).length >= 3}
                       className="rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated disabled:opacity-40"
                     >
-                      <Plus size={12} className="inline" /> Akcja
+                      <Plus size={12} className="inline" /> {tp(lang, 'ui.cc.actionBtn')}
                     </button>
                   </div>
                   {(c.actions ?? []).map((a, ai) => (
@@ -238,10 +239,10 @@ export default function CustomCommandsForm({
                         }
                         className="rounded-md border border-line bg-elevated px-2 py-2 text-sm outline-none focus:border-accent"
                       >
-                        <option value="addRole">➕ Nadaj rolę</option>
-                        <option value="removeRole">➖ Zabierz rolę</option>
-                        <option value="giveMoney">💰 Daj walutę</option>
-                        <option value="giveXp">✨ Daj XP</option>
+                        <option value="addRole">{tp(lang, 'ui.cc.actAddRole')}</option>
+                        <option value="removeRole">{tp(lang, 'ui.cc.actRemoveRole')}</option>
+                        <option value="giveMoney">{tp(lang, 'ui.cc.actGiveMoney')}</option>
+                        <option value="giveXp">{tp(lang, 'ui.cc.actGiveXp')}</option>
                       </select>
                       {a.kind === 'addRole' || a.kind === 'removeRole' ? (
                         <RoleSelect
@@ -272,7 +273,7 @@ export default function CustomCommandsForm({
                             })
                           }
                           className={inp}
-                          placeholder="Ilość"
+                          placeholder={tp(lang, 'ui.cc.amountPh')}
                         />
                       )}
                       <button
@@ -281,7 +282,7 @@ export default function CustomCommandsForm({
                           update(i, { actions: (c.actions ?? []).filter((_, j) => j !== ai) })
                         }
                         className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-                        aria-label="Usuń akcję"
+                        aria-label={tp(lang, 'ui.cc.delActionAria')}
                       >
                         <Trash2 size={14} />
                       </button>
@@ -293,7 +294,7 @@ export default function CustomCommandsForm({
                 <div className="space-y-2 rounded-lg border border-line/60 bg-bg/30 p-2.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold uppercase tracking-wide text-muted">
-                      Argumenty (użyj {'{nazwa}'} w odpowiedzi)
+                      {tp(lang, 'ui.cc.argsLabel')}
                     </span>
                     <button
                       type="button"
@@ -307,7 +308,7 @@ export default function CustomCommandsForm({
                       }
                       className="rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated"
                     >
-                      + argument
+                      {tp(lang, 'ui.cc.addArgBtn')}
                     </button>
                   </div>
                   {(c.options ?? []).map((o, oi) => (
@@ -322,7 +323,7 @@ export default function CustomCommandsForm({
                             ),
                           })
                         }
-                        placeholder="nazwa"
+                        placeholder={tp(lang, 'ui.cc.argNamePh')}
                         className={`${inp} w-28 font-mono`}
                         maxLength={32}
                       />
@@ -335,7 +336,7 @@ export default function CustomCommandsForm({
                             ),
                           })
                         }
-                        placeholder="opis (dla użytkownika)"
+                        placeholder={tp(lang, 'ui.cc.argDescPh')}
                         className={`${inp} flex-1`}
                         maxLength={100}
                       />
@@ -352,7 +353,7 @@ export default function CustomCommandsForm({
                           }
                           className="h-3.5 w-3.5 accent-accent"
                         />
-                        wymagany
+                        {tp(lang, 'ui.cc.argRequired')}
                       </label>
                       <button
                         type="button"
@@ -360,7 +361,7 @@ export default function CustomCommandsForm({
                           update(i, { options: (c.options ?? []).filter((_, xi) => xi !== oi) })
                         }
                         className="rounded-md border border-line px-2 py-1.5 text-muted transition hover:border-accent hover:text-accent"
-                        title="Usuń argument"
+                        title={tp(lang, 'ui.cc.delArgTitle')}
                       >
                         <Trash2 size={13} />
                       </button>
@@ -369,36 +370,56 @@ export default function CustomCommandsForm({
                 </div>
 
                 <label className="space-y-1 text-sm">
-                  <span className="font-semibold text-white/90">Typ odpowiedzi</span>
+                  <span className="font-semibold text-white/90">
+                    {tp(lang, 'ui.cc.respTypeLabel')}
+                  </span>
                   <select
                     value={c.type ?? 'message'}
                     onChange={(e) => update(i, { type: e.target.value as CustomCommand['type'] })}
                     className={inp}
                   >
-                    <option value="message">Wiadomość / embed</option>
-                    <option value="random">Losowa z listy</option>
-                    <option value="role">Nadanie / zdjęcie roli</option>
-                    <option value="help">Lista komend (/pomoc)</option>
+                    <option value="message">{tp(lang, 'ui.cc.typeMessage')}</option>
+                    <option value="random">{tp(lang, 'ui.cc.typeRandom')}</option>
+                    <option value="role">{tp(lang, 'ui.cc.typeRole')}</option>
+                    <option value="help">{tp(lang, 'ui.cc.typeHelp')}</option>
                   </select>
                 </label>
 
                 {(c.type ?? 'message') === 'message' && (
                   <div className="space-y-1 text-sm">
-                    <span className="font-semibold text-white/90">Odpowiedź</span>
+                    <span className="font-semibold text-white/90">
+                      {tp(lang, 'ui.cc.responseLabel')}
+                    </span>
                     <MessageStudio
                       value={c.response}
                       onChange={(response: RichMessage) => update(i, { response })}
                       emojis={guild.emojis}
                       variables={[
-                        { token: '{user}', label: 'Wywołujący (oznaczenie)', sample: '@Gracz' },
-                        { token: '{username}', label: 'Nazwa wywołującego', sample: 'Gracz' },
-                        { token: '{server}', label: 'Nazwa serwera', sample: 'GH0ST EMPIRE' },
-                        { token: '{memberCount}', label: 'Liczba członków', sample: '1234' },
+                        {
+                          token: '{user}',
+                          label: tp(lang, 'ui.cc.varCallerMention'),
+                          sample: '@Gracz',
+                        },
+                        {
+                          token: '{username}',
+                          label: tp(lang, 'ui.cc.varCallerName'),
+                          sample: 'Gracz',
+                        },
+                        {
+                          token: '{server}',
+                          label: tp(lang, 'ui.cc.varServerName'),
+                          sample: 'GH0ST EMPIRE',
+                        },
+                        {
+                          token: '{memberCount}',
+                          label: tp(lang, 'ui.cc.varMemberCount'),
+                          sample: '1234',
+                        },
                         ...(c.options ?? [])
                           .filter((o) => o.name)
                           .map((o) => ({
                             token: `{${o.name}}`,
-                            label: `Argument: ${o.name}`,
+                            label: `${tp(lang, 'ui.cc.varArgument')} ${o.name}`,
                             sample: o.description || o.name,
                           })),
                       ]}
@@ -409,40 +430,39 @@ export default function CustomCommandsForm({
                 {c.type === 'random' && (
                   <label className="space-y-1 text-sm">
                     <span className="font-semibold text-white/90">
-                      Losowe odpowiedzi (jedna na linię)
+                      {tp(lang, 'ui.cc.randomLabel')}
                     </span>
                     <textarea
                       value={(c.randomLines ?? []).join('\n')}
                       onChange={(e) => update(i, { randomLines: e.target.value.split('\n') })}
                       rows={4}
-                      placeholder={'Pierwsza odpowiedź\nDruga odpowiedź\n…'}
+                      placeholder={tp(lang, 'ui.cc.randomPh')}
                       className={inp}
                     />
-                    <span className="text-[11px] text-muted">
-                      Bot wylosuje jedną. Działają zmienne ({'{user}'}, {'{server}'}…).
-                    </span>
+                    <span className="text-[11px] text-muted">{tp(lang, 'ui.cc.randomHint')}</span>
                   </label>
                 )}
 
                 {c.type === 'role' && (
                   <label className="space-y-1 text-sm">
-                    <span className="font-semibold text-white/90">Rola do nadania / zdjęcia</span>
+                    <span className="font-semibold text-white/90">
+                      {tp(lang, 'ui.cc.roleLabel')}
+                    </span>
                     <RoleSelect
                       value={c.roleId ?? ''}
                       onChange={(v) => update(i, { roleId: v })}
                       roles={guild.roles}
-                      placeholder="— wybierz rolę —"
+                      placeholder={tp(lang, 'ui.cc.rolePh')}
                     />
-                    <span className="text-[11px] text-muted">
-                      Self-role: pierwsze użycie nadaje rolę, kolejne ją zdejmuje.
-                    </span>
+                    <span className="text-[11px] text-muted">{tp(lang, 'ui.cc.roleHint')}</span>
                   </label>
                 )}
 
                 {c.type === 'help' && (
                   <p className="rounded-lg border border-line/60 bg-bg/30 p-2.5 text-[11px] text-muted">
-                    Bot automatycznie wylistuje wszystkie Twoje komendy (nazwa + opis) w embedzie.
-                    Nazwij tę komendę np. <code>pomoc</code> lub <code>komendy</code>.
+                    {tp(lang, 'ui.cc.helpInfoPre')} <code>pomoc</code>{' '}
+                    {tp(lang, 'ui.cc.helpInfoMid')} <code>komendy</code>
+                    {tp(lang, 'ui.cc.helpInfoPost')}
                   </p>
                 )}
               </div>
@@ -457,7 +477,7 @@ export default function CustomCommandsForm({
           onClick={add}
           className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated"
         >
-          <Plus size={15} /> Dodaj komendę
+          <Plus size={15} /> {tp(lang, 'ui.cc.addCmdBtn')}
         </button>
         <button
           type="button"
@@ -465,17 +485,13 @@ export default function CustomCommandsForm({
           disabled={st === 'saving'}
           className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz i zarejestruj'}
+          {st === 'saving' ? tp(lang, 'ui.cc.saving') : tp(lang, 'ui.cc.saveRegister')}
         </button>
         {st === 'ok' && <span className="text-sm text-green-400">✓ {msg}</span>}
         {st === 'err' && <span className="text-sm text-accent">{msg}</span>}
       </div>
 
-      <p className="text-xs text-muted">
-        Komendy rejestrują się w Discordzie od razu po zapisaniu (komendy serwera). Zmienne{' '}
-        {'{user}'} / {'{server}'} / {'{memberCount}'} podstawiane są przy wywołaniu. Nazwa musi być
-        unikalna (nie może kolidować z komendą wbudowaną bota).
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.cc.footer')}</p>
     </div>
   );
 }
