@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-344-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.274.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-345-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.275.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.275.0] — 💳 M5 (billing): Stripe Checkout + webhook → guilds.tier + przycisk „Premium"
+
+- `[#345]` 💳 **Marketplace M5 (część 2/2: billing) — pełna integracja Stripe (env-gated, dependency-free).**
+  - [`lib/billing.ts`](dashboard/lib/billing.ts): `createCheckoutSession()` (surowy POST do Stripe API, subskrypcja per-serwer), `verifyStripeSignature()` (HMAC-SHA256 Web Crypto + tolerancja 5 min + porównanie w stałym czasie), `setGuildTier()` / `downgradeBySubscription()`.
+  - Nowe trasy: [`/api/billing/checkout`](dashboard/app/api/billing/checkout/route.ts) (wymaga sesji; serwer = `getPrimaryGuildId` przez chokepoint → user kupuje premium tylko dla SWOJEGO serwera) + [`/api/billing/webhook`](dashboard/app/api/billing/webhook/route.ts) (`checkout.session.completed` → premium; `customer.subscription.deleted` → free).
+  - [`MarketplaceGrid`](dashboard/components/MarketplaceGrid.tsx): przycisk **„✦ Premium"** (tylko gdy billing on + serwer free) → Checkout.
+  - **Env-gated, dependency-free** (jak Sentry/Twitch): bez `STRIPE_*` checkout/webhook → 400, zero paywalla. Klucze **tylko w env** (Vercel), nigdy w repo. 📘 Przewodnik [`docs/AKTYWACJA-STRIPE.md`](docs/AKTYWACJA-STRIPE.md) + ostrzeżenie o rotacji wyciekniętych kluczy.
+  - Bramki: biome czysto (308), `tsc` exit 0, docs:check exit 0.
 
 ## [0.274.0] — 💳 M5 (tiery): odczyt tieru serwera + gating premium-pluginów (env-gated)
 

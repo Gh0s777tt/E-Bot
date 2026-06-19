@@ -3,6 +3,7 @@
 // M2 — interaktywny katalog marketplace. Toggle first-party reużywa POST /api/modules
 // (ta sama, audytowana, chokepointem scope'owana ścieżka co Centrum sterowania). Community
 // (3rd-party) ma toggle wyłączony do czasu M6 (enable per-serwer przez `guild_plugins`).
+import { Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { groupLabel, tp } from '../lib/panelI18n';
@@ -62,12 +63,32 @@ export default function MarketplaceGrid({
     }
   }
 
+  // M5 — start Stripe Checkout dla bieżącego serwera (premium). Przekierowanie na stronę Stripe.
+  async function upgrade() {
+    try {
+      const r = await fetch('/api/billing/checkout', { method: 'POST' });
+      const j = (await r.json()) as { url?: string };
+      if (j.url) window.location.href = j.url;
+    } catch {
+      /* brak sieci / billing off — przycisk nie robi nic */
+    }
+  }
+
   // Grupowanie z zachowaniem kolejności pierwszego wystąpienia.
   const groups: string[] = [];
   for (const e of entries) if (!groups.includes(e.group)) groups.push(e.group);
 
   return (
     <div className="space-y-6">
+      {billingOn && guildTier === 'free' && (
+        <button
+          type="button"
+          onClick={upgrade}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-accent/50 bg-accent/10 px-3 py-1.5 text-sm font-semibold text-accent transition hover:bg-accent/20"
+        >
+          <Sparkles size={15} /> Premium
+        </button>
+      )}
       {groups.map((group) => (
         <section key={group} className="space-y-3">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted/70">
