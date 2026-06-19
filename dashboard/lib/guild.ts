@@ -100,6 +100,16 @@ export async function canAccessGuild(guildId: string): Promise<boolean> {
   return (await getAccessibleGuildIds()).includes(guildId);
 }
 
+// Do ZAPISÓW per-serwer: guild_id wybranego serwera + flaga, czy wolno pisać GLOBALNIE (klucz bez
+// prefiksu `g:`). Globalny zapis dozwolony tylko dla właściciela lub kontekstu bez sesji
+// (legacy/single-instance). Zalogowany NIE-właściciel (tenant) bez serwera NIE może pisać globalnie
+// — inaczej zanieczyściłby config instancji. (Hardening — przegląd bezpieczeństwa marketplace.)
+export async function getWriteGuildScope(): Promise<{ gid: string; allowGlobal: boolean }> {
+  const uid = await sessionUid();
+  const gid = await getPrimaryGuildId();
+  return { gid, allowGlobal: !uid || isOwner(uid) };
+}
+
 // Cache TTL w pamięci (60 s) — React cache() dedupuje tylko w obrębie jednego renderu;
 // to ogranicza realne wywołania Discord API między żądaniami (lekki odpowiednik Redisa).
 let memo: { at: number; data: GuildMeta } | null = null;

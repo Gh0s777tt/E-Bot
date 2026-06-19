@@ -1,9 +1,15 @@
-// Backup konfiguracji — zwraca WSZYSTKIE klucze settings jako JSON (chronione sesją przez proxy).
+// Backup konfiguracji — zwraca WSZYSTKIE klucze settings jako JSON. INSTANCE-GLOBAL: zawiera config
+// wszystkich serwerów (`g:<guildId>:<key>`), więc wymaga admina INSTANCJI — nie tylko zalogowania
+// (inaczej dowolny tenant/viewer pobrałby config innych serwerów). Hardening przeglądu bezpieczeństwa.
 import { getAllSettings } from '../../../../lib/data';
+import { isInstanceAdminRequest } from '../../../../lib/panelRoles';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(): Promise<Response> {
+export async function GET(request: Request): Promise<Response> {
+  if (!(await isInstanceAdminRequest(request))) {
+    return new Response('Brak uprawnień (admin instancji).', { status: 403 });
+  }
   const settings = await getAllSettings();
   const payload = {
     app: 'E-BOT',

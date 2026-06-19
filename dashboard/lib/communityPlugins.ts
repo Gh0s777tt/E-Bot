@@ -23,7 +23,12 @@ export const communityManifestSchema = z.object({
   title: z.string().min(2).max(80),
   description: z.string().max(300).optional(),
   version: z.string().max(20).optional(),
-  homepage: z.string().url().max(200).optional(),
+  homepage: z
+    .string()
+    .url()
+    .max(200)
+    .refine((u) => /^https?:\/\//i.test(u), 'tylko adresy http(s)')
+    .optional(),
 });
 export type CommunityManifest = z.infer<typeof communityManifestSchema>;
 

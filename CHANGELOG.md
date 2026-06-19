@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-352-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.282.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-353-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.283.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.283.0] — 🔐 Self-review bezpieczeństwa: 4 luki cross-tenant naprawione
+
+- `[#353]` 🔐 **Adwersarialny przegląd kodu marketplace/multi-tenant — 4 luki naprawione (3 aktywowane przez self-serve).**
+  - **F1 (High)**: `/api/config/export` **bez bramki admina** → każdy zalogowany (w tym `viewer`/tenant) pobierał config **wszystkich** serwerów (`g:<guildId>:*`) — wyciek cross-tenant. Naprawione: `isInstanceAdminRequest`.
+  - **F2 (High)**: `/api/panel-staff` + `/api/config/import` bramkowane sesyjną `role==='admin'` → tenant-admin self-serve (też `role='admin'`) przechodził (przejęcie staff / nadpisanie configu). Naprawione: handler sprawdza admina **instancji** (owner/staff), nie rolę sesji.
+  - **F3 (Med)**: `setGuildRawSetting` z pustym `gid` (scoped tenant bez serwera) pisał **globalnie** → zanieczyszczenie configu instancji. Naprawione: `getWriteGuildScope` — globalny zapis tylko owner/legacy; tenant bez serwera → no-op.
+  - **F4 (Low)**: manifest community `homepage` akceptował `javascript:` (latentny XSS). Naprawione: `.refine()` → tylko http(s).
+  - Nowy strażnik [`isInstanceAdminRequest`](dashboard/lib/panelRoles.ts) (`resolveRole==='admin'`). Zweryfikowane jako bezpieczne: webhook Stripe (HMAC), checkout (chokepoint), moderacja (resolveRole), CSRF (SameSite=Lax). 📘 [`docs/SECURITY-REVIEW-MARKETPLACE.md`](docs/SECURITY-REVIEW-MARKETPLACE.md).
+  - **Zero regresji**: właściciel/staff-admin nadal przechodzą; owner-write globalny zachowany. Bramki: biome czysto (318), `tsc` exit 0, docs:check exit 0.
 
 ## [0.282.0] — 🧩 M3 (reframe): plugin_config = config community; first-party bez migracji
 

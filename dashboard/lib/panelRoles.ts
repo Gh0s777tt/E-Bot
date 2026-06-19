@@ -3,7 +3,7 @@
 //  • dodatkowy „staff" (settings 'panel_staff', wg Discord ID) — admin / editor / viewer.
 // Egzekwowanie ról robi proxy.ts (viewer = tylko odczyt; sekcje adminowe = tylko admin).
 import { cookies } from 'next/headers';
-import { authConfig } from './auth';
+import { authConfig, parseCookie, SESSION_COOKIE } from './auth';
 import { getRawSetting, setRawSetting } from './data';
 import { getAuthSecret, type PanelRole, type Session, verifySession } from './session';
 
@@ -42,4 +42,13 @@ export async function currentSession(): Promise<Session | null> {
 export async function currentRole(): Promise<PanelRole> {
   const s = await currentSession();
   return s?.role ?? 'admin';
+}
+
+// Czy żądanie pochodzi od admina INSTANCJI (właściciel z env lub staff-admin) — a NIE od tenant-admina
+// self-serve (ten ma session.role='admin', lecz resolveRole=null). Do bramkowania funkcji
+// instance-global (panel-staff, backup/restore): sama rola sesji to za mało przy multi-tenant.
+export async function isInstanceAdminRequest(request: Request): Promise<boolean> {
+  const token = parseCookie(request.headers.get('cookie'))[SESSION_COOKIE];
+  const s = token ? await verifySession(token, getAuthSecret()) : null;
+  return !!s?.uid && (await resolveRole(s.uid)) === 'admin';
 }

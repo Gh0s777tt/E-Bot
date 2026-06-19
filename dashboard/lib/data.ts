@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { getPrimaryGuildId } from './guild';
+import { getPrimaryGuildId, getWriteGuildScope } from './guild';
 import { hasSupabase, supabase } from './supabase';
 
 export type Game = {
@@ -268,8 +268,10 @@ export async function getGuildRawSetting(key: string): Promise<string | null> {
   return rawGet(key);
 }
 export async function setGuildRawSetting(key: string, value: string): Promise<void> {
-  const gid = await getPrimaryGuildId();
-  return rawSet(gid ? `g:${gid}:${key}` : key, value);
+  const { gid, allowGlobal } = await getWriteGuildScope();
+  if (gid) return rawSet(`g:${gid}:${key}`, value);
+  if (allowGlobal) return rawSet(key, value); // owner/legacy: globalny zapis jak dotąd
+  // scoped tenant bez serwera → brak zapisu (ochrona globalnego configu instancji)
 }
 
 // Klucze configu już zmigrowane na per-serwer (bot czyta je przez getGuildSettings). Dla nich
