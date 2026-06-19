@@ -1,4 +1,4 @@
-<!-- SYNC: v0.256.0 · #326 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.257.0 · #327 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.256.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.257.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -82,9 +82,9 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 - 📈 **Retencja + więcej wykresów w czasie** (`/stats`).
 - 🧱 **Produkcyjna infra** — pełny Sentry (DSN), Redis (instancja), Supabase Realtime push (szkielety gotowe).
 - 🔗 **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy.
-- ↔️ **Pełne lustrzane RTL** — fundament `dir="rtl"` (v0.254.0) + cały chrom nawigacyjny (powłoka + MobileNav + GuildSwitcher, v0.255–256) gotowe; pozostaje migracja fizycznych klas Tailwind na logiczne (`ms-`/`ps-`/`start`) w stronach/widgetach (~100 komponentów).
+- ↔️ **Pełne lustrzane RTL** — fundament `dir="rtl"` (v0.254.0) + chrom nawigacyjny (v0.255–256) + strona główna/widgety (v0.257.0) gotowe; pozostaje migracja fizycznych klas Tailwind na logiczne (`ms-`/`ps-`/`start`) na pozostałych stronach konfiguracyjnych (~90 komponentów).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.256.0 (#326) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.257.0 (#327) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

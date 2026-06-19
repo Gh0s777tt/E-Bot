@@ -53,7 +53,7 @@ export default async function OverviewPage() {
           className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.12]"
         />
         <div
-          className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full"
+          className="pointer-events-none absolute -end-24 -top-24 h-56 w-56 rounded-full"
           style={{
             background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.16), transparent 70%)',
           }}
@@ -169,7 +169,7 @@ export default async function OverviewPage() {
                     style={{ width: `${stats.total ? (n / stats.total) * 100 : 0}%` }}
                   />
                 </div>
-                <span className="w-10 text-right text-sm">{n}</span>
+                <span className="w-10 text-end text-sm">{n}</span>
               </div>
             ))}
             {!Object.keys(stats.byPlatform).length && (

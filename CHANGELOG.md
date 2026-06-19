@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-326-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.256.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-327-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.257.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.257.0] — ↔️ Lustrzane RTL — przyrost 3: strona główna (Pulpit `/`) + widgety
+
+- `[#327]` ↔️ **Trzeci przyrost RTL — strona `/` (Pulpit) i widgety pulpitu.**
+  - `AntiraidAlarm`/`LiveServerTiles`: `ml-auto`→`ms-auto` (kropka statusu / pill „● aktualizacja" na właściwej krawędzi).
+  - `app/page.tsx`: dekoracyjna poświata hero `-right-24`→`-end-24` (odbicie w RTL), licznik platform `text-right`→`text-end`.
+  - **Bez zmian (już symetryczne)**: `HealthScoreCard`, `QuickActionsCard`, `ServerGrowthCard`, `SetupChecklist`, `StatCard` — zbudowane na symetrycznych odstępach + flex (RTL ogarnia je automatycznie).
+  - Świadomie pominięte: wyśrodkowanie `left-1/2 -translate-x-1/2` (badge „BOT" — symetryczne) oraz `pl-PL`/`rounded-lg` (fałszywe trafienia grepa, nie klasy kierunkowe — blind sed by je zepsuł).
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0. Weryfikacja wizualna — przy preview‑deployu.
 
 ## [0.256.0] — ↔️ Lustrzane RTL — przyrost 2: MobileNav + GuildSwitcher (chrom nawigacyjny domknięty)
 

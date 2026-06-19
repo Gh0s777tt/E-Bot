@@ -76,7 +76,7 @@ export default function LiveServerTiles() {
               : tp(lang, 'ui.home.liveConnecting')}
         </span>
         {pulse && live && (
-          <span className="ml-auto text-[10px] uppercase tracking-wide text-green-500/80">
+          <span className="ms-auto text-[10px] uppercase tracking-wide text-green-500/80">
             ● {tp(lang, 'ui.home.liveUpdate')}
           </span>
         )}

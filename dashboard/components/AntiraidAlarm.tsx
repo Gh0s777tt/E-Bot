@@ -25,7 +25,7 @@ export default function AntiraidAlarm({
       <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
         🛡️ Anti-raid
         <span
-          className={`ml-auto h-2.5 w-2.5 rounded-full ${recentRaid ? 'bg-accent pulse-dot' : 'bg-green-500'}`}
+          className={`ms-auto h-2.5 w-2.5 rounded-full ${recentRaid ? 'bg-accent pulse-dot' : 'bg-green-500'}`}
         />
       </h2>
 
