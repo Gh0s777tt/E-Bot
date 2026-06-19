@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-348-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.278.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-349-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.279.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.279.0] — 🚀 M4 (UI): onboarding „dodaj bota" + lista Twoich serwerów (domknięcie UI multi-guild)
+
+- `[#349]` 🚀 **Marketplace M4 — ekran onboardingu self-serve (ostatnia luka UI multi-guild).**
+  - Nowa strona [`/onboarding`](dashboard/app/onboarding/page.tsx): **Krok 1** — link zaproszenia bota (`botInviteUrl` w [`lib/enroll.ts`](dashboard/lib/enroll.ts): scope `bot applications.commands`, permissions z env `DISCORD_BOT_PERMISSIONS`, domyślnie 8); **Krok 2** — Twoje serwery (dostępne dla zalogowanego z `getAccessibleGuildIds` przez chokepoint).
+  - Nowy klient [`OnboardingGuilds`](dashboard/components/OnboardingGuilds.tsx): klik serwera ustawia kontekst (`panel_guild`) i przenosi do pulpitu.
+  - Wpis w nawigacji: „Onboarding" (ikona Rocket, grupa „Ogólne", próg `adv`). `.env.example`: `DISCORD_BOT_PERMISSIONS`.
+  - Bramki: biome czysto (317), `tsc` exit 0, docs:check exit 0.
 
 ## [0.278.0] — 🧩 M6 (UI): formularz zgłaszania pluginu community (pipeline autora domknięty)
 

@@ -22,6 +22,7 @@ import {
   Palette,
   Plug,
   Radio,
+  Rocket,
   Rss,
   ScrollText,
   Settings,
@@ -54,6 +55,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/', label: 'Przegląd', icon: LayoutDashboard },
       { href: '/setup', label: 'Kreator startowy', icon: Wand2 },
+      { href: '/onboarding', label: 'Onboarding', icon: Rocket, tier: 'adv' },
       { href: '/modules', label: 'Centrum sterowania', icon: SlidersHorizontal },
       { href: '/marketplace', label: 'Marketplace', icon: Store, tier: 'adv' },
       { href: '/stats', label: 'Statystyki', icon: BarChart3, tier: 'adv' },
