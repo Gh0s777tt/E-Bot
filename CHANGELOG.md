@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-322-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.252.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-323-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.253.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.253.0] — 🎨🏁 Pełne fonty + i18n obrazka OG profilu — KONIEC i18n CAŁEJ powierzchni web
+
+- `[#323]` 🎨 **Obraz OG publicznego profilu (`opengraph-image.tsx`): dynamiczne fonty Google (fail-safe) + lokalizacja etykiet — ostatni niezlokalizowany element UI.**
+  - 🔤 **Fonty per-skrypt z subsetem**: helper `loadGoogleFont(family, text)` pobiera z Google Fonts subset TTF (tylko glify obecne na obrazku) i przekazuje do Satori. Zawsze `Noto Sans` (Latin+Cyrylica) + `Noto Sans SC/JP/KR` i `Noto Sans Arabic` dokładane tylko gdy dany skrypt występuje w tekście (per-glif fallback Satori). Dzięki temu dowolny username (CJK, arabski, polskie diakrytyki) renderuje się bez „tofu" — wcześniej kod celowo unikał znaków spoza ASCII, bo domyślny font ich nie miał.
+  - 🛡️ **Fail-safe**: błąd fetcha fontu → `null` → fallback do wbudowanego fontu `next/og` (obecne zachowanie), nigdy 500. Node bez UA przeglądarki dostaje `format('truetype')` (Satori nie czyta woff2). Rdzeń zweryfikowany na żywym API: Latin z PL diakrytykami + japoński → poprawny TTF (sygnatura `00010000`), subset 8–12 KB.
+  - 🌍 **Etykiety**: 5 nowych kluczy `ui.og.*` × **14 języków** (parzystość 14×5=70) + reużycie `ui.pub.profMetaLevel`/`profMetaRankSuffix`; `getPanelLocale()` + `tp()`. UWAGA: crawlery (Discord/Twitter) nie wysyłają cookie `panel_lang`, więc etykiety lecą domyślnym PL dla realnych shareów — dobór fontów jest jednak niezależny od języka i naprawia username uniwersalnie.
+  - 🏁 **Koniec i18n CAŁEJ powierzchni web** — panel 39/39 + edytory + powierzchnia publiczna + boilerplate + obraz OG. Nie zostaje już żaden niezlokalizowany element UI.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK; rdzeń ładowania fontów zweryfikowany. Wstecznie zgodne (fallback PL + fallback fontu).
 
 ## [0.252.0] — 🌍🏁 i18n boilerplate frameworka (error + 404 + loading + metadata) — KONIEC i18n powierzchni web
 

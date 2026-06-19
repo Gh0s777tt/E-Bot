@@ -1,4 +1,4 @@
-<!-- SYNC: v0.252.0 · #322 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.253.0 · #323 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.252.0)
+## 🔭 Bieżący tor (v0.253.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -37,7 +37,8 @@
 - [x] Osobna, opcjonalna fala: wewnętrzne etykiety współdzielonego `CardStyleEditor` + `GradientField` (15 kluczy × 14 jęz.) ✅ **v0.249.0**
 - [x] Strona główna (Pulpit `/`) + widgety + checklista modułów + `relTime` (Intl) — 53 klucze `ui.home.*` + 16 `ui.checklist.*` × 14 jęz. ✅ **v0.250.0**
 - [x] Powierzchnia publiczna / pre-auth (osobno od 39/39): logowanie + publiczny ranking `/p/leaderboard` + publiczny profil `/p/u/[id]` (chrome + `generateMetadata`) — 17 kluczy `ui.pub.*` × 14 jęz. ✅ **v0.251.0**
-- [x] Boilerplate frameworka: `error.tsx` + `not-found.tsx` (404) + `loading.tsx` (Suspense) + metadane `layout.tsx` — 8 kluczy `ui.sys.*` × 14 jęz. ✅ **v0.252.0** · `opengraph-image.tsx` pominięty (font Satori). **KONIEC i18n powierzchni web.**
+- [x] Boilerplate frameworka: `error.tsx` + `not-found.tsx` (404) + `loading.tsx` (Suspense) + metadane `layout.tsx` — 8 kluczy `ui.sys.*` × 14 jęz. ✅ **v0.252.0**
+- [x] Obraz OG profilu (`opengraph-image.tsx`): dynamiczne fonty Google per-skrypt (fail-safe, subset TTF) + etykiety — 5 kluczy `ui.og.*` × 14 jęz. ✅ **v0.253.0**. **KONIEC i18n CAŁEJ powierzchni web** — nie zostaje żaden niezlokalizowany element UI.
 
 ### 🧭 Otwarte / strategiczne (poza torem i18n)
 - [ ] **Marketplace pluginów / efekt sieciowy** — *config* multi‑serwer gotowy (Etap K, C‑1…C‑27); brakuje produktyzacji marketplace i modelu multi‑guild jako usługi
@@ -184,4 +185,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.252.0 (#322) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.253.0 (#323) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
