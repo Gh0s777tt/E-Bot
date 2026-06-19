@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-312-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.242.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-313-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.243.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.243.0] — 🌍 i18n UI panelu — strona /ai (konfiguracja AI + pomoc + digest)
+
+- `[#313]` 🌍 **i18n UI panelu — kolejna fala: `/ai` (komendy AI, limity, AI-pomoc, AI-digest).**
+  - 🖥️ **Panel**: 45 nowych kluczy `ui.ai.*` × **14 języków** w `panelI18n.ts` (parzystość 14×45=630). `app/ai/page.tsx` (serwer) + `AiConfigForm.tsx` + `AiHelpForm.tsx` + `AiDigestForm.tsx` (klient) na `tp()`: intro z segmentami wokół `/ai`/`/tldr`/`/translate`/`/imagine`, 4 karty KPI, konfiguracja (model, limity dzień/użytkownik, persona, instrukcja `ai_usage`/`.env`), AI-pomoc (kanał, baza wiedzy FAQ), AI-digest (kanały, godzina UTC), tabela top-10 zużycia. Przyciski zapisu reużywają `SaveButton`. Nietłumaczone: komendy `/ai *`, marki (`DeepSeek`/`OpenAI`/`GH0ST`), tokeny (`ai_usage`/`.env`/`scripts/faza4-schema.sql`), format `pl-PL`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 33/~40 stron.
 
 ## [0.242.0] — 🌍 i18n UI panelu — strona /applications (rekrutacja / aplikacje)
 

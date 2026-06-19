@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { AiHelpConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -16,6 +18,7 @@ export default function AiHelpForm({
   initial: AiHelpConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<AiHelpConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -43,36 +46,36 @@ export default function AiHelpForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">AI-pomoc włączona</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.helpEnabledToggle')}</span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał pomocy</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.helpChannelLabel')}</span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
-          placeholder="— wybierz kanał —"
+          placeholder={tp(lang, 'ui.ai.channelPh')}
         />
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Baza wiedzy (FAQ / regulamin)</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.knowledgeLabel')}</span>
         <textarea
           value={c.knowledge}
           onChange={(e) => setC({ ...c, knowledge: e.target.value })}
           rows={8}
           maxLength={6000}
-          placeholder="Wklej FAQ, zasady, najczęstsze pytania… Bot odpowiada WYŁĄCZNIE na podstawie tej wiedzy."
+          placeholder={tp(lang, 'ui.ai.knowledgePh')}
           className={inputCls}
         />
       </label>
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Na wybranym kanale bot odpowiada na pytania (≥6 znaków) wyłącznie na podstawie bazy wiedzy
-        (bez zmyślania). Wymaga włączonych <code className="text-accent">Komend AI</code> powyżej.
-        Limit 10 s/użytkownik.
+        {tp(lang, 'ui.ai.helpFooterPre')}
+        <code className="text-accent">{tp(lang, 'ui.ai.commandsName')}</code>
+        {tp(lang, 'ui.ai.helpFooterPost')}
       </p>
     </div>
   );

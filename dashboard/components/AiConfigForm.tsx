@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
 
 type Cfg = {
@@ -16,6 +18,7 @@ const inputCls =
 const num = (v: string): number => Math.max(0, Math.floor(Number(v) || 0));
 
 export default function AiConfigForm({ initial }: { initial: Cfg }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -43,23 +46,23 @@ export default function AiConfigForm({ initial }: { initial: Cfg }) {
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Komendy AI włączone</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.enabledToggle')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Model</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.modelLabel')}</span>
           <select
             value={c.model}
             onChange={(e) => setC({ ...c, model: e.target.value as Cfg['model'] })}
             className={inputCls}
           >
-            <option value="deepseek">DeepSeek (tani)</option>
+            <option value="deepseek">{tp(lang, 'ui.ai.modelDeepseek')}</option>
             <option value="openai">OpenAI</option>
           </select>
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Limit zapytań / dzień / użytkownik</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.reqLimitLabel')}</span>
           <input
             type="number"
             value={c.dailyRequestLimit}
@@ -68,7 +71,7 @@ export default function AiConfigForm({ initial }: { initial: Cfg }) {
           />
         </label>
         <label className="space-y-1 text-sm sm:col-span-2">
-          <span className="font-semibold text-white/90">Limit tokenów / dzień / użytkownik</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.tokenLimitLabel')}</span>
           <input
             type="number"
             value={c.dailyTokenLimit}
@@ -79,22 +82,26 @@ export default function AiConfigForm({ initial }: { initial: Cfg }) {
       </div>
 
       <label className="block space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Persona — osobowość /ai (opcjonalnie)</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.ai.personaLabel')}</span>
         <textarea
           value={c.persona}
           onChange={(e) => setC({ ...c, persona: e.target.value })}
           rows={3}
           maxLength={1000}
-          placeholder="np. Jesteś zadziornym, dowcipnym botem gamingowym serwera GH0ST…"
+          placeholder={tp(lang, 'ui.ai.personaPh')}
           className={inputCls}
         />
       </label>
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Komenda <code className="text-accent">/ai</code> w bocie sprawdza dzienny limit (tabela
-        <code className="text-accent"> ai_usage</code>) przed wywołaniem modelu — twardy bezpiecznik
-        kosztów. Klucze API (DeepSeek/OpenAI) są w <code>.env</code> bota.
+        {tp(lang, 'ui.ai.configHelpPre')}
+        <code className="text-accent">/ai</code>
+        {tp(lang, 'ui.ai.configHelpMid')}
+        <code className="text-accent"> ai_usage</code>
+        {tp(lang, 'ui.ai.configHelpPost')}
+        <code>.env</code>
+        {tp(lang, 'ui.ai.configHelpEnd')}
       </p>
     </div>
   );
