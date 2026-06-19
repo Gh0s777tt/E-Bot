@@ -16,7 +16,7 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? 'bg-accent' : 'bg-white/20'}`}
     >
       <span
-        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[22px]' : 'left-0.5'}`}
+        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'start-[22px]' : 'start-0.5'}`}
       />
     </button>
   );

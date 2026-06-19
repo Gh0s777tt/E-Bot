@@ -25,7 +25,7 @@ function Switch({
       className={`relative h-5 w-9 shrink-0 rounded-full transition-colors disabled:opacity-50 ${on ? 'bg-accent' : 'bg-white/20'}`}
     >
       <span
-        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${on ? 'left-[18px]' : 'left-0.5'}`}
+        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${on ? 'start-[18px]' : 'start-0.5'}`}
       />
     </button>
   );

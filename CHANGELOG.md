@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-329-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.259.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-330-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.260.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.260.0] — ↔️🏁 Lustrzane RTL KOMPLETNE — knob przełączników (ostatni element)
+
+- `[#330]` ↔️ **Domknięcie pełnego lustrzanego RTL — knob 4 przełączników.**
+  - `AntinukeForm`/`ControlCenter`/`NotifSettingsForm` (`left-[22px]`) + `ModuleBar` (`left-[18px]`) → `start-[*]`; `left-0.5`→`start-0.5`. Knob suwa się od start do end, w RTL odbity (zgodnie z WAI-ARIA/Material). Konwersja LTR-identyczna (zero regresji).
+  - 🏁 **RTL KOMPLETNY**: finalny grep całego `dashboard/**.tsx` nie pokazuje już żadnej fizycznej klasy kierunkowej poza 2 wyśrodkowaniami `left-1/2 -translate-x-1/2` (symetryczne, poprawnie nietknięte). Cała powierzchnia (chrom + wszystkie strony + komponenty + przełączniki) na klasach logicznych Tailwind v4 (`start`/`end`, `ms`/`me`, `ps`/`pe`, `border-s`/`border-e`, `text-start`/`text-end`).
+  - Bramki: biome czysto (325 plików), `tsc` exit 0. Pełną weryfikację wizualną RTL najlepiej zrobić na preview‑deployu (arabski → `<html dir="rtl">`).
 
 ## [0.259.0] — ↔️ Lustrzane RTL — przyrost 5: 22 współdzielone komponenty (formularze/modale/MessageStudio)
 
