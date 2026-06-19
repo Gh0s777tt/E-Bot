@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-337-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.267.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-338-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.268.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.268.0] — 🔐 M1: warstwa multi-tenant (dostęp per-guild) + zawężenie przełącznika serwerów
+
+- `[#338]` 🔐 **Marketplace M1 — prymityw izolacji per-guild + scope przełącznika (additive, owner-bypass).**
+  - Nowa biblioteka [`dashboard/lib/tenant.ts`](dashboard/lib/tenant.ts): `isOwner`, `getMemberGuildIds(uid)` (czyta `guild_members` ze schematu M1), `getAccessibleGuildIds()` (owner → wszystkie serwery bota; inaczej przecięcie **serwery bota ∩ członkostwo**), `canAccessGuild(guildId)`. Graceful: brak chmury/tabeli → owner-bypass nietknięty.
+  - [`app/api/guilds/route.ts`](dashboard/app/api/guilds/route.ts) (źródło GuildSwitchera) zawęża listę do serwerów **dostępnych dla sesji** + klampuje wybrany serwer do dostępnych. **Dla właściciela = wszystkie serwery bota → zachowanie identyczne** (zero regresji); przyszły tenant zobaczy tylko swoje.
+  - Tabela `guild_members` startuje pusta → dziś działa wyłącznie owner-bypass; wiersze doda onboarding (M4). `canAccessGuild` gotowe do scope'owania zapytań/akcji w kolejnych przyrostach.
+  - Bramki: biome czysto (301 plików), `tsc` exit 0, docs:check exit 0.
 
 ## [0.267.0] — 🛒 M1 start: schemat danych multi-guild + marketplace (decyzje: płatne + community)
 
