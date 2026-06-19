@@ -1,10 +1,11 @@
 import type { AccessEntry, AccessTier } from '../lib/panelAccess';
+import { type PanelLocale, tp } from '../lib/panelI18n';
 
-const TIER_LABEL: Record<AccessTier, string> = {
-  owner: '👑 Właściciel',
-  admin: '🛡️ Admin',
-  editor: '✏️ Editor',
-  viewer: '👁️ Viewer',
+const TIER_KEY: Record<AccessTier, string> = {
+  owner: 'ui.settings.tierOwner',
+  admin: 'ui.settings.tierAdmin',
+  editor: 'ui.settings.tierEditor',
+  viewer: 'ui.settings.tierViewer',
 };
 
 const TIER_BADGE: Record<AccessTier, string> = {
@@ -17,15 +18,18 @@ const TIER_BADGE: Record<AccessTier, string> = {
 export default function PanelAccessList({
   entries,
   currentUid,
+  lang,
 }: {
   entries: AccessEntry[];
   currentUid?: string;
+  lang: PanelLocale;
 }) {
   if (!entries.length) {
     return (
       <p className="text-sm text-muted">
-        Brak skonfigurowanych właścicieli ani staffu. Dodaj właścicieli w{' '}
-        <code className="text-accent">DASHBOARD_OWNER_IDS</code> (env) lub użytkowników niżej.
+        {tp(lang, 'ui.settings.accessEmptyPre')}{' '}
+        <code className="text-accent">DASHBOARD_OWNER_IDS</code>{' '}
+        {tp(lang, 'ui.settings.accessEmptyPost')}
       </p>
     );
   }
@@ -52,7 +56,7 @@ export default function PanelAccessList({
                 <span className="truncate font-semibold text-white/90">{e.name}</span>
                 {isMe && (
                   <span className="shrink-0 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold text-accent">
-                    Ty
+                    {tp(lang, 'ui.settings.accessMe')}
                   </span>
                 )}
               </div>
@@ -64,16 +68,17 @@ export default function PanelAccessList({
             <span
               className={`shrink-0 rounded-md border px-2 py-1 text-xs font-semibold ${TIER_BADGE[e.tier]}`}
             >
-              {TIER_LABEL[e.tier]}
+              {tp(lang, TIER_KEY[e.tier])}
             </span>
           </div>
         );
       })}
 
       <p className="pt-1 text-xs text-muted">
-        👑 <strong className="text-white/80">Właściciele</strong> pochodzą z konfiguracji serwera (
-        <code className="text-accent">DASHBOARD_OWNER_IDS</code>) — zawsze admin, nie do zmiany z
-        panelu. Pozostałych dodajesz/edytujesz niżej.
+        👑 <strong className="text-white/80">{tp(lang, 'ui.settings.accessFooterOwners')}</strong>{' '}
+        {tp(lang, 'ui.settings.accessFooterMid')}
+        <code className="text-accent">DASHBOARD_OWNER_IDS</code>
+        {tp(lang, 'ui.settings.accessFooterPost')}
       </p>
     </div>
   );

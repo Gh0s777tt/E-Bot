@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-316-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.246.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-317-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.247.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.247.0] — 🌍 i18n UI panelu — strona /settings (bot · status · język · motyw · backup · dostęp)
+
+- `[#317]` 🌍 **i18n UI panelu — kolejna fala: `/settings` (personalizacja bota, status/aktywność, język, motyw, system, backup konfiguracji, dostęp do panelu, użytkownicy).**
+  - 🖥️ **Panel**: 105 nowych kluczy `ui.settings.*` × **14 języków** w `panelI18n.ts` (parzystość 14×105=1470). `app/settings/page.tsx` (serwer) + `BotCustomizeForm.tsx` + `BotPresenceForm.tsx` + `BotLanguageForm.tsx` + `ThemeSwitcher.tsx` + `ConfigBackupForm.tsx` + `PanelUsersForm.tsx` (klient) + `PanelAccessList.tsx` (serwer, prop `lang: PanelLocale`) na `tp()`: 9 nagłówków sekcji, personalizacja (avatar, nazwa), statusy/aktywności presence + podgląd, język bota (segmenty `Auto`/`<strong>`), motyw, tabela System (źródło/Supabase/gry/hosting), backup (eksport/import + diff + ostrzeżenia + komunikaty), lista dostępu (rangi `tier*`, segmenty `DASHBOARD_OWNER_IDS`), użytkownicy panelu (intro, role-opisy, poziomy). Wspólne `save`/`saving`/`saveError`/`saved`/`del`. Nietłumaczone: tokeny (`DISCORD_BOT_TOKEN`/`supabase/schema.sql`/`npm run seed`/`SUPABASE_URL`/`.env`), wartości ról (`admin`/`editor`/`viewer`), nazwy z lib (`BOT_LOCALE_OPTIONS`, `THEME_PRESETS`), hosting/URL przykłady, marki.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 37/~40 stron.
 
 ## [0.246.0] — 🌍 i18n UI panelu — strona /moderation (automod + AI-mod + tester regex + sprawy)
 

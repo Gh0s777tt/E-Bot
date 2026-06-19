@@ -2,6 +2,8 @@
 
 import { AlertTriangle, Download, Upload } from 'lucide-react';
 import { type ChangeEvent, useRef, useState } from 'react';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 type Diff = { total: number; added: number; changed: number; same: number; sample: string[] };
 
@@ -9,6 +11,7 @@ const btn =
   'inline-flex items-center gap-2 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated disabled:opacity-50';
 
 export default function ConfigBackupForm() {
+  const { lang } = useLang();
   const [busy, setBusy] = useState<'idle' | 'exporting' | 'importing'>('idle');
   const [msg, setMsg] = useState('');
   const [pending, setPending] = useState<Record<string, string> | null>(null);
@@ -34,9 +37,11 @@ export default function ConfigBackupForm() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setMsg(`✓ Pobrano kopię (${data.keys ?? Object.keys(data.settings ?? {}).length} kluczy).`);
+      setMsg(
+        `✓ ${tp(lang, 'ui.settings.exportedDone')} (${data.keys ?? Object.keys(data.settings ?? {}).length} ${tp(lang, 'ui.settings.keysWord')}).`,
+      );
     } catch {
-      setMsg('Błąd eksportu.');
+      setMsg(tp(lang, 'ui.settings.exportError'));
     }
     setBusy('idle');
   }
@@ -81,7 +86,7 @@ export default function ConfigBackupForm() {
       setPending(clean);
       setDiff({ total: Object.keys(clean).length, added, changed, same, sample });
     } catch {
-      setMsg('Nie udało się odczytać pliku (oczekiwany JSON kopii E-BOT).');
+      setMsg(tp(lang, 'ui.settings.readFileError'));
     }
   }
 
@@ -97,26 +102,28 @@ export default function ConfigBackupForm() {
       });
       const j = (await r.json()) as { ok?: boolean; count?: number };
       if (!r.ok || !j.ok) throw new Error('http');
-      setMsg(`✓ Przywrócono ${j.count} kluczy. Bot zsynchronizuje zmiany w ~60 s.`);
+      setMsg(
+        `✓ ${tp(lang, 'ui.settings.restoredPre')} ${j.count} ${tp(lang, 'ui.settings.keysWord')}. ${tp(lang, 'ui.settings.restoredPost')}`,
+      );
       setPending(null);
       setDiff(null);
       if (fileRef.current) fileRef.current.value = '';
     } catch {
-      setMsg('Błąd importu.');
+      setMsg(tp(lang, 'ui.settings.importError'));
     }
     setBusy('idle');
   }
 
   return (
     <div className="space-y-4 text-sm">
-      <p className="text-muted">
-        Pełna kopia ustawień bota (wszystkie moduły, jeden plik JSON). Przydatne do przenosin
-        serwera, eksperymentów i odzyskiwania po awarii.
-      </p>
+      <p className="text-muted">{tp(lang, 'ui.settings.backupIntro')}</p>
 
       <div className="flex flex-wrap items-center gap-3">
         <button type="button" onClick={doExport} disabled={busy !== 'idle'} className={btn}>
-          <Download size={15} /> {busy === 'exporting' ? 'Pobieranie…' : 'Pobierz kopię'}
+          <Download size={15} />{' '}
+          {busy === 'exporting'
+            ? tp(lang, 'ui.settings.downloading')
+            : tp(lang, 'ui.settings.downloadBackup')}
         </button>
         <button
           type="button"
@@ -124,7 +131,7 @@ export default function ConfigBackupForm() {
           disabled={busy !== 'idle'}
           className={btn}
         >
-          <Upload size={15} /> Wczytaj kopię…
+          <Upload size={15} /> {tp(lang, 'ui.settings.loadBackup')}
         </button>
         <input
           ref={fileRef}
@@ -138,12 +145,19 @@ export default function ConfigBackupForm() {
       {diff && (
         <div className="space-y-3 rounded-lg border border-line bg-bg/40 p-4">
           <p className="font-semibold text-white/90">
-            Podgląd przywracania: {diff.total} kluczy w pliku
+            {tp(lang, 'ui.settings.previewRestorePre')} {diff.total}{' '}
+            {tp(lang, 'ui.settings.previewRestorePost')}
           </p>
           <div className="flex flex-wrap gap-4 text-xs">
-            <span className="text-green-400">+ {diff.added} nowych</span>
-            <span className="text-amber-400">~ {diff.changed} zmienionych</span>
-            <span className="text-muted">= {diff.same} bez zmian</span>
+            <span className="text-green-400">
+              + {diff.added} {tp(lang, 'ui.settings.diffNew')}
+            </span>
+            <span className="text-amber-400">
+              ~ {diff.changed} {tp(lang, 'ui.settings.diffChanged')}
+            </span>
+            <span className="text-muted">
+              = {diff.same} {tp(lang, 'ui.settings.diffSame')}
+            </span>
           </div>
           {diff.sample.length > 0 && (
             <pre className="max-h-32 overflow-auto rounded bg-elevated px-3 py-2 font-mono text-[11px] text-muted">
@@ -154,8 +168,8 @@ export default function ConfigBackupForm() {
           <div className="flex items-start gap-2 rounded border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200/90">
             <AlertTriangle size={14} className="mt-0.5 shrink-0" />
             <span>
-              Import nadpisze {diff.changed + diff.added} kluczy (nie kasuje pozostałych). Operacja
-              jest nieodwracalna — w razie potrzeby najpierw pobierz aktualną kopię.
+              {tp(lang, 'ui.settings.importWarnPre')} {diff.changed + diff.added}{' '}
+              {tp(lang, 'ui.settings.importWarnPost')}
             </span>
           </div>
           <button
@@ -165,8 +179,8 @@ export default function ConfigBackupForm() {
             className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
           >
             {busy === 'importing'
-              ? 'Przywracanie…'
-              : `Przywróć ${diff.added + diff.changed} kluczy`}
+              ? tp(lang, 'ui.settings.restoring')
+              : `${tp(lang, 'ui.settings.restoreBtn')} ${diff.added + diff.changed} ${tp(lang, 'ui.settings.keysWord')}`}
           </button>
         </div>
       )}
@@ -179,10 +193,7 @@ export default function ConfigBackupForm() {
 
       <p className="flex items-start gap-2 text-xs text-muted">
         <AlertTriangle size={13} className="mt-0.5 shrink-0 text-amber-400/80" />
-        <span>
-          Plik zawiera pełną konfigurację, w tym tokeny webhooków i ID kanałów — trzymaj go w
-          bezpiecznym miejscu i nie udostępniaj publicznie.
-        </span>
+        <span>{tp(lang, 'ui.settings.backupWarn')}</span>
       </p>
     </div>
   );

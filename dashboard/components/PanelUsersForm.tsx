@@ -2,18 +2,21 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import type { PanelRole, StaffEntry } from '../lib/panelRoles';
+import { useLang } from './LangContext';
 
 const inp =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-const ROLE_LABEL: Record<PanelRole, string> = {
-  admin: 'Admin (pełny dostęp)',
-  editor: 'Editor (edycja bez zarządzania użytkownikami)',
-  viewer: 'Viewer (tylko podgląd)',
+const ROLE_DESC_KEY: Record<PanelRole, string> = {
+  admin: 'ui.settings.roleAdminDesc',
+  editor: 'ui.settings.roleEditorDesc',
+  viewer: 'ui.settings.roleViewerDesc',
 };
 
 export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
+  const { lang } = useLang();
   const [staff, setStaff] = useState<StaffEntry[]>(initial);
   const keys = useRef<number[]>(initial.map((_, i) => i + 1));
   const nextKey = useRef(initial.length + 1);
@@ -45,11 +48,11 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
       if (r.ok && j.ok) setSt('ok');
       else {
         setSt('err');
-        setMsg(j.error || 'Błąd zapisu.');
+        setMsg(j.error || tp(lang, 'ui.settings.saveError'));
       }
     } catch {
       setSt('err');
-      setMsg('Błąd sieci.');
+      setMsg(tp(lang, 'ui.settings.netError'));
     }
     setTimeout(() => setSt('idle'), 3000);
   }
@@ -57,9 +60,10 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
   return (
     <div className="space-y-3 text-sm">
       <p className="text-muted">
-        Dodaj współpracowników po ich <strong className="text-white/80">Discord ID</strong> i nadaj
-        rolę. Właściciele (z konfiguracji serwera) mają zawsze rolę <em>admin</em> i nie trzeba ich
-        tu dodawać.
+        {tp(lang, 'ui.settings.usersIntroPre')}{' '}
+        <strong className="text-white/80">{tp(lang, 'ui.settings.usersIntroStrong')}</strong>{' '}
+        {tp(lang, 'ui.settings.usersIntroMid')} <em>admin</em>{' '}
+        {tp(lang, 'ui.settings.usersIntroPost')}
       </p>
 
       {staff.map((e, i) => (
@@ -72,13 +76,13 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
             onChange={(ev) =>
               update(i, { uid: ev.target.value.replace(/[^0-9]/g, '').slice(0, 25) })
             }
-            placeholder="Discord ID (np. 1512…)"
+            placeholder={tp(lang, 'ui.settings.usersUidPh')}
             className={`${inp} flex-1 font-mono`}
           />
           <input
             value={e.label}
             onChange={(ev) => update(i, { label: ev.target.value })}
-            placeholder="opis (np. Moderator)"
+            placeholder={tp(lang, 'ui.settings.usersLabelPh')}
             className={`${inp} flex-1`}
             maxLength={60}
           />
@@ -97,7 +101,7 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
             type="button"
             onClick={() => remove(i)}
             className="shrink-0 rounded-md border border-line px-2 py-1.5 text-muted transition hover:border-accent hover:text-accent"
-            title="Usuń"
+            title={tp(lang, 'ui.settings.del')}
           >
             <Trash2 size={14} />
           </button>
@@ -105,12 +109,11 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
       ))}
 
       <div className="rounded-md border border-line/60 bg-bg/30 p-3 text-xs text-muted">
-        <p className="mb-1 font-semibold text-white/80">Poziomy uprawnień</p>
+        <p className="mb-1 font-semibold text-white/80">{tp(lang, 'ui.settings.permLevels')}</p>
         <ul className="space-y-0.5">
           {(['admin', 'editor', 'viewer'] as PanelRole[]).map((r) => (
             <li key={r}>
-              <span className="font-mono text-accent">{r}</span> —{' '}
-              {ROLE_LABEL[r].split('(')[1]?.replace(')', '')}
+              <span className="font-mono text-accent">{r}</span> — {tp(lang, ROLE_DESC_KEY[r])}
             </li>
           ))}
         </ul>
@@ -122,7 +125,7 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
           onClick={add}
           className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated"
         >
-          <Plus size={15} /> Dodaj użytkownika
+          <Plus size={15} /> {tp(lang, 'ui.settings.addUser')}
         </button>
         <button
           type="button"
@@ -130,9 +133,11 @@ export default function PanelUsersForm({ initial }: { initial: StaffEntry[] }) {
           disabled={st === 'saving'}
           className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
-          {st === 'saving' ? 'Zapisywanie…' : 'Zapisz'}
+          {st === 'saving' ? tp(lang, 'ui.settings.saving') : tp(lang, 'ui.settings.save')}
         </button>
-        {st === 'ok' && <span className="text-sm text-green-400">✓ Zapisano</span>}
+        {st === 'ok' && (
+          <span className="text-sm text-green-400">✓ {tp(lang, 'ui.settings.saved')}</span>
+        )}
         {st === 'err' && <span className="text-sm text-accent">{msg}</span>}
       </div>
     </div>

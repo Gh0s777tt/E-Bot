@@ -1,4 +1,4 @@
-<!-- SYNC: v0.246.0 · #316 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.247.0 · #317 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.246.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.247.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.246.0** — 🌍 i18n UI panelu — strona `/moderation` (14 języków). Wcześniej: `/custom-commands`, `/engagement`, `/ai`, `/applications`, `/commands`, `/roles`, `/creator`, `/gaming`, `/integrations`, `/library`, `/eco`, `/economy`, `/donations`, `/profile`, i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K) oraz 14 epików „2.0" (Faza 8).
+Najnowsze: **v0.247.0** — 🌍 i18n UI panelu — strona `/settings` (14 języków). Wcześniej: `/moderation`, `/custom-commands`, `/engagement`, `/ai`, `/applications`, `/commands`, `/roles`, `/creator`, `/gaming`, `/integrations`, `/library`, `/eco`, `/economy`, `/donations`, i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K) oraz 14 epików „2.0" (Faza 8).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

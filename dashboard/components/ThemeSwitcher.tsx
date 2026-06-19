@@ -2,8 +2,10 @@
 
 import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import { THEME_PRESETS } from '../lib/themes';
 import ColorField, { hexToRgb } from './ColorField';
+import { useLang } from './LangContext';
 
 function applyChannels(rgb: string, hover: string, dark: string) {
   const r = document.documentElement;
@@ -31,6 +33,7 @@ function applyHex(hex: string): boolean {
 }
 
 export default function ThemeSwitcher() {
+  const { lang } = useLang();
   const [active, setActive] = useState('red');
   const [hex, setHex] = useState('#E50914');
 
@@ -79,7 +82,7 @@ export default function ThemeSwitcher() {
 
       <div className="flex flex-wrap items-end gap-3 rounded-xl border border-line bg-bg/40 p-3">
         <ColorField
-          label="Własny kolor akcentu (HEX/RGB)"
+          label={tp(lang, 'ui.settings.customColorLabel')}
           value={hex}
           onChange={(v) => {
             setHex(v);
@@ -91,7 +94,9 @@ export default function ThemeSwitcher() {
           }}
         />
         {active === 'custom' && (
-          <span className="pb-2 text-xs text-green-400">✓ własny aktywny</span>
+          <span className="pb-2 text-xs text-green-400">
+            ✓ {tp(lang, 'ui.settings.customActive')}
+          </span>
         )}
       </div>
     </div>
