@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-323-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.253.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-324-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.254.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.254.0] — 🔍 Audyt i18n 14 języków + naprawa RTL (arabski) — kierunek pisma na `<html>`
+
+- `[#324]` 🔍 **Audyt spójności i18n + wykryta i naprawiona luka RTL dla arabskiego.**
+  - 🔍 **Audyt słownika `panelI18n.ts`** (parser regionowy odporny na zawijanie/konkatenację wartości, 14 lokalizacji): parzystość **1394 klucze × 14** (identyczne zestawy, **0 brakujących**), **0 duplikatów**, **tokeny `{…}` w 100% spójne** między językami. 3 puste wartości (`ui.donations.helpPre`, `ui.setup.bpIntroMid`, `ui.integrations.urlHelpPre` w CJK) — **celowe** segmenty Pre/Mid przy innym szyku zdania (np. CJK zaczyna od `<code>`/komendy, bez poprzedzającego słowa typu „The"/„Komenda"). Słownik statycznie czysty.
+  - 🐛 **Brak RTL — naprawiony**: mimo wymogu „arabski = RTL" panel nigdzie nie ustawiał `dir`, więc arabski renderował się LTR (źle wyrównany). Dodane:
+    - `LangContext` (klient): `useEffect` ustawia `document.documentElement.dir` (`ar` → `rtl`, reszta `ltr`) + `lang` przy każdej zmianie języka — natychmiastowe przełączenie bez reloadu.
+    - `app/layout.tsx` (serwer): `RootLayout` → `async` + `getPanelLocale()` → `<html lang={lang} dir={…}>` — poprawny kierunek już w SSR (bez „mignięcia" LTR dla użytkownika z cookie `ar`).
+  - ⚠️ **Zakres RTL**: to fundament (kierunek tekstu + bazowe wyrównanie). Pełne lustrzane odbicie układu wymaga zamiany fizycznych klas Tailwind (`ml-`/`pl-`/`left-`/`text-left`) na logiczne (`ms-`/`ps-`/`start`/`text-start`) w ~100 komponentach — osobny, większy follow-up (dopisany do planu).
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; audyt parzystości CLEAN. Wstecznie zgodne.
 
 ## [0.253.0] — 🎨🏁 Pełne fonty + i18n obrazka OG profilu — KONIEC i18n CAŁEJ powierzchni web
 

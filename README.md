@@ -1,4 +1,4 @@
-<!-- SYNC: v0.253.0 · #323 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.254.0 · #324 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.253.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.254.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.253.0** — 🎨🏁 **Obraz OG profilu** (`opengraph-image.tsx`): dynamiczne fonty Google per-skrypt (fail-safe, subset TTF) + etykiety w 14 językach (5 kluczy `ui.og.*`) — dowolny username/skrypt renderuje się bez „tofu". **KONIEC i18n CAŁEJ powierzchni web** (panel 39/39 + edytory + powierzchnia publiczna + boilerplate + obraz OG). Wcześniej: boilerplate frameworka (`error`/`404`/`loading`/metadane, v0.252.0), powierzchnia publiczna (v0.251.0), Pulpit `/` + `relTime` (v0.250.0). Wcześniej: **powierzchnia publiczna / pre-auth** (login + `/p/leaderboard` + `/p/u/[id]`, v0.251.0) oraz **strona główna Pulpit `/`** + widgety + `relTime` (Intl) domykające **komplet UI panelu 39/39** (v0.250.0). Wcześniej: współdzielony `CardStyleEditor`/`GradientField` (v0.249.0), `/setup`, `/settings`, `/moderation`, `/custom-commands`, `/engagement`, `/ai`, i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K) oraz 14 epików „2.0" (Faza 8).
+Najnowsze: **v0.254.0** — 🔍 **Audyt i18n 14 języków** (parzystość **1394×14**, 0 duplikatów, tokeny `{…}` 100% spójne) + 🐛 **naprawa RTL dla arabskiego** (`dir="rtl"` na `<html>` — SSR z cookie + klient na zmianę języka; pełne lustrzane odbicie układu jako follow-up). Wcześniej domknięta **i18n CAŁEJ powierzchni web**: panel 39/39 + współdzielone edytory + powierzchnia publiczna (login/`/p/leaderboard`/`/p/u/[id]`) + boilerplate (`error`/`404`/`loading`/metadane) + obraz OG profilu (fonty per-skrypt). Fundamenty: i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K), 14 epików „2.0" (Faza 8).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

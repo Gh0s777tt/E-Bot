@@ -26,9 +26,14 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const lang = await getPanelLocale();
   return (
-    <html lang="pl" className={`${display.variable} ${body.variable}`}>
+    <html
+      lang={lang}
+      dir={lang === 'ar' ? 'rtl' : 'ltr'}
+      className={`${display.variable} ${body.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{

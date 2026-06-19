@@ -1,4 +1,4 @@
-<!-- SYNC: v0.253.0 · #323 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.254.0 · #324 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.253.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.254.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -74,7 +74,7 @@ flowchart LR
 
 ## 🏁 Ukończone — i18n UI panelu
 
-Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków (Pulpit `/` + powłoka + pomoc 37/37 + web GameVault + strony ustawień). **Komplet: 39/39 stron** — ostatnia, odkryta przy przeglądzie strona główna (Pulpit `/`) z widgetami pulpitu (health-check, szybkie akcje, wzrost serwera, alarm anti-raid, live-kafelki, checklista) + relTime zależny od języka (v0.250.0). Domknięta też opcjonalna fala — etykiety współdzielonego `CardStyleEditor` + `GradientField` (v0.249.0). Zlokalizowana również **powierzchnia publiczna / pre-auth** (osobno od 39/39): logowanie, publiczny ranking `/p/leaderboard`, publiczny profil `/p/u/[id]` (17 kluczy `ui.pub.*` × 14 jęz., v0.251.0) oraz **boilerplate frameworka** — `error`/`404`/`loading`/metadane (8 kluczy `ui.sys.*` × 14 jęz., v0.252.0). Naprawiony też **obraz OG profilu** — dynamiczne fonty Google per-skrypt (fail-safe) + etykiety (5 kluczy `ui.og.*` × 14 jęz., v0.253.0), więc dowolny username/skrypt renderuje się bez „tofu". **KONIEC i18n CAŁEJ powierzchni web** — nie zostaje żaden niezlokalizowany element UI. Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02530).
+Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków (Pulpit `/` + powłoka + pomoc 37/37 + web GameVault + strony ustawień). **Komplet: 39/39 stron** — ostatnia, odkryta przy przeglądzie strona główna (Pulpit `/`) z widgetami pulpitu (health-check, szybkie akcje, wzrost serwera, alarm anti-raid, live-kafelki, checklista) + relTime zależny od języka (v0.250.0). Domknięta też opcjonalna fala — etykiety współdzielonego `CardStyleEditor` + `GradientField` (v0.249.0). Zlokalizowana również **powierzchnia publiczna / pre-auth** (osobno od 39/39): logowanie, publiczny ranking `/p/leaderboard`, publiczny profil `/p/u/[id]` (17 kluczy `ui.pub.*` × 14 jęz., v0.251.0) oraz **boilerplate frameworka** — `error`/`404`/`loading`/metadane (8 kluczy `ui.sys.*` × 14 jęz., v0.252.0). Naprawiony też **obraz OG profilu** — dynamiczne fonty Google per-skrypt (fail-safe) + etykiety (5 kluczy `ui.og.*` × 14 jęz., v0.253.0), więc dowolny username/skrypt renderuje się bez „tofu". **KONIEC i18n CAŁEJ powierzchni web** — nie zostaje żaden niezlokalizowany element UI. **Audyt 14 jęz. (v0.254.0)**: parzystość 1394×14, 0 duplikatów, tokeny `{…}` spójne; naprawiony **RTL** dla arabskiego (`dir="rtl"` na `<html>` — SSR z cookie + klient na zmianę języka; pełne lustrzane odbicie układu jako follow-up). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02540).
 
 ## 🧭 Wzrost (plan / opcjonalne)
 
@@ -82,8 +82,9 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 - 📈 **Retencja + więcej wykresów w czasie** (`/stats`).
 - 🧱 **Produkcyjna infra** — pełny Sentry (DSN), Redis (instancja), Supabase Realtime push (szkielety gotowe).
 - 🔗 **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy.
+- ↔️ **Pełne lustrzane RTL** — fundament `dir="rtl"` gotowy (v0.254.0); pozostaje migracja fizycznych klas Tailwind na logiczne (`ms-`/`ps-`/`start`) w ~100 komponentach.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.253.0 (#323) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.254.0 (#324) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

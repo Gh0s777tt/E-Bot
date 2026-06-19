@@ -36,6 +36,13 @@ export function LangProvider({ children }: { children: ReactNode }) {
     if (detected !== DEFAULT_PANEL_LOCALE) setLangState(detected);
   }, []);
 
+  // Kierunek pisma na <html>: arabski = RTL, reszta LTR. Ustawiane klient-side, by zmiana języka
+  // bez reloadu od razu przełączała układ (SSR ustawia to samo z cookie w app/layout.tsx).
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  }, [lang]);
+
   function setLang(l: PanelLocale): void {
     setLangState(l);
     try {
