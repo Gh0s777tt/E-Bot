@@ -12,6 +12,8 @@ import { getServerHealth } from '../lib/health';
 import { getAntiraidState, getServerHistory } from '../lib/insights';
 import { getIntegrations } from '../lib/integrations';
 import { botInviteUrl } from '../lib/invite';
+import { tp } from '../lib/panelI18n';
+import { getPanelLocale } from '../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,8 +25,8 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function OverviewPage() {
-  const [stats, games, src, integrations, checklist, history, antiraid, health] = await Promise.all(
-    [
+  const [stats, games, src, integrations, checklist, history, antiraid, health, lang] =
+    await Promise.all([
       getStats(),
       getGames(),
       activeSource(),
@@ -33,8 +35,8 @@ export default async function OverviewPage() {
       getServerHistory(),
       getAntiraidState(),
       getServerHealth(),
-    ],
-  );
+      getPanelLocale(),
+    ]);
   const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
   const coverPct = stats.total ? Math.round((stats.withCover / stats.total) * 100) : 0;
@@ -70,10 +72,14 @@ export default async function OverviewPage() {
             </div>
             <div>
               <h1 className="font-display text-3xl tracking-wide">E-BOT</h1>
-              <p className="text-sm text-muted">Discord · gry · live · bezpieczeństwo</p>
+              <p className="text-sm text-muted">Discord · {tp(lang, 'ui.home.heroSubtitle')}</p>
               <span className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-green-500/40 bg-green-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-green-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                {src === 'supabase' ? 'Supabase' : src === 'sqlite' ? 'SQLite' : 'brak danych'}
+                {src === 'supabase'
+                  ? 'Supabase'
+                  : src === 'sqlite'
+                    ? 'SQLite'
+                    : tp(lang, 'ui.home.srcNone')}
               </span>
               <div className="mt-3">
                 <a
@@ -82,7 +88,7 @@ export default async function OverviewPage() {
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover"
                 >
-                  <UserPlus size={15} /> Zaproś bota na serwer
+                  <UserPlus size={15} /> {tp(lang, 'ui.home.inviteBtn')}
                 </a>
               </div>
             </div>
@@ -90,13 +96,13 @@ export default async function OverviewPage() {
 
           <div className="grid flex-1 grid-cols-2 gap-3 lg:grid-cols-4">
             <StatCard
-              label="Gry w bibliotece"
+              label={tp(lang, 'ui.home.statGames')}
               value={stats.total}
               icon={<Gamepad2 size={14} />}
               accent
             />
             <StatCard
-              label="Platformy"
+              label={tp(lang, 'ui.home.statPlatforms')}
               value={stats.platforms}
               hint={Object.keys(stats.byPlatform)
                 .map((p) => PLATFORM_LABEL[p] ?? p)
@@ -104,12 +110,12 @@ export default async function OverviewPage() {
               icon={<Layers size={14} />}
             />
             <StatCard
-              label="Łączny czas gry"
+              label={tp(lang, 'ui.home.statHours')}
               value={`${stats.totalHours} h`}
               icon={<Clock size={14} />}
             />
             <StatCard
-              label="Integracje"
+              label={tp(lang, 'ui.home.integrations')}
               value={`${okCount}/${integrations.length}`}
               icon={<Plug size={14} />}
             />
@@ -118,7 +124,7 @@ export default async function OverviewPage() {
 
         <div className="relative mt-5">
           <div className="flex justify-between text-[11px] uppercase tracking-wide text-muted">
-            <span>Pokrycie okładek</span>
+            <span>{tp(lang, 'ui.home.coverage')}</span>
             <span>
               {stats.withCover}/{stats.total}
             </span>
@@ -134,24 +140,24 @@ export default async function OverviewPage() {
 
       {/* ===== PULPIT 2.0: HEALTH-SCORE + SZYBKIE AKCJE ===== */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <HealthScoreCard health={health} />
+        <HealthScoreCard health={health} lang={lang} />
         <QuickActionsCard />
       </div>
 
       {/* ===== WZROST SERWERA + ALARM ANTI-RAID ===== */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <ServerGrowthCard history={history} />
-        <AntiraidAlarm state={antiraid} />
+        <ServerGrowthCard history={history} lang={lang} />
+        <AntiraidAlarm state={antiraid} lang={lang} />
       </div>
 
       {/* ===== PIERWSZE KROKI (checklist konfiguracji) ===== */}
-      <SetupChecklist items={checklist} />
+      <SetupChecklist items={checklist} lang={lang} />
 
       {/* ===== 2 KOLUMNY: PLATFORMY | INTEGRACJE ===== */}
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-            <Layers size={16} className="text-accent" /> Rozkład platform
+            <Layers size={16} className="text-accent" /> {tp(lang, 'ui.home.platformDist')}
           </h2>
           <div className="space-y-3">
             {Object.entries(stats.byPlatform).map(([p, n]) => (
@@ -167,14 +173,14 @@ export default async function OverviewPage() {
               </div>
             ))}
             {!Object.keys(stats.byPlatform).length && (
-              <p className="text-sm text-muted">Brak danych.</p>
+              <p className="text-sm text-muted">{tp(lang, 'ui.home.emptyPlatforms')}</p>
             )}
           </div>
         </section>
 
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-            <Plug size={16} className="text-accent" /> Integracje
+            <Plug size={16} className="text-accent" /> {tp(lang, 'ui.home.integrations')}
           </h2>
           <div className="grid grid-cols-2 gap-2">
             {integrations.map((i) => (
@@ -194,13 +200,13 @@ export default async function OverviewPage() {
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-            <Gamepad2 size={16} className="text-accent" /> Najczęściej grane
+            <Gamepad2 size={16} className="text-accent" /> {tp(lang, 'ui.home.mostPlayed')}
           </h2>
           <a
             href="/library"
             className="text-xs uppercase tracking-wide text-muted transition hover:text-white"
           >
-            Cała biblioteka ›
+            {tp(lang, 'ui.home.allLibrary')}
           </a>
         </div>
         {recent.length ? (
@@ -211,7 +217,9 @@ export default async function OverviewPage() {
           </div>
         ) : (
           <p className="text-muted">
-            Brak gier. Uruchom <code className="text-accent">node ingest/sync.mts</code>.
+            {tp(lang, 'ui.home.emptyGamesPre')}
+            <code className="text-accent">node ingest/sync.mts</code>
+            {tp(lang, 'ui.home.emptyGamesPost')}
           </p>
         )}
       </section>

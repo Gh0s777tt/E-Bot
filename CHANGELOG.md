@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-319-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.249.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-320-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.250.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.250.0] — 🌍🏁 i18n strony głównej panelu (Pulpit `/`) — odkryta 39. strona domyka komplet (39/39)
+
+- `[#320]` 🌍 **i18n strony głównej panelu (Pulpit / Overview, `/`) wraz z widgetami pulpitu — strona pominięta przy pierwotnej enumeracji „38 stron", teraz uzupełniona.**
+  - 🖥️ **Panel**: 53 klucze `ui.home.*` + 16 kluczy `ui.checklist.*` × **14 języków** w `panelI18n.ts` (parzystość 14×53=742, 14×16=224). `app/page.tsx` (serwer, `getPanelLocale()` w `Promise.all`) + widgety na `tp()`: `HealthScoreCard` · `ServerGrowthCard` · `AntiraidAlarm` (serwer, prop `lang: PanelLocale`) oraz `QuickActionsCard` · `LiveServerTiles` (klient, `useLang()`). Zlokalizowano: hero (podtytuł, „Zaproś bota na serwer", staty, pokrycie okładek), health-check, szybkie akcje (raidmode + skróty), wzrost serwera, alarm anti-raid (mapy `LABEL_KEY`), live-kafelki, „Pierwsze kroki", rozkład platform, „Najczęściej grane".
+  - 🔧 **`getSetupChecklist` przebudowany** z `label`/`hint` na `labelKey`/`hintKey` (`ui.checklist.*`) — tłumaczone przez `tp()` w `SetupChecklist` **oraz** `/diagnostics` (drugi konsument), więc checklista modułów jest teraz w pełni zlokalizowana w obu miejscach.
+  - 🕒 **`relTime` zależny od języka** — przepisany na `Intl.RelativeTimeFormat` (natywna pluralizacja dla 14 języków, zero dodatkowych kluczy); `lang` przekazywany w `AntiraidAlarm` i `ProfileCard`.
+  - 🏁 **Komplet i18n UI panelu: 39/39 stron** — Pulpit `/` był 39. stroną, pominiętą w pierwotnej liście 38 stron konfiguracyjnych. Nietłumaczone: marki (Discord/Supabase/SQLite), nazwy funkcji/komend (`Anti-raid`, `Raidmode`, `lockdown`, `/panic`, `/raidmode`, `/healthcheck`, `/backup restore`, `node ingest/sync.mts`), tokeny (`autorole`, `RSS`, `XP`, `Anti-nuke`), format `pl-PL`, emoji.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL).
 
 ## [0.249.0] — 🎨 i18n współdzielonego `CardStyleEditor` + `GradientField` (domyka opcjonalną falę po 38/38)
 

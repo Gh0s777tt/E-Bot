@@ -1,4 +1,4 @@
-<!-- SYNC: v0.249.0 · #319 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.250.0 · #320 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -17,7 +17,7 @@
 ![Architekt serwera](https://img.shields.io/badge/Architekt_serwera-✅-E50914?labelColor=0a0a0a)
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
-![i18n panelu](https://img.shields.io/badge/i18n_panelu_38%2F38-✅-E50914?labelColor=0a0a0a)
+![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
 ![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?labelColor=0a0a0a)
 
 </div>
@@ -29,12 +29,13 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.249.0)
+## 🔭 Bieżący tor (v0.250.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
-- [x] **Zrobione 38/38 stron (komplet)**: `/welcome` `/modules` `/leaderboard` `/logging` `/audit` `/modmail` `/birthdays` `/suggestions` `/appearance` `/wishlist` `/notifications` `/live` `/tickets` `/security` `/levels` `/counters` `/responder` `/automations` `/scheduled` `/diagnostics` `/stats` `/profile` `/donations` `/economy` `/eco` `/library` `/integrations` `/gaming` `/creator` `/roles` `/commands` `/applications` `/ai` `/engagement` `/custom-commands` `/moderation` `/settings` `/setup`
+- [x] **Zrobione 39/39 stron (komplet)**: `/` (Pulpit) `/welcome` `/modules` `/leaderboard` `/logging` `/audit` `/modmail` `/birthdays` `/suggestions` `/appearance` `/wishlist` `/notifications` `/live` `/tickets` `/security` `/levels` `/counters` `/responder` `/automations` `/scheduled` `/diagnostics` `/stats` `/profile` `/donations` `/economy` `/eco` `/library` `/integrations` `/gaming` `/creator` `/roles` `/commands` `/applications` `/ai` `/engagement` `/custom-commands` `/moderation` `/settings` `/setup`
 - [x] Osobna, opcjonalna fala: wewnętrzne etykiety współdzielonego `CardStyleEditor` + `GradientField` (15 kluczy × 14 jęz.) ✅ **v0.249.0**
+- [x] Strona główna (Pulpit `/`) + widgety + checklista modułów + `relTime` (Intl) — 53 klucze `ui.home.*` + 16 `ui.checklist.*` × 14 jęz. ✅ **v0.250.0**
 
 ### 🧭 Otwarte / strategiczne (poza torem i18n)
 - [ ] **Marketplace pluginów / efekt sieciowy** — *config* multi‑serwer gotowy (Etap K, C‑1…C‑27); brakuje produktyzacji marketplace i modelu multi‑guild jako usługi
@@ -176,9 +177,9 @@
 ### 🎁 Funkcje końcowe + i18n treści (`0.195`–`0.222`)
 - [x] Wyszukiwarka komend w `/help` · automod anty‑caps/anty‑spoiler · krzywa XP (presety) · 8 motywów kart · giveaway (kasa+XP) · onboarding DM właściciela · transkrypty ticketów na web
 - [x] i18n treści: samouczek, asystent AI, **„Jak to działa?" 37/37 stron × 14 jęz.**, web GameVault (+RTL +przełącznik)
-- [x] **i18n UI panelu** — 38/38 stron ✅ *(patrz „Bieżący tor" u góry)*
+- [x] **i18n UI panelu** — 39/39 stron ✅ *(patrz „Bieżący tor" u góry)*
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.249.0 (#319) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.250.0 (#320) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

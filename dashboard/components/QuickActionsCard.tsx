@@ -4,10 +4,13 @@
 // + skróty do modułów bezpieczeństwa.
 import { ShieldAlert, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 export default function QuickActionsCard() {
   const [on, setOn] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
+  const { lang } = useLang();
 
   useEffect(() => {
     fetch('/api/raidmode')
@@ -36,7 +39,7 @@ export default function QuickActionsCard() {
   return (
     <section className="panel-glow rounded-2xl border border-line bg-card p-5">
       <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-        <Zap size={16} className="text-accent" /> Szybkie akcje
+        <Zap size={16} className="text-accent" /> {tp(lang, 'ui.home.qaHeading')}
       </h2>
 
       <div className="flex items-center justify-between rounded-xl border border-line bg-bg/40 p-4">
@@ -45,13 +48,14 @@ export default function QuickActionsCard() {
             <ShieldAlert size={15} className={on ? 'text-accent' : 'text-muted'} /> Raidmode
             {on && (
               <span className="rounded bg-accent/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
-                aktywny
+                {tp(lang, 'ui.home.qaActive')}
               </span>
             )}
           </p>
           <p className="mt-1 text-xs text-muted">
-            Awaryjna blokada: bot wyrzuca każde nowe wejście. Bot przełącza w ≤30 s; natychmiast:{' '}
-            <code className="text-accent">/raidmode</code>.
+            {tp(lang, 'ui.home.qaRaidPre')}
+            <code className="text-accent">/raidmode</code>
+            {tp(lang, 'ui.home.qaRaidPost')}
           </p>
         </div>
         <button
@@ -64,7 +68,7 @@ export default function QuickActionsCard() {
               : 'bg-accent text-white hover:bg-accent-hover'
           }`}
         >
-          {on === null ? '…' : on ? 'Wyłącz' : 'Włącz'}
+          {on === null ? '…' : on ? tp(lang, 'ui.home.qaOff') : tp(lang, 'ui.home.qaOn')}
         </button>
       </div>
 
@@ -73,19 +77,21 @@ export default function QuickActionsCard() {
           href="/security"
           className="rounded-md border border-line bg-bg/40 px-3 py-2 text-center transition hover:border-accent"
         >
-          🛡️ Bezpieczeństwo
+          🛡️ {tp(lang, 'ui.home.security')}
         </a>
         <a
           href="/moderation"
           className="rounded-md border border-line bg-bg/40 px-3 py-2 text-center transition hover:border-accent"
         >
-          ⚖️ Moderacja
+          ⚖️ {tp(lang, 'ui.home.moderation')}
         </a>
       </div>
       <p className="mt-3 text-xs text-muted">
-        Pełna twierdza jednym ruchem (lockdown + raidmode):{' '}
-        <code className="text-accent">/panic</code> · odbudowa po ataku:{' '}
-        <code className="text-accent">/backup restore</code>.
+        {tp(lang, 'ui.home.qaFooterPre')}
+        <code className="text-accent">/panic</code>
+        {tp(lang, 'ui.home.qaFooterMid')}
+        <code className="text-accent">/backup restore</code>
+        {tp(lang, 'ui.home.qaFooterPost')}
       </p>
     </section>
   );

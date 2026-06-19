@@ -2,7 +2,9 @@
 
 import { Hash, Radio, Rocket, Users, Volume2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import CountUp from './CountUp';
+import { useLang } from './LangContext';
 
 type Status = {
   online: boolean | null;
@@ -14,11 +16,11 @@ type Status = {
 };
 
 const TILES = [
-  { key: 'guilds', label: 'Serwery', icon: Radio },
-  { key: 'members', label: 'Członkowie', icon: Users },
-  { key: 'voice', label: 'Na voice (teraz)', icon: Volume2 },
-  { key: 'boosts', label: 'Boosty', icon: Rocket },
-  { key: 'channels', label: 'Kanały', icon: Hash },
+  { key: 'guilds', labelKey: 'ui.home.tlServers', icon: Radio },
+  { key: 'members', labelKey: 'ui.home.tlMembers', icon: Users },
+  { key: 'voice', labelKey: 'ui.home.tlVoice', icon: Volume2 },
+  { key: 'boosts', labelKey: 'ui.home.boosts', icon: Rocket },
+  { key: 'channels', labelKey: 'ui.home.channels', icon: Hash },
 ] as const;
 
 // Live-kafelki serwera — czyta /api/bot-status (heartbeat bota), odświeża co 12 s,
@@ -26,6 +28,7 @@ const TILES = [
 export default function LiveServerTiles() {
   const [s, setS] = useState<Status>({ online: null });
   const [pulse, setPulse] = useState(false);
+  const { lang } = useLang();
 
   useEffect(() => {
     let alive = true;
@@ -62,17 +65,19 @@ export default function LiveServerTiles() {
         <span
           className={`h-2.5 w-2.5 rounded-full ${live ? 'bg-green-500 pulse-dot' : s.online === false ? 'bg-accent' : 'bg-muted'}`}
         />
-        <h2 className="text-base font-semibold uppercase tracking-wide">Serwer na żywo</h2>
+        <h2 className="text-base font-semibold uppercase tracking-wide">
+          {tp(lang, 'ui.home.liveHeading')}
+        </h2>
         <span className="text-xs text-muted">
           {live
-            ? 'bot online · odświeża co 12 s'
+            ? tp(lang, 'ui.home.liveOnline')
             : s.online === false
-              ? 'bot offline'
-              : 'łączenie…'}
+              ? tp(lang, 'ui.home.liveOffline')
+              : tp(lang, 'ui.home.liveConnecting')}
         </span>
         {pulse && live && (
           <span className="ml-auto text-[10px] uppercase tracking-wide text-green-500/80">
-            ● aktualizacja
+            ● {tp(lang, 'ui.home.liveUpdate')}
           </span>
         )}
       </div>
@@ -86,7 +91,7 @@ export default function LiveServerTiles() {
               className="group rounded-xl border border-line bg-bg/40 p-3.5 transition-all hover:-translate-y-0.5 hover:border-accent/40"
             >
               <div className="flex items-center justify-between text-[11px] uppercase tracking-wide text-muted">
-                <span>{t.label}</span>
+                <span>{tp(lang, t.labelKey)}</span>
                 <Icon size={14} className="text-accent/70 transition group-hover:text-accent" />
               </div>
               <div className="mt-1.5 font-display text-2xl font-bold">

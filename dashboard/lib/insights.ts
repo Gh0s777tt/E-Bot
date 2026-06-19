@@ -1,6 +1,7 @@
 // Insights pulpitu: wzrost serwera + alarm anti-raid. Czyta klucze pisane przez bota
 // ('server_history' globalnie, 'antiraid_state' PER-SERWER) z Supabase, server-side.
 import { getGuildRawSetting, getRawSetting } from './data';
+import type { PanelLocale } from './panelI18n';
 
 export type GrowthPoint = { day: string; members: number; boosts: number; channels: number };
 
@@ -34,14 +35,16 @@ export async function getAntiraidState(): Promise<AntiraidState> {
   }
 }
 
-// Względny czas „X temu" (PL), z timestampu ms. Liczone server-side na force-dynamic stronach.
-export function relTime(ts: number, now: number): string {
+// Względny czas „X temu" zależny od języka panelu. Intl.RelativeTimeFormat daje natywną
+// pluralizację dla wszystkich 14 języków (kody PanelLocale = poprawne tagi BCP47). Server-side.
+export function relTime(ts: number, now: number, lang: PanelLocale = 'pl'): string {
+  const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
   const s = Math.max(0, Math.round((now - ts) / 1000));
-  if (s < 60) return 'przed chwilą';
+  if (s < 60) return rtf.format(-s, 'second');
   const m = Math.round(s / 60);
-  if (m < 60) return `${m} min temu`;
+  if (m < 60) return rtf.format(-m, 'minute');
   const h = Math.round(m / 60);
-  if (h < 24) return `${h} h temu`;
+  if (h < 24) return rtf.format(-h, 'hour');
   const d = Math.round(h / 24);
-  return `${d} dni temu`;
+  return rtf.format(-d, 'day');
 }

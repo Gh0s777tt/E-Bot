@@ -167,8 +167,10 @@ export default async function DiagnosticsPage() {
             >
               <Dot ok={c.done} />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-sm font-medium group-hover:text-white">{c.label}</div>
-                <div className="truncate text-xs text-muted">{c.hint}</div>
+                <div className="truncate text-sm font-medium group-hover:text-white">
+                  {tp(lang, c.labelKey)}
+                </div>
+                <div className="truncate text-xs text-muted">{tp(lang, c.hintKey)}</div>
               </div>
               {!c.done && (
                 <span className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-accent">

@@ -1,4 +1,4 @@
-<!-- SYNC: v0.249.0 · #319 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.250.0 · #320 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.249.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.250.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -40,7 +40,7 @@ gantt
   section i18n treści + UI (bieżące)
   Samouczek · asystent · „Jak działa" 37/37 :done, i1, 2026-06-11, 1d
   Web GameVault (14 jęz. + RTL)        :done, i2, 2026-06-11, 1d
-  i18n UI panelu (38/38 stron)         :done, i3, 2026-06-12, 8d
+  i18n UI panelu (39/39 stron)         :done, i3, 2026-06-12, 8d
   section Otwarte
   Marketplace / multi-guild jako usługa :        mk, 2026-06-25, 10d
 ```
@@ -55,7 +55,7 @@ gantt
 | **8** | Fundament customizacji: Message Studio + 14 epików „2.0" | ✅ done |
 | **A–J** | Architekt serwera, fun/safety/gaming, customization 2.0, **i18n bota (14 jęz.)** | ✅ done |
 | **K** | Przyjazność 2.0 + **config per‑serwer** (C‑1…C‑27 — fundament multi‑guild) | ✅ done |
-| **i18n** | Treść panelu/web w 14 językach: pomoc 37/37 ✓, web ✓, **UI panelu 38/38 ✓** | ✅ done |
+| **i18n** | Treść panelu/web w 14 językach: pomoc 37/37 ✓, web ✓, **UI panelu 39/39 ✓** | ✅ done |
 | **Wzrost** | Marketplace pluginów / multi‑guild jako usługa, retencja, infra prod | 🧭 plan |
 
 ## ✅ Zrealizowane — stan na v0.222
@@ -74,7 +74,7 @@ flowchart LR
 
 ## 🏁 Ukończone — i18n UI panelu
 
-Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków (powłoka + pomoc 37/37 + web GameVault + strony ustawień). **Komplet: 38/38 stron.** Domknięta też opcjonalna fala — etykiety współdzielonego `CardStyleEditor` + `GradientField` (15 kluczy × 14 jęz., v0.249.0). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02490).
+Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków (Pulpit `/` + powłoka + pomoc 37/37 + web GameVault + strony ustawień). **Komplet: 39/39 stron** — ostatnia, odkryta przy przeglądzie strona główna (Pulpit `/`) z widgetami pulpitu (health-check, szybkie akcje, wzrost serwera, alarm anti-raid, live-kafelki, checklista) + relTime zależny od języka (v0.250.0). Domknięta też opcjonalna fala — etykiety współdzielonego `CardStyleEditor` + `GradientField` (v0.249.0). Szczegóły: [`PHASES.md`](PHASES.md#-bieżący-tor-v02500).
 
 ## 🧭 Wzrost (plan / opcjonalne)
 
@@ -86,4 +86,4 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.249.0 (#319) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.250.0 (#320) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

@@ -1,17 +1,25 @@
 // Pulpit 2.0 — kafel health-score serwera (dane z lib/health.ts, lustro /healthcheck bota).
 import { HeartPulse } from 'lucide-react';
 import type { ServerHealth } from '../lib/health';
+import { type PanelLocale, tp } from '../lib/panelI18n';
 
-export default function HealthScoreCard({ health }: { health: ServerHealth | null }) {
+export default function HealthScoreCard({
+  health,
+  lang,
+}: {
+  health: ServerHealth | null;
+  lang: PanelLocale;
+}) {
   if (!health) {
     return (
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-2 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <HeartPulse size={16} className="text-accent" /> Health-check serwera
+          <HeartPulse size={16} className="text-accent" /> {tp(lang, 'ui.home.hcHeading')}
         </h2>
         <p className="text-sm text-muted">
-          Brak danych — sprawdź token bota. Możesz też użyć{' '}
-          <code className="text-accent">/healthcheck</code> na Discordzie.
+          {tp(lang, 'ui.home.hcNoDataPre')}
+          <code className="text-accent">/healthcheck</code>
+          {tp(lang, 'ui.home.hcNoDataPost')}
         </p>
       </section>
     );
@@ -24,7 +32,7 @@ export default function HealthScoreCard({ health }: { health: ServerHealth | nul
   return (
     <section className="panel-glow rounded-2xl border border-line bg-card p-5">
       <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-        <HeartPulse size={16} className="text-accent" /> Health-check serwera
+        <HeartPulse size={16} className="text-accent" /> {tp(lang, 'ui.home.hcHeading')}
       </h2>
       <div className="mb-3 flex items-end gap-3">
         <span className={`font-display text-4xl ${color}`}>{health.score}</span>
@@ -44,8 +52,9 @@ export default function HealthScoreCard({ health }: { health: ServerHealth | nul
         ))}
       </ul>
       <p className="mt-3 text-xs text-muted">
-        Punkty ⚠️ poprawisz w ustawieniach serwera Discord. Pełny audyt:{' '}
-        <code className="text-accent">/healthcheck</code>.
+        {tp(lang, 'ui.home.hcFooterPre')}
+        <code className="text-accent">/healthcheck</code>
+        {tp(lang, 'ui.home.hcFooterPost')}
       </p>
     </section>
   );

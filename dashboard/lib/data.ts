@@ -378,7 +378,8 @@ export async function restoreSettings(input: Record<string, unknown>): Promise<n
 }
 
 // ───────────── Checklist startowy („Pierwsze kroki" na pulpicie) — jeden odczyt settings ─────────────
-export type ChecklistItem = { label: string; done: boolean; href: string; hint: string };
+// labelKey/hintKey → klucze i18n (ui.checklist.*) tłumaczone w komponencie przez tp(lang, …).
+export type ChecklistItem = { labelKey: string; hintKey: string; done: boolean; href: string };
 export async function getSetupChecklist(): Promise<ChecklistItem[]> {
   const all = await getAllSettings();
   const json = (k: string): Record<string, unknown> | unknown[] | null => {
@@ -404,52 +405,52 @@ export async function getSetupChecklist(): Promise<ChecklistItem[]> {
 
   return [
     {
-      label: 'Powiadomienia o streamach',
+      labelKey: 'ui.checklist.lblNotify',
+      hintKey: 'ui.checklist.hintNotify',
       done: !!all.notify_channel_id,
       href: '/notifications',
-      hint: 'Kanał alertów live',
     },
     {
-      label: 'Powitania nowych osób',
+      labelKey: 'ui.checklist.lblWelcome',
+      hintKey: 'ui.checklist.hintWelcome',
       done: !!(welcome.enabled && welcome.channelId),
       href: '/welcome',
-      hint: 'Wiadomość + autorole',
     },
     {
-      label: 'Automoderacja',
+      labelKey: 'ui.checklist.lblAutomod',
+      hintKey: 'ui.checklist.hintAutomod',
       done: !!automod.enabled,
       href: '/moderation',
-      hint: 'Filtry treści i spamu',
     },
     {
-      label: 'Ochrona serwera',
+      labelKey: 'ui.checklist.lblProtect',
+      hintKey: 'ui.checklist.hintProtect',
       done: !!(antinuke.enabled || verification.enabled),
       href: '/security',
-      hint: 'Anti-nuke / weryfikacja',
     },
     {
-      label: 'System ticketów',
+      labelKey: 'ui.checklist.lblTickets',
+      hintKey: 'ui.checklist.hintTickets',
       done: !!tickets.enabled,
       href: '/tickets',
-      hint: 'Wsparcie użytkowników',
     },
     {
-      label: 'Poziomy / XP',
+      labelKey: 'ui.checklist.lblLevels',
+      hintKey: 'ui.checklist.hintLevels',
       done: !!leveling.enabled,
       href: '/levels',
-      hint: 'Aktywność i role',
     },
     {
-      label: 'Powiadomienia social',
+      labelKey: 'ui.checklist.lblSocial',
+      hintKey: 'ui.checklist.hintSocial',
       done: !!social.enabled,
       href: '/creator',
-      hint: 'Nowe posty (RSS)',
     },
     {
-      label: 'Zaplanowane posty',
+      labelKey: 'ui.checklist.lblScheduled',
+      hintKey: 'ui.checklist.hintScheduled',
       done: scheduledArr.some((p) => p?.enabled),
       href: '/scheduled',
-      hint: 'Automatyczne ogłoszenia',
     },
   ];
 }

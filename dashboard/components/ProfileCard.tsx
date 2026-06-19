@@ -180,7 +180,7 @@ export default function ProfileCard({
                 <span className="min-w-0 flex-1 truncate">
                   {TX_REASONS.has(h.reason) ? tp(lang, `ui.tx.${h.reason}`) : h.reason}
                 </span>
-                <span className="shrink-0 text-[11px] text-muted">{relTime(h.ts, now)}</span>
+                <span className="shrink-0 text-[11px] text-muted">{relTime(h.ts, now, lang)}</span>
                 <span
                   className={`w-24 shrink-0 text-right font-semibold tabular-nums ${h.delta >= 0 ? 'text-green-400' : 'text-accent'}`}
                 >
