@@ -1,4 +1,4 @@
-<!-- SYNC: v0.247.0 · #317 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.248.0 · #318 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -17,7 +17,7 @@
 ![Architekt serwera](https://img.shields.io/badge/Architekt_serwera-✅-E50914?labelColor=0a0a0a)
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
-![i18n panelu](https://img.shields.io/badge/i18n_panelu-🔄_37%2F~40-FFB020?labelColor=0a0a0a)
+![i18n panelu](https://img.shields.io/badge/i18n_panelu_38%2F38-✅-E50914?labelColor=0a0a0a)
 ![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?labelColor=0a0a0a)
 
 </div>
@@ -29,13 +29,12 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.247.0)
+## 🔭 Bieżący tor (v0.248.0)
 
-**🌍 i18n UI panelu** — tłumaczenie etykiet i formularzy stron ustawień na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37) i strona web GameVault są już wielojęzyczne — teraz idą strony ustawień, falami (`page.tsx` server-side + komponenty‑formularze).
+**🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
-- [x] **Zrobione 37/~40 stron**: `/welcome` `/modules` `/leaderboard` `/logging` `/audit` `/modmail` `/birthdays` `/suggestions` `/appearance` `/wishlist` `/notifications` `/live` `/tickets` `/security` `/levels` `/counters` `/responder` `/automations` `/scheduled` `/diagnostics` `/stats` `/profile` `/donations` `/economy` `/eco` `/library` `/integrations` `/gaming` `/creator` `/roles` `/commands` `/applications` `/ai` `/engagement` `/custom-commands` `/moderation` `/settings`
-- [ ] **Pozostało ~1 strona**: `/setup`
-- [ ] Osobna, późniejsza fala: wewnętrzne etykiety współdzielonego `CardStyleEditor`
+- [x] **Zrobione 38/38 stron (komplet)**: `/welcome` `/modules` `/leaderboard` `/logging` `/audit` `/modmail` `/birthdays` `/suggestions` `/appearance` `/wishlist` `/notifications` `/live` `/tickets` `/security` `/levels` `/counters` `/responder` `/automations` `/scheduled` `/diagnostics` `/stats` `/profile` `/donations` `/economy` `/eco` `/library` `/integrations` `/gaming` `/creator` `/roles` `/commands` `/applications` `/ai` `/engagement` `/custom-commands` `/moderation` `/settings` `/setup`
+- [ ] Osobna, opcjonalna fala: wewnętrzne etykiety współdzielonego `CardStyleEditor`
 
 ### 🧭 Otwarte / strategiczne (poza torem i18n)
 - [ ] **Marketplace pluginów / efekt sieciowy** — *config* multi‑serwer gotowy (Etap K, C‑1…C‑27); brakuje produktyzacji marketplace i modelu multi‑guild jako usługi
@@ -177,9 +176,9 @@
 ### 🎁 Funkcje końcowe + i18n treści (`0.195`–`0.222`)
 - [x] Wyszukiwarka komend w `/help` · automod anty‑caps/anty‑spoiler · krzywa XP (presety) · 8 motywów kart · giveaway (kasa+XP) · onboarding DM właściciela · transkrypty ticketów na web
 - [x] i18n treści: samouczek, asystent AI, **„Jak to działa?" 37/37 stron × 14 jęz.**, web GameVault (+RTL +przełącznik)
-- [🔄] **i18n UI panelu** — 37/~40 stron *(patrz „Bieżący tor" u góry)*
+- [x] **i18n UI panelu** — 38/38 stron ✅ *(patrz „Bieżący tor" u góry)*
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.247.0 (#317) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.248.0 (#318) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

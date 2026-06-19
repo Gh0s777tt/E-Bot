@@ -2,16 +2,19 @@
 
 import { Check, Hammer, Loader2, Sparkles, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import { buildPlan, PROV_BLOCKS, type ProvBlock } from '../lib/setup';
+import { useLang } from './LangContext';
 
 type LogItem = { label: string; ok: boolean; detail?: string };
-const PRESET_LABEL: Record<string, string> = {
-  streamer: 'Serwer streamera',
-  gaming: 'Serwer gamingowy',
-  community: 'Społeczność',
+const PRESET_KEY: Record<string, string> = {
+  streamer: 'ui.setup.presetStreamer',
+  gaming: 'ui.setup.presetGaming',
+  community: 'ui.setup.presetCommunity',
 };
 
 export default function ServerArchitect() {
+  const { lang } = useLang();
   const [sel, setSel] = useState<Set<ProvBlock>>(new Set());
   const [st, setSt] = useState<'idle' | 'working' | 'done' | 'err'>('idle');
   const [log, setLog] = useState<LogItem[]>([]);
@@ -90,20 +93,20 @@ export default function ServerArchitect() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted">
-        Zaznacz, co utworzyć — bot doda kanały, kategorie i role na serwerze (pomija to, co już
-        istnieje) i <strong>od razu wpina je w moduły</strong> (powitania → kanał powitań, logi →
-        logi serwera, liczniki → moduł liczników). Wymaga uprawnień bota{' '}
-        <em>Zarządzanie kanałami</em> i <em>Zarządzanie rolami</em>.
+        {tp(lang, 'ui.setup.saIntroPre')} <strong>{tp(lang, 'ui.setup.saIntroStrong')}</strong>{' '}
+        {tp(lang, 'ui.setup.saIntroMid')} <em>{tp(lang, 'ui.setup.saIntroPerm1')}</em>{' '}
+        {tp(lang, 'ui.setup.saIntroAnd')} <em>{tp(lang, 'ui.setup.saIntroPerm2')}</em>
+        {tp(lang, 'ui.setup.saIntroEnd')}
       </p>
 
       <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">
         <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white/90">
-          <Sparkles size={16} className="text-accent" /> AI-kreator — opisz serwer, dobiorę bloki
+          <Sparkles size={16} className="text-accent" /> {tp(lang, 'ui.setup.aiTitle')}
         </div>
         <textarea
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
-          placeholder="np. serwer dla streamera Fortnite z aktywną społecznością i sklepem za punkty"
+          placeholder={tp(lang, 'ui.setup.aiPlaceholder')}
           rows={2}
           className="w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent"
         />
@@ -119,17 +122,19 @@ export default function ServerArchitect() {
             ) : (
               <Sparkles size={15} />
             )}
-            {aiSt === 'thinking' ? 'Myślę…' : 'Zaproponuj (AI)'}
+            {aiSt === 'thinking' ? tp(lang, 'ui.setup.aiThinking') : tp(lang, 'ui.setup.aiSuggest')}
           </button>
           {aiPreset && (
             <span className="text-sm text-muted">
-              Sugerowany preset:{' '}
-              <strong className="text-white">{PRESET_LABEL[aiPreset] ?? aiPreset}</strong> — bloki
-              zaznaczyłem niżej.
+              {tp(lang, 'ui.setup.aiSuggestedPre')}{' '}
+              <strong className="text-white">
+                {PRESET_KEY[aiPreset] ? tp(lang, PRESET_KEY[aiPreset]) : aiPreset}
+              </strong>{' '}
+              {tp(lang, 'ui.setup.aiSuggestedPost')}
             </span>
           )}
           {aiSt === 'err' && (
-            <span className="text-sm text-accent">AI niedostępne — sprawdź klucz w env.</span>
+            <span className="text-sm text-accent">{tp(lang, 'ui.setup.aiUnavailable')}</span>
           )}
         </div>
       </div>
@@ -161,11 +166,11 @@ export default function ServerArchitect() {
       {sel.size > 0 && (
         <div className="rounded-xl border border-line bg-bg/40 p-4">
           <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
-            Podgląd — co powstanie
+            {tp(lang, 'ui.setup.saPreviewLabel')}
           </div>
           {preview.roles.length > 0 && (
             <div className="mb-2 flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-muted">Role:</span>
+              <span className="text-xs text-muted">{tp(lang, 'ui.setup.saRolesLabel')}</span>
               {preview.roles.map((r) => (
                 <span key={r.name} className="rounded bg-elevated px-2 py-0.5 text-xs">
                   @{r.name}
@@ -205,19 +210,23 @@ export default function ServerArchitect() {
           className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
           {working ? <Loader2 size={16} className="animate-spin" /> : <Hammer size={16} />}
-          {working ? 'Tworzę na serwerze…' : 'Utwórz strukturę'}
+          {working ? tp(lang, 'ui.setup.creating') : tp(lang, 'ui.setup.createStructure')}
         </button>
-        {st === 'done' && <span className="text-sm text-green-400">✓ Gotowe</span>}
+        {st === 'done' && (
+          <span className="text-sm text-green-400">✓ {tp(lang, 'ui.setup.saDone')}</span>
+        )}
         {st === 'err' && (
-          <span className="text-sm text-accent">Błąd / timeout — czy bot jest online?</span>
+          <span className="text-sm text-accent">{tp(lang, 'ui.setup.saErrTimeout')}</span>
         )}
       </div>
 
       {(working || log.length > 0) && (
         <div className="rounded-xl border border-line bg-bg/40 p-3">
-          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">Log</div>
+          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
+            {tp(lang, 'ui.setup.logLabel')}
+          </div>
           {working && !log.length && (
-            <p className="text-sm text-muted">Czekam na bota (wykonuje zlecenie)…</p>
+            <p className="text-sm text-muted">{tp(lang, 'ui.setup.waitingBot')}</p>
           )}
           <ul className="space-y-1 text-sm">
             {log.map((l) => (

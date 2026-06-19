@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-317-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.247.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-318-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.248.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.248.0] — 🌍🏁 i18n UI panelu UKOŃCZONE — strona /setup (kreator startowy · Architekt · Blueprinty)
+
+- `[#318]` 🌍 **i18n UI panelu — ostatnia fala: `/setup` (kreator startowy z presetami, Architekt struktury serwera + AI-kreator, Blueprinty z kodem recepty).**
+  - 🖥️ **Panel**: 58 nowych kluczy `ui.setup.*` × **14 języków** w `panelI18n.ts` (parzystość 14×58=812). `app/setup/page.tsx` + `ServerArchitect.tsx` + `Blueprints.tsx` (klient) na `tp()`: ekran „Gotowe!" z linkiem do Diagnostyki, kreator presetów (intro + przyciski), Architekt (intro z segmentami `Zarządzanie kanałami`/`Zarządzanie rolami`, AI-kreator z mapą presetów, podgląd struktury, log), Blueprinty (intro `<strong>`, przyciski, eksport/import kodu recepty, log). Mapy `PRESET_KEY` przebudowane na klucze. Nietłumaczone: dane z `lib/setup` (`PRESETS`/`PROV_BLOCKS`/`BLUEPRINTS` — nazwy/opisy/emoji modułów), tokeny (`env`), nazwy modułów.
+  - 🏁 **Kamień milowy:** i18n UI panelu **ukończone — 38/38 stron** w 14 językach (powłoka + pomoc 37/37 + web GameVault + wszystkie strony ustawień). Pozostaje tylko osobna, opcjonalna fala wewnętrznych etykiet współdzielonego `CardStyleEditor`.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL).
 
 ## [0.247.0] — 🌍 i18n UI panelu — strona /settings (bot · status · język · motyw · backup · dostęp)
 

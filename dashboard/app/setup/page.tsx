@@ -4,10 +4,13 @@ import { ArrowRight, Check, Hammer, LayoutTemplate, Sparkles, Wand2 } from 'luci
 import Link from 'next/link';
 import { useState } from 'react';
 import Blueprints from '../../components/Blueprints';
+import { useLang } from '../../components/LangContext';
 import ServerArchitect from '../../components/ServerArchitect';
+import { tp } from '../../lib/panelI18n';
 import { PRESETS, type PresetId } from '../../lib/setup';
 
 export default function SetupPage() {
+  const { lang } = useLang();
   const [sel, setSel] = useState<PresetId | null>(null);
   const [st, setSt] = useState<'idle' | 'saving' | 'done' | 'err'>('idle');
   const [enabled, setEnabled] = useState<string[]>([]);
@@ -40,7 +43,9 @@ export default function SetupPage() {
           <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl border-2 border-green-500/50 bg-green-500/10 text-green-400">
             <Check size={28} />
           </div>
-          <h2 className="font-display text-2xl tracking-wide">Gotowe! Moduły włączone</h2>
+          <h2 className="font-display text-2xl tracking-wide">
+            {tp(lang, 'ui.setup.doneHeading')}
+          </h2>
           <div className="mt-3 flex flex-wrap justify-center gap-2">
             {enabled.map((e) => (
               <span
@@ -52,15 +57,16 @@ export default function SetupPage() {
             ))}
           </div>
           <p className="mx-auto mt-4 max-w-md text-sm text-muted">
-            Kreator włączył moduły z sensownymi domyślnymi. Dokończ szczegóły (kanały powitań, role,
-            filtry) — <strong>Diagnostyka</strong> pokaże, czego jeszcze brakuje.
+            {tp(lang, 'ui.setup.doneNotePre')}{' '}
+            <strong>{tp(lang, 'ui.setup.doneNoteStrong')}</strong>{' '}
+            {tp(lang, 'ui.setup.doneNotePost')}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link
               href="/diagnostics"
               className="inline-flex items-center gap-1.5 rounded-md bg-accent px-5 py-2.5 font-semibold transition hover:bg-accent-hover"
             >
-              Otwórz Diagnostykę <ArrowRight size={15} />
+              {tp(lang, 'ui.setup.openDiagnostics')} <ArrowRight size={15} />
             </Link>
             <button
               type="button"
@@ -70,7 +76,7 @@ export default function SetupPage() {
               }}
               className="rounded-md border border-line px-5 py-2.5 text-sm transition hover:border-accent"
             >
-              Wróć do presetów
+              {tp(lang, 'ui.setup.backToPresets')}
             </button>
           </div>
         </section>
@@ -88,11 +94,10 @@ export default function SetupPage() {
           }}
         />
         <h2 className="relative flex items-center gap-2 font-display text-2xl tracking-wide">
-          <Wand2 className="text-accent" size={24} /> Kreator startowy
+          <Wand2 className="text-accent" size={24} /> {tp(lang, 'ui.setup.wizardHeading')}
         </h2>
         <p className="relative mt-2 max-w-2xl text-sm text-muted">
-          Wybierz, do czego głównie służy Twój serwer — włączę pasujący zestaw modułów jednym
-          kliknięciem. Nic nie kasuję: tylko włączam (merge), a Ty dopracujesz szczegóły.
+          {tp(lang, 'ui.setup.wizardIntro')}
         </p>
       </section>
 
@@ -138,30 +143,31 @@ export default function SetupPage() {
           disabled={!sel || st === 'saving'}
           className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
-          <Sparkles size={16} /> {st === 'saving' ? 'Włączam…' : 'Zastosuj preset'}
+          <Sparkles size={16} />{' '}
+          {st === 'saving' ? tp(lang, 'ui.setup.applying') : tp(lang, 'ui.setup.applyPreset')}
         </button>
-        {st === 'err' && <span className="text-sm text-accent">Błąd — spróbuj ponownie.</span>}
-        {!sel && <span className="text-sm text-muted">Wybierz preset powyżej.</span>}
+        {st === 'err' && (
+          <span className="text-sm text-accent">{tp(lang, 'ui.setup.errRetry')}</span>
+        )}
+        {!sel && (
+          <span className="text-sm text-muted">{tp(lang, 'ui.setup.selectPresetHint')}</span>
+        )}
       </div>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-6">
         <h2 className="mb-1 flex items-center gap-2 font-display text-2xl tracking-wide">
-          <Hammer className="text-accent" size={22} /> Architekt struktury
+          <Hammer className="text-accent" size={22} /> {tp(lang, 'ui.setup.architectHeading')}
         </h2>
-        <p className="mb-4 text-sm text-muted">
-          Zbuduj szkielet serwera jednym kliknięciem — bot utworzy wybrane kanały, kategorie i role.
-        </p>
+        <p className="mb-4 text-sm text-muted">{tp(lang, 'ui.setup.architectIntro')}</p>
         <ServerArchitect />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-6">
         <h2 className="mb-1 flex items-center gap-2 font-display text-2xl tracking-wide">
-          <LayoutTemplate className="text-accent" size={22} /> Blueprinty
+          <LayoutTemplate className="text-accent" size={22} />{' '}
+          {tp(lang, 'ui.setup.blueprintsHeading')}
         </h2>
-        <p className="mb-4 text-sm text-muted">
-          Gotowe szablony serwera — włącz moduły i utwórz strukturę jednym kliknięciem. Plus kod
-          recepty do przenoszenia setupu.
-        </p>
+        <p className="mb-4 text-sm text-muted">{tp(lang, 'ui.setup.blueprintsIntro')}</p>
         <Blueprints />
       </section>
     </div>

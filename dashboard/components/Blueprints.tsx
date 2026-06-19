@@ -2,11 +2,14 @@
 
 import { Check, Copy, Download, Loader2, Upload, X } from 'lucide-react';
 import { useState } from 'react';
+import { tp } from '../lib/panelI18n';
 import { BLUEPRINTS, type Blueprint, decodeRecipe, encodeRecipe } from '../lib/setup';
+import { useLang } from './LangContext';
 
 type LogItem = { label: string; ok: boolean; detail?: string };
 
 export default function Blueprints() {
+  const { lang } = useLang();
   const [sel, setSel] = useState<string | null>(null);
   const [st, setSt] = useState<'idle' | 'working' | 'done' | 'err'>('idle');
   const [log, setLog] = useState<LogItem[]>([]);
@@ -72,9 +75,9 @@ export default function Blueprints() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted">
-        Pełne szablony — jedno kliknięcie <strong>włącza moduły</strong> i{' '}
-        <strong>tworzy strukturę</strong> serwera. Każdy ma kod recepty do
-        udostępnienia/przeniesienia.
+        {tp(lang, 'ui.setup.bpIntroPre')} <strong>{tp(lang, 'ui.setup.bpIntroStrong1')}</strong>{' '}
+        {tp(lang, 'ui.setup.bpIntroMid')} <strong>{tp(lang, 'ui.setup.bpIntroStrong2')}</strong>{' '}
+        {tp(lang, 'ui.setup.bpIntroPost')}
       </p>
 
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -121,22 +124,23 @@ export default function Blueprints() {
           className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
           {working ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
-          {working ? 'Stosuję…' : 'Zastosuj blueprint'}
+          {working ? tp(lang, 'ui.setup.bpApplying') : tp(lang, 'ui.setup.bpApplyBtn')}
         </button>
         {st === 'done' && (
           <span className="text-sm text-green-400">
-            ✓ Gotowe{enabled.length ? ` — włączono: ${enabled.length} modułów` : ''}
+            ✓ {tp(lang, 'ui.setup.bpDone')}
+            {enabled.length
+              ? ` ${tp(lang, 'ui.setup.bpEnabledPre')} ${enabled.length} ${tp(lang, 'ui.setup.bpEnabledPost')}`
+              : ''}
           </span>
         )}
-        {st === 'err' && (
-          <span className="text-sm text-accent">Błąd — czy bot online / kod poprawny?</span>
-        )}
+        {st === 'err' && <span className="text-sm text-accent">{tp(lang, 'ui.setup.bpErr')}</span>}
       </div>
 
       {/* Eksport / import recepty */}
       <div className="rounded-xl border border-line bg-bg/40 p-4">
         <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
-          Kod recepty (eksport / import)
+          {tp(lang, 'ui.setup.recipeLabel')}
         </div>
         {code && (
           <div className="mb-3 flex items-center gap-2">
@@ -150,7 +154,7 @@ export default function Blueprints() {
               onClick={() => navigator.clipboard?.writeText(code).catch(() => {})}
               className="inline-flex shrink-0 items-center gap-1 rounded-md border border-line px-3 py-2 text-xs transition hover:border-accent"
             >
-              <Copy size={13} /> Kopiuj
+              <Copy size={13} /> {tp(lang, 'ui.setup.copyBtn')}
             </button>
           </div>
         )}
@@ -158,7 +162,7 @@ export default function Blueprints() {
           <input
             value={imp}
             onChange={(e) => setImp(e.target.value)}
-            placeholder="Wklej kod recepty, by zastosować na tym serwerze…"
+            placeholder={tp(lang, 'ui.setup.recipePlaceholder')}
             className="w-full rounded-md border border-line bg-elevated px-3 py-2 font-mono text-xs outline-none focus:border-accent"
           />
           <button
@@ -167,15 +171,19 @@ export default function Blueprints() {
             disabled={!imp.trim() || working}
             className="inline-flex shrink-0 items-center gap-1 rounded-md border border-accent/50 px-3 py-2 text-xs font-semibold text-accent transition hover:bg-accent hover:text-white disabled:opacity-50"
           >
-            <Upload size={13} /> Zastosuj kod
+            <Upload size={13} /> {tp(lang, 'ui.setup.applyCodeBtn')}
           </button>
         </div>
       </div>
 
       {(working || log.length > 0) && (
         <div className="rounded-xl border border-line bg-bg/40 p-3">
-          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">Log struktury</div>
-          {working && !log.length && <p className="text-sm text-muted">Czekam na bota…</p>}
+          <div className="mb-2 text-[11px] uppercase tracking-wide text-muted">
+            {tp(lang, 'ui.setup.logStructureLabel')}
+          </div>
+          {working && !log.length && (
+            <p className="text-sm text-muted">{tp(lang, 'ui.setup.waitingBotShort')}</p>
+          )}
           <ul className="space-y-1 text-sm">
             {log.map((l) => (
               <li key={l.label} className="flex items-center gap-2">
