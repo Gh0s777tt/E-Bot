@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-355-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.285.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-356-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.286.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.286.0] — 🧪 M6b (start): wykonanie akcji pluginu — setConfig (scoped, bez efektów w Discordzie)
+
+- `[#356]` 🧪 **Marketplace M6b — warstwa wykonania akcji pluginu (najbezpieczniejsza akcja na start).**
+  - Nowy [`lib/pluginExecutor.ts`](dashboard/lib/pluginExecutor.ts): `executePluginActions(actions, ctx)` — wykonuje zwalidowane akcje (z `pluginRunner`, M6a) **scoped do `guild_id` + `plugin_key`**; zwraca wynik per akcja.
+  - Na start **wyłącznie `setConfig`** (zapis do `plugin_config` tego pluginu+gildii): **zero efektów w Discordzie**, brak cross-guild, brak eskalacji. setConfig batchowany w jeden zapis.
+  - Akcje z efektami zewnętrznymi (`sendMessage`/`addRole`) **świadomie POMIJANE** — wymagają per-akcja sprawdzenia, że kanał/rola należą do gildii + bot-tokenu; kolejny przyrost.
+  - Bez konsumenta (orchestrator = M6c, gdy manifest dostanie endpoint/secret) → zero ryzyka. Bramki: biome czysto (320), `tsc` exit 0, docs:check exit 0.
 
 ## [0.285.0] — 🧪 M6a (start): runner webhook pluginów — kontrakt akcji + SSRF-guard + HMAC
 
