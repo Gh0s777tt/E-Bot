@@ -13,6 +13,8 @@ import {
   getTempVoice,
 } from '../../lib/engagement';
 import { getGuildMeta } from '../../lib/guild';
+import { tp } from '../../lib/panelI18n';
+import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +27,7 @@ function fmt(d: string): string {
 }
 
 export default async function EngagementPage() {
-  const [btn, star, tv, counting, invites, giveaways, guild] = await Promise.all([
+  const [btn, star, tv, counting, invites, giveaways, guild, lang] = await Promise.all([
     getButtonRoles(),
     getStarboard(),
     getTempVoice(),
@@ -33,70 +35,73 @@ export default async function EngagementPage() {
     getInvitesConfig(),
     getGiveaways(20),
     getGuildMeta(),
+    getPanelLocale(),
   ]);
 
   return (
     <div className="space-y-6">
       <p className="max-w-3xl text-sm text-muted">
-        Zaangażowanie społeczności: role za przyciski, starboard, kanały głosowe na żądanie oraz
-        konkursy. Komendy bota: <code className="text-accent">/buttonpanel</code>,{' '}
+        {tp(lang, 'ui.engagement.intro')} <code className="text-accent">/buttonpanel</code>,{' '}
         <code className="text-accent">/giveaway start</code>,{' '}
         <code className="text-accent">/remind</code>.
       </p>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <MousePointerClick size={16} className="text-accent" /> Role za przyciski
+          <MousePointerClick size={16} className="text-accent" />{' '}
+          {tp(lang, 'ui.engagement.buttonRolesHeading')}
         </h2>
         <ButtonRolesForm initial={btn} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Star size={16} className="text-accent" /> Starboard
+          <Star size={16} className="text-accent" /> {tp(lang, 'ui.engagement.starboardHeading')}
         </h2>
         <StarboardForm initial={star} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Volume2 size={16} className="text-accent" /> Kanały głosowe na żądanie
+          <Volume2 size={16} className="text-accent" /> {tp(lang, 'ui.engagement.tempVoiceHeading')}
         </h2>
         <TempVoiceForm initial={tv} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Hash size={16} className="text-accent" /> Gra w liczenie
+          <Hash size={16} className="text-accent" /> {tp(lang, 'ui.engagement.countingHeading')}
         </h2>
         <CountingForm initial={counting} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <UserPlus size={16} className="text-accent" /> Śledzenie zaproszeń
+          <UserPlus size={16} className="text-accent" /> {tp(lang, 'ui.engagement.invitesHeading')}
         </h2>
         <InvitesForm initial={invites} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Gift size={16} className="text-accent" /> Giveawaye
+          <Gift size={16} className="text-accent" /> {tp(lang, 'ui.engagement.giveawaysHeading')}
         </h2>
         {giveaways.length === 0 ? (
           <p className="text-sm text-muted">
-            Brak konkursów. Uruchom <code className="text-accent">/giveaway start</code> na
-            Discordzie (wymaga <code>b5-schema.sql</code> w Supabase).
+            {tp(lang, 'ui.engagement.giveawaysEmptyPre')}{' '}
+            <code className="text-accent">/giveaway start</code>{' '}
+            {tp(lang, 'ui.engagement.giveawaysEmptyMid')} <code>b5-schema.sql</code>{' '}
+            {tp(lang, 'ui.engagement.giveawaysEmptyPost')}
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr className="border-b border-line">
-                  <th className="px-3 py-2">Nagroda</th>
-                  <th className="px-3 py-2">Zwycięzców</th>
-                  <th className="px-3 py-2">Koniec</th>
-                  <th className="px-3 py-2">Status</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.engagement.thPrize')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.engagement.thWinners')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.engagement.thEnd')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.engagement.thStatus')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -111,7 +116,9 @@ export default async function EngagementPage() {
                           g.ended ? 'bg-white/10 text-muted' : 'bg-accent/15 text-accent'
                         }`}
                       >
-                        {g.ended ? 'zakończony' : 'trwa'}
+                        {g.ended
+                          ? tp(lang, 'ui.engagement.statusEnded')
+                          : tp(lang, 'ui.engagement.statusActive')}
                       </span>
                     </td>
                   </tr>

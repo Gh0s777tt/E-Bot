@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -11,6 +13,7 @@ const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
 export default function TempVoiceForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -38,11 +41,15 @@ export default function TempVoiceForm({ initial, guild }: { initial: Cfg; guild:
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Kanały głosowe na żądanie włączone</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.tv.enabledToggle')}
+        </span>
       </label>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał „hub" (wejście tworzy kanał)</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.tv.hubLabel')}
+          </span>
           <ChannelSelect
             value={c.hubChannelId}
             onChange={(v) => setC({ ...c, hubChannelId: v })}
@@ -51,18 +58,22 @@ export default function TempVoiceForm({ initial, guild }: { initial: Cfg; guild:
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kategoria nowych kanałów</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.tv.categoryLabel')}
+          </span>
           <ChannelSelect
             value={c.categoryId}
             onChange={(v) => setC({ ...c, categoryId: v })}
             channels={guild.channels}
             kind="category"
-            placeholder="— ta sama co hub —"
+            placeholder={tp(lang, 'ui.engagement.tv.categoryPh')}
           />
         </label>
       </div>
       <label className="block space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Szablon nazwy</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.tv.templateLabel')}
+        </span>
         <input
           value={c.nameTemplate}
           onChange={(e) => setC({ ...c, nameTemplate: e.target.value })}
@@ -70,7 +81,8 @@ export default function TempVoiceForm({ initial, guild }: { initial: Cfg; guild:
           className={inputCls}
         />
         <span className="text-xs text-muted">
-          <code className="text-accent">{'{user}'}</code> = nick osoby tworzącej kanał.
+          <code className="text-accent">{'{user}'}</code>{' '}
+          {tp(lang, 'ui.engagement.tv.templateHint')}
         </span>
       </label>
       <SaveButton st={st} onClick={save} />

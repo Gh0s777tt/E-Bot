@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import type { CountingConfig } from '../lib/engagement';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ export default function CountingForm({
   initial: CountingConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [c, setC] = useState<CountingConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -40,16 +43,20 @@ export default function CountingForm({
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Gra w liczenie włączona</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.ct.enabledToggle')}
+        </span>
       </label>
 
       <label className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Kanał liczenia</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.ct.channelLabel')}
+        </span>
         <ChannelSelect
           value={c.channelId}
           onChange={(v) => setC({ ...c, channelId: v })}
           channels={guild.channels}
-          placeholder="— wybierz kanał —"
+          placeholder={tp(lang, 'ui.engagement.ct.channelPh')}
         />
       </label>
 
@@ -61,7 +68,7 @@ export default function CountingForm({
           className="h-4 w-4 accent-accent"
         />
         <span className="font-semibold text-white/90">
-          Pozwól liczyć dwa razy z rzędu (domyślnie nie)
+          {tp(lang, 'ui.engagement.ct.allowSameUser')}
         </span>
       </label>
 
@@ -72,14 +79,13 @@ export default function CountingForm({
           onChange={(e) => setC({ ...c, resetOnFail: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Reset licznika po błędzie</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.ct.resetOnFail')}
+        </span>
       </label>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Na wybranym kanale użytkownicy piszą kolejne liczby (1, 2, 3…). Bot reaguje ✅/❌, pilnuje
-        kolejności i zapisuje rekord serwera. Tej samej osobie nie wolno liczyć dwa razy z rzędu.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.engagement.ct.footer')}</p>
     </div>
   );
 }

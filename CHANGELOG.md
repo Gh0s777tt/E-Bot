@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-313-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.243.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-314-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.244.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.244.0] — 🌍 i18n UI panelu — strona /engagement (zaangażowanie społeczności)
+
+- `[#314]` 🌍 **i18n UI panelu — kolejna fala: `/engagement` (role za przyciski, starboard, kanały głosowe na żądanie, gra w liczenie, śledzenie zaproszeń, giveawaye).**
+  - 🖥️ **Panel**: 54 nowe klucze `ui.engagement.*` × **14 języków** w `panelI18n.ts` (parzystość 14×54=756). `app/engagement/page.tsx` (serwer) + `ButtonRolesForm.tsx` + `StarboardForm.tsx` + `TempVoiceForm.tsx` + `CountingForm.tsx` + `InvitesForm.tsx` (klient) na `tp()`: intro z segmentami wokół `/buttonpanel`/`/giveaway start`/`/remind`, 6 nagłówków sekcji, role-za-przyciski (treść wiadomości, etykieta→rola, instrukcja `/buttonpanel`), starboard (kanał, próg, emoji), kanały głosowe na żądanie (hub, kategoria, szablon `{user}`), gra w liczenie, śledzenie zaproszeń (logi dołączeń, fejk-konto, progi-nagrody, segmenty wokół `Zarządzanie serwerem`/`_ALL.sql`/`/invites`), tabela giveawayów (puste z `/giveaway start`+`b5-schema.sql`, nagłówki Nagroda/Zwycięzców/Koniec/Status, statusy zakończony/trwa). Wspólny `delAria` w obrębie strony; przyciski zapisu reużywają `SaveButton`. Nietłumaczone: komendy `/buttonpanel`/`/giveaway start`/`/remind`/`/invites`, marka `Starboard`, tokeny (`b5-schema.sql`/`_ALL.sql`/`{user}`), placeholdery `⭐`/`🔊 {user}`, format `pl-PL`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 34/~40 stron.
 
 ## [0.243.0] — 🌍 i18n UI panelu — strona /ai (konfiguracja AI + pomoc + digest)
 

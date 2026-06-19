@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -12,6 +14,7 @@ const inputCls =
 const num = (v: string): number => Math.max(1, Math.floor(Number(v) || 1));
 
 export default function StarboardForm({ initial, guild }: { initial: Cfg; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -39,11 +42,15 @@ export default function StarboardForm({ initial, guild }: { initial: Cfg; guild:
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Starboard włączony</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.sb.enabledToggle')}
+        </span>
       </label>
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="space-y-1 text-sm sm:col-span-1">
-          <span className="font-semibold text-white/90">Kanał starboardu</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.sb.channelLabel')}
+          </span>
           <ChannelSelect
             value={c.channelId}
             onChange={(v) => setC({ ...c, channelId: v })}
@@ -51,7 +58,9 @@ export default function StarboardForm({ initial, guild }: { initial: Cfg; guild:
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Próg reakcji</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.sb.thresholdLabel')}
+          </span>
           <input
             type="number"
             value={c.threshold}
@@ -60,7 +69,9 @@ export default function StarboardForm({ initial, guild }: { initial: Cfg; guild:
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Emoji</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.sb.emojiLabel')}
+          </span>
           <input
             value={c.emoji}
             onChange={(e) => setC({ ...c, emoji: e.target.value })}

@@ -4,6 +4,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { InvitesConfig } from '../lib/engagement';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -20,6 +22,7 @@ export default function InvitesForm({
   initial: InvitesConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const [logChannelId, setLogChannelId] = useState(initial.logChannelId);
   const [fakeMinAgeDays, setFakeMinAgeDays] = useState(initial.fakeMinAgeDays);
@@ -64,21 +67,27 @@ export default function InvitesForm({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Śledzenie zaproszeń włączone</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.engagement.inv.enabledToggle')}
+        </span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał logów dołączeń</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.inv.logChannelLabel')}
+          </span>
           <ChannelSelect
             value={logChannelId}
             onChange={setLogChannelId}
             channels={guild.channels}
-            placeholder="— brak logów —"
+            placeholder={tp(lang, 'ui.engagement.inv.logChannelPh')}
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Fejk: konto młodsze niż (dni)</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.inv.fakeAgeLabel')}
+          </span>
           <input
             type="number"
             value={fakeMinAgeDays}
@@ -90,20 +99,20 @@ export default function InvitesForm({
 
       <div className="space-y-2 rounded-lg border border-line/60 bg-elevated/40 p-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Nagrody-role za zaproszenia</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.engagement.inv.rewardsLabel')}
+          </span>
           <button
             type="button"
             onClick={addRow}
             disabled={rows.length >= 20}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
-            <Plus size={12} /> Dodaj próg
+            <Plus size={12} /> {tp(lang, 'ui.engagement.inv.addThreshold')}
           </button>
         </div>
         {rows.length === 0 && (
-          <p className="text-xs text-muted">
-            Brak nagród. Dodaj próg: X realnych zaproszeń → rola.
-          </p>
+          <p className="text-xs text-muted">{tp(lang, 'ui.engagement.inv.empty')}</p>
         )}
         {rows.map((r) => (
           <div key={r.k} className="grid grid-cols-1 gap-2 sm:grid-cols-[100px_1fr_auto]">
@@ -117,13 +126,13 @@ export default function InvitesForm({
               value={r.roleId}
               onChange={(v) => setRow(r.k, { roleId: v })}
               roles={guild.roles}
-              placeholder="— rola —"
+              placeholder={tp(lang, 'ui.engagement.inv.rolePh')}
             />
             <button
               type="button"
               onClick={() => delRow(r.k)}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.engagement.delAria')}
             >
               <Trash2 size={14} />
             </button>
@@ -133,9 +142,10 @@ export default function InvitesForm({
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Bot wykrywa, czyim zaproszeniem wszedł nowy członek (porównanie liczby użyć zaproszeń).
-        Wymaga uprawnienia bota <em>Zarządzanie serwerem</em> oraz <code>_ALL.sql</code> w Supabase.
-        Statystyki: <code className="text-accent">/invites</code>.
+        {tp(lang, 'ui.engagement.inv.footerPre')}{' '}
+        <em>{tp(lang, 'ui.engagement.inv.footerPerm')}</em>{' '}
+        {tp(lang, 'ui.engagement.inv.footerMid')} <code>_ALL.sql</code>{' '}
+        {tp(lang, 'ui.engagement.inv.footerStats')} <code className="text-accent">/invites</code>.
       </p>
     </div>
   );
