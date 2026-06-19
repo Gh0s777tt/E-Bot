@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-310-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.240.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-311-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.241.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.241.0] — 🌍 i18n UI panelu — strona /commands (lista slash-komend)
+
+- `[#311]` 🌍 **i18n UI panelu — kolejna fala: `/commands` (lista zarejestrowanych slash-komend).**
+  - 🖥️ **Panel**: 8 nowych kluczy `ui.commands.*` × **14 języków** w `panelI18n.ts` (parzystość 14×8=112). `app/commands/page.tsx` (serwer) na `tp()`: intro + licznik, komunikat błędu pobrania z segmentem wokół `node bot/src/deploy-commands.mts`, nagłówki tabeli (Komenda/Opis/Podkomendy), stopka z segmentem wokół `deploy-commands`. Nazwy komend/opisy/podkomendy oraz etykiety grup modułów pochodzą z `lib/`/Discord API (dane) — nietłumaczone.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 31/~40 stron.
 
 ## [0.240.0] — 🌍 i18n UI panelu — strona /roles (reaction roles + panel + menu ról)
 

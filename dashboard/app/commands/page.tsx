@@ -12,6 +12,8 @@ import {
   Wrench,
 } from 'lucide-react';
 import { getRegisteredCommands, groupCommands } from '../../lib/commands';
+import { tp } from '../../lib/panelI18n';
+import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,22 +31,24 @@ const GROUP_ICONS: Record<string, LucideIcon> = {
 };
 
 export default async function CommandsPage() {
-  const commands = await getRegisteredCommands();
+  const [commands, lang] = await Promise.all([getRegisteredCommands(), getPanelLocale()]);
   const groups = groupCommands(commands);
 
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted">
-        Slash-komendy <strong>realnie zarejestrowane</strong> przez bota (pobierane na żywo z
-        Discord API), pogrupowane w moduły.{' '}
-        {commands.length > 0 && <span className="text-accent">Łącznie: {commands.length}.</span>}
+        {tp(lang, 'ui.commands.intro')}{' '}
+        {commands.length > 0 && (
+          <span className="text-accent">
+            {tp(lang, 'ui.commands.total')} {commands.length}.
+          </span>
+        )}
       </p>
 
       {commands.length === 0 ? (
         <section className="panel-glow rounded-2xl border border-line bg-card px-5 py-6">
           <p className="text-sm text-muted">
-            Nie udało się pobrać listy z Discord API (brak tokenu bota lub komendy jeszcze nie
-            zarejestrowane). Uruchom{' '}
+            {tp(lang, 'ui.commands.emptyErrorPre')}
             <code className="text-accent">node bot/src/deploy-commands.mts</code>.
           </p>
         </section>
@@ -66,9 +70,9 @@ export default async function CommandsPage() {
                 <table className="w-full min-w-[480px] text-sm">
                   <thead className="text-left text-[11px] uppercase tracking-wide text-muted">
                     <tr>
-                      <th className="px-5 py-3 font-medium">Komenda</th>
-                      <th className="px-5 py-3 font-medium">Opis</th>
-                      <th className="px-5 py-3 font-medium">Podkomendy</th>
+                      <th className="px-5 py-3 font-medium">{tp(lang, 'ui.commands.thCommand')}</th>
+                      <th className="px-5 py-3 font-medium">{tp(lang, 'ui.commands.thDesc')}</th>
+                      <th className="px-5 py-3 font-medium">{tp(lang, 'ui.commands.thSubs')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -106,8 +110,9 @@ export default async function CommandsPage() {
       )}
 
       <p className="text-xs text-muted">
-        Lista odświeża się automatycznie po <code>deploy-commands</code> (rejestracja globalna ~do 1
-        h propagacji w kliencie Discord). Nowe komendy spoza mapy modułów trafiają do sekcji „Inne".
+        {tp(lang, 'ui.commands.footerPre')}
+        <code>deploy-commands</code>
+        {tp(lang, 'ui.commands.footerPost')}
       </p>
     </div>
   );

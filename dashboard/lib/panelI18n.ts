@@ -766,6 +766,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Powitania: WŁĄCZONE',
     'ui.welcome.statusOff': 'Powitania: WYŁĄCZONE',
     'ui.welcome.heading': 'Powitania + autorole',
+    'ui.commands.intro':
+      'Slash-komendy realnie zarejestrowane przez bota (pobierane na żywo z Discord API), pogrupowane w moduły.',
+    'ui.commands.total': 'Łącznie:',
+    'ui.commands.emptyErrorPre':
+      'Nie udało się pobrać listy z Discord API (brak tokenu bota lub komendy jeszcze nie zarejestrowane). Uruchom ',
+    'ui.commands.thCommand': 'Komenda',
+    'ui.commands.thDesc': 'Opis',
+    'ui.commands.thSubs': 'Podkomendy',
+    'ui.commands.footerPre': 'Lista odświeża się automatycznie po ',
+    'ui.commands.footerPost':
+      ' (rejestracja globalna ~do 1 h propagacji w kliencie Discord). Nowe komendy spoza mapy modułów trafiają do sekcji „Inne".',
     'ui.roles.intro':
       'Reaction roles: użytkownik klika reakcję pod wskazaną wiadomością → bot nadaje rolę (usunięcie reakcji → odbiera). Konfigurację zapisujesz tu (Supabase), bot stosuje ją na żywo. Rolę wybierasz z listy; ID wiadomości skopiuj z Discorda (tryb developera → „Kopiuj ID wiadomości").',
     'ui.roles.heading2': 'Reaction roles — utwórz panel (embed)',
@@ -1618,6 +1629,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Welcomes: ON',
     'ui.welcome.statusOff': 'Welcomes: OFF',
     'ui.welcome.heading': 'Welcomes + autorole',
+    'ui.commands.intro':
+      'Slash commands actually registered by the bot (fetched live from the Discord API), grouped into modules.',
+    'ui.commands.total': 'Total:',
+    'ui.commands.emptyErrorPre':
+      'Could not fetch the list from the Discord API (no bot token or commands not yet registered). Run ',
+    'ui.commands.thCommand': 'Command',
+    'ui.commands.thDesc': 'Description',
+    'ui.commands.thSubs': 'Subcommands',
+    'ui.commands.footerPre': 'The list refreshes automatically after ',
+    'ui.commands.footerPost':
+      ' (global registration ~up to 1 h to propagate in the Discord client). New commands outside the module map go to the “Other” section.',
     'ui.roles.intro':
       'Reaction roles: a user clicks a reaction under the chosen message → the bot grants a role (removing the reaction → takes it away). You save the configuration here (Supabase); the bot applies it live. You pick the role from a list; copy the message ID from Discord (developer mode → “Copy Message ID”).',
     'ui.roles.heading2': 'Reaction roles — create a panel (embed)',
@@ -2471,6 +2493,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Begrüßungen: AN',
     'ui.welcome.statusOff': 'Begrüßungen: AUS',
     'ui.welcome.heading': 'Begrüßungen + autorole',
+    'ui.commands.intro':
+      'Slash-Befehle, die der Bot tatsächlich registriert hat (live aus der Discord-API geladen), in Module gruppiert.',
+    'ui.commands.total': 'Gesamt:',
+    'ui.commands.emptyErrorPre':
+      'Die Liste konnte nicht aus der Discord-API geladen werden (kein Bot-Token oder Befehle noch nicht registriert). Starte ',
+    'ui.commands.thCommand': 'Befehl',
+    'ui.commands.thDesc': 'Beschreibung',
+    'ui.commands.thSubs': 'Unterbefehle',
+    'ui.commands.footerPre': 'Die Liste aktualisiert sich automatisch nach ',
+    'ui.commands.footerPost':
+      ' (globale Registrierung ~bis zu 1 Std. Verzögerung im Discord-Client). Neue Befehle außerhalb der Modulübersicht landen im Abschnitt „Sonstige“.',
     'ui.roles.intro':
       'Reaction Roles: ein Nutzer klickt eine Reaktion unter der gewählten Nachricht → der Bot vergibt eine Rolle (Reaktion entfernen → nimmt sie weg). Die Konfiguration speicherst du hier (Supabase); der Bot wendet sie live an. Die Rolle wählst du aus einer Liste; kopiere die Nachrichten-ID aus Discord (Entwicklermodus → „Nachrichten-ID kopieren“).',
     'ui.roles.heading2': 'Reaction Roles — Panel erstellen (Embed)',
@@ -3330,6 +3363,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenidas: ACTIVADAS',
     'ui.welcome.statusOff': 'Bienvenidas: DESACTIVADAS',
     'ui.welcome.heading': 'Bienvenidas + autorole',
+    'ui.commands.intro':
+      'Comandos slash realmente registrados por el bot (obtenidos en vivo desde la API de Discord), agrupados en módulos.',
+    'ui.commands.total': 'Total:',
+    'ui.commands.emptyErrorPre':
+      'No se pudo obtener la lista desde la API de Discord (sin token del bot o comandos aún no registrados). Ejecuta ',
+    'ui.commands.thCommand': 'Comando',
+    'ui.commands.thDesc': 'Descripción',
+    'ui.commands.thSubs': 'Subcomandos',
+    'ui.commands.footerPre': 'La lista se actualiza automáticamente tras ',
+    'ui.commands.footerPost':
+      ' (registro global ~hasta 1 h de propagación en el cliente de Discord). Los comandos nuevos fuera del mapa de módulos van a la sección «Otros».',
     'ui.roles.intro':
       'Reaction roles: el usuario hace clic en una reacción bajo el mensaje indicado → el bot otorga un rol (quitar la reacción → lo retira). La configuración la guardas aquí (Supabase); el bot la aplica en vivo. El rol lo eliges de una lista; copia el ID del mensaje desde Discord (modo desarrollador → «Copiar ID del mensaje»).',
     'ui.roles.heading2': 'Reaction roles — crear panel (embed)',
@@ -4191,6 +4235,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Benvenuti: ATTIVI',
     'ui.welcome.statusOff': 'Benvenuti: DISATTIVATI',
     'ui.welcome.heading': 'Benvenuti + autorole',
+    'ui.commands.intro':
+      'Comandi slash effettivamente registrati dal bot (recuperati in tempo reale dall’API di Discord), raggruppati in moduli.',
+    'ui.commands.total': 'Totale:',
+    'ui.commands.emptyErrorPre':
+      'Impossibile recuperare l’elenco dall’API di Discord (nessun token del bot o comandi non ancora registrati). Esegui ',
+    'ui.commands.thCommand': 'Comando',
+    'ui.commands.thDesc': 'Descrizione',
+    'ui.commands.thSubs': 'Sottocomandi',
+    'ui.commands.footerPre': 'L’elenco si aggiorna automaticamente dopo ',
+    'ui.commands.footerPost':
+      ' (registrazione globale ~fino a 1 h di propagazione nel client Discord). I nuovi comandi non presenti nella mappa dei moduli finiscono nella sezione «Altri».',
     'ui.roles.intro':
       'Reaction roles: l’utente clicca una reazione sotto il messaggio indicato → il bot assegna un ruolo (rimuovere la reazione → lo toglie). La configurazione la salvi qui (Supabase); il bot la applica in tempo reale. Il ruolo lo scegli da un elenco; copia l’ID del messaggio da Discord (modalità sviluppatore → «Copia ID messaggio»).',
     'ui.roles.heading2': 'Reaction roles — crea un pannello (embed)',
@@ -5053,6 +5108,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenue : ACTIVÉ',
     'ui.welcome.statusOff': 'Bienvenue : DÉSACTIVÉ',
     'ui.welcome.heading': 'Bienvenue + autorole',
+    'ui.commands.intro':
+      'Commandes slash réellement enregistrées par le bot (récupérées en direct depuis l’API Discord), regroupées en modules.',
+    'ui.commands.total': 'Total :',
+    'ui.commands.emptyErrorPre':
+      'Impossible de récupérer la liste depuis l’API Discord (pas de token du bot ou commandes pas encore enregistrées). Lance ',
+    'ui.commands.thCommand': 'Commande',
+    'ui.commands.thDesc': 'Description',
+    'ui.commands.thSubs': 'Sous-commandes',
+    'ui.commands.footerPre': 'La liste se met à jour automatiquement après ',
+    'ui.commands.footerPost':
+      ' (enregistrement global ~jusqu’à 1 h de propagation dans le client Discord). Les nouvelles commandes hors de la carte des modules vont dans la section « Autres ».',
     'ui.roles.intro':
       'Reaction roles : l’utilisateur clique une réaction sous le message indiqué → le bot attribue un rôle (retirer la réaction → le retire). Tu enregistres la configuration ici (Supabase) ; le bot l’applique en direct. Tu choisis le rôle dans une liste ; copie l’ID du message depuis Discord (mode développeur → « Copier l’identifiant du message »).',
     'ui.roles.heading2': 'Reaction roles — créer un panneau (embed)',
@@ -5915,6 +5981,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Boas-vindas: LIGADAS',
     'ui.welcome.statusOff': 'Boas-vindas: DESLIGADAS',
     'ui.welcome.heading': 'Boas-vindas + autorole',
+    'ui.commands.intro':
+      'Comandos slash realmente registados pelo bot (obtidos em tempo real da API do Discord), agrupados em módulos.',
+    'ui.commands.total': 'Total:',
+    'ui.commands.emptyErrorPre':
+      'Não foi possível obter a lista da API do Discord (sem token do bot ou comandos ainda não registados). Executa ',
+    'ui.commands.thCommand': 'Comando',
+    'ui.commands.thDesc': 'Descrição',
+    'ui.commands.thSubs': 'Subcomandos',
+    'ui.commands.footerPre': 'A lista atualiza-se automaticamente após ',
+    'ui.commands.footerPost':
+      ' (registo global ~até 1 h de propagação no cliente Discord). Os novos comandos fora do mapa de módulos vão para a secção «Outros».',
     'ui.roles.intro':
       'Reaction roles: o utilizador clica numa reação sob a mensagem indicada → o bot atribui um cargo (remover a reação → retira-o). A configuração guardas aqui (Supabase); o bot aplica-a em tempo real. O cargo escolhes de uma lista; copia o ID da mensagem do Discord (modo de programador → «Copiar ID da mensagem»).',
     'ui.roles.heading2': 'Reaction roles — criar painel (embed)',
@@ -6773,6 +6850,16 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '欢迎消息：已开启',
     'ui.welcome.statusOff': '欢迎消息：已关闭',
     'ui.welcome.heading': '欢迎消息 + autorole',
+    'ui.commands.intro': '机器人实际注册的斜杠命令（从 Discord API 实时获取），按模块分组。',
+    'ui.commands.total': '共计：',
+    'ui.commands.emptyErrorPre':
+      '无法从 Discord API 获取列表（缺少机器人令牌或命令尚未注册）。请运行 ',
+    'ui.commands.thCommand': '命令',
+    'ui.commands.thDesc': '描述',
+    'ui.commands.thSubs': '子命令',
+    'ui.commands.footerPre': '列表在 ',
+    'ui.commands.footerPost':
+      ' 之后自动刷新（全局注册在 Discord 客户端约需 1 小时传播）。模块映射之外的新命令归入「其他」部分。',
     'ui.roles.intro':
       '反应身份组：用户在指定消息下点击反应 → 机器人授予身份组（移除反应 → 收回）。配置在此保存（Supabase），机器人实时应用。身份组从列表中选择；消息 ID 请从 Discord 复制（开发者模式 →「复制消息 ID」）。',
     'ui.roles.heading2': '反应身份组 —— 创建面板（嵌入）',
@@ -7598,6 +7685,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '환영 메시지: 켜짐',
     'ui.welcome.statusOff': '환영 메시지: 꺼짐',
     'ui.welcome.heading': '환영 메시지 + autorole',
+    'ui.commands.intro':
+      '봇이 실제로 등록한 슬래시 명령(Discord API에서 실시간 조회), 모듈별로 그룹화.',
+    'ui.commands.total': '총계:',
+    'ui.commands.emptyErrorPre':
+      'Discord API에서 목록을 가져오지 못했습니다(봇 토큰 없음 또는 명령이 아직 등록되지 않음). 실행: ',
+    'ui.commands.thCommand': '명령',
+    'ui.commands.thDesc': '설명',
+    'ui.commands.thSubs': '하위 명령',
+    'ui.commands.footerPre': '목록은 ',
+    'ui.commands.footerPost':
+      ' 이후 자동으로 새로 고쳐집니다(전역 등록은 Discord 클라이언트에서 전파에 최대 약 1시간). 모듈 맵에 없는 새 명령은 "기타" 섹션으로 이동합니다.',
     'ui.roles.intro':
       '반응 역할: 사용자가 지정한 메시지 아래 반응을 클릭하면 → 봇이 역할을 부여합니다(반응 제거 → 회수). 설정은 여기에 저장하며(Supabase) 봇이 실시간으로 적용합니다. 역할은 목록에서 선택하고, 메시지 ID는 Discord에서 복사하세요(개발자 모드 → "메시지 ID 복사").',
     'ui.roles.heading2': '반응 역할 — 패널 만들기 (임베드)',
@@ -8443,6 +8541,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Приветствия: ВКЛЮЧЕНЫ',
     'ui.welcome.statusOff': 'Приветствия: ВЫКЛЮЧЕНЫ',
     'ui.welcome.heading': 'Приветствия + autorole',
+    'ui.commands.intro':
+      'Slash-команды, реально зарегистрированные ботом (загружаются в реальном времени из Discord API), сгруппированные по модулям.',
+    'ui.commands.total': 'Всего:',
+    'ui.commands.emptyErrorPre':
+      'Не удалось получить список из Discord API (нет токена бота или команды ещё не зарегистрированы). Запустите ',
+    'ui.commands.thCommand': 'Команда',
+    'ui.commands.thDesc': 'Описание',
+    'ui.commands.thSubs': 'Подкоманды',
+    'ui.commands.footerPre': 'Список обновляется автоматически после ',
+    'ui.commands.footerPost':
+      ' (глобальная регистрация ~до 1 ч на распространение в клиенте Discord). Новые команды вне карты модулей попадают в раздел «Прочее».',
     'ui.roles.intro':
       'Reaction roles: пользователь нажимает реакцию под указанным сообщением → бот выдаёт роль (снятие реакции → забирает). Конфигурацию вы сохраняете здесь (Supabase); бот применяет её в реальном времени. Роль выбираете из списка; ID сообщения скопируйте из Discord (режим разработчика → «Копировать ID сообщения»).',
     'ui.roles.heading2': 'Reaction roles — создать панель (embed)',
@@ -9298,6 +9407,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Привітання: УВІМКНЕНО',
     'ui.welcome.statusOff': 'Привітання: ВИМКНЕНО',
     'ui.welcome.heading': 'Привітання + autorole',
+    'ui.commands.intro':
+      'Slash-команди, реально зареєстровані ботом (завантажуються в реальному часі з Discord API), згруповані за модулями.',
+    'ui.commands.total': 'Усього:',
+    'ui.commands.emptyErrorPre':
+      'Не вдалося отримати список з Discord API (немає токена бота або команди ще не зареєстровані). Запустіть ',
+    'ui.commands.thCommand': 'Команда',
+    'ui.commands.thDesc': 'Опис',
+    'ui.commands.thSubs': 'Підкоманди',
+    'ui.commands.footerPre': 'Список оновлюється автоматично після ',
+    'ui.commands.footerPost':
+      ' (глобальна реєстрація ~до 1 год на поширення в клієнті Discord). Нові команди поза картою модулів потрапляють у розділ «Інше».',
     'ui.roles.intro':
       'Reaction roles: користувач натискає реакцію під вказаним повідомленням → бот видає роль (зняття реакції → забирає). Конфігурацію ви зберігаєте тут (Supabase); бот застосовує її в реальному часі. Роль обираєте зі списку; ID повідомлення скопіюйте з Discord (режим розробника → «Копіювати ID повідомлення»).',
     'ui.roles.heading2': 'Reaction roles — створити панель (embed)',
@@ -10152,6 +10272,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '歓迎メッセージ：オン',
     'ui.welcome.statusOff': '歓迎メッセージ：オフ',
     'ui.welcome.heading': '歓迎メッセージ + autorole',
+    'ui.commands.intro':
+      'ボットが実際に登録したスラッシュコマンド（Discord API からリアルタイム取得）、モジュールごとにグループ化。',
+    'ui.commands.total': '合計：',
+    'ui.commands.emptyErrorPre':
+      'Discord API から一覧を取得できませんでした（ボットトークンがない、またはコマンドが未登録）。実行してください：',
+    'ui.commands.thCommand': 'コマンド',
+    'ui.commands.thDesc': '説明',
+    'ui.commands.thSubs': 'サブコマンド',
+    'ui.commands.footerPre': '一覧は ',
+    'ui.commands.footerPost':
+      ' の後に自動で更新されます（グローバル登録は Discord クライアントへの反映に最大約 1 時間）。モジュールマップ外の新しいコマンドは「その他」セクションに入ります。',
     'ui.roles.intro':
       'リアクションロール：ユーザーが指定メッセージの下のリアクションをクリックすると → ボットがロールを付与します（リアクション解除 → 取り消し）。設定はここに保存し（Supabase）、ボットがリアルタイムで適用します。ロールは一覧から選び、メッセージ ID は Discord からコピーしてください（開発者モード →「メッセージ ID をコピー」）。',
     'ui.roles.heading2': 'リアクションロール — パネルを作成（埋め込み）',
@@ -11008,6 +11139,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'الترحيب: مُفعَّل',
     'ui.welcome.statusOff': 'الترحيب: مُعطَّل',
     'ui.welcome.heading': 'الترحيب + autorole',
+    'ui.commands.intro':
+      'أوامر السلاش المسجّلة فعليًا بواسطة البوت (تُجلب مباشرةً من واجهة Discord API)، مجمّعة في وحدات.',
+    'ui.commands.total': 'الإجمالي:',
+    'ui.commands.emptyErrorPre':
+      'تعذّر جلب القائمة من واجهة Discord API (لا يوجد رمز للبوت أو لم تُسجَّل الأوامر بعد). شغّل ',
+    'ui.commands.thCommand': 'الأمر',
+    'ui.commands.thDesc': 'الوصف',
+    'ui.commands.thSubs': 'الأوامر الفرعية',
+    'ui.commands.footerPre': 'تتحدّث القائمة تلقائيًا بعد ',
+    'ui.commands.footerPost':
+      ' (التسجيل العام ~حتى ساعة واحدة للانتشار في عميل Discord). الأوامر الجديدة خارج خريطة الوحدات تذهب إلى قسم «أخرى».',
     'ui.roles.intro':
       'أدوار التفاعل: ينقر المستخدم على تفاعل أسفل الرسالة المحددة ← يمنح البوت دورًا (إزالة التفاعل ← يسحبه). تحفظ الإعدادات هنا (Supabase) ويطبّقها البوت مباشرةً. تختار الدور من قائمة؛ وانسخ معرّف الرسالة من Discord (وضع المطوّر ← «نسخ معرّف الرسالة»).',
     'ui.roles.heading2': 'أدوار التفاعل — إنشاء لوحة (مضمّنة)',
@@ -11849,6 +11991,17 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Sambutan: AKTIF',
     'ui.welcome.statusOff': 'Sambutan: NONAKTIF',
     'ui.welcome.heading': 'Sambutan + autorole',
+    'ui.commands.intro':
+      'Perintah slash yang benar-benar didaftarkan oleh bot (diambil langsung dari Discord API), dikelompokkan dalam modul.',
+    'ui.commands.total': 'Total:',
+    'ui.commands.emptyErrorPre':
+      'Gagal mengambil daftar dari Discord API (tidak ada token bot atau perintah belum terdaftar). Jalankan ',
+    'ui.commands.thCommand': 'Perintah',
+    'ui.commands.thDesc': 'Deskripsi',
+    'ui.commands.thSubs': 'Subperintah',
+    'ui.commands.footerPre': 'Daftar diperbarui otomatis setelah ',
+    'ui.commands.footerPost':
+      ' (pendaftaran global ~hingga 1 jam untuk propagasi di klien Discord). Perintah baru di luar peta modul masuk ke bagian «Lainnya».',
     'ui.roles.intro':
       'Reaction roles: pengguna mengeklik reaksi di bawah pesan yang ditentukan → bot memberi peran (menghapus reaksi → mencabutnya). Konfigurasi kamu simpan di sini (Supabase); bot menerapkannya secara langsung. Peran dipilih dari daftar; salin ID pesan dari Discord (mode pengembang → «Salin ID Pesan»).',
     'ui.roles.heading2': 'Reaction roles — buat panel (embed)',
