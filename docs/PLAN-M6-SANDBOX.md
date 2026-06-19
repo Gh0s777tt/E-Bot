@@ -78,7 +78,7 @@ Dopiero gdy pojawi się potrzeba „inline" (bez hostingu autora), dokładamy **
 
 ## 🚦 Fazowanie
 
-1. **M6a — kontrakt akcji + webhook runner** (model B): builder payloadu, podpis HMAC, walidator akcji scoped, limity. Pluginy „server-side hosted".
+1. **M6a — kontrakt akcji + webhook runner** (model B) — ✅ **runner gotowy** ([`lib/pluginRunner.ts`](../dashboard/lib/pluginRunner.ts), v0.285.0): builder payloadu, podpis HMAC, walidator akcji (Zod), SSRF-guard, timeout/limit. **Bez wykonywania akcji** (to M6b). Pluginy „server-side hosted".
 2. **M6b — SDK autora + przykładowy plugin**: typy akcji/zdarzeń, helper podpisu, szablon endpointu (Worker/Express), dokumentacja.
 3. **M6c — publikacja/review UX**: rozszerzenie `/marketplace/submit` o pola endpointu/scope’ów; panel review pokazuje scope’y; sandbox testowy (dry-run) przed approve.
 4. **M6d (opcjonalnie) — inline isolate** (C/E) za tym samym kontraktem, gdy potrzebny hosting po naszej stronie.

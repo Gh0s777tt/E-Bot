@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-354-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.284.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-355-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.285.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.285.0] — 🧪 M6a (start): runner webhook pluginów — kontrakt akcji + SSRF-guard + HMAC
+
+- `[#355]` 🧪 **Marketplace M6a — silnik wykonania pluginów community (warstwa „zawołaj plugin"; akcji jeszcze nie wykonuje).**
+  - Nowy [`lib/pluginRunner.ts`](dashboard/lib/pluginRunner.ts): `runPluginWebhook(inv)` — buduje **scoped** payload (`event`/`guild_id`/`plugin_key`/`config`/`input`), podpisuje **HMAC-SHA256** (`X-EBOT-Signature`), woła endpoint autora i **waliduje odpowiedź** (Zod: akcje `sendMessage`/`addRole`/`setConfig`, max 20).
+  - **SSRF-guard** (`isSafeEndpoint`): tylko `https` + blokada loopback/private/link-local/metadata; **brak redirectów**, timeout 3 s, limit odpowiedzi 100 KB (DNS-rebinding → egress-proxy z decyzji D3, udokumentowane).
+  - **Obcego kodu NIE uruchamiamy** — runner tylko woła endpoint autora i zwraca zwalidowane akcje. **Wykonanie akcji** (scoped do `guild_id`, autoryzacja per-akcja) = **M6b**. Zgodne z [`PLAN-M6-SANDBOX.md`](docs/PLAN-M6-SANDBOX.md) (webhook-first).
+  - Bramki: biome czysto (319), `tsc` exit 0, docs:check exit 0.
 
 ## [0.284.0] — 🧪 Design M6 sandbox: bezpieczne wykonanie pluginów community (webhook-first)
 
