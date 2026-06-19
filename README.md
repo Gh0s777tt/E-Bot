@@ -1,4 +1,4 @@
-<!-- SYNC: v0.250.0 · #320 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.251.0 · #321 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.250.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.251.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.250.0** — 🌍🏁 **i18n strony głównej panelu (Pulpit `/`)** + widgety pulpitu + checklista modułów + `relTime` zależny od języka (53 klucze `ui.home.*` + 16 `ui.checklist.*` × 14 języków) — odkryta przy przeglądzie 39. strona domyka **komplet i18n UI panelu: 39/39 stron**. Wcześniej: współdzielony `CardStyleEditor`/`GradientField` (v0.249.0), `/setup`, `/settings`, `/moderation`, `/custom-commands`, `/engagement`, `/ai`, i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K) oraz 14 epików „2.0" (Faza 8).
+Najnowsze: **v0.251.0** — 🌍 **i18n powierzchni publicznej / pre-auth**: ekran logowania, publiczny ranking `/p/leaderboard`, publiczny profil `/p/u/[id]` (chrome + `generateMetadata`) — 17 kluczy `ui.pub.*` × 14 języków (panel uwierzytelniony pozostaje 39/39). Wcześniej: **i18n strony głównej panelu (Pulpit `/`)** + widgety + checklista + `relTime` (Intl, 14 jęz.) domykające **komplet UI panelu 39/39** (v0.250.0). Wcześniej: współdzielony `CardStyleEditor`/`GradientField` (v0.249.0), `/setup`, `/settings`, `/moderation`, `/custom-commands`, `/engagement`, `/ai`, i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K) oraz 14 epików „2.0" (Faza 8).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

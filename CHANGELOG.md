@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-320-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.250.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-321-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.251.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,17 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.251.0] — 🌍 i18n powierzchni publicznej / pre-auth: login + ranking publiczny + profil publiczny
+
+- `[#321]` 🌍 **i18n stron publicznych/pre-auth (poza torem 39/39 panelu uwierzytelnionego): ekran logowania, publiczny ranking `/p/leaderboard`, publiczny profil `/p/u/[id]`.**
+  - 🖥️ **Panel**: 17 nowych kluczy `ui.pub.*` × **14 języków** w `panelI18n.ts` (parzystość 14×17=238). Wszystkie 3 strony to server-components → `getPanelLocale()` + `tp()`.
+    - `app/login/page.tsx`: 3 komunikaty błędów OAuth (mapa `ERROR_KEY`: `state`/`denied`/`oauth`), podtytuł „Panel sterowania", przycisk „Zaloguj przez Discord", „Dostęp tylko dla właściciela".
+    - `app/p/leaderboard/page.tsx`: nagłówek + podtytuł; tablice rankingowe **reużywają** istniejące `ui.lb.topXp`/`topEco`/`topActive`/`msgUnit`/`empty` (spójność z panelowym `/leaderboard`).
+    - `app/p/u/[id]/page.tsx`: chrome strony („Profil publiczny", „karta gracza", link „Ranking", komunikat braku danych) **oraz** `generateMetadata` (tytuł + opis OG: poziom/ranga/wiadomości/odznaki — segmentowane klucze).
+  - 🌍 **Locale powierzchni publicznej** = ustawienie języka panelu (`getPanelLocale()`), to samo źródło co panel; działa, bo `Shell` (z `LangProvider`) opakowuje cały root layout, więc strony publiczne też mają dostęp do i18n.
+  - 🏁 **Panel uwierzytelniony pozostaje 39/39** — to osobna powierzchnia publiczna, nie 40. strona panelu. Nietłumaczone: marki (E-Bot/Discord/GH0ST EMPIRE), tokeny (`XP`), format `pl-PL`, emoji, ścieżki API.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL).
 
 ## [0.250.0] — 🌍🏁 i18n strony głównej panelu (Pulpit `/`) — odkryta 39. strona domyka komplet (39/39)
 
