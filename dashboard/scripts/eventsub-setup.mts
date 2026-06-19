@@ -37,32 +37,43 @@ if (!user) {
 }
 console.log(`Kanał: ${channel} (id ${user.id}) · callback: ${callback}`);
 
-// posprzątaj stare subskrypcje stream.online na ten callback
+// Rejestrujemy dwie subskrypcje: stream.online (powiadomienia live) oraz channel.subscribe
+// (tor N — subskrypcja Twitch → rola Discord). Ta druga wymaga, by broadcaster wcześniej
+// autoryzował aplikację scope `channel:read:subscriptions` (jednorazowy OAuth twórcy).
+const TYPES = ['stream.online', 'channel.subscribe'] as const;
 const existing =
   (await (await fetch('https://api.twitch.tv/helix/eventsub/subscriptions', { headers: h })).json())
     .data || [];
-for (const s of existing) {
-  if (s.type === 'stream.online' && s.transport?.callback === callback) {
-    await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${s.id}`, {
-      method: 'DELETE',
-      headers: h,
-    });
-    console.log('usunięto starą subskrypcję', s.id, `(${s.status})`);
+for (const type of TYPES) {
+  // posprzątaj stare subskrypcje tego typu na ten callback
+  for (const s of existing) {
+    if (s.type === type && s.transport?.callback === callback) {
+      await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${s.id}`, {
+        method: 'DELETE',
+        headers: h,
+      });
+      console.log('usunięto starą subskrypcję', s.id, type, `(${s.status})`);
+    }
   }
+  const res = await fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
+    method: 'POST',
+    headers: h,
+    body: JSON.stringify({
+      type,
+      version: '1',
+      condition: { broadcaster_user_id: user.id },
+      transport: { method: 'webhook', callback, secret: esSecret },
+    }),
+  });
+  const out = await res.json();
+  const sub = out.data?.[0];
+  if (sub) console.log(`✅ ${type}: ${sub.id} · status: ${sub.status}`);
+  else
+    console.error(
+      `❌ ${type} (HTTP ${res.status}):`,
+      JSON.stringify(out).slice(0, 300),
+      type === 'channel.subscribe'
+        ? '— channel.subscribe wymaga autoryzacji broadcastera scope channel:read:subscriptions'
+        : '',
+    );
 }
-
-const res = await fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
-  method: 'POST',
-  headers: h,
-  body: JSON.stringify({
-    type: 'stream.online',
-    version: '1',
-    condition: { broadcaster_user_id: user.id },
-    transport: { method: 'webhook', callback, secret: esSecret },
-  }),
-});
-const out = await res.json();
-console.log('HTTP', res.status);
-const sub = out.data?.[0];
-if (sub) console.log(`✅ subskrypcja: ${sub.id} · status: ${sub.status}`);
-else console.error('❌', JSON.stringify(out).slice(0, 400));

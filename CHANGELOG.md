@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-333-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.263.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-334-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.264.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.264.0] — 🟣 Twitch sub→rola: domknięcie kodu aktywacji + przewodnik
+
+- `[#334]` 🟣 **Twitch sub → rola Discord — kod gotowy do aktywacji + dokumentacja.**
+  - Runtime **kompletny** (zweryfikowane): `app/api/twitch/eventsub/route.ts` obsługuje `channel.subscribe` → `assignSubRole` (config `twitch_sub_config` + link `twitch_links` → `PUT` roli), z cichą degradacją gdy nieskonfigurowane.
+  - **Domknięta luka aktywacji**: `dashboard/scripts/eventsub-setup.mts` rejestruje teraz **oba** typy EventSub — `stream.online` **i** `channel.subscribe` (wcześniej tylko live). Czytelny komunikat błędu, jeśli broadcaster nie autoryzował scope `channel:read:subscriptions`.
+  - 📘 Nowy przewodnik [`docs/AKTYWACJA-TWITCH-SUB.md`](docs/AKTYWACJA-TWITCH-SUB.md) — dokładne kroki: aplikacja Twitch, env, OAuth broadcastera, schemat DB, rejestracja EventSub, panel, `/linktwitch`.
+  - ⚠️ Pełna aktywacja wymaga **zasobów użytkownika**: aplikacja Twitch (`CLIENT_ID`/`SECRET`) + jednorazowa autoryzacja broadcastera scope `channel:read:subscriptions`. Bez nich kod stoi gotowy i nieaktywny (degraduje się cicho).
+  - Czysto panel (Vercel). Bramki: biome czysto (326 plików), `tsc` exit 0.
 
 ## [0.263.0] — 📊 /stats: konfigurowalny zakres (7/14/30/90 dni) + eksport CSV
 
