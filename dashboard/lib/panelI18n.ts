@@ -766,6 +766,36 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Powitania: WŁĄCZONE',
     'ui.welcome.statusOff': 'Powitania: WYŁĄCZONE',
     'ui.welcome.heading': 'Powitania + autorole',
+    'ui.roles.intro':
+      'Reaction roles: użytkownik klika reakcję pod wskazaną wiadomością → bot nadaje rolę (usunięcie reakcji → odbiera). Konfigurację zapisujesz tu (Supabase), bot stosuje ją na żywo. Rolę wybierasz z listy; ID wiadomości skopiuj z Discorda (tryb developera → „Kopiuj ID wiadomości").',
+    'ui.roles.heading2': 'Reaction roles — utwórz panel (embed)',
+    'ui.roles.heading3': 'Menu ról (dropdown)',
+    'ui.roles.mappingsLabel': 'Mapowania (wiadomość → emoji → rola)',
+    'ui.roles.addBtn': 'Dodaj',
+    'ui.roles.noMappings': 'Brak mapowań. Dodaj: ID wiadomości, emoji i ID roli.',
+    'ui.roles.msgIdPh': 'ID wiadomości',
+    'ui.roles.delAria': 'Usuń',
+    'ui.roles.rrHelp':
+      'Bot nadaje rolę po dodaniu reakcji pod wskazaną wiadomością i odbiera po jej usunięciu. Emoji: zwykłe (np. ✅) lub własne serwera. Wymaga włączonego bota.',
+    'ui.roles.panelIntroPre':
+      'Tryb „utwórz": bot publikuje tę wiadomość (embed z edytora) komendą ',
+    'ui.roles.panelIntroPost': ' i sam dodaje reakcje wg par poniżej.',
+    'ui.roles.panelMsgLabel': 'Wiadomość panelu',
+    'ui.roles.pairsLabel': 'Pary emoji → rola (max 20)',
+    'ui.roles.noPairs': 'Brak par. Dodaj emoji (zwykłe lub serwerowe) i rolę.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Wybierz jedną — reakcja zostawia użytkownikowi tylko jedną rolę z tego panelu (radio).',
+    'ui.roles.panelHelpPre': 'Po zapisie wejdź na docelowy kanał i odpal ',
+    'ui.roles.panelHelpMid':
+      ' — bot wyśle wiadomość i doda reakcje. Emoji serwerowe wstaw przez picker w edytorze (lub ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Treść wiadomości',
+    'ui.roles.menuPlaceholderLabel': 'Placeholder menu',
+    'ui.roles.optionsLabel': 'Opcje (rola → etykieta)',
+    'ui.roles.noOptions': 'Brak opcji. Dodaj rolę, etykietę i (opcjonalnie) emoji.',
+    'ui.roles.labelPh': 'Etykieta',
+    'ui.roles.menuHelpPre': 'Po zapisaniu opublikuj menu komendą ',
+    'ui.roles.menuHelpPost': ' na kanale. Użytkownik wybiera role z listy (wielokrotny wybór).',
     'ui.creator.intro':
       'Narzędzia twórcy: automatyczne wydarzenie Discord gdy wejdziesz na live (Twitch EventSub) oraz relay klipów — bot wrzuca nowe klipy z Twitcha na wskazany kanał. Konfigurację zapisujesz tu (Supabase); bot stosuje ją na żywo.',
     'ui.creator.creatorHeading': 'Narzędzia twórcy',
@@ -1588,6 +1618,37 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Welcomes: ON',
     'ui.welcome.statusOff': 'Welcomes: OFF',
     'ui.welcome.heading': 'Welcomes + autorole',
+    'ui.roles.intro':
+      'Reaction roles: a user clicks a reaction under the chosen message → the bot grants a role (removing the reaction → takes it away). You save the configuration here (Supabase); the bot applies it live. You pick the role from a list; copy the message ID from Discord (developer mode → “Copy Message ID”).',
+    'ui.roles.heading2': 'Reaction roles — create a panel (embed)',
+    'ui.roles.heading3': 'Role menu (dropdown)',
+    'ui.roles.mappingsLabel': 'Mappings (message → emoji → role)',
+    'ui.roles.addBtn': 'Add',
+    'ui.roles.noMappings': 'No mappings. Add: message ID, emoji and role ID.',
+    'ui.roles.msgIdPh': 'Message ID',
+    'ui.roles.delAria': 'Delete',
+    'ui.roles.rrHelp':
+      'The bot grants the role when a reaction is added under the chosen message and removes it when the reaction is removed. Emoji: standard (e.g. ✅) or a server one. Requires the bot to be enabled.',
+    'ui.roles.panelIntroPre':
+      '“Create” mode: the bot posts this message (embed from the editor) with the ',
+    'ui.roles.panelIntroPost': ' command and adds the reactions itself per the pairs below.',
+    'ui.roles.panelMsgLabel': 'Panel message',
+    'ui.roles.pairsLabel': 'Emoji → role pairs (max 20)',
+    'ui.roles.noPairs': 'No pairs. Add an emoji (standard or server) and a role.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Pick one — the reaction leaves the user only one role from this panel (radio).',
+    'ui.roles.panelHelpPre': 'After saving, go to the target channel and run ',
+    'ui.roles.panelHelpMid':
+      ' — the bot sends the message and adds the reactions. Insert server emoji via the picker in the editor (or ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Message content',
+    'ui.roles.menuPlaceholderLabel': 'Menu placeholder',
+    'ui.roles.optionsLabel': 'Options (role → label)',
+    'ui.roles.noOptions': 'No options. Add a role, a label and (optionally) an emoji.',
+    'ui.roles.labelPh': 'Label',
+    'ui.roles.menuHelpPre': 'After saving, publish the menu with the ',
+    'ui.roles.menuHelpPost':
+      ' command in a channel. The user picks roles from the list (multiple choice).',
     'ui.creator.intro':
       'Creator tools: an automatic Discord event when you go live (Twitch EventSub) and a clip relay — the bot posts new Twitch clips to the chosen channel. You save the configuration here (Supabase); the bot applies it live.',
     'ui.creator.creatorHeading': 'Creator tools',
@@ -2410,6 +2471,38 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Begrüßungen: AN',
     'ui.welcome.statusOff': 'Begrüßungen: AUS',
     'ui.welcome.heading': 'Begrüßungen + autorole',
+    'ui.roles.intro':
+      'Reaction Roles: ein Nutzer klickt eine Reaktion unter der gewählten Nachricht → der Bot vergibt eine Rolle (Reaktion entfernen → nimmt sie weg). Die Konfiguration speicherst du hier (Supabase); der Bot wendet sie live an. Die Rolle wählst du aus einer Liste; kopiere die Nachrichten-ID aus Discord (Entwicklermodus → „Nachrichten-ID kopieren“).',
+    'ui.roles.heading2': 'Reaction Roles — Panel erstellen (Embed)',
+    'ui.roles.heading3': 'Rollen-Menü (Dropdown)',
+    'ui.roles.mappingsLabel': 'Zuordnungen (Nachricht → Emoji → Rolle)',
+    'ui.roles.addBtn': 'Hinzufügen',
+    'ui.roles.noMappings': 'Keine Zuordnungen. Füge hinzu: Nachrichten-ID, Emoji und Rollen-ID.',
+    'ui.roles.msgIdPh': 'Nachrichten-ID',
+    'ui.roles.delAria': 'Löschen',
+    'ui.roles.rrHelp':
+      'Der Bot vergibt die Rolle, wenn unter der gewählten Nachricht eine Reaktion hinzugefügt wird, und nimmt sie beim Entfernen wieder weg. Emoji: Standard (z. B. ✅) oder ein Server-Emoji. Erfordert einen aktiven Bot.',
+    'ui.roles.panelIntroPre':
+      '„Erstellen“-Modus: Der Bot postet diese Nachricht (Embed aus dem Editor) mit dem Befehl ',
+    'ui.roles.panelIntroPost': ' und fügt die Reaktionen gemäß den Paaren unten selbst hinzu.',
+    'ui.roles.panelMsgLabel': 'Panel-Nachricht',
+    'ui.roles.pairsLabel': 'Emoji-→-Rolle-Paare (max. 20)',
+    'ui.roles.noPairs': 'Keine Paare. Füge ein Emoji (Standard oder Server) und eine Rolle hinzu.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Nur eine wählen — die Reaktion lässt dem Nutzer nur eine Rolle aus diesem Panel (Radio).',
+    'ui.roles.panelHelpPre': 'Gehe nach dem Speichern in den Zielkanal und führe ',
+    'ui.roles.panelHelpMid':
+      ' aus — der Bot sendet die Nachricht und fügt die Reaktionen hinzu. Server-Emoji über den Picker im Editor einfügen (oder ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Nachrichteninhalt',
+    'ui.roles.menuPlaceholderLabel': 'Menü-Platzhalter',
+    'ui.roles.optionsLabel': 'Optionen (Rolle → Label)',
+    'ui.roles.noOptions':
+      'Keine Optionen. Füge eine Rolle, ein Label und (optional) ein Emoji hinzu.',
+    'ui.roles.labelPh': 'Label',
+    'ui.roles.menuHelpPre': 'Veröffentliche das Menü nach dem Speichern mit dem Befehl ',
+    'ui.roles.menuHelpPost':
+      ' in einem Kanal. Der Nutzer wählt Rollen aus der Liste (Mehrfachauswahl).',
     'ui.creator.intro':
       'Creator-Tools: ein automatisches Discord-Event, wenn du live gehst (Twitch EventSub), und ein Clip-Relay — der Bot postet neue Twitch-Clips im gewählten Kanal. Die Konfiguration speicherst du hier (Supabase); der Bot wendet sie live an.',
     'ui.creator.creatorHeading': 'Creator-Tools',
@@ -3237,6 +3330,37 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenidas: ACTIVADAS',
     'ui.welcome.statusOff': 'Bienvenidas: DESACTIVADAS',
     'ui.welcome.heading': 'Bienvenidas + autorole',
+    'ui.roles.intro':
+      'Reaction roles: el usuario hace clic en una reacción bajo el mensaje indicado → el bot otorga un rol (quitar la reacción → lo retira). La configuración la guardas aquí (Supabase); el bot la aplica en vivo. El rol lo eliges de una lista; copia el ID del mensaje desde Discord (modo desarrollador → «Copiar ID del mensaje»).',
+    'ui.roles.heading2': 'Reaction roles — crear panel (embed)',
+    'ui.roles.heading3': 'Menú de roles (desplegable)',
+    'ui.roles.mappingsLabel': 'Asignaciones (mensaje → emoji → rol)',
+    'ui.roles.addBtn': 'Añadir',
+    'ui.roles.noMappings': 'Sin asignaciones. Añade: ID del mensaje, emoji e ID del rol.',
+    'ui.roles.msgIdPh': 'ID del mensaje',
+    'ui.roles.delAria': 'Eliminar',
+    'ui.roles.rrHelp':
+      'El bot otorga el rol al añadir una reacción bajo el mensaje indicado y lo retira al quitarla. Emoji: estándar (p. ej. ✅) o propio del servidor. Requiere el bot activado.',
+    'ui.roles.panelIntroPre':
+      'Modo «crear»: el bot publica este mensaje (embed del editor) con el comando ',
+    'ui.roles.panelIntroPost': ' y añade las reacciones según los pares de abajo.',
+    'ui.roles.panelMsgLabel': 'Mensaje del panel',
+    'ui.roles.pairsLabel': 'Pares emoji → rol (máx. 20)',
+    'ui.roles.noPairs': 'Sin pares. Añade un emoji (estándar o del servidor) y un rol.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Elegir uno — la reacción deja al usuario solo un rol de este panel (radio).',
+    'ui.roles.panelHelpPre': 'Tras guardar, ve al canal de destino y ejecuta ',
+    'ui.roles.panelHelpMid':
+      ' — el bot envía el mensaje y añade las reacciones. Inserta emojis del servidor con el selector del editor (o ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Contenido del mensaje',
+    'ui.roles.menuPlaceholderLabel': 'Marcador del menú',
+    'ui.roles.optionsLabel': 'Opciones (rol → etiqueta)',
+    'ui.roles.noOptions': 'Sin opciones. Añade un rol, una etiqueta y (opcional) un emoji.',
+    'ui.roles.labelPh': 'Etiqueta',
+    'ui.roles.menuHelpPre': 'Tras guardar, publica el menú con el comando ',
+    'ui.roles.menuHelpPost':
+      ' en un canal. El usuario elige roles de la lista (selección múltiple).',
     'ui.creator.intro':
       'Herramientas de creador: un evento de Discord automático cuando empiezas a emitir (Twitch EventSub) y un relay de clips — el bot publica nuevos clips de Twitch en el canal indicado. La configuración la guardas aquí (Supabase); el bot la aplica en vivo.',
     'ui.creator.creatorHeading': 'Herramientas de creador',
@@ -4067,6 +4191,38 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Benvenuti: ATTIVI',
     'ui.welcome.statusOff': 'Benvenuti: DISATTIVATI',
     'ui.welcome.heading': 'Benvenuti + autorole',
+    'ui.roles.intro':
+      'Reaction roles: l’utente clicca una reazione sotto il messaggio indicato → il bot assegna un ruolo (rimuovere la reazione → lo toglie). La configurazione la salvi qui (Supabase); il bot la applica in tempo reale. Il ruolo lo scegli da un elenco; copia l’ID del messaggio da Discord (modalità sviluppatore → «Copia ID messaggio»).',
+    'ui.roles.heading2': 'Reaction roles — crea un pannello (embed)',
+    'ui.roles.heading3': 'Menu ruoli (a tendina)',
+    'ui.roles.mappingsLabel': 'Mappature (messaggio → emoji → ruolo)',
+    'ui.roles.addBtn': 'Aggiungi',
+    'ui.roles.noMappings': 'Nessuna mappatura. Aggiungi: ID messaggio, emoji e ID ruolo.',
+    'ui.roles.msgIdPh': 'ID messaggio',
+    'ui.roles.delAria': 'Elimina',
+    'ui.roles.rrHelp':
+      'Il bot assegna il ruolo quando viene aggiunta una reazione sotto il messaggio indicato e lo toglie alla rimozione. Emoji: standard (es. ✅) o del server. Richiede il bot attivo.',
+    'ui.roles.panelIntroPre':
+      'Modalità «crea»: il bot pubblica questo messaggio (embed dall’editor) con il comando ',
+    'ui.roles.panelIntroPost': ' e aggiunge da sé le reazioni secondo le coppie qui sotto.',
+    'ui.roles.panelMsgLabel': 'Messaggio del pannello',
+    'ui.roles.pairsLabel': 'Coppie emoji → ruolo (max 20)',
+    'ui.roles.noPairs': 'Nessuna coppia. Aggiungi un’emoji (standard o del server) e un ruolo.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Scegline uno — la reazione lascia all’utente un solo ruolo da questo pannello (radio).',
+    'ui.roles.panelHelpPre': 'Dopo il salvataggio, vai nel canale di destinazione ed esegui ',
+    'ui.roles.panelHelpMid':
+      ' — il bot invia il messaggio e aggiunge le reazioni. Inserisci le emoji del server tramite il picker nell’editor (oppure ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Contenuto del messaggio',
+    'ui.roles.menuPlaceholderLabel': 'Segnaposto del menu',
+    'ui.roles.optionsLabel': 'Opzioni (ruolo → etichetta)',
+    'ui.roles.noOptions':
+      'Nessuna opzione. Aggiungi un ruolo, un’etichetta e (facoltativo) un’emoji.',
+    'ui.roles.labelPh': 'Etichetta',
+    'ui.roles.menuHelpPre': 'Dopo il salvataggio, pubblica il menu con il comando ',
+    'ui.roles.menuHelpPost':
+      ' in un canale. L’utente sceglie i ruoli dall’elenco (selezione multipla).',
     'ui.creator.intro':
       'Strumenti per creator: un evento Discord automatico quando vai in live (Twitch EventSub) e un relay di clip — il bot pubblica le nuove clip di Twitch nel canale indicato. La configurazione la salvi qui (Supabase); il bot la applica in tempo reale.',
     'ui.creator.creatorHeading': 'Strumenti per creator',
@@ -4897,6 +5053,37 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Bienvenue : ACTIVÉ',
     'ui.welcome.statusOff': 'Bienvenue : DÉSACTIVÉ',
     'ui.welcome.heading': 'Bienvenue + autorole',
+    'ui.roles.intro':
+      'Reaction roles : l’utilisateur clique une réaction sous le message indiqué → le bot attribue un rôle (retirer la réaction → le retire). Tu enregistres la configuration ici (Supabase) ; le bot l’applique en direct. Tu choisis le rôle dans une liste ; copie l’ID du message depuis Discord (mode développeur → « Copier l’identifiant du message »).',
+    'ui.roles.heading2': 'Reaction roles — créer un panneau (embed)',
+    'ui.roles.heading3': 'Menu de rôles (déroulant)',
+    'ui.roles.mappingsLabel': 'Correspondances (message → emoji → rôle)',
+    'ui.roles.addBtn': 'Ajouter',
+    'ui.roles.noMappings': 'Aucune correspondance. Ajoute : ID du message, emoji et ID du rôle.',
+    'ui.roles.msgIdPh': 'ID du message',
+    'ui.roles.delAria': 'Supprimer',
+    'ui.roles.rrHelp':
+      'Le bot attribue le rôle quand une réaction est ajoutée sous le message indiqué et le retire à sa suppression. Emoji : standard (p. ex. ✅) ou du serveur. Nécessite que le bot soit activé.',
+    'ui.roles.panelIntroPre':
+      'Mode « créer » : le bot publie ce message (embed depuis l’éditeur) avec la commande ',
+    'ui.roles.panelIntroPost': ' et ajoute lui-même les réactions selon les paires ci-dessous.',
+    'ui.roles.panelMsgLabel': 'Message du panneau',
+    'ui.roles.pairsLabel': 'Paires emoji → rôle (max 20)',
+    'ui.roles.noPairs': 'Aucune paire. Ajoute un emoji (standard ou du serveur) et un rôle.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ En choisir un — la réaction ne laisse à l’utilisateur qu’un seul rôle de ce panneau (radio).',
+    'ui.roles.panelHelpPre': 'Après l’enregistrement, va dans le salon cible et lance ',
+    'ui.roles.panelHelpMid':
+      ' — le bot envoie le message et ajoute les réactions. Insère les emojis du serveur via le sélecteur de l’éditeur (ou ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Contenu du message',
+    'ui.roles.menuPlaceholderLabel': 'Texte indicatif du menu',
+    'ui.roles.optionsLabel': 'Options (rôle → libellé)',
+    'ui.roles.noOptions': 'Aucune option. Ajoute un rôle, un libellé et (facultatif) un emoji.',
+    'ui.roles.labelPh': 'Libellé',
+    'ui.roles.menuHelpPre': 'Après l’enregistrement, publie le menu avec la commande ',
+    'ui.roles.menuHelpPost':
+      ' dans un salon. L’utilisateur choisit les rôles dans la liste (choix multiple).',
     'ui.creator.intro':
       'Outils créateur : un événement Discord automatique quand tu passes en live (Twitch EventSub) et un relais de clips — le bot publie les nouveaux clips Twitch dans le salon indiqué. Tu enregistres la configuration ici (Supabase) ; le bot l’applique en direct.',
     'ui.creator.creatorHeading': 'Outils créateur',
@@ -5728,6 +5915,36 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Boas-vindas: LIGADAS',
     'ui.welcome.statusOff': 'Boas-vindas: DESLIGADAS',
     'ui.welcome.heading': 'Boas-vindas + autorole',
+    'ui.roles.intro':
+      'Reaction roles: o utilizador clica numa reação sob a mensagem indicada → o bot atribui um cargo (remover a reação → retira-o). A configuração guardas aqui (Supabase); o bot aplica-a em tempo real. O cargo escolhes de uma lista; copia o ID da mensagem do Discord (modo de programador → «Copiar ID da mensagem»).',
+    'ui.roles.heading2': 'Reaction roles — criar painel (embed)',
+    'ui.roles.heading3': 'Menu de cargos (dropdown)',
+    'ui.roles.mappingsLabel': 'Mapeamentos (mensagem → emoji → cargo)',
+    'ui.roles.addBtn': 'Adicionar',
+    'ui.roles.noMappings': 'Sem mapeamentos. Adiciona: ID da mensagem, emoji e ID do cargo.',
+    'ui.roles.msgIdPh': 'ID da mensagem',
+    'ui.roles.delAria': 'Eliminar',
+    'ui.roles.rrHelp':
+      'O bot atribui o cargo ao adicionar uma reação sob a mensagem indicada e retira-o ao removê-la. Emoji: padrão (ex. ✅) ou do servidor. Requer o bot ativado.',
+    'ui.roles.panelIntroPre':
+      'Modo «criar»: o bot publica esta mensagem (embed do editor) com o comando ',
+    'ui.roles.panelIntroPost': ' e adiciona as reações segundo os pares abaixo.',
+    'ui.roles.panelMsgLabel': 'Mensagem do painel',
+    'ui.roles.pairsLabel': 'Pares emoji → cargo (máx. 20)',
+    'ui.roles.noPairs': 'Sem pares. Adiciona um emoji (padrão ou do servidor) e um cargo.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Escolher um — a reação deixa ao utilizador apenas um cargo deste painel (radio).',
+    'ui.roles.panelHelpPre': 'Após guardar, vai ao canal de destino e executa ',
+    'ui.roles.panelHelpMid':
+      ' — o bot envia a mensagem e adiciona as reações. Insere emojis do servidor pelo seletor do editor (ou ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Conteúdo da mensagem',
+    'ui.roles.menuPlaceholderLabel': 'Marcador do menu',
+    'ui.roles.optionsLabel': 'Opções (cargo → etiqueta)',
+    'ui.roles.noOptions': 'Sem opções. Adiciona um cargo, uma etiqueta e (opcional) um emoji.',
+    'ui.roles.labelPh': 'Etiqueta',
+    'ui.roles.menuHelpPre': 'Após guardar, publica o menu com o comando ',
+    'ui.roles.menuHelpPost': ' num canal. O utilizador escolhe cargos da lista (seleção múltipla).',
     'ui.creator.intro':
       'Ferramentas de criador: um evento de Discord automático quando entras em live (Twitch EventSub) e um relay de clipes — o bot publica novos clipes da Twitch no canal indicado. A configuração guardas aqui (Supabase); o bot aplica-a em tempo real.',
     'ui.creator.creatorHeading': 'Ferramentas de criador',
@@ -6556,6 +6773,34 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '欢迎消息：已开启',
     'ui.welcome.statusOff': '欢迎消息：已关闭',
     'ui.welcome.heading': '欢迎消息 + autorole',
+    'ui.roles.intro':
+      '反应身份组：用户在指定消息下点击反应 → 机器人授予身份组（移除反应 → 收回）。配置在此保存（Supabase），机器人实时应用。身份组从列表中选择；消息 ID 请从 Discord 复制（开发者模式 →「复制消息 ID」）。',
+    'ui.roles.heading2': '反应身份组 —— 创建面板（嵌入）',
+    'ui.roles.heading3': '身份组菜单（下拉）',
+    'ui.roles.mappingsLabel': '映射（消息 → 表情 → 身份组）',
+    'ui.roles.addBtn': '添加',
+    'ui.roles.noMappings': '暂无映射。添加：消息 ID、表情和身份组 ID。',
+    'ui.roles.msgIdPh': '消息 ID',
+    'ui.roles.delAria': '删除',
+    'ui.roles.rrHelp':
+      '在指定消息下添加反应时机器人授予身份组，移除反应时收回。表情：标准（如 ✅）或服务器自定义。需要机器人已启用。',
+    'ui.roles.panelIntroPre': '「创建」模式：机器人用命令 ',
+    'ui.roles.panelIntroPost': ' 发布此消息（来自编辑器的嵌入），并按下方的配对自行添加反应。',
+    'ui.roles.panelMsgLabel': '面板消息',
+    'ui.roles.pairsLabel': '表情 → 身份组配对（最多 20）',
+    'ui.roles.noPairs': '暂无配对。添加表情（标准或服务器）和身份组。',
+    'ui.roles.exclusiveLabel': '🎚️ 单选 —— 反应只给用户保留此面板中的一个身份组（单选）。',
+    'ui.roles.panelHelpPre': '保存后，进入目标频道并运行 ',
+    'ui.roles.panelHelpMid':
+      ' —— 机器人会发送消息并添加反应。服务器表情通过编辑器中的选择器插入（或 ',
+    'ui.roles.panelHelpPost': '）。',
+    'ui.roles.msgContentLabel': '消息内容',
+    'ui.roles.menuPlaceholderLabel': '菜单占位符',
+    'ui.roles.optionsLabel': '选项（身份组 → 标签）',
+    'ui.roles.noOptions': '暂无选项。添加身份组、标签和（可选）表情。',
+    'ui.roles.labelPh': '标签',
+    'ui.roles.menuHelpPre': '保存后，在频道用命令 ',
+    'ui.roles.menuHelpPost': ' 发布菜单。用户从列表中选择身份组（可多选）。',
     'ui.creator.intro':
       '创作者工具：开播时自动创建 Discord 活动（Twitch EventSub），以及剪辑转发 —— 机器人将新的 Twitch 剪辑发布到指定频道。配置在此保存（Supabase），机器人实时应用。',
     'ui.creator.creatorHeading': '创作者工具',
@@ -7353,6 +7598,37 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '환영 메시지: 켜짐',
     'ui.welcome.statusOff': '환영 메시지: 꺼짐',
     'ui.welcome.heading': '환영 메시지 + autorole',
+    'ui.roles.intro':
+      '반응 역할: 사용자가 지정한 메시지 아래 반응을 클릭하면 → 봇이 역할을 부여합니다(반응 제거 → 회수). 설정은 여기에 저장하며(Supabase) 봇이 실시간으로 적용합니다. 역할은 목록에서 선택하고, 메시지 ID는 Discord에서 복사하세요(개발자 모드 → "메시지 ID 복사").',
+    'ui.roles.heading2': '반응 역할 — 패널 만들기 (임베드)',
+    'ui.roles.heading3': '역할 메뉴 (드롭다운)',
+    'ui.roles.mappingsLabel': '매핑 (메시지 → 이모지 → 역할)',
+    'ui.roles.addBtn': '추가',
+    'ui.roles.noMappings': '매핑이 없습니다. 추가: 메시지 ID, 이모지, 역할 ID.',
+    'ui.roles.msgIdPh': '메시지 ID',
+    'ui.roles.delAria': '삭제',
+    'ui.roles.rrHelp':
+      '지정한 메시지 아래에 반응이 추가되면 봇이 역할을 부여하고, 제거되면 회수합니다. 이모지: 표준(예: ✅) 또는 서버 이모지. 봇이 활성화되어 있어야 합니다.',
+    'ui.roles.panelIntroPre': '"만들기" 모드: 봇이 ',
+    'ui.roles.panelIntroPost':
+      ' 명령으로 이 메시지(편집기의 임베드)를 게시하고, 아래 쌍에 따라 직접 반응을 추가합니다.',
+    'ui.roles.panelMsgLabel': '패널 메시지',
+    'ui.roles.pairsLabel': '이모지 → 역할 쌍 (최대 20)',
+    'ui.roles.noPairs': '쌍이 없습니다. 이모지(표준 또는 서버)와 역할을 추가하세요.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ 하나만 선택 — 반응이 이 패널에서 사용자에게 역할 하나만 남깁니다(라디오).',
+    'ui.roles.panelHelpPre': '저장 후 대상 채널로 가서 ',
+    'ui.roles.panelHelpMid':
+      ' 를 실행하세요 — 봇이 메시지를 보내고 반응을 추가합니다. 서버 이모지는 편집기의 선택기로 삽입하세요(또는 ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': '메시지 내용',
+    'ui.roles.menuPlaceholderLabel': '메뉴 플레이스홀더',
+    'ui.roles.optionsLabel': '옵션 (역할 → 라벨)',
+    'ui.roles.noOptions': '옵션이 없습니다. 역할, 라벨, (선택) 이모지를 추가하세요.',
+    'ui.roles.labelPh': '라벨',
+    'ui.roles.menuHelpPre': '저장 후 채널에서 ',
+    'ui.roles.menuHelpPost':
+      ' 명령으로 메뉴를 게시하세요. 사용자가 목록에서 역할을 선택합니다(다중 선택).',
     'ui.creator.intro':
       '크리에이터 도구: 방송을 시작하면 자동으로 Discord 이벤트를 생성하고(Twitch EventSub), 클립 릴레이로 새 Twitch 클립을 지정한 채널에 게시합니다. 설정은 여기에 저장하며(Supabase) 봇이 실시간으로 적용합니다.',
     'ui.creator.creatorHeading': '크리에이터 도구',
@@ -8167,6 +8443,37 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Приветствия: ВКЛЮЧЕНЫ',
     'ui.welcome.statusOff': 'Приветствия: ВЫКЛЮЧЕНЫ',
     'ui.welcome.heading': 'Приветствия + autorole',
+    'ui.roles.intro':
+      'Reaction roles: пользователь нажимает реакцию под указанным сообщением → бот выдаёт роль (снятие реакции → забирает). Конфигурацию вы сохраняете здесь (Supabase); бот применяет её в реальном времени. Роль выбираете из списка; ID сообщения скопируйте из Discord (режим разработчика → «Копировать ID сообщения»).',
+    'ui.roles.heading2': 'Reaction roles — создать панель (embed)',
+    'ui.roles.heading3': 'Меню ролей (выпадающее)',
+    'ui.roles.mappingsLabel': 'Сопоставления (сообщение → эмодзи → роль)',
+    'ui.roles.addBtn': 'Добавить',
+    'ui.roles.noMappings': 'Нет сопоставлений. Добавьте: ID сообщения, эмодзи и ID роли.',
+    'ui.roles.msgIdPh': 'ID сообщения',
+    'ui.roles.delAria': 'Удалить',
+    'ui.roles.rrHelp':
+      'Бот выдаёт роль при добавлении реакции под указанным сообщением и забирает при её снятии. Эмодзи: обычное (напр. ✅) или серверное. Требуется включённый бот.',
+    'ui.roles.panelIntroPre':
+      'Режим «создать»: бот публикует это сообщение (embed из редактора) командой ',
+    'ui.roles.panelIntroPost': ' и сам добавляет реакции по парам ниже.',
+    'ui.roles.panelMsgLabel': 'Сообщение панели',
+    'ui.roles.pairsLabel': 'Пары эмодзи → роль (макс. 20)',
+    'ui.roles.noPairs': 'Нет пар. Добавьте эмодзи (обычное или серверное) и роль.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Выбрать одну — реакция оставляет пользователю только одну роль из этой панели (radio).',
+    'ui.roles.panelHelpPre': 'После сохранения зайдите в целевой канал и выполните ',
+    'ui.roles.panelHelpMid':
+      ' — бот отправит сообщение и добавит реакции. Серверные эмодзи вставляйте через пикер в редакторе (или ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Текст сообщения',
+    'ui.roles.menuPlaceholderLabel': 'Плейсхолдер меню',
+    'ui.roles.optionsLabel': 'Опции (роль → метка)',
+    'ui.roles.noOptions': 'Нет опций. Добавьте роль, метку и (необязательно) эмодзи.',
+    'ui.roles.labelPh': 'Метка',
+    'ui.roles.menuHelpPre': 'После сохранения опубликуйте меню командой ',
+    'ui.roles.menuHelpPost':
+      ' в канале. Пользователь выбирает роли из списка (множественный выбор).',
     'ui.creator.intro':
       'Инструменты автора: автоматическое событие Discord при выходе в эфир (Twitch EventSub) и релей клипов — бот публикует новые клипы Twitch в указанном канале. Конфигурацию вы сохраняете здесь (Supabase); бот применяет её в реальном времени.',
     'ui.creator.creatorHeading': 'Инструменты автора',
@@ -8991,6 +9298,36 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Привітання: УВІМКНЕНО',
     'ui.welcome.statusOff': 'Привітання: ВИМКНЕНО',
     'ui.welcome.heading': 'Привітання + autorole',
+    'ui.roles.intro':
+      'Reaction roles: користувач натискає реакцію під вказаним повідомленням → бот видає роль (зняття реакції → забирає). Конфігурацію ви зберігаєте тут (Supabase); бот застосовує її в реальному часі. Роль обираєте зі списку; ID повідомлення скопіюйте з Discord (режим розробника → «Копіювати ID повідомлення»).',
+    'ui.roles.heading2': 'Reaction roles — створити панель (embed)',
+    'ui.roles.heading3': 'Меню ролей (випадне)',
+    'ui.roles.mappingsLabel': 'Зіставлення (повідомлення → емодзі → роль)',
+    'ui.roles.addBtn': 'Додати',
+    'ui.roles.noMappings': 'Немає зіставлень. Додайте: ID повідомлення, емодзі та ID ролі.',
+    'ui.roles.msgIdPh': 'ID повідомлення',
+    'ui.roles.delAria': 'Видалити',
+    'ui.roles.rrHelp':
+      'Бот видає роль після додавання реакції під вказаним повідомленням і забирає після її зняття. Емодзі: звичайне (напр. ✅) або серверне. Потрібен увімкнений бот.',
+    'ui.roles.panelIntroPre':
+      'Режим «створити»: бот публікує це повідомлення (embed з редактора) командою ',
+    'ui.roles.panelIntroPost': ' і сам додає реакції за парами нижче.',
+    'ui.roles.panelMsgLabel': 'Повідомлення панелі',
+    'ui.roles.pairsLabel': 'Пари емодзі → роль (макс. 20)',
+    'ui.roles.noPairs': 'Немає пар. Додайте емодзі (звичайне або серверне) і роль.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Обрати одну — реакція залишає користувачу лише одну роль із цієї панелі (radio).',
+    'ui.roles.panelHelpPre': 'Після збереження зайдіть у цільовий канал і виконайте ',
+    'ui.roles.panelHelpMid':
+      ' — бот надішле повідомлення та додасть реакції. Серверні емодзі вставляйте через пікер у редакторі (або ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Текст повідомлення',
+    'ui.roles.menuPlaceholderLabel': 'Плейсхолдер меню',
+    'ui.roles.optionsLabel': 'Опції (роль → мітка)',
+    'ui.roles.noOptions': 'Немає опцій. Додайте роль, мітку та (необов’язково) емодзі.',
+    'ui.roles.labelPh': 'Мітка',
+    'ui.roles.menuHelpPre': 'Після збереження опублікуйте меню командою ',
+    'ui.roles.menuHelpPost': ' у каналі. Користувач обирає ролі зі списку (множинний вибір).',
     'ui.creator.intro':
       'Інструменти автора: автоматична подія Discord під час виходу в ефір (Twitch EventSub) та релей кліпів — бот публікує нові кліпи Twitch у вказаному каналі. Конфігурацію ви зберігаєте тут (Supabase); бот застосовує її в реальному часі.',
     'ui.creator.creatorHeading': 'Інструменти автора',
@@ -9815,6 +10152,39 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': '歓迎メッセージ：オン',
     'ui.welcome.statusOff': '歓迎メッセージ：オフ',
     'ui.welcome.heading': '歓迎メッセージ + autorole',
+    'ui.roles.intro':
+      'リアクションロール：ユーザーが指定メッセージの下のリアクションをクリックすると → ボットがロールを付与します（リアクション解除 → 取り消し）。設定はここに保存し（Supabase）、ボットがリアルタイムで適用します。ロールは一覧から選び、メッセージ ID は Discord からコピーしてください（開発者モード →「メッセージ ID をコピー」）。',
+    'ui.roles.heading2': 'リアクションロール — パネルを作成（埋め込み）',
+    'ui.roles.heading3': 'ロールメニュー（ドロップダウン）',
+    'ui.roles.mappingsLabel': 'マッピング（メッセージ → 絵文字 → ロール）',
+    'ui.roles.addBtn': '追加',
+    'ui.roles.noMappings': 'マッピングがありません。追加：メッセージ ID、絵文字、ロール ID。',
+    'ui.roles.msgIdPh': 'メッセージ ID',
+    'ui.roles.delAria': '削除',
+    'ui.roles.rrHelp':
+      '指定メッセージの下にリアクションが追加されるとボットがロールを付与し、解除されると取り消します。絵文字：標準（例: ✅）またはサーバー絵文字。ボットが有効である必要があります。',
+    'ui.roles.panelIntroPre': '「作成」モード：ボットが ',
+    'ui.roles.panelIntroPost':
+      ' コマンドでこのメッセージ（エディターの埋め込み）を投稿し、下のペアに従ってリアクションを自動追加します。',
+    'ui.roles.panelMsgLabel': 'パネルのメッセージ',
+    'ui.roles.pairsLabel': '絵文字 → ロールのペア（最大 20）',
+    'ui.roles.noPairs':
+      'ペアがありません。絵文字（標準またはサーバー）とロールを追加してください。',
+    'ui.roles.exclusiveLabel':
+      '🎚️ 1つ選択 — リアクションでこのパネルからユーザーに1つのロールだけを残します（ラジオ）。',
+    'ui.roles.panelHelpPre': '保存後、対象チャンネルへ移動して ',
+    'ui.roles.panelHelpMid':
+      ' を実行してください — ボットがメッセージを送信しリアクションを追加します。サーバー絵文字はエディターのピッカーで挿入してください（または ',
+    'ui.roles.panelHelpPost': '）。',
+    'ui.roles.msgContentLabel': 'メッセージ本文',
+    'ui.roles.menuPlaceholderLabel': 'メニューのプレースホルダー',
+    'ui.roles.optionsLabel': 'オプション（ロール → ラベル）',
+    'ui.roles.noOptions':
+      'オプションがありません。ロール、ラベル、（任意で）絵文字を追加してください。',
+    'ui.roles.labelPh': 'ラベル',
+    'ui.roles.menuHelpPre': '保存後、チャンネルで ',
+    'ui.roles.menuHelpPost':
+      ' コマンドでメニューを公開してください。ユーザーは一覧からロールを選びます（複数選択）。',
     'ui.creator.intro':
       'クリエイター向けツール：配信開始時に Discord イベントを自動作成（Twitch EventSub）し、クリップリレーで新しい Twitch クリップを指定チャンネルに投稿します。設定はここに保存し（Supabase）、ボットがリアルタイムで適用します。',
     'ui.creator.creatorHeading': 'クリエイター向けツール',
@@ -10638,6 +11008,35 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'الترحيب: مُفعَّل',
     'ui.welcome.statusOff': 'الترحيب: مُعطَّل',
     'ui.welcome.heading': 'الترحيب + autorole',
+    'ui.roles.intro':
+      'أدوار التفاعل: ينقر المستخدم على تفاعل أسفل الرسالة المحددة ← يمنح البوت دورًا (إزالة التفاعل ← يسحبه). تحفظ الإعدادات هنا (Supabase) ويطبّقها البوت مباشرةً. تختار الدور من قائمة؛ وانسخ معرّف الرسالة من Discord (وضع المطوّر ← «نسخ معرّف الرسالة»).',
+    'ui.roles.heading2': 'أدوار التفاعل — إنشاء لوحة (مضمّنة)',
+    'ui.roles.heading3': 'قائمة الأدوار (منسدلة)',
+    'ui.roles.mappingsLabel': 'التعيينات (رسالة → إيموجي → دور)',
+    'ui.roles.addBtn': 'إضافة',
+    'ui.roles.noMappings': 'لا تعيينات. أضف: معرّف الرسالة، إيموجي، ومعرّف الدور.',
+    'ui.roles.msgIdPh': 'معرّف الرسالة',
+    'ui.roles.delAria': 'حذف',
+    'ui.roles.rrHelp':
+      'يمنح البوت الدور عند إضافة تفاعل أسفل الرسالة المحددة ويسحبه عند إزالته. الإيموجي: عادي (مثل ✅) أو خاص بالخادم. يتطلب تفعيل البوت.',
+    'ui.roles.panelIntroPre': 'وضع «الإنشاء»: ينشر البوت هذه الرسالة (مضمّنة من المحرّر) بالأمر ',
+    'ui.roles.panelIntroPost': ' ويضيف التفاعلات بنفسه وفق الأزواج أدناه.',
+    'ui.roles.panelMsgLabel': 'رسالة اللوحة',
+    'ui.roles.pairsLabel': 'أزواج إيموجي → دور (حد أقصى 20)',
+    'ui.roles.noPairs': 'لا أزواج. أضف إيموجي (عاديًا أو خاصًا بالخادم) ودورًا.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ اختر واحدًا — يترك التفاعل للمستخدم دورًا واحدًا فقط من هذه اللوحة (راديو).',
+    'ui.roles.panelHelpPre': 'بعد الحفظ، ادخل القناة الهدف ونفّذ ',
+    'ui.roles.panelHelpMid':
+      ' — سيرسل البوت الرسالة ويضيف التفاعلات. أدرج إيموجي الخادم عبر المنتقي في المحرّر (أو ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'محتوى الرسالة',
+    'ui.roles.menuPlaceholderLabel': 'العنصر النائب للقائمة',
+    'ui.roles.optionsLabel': 'الخيارات (دور → تسمية)',
+    'ui.roles.noOptions': 'لا خيارات. أضف دورًا وتسمية و(اختياريًا) إيموجي.',
+    'ui.roles.labelPh': 'تسمية',
+    'ui.roles.menuHelpPre': 'بعد الحفظ، انشر القائمة بالأمر ',
+    'ui.roles.menuHelpPost': ' في قناة. يختار المستخدم الأدوار من القائمة (اختيار متعدد).',
     'ui.creator.intro':
       'أدوات المُنشئ: حدث Discord تلقائي عند بدء البث المباشر (Twitch EventSub) وترحيل المقاطع — ينشر البوت مقاطع Twitch الجديدة في القناة المحددة. تحفظ الإعدادات هنا (Supabase) ويطبّقها البوت مباشرةً.',
     'ui.creator.creatorHeading': 'أدوات المُنشئ',
@@ -11450,6 +11849,36 @@ const UI: Record<PanelLocale, Dict> = {
     'ui.welcome.statusOn': 'Sambutan: AKTIF',
     'ui.welcome.statusOff': 'Sambutan: NONAKTIF',
     'ui.welcome.heading': 'Sambutan + autorole',
+    'ui.roles.intro':
+      'Reaction roles: pengguna mengeklik reaksi di bawah pesan yang ditentukan → bot memberi peran (menghapus reaksi → mencabutnya). Konfigurasi kamu simpan di sini (Supabase); bot menerapkannya secara langsung. Peran dipilih dari daftar; salin ID pesan dari Discord (mode pengembang → «Salin ID Pesan»).',
+    'ui.roles.heading2': 'Reaction roles — buat panel (embed)',
+    'ui.roles.heading3': 'Menu peran (dropdown)',
+    'ui.roles.mappingsLabel': 'Pemetaan (pesan → emoji → peran)',
+    'ui.roles.addBtn': 'Tambah',
+    'ui.roles.noMappings': 'Tidak ada pemetaan. Tambahkan: ID pesan, emoji, dan ID peran.',
+    'ui.roles.msgIdPh': 'ID pesan',
+    'ui.roles.delAria': 'Hapus',
+    'ui.roles.rrHelp':
+      'Bot memberi peran saat reaksi ditambahkan di bawah pesan yang ditentukan dan mencabutnya saat dihapus. Emoji: standar (mis. ✅) atau milik server. Membutuhkan bot aktif.',
+    'ui.roles.panelIntroPre':
+      'Mode «buat»: bot memposting pesan ini (embed dari editor) dengan perintah ',
+    'ui.roles.panelIntroPost': ' dan menambahkan reaksi sendiri sesuai pasangan di bawah.',
+    'ui.roles.panelMsgLabel': 'Pesan panel',
+    'ui.roles.pairsLabel': 'Pasangan emoji → peran (maks. 20)',
+    'ui.roles.noPairs': 'Tidak ada pasangan. Tambahkan emoji (standar atau server) dan peran.',
+    'ui.roles.exclusiveLabel':
+      '🎚️ Pilih satu — reaksi hanya menyisakan satu peran dari panel ini bagi pengguna (radio).',
+    'ui.roles.panelHelpPre': 'Setelah menyimpan, masuk ke saluran tujuan dan jalankan ',
+    'ui.roles.panelHelpMid':
+      ' — bot mengirim pesan dan menambahkan reaksi. Sisipkan emoji server lewat picker di editor (atau ',
+    'ui.roles.panelHelpPost': ').',
+    'ui.roles.msgContentLabel': 'Isi pesan',
+    'ui.roles.menuPlaceholderLabel': 'Placeholder menu',
+    'ui.roles.optionsLabel': 'Opsi (peran → label)',
+    'ui.roles.noOptions': 'Tidak ada opsi. Tambahkan peran, label, dan (opsional) emoji.',
+    'ui.roles.labelPh': 'Label',
+    'ui.roles.menuHelpPre': 'Setelah menyimpan, terbitkan menu dengan perintah ',
+    'ui.roles.menuHelpPost': ' di saluran. Pengguna memilih peran dari daftar (pilihan ganda).',
     'ui.creator.intro':
       'Alat kreator: event Discord otomatis saat kamu mulai siaran (Twitch EventSub) dan relay klip — bot memposting klip Twitch baru ke saluran yang ditentukan. Konfigurasi kamu simpan di sini (Supabase); bot menerapkannya secara langsung.',
     'ui.creator.creatorHeading': 'Alat kreator',

@@ -3,6 +3,8 @@
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -13,6 +15,7 @@ const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
 export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; guild: GuildMeta }) {
+  const { lang } = useLang();
   const idRef = useRef(0);
   const [rows, setRows] = useState<Row[]>(() =>
     initial.map((r) => ({ ...r, k: `r${idRef.current++}` })),
@@ -44,27 +47,25 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-white/90">
-          Mapowania (wiadomość → emoji → rola)
+          {tp(lang, 'ui.roles.mappingsLabel')}
         </span>
         <button
           type="button"
           onClick={addRow}
           className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
         >
-          <Plus size={12} /> Dodaj
+          <Plus size={12} /> {tp(lang, 'ui.roles.addBtn')}
         </button>
       </div>
 
-      {rows.length === 0 && (
-        <p className="text-xs text-muted">Brak mapowań. Dodaj: ID wiadomości, emoji i ID roli.</p>
-      )}
+      {rows.length === 0 && <p className="text-xs text-muted">{tp(lang, 'ui.roles.noMappings')}</p>}
 
       {rows.map((r) => (
         <div key={r.k} className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_90px_1fr_auto]">
           <input
             value={r.messageId}
             onChange={(e) => setRow(r.k, { messageId: e.target.value })}
-            placeholder="ID wiadomości"
+            placeholder={tp(lang, 'ui.roles.msgIdPh')}
             className={inputCls}
           />
           <input
@@ -82,7 +83,7 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
             type="button"
             onClick={() => delRow(r.k)}
             className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-            aria-label="Usuń"
+            aria-label={tp(lang, 'ui.roles.delAria')}
           >
             <Trash2 size={14} />
           </button>
@@ -92,10 +93,7 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
       <div className="pt-1">
         <SaveButton st={st} onClick={save} />
       </div>
-      <p className="text-xs text-muted">
-        Bot nadaje rolę po dodaniu reakcji pod wskazaną wiadomością i odbiera po jej usunięciu.
-        Emoji: zwykłe (np. ✅) lub własne serwera. Wymaga włączonego bota.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.roles.rrHelp')}</p>
     </div>
   );
 }

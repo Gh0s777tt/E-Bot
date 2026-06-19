@@ -4,7 +4,9 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { ReactionPanel } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import { normalizeRich, type RichMessage } from '../lib/richMessage';
+import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -22,6 +24,7 @@ export default function ReactionRolePanelForm({
   initial: ReactionPanel;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [spec, setSpec] = useState<RichMessage>(normalizeRich(initial.panelSpec));
   const [pairs, setPairs] = useState<Pair[]>(() =>
     initial.pairs.map((p, i) => ({ id: `p${i}`, emoji: p.emoji, roleId: p.roleId })),
@@ -60,30 +63,31 @@ export default function ReactionRolePanelForm({
   return (
     <div className="space-y-4">
       <p className="text-xs text-muted">
-        Tryb „utwórz": bot publikuje tę wiadomość (embed z edytora) komendą{' '}
-        <code className="text-accent">/reactionpanel</code> i sam dodaje reakcje wg par poniżej.
+        {tp(lang, 'ui.roles.panelIntroPre')}
+        <code className="text-accent">/reactionpanel</code>
+        {tp(lang, 'ui.roles.panelIntroPost')}
       </p>
 
       <div className="space-y-1 text-sm">
-        <span className="font-semibold text-white/90">Wiadomość panelu</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.roles.panelMsgLabel')}</span>
         <MessageStudio value={spec} onChange={setSpec} emojis={guild.emojis} />
       </div>
 
       <div className="space-y-2 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Pary emoji → rola (max 20)</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.roles.pairsLabel')}
+          </span>
           <button
             type="button"
             onClick={addPair}
             disabled={pairs.length >= 20}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
-            <Plus size={12} /> Dodaj
+            <Plus size={12} /> {tp(lang, 'ui.roles.addBtn')}
           </button>
         </div>
-        {pairs.length === 0 && (
-          <p className="text-xs text-muted">Brak par. Dodaj emoji (zwykłe lub serwerowe) i rolę.</p>
-        )}
+        {pairs.length === 0 && <p className="text-xs text-muted">{tp(lang, 'ui.roles.noPairs')}</p>}
         {pairs.map((p) => (
           <div key={p.id} className="grid grid-cols-[110px_1fr_auto] gap-2">
             <input
@@ -102,7 +106,7 @@ export default function ReactionRolePanelForm({
               type="button"
               onClick={() => delPair(p.id)}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.roles.delAria')}
             >
               <Trash2 size={14} />
             </button>
@@ -117,16 +121,16 @@ export default function ReactionRolePanelForm({
           onChange={(e) => setExclusive(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="text-white/90">
-          🎚️ Wybierz jedną — reakcja zostawia użytkownikowi tylko jedną rolę z tego panelu (radio).
-        </span>
+        <span className="text-white/90">{tp(lang, 'ui.roles.exclusiveLabel')}</span>
       </label>
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Po zapisie wejdź na docelowy kanał i odpal{' '}
-        <code className="text-accent">/reactionpanel</code> — bot wyśle wiadomość i doda reakcje.
-        Emoji serwerowe wstaw przez picker w edytorze (lub <code>{'<:nazwa:id>'}</code>).
+        {tp(lang, 'ui.roles.panelHelpPre')}
+        <code className="text-accent">/reactionpanel</code>
+        {tp(lang, 'ui.roles.panelHelpMid')}
+        <code>{'<:nazwa:id>'}</code>
+        {tp(lang, 'ui.roles.panelHelpPost')}
       </p>
     </div>
   );

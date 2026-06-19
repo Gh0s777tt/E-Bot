@@ -4,6 +4,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { RoleMenuConfig } from '../lib/engagement';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -20,6 +22,7 @@ export default function RoleMenuForm({
   initial: RoleMenuConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [message, setMessage] = useState(initial.message);
   const [placeholder, setPlaceholder] = useState(initial.placeholder);
   const idRef = useRef(0);
@@ -61,7 +64,9 @@ export default function RoleMenuForm({
     <div className="max-w-2xl space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Treść wiadomości</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.roles.msgContentLabel')}
+          </span>
           <input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -69,7 +74,9 @@ export default function RoleMenuForm({
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Placeholder menu</span>
+          <span className="font-semibold text-white/90">
+            {tp(lang, 'ui.roles.menuPlaceholderLabel')}
+          </span>
           <input
             value={placeholder}
             onChange={(e) => setPlaceholder(e.target.value)}
@@ -80,27 +87,27 @@ export default function RoleMenuForm({
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-white/90">Opcje (rola → etykieta)</span>
+          <span className="text-sm font-semibold text-white/90">
+            {tp(lang, 'ui.roles.optionsLabel')}
+          </span>
           <button
             type="button"
             onClick={addRow}
             disabled={rows.length >= 25}
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
-            <Plus size={12} /> Dodaj
+            <Plus size={12} /> {tp(lang, 'ui.roles.addBtn')}
           </button>
         </div>
         {rows.length === 0 && (
-          <p className="text-xs text-muted">
-            Brak opcji. Dodaj rolę, etykietę i (opcjonalnie) emoji.
-          </p>
+          <p className="text-xs text-muted">{tp(lang, 'ui.roles.noOptions')}</p>
         )}
         {rows.map((r) => (
           <div key={r.k} className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_80px_auto]">
             <input
               value={r.label}
               onChange={(e) => setRow(r.k, { label: e.target.value })}
-              placeholder="Etykieta"
+              placeholder={tp(lang, 'ui.roles.labelPh')}
               className={inputCls}
             />
             <RoleSelect
@@ -118,7 +125,7 @@ export default function RoleMenuForm({
               type="button"
               onClick={() => delRow(r.k)}
               className="rounded-md border border-line p-2 text-muted transition hover:border-accent hover:text-accent"
-              aria-label="Usuń"
+              aria-label={tp(lang, 'ui.roles.delAria')}
             >
               <Trash2 size={14} />
             </button>
@@ -128,8 +135,9 @@ export default function RoleMenuForm({
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Po zapisaniu opublikuj menu komendą <code className="text-accent">/rolemenu</code> na
-        kanale. Użytkownik wybiera role z listy (wielokrotny wybór).
+        {tp(lang, 'ui.roles.menuHelpPre')}
+        <code className="text-accent">/rolemenu</code>
+        {tp(lang, 'ui.roles.menuHelpPost')}
       </p>
     </div>
   );

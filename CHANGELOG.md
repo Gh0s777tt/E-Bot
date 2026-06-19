@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-309-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.239.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-310-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.240.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.240.0] — 🌍 i18n UI panelu — strona /roles (reaction roles + panel + menu ról)
+
+- `[#310]` 🌍 **i18n UI panelu — kolejna fala: `/roles` (reaction roles — mapowania, panel embed, menu ról).**
+  - 🖥️ **Panel**: 25 nowych kluczy `ui.roles.*` × **14 języków** w `panelI18n.ts` (parzystość 14×25=350). `app/roles/page.tsx` (serwer) + `ReactionRolesForm.tsx` + `ReactionRolePanelForm.tsx` + `RoleMenuForm.tsx` (klient) na `tp()`: intro, mapowania reakcja→rola, kreator panelu (Message Studio, pary emoji→rola, tryb radio, instrukcja `/reactionpanel` + `<:nazwa:id>`), menu dropdown (treść, placeholder, opcje, instrukcja `/rolemenu`). Wspólne `addBtn`/`delAria` w obrębie strony; przyciski zapisu reużywają `SaveButton`. Nietłumaczone: nazwa funkcji `Reaction roles`, komendy `/reactionpanel`/`/rolemenu`, token `<:nazwa:id>`, placeholder `emoji`.
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 30/~40 stron.
 
 ## [0.239.0] — 🌍 i18n UI panelu — strona /creator (narzędzia twórcy + social/RSS)
 
