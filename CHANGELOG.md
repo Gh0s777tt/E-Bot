@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-311-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.241.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-312-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.242.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.242.0] — 🌍 i18n UI panelu — strona /applications (rekrutacja / aplikacje)
+
+- `[#312]` 🌍 **i18n UI panelu — kolejna fala: `/applications` (rekrutacja — panel aplikacji z modalami).**
+  - 🖥️ **Panel**: 24 nowe klucze `ui.applications.*` × **14 języków** w `panelI18n.ts` (parzystość 14×24=336). `app/applications/page.tsx` (serwer) + `ApplicationsForm.tsx` (klient) na `tp()`: intro z `/applypanel`, włącznik, Message Studio panelu, lista aplikacji-przycisków (nazwa, emoji, **kolory stylów** `STYLES`→klucze, kanał recenzji, rola, pytania do 5), stopka. Przyciski zapisu reużywają `SaveButton`. Nietłumaczone: komenda `/applypanel`, przykłady nazw (`Moderator`/`Builder`), domyślna etykieta `Aplikuj` (wartość danych).
+  - Czysto panel (Vercel). Bramki: biome czysto, dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 32/~40 stron.
 
 ## [0.241.0] — 🌍 i18n UI panelu — strona /commands (lista slash-komend)
 

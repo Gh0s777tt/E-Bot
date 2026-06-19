@@ -4,7 +4,9 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { Application, ApplicationsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
 import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
+import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -23,11 +25,11 @@ type FormApp = {
   questions: FormQ[];
 };
 
-const STYLES: { value: Application['style']; label: string }[] = [
-  { value: 'primary', label: 'Niebieski' },
-  { value: 'secondary', label: 'Szary' },
-  { value: 'success', label: 'Zielony' },
-  { value: 'danger', label: 'Czerwony' },
+const STYLES: { value: Application['style']; key: string }[] = [
+  { value: 'primary', key: 'ui.applications.styleBlue' },
+  { value: 'secondary', key: 'ui.applications.styleGray' },
+  { value: 'success', key: 'ui.applications.styleGreen' },
+  { value: 'danger', key: 'ui.applications.styleRed' },
 ];
 
 const newId = () => crypto.randomUUID().slice(0, 8);
@@ -43,6 +45,7 @@ export default function ApplicationsForm({
   initial: ApplicationsConfig;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
   const [panelSpec, setPanelSpec] = useState<RichMessage>(
     initial.panelSpec ? normalizeRich(initial.panelSpec) : fromLegacy(initial.panelMessage),
@@ -154,12 +157,16 @@ export default function ApplicationsForm({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">Aplikacje włączone</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.applications.enabledToggle')}
+        </span>
       </label>
 
       <div className="space-y-1 text-sm">
         <span className="font-semibold text-white/90">
-          Wiadomość panelu (komenda <code className="text-accent">/applypanel</code>)
+          {tp(lang, 'ui.applications.panelMsgLabelPre')}
+          <code className="text-accent">/applypanel</code>
+          {tp(lang, 'ui.applications.panelMsgLabelPost')}
         </span>
         <MessageStudio value={panelSpec} onChange={setPanelSpec} emojis={guild.emojis} />
       </div>
@@ -167,11 +174,10 @@ export default function ApplicationsForm({
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <span className="font-semibold text-white/90">Aplikacje (przyciski panelu)</span>
-            <p className="text-xs text-muted">
-              Każda aplikacja = osobny przycisk (np. Moderator, Builder) z własnym kanałem recenzji,
-              rolą i pytaniami (max 5 — limit Discorda na modal).
-            </p>
+            <span className="font-semibold text-white/90">
+              {tp(lang, 'ui.applications.appsLabel')}
+            </span>
+            <p className="text-xs text-muted">{tp(lang, 'ui.applications.appsHint')}</p>
           </div>
           <button
             type="button"
@@ -179,7 +185,7 @@ export default function ApplicationsForm({
             disabled={apps.length >= 10}
             className="flex shrink-0 items-center gap-1 rounded-md border border-line px-2 py-1 text-xs transition hover:border-accent hover:bg-elevated disabled:opacity-40"
           >
-            <Plus size={13} /> Dodaj
+            <Plus size={13} /> {tp(lang, 'ui.applications.addBtn')}
           </button>
         </div>
 
@@ -189,14 +195,14 @@ export default function ApplicationsForm({
               <input
                 value={app.label}
                 onChange={(e) => setApp(app.id, { label: e.target.value })}
-                placeholder="Nazwa przycisku (np. Moderator)"
+                placeholder={tp(lang, 'ui.applications.labelPh')}
                 className={inputCls}
                 maxLength={80}
               />
               <input
                 value={app.emoji}
                 onChange={(e) => setApp(app.id, { emoji: e.target.value })}
-                placeholder="Emoji"
+                placeholder={tp(lang, 'ui.applications.emojiPh')}
                 className={inputCls}
                 maxLength={64}
               />
@@ -207,7 +213,7 @@ export default function ApplicationsForm({
               >
                 {STYLES.map((s) => (
                   <option key={s.value} value={s.value}>
-                    {s.label}
+                    {tp(lang, s.key)}
                   </option>
                 ))}
               </select>
@@ -217,20 +223,20 @@ export default function ApplicationsForm({
                 value={app.reviewChannelId}
                 onChange={(v) => setApp(app.id, { reviewChannelId: v })}
                 channels={guild.channels}
-                placeholder="— kanał recenzji —"
+                placeholder={tp(lang, 'ui.applications.reviewChannelPh')}
               />
               <RoleSelect
                 value={app.acceptRoleId}
                 onChange={(v) => setApp(app.id, { acceptRoleId: v })}
                 roles={guild.roles}
-                placeholder="— rola po akceptacji —"
+                placeholder={tp(lang, 'ui.applications.acceptRolePh')}
               />
             </div>
 
             <div className="space-y-1.5 rounded-md border border-line/60 bg-bg/30 p-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-muted">
-                  Pytania ({app.questions.length}/5)
+                  {tp(lang, 'ui.applications.questionsLabel')} ({app.questions.length}/5)
                 </span>
                 <div className="flex items-center gap-2">
                   <button
@@ -239,14 +245,14 @@ export default function ApplicationsForm({
                     disabled={app.questions.length >= 5}
                     className="flex items-center gap-1 rounded-md border border-line px-2 py-0.5 text-xs transition hover:border-accent hover:bg-elevated disabled:opacity-40"
                   >
-                    <Plus size={11} /> Pytanie
+                    <Plus size={11} /> {tp(lang, 'ui.applications.addQBtn')}
                   </button>
                   <button
                     type="button"
                     onClick={() => removeApp(app.id)}
                     className="rounded-md border border-line px-2 py-0.5 text-xs text-muted transition hover:border-accent hover:text-accent"
                   >
-                    Usuń aplikację
+                    {tp(lang, 'ui.applications.removeAppBtn')}
                   </button>
                 </div>
               </div>
@@ -255,7 +261,7 @@ export default function ApplicationsForm({
                   <input
                     value={qq.q}
                     onChange={(e) => setQ(app.id, qq.id, e.target.value)}
-                    placeholder="Pytanie do kandydata"
+                    placeholder={tp(lang, 'ui.applications.questionPh')}
                     className={inputCls}
                     maxLength={200}
                   />
@@ -263,7 +269,7 @@ export default function ApplicationsForm({
                     type="button"
                     onClick={() => removeQ(app.id, qq.id)}
                     className="rounded-md border border-line px-2 text-muted transition hover:border-accent hover:text-accent"
-                    aria-label="Usuń pytanie"
+                    aria-label={tp(lang, 'ui.applications.delQAria')}
                   >
                     <Trash2 size={13} />
                   </button>
@@ -276,8 +282,9 @@ export default function ApplicationsForm({
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Po zapisie opublikuj/odśwież panel komendą <code className="text-accent">/applypanel</code>.
-        Brak aplikacji = pojedynczy przycisk z pól domyślnych (wstecznie zgodne).
+        {tp(lang, 'ui.applications.footerPre')}
+        <code className="text-accent">/applypanel</code>
+        {tp(lang, 'ui.applications.footerPost')}
       </p>
     </div>
   );
