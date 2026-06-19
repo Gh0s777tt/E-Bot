@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-346-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.276.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-347-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.277.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.277.0] — 🛡️ M6 (UI): panel moderacji community (approve/reject) dla właściciela/staff
+
+- `[#347]` 🛡️ **Marketplace M6 — panel moderacji community (UI) spinający backend zgłoszeń.**
+  - Nowa strona [`/marketplace/review`](dashboard/app/marketplace/review/page.tsx): lista zgłoszeń `pending` (`listCommunityPlugins`) + przyciski **Zatwierdź/Odrzuć**. Dostęp **wyłącznie** dla właściciela/staff instancji (`resolveRole='admin'`); tenant-admini → komunikat o braku praw.
+  - Nowy klient [`CommunityReview`](dashboard/components/CommunityReview.tsx): approve/reject → `POST /api/community/review` (owner-only także po stronie serwera); pozycja znika z kolejki po decyzji.
+  - [`/marketplace`](dashboard/app/marketplace/page.tsx): link „Moderacja community →" widoczny **tylko** dla właściciela/staff.
+  - Zatwierdzony plugin natychmiast trafia do katalogu (`getPluginCatalog` z M2). Teksty owner-only po polsku (bazowy język) — bez ruszania słownika 1394×14.
+  - Bramki: biome czysto (313), `tsc` exit 0, docs:check exit 0.
 
 ## [0.276.0] — 🧩 M6 (community): zgłoszenia + moderacja pluginów 3rd-party (bez sandboxa)
 
