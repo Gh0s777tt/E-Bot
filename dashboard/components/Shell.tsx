@@ -26,7 +26,7 @@ export default function Shell({ children, inviteUrl }: { children: ReactNode; in
           <Assistant />
           <TourGuide />
           <Sidebar />
-          <div className="content-pane min-w-0 flex-1 md:pl-60">
+          <div className="content-pane min-w-0 flex-1 md:ps-60">
             <Topbar inviteUrl={inviteUrl} />
             <main className="mx-auto max-w-7xl px-5 py-6 md:px-8">
               <GlobalPageHeader />

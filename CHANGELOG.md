@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-324-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.254.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-325-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.255.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.255.0] — ↔️ Pełne lustrzane RTL — przyrost 1: powłoka panelu (Sidebar/Shell/Topbar)
+
+- `[#325]` ↔️ **Pierwszy przyrost lustrzanego układu RTL (arabski): rama panelu na logicznych klasach Tailwind v4.**
+  - `Sidebar.tsx`: `left-0`→`start-0`, `border-r`→`border-e` — rail nawigacji przechodzi na prawą krawędź w RTL (a jego separator na stronę treści).
+  - `Shell.tsx`: `md:pl-60`→`md:ps-60` — offset treści spod railu po właściwej stronie (w RTL = od prawej).
+  - `Topbar.tsx`: `ml-auto`→`ms-auto` — grupa akcji dosuwana do właściwej krawędzi.
+  - Wszystkie konwersje są **wizualnie identyczne w LTR** (zero regresji dla 13 języków) i **odbijają się w RTL** (logiczne właściwości: `inset-inline-start`, `padding-inline-start`, `margin-inline-start`, `border-inline-end`). Wymaga Tailwind v4 (jest, `^4.3`).
+  - ⏭️ Kolejne przyrosty: `MobileNav` (drawer + `translate`), wyśrodkowania/`hover:translate-x`, klasy kierunkowe na poszczególnych stronach (~100 komponentów).
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0. Weryfikacja wizualna RTL — przy preview‑deployu (przełącz język na arabski).
 
 ## [0.254.0] — 🔍 Audyt i18n 14 języków + naprawa RTL (arabski) — kierunek pisma na `<html>`
 

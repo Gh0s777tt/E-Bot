@@ -58,7 +58,7 @@ export default function Sidebar() {
   })).filter((g) => g.items.length > 0);
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-line bg-surface md:flex">
+    <aside className="fixed inset-y-0 start-0 z-40 hidden w-60 flex-col border-e border-line bg-surface md:flex">
       <div className="flex h-14 shrink-0 items-center gap-2 border-b border-line px-4">
         <img
           src="/ghost-skull.png"

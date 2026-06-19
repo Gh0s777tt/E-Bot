@@ -1,4 +1,4 @@
-<!-- SYNC: v0.254.0 · #324 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.255.0 · #325 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.254.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.255.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -82,9 +82,9 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 - 📈 **Retencja + więcej wykresów w czasie** (`/stats`).
 - 🧱 **Produkcyjna infra** — pełny Sentry (DSN), Redis (instancja), Supabase Realtime push (szkielety gotowe).
 - 🔗 **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy.
-- ↔️ **Pełne lustrzane RTL** — fundament `dir="rtl"` gotowy (v0.254.0); pozostaje migracja fizycznych klas Tailwind na logiczne (`ms-`/`ps-`/`start`) w ~100 komponentach.
+- ↔️ **Pełne lustrzane RTL** — fundament `dir="rtl"` (v0.254.0) + powłoka Sidebar/Shell/Topbar (v0.255.0) gotowe; pozostaje migracja fizycznych klas Tailwind na logiczne (`ms-`/`ps-`/`start`) w pozostałych ~100 komponentach + `MobileNav`.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.254.0 (#324) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.255.0 (#325) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
