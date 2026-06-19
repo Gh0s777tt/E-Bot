@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-341-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.271.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-342-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.272.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.272.0] — 🛒 M2: interaktywny marketplace — toggle enable/disable per-serwer
+
+- `[#342]` 🛒 **Marketplace M2 — toggle enable/disable na kartach (first-party, reużycie audytowanej ścieżki).**
+  - Nowy klient [`components/MarketplaceGrid.tsx`](dashboard/components/MarketplaceGrid.tsx): karty katalogu z przełącznikiem. Toggle first-party **reużywa `POST /api/modules`** (`setModuleEnabled` → `setConfigSetting`, per-serwer przez chokepoint `getPrimaryGuildId`, z wpisem audit) — ta sama, sprawdzona ścieżka co Centrum sterowania; optymistyczny UI z rollbackiem przy błędzie.
+  - Stan początkowy z `getModuleStates()` (per-serwer). Community (3rd-party): toggle **wyłączony do M6** (enable per-serwer pójdzie przez `guild_plugins`) — uczciwie, bez martwego kodu zapisu dla pustej tabeli.
+  - [`app/marketplace/page.tsx`](dashboard/app/marketplace/page.tsx) dokłada `getModuleStates` i renderuje `MarketplaceGrid`. Zero nowych endpointów / kluczy i18n.
+  - Bramki: biome czysto (304), `tsc` exit 0, docs:check exit 0.
 
 ## [0.271.0] — 🛒 M2: strona /marketplace (katalog pluginów w UI + wpis w nawigacji)
 
