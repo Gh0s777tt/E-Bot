@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-340-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.270.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-341-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.271.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.271.0] — 🛒 M2: strona /marketplace (katalog pluginów w UI + wpis w nawigacji)
+
+- `[#341]` 🛒 **Marketplace M2 — UI katalogu pluginów (read-only) + nawigacja.**
+  - Nowa strona [`app/marketplace/page.tsx`](dashboard/app/marketplace/page.tsx): server-component renderujący `getPluginCatalog()` jako karty pogrupowane (tytuł, opis, odznaka `community` / `premium`, odnośnik „konfig" → istniejący formularz modułu). First-party + community w jednym widoku.
+  - Wpis w nawigacji ([`components/nav-items.ts`](dashboard/components/nav-items.ts)): „Marketplace" (ikona Store) w grupie „Ogólne", próg `adv`. `navLabel` gracefully fallbackuje → etykieta bez 14 tłumaczeń (termin uniwersalny).
+  - **Zero nowych kluczy i18n**: reużyte `ui.modules.intro` + `ui.modules.config`; źródło/tier renderowane jako tokeny techniczne (nietłumaczone). Parytet 14 jęz. nienaruszony.
+  - Toggle enable per-serwer = osobny przyrost (tu prezentacja). Bramki: biome czysto (303), `tsc` exit 0, docs:check exit 0.
 
 ## [0.270.0] — 🧩 M2: katalog pluginów marketplace (first-party z kodu + community z DB)
 
