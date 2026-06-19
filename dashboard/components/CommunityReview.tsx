@@ -4,8 +4,11 @@
 // (owner/staff-only, egzekwowane też po stronie serwera). Zatwierdzony plugin wpada do katalogu.
 import { useState } from 'react';
 import type { CommunityPlugin } from '../lib/communityPlugins';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 export default function CommunityReview({ initial }: { initial: CommunityPlugin[] }) {
+  const { lang } = useLang();
   const [items, setItems] = useState<CommunityPlugin[]>(initial);
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -26,7 +29,7 @@ export default function CommunityReview({ initial }: { initial: CommunityPlugin[
   }
 
   if (!items.length) {
-    return <p className="text-sm text-muted">Brak zgłoszeń oczekujących na moderację.</p>;
+    return <p className="text-sm text-muted">{tp(lang, 'ui.mkt.reviewEmpty')}</p>;
   }
 
   return (
@@ -41,7 +44,11 @@ export default function CommunityReview({ initial }: { initial: CommunityPlugin[
               {p.title} <span className="text-xs font-normal text-muted">({p.key})</span>
             </p>
             {p.description && <p className="truncate text-xs text-muted">{p.description}</p>}
-            {p.author_id && <p className="text-[10px] text-muted/70">autor: {p.author_id}</p>}
+            {p.author_id && (
+              <p className="text-[10px] text-muted/70">
+                {tp(lang, 'ui.mkt.author')}: {p.author_id}
+              </p>
+            )}
           </div>
           <div className="flex shrink-0 gap-2">
             <button
@@ -50,7 +57,7 @@ export default function CommunityReview({ initial }: { initial: CommunityPlugin[
               onClick={() => decide(p.key, 'approved')}
               className="rounded-md border border-accent/50 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent transition hover:bg-accent/20 disabled:opacity-40"
             >
-              Zatwierdź
+              {tp(lang, 'ui.mkt.approve')}
             </button>
             <button
               type="button"
@@ -58,7 +65,7 @@ export default function CommunityReview({ initial }: { initial: CommunityPlugin[
               onClick={() => decide(p.key, 'rejected')}
               className="rounded-md border border-line px-3 py-1.5 text-xs text-muted transition hover:border-red-500/50 hover:text-red-400 disabled:opacity-40"
             >
-              Odrzuć
+              {tp(lang, 'ui.mkt.reject')}
             </button>
           </div>
         </div>

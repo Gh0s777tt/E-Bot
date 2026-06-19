@@ -3,6 +3,8 @@
 // M6 — formularz zgłaszania pluginu community (autor). POST /api/community/submit → wpis
 // 'pending' do moderacji. Walidacja zgodna z communityManifestSchema (serwer waliduje ponownie).
 import { type FormEvent, useState } from 'react';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 type FormState = {
   key: string;
@@ -14,6 +16,7 @@ type FormState = {
 const EMPTY: FormState = { key: '', title: '', description: '', version: '', homepage: '' };
 
 export default function CommunitySubmitForm() {
+  const { lang } = useLang();
   const [form, setForm] = useState<FormState>(EMPTY);
   const [status, setStatus] = useState<{ ok: boolean; msg: string } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -38,13 +41,13 @@ export default function CommunitySubmitForm() {
       });
       const j = (await r.json()) as { ok?: boolean; error?: string };
       if (r.ok && j.ok) {
-        setStatus({ ok: true, msg: 'Zgłoszono! Plugin czeka na moderację.' });
+        setStatus({ ok: true, msg: tp(lang, 'ui.mkt.submitOk') });
         setForm(EMPTY);
       } else {
-        setStatus({ ok: false, msg: j.error || 'Nie udało się zgłosić.' });
+        setStatus({ ok: false, msg: j.error || tp(lang, 'ui.mkt.submitFail') });
       }
     } catch {
-      setStatus({ ok: false, msg: 'Błąd sieci.' });
+      setStatus({ ok: false, msg: tp(lang, 'ui.mkt.netErr') });
     } finally {
       setBusy(false);
     }
@@ -58,7 +61,7 @@ export default function CommunitySubmitForm() {
     <form onSubmit={submit} className="max-w-lg space-y-3">
       <div>
         <label className={lbl} htmlFor="cp-key">
-          Klucz (małe litery, cyfry, myślniki)
+          {tp(lang, 'ui.mkt.fKey')}
         </label>
         <input
           id="cp-key"
@@ -73,7 +76,7 @@ export default function CommunitySubmitForm() {
       </div>
       <div>
         <label className={lbl} htmlFor="cp-title">
-          Nazwa
+          {tp(lang, 'ui.mkt.fTitle')}
         </label>
         <input
           id="cp-title"
@@ -87,7 +90,7 @@ export default function CommunitySubmitForm() {
       </div>
       <div>
         <label className={lbl} htmlFor="cp-desc">
-          Opis (opcjonalnie)
+          {tp(lang, 'ui.mkt.fDesc')}
         </label>
         <textarea
           id="cp-desc"
@@ -101,7 +104,7 @@ export default function CommunitySubmitForm() {
       <div className="flex gap-3">
         <div className="flex-1">
           <label className={lbl} htmlFor="cp-ver">
-            Wersja (opcjonalnie)
+            {tp(lang, 'ui.mkt.fVersion')}
           </label>
           <input
             id="cp-ver"
@@ -114,7 +117,7 @@ export default function CommunitySubmitForm() {
         </div>
         <div className="flex-1">
           <label className={lbl} htmlFor="cp-home">
-            Strona (opcjonalnie)
+            {tp(lang, 'ui.mkt.fHome')}
           </label>
           <input
             id="cp-home"
@@ -132,7 +135,7 @@ export default function CommunitySubmitForm() {
         disabled={busy}
         className="rounded-lg border border-accent/50 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent/20 disabled:opacity-40"
       >
-        Zgłoś plugin
+        {tp(lang, 'ui.mkt.submitBtn')}
       </button>
       {status && (
         <p className={`text-sm ${status.ok ? 'text-accent' : 'text-red-400'}`}>{status.msg}</p>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-350-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.280.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-351-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.281.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.281.0] — 🌍 i18n moderacji + zgłoszeń community (17 kluczy × 14) — dług i18n marketplace domknięty
+
+- `[#351]` 🌍 **i18n powierzchni moderacji + zgłoszeń community — 17 nowych kluczy × 14 (cały dług i18n toru domknięty).**
+  - Słownik [`lib/panelI18n.ts`](dashboard/lib/panelI18n.ts): `ui.mkt.*` (17: review/submit + pola formularza + komunikaty statusu) — **238 wpisów** (17 × 14), parytet zweryfikowany gripem.
+  - Kod na `tp()`: [`/marketplace/review`](dashboard/app/marketplace/review/page.tsx) + [`CommunityReview`](dashboard/components/CommunityReview.tsx) (intro/pusto/Zatwierdź/Odrzuć/autor) oraz [`/marketplace/submit`](dashboard/app/marketplace/submit/page.tsx) + [`CommunitySubmitForm`](dashboard/components/CommunitySubmitForm.tsx) (intro/etykiety pól/przycisk/statusy).
+  - **Koniec długu i18n toru marketplace** — wszystkie powierzchnie (onboarding/review/submit) w 14 językach; słownik +25 kluczy (8+17) × 14 = **350 wpisów** w obu przyrostach (v0.280–281).
+  - Bramki: biome czysto (317), `tsc` exit 0, docs:check exit 0.
 
 ## [0.280.0] — 🌍 i18n nowych powierzchni: onboarding + linki marketplace (8 kluczy × 14)
 
