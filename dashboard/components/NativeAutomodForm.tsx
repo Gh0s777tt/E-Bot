@@ -5,33 +5,36 @@
 import { useState } from 'react';
 import type { NativeRule } from '../lib/discordAutomod';
 import type { GuildMeta } from '../lib/guild';
+import { type PanelLocale, tp } from '../lib/panelI18n';
 import Hint from './Hint';
+import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-const TRIGGER_LABEL: Record<number, string> = {
-  1: '📝 Słowa-klucze',
-  3: '🌊 Anty-spam',
-  4: '🤬 Presety Discorda',
-  5: '📣 Limit wzmianek',
-  6: '👤 Profil członka',
+const TRIGGER_KEY: Record<number, string> = {
+  1: 'ui.mod.nTrigger1',
+  3: 'ui.mod.nTrigger3',
+  4: 'ui.mod.nTrigger4',
+  5: 'ui.mod.nTrigger5',
+  6: 'ui.mod.nTrigger6',
 };
 
-function ruleDetail(r: NativeRule): string {
-  if (r.triggerType === 1) return `${r.keywords.length} słów/fraz`;
-  if (r.triggerType === 4) return 'wulgaryzmy · 18+ · obelgi';
-  if (r.triggerType === 5) return `max ${r.mentionLimit ?? '?'} wzmianek`;
+function ruleDetail(r: NativeRule, lang: PanelLocale): string {
+  if (r.triggerType === 1) return `${r.keywords.length} ${tp(lang, 'ui.mod.nDetailWords')}`;
+  if (r.triggerType === 4) return tp(lang, 'ui.mod.nDetailPreset');
+  if (r.triggerType === 5) return `max ${r.mentionLimit ?? '?'} ${tp(lang, 'ui.mod.nMentions')}`;
   return '';
 }
 
-function actionBadges(r: NativeRule): string[] {
+function actionBadges(r: NativeRule, lang: PanelLocale): string[] {
   return r.actions.map((a) => {
-    if (a.type === 1) return '🚫 blokada';
-    if (a.type === 2) return '🔔 alert';
-    if (a.type === 3) return `⏳ timeout ${Math.round((a.durationSec ?? 0) / 60)} min`;
-    return `akcja ${a.type}`;
+    if (a.type === 1) return tp(lang, 'ui.mod.nBadgeBlock');
+    if (a.type === 2) return tp(lang, 'ui.mod.nBadgeAlert');
+    if (a.type === 3)
+      return `${tp(lang, 'ui.mod.nBadgeTimeout')} ${Math.round((a.durationSec ?? 0) / 60)} ${tp(lang, 'ui.mod.nMin')}`;
+    return `${tp(lang, 'ui.mod.nBadgeAction')} ${a.type}`;
   });
 }
 
@@ -42,6 +45,7 @@ export default function NativeAutomodForm({
   initial: NativeRule[] | null;
   guild: GuildMeta;
 }) {
+  const { lang } = useLang();
   const [rules, setRules] = useState<NativeRule[]>(initial ?? []);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -53,8 +57,9 @@ export default function NativeAutomodForm({
   if (initial === null) {
     return (
       <p className="text-sm text-muted">
-        🔌 Nie udało się pobrać reguł AutoModa — sprawdź, czy bot ma uprawnienie{' '}
-        <strong>Zarządzanie serwerem</strong> i czy panel ma <code>DISCORD_BOT_TOKEN</code>.
+        {tp(lang, 'ui.mod.nErrorFetchPre')} <strong>{tp(lang, 'ui.mod.nErrorFetchPerm')}</strong>{' '}
+        {tp(lang, 'ui.mod.nErrorFetchPost')} <code>DISCORD_BOT_TOKEN</code>
+        {tp(lang, 'ui.mod.nErrorFetchEnd')}
       </p>
     );
   }
@@ -70,14 +75,14 @@ export default function NativeAutomodForm({
       });
       const j = (await r.json()) as { ok: boolean; error?: string };
       if (!j.ok) {
-        setErr(j.error || 'Nieznany błąd.');
+        setErr(j.error || tp(lang, 'ui.mod.nUnknownError'));
       } else {
         const fresh = await fetch('/api/automod-native');
         const fj = (await fresh.json()) as { ok: boolean; rules: NativeRule[] };
         if (fj.ok) setRules(fj.rules);
       }
     } catch {
-      setErr('Błąd połączenia z API panelu.');
+      setErr(tp(lang, 'ui.mod.nConnError'));
     }
     setBusy(false);
   }
@@ -88,13 +93,13 @@ export default function NativeAutomodForm({
   return (
     <div className="space-y-5">
       <p className="text-sm text-muted">
-        Te reguły egzekwuje <strong>sam Discord</strong> — zadziałają nawet, gdy bot będzie offline.
-        Uzupełniają automod bota (wyżej): tu blokada następuje <em>zanim</em> wiadomość w ogóle się
-        pojawi.
+        {tp(lang, 'ui.mod.nIntroPre')} <strong>{tp(lang, 'ui.mod.nIntroStrong')}</strong>{' '}
+        {tp(lang, 'ui.mod.nIntroMid')} <em>{tp(lang, 'ui.mod.nIntroEm')}</em>{' '}
+        {tp(lang, 'ui.mod.nIntroPost')}
       </p>
 
       {rules.length === 0 ? (
-        <p className="text-sm text-muted">Brak reguł natywnego AutoModa — dodaj szablon niżej.</p>
+        <p className="text-sm text-muted">{tp(lang, 'ui.mod.nEmpty')}</p>
       ) : (
         <ul className="space-y-2">
           {rules.map((r) => (
@@ -105,15 +110,17 @@ export default function NativeAutomodForm({
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-white/90">{r.name}</p>
                 <p className="text-xs text-muted">
-                  {TRIGGER_LABEL[r.triggerType] ?? `typ ${r.triggerType}`}
-                  {ruleDetail(r) && <> · {ruleDetail(r)}</>}
-                  {actionBadges(r).length > 0 && <> · {actionBadges(r).join(' · ')}</>}
+                  {TRIGGER_KEY[r.triggerType]
+                    ? tp(lang, TRIGGER_KEY[r.triggerType])
+                    : `${tp(lang, 'ui.mod.nTypePrefix')} ${r.triggerType}`}
+                  {ruleDetail(r, lang) && <> · {ruleDetail(r, lang)}</>}
+                  {actionBadges(r, lang).length > 0 && <> · {actionBadges(r, lang).join(' · ')}</>}
                 </p>
               </div>
               <span
                 className={`rounded-md px-2 py-0.5 text-xs font-semibold ${r.enabled ? 'bg-green-500/15 text-green-300' : 'bg-line text-muted'}`}
               >
-                {r.enabled ? 'AKTYWNA' : 'WYŁĄCZONA'}
+                {r.enabled ? tp(lang, 'ui.mod.nActive') : tp(lang, 'ui.mod.nDisabled')}
               </span>
               <button
                 type="button"
@@ -121,7 +128,7 @@ export default function NativeAutomodForm({
                 onClick={() => call({ action: 'toggle', id: r.id, enabled: !r.enabled })}
                 className="rounded-md border border-line px-3 py-1.5 text-xs font-semibold transition hover:border-accent disabled:opacity-50"
               >
-                {r.enabled ? 'Wyłącz' : 'Włącz'}
+                {r.enabled ? tp(lang, 'ui.mod.nDisable') : tp(lang, 'ui.mod.nEnable')}
               </button>
               <button
                 type="button"
@@ -129,7 +136,7 @@ export default function NativeAutomodForm({
                 onClick={() => call({ action: 'delete', id: r.id })}
                 className="rounded-md border border-line px-3 py-1.5 text-xs font-semibold text-accent transition hover:border-accent disabled:opacity-50"
               >
-                Usuń
+                {tp(lang, 'ui.mod.nDelete')}
               </button>
             </li>
           ))}
@@ -138,8 +145,8 @@ export default function NativeAutomodForm({
 
       <div className="rounded-xl border border-line bg-bg/40 p-4 space-y-4">
         <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-          Szybkie szablony
-          <Hint text="Discord limituje: 1× presety, 1× anty-spam, 1× limit wzmianek, do 6× własne słowa." />
+          {tp(lang, 'ui.mod.nTemplatesLabel')}
+          <Hint text={tp(lang, 'ui.mod.nTemplatesHint')} />
         </p>
         <div className="flex flex-wrap gap-2">
           <button
@@ -148,7 +155,7 @@ export default function NativeAutomodForm({
             onClick={() => call({ action: 'create-preset' })}
             className="rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover disabled:opacity-40"
           >
-            🤬 Filtr wulgaryzmów (presety Discorda)
+            {tp(lang, 'ui.mod.nBtnPreset')}
           </button>
           <button
             type="button"
@@ -156,7 +163,7 @@ export default function NativeAutomodForm({
             onClick={() => call({ action: 'create-spam' })}
             className="rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover disabled:opacity-40"
           >
-            🌊 Anty-spam treści
+            {tp(lang, 'ui.mod.nBtnSpam')}
           </button>
           <div className="flex items-center gap-2">
             <button
@@ -165,7 +172,7 @@ export default function NativeAutomodForm({
               onClick={() => call({ action: 'create-mention', limit: mentionLimit })}
               className="rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover disabled:opacity-40"
             >
-              📣 Limit wzmianek + timeout 10 min
+              {tp(lang, 'ui.mod.nBtnMention')}
             </button>
             <input
               type="number"
@@ -176,36 +183,36 @@ export default function NativeAutomodForm({
                 setMentionLimit(Math.min(50, Math.max(1, Math.floor(Number(e.target.value) || 8))))
               }
               className={`${inputCls} w-20`}
-              title="Maksymalna liczba wzmianek w jednej wiadomości"
+              title={tp(lang, 'ui.mod.nMentionInputTitle')}
             />
           </div>
         </div>
 
         <div className="space-y-3 border-t border-line pt-4">
           <p className="text-sm font-semibold text-white/90">
-            📝 Własna lista słów ({keywordCount}/6)
-            <Hint text="Słowa/frazy po przecinku; gwiazdka = dowolny ciąg, np. *kasyno*. Wiadomość z trafieniem zostanie zablokowana zanim się pojawi." />
+            {tp(lang, 'ui.mod.nKeywordListPre')} ({keywordCount}/6)
+            <Hint text={tp(lang, 'ui.mod.nKeywordHint')} />
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <input
               value={kwName}
               onChange={(e) => setKwName(e.target.value)}
               className={inputCls}
-              placeholder="Nazwa reguły, np. Zakazane frazy"
+              placeholder={tp(lang, 'ui.mod.nRuleNamePh')}
               maxLength={100}
             />
             <ChannelSelect
               value={kwAlert}
               onChange={setKwAlert}
               channels={guild.channels}
-              placeholder="Kanał alertów (opcjonalnie)"
+              placeholder={tp(lang, 'ui.mod.nAlertChannelPh')}
             />
           </div>
           <textarea
             value={kwWords}
             onChange={(e) => setKwWords(e.target.value)}
             className={`${inputCls} min-h-20`}
-            placeholder="słowo1, *fraza z gwiazdką*, słowo2"
+            placeholder={tp(lang, 'ui.mod.nWordsPh')}
           />
           <button
             type="button"
@@ -228,12 +235,12 @@ export default function NativeAutomodForm({
             }}
             className="rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover disabled:opacity-40"
           >
-            Dodaj regułę słów
+            {tp(lang, 'ui.mod.nAddKeywordRule')}
           </button>
         </div>
       </div>
 
-      {busy && <p className="text-sm text-muted">⏳ Zapisywanie…</p>}
+      {busy && <p className="text-sm text-muted">{tp(lang, 'ui.mod.nSaving')}</p>}
       {err && <p className="text-sm text-accent">⚠️ {err}</p>}
     </div>
   );

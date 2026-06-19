@@ -8,6 +8,8 @@ import { getAiModConfig, getAutomodConfig, getAutomodStats } from '../../lib/com
 import { getNativeRules } from '../../lib/discordAutomod';
 import { getModCases, getTempBans } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
+import { type PanelLocale, tp } from '../../lib/panelI18n';
+import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,9 +32,9 @@ function fmt(d: string): string {
   }
 }
 
-function remaining(iso: string): string {
+function remaining(iso: string, lang: PanelLocale): string {
   const ms = new Date(iso).getTime() - Date.now();
-  if (ms <= 0) return 'lada chwila';
+  if (ms <= 0) return tp(lang, 'ui.mod.soon');
   const d = Math.floor(ms / 86_400_000);
   const h = Math.floor((ms % 86_400_000) / 3_600_000);
   const m = Math.floor((ms % 3_600_000) / 60_000);
@@ -44,7 +46,7 @@ function remaining(iso: string): string {
 }
 
 export default async function ModerationPage() {
-  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules] = await Promise.all([
+  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules, lang] = await Promise.all([
     getAutomodConfig(),
     getAiModConfig(),
     getModCases(30),
@@ -52,67 +54,67 @@ export default async function ModerationPage() {
     getGuildMeta(),
     getAutomodStats(),
     getNativeRules(),
+    getPanelLocale(),
   ]);
   return (
     <div className="space-y-6">
       <p className="max-w-3xl text-sm text-muted">
-        Automoderacja: blokowanie zaproszeń/linków, limit wzmianek i anty-spam. Naruszenia są
-        usuwane i logowane na mod-log. Ręczne komendy bota:{' '}
-        <code className="text-accent">/mod</code> (warn · timeout · kick · ban · tempban · unban ·
-        note · clear · warnings) oraz <code className="text-accent">/case user|recent</code> —
-        historia spraw (tylko moderatorzy; akcje twarde wymagają stosownych uprawnień). Tempbany bot
-        zdejmuje automatycznie po upływie czasu. (Anti-Nuke przeciw masowym akcjom admina znajdziesz
-        w <strong>Bezpieczeństwo</strong>.){' '}
+        {tp(lang, 'ui.mod.introPre')} <code className="text-accent">/mod</code>{' '}
+        {tp(lang, 'ui.mod.introMid')} <code className="text-accent">/case user|recent</code>{' '}
+        {tp(lang, 'ui.mod.introMid2')} <strong>{tp(lang, 'ui.mod.introSecurity')}</strong>
+        {tp(lang, 'ui.mod.introPost')}{' '}
         {cfg.enabled ? (
-          <span className="font-semibold text-green-400">Automod: WŁĄCZONY</span>
+          <span className="font-semibold text-green-400">{tp(lang, 'ui.mod.statusOn')}</span>
         ) : (
-          <span className="font-semibold text-accent">Automod: WYŁĄCZONY</span>
+          <span className="font-semibold text-accent">{tp(lang, 'ui.mod.statusOff')}</span>
         )}
       </p>
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <ShieldCheck size={16} className="text-accent" /> Automod
+          <ShieldCheck size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAutomod')}
         </h2>
         <AutomodForm initial={cfg} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Zap size={16} className="text-accent" /> Discord AutoMod (natywny)
+          <Zap size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingNative')}
         </h2>
         <NativeAutomodForm initial={nativeRules} guild={guild} />
       </section>
 
-      <AutomodStats stats={stats} />
+      <AutomodStats stats={stats} lang={lang} />
 
       <RegexTester />
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Bot size={16} className="text-accent" /> AI-moderacja
+          <Bot size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAiMod')}
         </h2>
         <AiModForm initial={aimod} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Gavel size={16} className="text-accent" /> Historia spraw
+          <Gavel size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingCases')}
         </h2>
         {cases.length === 0 ? (
           <p className="text-sm text-muted">
-            Brak spraw. Akcje z <code className="text-accent">/mod warn|timeout|clear</code> pojawią
-            się tutaj (wymaga uruchomienia <code>mod-cases-schema.sql</code> w Supabase).
+            {tp(lang, 'ui.mod.casesEmptyPre')}{' '}
+            <code className="text-accent">/mod warn|timeout|clear</code>{' '}
+            {tp(lang, 'ui.mod.casesEmptyMid')} <code>mod-cases-schema.sql</code>{' '}
+            {tp(lang, 'ui.mod.casesEmptyPost')}
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr className="border-b border-line">
-                  <th className="px-3 py-2">Akcja</th>
-                  <th className="px-3 py-2">Użytkownik</th>
-                  <th className="px-3 py-2">Moderator</th>
-                  <th className="px-3 py-2">Powód</th>
-                  <th className="px-3 py-2">Kiedy</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thAction')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thMod')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thReason')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thWhen')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -139,24 +141,23 @@ export default async function ModerationPage() {
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-          <Hourglass size={16} className="text-accent" /> Aktywne tempbany
+          <Hourglass size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingTempbans')}
         </h2>
         {tempbans.length === 0 ? (
           <p className="text-sm text-muted">
-            Brak aktywnych tempbanów. Nadaj je przez{' '}
-            <code className="text-accent">/mod tempban</code> (wymaga uruchomienia{' '}
-            <code>f6-moderation-schema.sql</code> w Supabase). Bot zdejmie ban automatycznie po
-            upływie czasu.
+            {tp(lang, 'ui.mod.tbEmptyPre')} <code className="text-accent">/mod tempban</code>{' '}
+            {tp(lang, 'ui.mod.tbEmptyMid')} <code>f6-moderation-schema.sql</code>{' '}
+            {tp(lang, 'ui.mod.tbEmptyPost')}
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr className="border-b border-line">
-                  <th className="px-3 py-2">Użytkownik</th>
-                  <th className="px-3 py-2">Powód</th>
-                  <th className="px-3 py-2">Auto-unban</th>
-                  <th className="px-3 py-2">Pozostało</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thReason')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thAutoUnban')}</th>
+                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thRemaining')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,7 +167,7 @@ export default async function ModerationPage() {
                     <td className="px-3 py-2 text-muted">{t.reason || '—'}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-muted">{fmt(t.unban_at)}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-muted">
-                      {remaining(t.unban_at)}
+                      {remaining(t.unban_at, lang)}
                     </td>
                   </tr>
                 ))}

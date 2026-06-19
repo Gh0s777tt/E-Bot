@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
@@ -21,13 +23,13 @@ const PII_DEF: PiiTypes = {
   email: true,
   phone: false,
 };
-const PII_FIELDS: { key: keyof PiiTypes; label: string }[] = [
-  { key: 'creditCard', label: 'Karty płatnicze' },
-  { key: 'pesel', label: 'PESEL' },
-  { key: 'idCard', label: 'Nr dowodu' },
-  { key: 'iban', label: 'IBAN / konto' },
-  { key: 'email', label: 'E-mail' },
-  { key: 'phone', label: 'Telefon (PL)' },
+const PII_FIELDS: { key: keyof PiiTypes; labelKey: string }[] = [
+  { key: 'creditCard', labelKey: 'ui.mod.piiCreditCard' },
+  { key: 'pesel', labelKey: 'ui.mod.piiPesel' },
+  { key: 'idCard', labelKey: 'ui.mod.piiIdCard' },
+  { key: 'iban', labelKey: 'ui.mod.piiIban' },
+  { key: 'email', labelKey: 'ui.mod.piiEmail' },
+  { key: 'phone', labelKey: 'ui.mod.piiPhone' },
 ];
 type Cfg = {
   enabled: boolean;
@@ -88,6 +90,7 @@ const fromLines = (s: string): string[] =>
     .filter(Boolean);
 
 export default function AutomodForm({ initial, guild }: { initial: Init; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<Cfg>({
     ...initial,
     bannedWords: initial.bannedWords ?? [],
@@ -170,15 +173,15 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
 
   return (
     <div className="max-w-xl space-y-4">
-      {toggle('enabled', 'Automod włączony')}
+      {toggle('enabled', tp(lang, 'ui.mod.enabledToggle'))}
       <div className="grid gap-2 sm:grid-cols-2">
-        {toggle('blockInvites', 'Blokuj zaproszenia Discord')}
-        {toggle('blockLinks', 'Blokuj linki (http/https)')}
+        {toggle('blockInvites', tp(lang, 'ui.mod.blockInvites'))}
+        {toggle('blockLinks', tp(lang, 'ui.mod.blockLinks'))}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Maks. wzmianek / wiadomość</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.maxMentions')}</span>
           <input
             type="number"
             value={c.maxMentions}
@@ -187,7 +190,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Anty-spam: wiadomości</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.antiSpamCount')}</span>
           <input
             type="number"
             value={c.antiSpamCount}
@@ -196,7 +199,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">…w ciągu (s)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.antiSpamSec')}</span>
           <input
             type="number"
             value={c.antiSpamSec}
@@ -208,21 +211,21 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Akcja przy naruszeniu</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.actionLabel')}</span>
           <select
             value={c.action}
             onChange={(e) => setC({ ...c, action: e.target.value as Cfg['action'] })}
             className={inputCls}
           >
-            <option value="delete">Usuń wiadomość</option>
-            <option value="timeout">Usuń + timeout</option>
-            <option value="kick">Usuń + wyrzuć</option>
-            <option value="ban">Usuń + ban</option>
+            <option value="delete">{tp(lang, 'ui.mod.actDelete')}</option>
+            <option value="timeout">{tp(lang, 'ui.mod.actTimeout')}</option>
+            <option value="kick">{tp(lang, 'ui.mod.actKick')}</option>
+            <option value="ban">{tp(lang, 'ui.mod.actBan')}</option>
           </select>
         </label>
         {c.action === 'timeout' && (
           <label className="space-y-1 text-sm">
-            <span className="font-semibold text-white/90">Czas timeoutu (minuty)</span>
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.timeoutMinutes')}</span>
             <input
               type="number"
               value={c.timeoutMinutes}
@@ -234,9 +237,8 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
       </div>
       {c.action !== 'delete' && (
         <p className="text-xs text-amber-300/80">
-          Uwaga: akcja „{c.action}" dotyczy <strong>każdego</strong> naruszenia automoda (też
-          drobnych jak nadmiar wzmianek). Bot potrzebuje odpowiednich uprawnień; przy ich braku
-          zostaje samo usunięcie wiadomości.
+          {tp(lang, 'ui.mod.actionWarnPre')} „{c.action}" {tp(lang, 'ui.mod.actionWarnMid')}{' '}
+          <strong>{tp(lang, 'ui.mod.actionWarnEvery')}</strong> {tp(lang, 'ui.mod.actionWarnPost')}
         </p>
       )}
 
@@ -251,16 +253,16 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
             }
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Eskalacja recydywy</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.escalationToggle')}</span>
           <span className="hidden text-xs text-muted sm:inline">
-            (powtarzające się naruszenia → mocniejsza akcja)
+            {tp(lang, 'ui.mod.escalationHint')}
           </span>
         </label>
         {c.escalation.enabled && (
           <>
             <div className="grid gap-3 sm:grid-cols-3">
               <label className="space-y-1 text-sm">
-                <span className="text-muted">Po ilu naruszeniach</span>
+                <span className="text-muted">{tp(lang, 'ui.mod.escThreshold')}</span>
                 <input
                   type="number"
                   value={c.escalation.threshold}
@@ -274,7 +276,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
                 />
               </label>
               <label className="space-y-1 text-sm">
-                <span className="text-muted">W oknie (min)</span>
+                <span className="text-muted">{tp(lang, 'ui.mod.escWindow')}</span>
                 <input
                   type="number"
                   value={c.escalation.windowMin}
@@ -288,7 +290,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
                 />
               </label>
               <label className="space-y-1 text-sm">
-                <span className="text-muted">Akcja eskalacji</span>
+                <span className="text-muted">{tp(lang, 'ui.mod.escActionLabel')}</span>
                 <select
                   value={c.escalation.action}
                   onChange={(e) =>
@@ -302,15 +304,17 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
                   }
                   className={inputCls}
                 >
-                  <option value="timeout">Timeout</option>
-                  <option value="kick">Wyrzuć</option>
-                  <option value="ban">Ban</option>
+                  <option value="timeout">{tp(lang, 'ui.mod.escActTimeout')}</option>
+                  <option value="kick">{tp(lang, 'ui.mod.escActKick')}</option>
+                  <option value="ban">{tp(lang, 'ui.mod.escActBan')}</option>
                 </select>
               </label>
             </div>
             <p className="text-xs text-muted">
-              Np. {c.escalation.threshold} naruszenia w {c.escalation.windowMin} min → automatycznie
-              „{c.escalation.action}" (nawet gdy akcja bazowa to „usuń").
+              {tp(lang, 'ui.mod.escExamplePre')} {c.escalation.threshold}{' '}
+              {tp(lang, 'ui.mod.escExampleMid')} {c.escalation.windowMin}{' '}
+              {tp(lang, 'ui.mod.escExampleMid2')} „{c.escalation.action}"{' '}
+              {tp(lang, 'ui.mod.escExamplePost')}
             </p>
           </>
         )}
@@ -318,7 +322,9 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
 
       {/* Anty-caps i anty-spoiler */}
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
-        <span className="font-semibold text-white/90">Anty-caps i anty-spoiler</span>
+        <span className="font-semibold text-white/90">
+          {tp(lang, 'ui.mod.antiCapsSpoilerLabel')}
+        </span>
         <label className="flex items-center gap-3 text-sm">
           <input
             type="checkbox"
@@ -327,14 +333,14 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
             className="h-4 w-4 accent-accent"
           />
           <span>
-            Blokuj nadmiar <strong>WIELKICH LITER</strong>{' '}
-            <span className="text-muted">(krzyk)</span>
+            {tp(lang, 'ui.mod.antiCapsPre')} <strong>{tp(lang, 'ui.mod.antiCapsStrong')}</strong>{' '}
+            <span className="text-muted">{tp(lang, 'ui.mod.antiCapsNote')}</span>
           </span>
         </label>
         {c.antiCaps.enabled && (
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1 text-sm">
-              <span className="text-muted">Próg % wielkich liter</span>
+              <span className="text-muted">{tp(lang, 'ui.mod.capsPercent')}</span>
               <input
                 type="number"
                 value={c.antiCaps.percent}
@@ -351,7 +357,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
               />
             </label>
             <label className="space-y-1 text-sm">
-              <span className="text-muted">Min. długość wiadomości</span>
+              <span className="text-muted">{tp(lang, 'ui.mod.capsMinLength')}</span>
               <input
                 type="number"
                 value={c.antiCaps.minLength}
@@ -376,12 +382,14 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
             className="h-4 w-4 accent-accent"
           />
           <span>
-            Blokuj spam <strong>spoilerów</strong> <span className="text-muted">(||tekst||)</span>
+            {tp(lang, 'ui.mod.antiSpoilerPre')}{' '}
+            <strong>{tp(lang, 'ui.mod.antiSpoilerStrong')}</strong>{' '}
+            <span className="text-muted">{tp(lang, 'ui.mod.antiSpoilerNote')}</span>
           </span>
         </label>
         {c.antiSpoiler.enabled && (
           <label className="space-y-1 text-sm sm:max-w-xs">
-            <span className="text-muted">Maks. liczba spoilerów w wiadomości</span>
+            <span className="text-muted">{tp(lang, 'ui.mod.spoilerMax')}</span>
             <input
               type="number"
               value={c.antiSpoiler.maxSpoilers}
@@ -399,20 +407,20 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
 
       {/* Własne filtry (Faza 8) */}
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
-        <span className="font-semibold text-white/90">Własne filtry treści</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.customFiltersLabel')}</span>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="space-y-1 text-sm">
-            <span className="text-muted">Zakazane słowa/frazy (jedna na linię)</span>
+            <span className="text-muted">{tp(lang, 'ui.mod.bannedWordsLabel')}</span>
             <textarea
               value={wordsText}
               onChange={(e) => setWordsText(e.target.value)}
               rows={4}
               className={inputCls}
-              placeholder={'spam\nzakazane słowo\n...'}
+              placeholder={tp(lang, 'ui.mod.bannedWordsPh')}
             />
           </label>
           <label className="space-y-1 text-sm">
-            <span className="text-muted">Wzorce regex (zaawansowane, jedna na linię)</span>
+            <span className="text-muted">{tp(lang, 'ui.mod.regexLabel')}</span>
             <textarea
               value={regexText}
               onChange={(e) => setRegexText(e.target.value)}
@@ -423,9 +431,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
           </label>
         </div>
         <label className="block space-y-1 text-sm">
-          <span className="text-muted">
-            Dozwolone domeny linków (whitelist, gdy „Blokuj linki" — jedna na linię)
-          </span>
+          <span className="text-muted">{tp(lang, 'ui.mod.allowedLinksLabel')}</span>
           <textarea
             value={linksText}
             onChange={(e) => setLinksText(e.target.value)}
@@ -436,12 +442,12 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
         </label>
 
         <div className="space-y-2">
-          <span className="text-sm text-muted">Kanały zwolnione z automodu</span>
+          <span className="text-sm text-muted">{tp(lang, 'ui.mod.ignoreChannelsLabel')}</span>
           <ChannelSelect
             value=""
             onChange={addIgnore}
             channels={guild.channels}
-            placeholder="+ dodaj kanał"
+            placeholder={tp(lang, 'ui.mod.addChannelPh')}
           />
           {c.ignoreChannels.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
@@ -451,7 +457,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
                   type="button"
                   onClick={() => removeIgnore(id)}
                   className="rounded-full border border-line px-2.5 py-0.5 text-xs text-muted transition hover:border-accent hover:text-accent"
-                  title="Kliknij, by usunąć"
+                  title={tp(lang, 'ui.mod.chipRemoveTitle')}
                 >
                   #{channelName(id)} ✕
                 </button>
@@ -463,9 +469,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
 
       {/* Ochrona: anti-scam + PII */}
       <div className="space-y-3 rounded-xl border border-line bg-bg/40 p-4">
-        <span className="font-semibold text-white/90">
-          Ochrona przed oszustwami i danymi osobowymi
-        </span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.protectionLabel')}</span>
 
         <label className="flex items-center gap-3 text-sm">
           <input
@@ -474,14 +478,14 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
             onChange={(e) => setC({ ...c, antiScam: { ...c.antiScam, enabled: e.target.checked } })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Anti-scam / phishing</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.antiScamToggle')}</span>
           <span className="hidden text-xs text-muted sm:inline">
-            (podrabiany Discord/Steam, „darmowe nitro/gift", linki na IP)
+            {tp(lang, 'ui.mod.antiScamHint')}
           </span>
         </label>
         {c.antiScam.enabled && (
           <label className="block space-y-1 text-sm">
-            <span className="text-muted">Dodatkowe domeny do blokady (jedna na linię)</span>
+            <span className="text-muted">{tp(lang, 'ui.mod.scamDomainsLabel')}</span>
             <textarea
               value={scamText}
               onChange={(e) => setScamText(e.target.value)}
@@ -499,7 +503,7 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
             onChange={(e) => setC({ ...c, pii: { ...c.pii, enabled: e.target.checked } })}
             className="h-4 w-4 accent-accent"
           />
-          <span className="font-semibold text-white/90">Ochrona danych osobowych (PII)</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.piiToggle')}</span>
         </label>
         {c.pii.enabled && (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -516,20 +520,20 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
                   }
                   className="h-4 w-4 accent-accent"
                 />
-                {f.label}
+                {tp(lang, f.labelKey)}
               </label>
             ))}
           </div>
         )}
         <p className="text-xs text-muted">
-          Wiadomości z oszustwem lub danymi osobowymi są usuwane; do mod-logu <strong>nie</strong>{' '}
-          trafia treść z danymi (zero wtórnego wycieku). Autor dostaje krótkie wyjaśnienie w DM.
+          {tp(lang, 'ui.mod.piiNotePre')} <strong>{tp(lang, 'ui.mod.piiNoteNot')}</strong>{' '}
+          {tp(lang, 'ui.mod.piiNotePost')}
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał mod-log</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.modlogLabel')}</span>
           <ChannelSelect
             value={c.modlogChannelId}
             onChange={(v) => setC({ ...c, modlogChannelId: v })}
@@ -537,22 +541,18 @@ export default function AutomodForm({ initial, guild }: { initial: Init; guild: 
           />
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Rola zwolniona z automodu</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.exemptRoleLabel')}</span>
           <RoleSelect
             value={c.exemptRoleId}
             onChange={(v) => setC({ ...c, exemptRoleId: v })}
             roles={guild.roles}
-            placeholder="— brak —"
+            placeholder={tp(lang, 'ui.mod.none')}
           />
         </label>
       </div>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">
-        Bot usuwa naruszenia (zakazane słowa/regex, zaproszenia, linki spoza whitelisty, nadmiar
-        wzmianek, spam) + loguje na mod-log. Pomijani: „Zarządzanie wiadomościami", rola zwolniona,
-        kanały zwolnione.
-      </p>
+      <p className="text-xs text-muted">{tp(lang, 'ui.mod.footer')}</p>
     </div>
   );
 }

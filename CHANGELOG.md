@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-315-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.245.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-316-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.246.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.246.0] — 🌍 i18n UI panelu — strona /moderation (automod + AI-mod + tester regex + sprawy)
+
+- `[#316]` 🌍 **i18n UI panelu — kolejna fala: `/moderation` (największa strona — automod, natywny Discord AutoMod, statystyki ochrony, tester regex, AI-moderacja, historia spraw, tempbany).**
+  - 🖥️ **Panel**: 169 nowych kluczy `ui.mod.*` × **14 języków** w `panelI18n.ts` (parzystość 14×169=2366). `app/moderation/page.tsx` (serwer) + `AutomodForm.tsx` + `NativeAutomodForm.tsx` + `AutomodStats.tsx` (serwer, prop `lang`) + `RegexTester.tsx` + `AiModForm.tsx` (klient) na `tp()`: intro z segmentami wokół `/mod`/`/case`/**Bezpieczeństwo** + status WŁ/WYŁ, automod (akcja+ostrzeżenie, eskalacja recydywy, anty-caps/spoiler z segmentami `<strong>`, własne filtry, anti-scam, PII, mod-log), natywny AutoMod (szablony, reguły, badge'e akcji, segmenty błędu `DISCORD_BOT_TOKEN`), statystyki ochrony (kategorie + trend), tester regex (flaga `i`), AI-mod (akcje, footer `OPENAI_API_KEY`), tabele spraw/tempbanów. Pomocnik `remaining()` + komponenty serwerowe przyjmują `PanelLocale`.
+  - 🧰 **Tooling**: `biome.json` — `files.maxSize` ↑ do 2 MiB (po dodaniu fali `panelI18n.ts` przekroczył domyślny limit 1 MiB i wypadał spod lintera). Nietłumaczone: komendy (`/mod`/`/case`/podkomendy), tokeny (`mod-cases-schema.sql`/`f6-moderation-schema.sql`/`DISCORD_BOT_TOKEN`/`OPENAI_API_KEY`/`.env`), placeholdery regex/domen (przykłady), format `pl-PL`, `PESEL`/`IBAN`/`XP`.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), dashboard `tsc` exit 0; parzystość kluczy OK. Wstecznie zgodne (fallback PL). Zrobione 36/~40 stron.
 
 ## [0.245.0] — 🌍 i18n UI panelu — strona /custom-commands (własne komendy slash)
 

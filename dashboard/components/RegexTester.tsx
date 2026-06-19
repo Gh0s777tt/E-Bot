@@ -1,11 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 
 // Plac zabaw regex — testuj wzorzec automoda na przykładowym tekście, zanim go zapiszesz.
 // Czysto klienckie (zero zapytań). Domyślnie flaga 'i' (jak automod). Bezpieczne: błędny wzorzec
 // nie wywala — pokazuje komunikat.
 export default function RegexTester() {
+  const { lang } = useLang();
   const [pattern, setPattern] = useState('');
   const [flags, setFlags] = useState('i');
   const [text, setText] = useState('');
@@ -28,45 +31,46 @@ export default function RegexTester() {
   return (
     <section className="panel-glow rounded-2xl border border-line bg-card p-5">
       <h2 className="mb-1 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
-        🧪 Tester wzorców (regex)
+        {tp(lang, 'ui.mod.rxHeading')}
       </h2>
       <p className="mb-4 text-xs text-muted">
-        Sprawdź wzorzec na przykładowej wiadomości, zanim dodasz go do automoda. Automod używa flagi{' '}
-        <code>i</code> (ignoruje wielkość liter).
+        {tp(lang, 'ui.mod.rxIntroPre')} <code>i</code> {tp(lang, 'ui.mod.rxIntroPost')}
       </p>
 
       <div className="flex flex-wrap gap-2">
         <input
           value={pattern}
           onChange={(e) => setPattern(e.target.value)}
-          placeholder="Wzorzec, np. (free\s*nitro|discord\.gift)"
+          placeholder={tp(lang, 'ui.mod.rxPatternPh')}
           className={`${inputCls} flex-1`}
         />
         <input
           value={flags}
           onChange={(e) => setFlags(e.target.value.replace(/[^gimsuy]/g, ''))}
-          placeholder="flagi"
+          placeholder={tp(lang, 'ui.mod.rxFlagsPh')}
           className={`${inputCls} w-20`}
-          aria-label="Flagi regex"
+          aria-label={tp(lang, 'ui.mod.rxFlagsAria')}
         />
       </div>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Wklej przykładową wiadomość do przetestowania…"
+        placeholder={tp(lang, 'ui.mod.rxTextPh')}
         rows={3}
         className={`${inputCls} mt-2 resize-y`}
       />
 
       <div className="mt-3 text-sm">
         {!result.ok ? (
-          <span className="text-accent">❌ Błędny wzorzec: {result.error}</span>
+          <span className="text-accent">
+            {tp(lang, 'ui.mod.rxErrorPre')} {result.error}
+          </span>
         ) : !pattern ? (
-          <span className="text-muted">Wpisz wzorzec, by zacząć.</span>
+          <span className="text-muted">{tp(lang, 'ui.mod.rxStart')}</span>
         ) : hit ? (
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-green-400">
-              ✅ Dopasowano ({result.matches.length})
+              {tp(lang, 'ui.mod.rxMatchedPre')} ({result.matches.length})
             </span>
             {result.matches.map((m, i) => (
               <span
@@ -79,9 +83,7 @@ export default function RegexTester() {
             ))}
           </div>
         ) : (
-          <span className="text-muted">
-            ⚪ Brak dopasowania — ta wiadomość nie zostałaby oznaczona tym wzorcem.
-          </span>
+          <span className="text-muted">{tp(lang, 'ui.mod.rxNoMatch')}</span>
         )}
       </div>
     </section>

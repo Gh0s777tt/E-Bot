@@ -3,19 +3,22 @@
 import { useState } from 'react';
 import type { AiModConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
+import { tp } from '../lib/panelI18n';
+import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-const ACTIONS: { v: AiModConfig['action']; l: string }[] = [
-  { v: 'delete', l: 'Usuń wiadomość' },
-  { v: 'warn', l: 'Ostrzeż (bez usuwania)' },
-  { v: 'log', l: 'Tylko loguj' },
+const ACTIONS: { v: AiModConfig['action']; k: string }[] = [
+  { v: 'delete', k: 'ui.mod.actDelete' },
+  { v: 'warn', k: 'ui.mod.aiActWarn' },
+  { v: 'log', k: 'ui.mod.aiActLog' },
 ];
 
 export default function AiModForm({ initial, guild }: { initial: AiModConfig; guild: GuildMeta }) {
+  const { lang } = useLang();
   const [c, setC] = useState<AiModConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
@@ -43,12 +46,12 @@ export default function AiModForm({ initial, guild }: { initial: AiModConfig; gu
           onChange={(e) => setC({ ...c, enabled: e.target.checked })}
           className="h-4 w-4 accent-accent"
         />
-        <span className="font-semibold text-white/90">AI-moderacja włączona</span>
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.aiEnabledToggle')}</span>
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Akcja po wykryciu</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.aiActionLabel')}</span>
           <select
             value={c.action}
             onChange={(e) => setC({ ...c, action: e.target.value as AiModConfig['action'] })}
@@ -56,37 +59,36 @@ export default function AiModForm({ initial, guild }: { initial: AiModConfig; gu
           >
             {ACTIONS.map((a) => (
               <option key={a.v} value={a.v}>
-                {a.l}
+                {tp(lang, a.k)}
               </option>
             ))}
           </select>
         </label>
         <label className="space-y-1 text-sm">
-          <span className="font-semibold text-white/90">Kanał logów</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.aiLogChannel')}</span>
           <ChannelSelect
             value={c.logChannelId}
             onChange={(v) => setC({ ...c, logChannelId: v })}
             channels={guild.channels}
-            placeholder="— brak —"
+            placeholder={tp(lang, 'ui.mod.none')}
           />
         </label>
         <label className="space-y-1 text-sm sm:col-span-2">
-          <span className="font-semibold text-white/90">Rola zwolniona</span>
+          <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.aiExemptRole')}</span>
           <RoleSelect
             value={c.exemptRoleId}
             onChange={(v) => setC({ ...c, exemptRoleId: v })}
             roles={guild.roles}
-            placeholder="— brak —"
+            placeholder={tp(lang, 'ui.mod.none')}
           />
         </label>
       </div>
 
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
-        Skanuje wiadomości <strong>darmowym</strong> endpointem moderacji OpenAI (toksyczność,
-        nękanie, treści NSFW, przemoc itp.) i stosuje wybraną akcję. Pomija moderatorów (uprawnienie
-        „Zarządzanie wiadomościami") i rolę zwolnioną. Wymaga <code>OPENAI_API_KEY</code> (jest w
-        .env). Najlepsze dla mniejszych serwerów (wywołanie API na wiadomość).
+        {tp(lang, 'ui.mod.aiFooterPre')} <strong>{tp(lang, 'ui.mod.aiFooterStrong')}</strong>{' '}
+        {tp(lang, 'ui.mod.aiFooterMid')} <code>OPENAI_API_KEY</code>{' '}
+        {tp(lang, 'ui.mod.aiFooterPost')}
       </p>
     </div>
   );
