@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-330-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.260.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-331-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.261.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.261.0] — 📈 /stats: wykres wzrostu członków + trendy przyjść/odejść (retencja)
+
+- `[#331]` 📈 **Nowe wykresy czasowe na `/stats` — wzrost serwera i rotacja członków (retencja).** Pierwszy przyrost toru „Wzrost" po domknięciu i18n + RTL.
+  - **Wzrost serwera**: nowa sekcja z `AreaChart` liczby członków w czasie (`getServerHistory` — migawki bota co 30 min) + aktualna liczba i bilans `+/−` za okres.
+  - **Rotacja / retencja**: w sekcji aktywności dodane wykresy **przyjść** i **odejść** w czasie — dane były już pobierane (`getActivitySeries`), wcześniej tylko liczby zbiorcze, teraz też 14-dniowy trend (sygnał churnu/retencji).
+  - Reużycie istniejących kluczy i18n (`ui.home.sgHeading`/`tlMembers`/`sgDays`/`sgEmpty`, `ui.stats.actJoins`/`actLeaves`) — **zero nowych tłumaczeń**, jedno nowe zapytanie (`getServerHistory`). Puste stany obsłużone, wstecznie zgodne.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), `tsc` exit 0. (Wizualnie najlepiej potwierdzić na uwierzytelnionym preview — `/stats` jest za bramką auth.)
 
 ## [0.260.0] — ↔️🏁 Lustrzane RTL KOMPLETNE — knob przełączników (ostatni element)
 

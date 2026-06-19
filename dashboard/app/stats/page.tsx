@@ -5,6 +5,7 @@ import {
   MessageSquare,
   Mic,
   Ticket,
+  TrendingUp,
   Trophy,
   Users,
 } from 'lucide-react';
@@ -24,6 +25,7 @@ import {
   ticketStats,
 } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
+import { getServerHistory } from '../../lib/insights';
 import { tp } from '../../lib/panelI18n';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
@@ -48,6 +50,7 @@ export default async function StatsPage() {
     guild,
     topUsers,
     hourly,
+    history,
     lang,
   ] = await Promise.all([
     getStats(),
@@ -60,6 +63,7 @@ export default async function StatsPage() {
     getGuildMeta(),
     getTopActiveUsers(14, 10),
     getHourlyActivity(),
+    getServerHistory(),
     getPanelLocale(),
   ]);
   const hourMax = Math.max(1, ...hourly);
@@ -75,6 +79,13 @@ export default async function StatsPage() {
     }),
     { messages: 0, joins: 0, leaves: 0, voice: 0 },
   );
+  // Wzrost serwera (członkowie w czasie) + rotacja (przyjścia/odejścia) — retencja.
+  const members = history.map((h) => h.members);
+  const memEnough = members.length >= 2;
+  const memLast = members.at(-1) ?? 0;
+  const memDelta = memLast - (members[0] ?? 0);
+  const joinsTrend = activity.map((p) => p.joins);
+  const leavesTrend = activity.map((p) => p.leaves);
 
   return (
     <div className="space-y-6">
@@ -147,8 +158,44 @@ export default async function StatsPage() {
             <strong className="text-accent">{actTotals.voice.toLocaleString('pl-PL')}</strong>
           </span>
         </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.stats.actJoins')}</div>
+            <AreaChart values={joinsTrend} height={90} />
+          </div>
+          <div>
+            <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.stats.actLeaves')}</div>
+            <AreaChart values={leavesTrend} height={90} />
+          </div>
+        </div>
         {actTotals.messages === 0 && (
           <p className="mt-2 text-xs text-muted">{tp(lang, 'ui.stats.activityEmpty')}</p>
+        )}
+      </section>
+
+      {/* Wzrost serwera — członkowie w czasie */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <TrendingUp size={16} className="text-accent" /> {tp(lang, 'ui.home.sgHeading')}
+        </h2>
+        {memEnough ? (
+          <>
+            <div className="mb-3 flex flex-wrap items-baseline gap-2">
+              <span className="font-display text-3xl font-bold">
+                {memLast.toLocaleString('pl-PL')}
+              </span>
+              <span className="text-sm text-muted">{tp(lang, 'ui.home.tlMembers')}</span>
+              <span
+                className={`text-sm font-semibold ${memDelta >= 0 ? 'text-green-400' : 'text-accent'}`}
+              >
+                {memDelta >= 0 ? '+' : ''}
+                {memDelta.toLocaleString('pl-PL')} / {members.length} {tp(lang, 'ui.home.sgDays')}
+              </span>
+            </div>
+            <AreaChart values={members} height={150} />
+          </>
+        ) : (
+          <p className="text-sm text-muted">{tp(lang, 'ui.home.sgEmpty')}</p>
         )}
       </section>
 
