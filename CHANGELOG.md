@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-331-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.261.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-332-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.262.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.262.0] — 📈 /stats: domknięcie pokrycia metryk wykresami (voice + boosty/kanały)
+
+- `[#332]` 📈 **Pełne pokrycie metryk wykresami czasowymi na `/stats`.** Drugi przyrost toru „Wzrost".
+  - Sekcja aktywności: dodany wykres **voice** — kwartet wiadomości/przyjścia/odejścia/voice ma teraz komplet trendów 14-dniowych.
+  - Sekcja „Wzrost serwera": dodane wykresy **boostów** i **kanałów** w czasie (z `server_history`, obok liczby członków).
+  - Reużycie kluczy i18n (`ui.stats.actVoice`, `ui.home.boosts`/`channels`) — zero nowych tłumaczeń, zero nowych zapytań (dane już pobrane na stronie). Wstecznie zgodne.
+  - Czysto panel (Vercel). Bramki: biome czysto (325 plików), `tsc` exit 0.
 
 ## [0.261.0] — 📈 /stats: wykres wzrostu członków + trendy przyjść/odejść (retencja)
 

@@ -1,4 +1,4 @@
-<!-- SYNC: v0.261.0 · #331 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.262.0 · #332 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.261.0)
+## 🔭 Bieżący tor (v0.262.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -44,7 +44,7 @@
 
 ### 🧭 Otwarte / strategiczne (poza torem i18n)
 - [ ] **Marketplace pluginów / efekt sieciowy** — *config* multi‑serwer gotowy (Etap K, C‑1…C‑27); brakuje produktyzacji marketplace i modelu multi‑guild jako usługi
-- [ ] **Retencja + więcej wykresów w czasie** (panel `/stats`) — 1. przyrost ✅ **v0.261.0** (wzrost członków + trendy przyjść/odejść); opcjonalnie dalej: kohortowa retencja, dłuższe zakresy, eksport
+- [ ] **Retencja + więcej wykresów w czasie** (panel `/stats`) — przyrosty 1–2 ✅ **v0.261–262** (wzrost członków + komplet trendów: wiadomości/przyjścia/odejścia/voice + boosty/kanały); opcjonalnie dalej: kohortowa retencja, dłuższe zakresy, eksport
 - [ ] **Produkcyjne wpięcie infry**: pełny Sentry (realny DSN), Redis (instancja), Supabase Realtime push — szkielety/wersje gated już są
 - [ ] **Twitch sub → rola** — kod gotowy; aktywacja wymaga OAuth twórcy (scope `channel:read:subscriptions`)
 
@@ -187,4 +187,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.261.0 (#331) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.262.0 (#332) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

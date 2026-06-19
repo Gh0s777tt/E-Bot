@@ -86,6 +86,9 @@ export default async function StatsPage() {
   const memDelta = memLast - (members[0] ?? 0);
   const joinsTrend = activity.map((p) => p.joins);
   const leavesTrend = activity.map((p) => p.leaves);
+  const voiceTrend = activity.map((p) => p.voice);
+  const boostsTrend = history.map((h) => h.boosts);
+  const channelsTrend = history.map((h) => h.channels);
 
   return (
     <div className="space-y-6">
@@ -158,7 +161,7 @@ export default async function StatsPage() {
             <strong className="text-accent">{actTotals.voice.toLocaleString('pl-PL')}</strong>
           </span>
         </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
           <div>
             <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.stats.actJoins')}</div>
             <AreaChart values={joinsTrend} height={90} />
@@ -166,6 +169,10 @@ export default async function StatsPage() {
           <div>
             <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.stats.actLeaves')}</div>
             <AreaChart values={leavesTrend} height={90} />
+          </div>
+          <div>
+            <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.stats.actVoice')}</div>
+            <AreaChart values={voiceTrend} height={90} />
           </div>
         </div>
         {actTotals.messages === 0 && (
@@ -193,6 +200,16 @@ export default async function StatsPage() {
               </span>
             </div>
             <AreaChart values={members} height={150} />
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.home.boosts')}</div>
+                <AreaChart values={boostsTrend} height={90} />
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.home.channels')}</div>
+                <AreaChart values={channelsTrend} height={90} />
+              </div>
+            </div>
           </>
         ) : (
           <p className="text-sm text-muted">{tp(lang, 'ui.home.sgEmpty')}</p>

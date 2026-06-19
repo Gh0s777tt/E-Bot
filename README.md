@@ -1,4 +1,4 @@
-<!-- SYNC: v0.261.0 · #331 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.262.0 · #332 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.261.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.262.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.261.0** — 📈 **`/stats`: nowe wykresy czasowe** — wzrost członków (`getServerHistory`) + trendy przyjść/odejść (retencja/rotacja), reużycie istniejących kluczy i18n (zero nowych tłumaczeń). Pierwszy przyrost toru „Wzrost" po domknięciu **i18n (14 jęz., panel 39/39 + publiczne + boilerplate + OG)** oraz **lustrzanego RTL** (cała powierzchnia, v0.254–260, zweryfikowane na żywo: `<html dir="rtl">` + odbite właściwości logiczne). Wcześniej: 14 stron tras (v0.258.0), strona główna (v0.257.0), chrom nawigacyjny (v0.255–256), fundament RTL `dir="rtl"` + audyt i18n 14 jęz. **1394×14** (v0.254.0). Wcześniej domknięta **i18n CAŁEJ powierzchni web**: panel 39/39 + współdzielone edytory + powierzchnia publiczna (login/`/p/leaderboard`/`/p/u/[id]`) + boilerplate (`error`/`404`/`loading`/metadane) + obraz OG profilu (fonty per-skrypt). Fundamenty: i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K), 14 epików „2.0" (Faza 8).
+Najnowsze: **v0.262.0** — 📈 **`/stats`: pełne pokrycie metryk wykresami czasowymi** — dodany trend **voice** (komplet: wiadomości/przyjścia/odejścia/voice) oraz **boosty/kanały** w sekcji wzrostu (`server_history`); reużycie istniejących kluczy i18n (zero nowych tłumaczeń). Tor „Wzrost" po domknięciu **i18n (14 jęz., panel 39/39 + publiczne + boilerplate + OG)** oraz **lustrzanego RTL** (cała powierzchnia, v0.254–260). Wcześniej: 14 stron tras (v0.258.0), strona główna (v0.257.0), chrom nawigacyjny (v0.255–256), fundament RTL `dir="rtl"` + audyt i18n 14 jęz. **1394×14** (v0.254.0). Wcześniej domknięta **i18n CAŁEJ powierzchni web**: panel 39/39 + współdzielone edytory + powierzchnia publiczna (login/`/p/leaderboard`/`/p/u/[id]`) + boilerplate (`error`/`404`/`loading`/metadane) + obraz OG profilu (fonty per-skrypt). Fundamenty: i18n treści „Jak to działa?" (37/37), web GameVault (+RTL), Architekt serwera, config per‑serwer (Etap K), 14 epików „2.0" (Faza 8).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>
