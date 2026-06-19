@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-345-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.275.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-346-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.276.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.276.0] — 🧩 M6 (community): zgłoszenia + moderacja pluginów 3rd-party (bez sandboxa)
+
+- `[#346]` 🧩 **Marketplace M6 (warstwa danych) — zgłoszenia + moderacja pluginów community (env-gated, BEZ wykonywania obcego kodu).**
+  - Nowy [`lib/communityPlugins.ts`](dashboard/lib/communityPlugins.ts): manifest Zod (`key`/`title`/`description`/`version`/`homepage`), `submitCommunityPlugin()` (→ wpis `source='community'`, `review_status='pending'`; ochrona rdzenia — klucz first-party zarezerwowany), `listCommunityPlugins()`, `reviewCommunityPlugin()` (approve/reject). Osobny plik od `lib/community.ts` (configi welcome/automod — bez kolizji).
+  - Trasy: [`/api/community/submit`](dashboard/app/api/community/submit/route.ts) (gated env `MARKETPLACE_COMMUNITY` + sesja; autor = uid) + [`/api/community/review`](dashboard/app/api/community/review/route.ts) (**tylko owner/staff instancji** — `resolveRole='admin'`; tenant-admini → 403, bo katalog community jest globalny).
+  - **Zatwierdzone wpisy automatycznie wpadają do marketplace** (`getPluginCatalog` z M2 czyta `source='community' AND review_status='approved'`) — pętla domknięta.
+  - **Sandbox wykonania obcego kodu = świadomie poza zakresem** (osobny, duży temat bezpieczeństwa). Tu wyłącznie metadane + walidacja + moderacja. Domyślnie OFF.
+  - Bramki: biome czysto (311), `tsc` exit 0, docs:check exit 0.
 
 ## [0.275.0] — 💳 M5 (billing): Stripe Checkout + webhook → guilds.tier + przycisk „Premium"
 
