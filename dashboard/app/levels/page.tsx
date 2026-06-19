@@ -94,19 +94,19 @@ export default async function LevelsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
-                  <th className="py-2 pr-3">#</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.levels.colUser')}</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.levels.colLevel')}</th>
+                <tr className="border-b border-line text-start text-xs uppercase tracking-wide text-muted">
+                  <th className="py-2 pe-3">#</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.levels.colUser')}</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.levels.colLevel')}</th>
                   <th className="py-2">XP</th>
                 </tr>
               </thead>
               <tbody>
                 {board.map((r, i) => (
                   <tr key={r.user_id} className="border-b border-line/50">
-                    <td className="py-2 pr-3 text-muted">{i + 1}</td>
-                    <td className="py-2 pr-3">{r.username ?? r.user_id}</td>
-                    <td className="py-2 pr-3 font-semibold text-accent">{r.level}</td>
+                    <td className="py-2 pe-3 text-muted">{i + 1}</td>
+                    <td className="py-2 pe-3">{r.username ?? r.user_id}</td>
+                    <td className="py-2 pe-3 font-semibold text-accent">{r.level}</td>
                     <td className="py-2">{r.xp.toLocaleString(lang)}</td>
                   </tr>
                 ))}

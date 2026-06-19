@@ -65,7 +65,7 @@ export default async function DiagnosticsPage() {
       {/* Health score */}
       <section className="panel-glow relative overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card to-bg p-6">
         <div
-          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full"
+          className="pointer-events-none absolute -end-16 -top-16 h-48 w-48 rounded-full"
           style={{
             background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.16), transparent 70%)',
           }}

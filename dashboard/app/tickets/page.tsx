@@ -70,19 +70,19 @@ export default async function TicketsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
-                  <th className="py-2 pr-3">{tp(lang, 'ui.tickets.colStatus')}</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.tickets.colUser')}</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.tickets.colSubject')}</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.tickets.colCreated')}</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.tickets.colRating')}</th>
+                <tr className="border-b border-line text-start text-xs uppercase tracking-wide text-muted">
+                  <th className="py-2 pe-3">{tp(lang, 'ui.tickets.colStatus')}</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.tickets.colUser')}</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.tickets.colSubject')}</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.tickets.colCreated')}</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.tickets.colRating')}</th>
                   <th className="py-2">{tp(lang, 'ui.tickets.colActions')}</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((t) => (
                   <tr key={t.id} className="border-b border-line/50">
-                    <td className="py-2 pr-3">
+                    <td className="py-2 pe-3">
                       <span
                         className={`rounded-md px-2 py-0.5 text-xs font-semibold ${
                           t.status === 'open'
@@ -95,12 +95,12 @@ export default async function TicketsPage() {
                         {statusLabel[t.status] ?? t.status}
                       </span>
                     </td>
-                    <td className="py-2 pr-3">{t.username ?? t.user_id}</td>
-                    <td className="py-2 pr-3">{t.subject ?? '—'}</td>
-                    <td className="py-2 pr-3 text-muted">
+                    <td className="py-2 pe-3">{t.username ?? t.user_id}</td>
+                    <td className="py-2 pe-3">{t.subject ?? '—'}</td>
+                    <td className="py-2 pe-3 text-muted">
                       {new Date(t.created_at).toLocaleString(lang)}
                     </td>
-                    <td className="py-2 pr-3 text-yellow-400">
+                    <td className="py-2 pe-3 text-yellow-400">
                       {t.rating ? '⭐'.repeat(t.rating) : '—'}
                     </td>
                     <td className="py-2">

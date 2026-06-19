@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-327-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.257.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-328-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.258.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,17 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.258.0] — ↔️ Lustrzane RTL — przyrost 4: strony tras `/app` (tabele, poświaty, ml-auto)
+
+- `[#328]` ↔️ **Czwarty przyrost RTL — 14 stron tras (`dashboard/app`).** Precyzyjny sweep fizycznych klas Tailwind → logiczne (sed po jednoznacznych tokenach + weryfikacja grep/tsc/biome):
+  - `text-left`→`text-start` (nagłówki/wiersze tabel: `/ai` `/levels` `/tickets` `/moderation` `/engagement` `/audit` `/suggestions` `/commands`; karty presetów `/setup`).
+  - `text-right`→`text-end` (liczby w `/stats` ×5, tabela System w `/settings`).
+  - `ml-auto`→`ms-auto` (`/profile` ×2, `/commands`, `/setup`).
+  - `py-2 pr-3`→`py-2 pe-3` (komórki tabel `/ai` `/levels` `/tickets`).
+  - Dekoracyjne poświaty `-right-16`/`-right-24`→`-end-*` (`/diagnostics` `/setup` `/login`); `/settings` lista `pl-5`→`ps-5`.
+  - **Wyśrodkowania `left-1/2 -translate-x-1/2` świadomie nietknięte** (potwierdzone grepem: `page.tsx`/`login` bez zmian).
+  - 14 plików, 44 czyste przemianowania klas. Czysto panel (Vercel). Bramki: biome czysto (325), `tsc` exit 0. Weryfikacja wizualna — przy preview‑deployu.
 
 ## [0.257.0] — ↔️ Lustrzane RTL — przyrost 3: strona główna (Pulpit `/`) + widgety
 

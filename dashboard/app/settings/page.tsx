@@ -112,7 +112,7 @@ export default async function SettingsPage() {
               className="flex justify-between gap-4 border-b border-line/60 pb-2 last:border-0"
             >
               <dt className="text-muted">{r.label}</dt>
-              <dd className="text-right font-medium">{r.value}</dd>
+              <dd className="text-end font-medium">{r.value}</dd>
             </div>
           ))}
         </dl>
@@ -145,7 +145,7 @@ export default async function SettingsPage() {
         <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide text-white">
           <Cloud size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingDeploy')}
         </h2>
-        <ol className="list-decimal space-y-1 pl-5">
+        <ol className="list-decimal space-y-1 ps-5">
           <li>
             {tp(lang, 'ui.settings.deployStep1Pre')}{' '}
             <code className="text-accent">supabase/schema.sql</code>{' '}

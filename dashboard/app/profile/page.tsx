@@ -45,7 +45,7 @@ export default async function ProfilePage() {
           </div>
           <a
             href="/api/auth/logout"
-            className="ml-auto flex items-center gap-1.5 rounded-md border border-accent/50 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-accent transition hover:bg-accent hover:text-white"
+            className="ms-auto flex items-center gap-1.5 rounded-md border border-accent/50 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-accent transition hover:bg-accent hover:text-white"
           >
             <LogOut size={14} /> {tp(lang, 'ui.profile.logout')}
           </a>
@@ -77,7 +77,7 @@ export default async function ProfilePage() {
               </span>
             )}
             {typeof link.tokens === 'number' && (
-              <span className="ml-auto rounded bg-accent/15 px-2 py-0.5 font-semibold text-accent">
+              <span className="ms-auto rounded bg-accent/15 px-2 py-0.5 font-semibold text-accent">
                 {link.tokens} GT
               </span>
             )}

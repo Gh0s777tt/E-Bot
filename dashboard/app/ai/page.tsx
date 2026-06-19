@@ -101,17 +101,17 @@ export default async function AiPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
-                  <th className="py-2 pr-3">{tp(lang, 'ui.ai.thUser')}</th>
-                  <th className="py-2 pr-3">{tp(lang, 'ui.ai.thRequests')}</th>
+                <tr className="border-b border-line text-start text-xs uppercase tracking-wide text-muted">
+                  <th className="py-2 pe-3">{tp(lang, 'ui.ai.thUser')}</th>
+                  <th className="py-2 pe-3">{tp(lang, 'ui.ai.thRequests')}</th>
                   <th className="py-2">{tp(lang, 'ui.ai.thTokens')}</th>
                 </tr>
               </thead>
               <tbody>
                 {usage.top.map((u) => (
                   <tr key={u.user_id} className="border-b border-line/50">
-                    <td className="py-2 pr-3 font-mono text-xs">{u.user_id}</td>
-                    <td className="py-2 pr-3">{u.requests}</td>
+                    <td className="py-2 pe-3 font-mono text-xs">{u.user_id}</td>
+                    <td className="py-2 pe-3">{u.requests}</td>
                     <td className="py-2">{u.tokens_used.toLocaleString('pl-PL')}</td>
                   </tr>
                 ))}

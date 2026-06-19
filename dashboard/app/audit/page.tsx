@@ -44,7 +44,7 @@ export default async function AuditPage() {
         {entries.length === 0 ? (
           <p className="p-6 text-sm text-muted">{tp(lang, 'ui.audit.empty')}</p>
         ) : (
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead className="border-line border-b text-xs uppercase tracking-wide text-muted">
               <tr>
                 <th className="px-4 py-3 font-semibold">{tp(lang, 'ui.audit.colWhen')}</th>

@@ -62,13 +62,13 @@ export default async function CommandsPage() {
             >
               <h2 className="flex items-center gap-2 border-b border-line px-5 py-4 text-base font-semibold uppercase tracking-wide">
                 <Icon size={16} className="text-accent" /> {g.label}
-                <span className="ml-auto rounded-md bg-elevated px-2 py-0.5 text-xs font-normal normal-case text-muted">
+                <span className="ms-auto rounded-md bg-elevated px-2 py-0.5 text-xs font-normal normal-case text-muted">
                   {g.commands.length}
                 </span>
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[480px] text-sm">
-                  <thead className="text-left text-[11px] uppercase tracking-wide text-muted">
+                  <thead className="text-start text-[11px] uppercase tracking-wide text-muted">
                     <tr>
                       <th className="px-5 py-3 font-medium">{tp(lang, 'ui.commands.thCommand')}</th>
                       <th className="px-5 py-3 font-medium">{tp(lang, 'ui.commands.thDesc')}</th>

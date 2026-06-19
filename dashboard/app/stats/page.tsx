@@ -170,7 +170,7 @@ export default async function StatsPage() {
           <div className="space-y-2">
             {board.map((u, i) => (
               <div key={u.user_id} className="flex items-center gap-3">
-                <span className="w-6 text-right text-sm text-muted">{i + 1}</span>
+                <span className="w-6 text-end text-sm text-muted">{i + 1}</span>
                 <span className="w-40 truncate text-sm">{u.username ?? u.user_id}</span>
                 <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-elevated">
                   <div
@@ -178,7 +178,7 @@ export default async function StatsPage() {
                     style={{ width: `${(u.xp / xpMax) * 100}%` }}
                   />
                 </div>
-                <span className="w-20 text-right text-sm">
+                <span className="w-20 text-end text-sm">
                   {tp(lang, 'ui.stats.lvl')} {u.level} · {u.xp.toLocaleString('pl-PL')}
                 </span>
               </div>
@@ -198,7 +198,7 @@ export default async function StatsPage() {
           <div className="space-y-2">
             {topUsers.map((u, i) => (
               <div key={u.user_id} className="flex items-center gap-3 text-sm">
-                <span className="w-6 text-right text-muted">{i + 1}</span>
+                <span className="w-6 text-end text-muted">{i + 1}</span>
                 <span className="w-44 truncate">{u.username}</span>
                 <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-elevated">
                   <div
@@ -206,7 +206,7 @@ export default async function StatsPage() {
                     style={{ width: `${(u.messages / Math.max(1, topUsers[0].messages)) * 100}%` }}
                   />
                 </div>
-                <span className="w-28 text-right text-muted">
+                <span className="w-28 text-end text-muted">
                   {u.messages} {tp(lang, 'ui.stats.msgsShort')} · {u.voice_min}m
                 </span>
               </div>
@@ -274,7 +274,7 @@ export default async function StatsPage() {
                     style={{ width: `${stats.total ? (n / stats.total) * 100 : 0}%` }}
                   />
                 </div>
-                <span className="w-10 text-right text-sm">{n}</span>
+                <span className="w-10 text-end text-sm">{n}</span>
               </div>
             ))}
             {!Object.keys(stats.byPlatform).length && (

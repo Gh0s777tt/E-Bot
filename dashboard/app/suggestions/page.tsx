@@ -64,7 +64,7 @@ export default async function SuggestionsPage() {
           <p className="text-sm text-muted">{tp(lang, 'ui.suggestions.empty')}</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-start text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr className="border-b border-line">
                   <th className="px-3 py-2">{tp(lang, 'ui.suggestions.colStatus')}</th>

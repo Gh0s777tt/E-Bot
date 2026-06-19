@@ -88,7 +88,7 @@ export default function SetupPage() {
     <div className="max-w-4xl space-y-6">
       <section className="panel-glow relative overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-card to-bg p-6">
         <div
-          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full"
+          className="pointer-events-none absolute -end-16 -top-16 h-48 w-48 rounded-full"
           style={{
             background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.16), transparent 70%)',
           }}
@@ -109,7 +109,7 @@ export default function SetupPage() {
               key={p.id}
               type="button"
               onClick={() => setSel(p.id)}
-              className={`flex flex-col rounded-2xl border p-5 text-left transition ${
+              className={`flex flex-col rounded-2xl border p-5 text-start transition ${
                 active
                   ? 'border-accent bg-accent/10 shadow-glow'
                   : 'border-line bg-card hover:border-accent/40'
@@ -118,7 +118,7 @@ export default function SetupPage() {
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{p.emoji}</span>
                 <span className="font-display text-lg tracking-wide">{p.name}</span>
-                {active && <Check size={16} className="ml-auto text-accent" />}
+                {active && <Check size={16} className="ms-auto text-accent" />}
               </div>
               <p className="mt-2 text-sm text-muted">{p.desc}</p>
               <div className="mt-3 flex flex-wrap gap-1.5">

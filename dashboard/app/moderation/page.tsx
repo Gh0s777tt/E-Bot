@@ -107,7 +107,7 @@ export default async function ModerationPage() {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-start text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr className="border-b border-line">
                   <th className="px-3 py-2">{tp(lang, 'ui.mod.thAction')}</th>
@@ -151,7 +151,7 @@ export default async function ModerationPage() {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-start text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted">
                 <tr className="border-b border-line">
                   <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>

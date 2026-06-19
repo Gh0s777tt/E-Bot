@@ -35,7 +35,7 @@ export default async function LoginPage({
         }}
       />
       <div
-        className="anim-aurora-2 pointer-events-none absolute -bottom-48 -right-24 h-[50vh] w-[50vw] rounded-full"
+        className="anim-aurora-2 pointer-events-none absolute -bottom-48 -end-24 h-[50vh] w-[50vw] rounded-full"
         style={{
           background:
             'radial-gradient(circle, rgb(var(--accent-dark-rgb) / 0.22), transparent 70%)',
