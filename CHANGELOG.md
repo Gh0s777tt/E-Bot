@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-347-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.277.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-348-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.278.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.278.0] — 🧩 M6 (UI): formularz zgłaszania pluginu community (pipeline autora domknięty)
+
+- `[#348]` 🧩 **Marketplace M6 — formularz zgłoszeń community (UI autora) + linki na `/marketplace`.**
+  - Nowa strona [`/marketplace/submit`](dashboard/app/marketplace/submit/page.tsx) (gated `MARKETPLACE_COMMUNITY`) + klient [`CommunitySubmitForm`](dashboard/components/CommunitySubmitForm.tsx): pola `key`/`title`/`description`/`version`/`homepage` → `POST /api/community/submit` (serwer waliduje `communityManifestSchema`); po wysłaniu plugin trafia do moderacji (`pending`).
+  - [`/marketplace`](dashboard/app/marketplace/page.tsx): link „Zgłoś plugin community →" (gdy community on) obok „Moderacja community →" (owner/staff).
+  - **Pipeline community domknięty end-to-end w UI**: autor zgłasza → owner moderuje → katalog. Teksty owner/autor po polsku (bazowy język).
+  - Bramki: biome czysto (315), `tsc` exit 0, docs:check exit 0.
 
 ## [0.277.0] — 🛡️ M6 (UI): panel moderacji community (approve/reject) dla właściciela/staff
 
