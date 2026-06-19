@@ -88,7 +88,7 @@ Migracja: istniejące `settings` (per-guild) → `plugin_config` (mapowanie modu
 
 ## 🛍️ Marketplace pluginów
 
-- **Faza 1 — first-party**: każdy istniejący moduł (C-1…C-27) = wpis w `PLUGINS`. UI: katalog z kartami (ikona, opis, tier), toggle enable per guild → odsłania istniejący formularz konfiguracji.
+- **Faza 1 — first-party**: każdy istniejący moduł = pozycja katalogu **pochodna z `lib/modules.ts`** (źródło prawdy w kodzie, bez seedu do DB — zero driftu; reader: [`lib/pluginCatalog.ts`](../dashboard/lib/pluginCatalog.ts)). UI: katalog z kartami (ikona, opis, tier), toggle enable per guild → odsłania istniejący formularz konfiguracji.
 - **Faza 2 — tiery**: `tier_required` na pluginie + `tier` na gildii; gating w UI + na backendzie.
 - **Faza 3 — community** ✅ *(w zakresie, M6)*: SDK/manifest dla pluginów 3rd-party (`source='community'`, `author_id`, `manifest`, `review_status` już w schemacie). Sandbox wykonania + proces review przed publikacją. Najwyższe ryzyko → wdrażane **na końcu**, po dojrzałym M1–M5.
 

@@ -70,4 +70,6 @@ create table if not exists plugin_config (
 --                         where discord_id = auth.jwt() ->> 'sub'));
 --   -- analogicznie dla guild_plugins / guild_members
 -- ════════════════════════════════════════════════════════════════════════
--- M2 zasieje `plugins` z dashboard/lib/modules.ts (każdy moduł C-1…C-27 → wiersz).
+-- M2: katalog first-party jest POCHODNĄ z dashboard/lib/modules.ts (źródło prawdy w kodzie,
+-- bez seedu — zero driftu); ta tabela `plugins` trzyma wyłącznie wpisy COMMUNITY (3rd-party).
+-- Łączenie obu źródeł: dashboard/lib/pluginCatalog.ts (getPluginCatalog).

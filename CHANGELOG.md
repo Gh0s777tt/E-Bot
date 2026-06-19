@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-339-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.269.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-340-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.270.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.270.0] — 🧩 M2: katalog pluginów marketplace (first-party z kodu + community z DB)
+
+- `[#340]` 🧩 **Marketplace M2 — serwerowy katalog pluginów (fundament UI marketplace).**
+  - Nowy [`dashboard/lib/pluginCatalog.ts`](dashboard/lib/pluginCatalog.ts): `getPluginCatalog()` łączy **first-party** (pochodne z `lib/modules.ts` — źródło prawdy w kodzie, **bez seedu do DB**, zero driftu) z **community** (wiersze `source='community'` z tabeli `plugins`, tylko `review_status='approved'`). Dodatkowo `getPluginByKey(key)` + typy `PluginCatalogEntry`/`PluginSource`/`PluginTier`.
+  - **Decyzja architektoniczna**: first-party NIE seedowane do DB (uniknięcie driftu kod↔baza); tabela `plugins` trzyma wyłącznie wpisy 3rd-party. Przy kolizji klucza first-party ma pierwszeństwo (ochrona rdzenia przed przesłonięciem).
+  - Graceful: brak chmury/tabeli → sam first-party (panel jak dziś). Zaktualizowane: komentarz schematu SQL + plan (Faza 1 first-party).
+  - Bramki: biome czysto (302), `tsc` exit 0, docs:check exit 0.
 
 ## [0.269.0] — 🔐 M1: twardy strażnik dostępu per-guild w getPrimaryGuildId (chokepoint)
 
