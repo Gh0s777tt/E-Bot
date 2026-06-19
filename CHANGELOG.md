@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-353-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.283.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-354-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.284.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.284.0] — 🧪 Design M6 sandbox: bezpieczne wykonanie pluginów community (webhook-first)
+
+- `[#354]` 🧪 **Plan projektowy sandboxa M6 — domknięcie planu marketplace (design, nie implementacja).**
+  - Nowy [`docs/PLAN-M6-SANDBOX.md`](docs/PLAN-M6-SANDBOX.md): model zagrożeń (untrusted code), 5 opcji izolacji (declarative / webhook author-hosted / managed isolate / microVM / serverless) z trade-offami, **rekomendacja webhook-first** (kod u autora, host pilnuje granicy danych + kontraktu akcji scoped do jednej `guild_id`), model **capability-based** (scopes w manifeście, zero ambient-authority), limity (timeout/RAM/rate), fazy **M6a–M6d**, decyzje + kill-switch.
+  - `vm2` odrzucone (historia sandbox-escape); goły `node:vm` to nie granica bezpieczeństwa. Plugin nigdy nie dotyka tokenu bota ani innych gildii.
+  - Plan marketplace (M6) wskazuje teraz **design** zamiast „TODO". Docs-only; docs:check exit 0.
 
 ## [0.283.0] — 🔐 Self-review bezpieczeństwa: 4 luki cross-tenant naprawione
 
