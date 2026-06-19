@@ -33,12 +33,12 @@ export default async function MarketplacePage() {
         <div className="flex flex-wrap gap-4">
           {communityOn && (
             <Link href="/marketplace/submit" className={linkCls}>
-              Zgłoś plugin community →
+              {tp(lang, 'ui.mkt.submit')} →
             </Link>
           )}
           {isMod && (
             <Link href="/marketplace/review" className={linkCls}>
-              Moderacja community →
+              {tp(lang, 'ui.mkt.moderate')} →
             </Link>
           )}
         </div>

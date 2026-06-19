@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-349-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.279.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-350-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.280.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.280.0] — 🌍 i18n nowych powierzchni: onboarding + linki marketplace (8 kluczy × 14)
+
+- `[#350]` 🌍 **i18n onboardingu + linków marketplace — 8 nowych kluczy × 14 języków (parytet przywrócony).**
+  - Słownik [`lib/panelI18n.ts`](dashboard/lib/panelI18n.ts): `ui.onb.*` (6: `step1`/`step1desc`/`addBot`/`noInvite`/`step2`/`noGuilds`) + `ui.mkt.*` (2: `submit`/`moderate`) — **112 wpisów** (8 × 14), parytet zweryfikowany gripem.
+  - Kod na `tp()`: [`/onboarding`](dashboard/app/onboarding/page.tsx) (kroki „dodaj bota" + Twoje serwery) + linki „zgłoś / moderuj community" na [`/marketplace`](dashboard/app/marketplace/page.tsx). Marki/tokeny (`E-BOT`, `DISCORD_CLIENT_ID`, `community`) nietłumaczone.
+  - Pozostają do i18n (kolejny przyrost): `/marketplace/review` + `/submit` + formularze (literały PL).
+  - Bramki: biome czysto (317), `tsc` exit 0, docs:check exit 0.
 
 ## [0.279.0] — 🚀 M4 (UI): onboarding „dodaj bota" + lista Twoich serwerów (domknięcie UI multi-guild)
 
