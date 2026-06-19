@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-334-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.264.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-335-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.265.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.265.0] — 🧱 Infra prod: audyt gotowości (Sentry/Realtime/Redis) + przewodnik aktywacji
+
+- `[#335]` 🧱 **Audyt szkieletów infry produkcyjnej — potwierdzona gotowość + dokumentacja aktywacji.**
+  - **Sentry** ([`lib/sentry.ts`](dashboard/lib/sentry.ts)): kompletny sender envelope przez `fetch` (zero zależności), **DSN-gated** (no-op bez `SENTRY_DSN`), nigdy nie wywraca żądania. Aktywacja = env `SENTRY_DSN`.
+  - **Supabase Realtime** ([`bot/src/cloud/realtime.mts`](bot/src/cloud/realtime.mts)): kompletna subskrypcja natywnym WebSocket zmian `settings` (panel→bot od ręki), wykładniczy backoff + **fallback poll 60 s**. Aktywacja = `ALTER PUBLICATION supabase_realtime ADD TABLE settings`.
+  - **Redis**: tylko w `.env.example`/`SECRETS.md` jako opcja — **niewpięty w kod** (projekt na SQLite/Supabase); aktywacja wymagałaby implementacji warstwy cache (osobne zadanie, nie samo env).
+  - 📘 Nowy przewodnik [`docs/AKTYWACJA-INFRA.md`](docs/AKTYWACJA-INFRA.md) — kroki + tabela stanu. Wszystkie elementy degradują się cicho; bez konfiguracji panel/bot działają na obecnym stosie.
+  - Bramki: biome czysto (326 plików), `tsc` exit 0.
 
 ## [0.264.0] — 🟣 Twitch sub→rola: domknięcie kodu aktywacji + przewodnik
 
