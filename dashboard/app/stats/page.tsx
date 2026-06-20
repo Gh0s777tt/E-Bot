@@ -28,6 +28,7 @@ import {
 import { getGuildMeta } from '../../lib/guild';
 import { getServerHistory } from '../../lib/insights';
 import { tp } from '../../lib/panelI18n';
+import { getCohortRetention } from '../../lib/retention';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
@@ -61,6 +62,7 @@ export default async function StatsPage({
     hourly,
     historyAll,
     lang,
+    retention,
   ] = await Promise.all([
     getStats(),
     getAiUsageSeries(range),
@@ -74,6 +76,7 @@ export default async function StatsPage({
     getHourlyActivity(),
     getServerHistory(),
     getPanelLocale(),
+    getCohortRetention(90),
   ]);
   const history = historyAll.slice(-range);
   const hourMax = Math.max(1, ...hourly);
@@ -241,6 +244,47 @@ export default async function StatsPage({
           </>
         ) : (
           <p className="text-sm text-muted">{tp(lang, 'ui.home.sgEmpty')}</p>
+        )}
+      </section>
+
+      {/* Retencja kohortowa — ile osób zostaje po D1/D7/D30 */}
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-1 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Users size={16} className="text-accent" /> {tp(lang, 'ui.stats.retHeading')}
+        </h2>
+        <p className="mb-4 text-xs text-muted">{tp(lang, 'ui.stats.retIntro')}</p>
+        {retention.total > 0 ? (
+          <>
+            <div className="grid grid-cols-3 gap-3">
+              {(
+                [
+                  ['D1', retention.d1, retention.eligible1],
+                  ['D7', retention.d7, retention.eligible7],
+                  ['D30', retention.d30, retention.eligible30],
+                ] as const
+              ).map(([k, pct, elig]) => (
+                <div key={k} className="rounded-xl border border-line bg-elevated p-4 text-center">
+                  <div className="font-display text-3xl font-bold text-accent">{pct}%</div>
+                  <div className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted">
+                    {k}
+                  </div>
+                  <div className="text-[10px] text-muted">n={elig}</div>
+                </div>
+              ))}
+            </div>
+            {retention.cohorts.length >= 2 && (
+              <div className="mt-4">
+                <div className="mb-1 text-xs text-muted">{tp(lang, 'ui.stats.retWeekly')}</div>
+                <AreaChart values={retention.cohorts.map((c) => c.d7)} height={100} />
+                <div className="mt-1 flex justify-between text-[10px] text-muted">
+                  <span>{retention.cohorts[0]?.week.slice(5)}</span>
+                  <span>{retention.cohorts.at(-1)?.week.slice(5)}</span>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="text-xs text-muted">{tp(lang, 'ui.stats.retEmpty')}</p>
         )}
       </section>
 

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-367-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.297.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-368-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.298.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.298.0] — 📊 Retencja kohortowa: wykres D1/D7/D30 na `/stats` (tor domknięty)
+
+- `[#368]` 📊 **Marketplace/analityka — retencja kohortowa widoczna na panelu: ilu nowych członków zostaje po 1/7/30 dniach.**
+  - **Lib** [`lib/retention.ts`](dashboard/lib/retention.ts) `getCohortRetention(90)`: liczy z `member_cohorts` retencję **eligible-based** (do D_n liczy tylko kohorty starsze niż N dni — poprawne wobec censoringu) + rozbicie per-tydzień (rozmiar + D7). Agreguje wszystkie serwery — spójnie z `getActivitySeries`.
+  - **UI** [`/stats`](dashboard/app/stats/page.tsx): nowa sekcja — 3 kafelki **D1/D7/D30** (z `n=` eligible) + wykres **retencji D7 wg tygodnia dołączenia** ([`AreaChart`](dashboard/components/AreaChart.tsx)), stan pusty gdy brak danych.
+  - **i18n ×14**: 4 nowe klucze (`ui.stats.retHeading`/`retIntro`/`retWeekly`/`retEmpty`) we wszystkich 14 językach (parzystość zachowana).
+  - Domyka tor retencji rozpoczęty w v0.297.0 (warstwa danych [`analytics/cohorts.mts`](bot/src/analytics/cohorts.mts) → teraz wizualizacja). Bramki: biome czysto, dashboard `tsc` exit 0, i18n parzystość 14×4, docs:check exit 0.
 
 ## [0.297.0] — 📈 Retencja kohortowa: fundament danych (tracking join/leave per-członka)
 
