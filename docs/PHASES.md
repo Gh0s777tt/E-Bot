@@ -1,4 +1,4 @@
-<!-- SYNC: v0.306.0 · #376 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.307.0 · #377 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.222.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.307.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.306.0)
+## 🔭 Bieżący tor (v0.307.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -64,7 +64,7 @@
 | **Architekt Serwera** | `0.100`–`0.104` | Silnik provisioningu, AI‑kreator struktury, blueprinty, dry‑run, `/undo` | ✅ |
 | **i18n bota** | `0.105`–`0.113`, `0.154`–`0.157` | Fundament i18n + opisy komend + runtime‑stringi + przełącznik — **14 języków** | ✅ |
 | **Etapy A–K** | `0.114`–`0.194` | Przyjazność (`/help`, `/tutorial`), fun‑pack, info/mod‑utils, Architekt++, social, **safety (Etap G)**, customization 2.0 (Etap H/I), gospodarka‑gry (Etap J: stocks/pets/cards/meme), **config per‑serwer (Etap K, C‑1…C‑27)** | ✅ |
-| **i18n treści + UI** | `0.202`–`0.243` | Samouczek, asystent, „Jak to działa?" 37/37, web GameVault (+RTL), **UI panelu (w toku, 33/~40)** | 🔄 |
+| **i18n treści + UI** | `0.202`–`0.253` | Samouczek, asystent, „Jak to działa?" 37/37, web GameVault (+RTL), **UI panelu 39/39 + powierzchnia publiczna + RTL** | ✅ |
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -188,4 +188,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.306.0 (#376) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.307.0 (#377) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-376-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.306.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-377-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.307.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.307.0] — 🔎 Audyt całości + gotowość publiczna: poprawki spójności docs + pierwszy tag/release
+
+- `[#377]` 🔎 **Pełny audyt projektu (3 równoległe sondy) + domknięcie drobiazgów przed pójściem publicznie.**
+  - **Werdykt audytu:** kod **funkcjonalnie kompletny** — 95 komend, 59 usług w tle, 46 stron panelu, 92 trasy API, GameVault + ingest; **0 TODO/FIXME/stub** w kodzie. Docs spójne, sekrety czyste (skan całej historii git).
+  - **Naprawione 2 nieaktualne miejsca w [`PHASES.md`](docs/PHASES.md):** header-badge wersji (`0.222.0` → bieżąca) i wiersz tabeli i18n („w toku, 33/~40" 🔄 → „39/39 ✅", zgodnie z rzeczywistością).
+  - **Pierwszy git tag + GitHub release** — wcześniej **0 tagów/release'ów** mimo 377 wpisów CHANGELOG. Od teraz wersje są tagowane.
+  - **Flaga do decyzji właściciela (nie zmieniam ślepo):** dwie funkcje `botInviteUrl` mają różne uprawnienia — [`lib/invite.ts`](dashboard/lib/invite.ts) zawężony `1099780312198`, [`lib/enroll.ts`](dashboard/lib/enroll.ts) env z defaultem `8` (Administrator). Wybór bitfielda wpływa na funkcje na każdym serwerze → świadoma decyzja przed publicznym botem. Bramki: docs:check exit 0.
 
 ## [0.306.0] — 🔁 CI: wyzwalacz `workflow_dispatch` (uruchamianie na żądanie)
 
