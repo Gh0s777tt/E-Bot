@@ -8,6 +8,7 @@ import {
   Partials,
 } from 'discord.js';
 import { startActivity } from './analytics/activity.mts';
+import { startCohorts } from './analytics/cohorts.mts';
 import { startDigest } from './analytics/digest.mts';
 import { startEcoSeason } from './analytics/ecoSeason.mts';
 import { startSeasons } from './analytics/seasons.mts';
@@ -192,6 +193,7 @@ client.once(Events.ClientReady, (c) => {
   startPriceTracker(c); // Faza 7 / F9.3 — śledzenie cen ITAD z listy życzeń (poll 12h)
   startActivity(c); // Faza 7 / F10.1 — analityka aktywności (flush co 5 min → activity_daily)
   startServerHistory(c); // snapshot rozmiaru serwera co 30 min → server_history (wykres wzrostu)
+  startCohorts(c); // tor retencji — tracking join/leave per-członka → member_cohorts (D1/D7/D30)
   startEcoInterest(c); // pasywny dochód — dzienne odsetki bankowe (jeśli włączone w configu eko)
   startSeasons(c); // Faza 7 / F10.2 — sezonowe rankingi (miesięczny hall of fame, sprawdza co 6h)
   startEcoSeason(c); // sezon ekonomii — miesięczny top-eco + wypłata podium + opcjonalny reset

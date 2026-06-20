@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-366-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.296.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-367-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.297.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.297.0] — 📈 Retencja kohortowa: fundament danych (tracking join/leave per-członka)
+
+- `[#367]` 📈 **Nowy tor — kohortowa retencja `/stats`: warstwa danych (bot zaczyna śledzić, kto i kiedy dołączył/odszedł).**
+  - **Nowa tabela** `member_cohorts` (`guild_id`, `user_id`, `joined_at`, `left_at`, PK `guild_id+user_id`) — [`expansion-cohorts-schema.sql`](dashboard/scripts/expansion-cohorts-schema.sql) + dopisana do [`_ALL.sql`](dashboard/scripts/_ALL.sql).
+  - **Usługa bota** [`analytics/cohorts.mts`](bot/src/analytics/cohorts.mts): `guildMemberAdd` → `joined_at` (upsert), `guildMemberRemove` → `left_at` (tylko aktywny wiersz, `left_at IS NULL`). Boty pomijane. No-op bez chmury.
+  - **Bounded backfill** (30 s po starcie): z `member.joinedAt` dla świeżych kohort (ostatnie 90 dni), serwery > 10 000 członków pomijane i logowane — dzięki temu retencja ma dane **od razu**, bez czekania na napływ nowych.
+  - **Dlaczego osobny przyrost:** dotąd nigdzie nie było per-user daty dołączenia (tylko agregaty `activity_daily`). To fundament; wykres D1/D7/D30 na panelu = następny przyrost (wzorzec „plumbing → UI"). Bramki: biome czysto, smoke importu usługi ✓, parse-check `index.mts` ✓, docs:check exit 0.
 
 ## [0.296.0] — 📘 M6: przewodnik aktywacji community + kontrakt webhooka + przykładowy plugin (kapstone)
 
