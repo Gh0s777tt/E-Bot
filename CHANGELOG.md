@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-357-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.287.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-358-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.288.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.288.0] — 🧪 M6c (start): dry-run testowy pluginu (owner-only, bez wykonania akcji)
+
+- `[#358]` 🧪 **Marketplace M6c — bezpieczny dry-run pluginu (pierwszy krok „ożywienia", wciąż bez efektów).**
+  - Nowa trasa [`/api/community/dryrun`](dashboard/app/api/community/dryrun/route.ts): **owner/staff-only** (`isInstanceAdminRequest`) + env-gated (`MARKETPLACE_COMMUNITY`). Woła endpoint autora przez runner M6a (SSRF-guard + podpis HMAC) i **zwraca zwalidowane akcje — bez wykonania** (zero efektów w Discordzie).
+  - To podgląd „co plugin by zrobił" przed dopuszczeniem. Owner-only zapobiega użyciu hosta jako proxy SSRF.
+  - Triggerów produkcyjnych (wywołanie na zdarzenie) **świadomie brak** — kolejny krok M6c. Bramki: biome czysto (322), `tsc` exit 0, docs:check exit 0.
 
 ## [0.287.0] — 🧪 M6b (cz.2): akcje pluginu z efektami w Discordzie — per-akcja authz + anty-eskalacja
 
