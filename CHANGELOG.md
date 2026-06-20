@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-393-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.323.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-394-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.324.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.324.0] — 🧰 P1: deklaracja `engines` (Node ≥24 · pnpm ≥11) w 5 pakietach
+
+- `[#394]` 🧰 **Toolchain dostaje jawny kontrakt wersji — koniec cichych niezgodności runtime.**
+  - Wszystkie **5** `package.json` (root + `bot`/`dashboard`/`web`/`ingest`) dostały pole `engines`: `node >=24`, `pnpm >=11`. Floor wynika z realnych wymagań: bot biega `node *.mts` **bez flag** (natywny unflagged type-stripping ≥23.6), `web` używa `node:sqlite` → `>=24` to bezpieczna podłoga; `pnpm >=11` matchuje `packageManager: pnpm@11.5.2`. CI (Node 26) mieści się w zakresie.
+  - **Bramki:** biome czysty (5× JSON waliduje), docs:check exit 0.
 
 ## [0.323.0] — 🛡️ P1: rate-limit publicznego sinku `/api/sentry` + wspólny helper
 
