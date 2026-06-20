@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-371-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.301.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-372-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.302.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.302.0] — 🧩 Gotowość pod sharding (skala >2500 serwerów): audyt + uodpornienie + ShardingManager
+
+- `[#372]` 🧩 **Bot shard-ready — audyt shard-safety + naprawa 3 breakerów + opcjonalne wejście shardowane.**
+  - **Audyt** (~40 usług): praca per-serwer (iteracja `client.guilds.cache.values()`) jest shard-safe (każdy serwer na 1 shardzie). Wykryte i naprawione 3 miejsca zakładające „jeden proces widzi wszystko" — wszystkie **single-process-safe** (`client.shard=null` bez shardingu → zero zmian dziś):
+    - [`heartbeat.mts`](bot/src/cloud/heartbeat.mts): sumowanie liczników ze wszystkich shardów (`broadcastEval`), globalny `bot_status` pisze **tylko shard 0** (inaczej shardy nadpisywałyby się cząstkowym countem). Panel czyta jak dotąd.
+    - [`moderation.mts`](bot/src/security/moderation.mts) + [`tempRoles.mts`](bot/src/economy/tempRoles.mts): poller tempbanów/ról pomija serwery spoza sharda (`if (client.shard && !cache.has(guild_id)) continue`) — inaczej każdy shard przetwarzałby każdy wpis (N× REST).
+  - **Wejście shardowane** [`shard.mts`](bot/src/shard.mts) (`ShardingManager`) + skrypt `pnpm --filter bot shard`; `SHARD_COUNT=auto|N`. `index.mts` bez zmian (Client czyta info o shardzie sam).
+  - **Przewodnik** [`docs/SHARDING.md`](docs/SHARDING.md): model, aktywacja, co uodpornione, akceptowalna degradacja (cooldowny/deltas per-user, osierocone wpisy temp). Bramki: biome czysto, smoke importu (heartbeat/moderation/tempRoles) ✓, parse-check `shard.mts` ✓, docs:check exit 0.
 
 ## [0.301.0] — 🔧 Reconciliation: `ai_usage` w pełni per-serwer (dokończenie scopingu panelu)
 

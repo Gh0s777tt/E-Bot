@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.mts",
+    "shard": "node src/shard.mts",
     "smoke": "node src/index.mts --smoke",
     "deploy": "node src/deploy-commands.mts"
   },

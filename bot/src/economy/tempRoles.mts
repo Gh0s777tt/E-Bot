@@ -33,6 +33,9 @@ async function tick(client: Client): Promise<void> {
     `select=id,guild_id,user_id,role_id&expires_at=lte.${nowIso}&order=expires_at.asc&limit=25`,
   );
   for (const r of due) {
+    // Pod shardingiem: pomiń serwery spoza tego sharda (obsłuży je ich shard) — inaczej KAŻDY shard
+    // przetwarzałby KAŻDY wpis (N× REST + N× delete). Single-process: client.shard=null → bez zmian.
+    if (client.shard && !client.guilds.cache.has(r.guild_id)) continue;
     const guild = (await client.guilds.fetch(r.guild_id).catch(() => null)) as Guild | null;
     if (guild) {
       const member = await guild.members.fetch(r.user_id).catch(() => null);

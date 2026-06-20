@@ -1,4 +1,4 @@
-<!-- SYNC: v0.301.0 · #371 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.302.0 · #372 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.301.0)
+## 🔭 Bieżący tor (v0.302.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -47,6 +47,7 @@
 - [ ] **Retencja + więcej wykresów w czasie** (panel `/stats`) — przyrosty 1–3 ✅ **v0.261–263** (wzrost członków + komplet trendów + **konfigurowalny zakres 7/14/30/90d** + **eksport CSV**); **kohortowa retencja ✓** — fundament danych (tabela `member_cohorts` + tracking join/leave w bocie [`analytics/cohorts.mts`](../bot/src/analytics/cohorts.mts) z bounded backfillem 90 dni, v0.297.0) + **wykres D1/D7/D30 na `/stats`** ([`lib/retention.ts`](../dashboard/lib/retention.ts) eligible-based + sekcja UI + i18n ×14, v0.298.0) + **Audyt #2 bezpieczeństwa** — naprawa F5 (scoping analityki `/stats` przez `getPrimaryGuildId`, anty-przeciek cross-tenant; [`SECURITY-REVIEW-MARKETPLACE.md`](SECURITY-REVIEW-MARKETPLACE.md), v0.299.0) + **rezydua F5 domknięte** (`server_history` + `ai_usage` per-serwer (cała analityka `/stats` scoped chokepointem; v0.300–301)
 - [ ] **Produkcyjne wpięcie infry** — szkielety **kompletne i gated** (audyt v0.265.0, przewodnik [`AKTYWACJA-INFRA.md`](AKTYWACJA-INFRA.md)): Sentry no-op bez `SENTRY_DSN`; Realtime z fallbackiem poll 60 s (aktywacja = `ALTER PUBLICATION … ADD TABLE settings`); Redis niewpięty (opcja na skalę). Aktywacja Sentry/Realtime wymaga **Twoich** zasobów
 - [ ] **Twitch sub → rola** — kod **kompletny + gotowy do aktywacji** (v0.264.0): runtime obsługuje `channel.subscribe`→rola, `eventsub-setup.mts` rejestruje obie subskrypcje, przewodnik [`AKTYWACJA-TWITCH-SUB.md`](AKTYWACJA-TWITCH-SUB.md). Aktywacja czeka na **Twoje** zasoby: aplikacja Twitch + OAuth broadcastera (scope `channel:read:subscriptions`)
+- [ ] **Sharding (skala >2500 serwerów)** — bot **shard-ready** (v0.302.0): audyt shard-safety + uodpornione globalne agregaty (`heartbeat` sumuje `broadcastEval`/pisze tylko shard 0; pollery tempban/temp-role pomijają obce serwery), opcjonalny [`shard.mts`](../bot/src/shard.mts) (`ShardingManager`, skrypt `shard`); przewodnik [`SHARDING.md`](SHARDING.md). Włączasz przy zbliżaniu się do progu
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -187,4 +188,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.301.0 (#371) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.302.0 (#372) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

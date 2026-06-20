@@ -13,6 +13,9 @@ async function tick(client: Client): Promise<void> {
     `select=id,guild_id,user_id,username&unban_at=lte.${nowIso}&order=unban_at.asc&limit=25`,
   );
   for (const t of due) {
+    // Pod shardingiem: pomiń serwery spoza tego sharda (obsłuży je ich shard) — inaczej KAŻDY shard
+    // przetwarzałby KAŻDY wpis (N× REST + N× delete). Single-process: client.shard=null → bez zmian.
+    if (client.shard && !client.guilds.cache.has(t.guild_id)) continue;
     const guild = (await client.guilds.fetch(t.guild_id).catch(() => null)) as Guild | null;
     if (guild) {
       await guild.bans.remove(t.user_id, 'Tempban wygasł').catch(() => {});
