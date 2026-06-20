@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useT } from './LangProvider';
 
 type Settings = {
@@ -39,6 +39,13 @@ export default function SettingsForm({ initial }: { initial: Settings }) {
   const tt = useT();
   const [s, setS] = useState<Settings>(initial);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  // Sekret admina — gate zapisu (web/app/api/settings/route.ts). Wpisany raz, trzymany lokalnie.
+  const [secret, setSecret] = useState('');
+  useEffect(() => {
+    try {
+      setSecret(localStorage.getItem('ebot_admin_secret') ?? '');
+    } catch {}
+  }, []);
 
   function set<K extends keyof Settings>(k: K, v: Settings[K]) {
     setS((p) => ({ ...p, [k]: v }));
@@ -47,9 +54,12 @@ export default function SettingsForm({ initial }: { initial: Settings }) {
   async function save() {
     setStatus('saving');
     try {
+      localStorage.setItem('ebot_admin_secret', secret);
+    } catch {}
+    try {
       const r = await fetch('/api/settings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
         body: JSON.stringify(s),
       });
       setStatus(r.ok ? 'saved' : 'error');
@@ -100,6 +110,21 @@ export default function SettingsForm({ initial }: { initial: Settings }) {
             <Toggle on={s[p.key] as boolean} onClick={() => set(p.key, !s[p.key] as never)} />
           </div>
         ))}
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-white/90">🔑 WEB_ADMIN_SECRET</label>
+        <input
+          type="password"
+          value={secret}
+          onChange={(e) => setSecret(e.target.value)}
+          placeholder="sekret admina — wymagany do zapisu"
+          className="w-full rounded-md border border-white/15 bg-elevated px-3 py-2 text-white outline-none focus:border-accent"
+        />
+        <p className="text-xs text-muted">
+          Zapis ustawień wymaga sekretu — ustaw <code>WEB_ADMIN_SECRET</code> w env i wpisz go
+          tutaj.
+        </p>
       </div>
 
       <div className="flex items-center gap-4">

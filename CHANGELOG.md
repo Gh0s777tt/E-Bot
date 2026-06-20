@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-378-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.308.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-379-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.309.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.309.0] — 🔐 Hardening P0 cz.2: ujednolicenie uprawnień bota + sekret admina na web/api/settings
+
+- `[#379]` 🔐 **Druga partia P0 z audytu — zaproszenie bota i nieuwierzytelniony zapis w GameVault.**
+  - **Ujednolicone uprawnienia zaproszenia bota** — [`dashboard/lib/invite.ts`](dashboard/lib/invite.ts) czyta teraz `DISCORD_BOT_PERMISSIONS` (domyślnie `8` = Administrator), SPÓJNIE z [`lib/enroll.ts`](dashboard/lib/enroll.ts). Wcześniej dwie ścieżki zaproszenia miały RÓŻNE bitfieldy (zawężony `1099780312198` vs Administrator). Decyzja właściciela: **Administrator teraz**, precyzyjny least-privilege jako osobny przyrost (oba miejsca env-konfigurowalne).
+  - **Sekret admina na `web/ /api/settings`** ([`web/app/api/settings/route.ts`](web/app/api/settings/route.ts)) — POST pisał do **współdzielonej `bot.db`** (notify_*) **bez żadnej autoryzacji** (każdy mógł podmienić kanał/wzmiankę powiadomień). Teraz: `WEB_ADMIN_SECRET` **fail-closed** (brak env ⇒ 401), porównanie **timing-safe na SHA-256**; formularz ([`SettingsForm.tsx`](web/components/SettingsForm.tsx)) ma pole sekretu (localStorage + nagłówek `x-admin-secret`). [`.env.example`](.env.example): dopisany `WEB_ADMIN_SECRET`.
+  - **Bramki:** biome czysty, **dashboard + web `tsc` exit 0**, docs:check exit 0.
 
 ## [0.308.0] — 🔐 Hardening P0 (audyt): nagłówki bezpieczeństwa HTTP + domknięcie eskalacji ról
 
