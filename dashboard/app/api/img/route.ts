@@ -1,4 +1,6 @@
-// Proxy/cache okładek (whitelist hostów = ochrona przed SSRF).
+// Proxy/cache okładek (whitelist hostów = ochrona przed SSRF). Cache na BRZEGU Vercela przez
+// s-maxage (per unikalny URL `?u=`) + stale-while-revalidate → mniej uderzeń w origin/CDN gier
+// (wcześniej force-dynamic wymuszał obejście cache; każda okładka biła w serwer). Fetch z timeoutem.
 const ALLOW = new Set([
   'cdn.cloudflare.steamstatic.com',
   'shared.cloudflare.steamstatic.com',
@@ -8,7 +10,7 @@ const ALLOW = new Set([
   'psnobj.prod.dl.playstation.net',
 ]);
 
-export const dynamic = 'force-dynamic';
+const TIMEOUT_MS = 8000;
 
 export async function GET(request: Request): Promise<Response> {
   const u = new URL(request.url).searchParams.get('u');
@@ -22,16 +24,23 @@ export async function GET(request: Request): Promise<Response> {
   if (target.protocol !== 'https:' || !ALLOW.has(target.hostname)) {
     return new Response('forbidden host', { status: 403 });
   }
-  const upstream = await fetch(target.toString(), {
-    headers: { 'User-Agent': 'BotDC-Dashboard/0.1' },
-  });
+  let upstream: Response;
+  try {
+    upstream = await fetch(target.toString(), {
+      headers: { 'User-Agent': 'BotDC-Dashboard/0.1' },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+  } catch {
+    return new Response('upstream timeout', { status: 504 });
+  }
   if (!upstream.ok || !upstream.body)
     return new Response(`upstream ${upstream.status}`, { status: 502 });
   return new Response(upstream.body, {
     status: 200,
     headers: {
       'Content-Type': upstream.headers.get('content-type') ?? 'image/jpeg',
-      'Cache-Control': 'public, max-age=86400',
+      // Przeglądarka (max-age) + brzeg Vercela (s-maxage) + serwuj stare w tle (SWR).
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
     },
   });
 }

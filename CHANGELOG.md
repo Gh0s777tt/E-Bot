@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-383-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.313.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-384-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.314.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.314.0] — ⚡ P2: edge-cache + timeout na proxy okładek (/api/img)
+
+- `[#384]` ⚡ **Mniej uderzeń w CDN gier, brak wiszących połączeń — szybsza siatka okładek.**
+  - [`/api/img`](dashboard/app/api/img/route.ts): usunięty `force-dynamic`, dodany `Cache-Control: s-maxage=86400, stale-while-revalidate=604800` → Vercel cache'uje każdą okładkę **na brzegu** (per unikalny `?u=`), zamiast bić w origin Steam/IGDB/PSN przy każdym wyświetleniu. Fetch z `AbortSignal.timeout(8000)` — wolny CDN gier zwraca teraz **504**, nie wisi. Whitelist hostów (SSRF) bez zmian.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.313.0] — 🔭 Observability: globalny hook błędów serwera (onRequestError) → Sentry
 
