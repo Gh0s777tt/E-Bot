@@ -38,6 +38,10 @@ export const communityManifestSchema = z.object({
     .optional(),
   secret: z.string().min(8).max(200).optional(),
   event: z.string().max(48).optional(),
+  // M6+ — filtr treści dla `event='messageCreate'`: plugin odpala się TYLKO gdy wiadomość zawiera
+  // (bez rozróżniania wielkości liter) któreś ze słów-kluczy. Pusta/brak → plugin messageCreate nie
+  // jest forwardowany (bot nie zalewa panelu strumieniem wiadomości). Dopasowanie = substring.
+  keywords: z.array(z.string().min(1).max(80)).max(20).optional(),
 });
 export type CommunityManifest = z.infer<typeof communityManifestSchema>;
 
@@ -194,6 +198,58 @@ export async function getGuildCommunityStates(guildId: string): Promise<Record<s
       const row = r as { plugin_key: string; enabled?: boolean };
       out[row.plugin_key] = row.enabled === true;
     }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+// Agregat słów-kluczy do filtra `messageCreate` po stronie bota: mapa `guildId → unikalne keywordy`
+// z WŁĄCZONYCH + ZATWIERDZONYCH pluginów community subskrybujących `messageCreate`. Bot pobiera to
+// cyklicznie (poll) i forwarduje TYLKO pasujące wiadomości — dzięki temu strumień messageCreate nie
+// zalewa endpointu. Pusta mapa (typowy stan — community opt-in) = bot nic nie forwarduje na wiadomości.
+export async function getMessageSubscriptions(): Promise<Record<string, string[]>> {
+  if (!hasSupabase) return {};
+  try {
+    const enabled = await supabase()
+      .from('guild_plugins')
+      .select('guild_id,plugin_key')
+      .eq('enabled', true);
+    if (enabled.error || !enabled.data?.length) return {};
+
+    const plugins = await supabase()
+      .from('plugins')
+      .select('key,manifest')
+      .eq('source', 'community')
+      .eq('review_status', 'approved');
+    if (plugins.error || !plugins.data) return {};
+
+    // pluginKey → keywords[] (tylko messageCreate z niepustą listą słów-kluczy)
+    const kwByKey = new Map<string, string[]>();
+    for (const p of plugins.data) {
+      const row = p as { key: string; manifest?: CommunityManifest | null };
+      const m = row.manifest;
+      if (m?.event === 'messageCreate' && Array.isArray(m.keywords) && m.keywords.length) {
+        kwByKey.set(row.key, m.keywords);
+      }
+    }
+    if (!kwByKey.size) return {};
+
+    // join: per-serwer zbierz unikalne keywordy z jego włączonych pluginów messageCreate
+    const acc: Record<string, Set<string>> = {};
+    for (const row of enabled.data) {
+      const r = row as { guild_id: string; plugin_key: string };
+      const kws = kwByKey.get(r.plugin_key);
+      if (!kws) continue;
+      let set = acc[r.guild_id];
+      if (!set) {
+        set = new Set<string>();
+        acc[r.guild_id] = set;
+      }
+      for (const k of kws) set.add(k);
+    }
+    const out: Record<string, string[]> = {};
+    for (const [g, set] of Object.entries(acc)) out[g] = [...set];
     return out;
   } catch {
     return {};

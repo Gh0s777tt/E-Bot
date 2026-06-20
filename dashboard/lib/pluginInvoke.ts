@@ -49,6 +49,22 @@ export async function invokePlugin(
   return { ok: true, results };
 }
 
+// Dopasowanie treści do słów-kluczy (case-insensitive substring) — filtr pluginów `messageCreate`.
+function matchesKeywords(content: string, keywords: string[]): boolean {
+  if (!content) return false;
+  const lc = content.toLowerCase();
+  return keywords.some((k) => lc.includes(k.toLowerCase()));
+}
+
+// Bezpieczne wyciągnięcie `content` z nieznanego inputu zdarzenia (bez rzutowania `as any`).
+function extractContent(input: unknown): string {
+  if (input && typeof input === 'object' && 'content' in input) {
+    const c = (input as { content?: unknown }).content;
+    if (typeof c === 'string') return c;
+  }
+  return '';
+}
+
 // Wynik fan-outu na zdarzenie — co odpalono dla danego serwera (do logu mostu).
 export type GuildEventResult =
   | { ok: true; invoked: { pluginKey: string; ok: boolean; error?: string }[] }
@@ -78,6 +94,12 @@ export async function invokeGuildEvent(
   for (const key of enabledKeys) {
     const plugin = await getCommunityPlugin(key); // tylko zatwierdzony (+ manifest)
     if (!plugin?.manifest || plugin.manifest.event !== event) continue; // nie subskrybuje zdarzenia
+    // messageCreate: autorytatywny filtr słów-kluczy PER-PLUGIN. Bot filtruje zbiorczo dla serwera
+    // (optymalizacja), tu pilnujemy, by przy wielu pluginach każdy dostał TYLKO swoje trafienia.
+    if (event === 'messageCreate') {
+      const kws = plugin.manifest.keywords ?? [];
+      if (!kws.length || !matchesKeywords(extractContent(input), kws)) continue;
+    }
     const res = await invokePlugin(key, guildId, event, input);
     invoked.push(
       res.ok ? { pluginKey: key, ok: true } : { pluginKey: key, ok: false, error: res.error },

@@ -9,20 +9,26 @@
 import { type Client, Events } from 'discord.js';
 import { log } from '../lib/log.mts';
 
-// Pełny URL endpointu mostu z bazy panelu (tylko https). null = brak/niepoprawna konfiguracja.
-function endpoint(): string | null {
+const SUBS_REFRESH_MS = 5 * 60_000; // jak często bot odświeża zbiór słów-kluczy messageCreate z panelu
+
+// Baza panelu (tylko https — sekret leci w nagłówku Bearer). null = brak/niepoprawna konfiguracja.
+function baseUrl(): string | null {
   const base = (process.env.PLUGIN_BRIDGE_URL || '').trim().replace(/\/+$/, '');
-  if (!base || !/^https:\/\//i.test(base)) return null; // wymagamy https (sekret leci w nagłówku)
-  return `${base}/api/internal/plugin-event`;
+  if (!base || !/^https:\/\//i.test(base)) return null;
+  return base;
 }
+
+// Cache słów-kluczy messageCreate per-serwer (guildId → keywordy). Pusty = nic nie forwardujemy na
+// wiadomości. Odświeżany pollem z /api/internal/plugin-subscriptions (wzorzec jak settings-sync).
+let msgSubs = new Map<string, string[]>();
 
 // Fire-and-forget: forward zdarzenia do panelu. Sekret w nagłówku Bearer (jak bot↔GH0ST).
 async function sendEvent(event: string, guildId: string, input: unknown): Promise<void> {
-  const url = endpoint();
+  const base = baseUrl();
   const secret = process.env.PLUGIN_BRIDGE_SECRET || '';
-  if (!url || !secret) return;
+  if (!base || !secret) return;
   try {
-    const r = await fetch(url, {
+    const r = await fetch(`${base}/api/internal/plugin-event`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
       body: JSON.stringify({ guildId, event, input }),
@@ -34,15 +40,38 @@ async function sendEvent(event: string, guildId: string, input: unknown): Promis
   }
 }
 
+// Pobranie z panelu mapy guildId → słowa-klucze (pluginy messageCreate). Cache podmieniamy atomowo;
+// przy błędzie zostaje poprzedni (bot nie „głuchnie" na chwilowy problem sieci/panelu).
+async function refreshSubs(): Promise<void> {
+  const base = baseUrl();
+  const secret = process.env.PLUGIN_BRIDGE_SECRET || '';
+  if (!base || !secret) return;
+  try {
+    const r = await fetch(`${base}/api/internal/plugin-subscriptions`, {
+      headers: { Authorization: `Bearer ${secret}` },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!r.ok) {
+      log.warn('plugin-bridge: pobranie subskrypcji nieudane', { status: r.status });
+      return;
+    }
+    const j = (await r.json().catch(() => ({}))) as { subs?: Record<string, string[]> };
+    const next = new Map<string, string[]>();
+    for (const [gid, kws] of Object.entries(j.subs ?? {})) {
+      if (Array.isArray(kws) && kws.length) next.set(gid, kws);
+    }
+    msgSubs = next;
+  } catch (e) {
+    log.warn('plugin-bridge: błąd pobierania subskrypcji', { err: e });
+  }
+}
+
 export function startPluginBridge(client: Client): void {
-  if (!endpoint() || !process.env.PLUGIN_BRIDGE_SECRET) {
+  if (!baseUrl() || !process.env.PLUGIN_BRIDGE_SECRET) {
     log.info('plugin-bridge: brak PLUGIN_BRIDGE_URL/SECRET (https) — pominięto');
     return;
   }
-  // Forwardujemy WYŁĄCZNIE zdarzenia o ograniczonej częstotliwości — cykl życia członka.
-  // Wysokoczęstotliwościowe (messageCreate / reakcje / voice) świadomie pomijamy: bez filtra
-  // subskrypcji po stronie panelu zalałyby endpoint (każde = round-trip + odczyt Supabase).
-  // To osobny, przyszły temat (keyword-subscription). Boty pomijamy (mniej szumu/amplifikacji).
+  // Boty pomijamy we wszystkich zdarzeniach (mniej szumu/amplifikacji przy raidach).
 
   // Nowy członek (powitania / role startowe).
   client.on(Events.GuildMemberAdd, (member) => {
@@ -75,5 +104,23 @@ export function startPluginBridge(client: Client): void {
     });
   });
 
-  log.info('plugin-bridge: aktywny (guildMemberAdd/Remove/Boost → panel)');
+  // messageCreate: WYSOKA częstotliwość → forwardujemy WYŁĄCZNIE wiadomości zawierające słowo-klucz
+  // zadeklarowane przez plugin (cache `msgSubs` z panelu). Bez dopasowania = zero ruchu do panelu.
+  // Panel filtruje jeszcze per-plugin (autorytatywnie); tu jest tylko tania bramka częstotliwości.
+  client.on(Events.MessageCreate, (msg) => {
+    if (!msg.guild || msg.author.bot || !msg.content) return;
+    const kws = msgSubs.get(msg.guild.id);
+    if (!kws?.length) return;
+    const lc = msg.content.toLowerCase();
+    if (!kws.some((k) => lc.includes(k.toLowerCase()))) return;
+    void sendEvent('messageCreate', msg.guild.id, {
+      userId: msg.author.id,
+      channelId: msg.channelId,
+      content: msg.content.slice(0, 500),
+    });
+  });
+
+  void refreshSubs();
+  setInterval(() => void refreshSubs(), SUBS_REFRESH_MS);
+  log.info('plugin-bridge: aktywny (member lifecycle + messageCreate[keyword] → panel)');
 }

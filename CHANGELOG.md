@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-363-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.293.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-364-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.294.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.294.0] — 💬 M6: pluginy na `messageCreate` przez filtr słów-kluczy (bezpieczna wysoka częstotliwość)
+
+- `[#364]` 💬 **Marketplace M6 — most forwarduje `messageCreate`, ale TYLKO wiadomości ze słowem-kluczem pluginu.**
+  - **Manifest** [`communityPlugins.ts`](dashboard/lib/communityPlugins.ts): nowe pole `keywords[]` (dla `event='messageCreate'`; dopasowanie = substring, case-insensitive). Pusta lista → plugin messageCreate nie jest forwardowany.
+  - **Agregat subskrypcji** `getMessageSubscriptions()` + endpoint [`/api/internal/plugin-subscriptions`](dashboard/app/api/internal/plugin-subscriptions/route.ts): mapa `guildId → słowa-klucze` z włączonych+zatwierdzonych pluginów messageCreate. Bot pobiera ją pollem (5 min, cache jak settings-sync) i forwarduje **wyłącznie** pasujące wiadomości — strumień messageCreate nie zalewa endpointu.
+  - **Filtr dwuwarstwowy**: bot = tania bramka częstotliwości (zbiorczo dla serwera); panel [`invokeGuildEvent`](dashboard/lib/pluginInvoke.ts) = autorytatywny filtr **per-plugin** (przy wielu pluginach każdy dostaje tylko swoje trafienia).
+  - **Auth mostu scentralizowany** w [`lib/pluginBridge.ts`](dashboard/lib/pluginBridge.ts) (`bridgeReady`/`bridgeAuthorized`, constant-time) — jedno miejsce do audytu dla wszystkich `/api/internal/*`; trasa plugin-event zrefaktoryzowana. Bramki: biome czysto, dashboard `tsc` exit 0, smoke importu mostu ✓, docs:check exit 0.
+  - *Następny przyrost:* pole `keywords` w formularzu zgłoszeń (UI + i18n ×14) — spójnie z wzorcem „plumbing → UI".
 
 ## [0.293.0] — 📡 M6: most pluginów — więcej zdarzeń (odejście + boost) z bezpieczeństwem częstotliwości
 
