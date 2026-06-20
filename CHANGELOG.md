@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-372-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.302.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-373-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.303.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.303.0] — 🧪 Bramka typów dla bota: `tsc` + biome w CI (14 błędów typów naprawionych)
+
+- `[#373]` 🧪 **Bot zyskuje bramkę jakości — typecheck `tsc` i lint biome w CI; wyczyszczony istniejący dług typów.**
+  - **Setup:** [`bot/package.json`](bot/package.json) — devDeps `typescript`+`@types/node` (jak dashboard), skrypt `typecheck`. Istniejący `tsconfig.json` (`strict: true`) wreszcie ma czym działać. Bot był dotąd uruchamiany natywnie (strip-types) bez żadnej weryfikacji typów.
+  - **CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)): `biome ci` i `tsc --noEmit` rozszerzone o **`bot`** (wcześniej tylko dashboard+web). Bot ma teraz pełną bramkę lint+typy.
+  - **14 błędów typów naprawionych** (kod był pisany typowo — zero lawiny):
+    - `lock`/`lockdown`/`unlock`: rzutowania `as GuildTextBasedChannel` **maskowały** niezgodność z wątkami (które nie mają `permissionOverwrites`). Strażniki runtime były poprawne, ale typy kłamały → naprawione przez zawężenie (`'permissionOverwrites' in ch`) + `canLock` jako type-predicate `NonThreadGuildBasedChannel`.
+    - `pet`/`cards`: helpery `statusEmbed`/`pulledEmbed` brały `locale: string` zamiast unii `Locale` → poprawny typ parametru.
+  - Bramki: **biome ci (cały bot) exit 0, bot `tsc` exit 0**, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.302.0] — 🧩 Gotowość pod sharding (skala >2500 serwerów): audyt + uodpornienie + ShardingManager
 

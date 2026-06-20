@@ -2,7 +2,6 @@
 import {
   ChannelType,
   type ChatInputCommandInteraction,
-  type GuildTextBasedChannel,
   MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
@@ -28,10 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
   try {
-    await (ch as GuildTextBasedChannel).permissionOverwrites.edit(
-      interaction.guild.roles.everyone,
-      { SendMessages: false },
-    );
+    await ch.permissionOverwrites.edit(interaction.guild.roles.everyone, { SendMessages: false });
     await interaction.reply({ content: t(locale, 'mod2.locked', { channel: `<#${ch.id}>` }) });
   } catch {
     await interaction.reply({ content: t(locale, 'mod2.fail'), flags: MessageFlags.Ephemeral });

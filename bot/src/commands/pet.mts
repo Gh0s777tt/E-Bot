@@ -28,6 +28,7 @@ import {
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
+import type { Locale } from '../i18n/locales.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
@@ -67,7 +68,7 @@ export const data = new SlashCommandBuilder()
   )
   .addSubcommand((s) => s.setName('release').setDescription('Wypuść peta (usuwa go).'));
 
-function statusEmbed(locale: string, pet: Pet, cur: string): EmbedBuilder {
+function statusEmbed(locale: Locale, pet: Pet, cur: string): EmbedBuilder {
   const sp = findSpecies(pet.species);
   const emoji = sp?.emoji ?? '🐾';
   const lvl = petLevel(pet.xp);

@@ -6,6 +6,7 @@ import {
   type Guild,
   type GuildBasedChannel,
   MessageFlags,
+  type NonThreadGuildBasedChannel,
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from 'discord.js';
@@ -17,7 +18,7 @@ const LOCKABLE = new Set<number>([
   ChannelType.GuildForum,
 ]);
 
-function canLock(ch: GuildBasedChannel): boolean {
+function canLock(ch: GuildBasedChannel): ch is NonThreadGuildBasedChannel {
   return LOCKABLE.has(ch.type) && 'permissionOverwrites' in ch;
 }
 

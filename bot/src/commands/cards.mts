@@ -25,6 +25,7 @@ import {
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
+import type { Locale } from '../i18n/locales.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
@@ -70,7 +71,7 @@ export const data = new SlashCommandBuilder()
   );
 
 function pulledEmbed(
-  locale: string,
+  locale: Locale,
   card: ReturnType<typeof drawCard>,
   isNew: boolean,
 ): EmbedBuilder {

@@ -36,12 +36,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint (Biome)
-        run: pnpm exec biome ci dashboard web
+        run: pnpm exec biome ci dashboard web bot
 
-      - name: Typecheck (dashboard + web)
+      - name: Typecheck (dashboard + web + bot)
         run: |
           pnpm --filter bot-dc-dashboard exec tsc --noEmit
           pnpm --filter bot-dc-web exec tsc --noEmit
+          pnpm --filter bot-dc-bot exec tsc --noEmit
 
       - name: Testy jednostkowe (Vitest)
         run: pnpm exec vitest run
