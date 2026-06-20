@@ -1,56 +1,65 @@
-// Dzienny snapshot rozmiaru serwera → cloud key 'server_history' (ostatnie 90 dni).
-// Panel rysuje z tego wykres wzrostu. Zapis co 30 min (odświeża wpis na dziś), cap 90 dni.
-import type { Client } from 'discord.js';
+// Dzienny snapshot rozmiaru serwera → cloud key PER-SERWER `g:<guildId>:server_history` (90 dni).
+// Panel rysuje wykres wzrostu z danych WYBRANEGO serwera (chokepoint) — bez przecieku między tenantami
+// (luka F5, Audyt #2). Zapis co 30 min (odświeża wpis na dziś), cap 90 dni, osobno dla każdego serwera.
+import type { Client, Guild } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 
 type Snap = { day: string; members: number; boosts: number; channels: number };
 
-let history: Snap[] = [];
-let loaded = false;
+const histories = new Map<string, Snap[]>(); // guildId → historia (90 dni)
+const loaded = new Set<string>(); // serwery już wczytane z chmury (lazy)
 
 function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function aggregate(client: Client): Omit<Snap, 'day'> {
-  let members = 0;
-  let boosts = 0;
-  let channels = 0;
-  for (const g of client.guilds.cache.values()) {
-    members += g.memberCount || 0;
-    boosts += g.premiumSubscriptionCount ?? 0;
-    channels += g.channels.cache.size;
-  }
-  return { members, boosts, channels };
+function snapshot(g: Guild): Omit<Snap, 'day'> {
+  return {
+    members: g.memberCount || 0,
+    boosts: g.premiumSubscriptionCount ?? 0,
+    channels: g.channels.cache.size,
+  };
 }
 
-async function load(): Promise<void> {
-  if (loaded) return;
-  loaded = true;
+async function loadGuild(guildId: string): Promise<Snap[]> {
+  if (!loaded.has(guildId)) {
+    loaded.add(guildId);
+    try {
+      const raw = await cloudGetSetting(`g:${guildId}:server_history`);
+      const arr = raw ? (JSON.parse(raw) as Snap[]) : [];
+      histories.set(guildId, Array.isArray(arr) ? arr : []);
+    } catch {
+      histories.set(guildId, []);
+    }
+  }
+  return histories.get(guildId) ?? [];
+}
+
+async function tickGuild(g: Guild): Promise<void> {
+  let hist = await loadGuild(g.id);
+  const d = today();
+  const agg = snapshot(g);
+  const last = hist[hist.length - 1];
+  if (last && last.day === d) {
+    hist[hist.length - 1] = { day: d, ...agg }; // odśwież dzisiejszy odczyt
+  } else {
+    hist.push({ day: d, ...agg });
+  }
+  if (hist.length > 90) {
+    hist = hist.slice(-90);
+    histories.set(g.id, hist);
+  }
   try {
-    const raw = await cloudGetSetting('server_history');
-    if (raw) history = JSON.parse(raw) as Snap[];
+    await cloudSetSetting(`g:${g.id}:server_history`, JSON.stringify(hist));
   } catch {
-    /* brak / błąd → pusta historia */
+    /* trudno — następny tick spróbuje ponownie */
   }
 }
 
 async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
-  await load();
-  const d = today();
-  const agg = aggregate(client);
-  const last = history[history.length - 1];
-  if (last && last.day === d) {
-    history[history.length - 1] = { day: d, ...agg }; // odśwież dzisiejszy odczyt
-  } else {
-    history.push({ day: d, ...agg });
-  }
-  if (history.length > 90) history = history.slice(-90);
-  try {
-    await cloudSetSetting('server_history', JSON.stringify(history));
-  } catch {
-    /* trudno — następny tick spróbuje ponownie */
+  for (const g of client.guilds.cache.values()) {
+    await tickGuild(g).catch(() => {});
   }
 }
 
@@ -64,5 +73,7 @@ export function startServerHistory(client: Client): void {
     () => void tick(client).catch((e) => console.warn('[history]', (e as Error).message)),
     30 * 60_000,
   );
-  console.log('[history] snapshot rozmiaru serwera co 30 min → server_history.');
+  console.log(
+    '[history] snapshot rozmiaru serwera co 30 min → g:<id>:server_history (per-serwer).',
+  );
 }

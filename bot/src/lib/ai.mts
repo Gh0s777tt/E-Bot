@@ -65,17 +65,26 @@ export async function callModel(
   return { text: d.choices?.[0]?.message?.content ?? '', tokens: d.usage?.total_tokens ?? 0 };
 }
 
-export type Usage = { limited: string | null; usedTokens: number; usedReq: number; day: string };
+// guildId niesiony w Usage, żeby bumpUsage zapisał ten sam serwer co checkUsage policzył.
+// DM/brak serwera → '' (te wiersze nie pokażą się żadnemu tenantowi na /stats — panel fail-closed).
+export type Usage = {
+  limited: string | null;
+  usedTokens: number;
+  usedReq: number;
+  day: string;
+  guildId: string;
+};
 
-/** Sprawdza dzisiejsze zużycie PRZED wywołaniem; `limited` = komunikat gdy limit przekroczony. */
-export async function checkUsage(userId: string, cfg: AiConfig): Promise<Usage> {
+/** Sprawdza dzisiejsze zużycie PRZED wywołaniem; `limited` = komunikat gdy limit przekroczony.
+ *  Liczone PER-SERWER (Audyt #2): zużycie i dzienny limit są niezależne na każdym serwerze. */
+export async function checkUsage(userId: string, guildId: string, cfg: AiConfig): Promise<Usage> {
   const day = new Date().toISOString().slice(0, 10);
   let usedTokens = 0;
   let usedReq = 0;
   if (hasCloud()) {
     const rows = await cloudSelect<{ tokens_used: number; requests: number }>(
       'ai_usage',
-      `select=tokens_used,requests&user_id=eq.${userId}&day=eq.${day}`,
+      `select=tokens_used,requests&guild_id=eq.${guildId}&user_id=eq.${userId}&day=eq.${day}`,
     );
     usedTokens = rows[0]?.tokens_used ?? 0;
     usedReq = rows[0]?.requests ?? 0;
@@ -86,7 +95,7 @@ export async function checkUsage(userId: string, cfg: AiConfig): Promise<Usage> 
   } else if (cfg.dailyTokenLimit > 0 && usedTokens >= cfg.dailyTokenLimit) {
     limited = `🛑 Dzienny limit tokenów osiągnięty (${cfg.dailyTokenLimit}). Wróć jutro.`;
   }
-  return { limited, usedTokens, usedReq, day };
+  return { limited, usedTokens, usedReq, day, guildId };
 }
 
 export async function bumpUsage(userId: string, u: Usage, addTokens: number): Promise<void> {
@@ -95,13 +104,14 @@ export async function bumpUsage(userId: string, u: Usage, addTokens: number): Pr
     'ai_usage',
     [
       {
+        guild_id: u.guildId,
         user_id: userId,
         day: u.day,
         tokens_used: u.usedTokens + addTokens,
         requests: u.usedReq + 1,
       },
     ],
-    'user_id,day',
+    'guild_id,user_id,day',
   ).catch((e) => console.warn('[ai]', (e as Error).message));
 }
 

@@ -1,13 +1,14 @@
 // Insights pulpitu: wzrost serwera + alarm anti-raid. Czyta klucze pisane przez bota
-// ('server_history' globalnie, 'antiraid_state' PER-SERWER) z Supabase, server-side.
-import { getGuildRawSetting, getRawSetting } from './data';
+// (oba PER-SERWER: 'server_history' i 'antiraid_state') z Supabase, server-side, scoped chokepointem.
+import { getGuildRawSetting } from './data';
 import type { PanelLocale } from './panelI18n';
 
 export type GrowthPoint = { day: string; members: number; boosts: number; channels: number };
 
 export async function getServerHistory(): Promise<GrowthPoint[]> {
   try {
-    const raw = await getRawSetting('server_history');
+    // PER-SERWER (g:<guildId>:server_history) — bez przecieku wzrostu między tenantami (luka F5).
+    const raw = await getGuildRawSetting('server_history');
     if (!raw) return [];
     const arr = JSON.parse(raw) as GrowthPoint[];
     return Array.isArray(arr) ? arr : [];

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-369-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.299.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-370-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.300.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.300.0] — 🔐 Domknięcie rezyduów F5: `server_history` per-serwer + AI-usage gated do właściciela 🎉
+
+- `[#370]` 🔐 **Pełne zamknięcie luki F5 — pozostałe dwa źródła cross-tenant na `/stats` naprawione (milestone v0.300).**
+  - **`server_history` → per-serwer.** Bot [`serverHistory.mts`](bot/src/analytics/serverHistory.mts) snapshotuje **każdy serwer osobno** do klucza `g:<guildId>:server_history` (zamiast jednego globalnego agregatu wszystkich serwerów); panel [`insights.ts`](dashboard/lib/insights.ts) czyta przez chokepoint (`getGuildRawSetting`). „Wzrost serwera" na `/stats` jest teraz scoped per-tenant.
+  - **`ai_usage` — gated do właściciela.** Tabela zostaje **globalna celowo** (per-user dzienny **budżet kosztów** współdzielony między serwerami; migracja złamałaby kontrolę kosztów w [`lib/ai.mts`](bot/src/lib/ai.mts)). Zamiast tego sekcje AI na [`/stats`](dashboard/app/stats/page.tsx) pokazujemy **tylko właścicielowi instancji** (`currentSession` + `resolveRole`); tenant self-serve nie pobiera danych AI → zero przecieku globalnych liczników.
+  - **F5 w pełni domknięte** — [`SECURITY-REVIEW-MARKETPLACE.md`](docs/SECURITY-REVIEW-MARKETPLACE.md) zaktualizowany (rezydua → DOMKNIĘTE). Bramki: biome czysto, dashboard `tsc` exit 0, smoke importu bota ✓, docs:check exit 0.
 
 ## [0.299.0] — 🔐 Audyt #2 + naprawa F5: scoping analityki `/stats` (anty-przeciek cross-tenant)
 

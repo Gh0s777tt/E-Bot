@@ -53,14 +53,17 @@ create table if not exists ticket_messages (
   at          timestamptz not null default now()
 );
 
--- 🤖 Limity AI (twardy budżet kosztów)
+-- 🤖 Limity AI (twardy budżet kosztów) — scoped per-serwer (Audyt #2): guild_id w PK
+-- (migracja istniejących instalacji niżej: „ai_usage — scoping per-serwer").
 create table if not exists ai_usage (
+  guild_id    text    not null default '',
   user_id     text    not null,
   day         date    not null,
   tokens_used integer not null default 0,
   requests    integer not null default 0,
-  primary key (user_id, day)
+  primary key (guild_id, user_id, day)
 );
+create index if not exists ai_usage_guild_day on ai_usage (guild_id, day);
 
 alter table user_levels     enable row level security;
 alter table tickets         enable row level security;
@@ -520,6 +523,19 @@ create table if not exists member_cohorts (
 );
 create index if not exists member_cohorts_guild_joined on member_cohorts (guild_id, joined_at);
 alter table member_cohorts enable row level security;
+
+-- ─────────────────────────────────────────────────────────────
+-- ai_usage — scoping per-serwer (Audyt #2 domknięty): guild_id + PK (guild_id, user_id, day).
+-- Migracja istniejących instalacji (CREATE wyżej już ma nowy kształt; tu ALTER dla starych).
+-- Idempotentne. Stare wiersze → guild_id='' (nieznany serwer/DM; panel fail-closed na pustym gid).
+-- ─────────────────────────────────────────────────────────────
+alter table ai_usage add column if not exists guild_id text;
+update ai_usage set guild_id = '' where guild_id is null;
+alter table ai_usage alter column guild_id set not null;
+alter table ai_usage alter column guild_id set default '';
+alter table ai_usage drop constraint if exists ai_usage_pkey;
+alter table ai_usage add primary key (guild_id, user_id, day);
+create index if not exists ai_usage_guild_day on ai_usage (guild_id, day);
 
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.

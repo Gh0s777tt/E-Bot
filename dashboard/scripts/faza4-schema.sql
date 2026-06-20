@@ -40,14 +40,17 @@ create table if not exists ticket_messages (
   at          timestamptz not null default now()
 );
 
--- 🤖 Limity AI (twardy budżet kosztów)
+-- 🤖 Limity AI (twardy budżet kosztów) — scoped per-serwer (Audyt #2): guild_id w PK, żeby
+-- zużycie było liczone/czytane per-serwer (panel /stats nie agreguje cudzych serwerów).
 create table if not exists ai_usage (
+  guild_id    text    not null default '',
   user_id     text    not null,
   day         date    not null,
   tokens_used integer not null default 0,
   requests    integer not null default 0,
-  primary key (user_id, day)
+  primary key (guild_id, user_id, day)
 );
+create index if not exists ai_usage_guild_day on ai_usage (guild_id, day);
 
 -- RLS włączone; brak polityk publicznych → dostęp tylko przez klucz service_role
 -- (którego używają panel i bot). Anon nie ma dostępu.

@@ -70,13 +70,12 @@ Adwersarialny przegląd kodu z v0.292–298: most bot→panel (`/api/internal/*`
 - **Filtr keywordów `messageCreate`** — dwuwarstwowy (bot = tania bramka częstotliwości, panel = autorytatywny per-plugin); dopasowanie substring na treści, bez injekcji.
 - **Tracking kohort (`cohorts.mts`)** — filtr PostgREST `guild_id=eq.…&user_id=eq.…` na snowflake'ach Discord (zawsze numeryczne, z bramy — nie od atakującego) → brak injekcji. Boty pomijane; no-op bez chmury; backfill ograniczony progiem 10 000 + oknem 90 dni.
 
-### 🟡 Rezydua (follow-up — wymagają zmian po stronie bota)
+### 🟢 Rezydua — DOMKNIĘTE (v0.300.0)
 
-- **`ai_usage`** — tabela **bez `guild_id`** (PK `user_id,day`); `getAiUsageToday`/`getAiUsageSeries` nie da się scope'ować bez migracji schematu + zapisu `guild_id` przez bota. Niższa waga (zagregowane liczniki AI).
-- **`server_history`** — **globalny** setting (jeden JSON/instancja); wymaga przechowywania per-serwer po stronie bota. Niższa waga (rozmiar serwera/boosty/kanały w czasie).
-- *Mitygacja, jeśli pilne przed pełnym scope'owaniem:* sekcje „AI" i „Wzrost serwera" renderować tylko dla `isInstanceAdminRequest` (ukryć tenantom).
+- **`server_history`** → **per-serwer** (`g:<guildId>:server_history`): bot snapshotuje każdy serwer osobno ([`serverHistory.mts`](../bot/src/analytics/serverHistory.mts)), panel czyta przez chokepoint ([`insights.ts`](../dashboard/lib/insights.ts) `getGuildRawSetting`). „Wzrost serwera" scoped per-tenant.
+- **`ai_usage`** — pozostaje **globalny celowo** (per-user dzienny **budżet kosztów**, współdzielony między serwerami; migracja złamałaby kontrolę kosztów). Zamiast migracji: jego wyświetlanie na `/stats` jest **gated do właściciela instancji** (`currentSession` + `resolveRole`); tenant self-serve nie pobiera danych AI → zero przecieku globalnych liczników.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Self-review · v0.283.0 (F1–F4) + v0.299.0 (F5) · powiązane: <a href="PLAN-MARKETPLACE.md">PLAN-MARKETPLACE</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>
+<div align="center"><sub>Self-review · v0.283.0 (F1–F4) + v0.299.0 (F5) + v0.300.0 (rezydua F5 domknięte) · powiązane: <a href="PLAN-MARKETPLACE.md">PLAN-MARKETPLACE</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>

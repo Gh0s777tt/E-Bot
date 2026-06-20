@@ -19,7 +19,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
   await interaction.deferReply();
-  const usage = await checkUsage(interaction.user.id, cfg);
+  const usage = await checkUsage(interaction.user.id, interaction.guildId ?? '', cfg);
   if (usage.limited) {
     await interaction.editReply(usage.limited);
     return;
