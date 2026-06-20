@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-395-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.325.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-396-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.326.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.326.0] — 🧪 P1: testy izolacji multi-tenant — rygiel anty-IDOR
+
+- `[#396]` 🧪 **Regresja IDOR (v0.318) zaryglowana testem — usunięcie scope = czerwony CI.**
+  - Nowy [`isolation.test.ts`](dashboard/lib/isolation.test.ts): mock klienta Supabase (chainable + thenable proxy nagrywa `.eq`/`.from`/`.insert`) + `getPrimaryGuildId`, **bez sieci**. Weryfikuje, że `removeShopItem`/`getShopItems`/`getTickets`/`closeTicket` nakładają `.eq('guild_id', gid)`, `addShopItem` zapisuje `guild_id` w payloadzie, a **fail-closed** (brak primary guild) zwraca pusto/`false` i **nie dotyka** buildera.
+  - 6 nowych testów → **vitest 36/36** (4 pliki). Behawioralny rygiel: `service_role` omija RLS → scope aplikacyjny to jedyna autoryzacja; ktokolwiek usunie `.eq('guild_id')` dostanie czerwony CI.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, vitest 36/36, docs:check exit 0.
 
 ## [0.325.0] — 🛟 P1 (UX): potwierdzenie przed usunięciem w panelu (wishlist + sklep)
 
