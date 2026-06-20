@@ -11,6 +11,7 @@ import {
 } from '../../../../lib/auth';
 import { enrollFromDiscord } from '../../../../lib/enroll';
 import { resolveRole } from '../../../../lib/panelRoles';
+import { captureError } from '../../../../lib/sentry';
 import { signSession } from '../../../../lib/session';
 
 export const dynamic = 'force-dynamic';
@@ -59,7 +60,12 @@ export async function GET(request: Request) {
     });
     res.cookies.set(STATE_COOKIE, '', { maxAge: 0, path: '/' });
     return res;
-  } catch {
+  } catch (e) {
+    // Cały łańcuch OAuth (token exchange / fetch usera / enrollment / sesja) ginął cicho → Sentry.
+    await captureError(`OAuth callback: ${(e as Error).message}`, {
+      label: 'auth-callback',
+      stack: (e as Error)?.stack,
+    });
     return NextResponse.redirect(`${origin}/login?e=oauth`);
   }
 }

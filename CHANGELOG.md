@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-388-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.318.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-389-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.319.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.319.0] — 🔭 P0 (re-audyt): captureError w krytycznych catch (billing + auth callback)
+
+- `[#389]` 🔭 **Ciche awarie premium i logowania przestają być niewidoczne.**
+  - `onRequestError` (v0.313) łapie tylko NIEOBSŁUŻONE błędy — trasy z własnym `try/catch` (4xx/redirect) nie raportowały. Dopięte `captureError` (no-op bez `SENTRY_DSN`):
+    - [`billing/webhook`](dashboard/app/api/billing/webhook/route.ts) — gdy `setGuildTier` zwróci `false` (**opłacony upgrade bez zapisu tieru = user płaci, brak premium**) + zły JSON po poprawnym podpisie.
+    - [`auth/callback`](dashboard/app/api/auth/callback/route.ts) — cały łańcuch OAuth (token exchange / fetch usera / enrollment / sesja) ginął cicho w `catch → /login?e=oauth`.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.318.0] — 🔐 P0 (re-audyt): IDOR — scope per-serwer na shop/tickets
 

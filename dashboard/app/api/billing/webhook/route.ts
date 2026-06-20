@@ -3,6 +3,7 @@ import {
   setGuildTier,
   verifyStripeSignature,
 } from '../../../../lib/billing';
+import { captureError } from '../../../../lib/sentry';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +22,9 @@ export async function POST(request: Request): Promise<Response> {
   let event: { type?: string; data?: { object?: Record<string, unknown> } };
   try {
     event = JSON.parse(raw) as typeof event;
-  } catch {
+  } catch (e) {
+    // Zły JSON po POPRAWNYM podpisie jest anomalią — raportuj (no-op bez SENTRY_DSN).
+    await captureError(`Stripe webhook: zły JSON — ${(e as Error).message}`, { label: 'billing' });
     return new Response('bad json', { status: 400 });
   }
 
@@ -30,10 +33,16 @@ export async function POST(request: Request): Promise<Response> {
     const meta = obj.metadata as Record<string, unknown> | undefined;
     const guildId = String(obj.client_reference_id ?? meta?.guild_id ?? '');
     if (guildId) {
-      await setGuildTier(guildId, 'premium', {
+      const ok = await setGuildTier(guildId, 'premium', {
         customerId: typeof obj.customer === 'string' ? obj.customer : undefined,
         subId: typeof obj.subscription === 'string' ? obj.subscription : undefined,
       });
+      // Opłacony upgrade, który NIE zapisał tieru = cichy dramat (user płaci, brak premium) → Sentry.
+      if (!ok) {
+        await captureError(`Stripe: upgrade nie zapisał tieru dla guild ${guildId}`, {
+          label: 'billing',
+        });
+      }
     }
   } else if (event.type === 'customer.subscription.deleted') {
     const subId = typeof obj.id === 'string' ? obj.id : '';
