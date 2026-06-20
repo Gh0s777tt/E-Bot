@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-382-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.312.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-383-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.313.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.313.0] — 🔭 Observability: globalny hook błędów serwera (onRequestError) → Sentry
+
+- `[#383]` 🔭 **Błędy serwera panelu przestają być niewidoczne.**
+  - Nowy [`dashboard/instrumentation.ts`](dashboard/instrumentation.ts) z hookiem Next 16 `onRequestError` → [`captureError`](dashboard/lib/sentry.ts). Łapie **nieobsłużone** błędy route handlerów, renderu RSC i server actions w CAŁYM panelu. Wcześniej `captureError` było wołane tylko z relay klienta (`/api/sentry`), więc błędy serwera (92 trasy + ~46 stron) **nie trafiały do Sentry**.
+  - **No-op bez `SENTRY_DSN`** (jak dotąd) — aktywuje się po dodaniu DSN w env Vercela; nigdy nie wywraca żądania. Kontekst zdarzenia: ścieżka, metoda, `routePath`/`routeType`.
+  - **Świadomie poza zakresem:** trasy, które łapią błąd i zwracają go jako 4xx (własny try/catch), nie wyzwalają hooka — raportowanie tych specyficznych przypadków (np. webhook Stripe, plugin-bridge) to drobny follow-up per-trasa.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.312.0] — 🔐 Hardening „ogon" #2: bramka instance-admin na 4 globalnych configach
 
