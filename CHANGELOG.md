@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-391-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.321.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-392-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.322.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.322.0] — 🛡️ P0 (re-audyt): walidacja zod na globalnym configu integracji — KONIEC tieru P0
+
+- `[#392]` 🛡️ **Koniec ślepego `as IntegrationConfig` — wejście walidowane schematem.**
+  - [`/api/integrations`](dashboard/app/api/integrations/route.ts) (POST, config **globalny**) kastował `request.json()` na typ bez sprawdzenia. Dodany `z.object` (`safeParse`): `enabled` = `record<string,boolean>` (klucz ≤64), `aiProvider` ≤32, `aiModel` ≤120 — błędny kształt → `400 invalid_body`, nieznane pola obcinane. Chroni globalny klucz `settings` przed śmieciem / olbrzymimi stringami. Bramka instance-admin (v0.312) bez zmian.
+  - 🏁 **Domknięty cały tier P0 z re-audytu:** IDOR shop/tickets (v0.318) · Sentry-w-catch (v0.319) · web/ resilience (v0.320) · SSRF IPv4-mapped + CRON timing-safe (v0.321) · zod-integrations (v0.322). Dalej **P1**: rate-limit, `confirm()` na destrukcyjnych akcjach panelu, `engines` w `package.json`, testy izolacji multi-tenant.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.321.0] — 🛡️ P0 (re-audyt): domknięcie strażników — SSRF IPv4-mapped + CRON_SECRET timing-safe
 
