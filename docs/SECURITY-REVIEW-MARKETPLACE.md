@@ -70,12 +70,12 @@ Adwersarialny przegląd kodu z v0.292–298: most bot→panel (`/api/internal/*`
 - **Filtr keywordów `messageCreate`** — dwuwarstwowy (bot = tania bramka częstotliwości, panel = autorytatywny per-plugin); dopasowanie substring na treści, bez injekcji.
 - **Tracking kohort (`cohorts.mts`)** — filtr PostgREST `guild_id=eq.…&user_id=eq.…` na snowflake'ach Discord (zawsze numeryczne, z bramy — nie od atakującego) → brak injekcji. Boty pomijane; no-op bez chmury; backfill ograniczony progiem 10 000 + oknem 90 dni.
 
-### 🟢 Rezydua — DOMKNIĘTE (v0.300.0)
+### 🟢 Rezydua — DOMKNIĘTE (v0.300–301)
 
-- **`server_history`** → **per-serwer** (`g:<guildId>:server_history`): bot snapshotuje każdy serwer osobno ([`serverHistory.mts`](../bot/src/analytics/serverHistory.mts)), panel czyta przez chokepoint ([`insights.ts`](../dashboard/lib/insights.ts) `getGuildRawSetting`). „Wzrost serwera" scoped per-tenant.
-- **`ai_usage`** — pozostaje **globalny celowo** (per-user dzienny **budżet kosztów**, współdzielony między serwerami; migracja złamałaby kontrolę kosztów). Zamiast migracji: jego wyświetlanie na `/stats` jest **gated do właściciela instancji** (`currentSession` + `resolveRole`); tenant self-serve nie pobiera danych AI → zero przecieku globalnych liczników.
+- **`server_history`** → **per-serwer** (`g:<guildId>:server_history`): bot snapshotuje każdy serwer osobno ([`serverHistory.mts`](../bot/src/analytics/serverHistory.mts)), panel czyta przez chokepoint ([`insights.ts`](../dashboard/lib/insights.ts) `getGuildRawSetting`). „Wzrost serwera" scoped per-tenant (v0.300.0).
+- **`ai_usage`** → **per-serwer** (migracja PK na `(guild_id, user_id, day)` — [`expansion-ai-usage-guild-schema.sql`](../dashboard/scripts/expansion-ai-usage-guild-schema.sql), idempotentna): bot zapisuje `guild_id` ([`lib/ai.mts`](../bot/src/lib/ai.mts) + 7 komend), panel scope'uje odczyt (`getAiUsageToday`/`getAiUsageSeries` przez `getPrimaryGuildId`). Dzienny limit AI działa teraz **per-serwer-per-użytkownik**; stare wiersze (`guild_id=''`) nie pokażą się tenantom (fail-closed). (v0.300 schemat+bot, v0.301 scoping panelu + usunięcie zbędnego owner-gate).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Self-review · v0.283.0 (F1–F4) + v0.299.0 (F5) + v0.300.0 (rezydua F5 domknięte) · powiązane: <a href="PLAN-MARKETPLACE.md">PLAN-MARKETPLACE</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>
+<div align="center"><sub>Self-review · v0.283.0 (F1–F4) + v0.299.0 (F5) + v0.300–301 (rezydua F5 domknięte: server_history + ai_usage per-serwer) · powiązane: <a href="PLAN-MARKETPLACE.md">PLAN-MARKETPLACE</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>

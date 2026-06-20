@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-370-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.300.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-371-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.301.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -14,7 +14,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## [0.300.0] — 🔐 Domknięcie rezyduów F5: `server_history` per-serwer + AI-usage gated do właściciela 🎉
+## [0.301.0] — 🔧 Reconciliation: `ai_usage` w pełni per-serwer (dokończenie scopingu panelu)
+
+- `[#371]` 🔧 **Ujednolicenie strategii `ai_usage` na per-serwer — domknięcie odczytu w panelu + usunięcie zbędnego owner-gate.**
+  - **Kontekst:** w v0.300.0 do gałęzi trafiła równolegle (z osobnego zadania) **migracja `ai_usage` na per-serwer** (schemat PK `(guild_id,user_id,day)` + zapis `guild_id` w [`lib/ai.mts`](bot/src/lib/ai.mts) i 7 komendach), obok mojego tymczasowego owner-gate na `/stats`. Dwie strategie tego samego rezyduum — ten przyrost je **godzi** w jedną (per-serwer, lepsza dla multi-tenant).
+  - **Panel:** [`getAiUsageToday`/`getAiUsageSeries`](dashboard/lib/faza4.ts) scoped przez `getPrimaryGuildId()` + `.eq('guild_id', gid)` (jak reszta analityki); usunięty **zbędny** owner-gate z [`/stats`](dashboard/app/stats/page.tsx) — per-serwer dane są bezpieczne dla tenanta (widzi SWÓJ serwer).
+  - **Efekt:** cała analityka `/stats` (XP/aktywność/retencja/AI/wzrost) jednolicie scoped per-serwer przez chokepoint; dzienny limit kosztów AI = per-serwer-per-użytkownik. F5 i jego rezydua zamknięte spójnie. [`SECURITY-REVIEW-MARKETPLACE.md`](docs/SECURITY-REVIEW-MARKETPLACE.md) zaktualizowany.
+  - *Proces:* `git add -A` w v0.300 zgarnął niezacommitowane zmiany równoległego zadania — stąd reconciliation. Bramki: biome czysto, dashboard `tsc` exit 0, smoke importu bota ✓, docs:check exit 0.
+
+## [0.300.0] — 🔐 Domknięcie rezyduów F5: `server_history` per-serwer + AI-usage (per-serwer migracja + przejściowy owner-gate) 🎉
 
 - `[#370]` 🔐 **Pełne zamknięcie luki F5 — pozostałe dwa źródła cross-tenant na `/stats` naprawione (milestone v0.300).**
   - **`server_history` → per-serwer.** Bot [`serverHistory.mts`](bot/src/analytics/serverHistory.mts) snapshotuje **każdy serwer osobno** do klucza `g:<guildId>:server_history` (zamiast jednego globalnego agregatu wszystkich serwerów); panel [`insights.ts`](dashboard/lib/insights.ts) czyta przez chokepoint (`getGuildRawSetting`). „Wzrost serwera" na `/stats` jest teraz scoped per-tenant.

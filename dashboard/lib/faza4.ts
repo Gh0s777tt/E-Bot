@@ -236,9 +236,11 @@ export async function getAiUsageToday(): Promise<{
   if (!hasSupabase) return empty;
   try {
     const day = new Date().toISOString().slice(0, 10);
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (ai_usage ma guild_id od v0.300)
     const { data, error } = await supabase()
       .from('ai_usage')
       .select('user_id,tokens_used,requests')
+      .eq('guild_id', gid)
       .eq('day', day)
       .order('tokens_used', { ascending: false })
       .limit(50);
@@ -316,9 +318,11 @@ export async function getAiUsageSeries(days = 14): Promise<DayPoint[]> {
   if (!hasSupabase) return skeleton();
   try {
     const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (ai_usage ma guild_id od v0.300)
     const { data, error } = await supabase()
       .from('ai_usage')
       .select('day,tokens_used,requests')
+      .eq('guild_id', gid)
       .gte('day', since);
     if (error) throw new Error(error.message);
     const map = new Map<string, { tokens: number; requests: number }>();

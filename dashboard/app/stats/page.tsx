@@ -28,7 +28,6 @@ import {
 import { getGuildMeta } from '../../lib/guild';
 import { getServerHistory } from '../../lib/insights';
 import { tp } from '../../lib/panelI18n';
-import { currentSession, resolveRole } from '../../lib/panelRoles';
 import { getCohortRetention } from '../../lib/retention';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
@@ -50,11 +49,6 @@ export default async function StatsPage({
 }) {
   const sp = await searchParams;
   const range = (RANGES as readonly number[]).includes(Number(sp?.range)) ? Number(sp.range) : 14;
-  // ai_usage jest GLOBALNY (budżet kosztów per-user) — pokazujemy go tylko właścicielowi instancji
-  // (owner/staff lub kontekst bez sesji = legacy single-instance). Tenant self-serve → bez danych AI
-  // (zero przecieku globalnych liczników; luka F5, Audyt #2).
-  const session = await currentSession();
-  const ownerView = !session?.uid || (await resolveRole(session.uid)) === 'admin';
   const [
     stats,
     aiSeries,
@@ -71,15 +65,8 @@ export default async function StatsPage({
     retention,
   ] = await Promise.all([
     getStats(),
-    ownerView ? getAiUsageSeries(range) : Promise.resolve([]),
-    ownerView
-      ? getAiUsageToday()
-      : Promise.resolve({
-          totalTokens: 0,
-          totalRequests: 0,
-          users: 0,
-          top: [] as { user_id: string; tokens_used: number; requests: number }[],
-        }),
+    getAiUsageSeries(range),
+    getAiUsageToday(),
     getLeaderboard(8),
     getTickets(200),
     getActivitySeries(range),
