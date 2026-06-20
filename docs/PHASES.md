@@ -1,4 +1,4 @@
-<!-- SYNC: v0.307.0 · #377 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.308.0 · #378 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.307.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.308.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.307.0)
+## 🔭 Bieżący tor (v0.308.0)
 
 **🌍🏁 i18n UI panelu — UKOŃCZONE** — etykiety i formularze **wszystkich** stron panelu przetłumaczone na **14 języków** (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR + RTL, ID). Powłoka panelu, pomoc „Jak to działa?" (37/37), web GameVault oraz wszystkie strony ustawień — komplet.
 
@@ -48,6 +48,7 @@
 - [ ] **Produkcyjne wpięcie infry** — szkielety **kompletne i gated** (audyt v0.265.0, przewodnik [`AKTYWACJA-INFRA.md`](AKTYWACJA-INFRA.md)): Sentry no-op bez `SENTRY_DSN`; Realtime z fallbackiem poll 60 s (aktywacja = `ALTER PUBLICATION … ADD TABLE settings`); Redis niewpięty (opcja na skalę). Aktywacja Sentry/Realtime wymaga **Twoich** zasobów
 - [ ] **Twitch sub → rola** — kod **kompletny + gotowy do aktywacji** (v0.264.0): runtime obsługuje `channel.subscribe`→rola, `eventsub-setup.mts` rejestruje obie subskrypcje, przewodnik [`AKTYWACJA-TWITCH-SUB.md`](AKTYWACJA-TWITCH-SUB.md). Aktywacja czeka na **Twoje** zasoby: aplikacja Twitch + OAuth broadcastera (scope `channel:read:subscriptions`)
 - [ ] **Sharding (skala >2500 serwerów)** — bot **shard-ready** (v0.302.0): audyt shard-safety + uodpornione globalne agregaty (`heartbeat` sumuje `broadcastEval`/pisze tylko shard 0; pollery tempban/temp-role pomijają obce serwery), opcjonalny [`shard.mts`](../bot/src/shard.mts) (`ShardingManager`, skrypt `shard`); przewodnik [`SHARDING.md`](SHARDING.md). Włączasz przy zbliżaniu się do progu
+- [ ] **Hardening po audycie całości (P0→P3)** — pełny **5-wymiarowy audyt** (bezpieczeństwo · zależności · kompletność · UX/wydajność · jakość/testy; werdykt: **0 podatności zależności, 0 TODO/stub, type-safety wzorowa**). **P0 w toku:** nagłówki bezpieczeństwa HTTP (CSP/HSTS/X-Frame/nosniff) w panelu + GameVault ✅ **v0.308.0** + anty-eskalacja `/roleperms`+`/rolecopy` ✅ **v0.308.0**; następne: bramka per-guild/instance-admin na globalnych configach z sekretami (self-serve), auth na `web/ /api/settings`, testy rdzenia bezpieczeństwa + E2E w CI
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -188,4 +189,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.307.0 (#377) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.308.0 (#378) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

@@ -105,6 +105,21 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     });
     return;
   }
+  // Anty-eskalacja: tylko owner, ktoś stojący w hierarchii NAD rolą i posiadający WSZYSTKIE
+  // nadawane uprawnienia może je przypisać (blokuje np. ManageRoles → stempel Administratora).
+  const isOwner = interaction.user.id === guild.ownerId;
+  if (!isOwner) {
+    const caller = await guild.members.fetch(interaction.user.id).catch(() => null);
+    const aboveRole = caller ? caller.roles.highest.comparePositionTo(role) > 0 : false;
+    const hasAllPerms = interaction.memberPermissions?.has(preset.perms) ?? false;
+    if (!aboveRole || !hasAllPerms) {
+      await interaction.reply({
+        content: t(locale, 'rolepreset.fail', { role: mention }),
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+  }
   try {
     await role.setPermissions(new PermissionsBitField(preset.perms));
     await interaction.reply({

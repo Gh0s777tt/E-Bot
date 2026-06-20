@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-377-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.307.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-378-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.308.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.308.0] — 🔐 Hardening P0 (audyt): nagłówki bezpieczeństwa HTTP + domknięcie eskalacji ról
+
+- `[#378]` 🔐 **Pierwszy przyrost z wdrożenia rekomendacji 5-wymiarowego audytu — dwa domknięcia bezpieczeństwa.**
+  - **Nagłówki bezpieczeństwa HTTP** w obu apkach Next.js ([`dashboard/next.config.mjs`](dashboard/next.config.mjs), [`web/next.config.mjs`](web/next.config.mjs)): `Content-Security-Policy` (`default-src 'self'`, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`; `'unsafe-eval'`/`ws:` tylko w dev pod HMR), `Strict-Transport-Security` (2 lata + `preload`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`. Wcześniej panel **nie miał żadnych** — ochrona przed clickjackingiem, ograniczenie powierzchni XSS i wymuszenie HTTPS. (CSP z `'unsafe-inline'` dla script/style — pełne CSP z nonce to osobny krok P2.)
+  - **Anty-eskalacja w `/roleperms` i `/rolecopy`** ([`bot/src/commands/roleperms.mts`](bot/src/commands/roleperms.mts), [`rolecopy.mts`](bot/src/commands/rolecopy.mts)): użytkownik z samym `ManageRoles` nie nada już roli uprawnień, których **sam nie posiada** (np. preset `admin` = Administrator), ani nie skopiuje roli z groźnymi bitami. Warunek: **owner** lub (hierarchia nad rolą **i** komplet nadawanych uprawnień u wywołującego). Bot wykonywał edycję swoimi uprawnieniami, omijając zabezpieczenie klienta Discord — zamknięte.
+  - **Bramki:** biome czysty, **bot `tsc` exit 0**, docs:check exit 0. Bez zmian w danych/i18n (komunikat odmowy reużywa `rolepreset.fail`).
 
 ## [0.307.0] — 🔎 Audyt całości + gotowość publiczna: poprawki spójności docs + pierwszy tag/release
 

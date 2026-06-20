@@ -56,6 +56,18 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await fail();
     return;
   }
+  // Anty-eskalacja: tylko owner, ktoś stojący w hierarchii NAD celem i posiadający WSZYSTKIE
+  // kopiowane uprawnienia może je przenieść (blokuje kopiowanie roli z Administratorem przez nie-admina).
+  const isOwner = interaction.user.id === guild.ownerId;
+  if (!isOwner) {
+    const caller = await guild.members.fetch(interaction.user.id).catch(() => null);
+    const aboveTarget = caller ? caller.roles.highest.comparePositionTo(tgt) > 0 : false;
+    const hasAllPerms = interaction.memberPermissions?.has(src.permissions) ?? false;
+    if (!aboveTarget || !hasAllPerms) {
+      await fail();
+      return;
+    }
+  }
   try {
     await tgt.edit({
       permissions: src.permissions,
