@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-359-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.289.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-360-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.290.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.290.0] — 🧩 M6c: pola endpoint/secret w formularzu zgłoszeń (domknięcie UI loop community)
+
+- `[#360]` 🧩 **Marketplace M6c — formularz zgłoszeń przyjmuje webhook (endpoint + sekret); UI loop community domknięty.**
+  - [`CommunitySubmitForm`](dashboard/components/CommunitySubmitForm.tsx): pola **Endpoint webhooka** (`type=url`, https) + **Sekret HMAC** (`type=password`, maskowany), opcjonalne (plugin wykonywalny vs sam wpis katalogowy). Trafiają do manifestu → orchestrator M6c (`invokePlugin`) je czyta.
+  - i18n: `ui.mkt.fEndpoint` + `ui.mkt.fSecret` — **28 wpisów** (2 × 14 języków), parytet zweryfikowany.
+  - **Pełny obieg community gotowy w UI**: autor zgłasza **wykonywalny** plugin → moderacja → włączenie per-serwer → owner-run wykonuje. Bramki: biome czysto (324), `tsc` exit 0, docs:check exit 0.
 
 ## [0.289.0] — 🧪 M6c: trigger produkcyjny — orchestrator + owner-run (REALNE wykonanie pluginu)
 

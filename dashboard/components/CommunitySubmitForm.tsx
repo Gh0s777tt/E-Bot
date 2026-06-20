@@ -12,8 +12,18 @@ type FormState = {
   description: string;
   version: string;
   homepage: string;
+  endpoint: string;
+  secret: string;
 };
-const EMPTY: FormState = { key: '', title: '', description: '', version: '', homepage: '' };
+const EMPTY: FormState = {
+  key: '',
+  title: '',
+  description: '',
+  version: '',
+  homepage: '',
+  endpoint: '',
+  secret: '',
+};
 
 export default function CommunitySubmitForm() {
   const { lang } = useLang();
@@ -34,6 +44,8 @@ export default function CommunitySubmitForm() {
       if (form.description) body.description = form.description;
       if (form.version) body.version = form.version;
       if (form.homepage) body.homepage = form.homepage;
+      if (form.endpoint) body.endpoint = form.endpoint;
+      if (form.secret) body.secret = form.secret;
       const r = await fetch('/api/community/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -127,6 +139,36 @@ export default function CommunitySubmitForm() {
             onChange={(e) => set('homepage', e.target.value)}
             maxLength={200}
             placeholder="https://..."
+          />
+        </div>
+      </div>
+      <div className="flex gap-3">
+        <div className="flex-1">
+          <label className={lbl} htmlFor="cp-endpoint">
+            {tp(lang, 'ui.mkt.fEndpoint')}
+          </label>
+          <input
+            id="cp-endpoint"
+            className={input}
+            type="url"
+            value={form.endpoint}
+            onChange={(e) => set('endpoint', e.target.value)}
+            maxLength={200}
+            placeholder="https://..."
+          />
+        </div>
+        <div className="flex-1">
+          <label className={lbl} htmlFor="cp-secret">
+            {tp(lang, 'ui.mkt.fSecret')}
+          </label>
+          <input
+            id="cp-secret"
+            className={input}
+            type="password"
+            value={form.secret}
+            onChange={(e) => set('secret', e.target.value)}
+            maxLength={200}
+            autoComplete="new-password"
           />
         </div>
       </div>

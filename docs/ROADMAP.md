@@ -1,4 +1,4 @@
-<!-- SYNC: v0.289.0 · #359 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.290.0 · #360 · 2026-06-19 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.289.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.290.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -78,7 +78,7 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 
 ## 🧭 Wzrost (plan / opcjonalne)
 
-- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild jako usługa. *Config* per‑serwer już jest (Etap K). **Decyzje: płatne (tiery) + community (3rd-party)** → pełny zakres M1–M6. **M1–M6 ✓ (bez sandboxa):** schemat + multi-tenant + chokepoint (v0.267–269) + katalog + strona + toggle (v0.270–272) + self-serve login + **onboarding** `/onboarding` (v0.273+279) + billing Stripe (v0.274–275) + community UI pipeline `/marketplace/submit`+`/review` (v0.276–278) + **i18n wszystkich powierzchni ×14** (onboarding/review/submit, v0.280–281) + **M3 config** (`plugin_config`=community; first-party bez migracji, v0.282.0) + **self-review bezpieczeństwa** (4 luki cross-tenant naprawione, v0.283.0; [`SECURITY-REVIEW-MARKETPLACE.md`](SECURITY-REVIEW-MARKETPLACE.md)) + **design sandboxa M6** ([`PLAN-M6-SANDBOX.md`](PLAN-M6-SANDBOX.md): webhook-first + capability, v0.284.0) + **M6a runner webhook** ([`lib/pluginRunner.ts`](../dashboard/lib/pluginRunner.ts): kontrakt + HMAC + SSRF-guard, v0.285.0) + **M6b wykonanie akcji** ([`lib/pluginExecutor.ts`](../dashboard/lib/pluginExecutor.ts) + [`lib/discordActions.ts`](../dashboard/lib/discordActions.ts): `setConfig`+`sendMessage`+`addRole` z per-akcja authz/anty-eskalacja, v0.286–287) + **M6c dry-run + trigger produkcyjny** ([`lib/pluginInvoke.ts`](../dashboard/lib/pluginInvoke.ts) + `/api/community/run`: orchestrator 6 warstw + owner-triggered realne wykonanie, v0.288–289). Plan: [`PLAN-MARKETPLACE.md`](PLAN-MARKETPLACE.md).
+- 🛒 **Marketplace / efekt sieciowy** — pluginy, multi‑guild jako usługa. *Config* per‑serwer już jest (Etap K). **Decyzje: płatne (tiery) + community (3rd-party)** → pełny zakres M1–M6. **M1–M6 ✓ (bez sandboxa):** schemat + multi-tenant + chokepoint (v0.267–269) + katalog + strona + toggle (v0.270–272) + self-serve login + **onboarding** `/onboarding` (v0.273+279) + billing Stripe (v0.274–275) + community UI pipeline `/marketplace/submit`+`/review` (v0.276–278) + **i18n wszystkich powierzchni ×14** (onboarding/review/submit, v0.280–281) + **M3 config** (`plugin_config`=community; first-party bez migracji, v0.282.0) + **self-review bezpieczeństwa** (4 luki cross-tenant naprawione, v0.283.0; [`SECURITY-REVIEW-MARKETPLACE.md`](SECURITY-REVIEW-MARKETPLACE.md)) + **design sandboxa M6** ([`PLAN-M6-SANDBOX.md`](PLAN-M6-SANDBOX.md): webhook-first + capability, v0.284.0) + **M6a runner webhook** ([`lib/pluginRunner.ts`](../dashboard/lib/pluginRunner.ts): kontrakt + HMAC + SSRF-guard, v0.285.0) + **M6b wykonanie akcji** ([`lib/pluginExecutor.ts`](../dashboard/lib/pluginExecutor.ts) + [`lib/discordActions.ts`](../dashboard/lib/discordActions.ts): `setConfig`+`sendMessage`+`addRole` z per-akcja authz/anty-eskalacja, v0.286–287) + **M6c dry-run + trigger produkcyjny** ([`lib/pluginInvoke.ts`](../dashboard/lib/pluginInvoke.ts) + `/api/community/run`: orchestrator 6 warstw + owner-triggered realne wykonanie, v0.288–289) + formularz endpoint/secret (**UI loop ✓**, v0.290.0). Plan: [`PLAN-MARKETPLACE.md`](PLAN-MARKETPLACE.md).
 - 📈 **Retencja + więcej wykresów w czasie** (`/stats`) — przyrosty 1–3 gotowe (v0.261–263): wzrost członków + komplet trendów + konfigurowalny zakres 7/14/30/90d + eksport CSV; dalej opcjonalnie kohortowa retencja.
 - 🧱 **Produkcyjna infra** — szkielety **kompletne + gated** (audyt v0.265.0, [`AKTYWACJA-INFRA.md`](AKTYWACJA-INFRA.md)): Sentry (env `SENTRY_DSN`), Realtime (`ALTER PUBLICATION … ADD TABLE settings`, fallback poll), Redis niewpięty (opcja na skalę).
 - 🔗 **Twitch sub → rola** — kod **kompletny + gotowy do aktywacji** (v0.264.0, `eventsub-setup.mts` rejestruje `channel.subscribe`, przewodnik `AKTYWACJA-TWITCH-SUB.md`); aktywacja wymaga aplikacji Twitch + OAuth broadcastera (`channel:read:subscriptions`).
@@ -87,4 +87,4 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.289.0 (#359) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑19 · v0.290.0 (#360) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
