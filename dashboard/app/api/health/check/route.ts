@@ -1,10 +1,19 @@
 // Faza 6 / B7 — cron (Vercel) sprawdza świeżość pulsu bota i alarmuje na Discord przy ZMIANIE stanu
 // (down/up). Dedup w settings 'bot_alert_state' → brak spamu. Opcjonalna ochrona CRON_SECRET.
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { getRawSetting, setRawSetting } from '../../../../lib/data';
 
 export const dynamic = 'force-dynamic';
 
 const DOWN_AFTER_MS = 180_000; // 3 nieudane pulsy (puls co 60 s)
+
+// Porównanie sekretu w czasie stałym — hash do stałej długości (32 B), więc nie wycieka ani długości,
+// ani treści `CRON_SECRET` przez timing odpowiedzi (inaczej `===` zdradza prefiks przy brute-force).
+function safeEqual(a: string, b: string): boolean {
+  const ah = createHash('sha256').update(a).digest();
+  const bh = createHash('sha256').update(b).digest();
+  return timingSafeEqual(ah, bh);
+}
 
 async function postDiscord(text: string): Promise<void> {
   const channelId =
@@ -25,7 +34,8 @@ export async function GET(request: Request): Promise<Response> {
   if (secret) {
     const auth = request.headers.get('authorization') || '';
     const key = new URL(request.url).searchParams.get('key') || '';
-    if (auth !== `Bearer ${secret}` && key !== secret) {
+    const bearer = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+    if (!safeEqual(bearer, secret) && !safeEqual(key, secret)) {
       return new Response('forbidden', { status: 403 });
     }
   }

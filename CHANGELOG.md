@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-390-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.320.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-391-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.321.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.321.0] — 🛡️ P0 (re-audyt): domknięcie strażników — SSRF IPv4-mapped + CRON_SECRET timing-safe
+
+- `[#391]` 🛡️ **Dwa obejścia strażników zamknięte (SSRF + side-channel czasowy).**
+  - **SSRF — IPv4-mapped IPv6** w [`isPrivateHost`](dashboard/lib/pluginRunner.ts): `https://[::ffff:127.0.0.1]` (loopback), `::ffff:169.254.169.254` (**metadata chmury!**), `::ffff:10/192.168/172.16.x` (prywatne) oraz `::` (unspecified) **omijały** SSRF-guard runnera pluginów — `new URL()` kanonikalizuje formę dotted do **hex** (`::ffff:7f00:1`), której reguły IPv4 nie łapały. Dodane wyłuskanie osadzonego IPv4 (dotted **i** hex) + reguła na `::`. Tabela testów SSRF rozszerzona o **5 wektorów** (vitest **20/20**; bez fixu failują).
+  - **CRON_SECRET — porównanie w czasie stałym** w [`health/check`](dashboard/app/api/health/check/route.ts): `===` na sekrecie zdradzał prefiks przez timing odpowiedzi (ułatwia brute-force). Zamienione na `timingSafeEqual` po `SHA-256` (stała długość 32 B — nie wycieka też długości sekretu). Ścieżki akceptacji (`Authorization: Bearer` **lub** `?key=`) zachowane.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, vitest **20/20**, docs:check exit 0.
 
 ## [0.320.0] — 🛡️ P0 (re-audyt): web/ resilience — koniec białego ekranu (safeGenres + granice błędu)
 

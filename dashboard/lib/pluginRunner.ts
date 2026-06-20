@@ -26,23 +26,39 @@ export const pluginResponseSchema = z.object({ actions: z.array(pluginActionSche
 // Literalne adresy prywatne/loopback/link-local/metadata. UWAGA: nie rozwiązuje DNS — pełna ochrona
 // (rebinding) wymaga egress-proxy z allowlistą (decyzja D3 w PLAN-M6-SANDBOX.md). To pierwsza warstwa.
 function isPrivateHost(host: string): boolean {
-  if (host === 'localhost' || host.endsWith('.localhost') || host.endsWith('.internal'))
-    return true;
+  // IPv4-mapped/-compatible IPv6 (::ffff:127.0.0.1, ::ffff:169.254.169.254, ::127.0.0.1) osadza adres
+  // IPv4 — wyłuskujemy go, inaczej reguły IPv4 niżej go nie złapią (klasyczny bypass SSRF na loopback/
+  // metadata). UWAGA: `new URL()` kanonikalizuje formę dotted do HEX (::ffff:7f00:1) — obsługujemy obie.
+  let h = host;
+  const dotted = h.match(/^::(?:ffff:)?((?:\d{1,3}\.){3}\d{1,3})$/i);
+  if (dotted) {
+    h = dotted[1];
+  } else {
+    const hex = h.match(/^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/i);
+    if (hex) {
+      const hi = Number.parseInt(hex[1], 16);
+      const lo = Number.parseInt(hex[2], 16);
+      h = `${(hi >> 8) & 0xff}.${hi & 0xff}.${(lo >> 8) & 0xff}.${lo & 0xff}`;
+    }
+  }
+
+  if (h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.internal')) return true;
   if (
-    host === '::1' ||
-    host.startsWith('fe80:') ||
-    host.startsWith('fc') ||
-    host.startsWith('fd')
+    h === '::1' ||
+    h === '::' || // unspecified — bind do wszystkich interfejsów (≈ 0.0.0.0)
+    h.startsWith('fe80:') ||
+    h.startsWith('fc') ||
+    h.startsWith('fd')
   ) {
     return true;
   }
   return (
-    /^127\./.test(host) ||
-    host === '0.0.0.0' ||
-    /^10\./.test(host) ||
-    /^192\.168\./.test(host) ||
-    /^169\.254\./.test(host) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(host)
+    /^127\./.test(h) ||
+    h === '0.0.0.0' ||
+    /^10\./.test(h) ||
+    /^192\.168\./.test(h) ||
+    /^169\.254\./.test(h) ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(h)
   );
 }
 

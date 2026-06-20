@@ -141,6 +141,11 @@ describe('isSafeEndpoint — SSRF-guard runnera pluginów', () => {
       'https://[::1]/x', // IPv6 loopback (po naprawie strip nawiasów)
       'https://[fc00::1]/x',
       'https://[fe80::1]/x',
+      'https://[::]/x', // unspecified (≈ 0.0.0.0)
+      'https://[::ffff:127.0.0.1]/x', // IPv4-mapped IPv6 loopback (URL kanonikalizuje → ::ffff:7f00:1)
+      'https://[::ffff:169.254.169.254]/x', // IPv4-mapped metadata chmury
+      'https://[::ffff:10.0.0.1]/x', // IPv4-mapped prywatny
+      'https://[::ffff:192.168.1.1]/x', // IPv4-mapped prywatny
     ]) {
       expect(isSafeEndpoint(u), u).toBe(false);
     }
