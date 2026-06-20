@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-374-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.304.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-375-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.305.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.305.0] — 🚀 Przewodnik wdrożenia + monitoring (Railway · Vercel · cron-job.org · Uptime.com)
+
+- `[#375]` 🚀 **Operacjonalizacja bez sekretów — wpięcie hostingu i monitoringu w istniejące endpointy.**
+  - Nowy [`docs/AKTYWACJA-DEPLOY.md`](docs/AKTYWACJA-DEPLOY.md): checklisty env dla **Railway** (bot: `start` vs `shard`, intencje, most pluginów) i **Vercel** (panel: Supabase/OAuth/`DASHBOARD_OWNER_IDS`/marketplace/Stripe/`CRON_SECRET`) + wiring **cron-job.org** i **Uptime.com**.
+  - **Bez nowego kodu** — monitoring/cron wpina się w GOTOWE endpointy: [`/api/health`](dashboard/app/api/health/route.ts) (200/503 wg świeżości pulsu bota → Uptime.com) i [`/api/health/check`](dashboard/app/api/health/check/route.ts) (alarm na Discord przy zmianie down/up, dedup, `CRON_SECRET` → cron-job.org).
+  - [`.env.example`](.env.example): dopisane `CRON_SECRET` + `BOT_STATUS_URL` (były w kodzie, brakowało w szablonie).
+  - **Zasada bezpieczeństwa (utrwalona w przewodniku):** sekrety i klucze API serwisów ustawiasz wyłącznie w panelach usług (Railway/Vercel/…), nigdy w repo ani czacie; wyciekłe — natychmiast rotować. Bramki: docs:check exit 0.
 
 ## [0.304.0] — 🔒 Bezpieczeństwo: undici → 6.27.0 (4 podatności Dependabota zamknięte)
 
