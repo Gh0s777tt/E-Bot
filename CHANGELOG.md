@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-389-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.319.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-390-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.320.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.320.0] — 🛡️ P0 (re-audyt): web/ resilience — koniec białego ekranu (safeGenres + granice błędu)
+
+- `[#390]` 🛡️ **GameVault przestaje padać CAŁĄ stroną przez jeden uszkodzony wiersz.**
+  - [`getGames`](web/lib/db.ts) parsował kolumnę `genres` inline `JSON.parse` — jeden uszkodzony JSON wywalał wyjątek w `.map()` i ubijał render **całej** strony (a `web/` nie miało żadnej granicy błędu → biały ekran). Dodany helper `safeGenres` (`try/catch → []`): uszkodzony wiersz degraduje się do braku gatunków zamiast zabić stronę.
+  - Dodane **granice błędu Next** (których `web/` w ogóle nie posiadało — w przeciwieństwie do panelu):
+    - [`error.tsx`](web/app/error.tsx) — granica trasy: komunikat + przycisk „Spróbuj ponownie" (`reset`) + log błędu do konsoli.
+    - [`global-error.tsx`](web/app/global-error.tsx) — ostateczna granica (gdy padnie nawet root layout): własne `<html>/<body>` ze stylami inline (Tailwind może być na tym poziomie niedostępny).
+  - **Bramki:** biome czysty, web `tsc` exit 0, docs:check exit 0. Happy-path zweryfikowany na żywo (preview `web/`: hero + półki „Kontynuuj granie"/„Najczęściej grane" renderują się z poprawnie sparsowanymi gatunkami).
 
 ## [0.319.0] — 🔭 P0 (re-audyt): captureError w krytycznych catch (billing + auth callback)
 

@@ -17,6 +17,18 @@ function resolveDbPath(): string {
 
 const DB_PATH = resolveDbPath();
 
+// Bezpieczne parsowanie kolumny `genres` (JSON) — uszkodzony wiersz degraduje się do [],
+// zamiast rzucać wyjątkiem i wywalać CAŁĄ stronę (brak error.tsx → biały ekran).
+function safeGenres(raw: unknown): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(String(raw));
+    return Array.isArray(parsed) ? (parsed as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function getGames(): Game[] {
   if (!existsSync(DB_PATH)) return [];
   const db = new DatabaseSync(DB_PATH);
@@ -24,7 +36,7 @@ export function getGames(): Game[] {
     const rows = db.prepare('SELECT * FROM games ORDER BY playtime_min DESC').all();
     return rows.map((r) => ({
       ...r,
-      genres: r.genres ? (JSON.parse(String(r.genres)) as string[]) : [],
+      genres: safeGenres((r as { genres?: unknown }).genres),
     })) as Game[];
   } finally {
     db.close();
