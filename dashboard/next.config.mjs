@@ -36,6 +36,15 @@ const securityHeaders = [
 export default {
   // React Compiler 1.0 — automatyczna memoizacja (mniej zbędnych re-renderów).
   reactCompiler: true,
+  // Allowlist zdalnych hostów obrazów — fundament pod migrację <img> → next/image (dziś NIEAKTYWNE:
+  // komponenty używają jeszcze <img>). Discord (awatary/ikony), IGDB (okładki wishlist), Steam (okładki).
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'cdn.discordapp.com' },
+      { protocol: 'https', hostname: 'images.igdb.com' },
+      { protocol: 'https', hostname: '**.steamstatic.com' },
+    ],
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },

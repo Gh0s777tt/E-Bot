@@ -2,16 +2,20 @@
 
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback } from 'react';
+import { isRtl } from '../lib/i18n';
 import type { Game } from '../lib/types';
 import Card from './Card';
-import { useT } from './LangProvider';
+import { useLang, useT } from './LangProvider';
 
 export default function Row({ title, items }: { title: string; items: Game[] }) {
   const tt = useT();
+  const lang = useLang();
+  // RTL (arabski): embla musi znać kierunek, inaczej drag i scrollPrev/Next działają odwrotnie.
   const [emblaRef, embla] = useEmblaCarousel({
     align: 'start',
     dragFree: true,
     containScroll: 'trimSnaps',
+    direction: isRtl(lang) ? 'rtl' : 'ltr',
   });
 
   const prev = useCallback(() => embla?.scrollPrev(), [embla]);
@@ -37,7 +41,7 @@ export default function Row({ title, items }: { title: string; items: Game[] }) 
           type="button"
           onClick={prev}
           aria-label={tt('row.prev')}
-          className="absolute left-0 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 items-center justify-center bg-black/50 px-2 text-3xl text-white opacity-0 transition group-hover/row:opacity-100 hover:bg-black/80 md:flex"
+          className="absolute start-0 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 items-center justify-center bg-black/50 px-2 text-3xl text-white opacity-0 transition group-hover/row:opacity-100 hover:bg-black/80 md:flex"
         >
           ‹
         </button>
@@ -45,7 +49,7 @@ export default function Row({ title, items }: { title: string; items: Game[] }) 
           type="button"
           onClick={next}
           aria-label={tt('row.next')}
-          className="absolute right-0 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 items-center justify-center bg-black/50 px-2 text-3xl text-white opacity-0 transition group-hover/row:opacity-100 hover:bg-black/80 md:flex"
+          className="absolute end-0 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 items-center justify-center bg-black/50 px-2 text-3xl text-white opacity-0 transition group-hover/row:opacity-100 hover:bg-black/80 md:flex"
         >
           ›
         </button>

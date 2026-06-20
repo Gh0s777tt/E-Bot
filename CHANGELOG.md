@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-396-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.326.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-397-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.327.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.327.0] — ↔️🖼️ P1 (domknięcie): embla RTL w GameVault + fundament images.remotePatterns
+
+- `[#397]` ↔️ **Karuzela GameVault działa poprawnie w RTL + allowlist obrazów gotowy pod next/image.**
+  - **Embla RTL** [`Row.tsx`](web/components/Row.tsx): brak `direction` powodował, że dla arabskiego drag oraz `scrollPrev`/`scrollNext` szły **odwrotnie**. Dodane `direction: isRtl(lang) ? 'rtl' : 'ltr'` + strzałki na klasach logicznych (`start-0`/`end-0` zamiast `left/right`) — lustrzane w RTL, **bez zmian w LTR**. Zweryfikowane na żywo (preview `web/`: półki „Kontynuuj granie"/„Najczęściej grane" renderują się, 0 błędów konsoli).
+  - **images.remotePatterns** w obu [`next.config.mjs`](web/next.config.mjs) (panel + GameVault) — allowlist zdalnych hostów obrazów (Discord / IGDB / `**.steamstatic.com`). **Fundament** pod migrację `<img>` → `next/image` (P2/P3); dziś nieaktywne (komponenty używają jeszcze `<img>`), ale zeruje koszt późniejszej migracji.
+  - 🏁 **Tier P1 z re-audytu domknięty:** rate-limit (v0.323) · engines (v0.324) · confirm() (v0.325) · testy izolacji (v0.326) · embla RTL + remotePatterns (v0.327).
+  - **Bramki:** biome czysty, web `tsc` exit 0, docs:check exit 0.
 
 ## [0.326.0] — 🧪 P1: testy izolacji multi-tenant — rygiel anty-IDOR
 

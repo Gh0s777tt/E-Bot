@@ -35,6 +35,14 @@ const securityHeaders = [
 export default {
   // React Compiler 1.0 — automatyczna memoizacja (mniej zbędnych re-renderów).
   reactCompiler: true,
+  // Allowlist zdalnych hostów obrazów — fundament pod migrację <img> → next/image (dziś okładki ładuje
+  // jeszcze <img> w CoverImg). Steam (cdn.cloudflare/shared.akamai.steamstatic.com) + IGDB (fallback).
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**.steamstatic.com' },
+      { protocol: 'https', hostname: 'images.igdb.com' },
+    ],
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
