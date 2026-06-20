@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-392-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.322.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-393-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.323.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.323.0] — 🛡️ P1: rate-limit publicznego sinku `/api/sentry` + wspólny helper
+
+- `[#393]` 🛡️ **Publicznego sinku błędów nie da się już zalać.**
+  - [`/api/sentry`](dashboard/app/api/sentry/route.ts) (niezalogowany — `error.tsx` renderuje się też pre-auth) przekazywał **każdy** POST do Sentry → wektor nabicia kosztu/quota i obciążenia pamięci. Dodany best-effort limit **10/min per IP** (429) + cap rozmiaru body **16 KB** (413).
+  - Wspólny helper [`lib/rateLimit.ts`](dashboard/lib/rateLimit.ts) (sliding-window + `clientIp`, z opportunistycznym czyszczeniem mapy) — [`/api/hook`](dashboard/app/api/hook/route.ts) zmigrowany z lokalnej kopii (dedup; klucze z prefiksem `sentry:`/`hook:`). Świadomie **per-instancja serverless** (pierwsza warstwa; twardy globalny limit = Redis/edge). **+2 testy vitest → 22/22.**
+  - `/api/auth/callback` **pominięty świadomie** — wymaga ważnego `code` od Discorda (słaby wektor floodu), a limit per IP blokowałby legalne logowania zza wspólnego NAT.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, vitest 22/22, docs:check exit 0.
 
 ## [0.322.0] — 🛡️ P0 (re-audyt): walidacja zod na globalnym configu integracji — KONIEC tieru P0
 

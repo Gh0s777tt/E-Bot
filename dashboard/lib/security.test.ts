@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { canManageGuild } from './auth';
 import { verifyStripeSignature } from './billing';
 import { isSafeEndpoint } from './pluginRunner';
+import { rateLimited } from './rateLimit';
 import { getAuthSecret, type Session, signSession, verifySession } from './session';
 
 const SECRET = 'test-secret-at-least-16-chars';
@@ -174,5 +175,18 @@ describe('canManageGuild — maska MANAGE_GUILD (0x20)', () => {
 
   it('niepoprawny permissions → false (bez wyjątku)', () => {
     expect(canManageGuild({ id: '1', name: 'g', permissions: 'xyz' })).toBe(false);
+  });
+});
+
+describe('rateLimited — best-effort sliding window (publiczne sinki)', () => {
+  it('przepuszcza do limitu, blokuje powyżej', () => {
+    expect(rateLimited('rl-test-a', 2)).toBe(false); // 1. żądanie
+    expect(rateLimited('rl-test-a', 2)).toBe(false); // 2.
+    expect(rateLimited('rl-test-a', 2)).toBe(true); // 3. > 2 → limit
+  });
+
+  it('różne klucze mają niezależne kubełki', () => {
+    expect(rateLimited('rl-test-b', 1)).toBe(false);
+    expect(rateLimited('rl-test-c', 1)).toBe(false); // inny klucz nie dziedziczy licznika
   });
 });

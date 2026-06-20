@@ -2,18 +2,11 @@
 // po weryfikacji tokenu bot wysyła wiadomość na skonfigurowany kanał. PUBLICZNE (proxy allowlist).
 // Hartowanie: cap rozmiaru body + best-effort rate-limit per token (per-instancja serverless).
 import { getWebhookRelay } from '../../../lib/integrations';
+import { rateLimited } from '../../../lib/rateLimit';
 
 export const dynamic = 'force-dynamic';
 
 const MAX_BODY = 16_384;
-const hits = new Map<string, number[]>();
-function rateLimited(token: string): boolean {
-  const now = Date.now();
-  const arr = (hits.get(token) ?? []).filter((t) => now - t < 60_000);
-  arr.push(now);
-  hits.set(token, arr);
-  return arr.length > 20; // maks 20 żądań/min na token
-}
 
 export async function POST(request: Request): Promise<Response> {
   const c = await getWebhookRelay();
@@ -41,7 +34,7 @@ export async function POST(request: Request): Promise<Response> {
   if (token !== c.token) {
     return Response.json({ ok: false, error: 'bad token' }, { status: 403 });
   }
-  if (rateLimited(token)) {
+  if (rateLimited(`hook:${token}`, 20)) {
     return Response.json({ ok: false, error: 'rate limited' }, { status: 429 });
   }
 
