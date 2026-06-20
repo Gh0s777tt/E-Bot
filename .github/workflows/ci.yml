@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch: # ręczne uruchomienie z zakładki Actions / `gh workflow run CI` (test bez dummy-commita)
 
 permissions:
   contents: read

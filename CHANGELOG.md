@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-375-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.305.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-376-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.306.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.306.0] — 🔁 CI: wyzwalacz `workflow_dispatch` (uruchamianie na żądanie)
+
+- `[#376]` 🔁 **CI da się teraz odpalić ręcznie — bez dummy-commita.**
+  - [`.github/workflows/ci.yml`](.github/workflows/ci.yml): do `on:` dodany `workflow_dispatch` — run z zakładki **Actions → Run workflow** albo `gh workflow run CI`. Przydatne do testu „czy CI działa" (np. po odblokowaniu Actions) i do ponownego odpalenia bramek bez pushy.
+  - Ten push służy też jako **świeży test** wykonywania Actions na publicznym repo (po incydencie z zawieszoną kolejką). Bramki: docs:check exit 0; reszta (biome/tsc/test) odpala się w samym CI.
 
 ## [0.305.0] — 🚀 Przewodnik wdrożenia + monitoring (Railway · Vercel · cron-job.org · Uptime.com)
 
