@@ -52,3 +52,9 @@ jobs:
         run: |
           pnpm --filter bot-dc-dashboard build
           pnpm --filter bot-dc-web build
+
+      - name: Przeglądarki Playwright (chromium)
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Testy E2E panelu (Playwright)
+        run: pnpm exec playwright test

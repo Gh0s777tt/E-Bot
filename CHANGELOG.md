@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-380-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.310.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-381-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.311.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.311.0] — 🧪 P1: testy rdzenia bezpieczeństwa (vitest) + E2E Playwright w CI + poprawka SSRF IPv6
+
+- `[#381]` 🧪 **Zabetonowanie rdzenia bezpieczeństwa testami — regresja nie przejdzie niezauważona.**
+  - **20 testów jednostkowych rdzenia** ([dashboard/lib/security.test.ts](dashboard/lib/security.test.ts)): HMAC sesji (round-trip, zły sekret, manipulacja body, wygaśnięcie, śmieć), `getAuthSecret` fail-closed (rzuca w prod bez sekretu), podpis webhooka Stripe (anti-forge + anti-replay 5 min + podmiana body), SSRF-guard runnera pluginów, maska `canManageGuild`. Czyste funkcje, **0 sieci/mocków**.
+  - **Poprawka SSRF wykryta testem** ([pluginRunner.ts](dashboard/lib/pluginRunner.ts)): hostname IPv6 z `new URL` ma nawiasy (`[::1]`), więc warunek `host === '::1'` **nigdy nie łapał** — strip nawiasów blokuje teraz loopback/link-local IPv6 (`[::1]`/`[fc00::]`/`[fe80::]`). (Mapowane `::ffff:127.0.0.1` to osobny, znany ogon → egress-proxy D3.)
+  - **E2E Playwright w CI** ([.github/workflows/ci.yml](.github/workflows/ci.yml)): krok `playwright install --with-deps chromium` + `playwright test` (5 gotowych specek: bramka logowania, `/api/health`, publiczne `/p/*` — odporne na stan danych). Wcześniej specki istniały, ale **martwe w pipeline**. Przy okazji naprawiona brittle asercja w [`public.spec.ts`](e2e/public.spec.ts): test `/p/u/[id]` hardkodował string i18n (`'Publiczny profil'`) → teraz status<500 + nagłówek (locale-agnostic, wierne intencji „bez crasha").
+  - **Bramki:** vitest **20/20** (nowy plik), biome czysty, dashboard `tsc` exit 0, docs:check exit 0. **E2E 5/5 lokalnie** (next dev + chromium).
 
 ## [0.310.0] — 🔐 Hardening P0 cz.3: bramka instance-admin na sekretach globalnych (Ko-fi, webhook-relay)
 

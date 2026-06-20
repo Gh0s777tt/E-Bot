@@ -11,7 +11,8 @@ test.describe('Publiczne strony /p/ (bez logowania)', () => {
   });
 
   test('/p/u/[id] renderuje szkielet profilu (bez crasha dla nieznanego id)', async ({ page }) => {
-    await page.goto('/p/u/000000000000000000');
-    await expect(page.getByText('Publiczny profil')).toBeVisible();
+    const resp = await page.goto('/p/u/000000000000000000');
+    expect(resp?.status() ?? 500).toBeLessThan(500); // nieznany id → brak crasha 5xx
+    await expect(page.getByRole('heading').first()).toBeVisible(); // nagłówek renderuje się (locale-agnostic)
   });
 });

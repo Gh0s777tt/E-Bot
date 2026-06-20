@@ -53,7 +53,10 @@ export function isSafeEndpoint(url: string): boolean {
   } catch {
     return false;
   }
-  return u.protocol === 'https:' && !isPrivateHost(u.hostname.toLowerCase());
+  // hostname IPv6 z URL ma nawiasy ([::1]) — zdejmujemy je, by isPrivateHost łapał loopback/link-local.
+  return (
+    u.protocol === 'https:' && !isPrivateHost(u.hostname.toLowerCase().replace(/^\[|\]$/g, ''))
+  );
 }
 
 // Podpis payloadu (HMAC-SHA256, hex) — autor weryfikuje nagłówkiem X-EBOT-Signature, że wywołanie
