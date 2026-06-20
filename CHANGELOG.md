@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-360-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.290.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-361-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.291.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.291.0] — 🧩 M6: toggle włączania community-pluginów per-serwer (PEŁNA pętla UI domknięta)
+
+- `[#361]` 🧩 **Marketplace M6 — włączanie pluginów community z panelu (`guild_plugins`); cała pętla UI działa.**
+  - Nowa trasa [`/api/community/toggle`](dashboard/app/api/community/toggle/route.ts): włącz/wyłącz plugin community na **bieżącym** serwerze (`guild_plugins`), scoped do `guild_id` przez chokepoint; proxy blokuje viewerów; włączyć można **tylko zatwierdzony** plugin.
+  - [`communityPlugins.ts`](dashboard/lib/communityPlugins.ts): `setGuildPluginEnabled` (upsert) + `getGuildCommunityStates` (stany do UI).
+  - [`MarketplaceGrid`](dashboard/components/MarketplaceGrid.tsx): toggle community **odblokowany** — first-party → `/api/modules`, community → `/api/community/toggle`. Strona scala stany first-party + community.
+  - **Pełna pętla UI domknięta**: zgłoszenie → moderacja → **włączenie z panelu** → owner-run wykonuje. Bramki: biome czysto (325), `tsc` exit 0, docs:check exit 0.
 
 ## [0.290.0] — 🧩 M6c: pola endpoint/secret w formularzu zgłoszeń (domknięcie UI loop community)
 

@@ -2,7 +2,7 @@
 
 // M2 — interaktywny katalog marketplace. Toggle first-party reużywa POST /api/modules
 // (ta sama, audytowana, chokepointem scope'owana ścieżka co Centrum sterowania). Community
-// (3rd-party) ma toggle wyłączony do czasu M6 (enable per-serwer przez `guild_plugins`).
+// (3rd-party) → POST /api/community/toggle (guild_plugins, scoped do serwera) — M6.
 import { Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -48,14 +48,17 @@ export default function MarketplaceGrid({
   const { lang } = useLang();
   const [states, setStates] = useState<Record<string, boolean>>(initial);
 
-  async function flip(key: string) {
+  async function flip(key: string, community: boolean) {
     const next = !states[key];
     setStates((s) => ({ ...s, [key]: next }));
     try {
-      const r = await fetch('/api/modules', {
+      // first-party → /api/modules (settings); community → /api/community/toggle (guild_plugins).
+      const url = community ? '/api/community/toggle' : '/api/modules';
+      const body = community ? { pluginKey: key, enabled: next } : { key, enabled: next };
+      const r = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key, enabled: next }),
+        body: JSON.stringify(body),
       });
       if (!r.ok) throw new Error('fail');
     } catch {
@@ -139,8 +142,8 @@ export default function MarketplaceGrid({
                       )}
                       <Toggle
                         on={!!states[p.key]}
-                        onClick={() => flip(p.key)}
-                        disabled={community || locked}
+                        onClick={() => flip(p.key, community)}
+                        disabled={locked}
                       />
                     </div>
                   </div>

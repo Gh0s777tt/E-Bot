@@ -152,3 +152,50 @@ export async function guildPluginEnabled(guildId: string, key: string): Promise<
     return false;
   }
 }
+
+// Włącz/wyłącz plugin community na serwerze (guild_plugins, idempotentny upsert).
+export async function setGuildPluginEnabled(
+  guildId: string,
+  pluginKey: string,
+  enabled: boolean,
+): Promise<boolean> {
+  if (!guildId || !pluginKey || !hasSupabase) return false;
+  try {
+    await supabase()
+      .from('guild_plugins')
+      .upsert(
+        [
+          {
+            guild_id: guildId,
+            plugin_key: pluginKey,
+            enabled,
+            enabled_at: enabled ? new Date().toISOString() : null,
+          },
+        ],
+        { onConflict: 'guild_id,plugin_key' },
+      );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Stany włączenia pluginów community na serwerze (mapa pluginKey → enabled) — do UI marketplace.
+export async function getGuildCommunityStates(guildId: string): Promise<Record<string, boolean>> {
+  if (!guildId || !hasSupabase) return {};
+  try {
+    const { data, error } = await supabase()
+      .from('guild_plugins')
+      .select('plugin_key,enabled')
+      .eq('guild_id', guildId);
+    if (error || !data) return {};
+    const out: Record<string, boolean> = {};
+    for (const r of data) {
+      const row = r as { plugin_key: string; enabled?: boolean };
+      out[row.plugin_key] = row.enabled === true;
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}

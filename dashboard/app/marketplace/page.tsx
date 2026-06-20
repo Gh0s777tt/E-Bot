@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import MarketplaceGrid from '../../components/MarketplaceGrid';
 import { billingEnabled, getGuildTier } from '../../lib/billing';
-import { communityEnabled } from '../../lib/communityPlugins';
+import { communityEnabled, getGuildCommunityStates } from '../../lib/communityPlugins';
 import { getPrimaryGuildId } from '../../lib/guild';
 import { getModuleStates } from '../../lib/moduleState';
 import { tp } from '../../lib/panelI18n';
@@ -11,20 +11,22 @@ import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
-// M2 — UI marketplace: katalog (first-party z kodu + community z DB) + interaktywny toggle
-// enable/disable per-serwer. M5 — gating tierów (premium na 'free' zablokowany). M6 — linki:
-// zgłoszenie pluginu (gdy community on) + moderacja (owner/staff). Stan first-party =
-// getModuleStates (per-serwer, przez chokepoint getPrimaryGuildId).
+// M2/M6 — UI marketplace: katalog (first-party z kodu + community z DB) + interaktywny toggle
+// enable/disable per-serwer (first-party → settings; community → guild_plugins). M5 — gating tierów.
+// Stan: getModuleStates (first-party) + getGuildCommunityStates (community), oba przez chokepoint.
 export default async function MarketplacePage() {
   const session = await currentSession();
   const isMod = session ? (await resolveRole(session.uid)) === 'admin' : false;
   const communityOn = communityEnabled();
-  const [catalog, states, tier, lang] = await Promise.all([
+  const guildId = await getPrimaryGuildId();
+  const [catalog, modStates, tier, comStates, lang] = await Promise.all([
     getPluginCatalog(),
     getModuleStates(),
-    getPrimaryGuildId().then(getGuildTier),
+    getGuildTier(guildId),
+    getGuildCommunityStates(guildId),
     getPanelLocale(),
   ]);
+  const states = { ...modStates, ...comStates };
   const linkCls = 'inline-flex items-center gap-1 text-xs text-accent transition hover:underline';
   return (
     <div className="space-y-6">
