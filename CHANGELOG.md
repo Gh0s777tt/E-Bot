@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-365-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.295.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-366-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.296.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.296.0] — 📘 M6: przewodnik aktywacji community + kontrakt webhooka + przykładowy plugin (kapstone)
+
+- `[#366]` 📘 **Marketplace M6 — pełna dokumentacja operacyjna: jak włączyć i jak napisać plugin.**
+  - Nowy [`docs/AKTYWACJA-COMMUNITY.md`](docs/AKTYWACJA-COMMUNITY.md): kroki aktywacji (env panel/bot), **rozróżnienie DWÓCH sekretów** (`PLUGIN_BRIDGE_SECRET` bot↔panel vs manifest `secret` panel↔autor), 6 warstw strażników, **kontrakt webhooka** (request `X-EBOT-Signature` HMAC-SHA256 + body `{event, guild_id, plugin_key, config, input}`; response `{actions:[…]}`, max 20), tabela akcji (`sendMessage`/`addRole`/`setConfig` z limitami i regułami authz), ładunki `input` per zdarzenie, **przykładowy plugin Node.js** (weryfikacja podpisu na surowym body) i ścieżka testu (dry-run → owner-run).
+  - [`.env.example`](.env.example): sekcja community wskazuje przewodnik (jak Stripe → `AKTYWACJA-STRIPE.md`).
+  - Dokument oparty 1:1 na kodzie ([`pluginRunner.ts`](dashboard/lib/pluginRunner.ts) + [`pluginExecutor.ts`](dashboard/lib/pluginExecutor.ts)) — kontrakt jest wykonywalny, nie teoretyczny. Czysto dokumentacyjny przyrost (zero zmian kodu). Bramki: docs:check exit 0.
 
 ## [0.295.0] — 🧩 M6: deklaracja triggera w formularzu zgłoszeń (event + keywords, i18n ×14) — pętla auto-triggera UI-domknięta
 
