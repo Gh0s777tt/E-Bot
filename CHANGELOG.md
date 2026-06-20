@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-361-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.291.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-362-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.292.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.292.0] — 🤖 M6: auto-trigger pluginów community z bota (most bot→panel — „żywa" pętla)
+
+- `[#362]` 🤖 **Marketplace M6 — auto-trigger: plugin community odpala się na realne zdarzenie Discorda.**
+  - **Most bot→panel** ([`bot/src/cloud/plugin-bridge.mts`](bot/src/cloud/plugin-bridge.mts)): cienki forwarder w bocie wysyła zdarzenie `guildMemberAdd` do panelu. Bot **NIE wykonuje obcego kodu** — żadnej logiki bezpieczeństwa do audytu po jego stronie. Domyślnie OFF (aktywne tylko z `PLUGIN_BRIDGE_URL` https + `PLUGIN_BRIDGE_SECRET`).
+  - **Endpoint wewnętrzny** [`/api/internal/plugin-event`](dashboard/app/api/internal/plugin-event/route.ts): uwierzytelnienie service-to-service (Bearer, sekret ≥16 zn., porównanie constant-time); bez sekretu/przy community OFF zwraca **404** (nie zdradza istnienia). Bot autorytatywny co do `guildId` — izolację daje sandbox.
+  - **Fan-out** [`invokeGuildEvent`](dashboard/lib/pluginInvoke.ts): dla serwera odpala WSZYSTKIE włączone+zatwierdzone pluginy, których manifest deklaruje to zdarzenie (`manifest.event`), każdy przez audytowany `invokePlugin` (6 warstw strażników — **zero duplikacji sandboxa**).
+  - Zdarzenie wpięte w [`index.mts`](bot/src/index.mts) przy `ClientReady`; boty pomijane (mniej szumu/amplifikacji). Bramki: biome czysto, dashboard `tsc` exit 0, smoke importu bota ✓, docs:check exit 0.
 
 ## [0.291.0] — 🧩 M6: toggle włączania community-pluginów per-serwer (PEŁNA pętla UI domknięta)
 
