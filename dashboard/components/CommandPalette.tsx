@@ -12,11 +12,12 @@ import {
   Type,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { navLabel, tp } from '../lib/panelI18n';
 import { tierVisible } from '../lib/viewMode';
 import { useLang } from './LangContext';
 import { NAV_ITEMS } from './nav-items';
+import { useFocusTrap } from './useFocusTrap';
 import { useViewMode } from './ViewModeContext';
 
 type Cmd = {
@@ -65,6 +66,7 @@ export default function CommandPalette() {
   const [idx, setIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const commands = useMemo<Cmd[]>(() => {
     const goto = tp(lang, 'ui.groupGoto');
@@ -166,6 +168,11 @@ export default function CommandPalette() {
     }
   }, [open]);
 
+  // Focus-trap + przywrócenie focusu na zamknięcie (Escape już obsługuje globalny listener wyżej —
+  // tu domykamy brakujące: Tab krąży wewnątrz dialogu, focus wraca na element wyzwalający).
+  const close = useCallback(() => setOpen(false), []);
+  useFocusTrap(dialogRef, open, close);
+
   if (!open) return null;
 
   function exec(c?: Cmd) {
@@ -203,7 +210,12 @@ export default function CommandPalette() {
       onMouseDown={() => setOpen(false)}
     >
       <div
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-card shadow-2xl"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={tp(lang, 'ui.cmdPlaceholder')}
+        tabIndex={-1}
+        className="w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-card shadow-2xl outline-none"
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 border-b border-line px-4">

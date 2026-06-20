@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-386-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.316.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-387-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.317.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.317.0] — ♿ P2 a11y: focus-trap + semantyka dialogu na CommandPalette (Cmd+K)
+
+- `[#387]` ♿ **Drugi overlay z pełną semantyką dialogu — paleta komend.**
+  - [`CommandPalette`](dashboard/components/CommandPalette.tsx) (Cmd/Ctrl+K) używa [`useFocusTrap`](dashboard/components/useFocusTrap.ts): dodany **focus-trap** (Tab/Shift+Tab krąży wewnątrz) + **przywrócenie focusu** na zamknięcie. Dialog dostał `role="dialog"` + `aria-modal="true"` + `aria-label`. Istniejące Escape (globalny listener) i auto-focus inputu zostają — hook dokłada tylko brakujące warstwy, **bez konfliktu** ze strzałkami/Enter (te obsługuje input).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0. Interakcja zweryfikowana przeglądem kodu (overlay za auth; preview server to `web/`).
 
 ## [0.316.0] — ♿ P2 a11y: prymityw dialogu (focus-trap) + semantyka MobileNav
 
