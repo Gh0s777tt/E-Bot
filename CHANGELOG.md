@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-381-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.311.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-382-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.312.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.312.0] — 🔐 Hardening „ogon" #2: bramka instance-admin na 4 globalnych configach
+
+- `[#382]` 🔐 **Domknięcie clobberu globalnych configów w self-serve — kolejne 4 trasy instance-wide.**
+  - Zapis (POST) bramkowany `isInstanceAdminRequest` na: [`/api/integrations`](dashboard/app/api/integrations/route.ts) (aiProvider/aiModel + flagi integracji), [`/api/ai-config`](dashboard/app/api/ai-config/route.ts) (limity/model), [`/api/locale`](dashboard/app/api/locale/route.ts) (język bota **wymuszony dla całej instancji**), [`/api/bot/presence`](dashboard/app/api/bot/presence/route.ts) (status bota). Wcześniej tenant-admin self-serve mógł nadpisać te wspólne ustawienia całej instancji.
+  - **GET pozostaje otwarty** — te configi **nie zawierają sekretów** (te są w env), więc odczyt jest nieszkodliwy i nie psuje UI tylko-do-odczytu. (Inaczej niż Ko-fi/webhook-relay, gdzie GET ujawniał token → tam bramkowany też GET.)
+  - **Świadomie poza zakresem:** trasy per-serwer błędnie piszące globalnie (`setup/*`, social_feeds, scheduled_posts, creator) wymagają konwersji na klucze `g:<guildId>:` + synchronizacji z botem — osobny, ostrożny przyrost (ryzyko zmian po stronie bota).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.311.0] — 🧪 P1: testy rdzenia bezpieczeństwa (vitest) + E2E Playwright w CI + poprawka SSRF IPv6
 
