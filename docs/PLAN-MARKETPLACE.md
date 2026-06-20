@@ -21,7 +21,7 @@
 - ✅ **GuildSwitcher** + `panel_guild` cookie + `getPrimaryGuildId()` — przełączanie kontekstu serwera (dziś dla serwerów bota).
 - ✅ **Auth**: Discord OAuth + `DASHBOARD_OWNER_IDS` (model **jednowłaścicielski**).
 - ✅ **Supabase** (`settings` key-value) + Realtime push + i18n 14 jęz. + RTL.
-- ✅ **~95 komend / ~40 usług** = gotowy katalog funkcji do „opluginowania".
+- ✅ **~95 komend / 59 usług** = gotowy katalog funkcji do „opluginowania".
 
 ## 🧩 Luki do „SaaS multi-guild"
 

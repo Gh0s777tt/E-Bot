@@ -1,7 +1,7 @@
 // Krótkie opisy „co robi / po co / kiedy włączyć" dla każdej strony panelu.
 // Renderowane automatycznie pod tytułem w GlobalPageHeader (klucz = ścieżka = href z nav-items).
 // Cel: użytkownik od razu rozumie, do czego służy moduł — bez zaglądania do dokumentacji.
-// (Panel jest na razie po polsku; i18n UI panelu to osobny etap.)
+// To baza PL — tłumaczenia 13 języków + fallback w lib/pageInfo.i18n.ts (helper `pageDesc`).
 export const PAGE_INFO: Record<string, string> = {
   '/setup':
     'Kreator startowy — od pustego serwera do gotowej konfiguracji w kilku krokach. Najlepsze miejsce, by zacząć.',

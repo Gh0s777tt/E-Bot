@@ -1,4 +1,4 @@
-<!-- SYNC: v0.327.0 · #397 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.328.0 · #398 · 2026-06-20 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🗺️ ROADMAPA &nbsp;·&nbsp; E‑BOT
@@ -7,7 +7,7 @@
 ![Etapy](https://img.shields.io/badge/etapy_A–K-ukończone-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Bot](https://img.shields.io/badge/bot-LIVE_24%2F7-E50914?style=for-the-badge&logo=railway&labelColor=0a0a0a)
 ![i18n](https://img.shields.io/badge/i18n-14_języków-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.327.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.328.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -60,7 +60,7 @@ gantt
 
 ## ✅ Zrealizowane — stan na v0.222
 
-Stack zmodernizowany (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler · pnpm · Biome · Zod), branding GH0ST, panel na Vercel (**e‑bot‑dc.vercel.app**), **bot 24/7 na Railway**, ~95 slash‑komend, ~40 usług w tle, tabele Supabase, integracja GH0ST (`/link`, `link-status`). Pełen zestaw: moderacja + bezpieczeństwo (anti‑nuke/anti‑raid/heat/automod/weryfikacja/modmail/logi), leveling+ekonomia (eco/sklep/giełda/pety/karty), tickety, AI (czat/vision/moderacja/`/imagine`), powiadomienia live + EventSub, biblioteka gier 2.0, narzędzia twórcy, Architekt serwera, **config per‑serwer** oraz **i18n bota w 14 językach** (komendy + runtime).
+Stack zmodernizowany (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler · pnpm · Biome · Zod), branding GH0ST, panel na Vercel (**e‑bot‑dc.vercel.app**), **bot 24/7 na Railway**, ~95 slash‑komend, 59 usług w tle, tabele Supabase, integracja GH0ST (`/link`, `link-status`). Pełen zestaw: moderacja + bezpieczeństwo (anti‑nuke/anti‑raid/heat/automod/weryfikacja/modmail/logi), leveling+ekonomia (eco/sklep/giełda/pety/karty), tickety, AI (czat/vision/moderacja/`/imagine`), powiadomienia live + EventSub, biblioteka gier 2.0, narzędzia twórcy, Architekt serwera, **config per‑serwer** oraz **i18n bota w 14 językach** (komendy + runtime).
 
 ```mermaid
 flowchart LR
@@ -88,4 +88,4 @@ Etykiety/formularze **wszystkich** stron panelu przetłumaczone na 14 języków 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.327.0 (#397) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑06‑20 · v0.328.0 (#398) · powiązane: <a href="PHASES.md">PHASES</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-397-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.327.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-398-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.328.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.328.0] — 🧹 P3 (kosmetyka docs/kodu): spójność liczby usług + martwe komentarze i18n + dedup README
+
+- `[#398]` 🧹 **Audyt dokumentów — usunięte realne niespójności.**
+  - **Liczba usług ujednolicona:** live docs (CLAUDE/README/PLAN-MARKETPLACE/SHARDING/ROADMAP) podawały `~40 usług`, a audyt v0.307 policzył **59**. README miał wewnętrzną sprzeczność (wiersz 57: `~40` vs blurb: `59`). Wyrównane do audytowych **59 usług w tle**. CHANGELOG = historia → nietknięty.
+  - **Martwe komentarze i18n:** [`pageInfo.ts`](dashboard/lib/pageInfo.ts) i [`howItWorks.ts`](dashboard/lib/howItWorks.ts) twierdziły, że i18n tej treści to „osobny etap / osobna fala", choć są już `pageInfo.i18n.ts` (13 jęz. + `pageDesc`) oraz `howItWorksI18n.ts`. Komentarze zaktualizowane na wskaźniki do plików tłumaczeń.
+  - **Dedup README:** zdublowane zdanie w blurbie „Changelog" (infra/Twitch/`/stats`, v0.263–265) usunięte.
+  - **Bramki:** biome czysty, docs:check exit 0.
 
 ## [0.327.0] — ↔️🖼️ P1 (domknięcie): embla RTL w GameVault + fundament images.remotePatterns
 

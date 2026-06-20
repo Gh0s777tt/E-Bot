@@ -1,7 +1,7 @@
 // Etap K — „Jak to działa?": pełny, ludzki opis każdej funkcji (co robi · po co · co musi być
 // włączone · jakie uprawnienia bota i DLACZEGO · wskazówki). Renderowany rozwijanym panelem pod
 // nagłówkiem strony (HowItWorks.tsx), klucz = ścieżka = href z nav-items. Treść PL (bazowo, jak
-// pageInfo); i18n tej treści to osobna fala.
+// pageInfo); tłumaczenia 13 języków w lib/howItWorksI18n.ts.
 export type Perm = { perm: string; why: string };
 export type HowEntry = {
   does: string;

@@ -1,7 +1,7 @@
 # CLAUDE.md — E‑BOT (GH0ST EMPIRE)
 
 Monorepo **pnpm**. Pakiety:
-- `bot/` — Discord (discord.js v14), ~95 slash‑komend, ~40 usług w tle, **i18n 14 języków**, SQLite.
+- `bot/` — Discord (discord.js v14), ~95 slash‑komend, 59 usług w tle, **i18n 14 języków**, SQLite.
 - `dashboard/` — panel Next.js (React 19 / Tailwind 4 / TS 6) → Vercel + Supabase.
 - `web/` — „GameVault" (Netflix dla gier), osobny Next.js.
 - `ingest/` — kolektory Steam · PSN · GOG · IGDB → SQLite/Supabase.

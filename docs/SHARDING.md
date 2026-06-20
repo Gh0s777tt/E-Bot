@@ -32,7 +32,7 @@ flowchart TB
   S1 -->|serwery 1,N+1…| DC
 ```
 
-**Każdy serwer trafia na dokładnie jeden shard.** Dlatego praca **per-serwer** (iteracja `client.guilds.cache.values()` w ~40 usługach: powitania, automod, leveling, analytics, liczniki…) działa pod shardingiem bez zmian — każdy shard obsługuje swój podzbiór.
+**Każdy serwer trafia na dokładnie jeden shard.** Dlatego praca **per-serwer** (iteracja `client.guilds.cache.values()` w 59 usługach: powitania, automod, leveling, analytics, liczniki…) działa pod shardingiem bez zmian — każdy shard obsługuje swój podzbiór.
 
 ## 🛡️ Co zostało uodpornione (v0.302.0)
 
