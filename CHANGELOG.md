@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-373-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.303.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-374-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.304.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.304.0] — 🔒 Bezpieczeństwo: undici → 6.27.0 (4 podatności Dependabota zamknięte)
+
+- `[#374]` 🔒 **Załatane 4 alerty Dependabota — wszystkie z jednego transitywnego pakietu `undici`.**
+  - `undici@6.24.1` (z `@discordjs/rest` → discord.js) miał 4 GHSA: **WebSocket DoS przez fragment-count bypass (high)**, HTTP header injection przez Set-Cookie percent-decoding (medium), Set-Cookie SameSite downgrade (low), response queue poisoning przez keep-alive (low). Wszystkie naprawione w **6.27.0**.
+  - **Fix:** override `undici: '^6.27.0'` w [`pnpm-workspace.yaml`](pnpm-workspace.yaml) (pnpm 11 czyta overrides tam, nie w package.json — jak istniejący override `postcss`). Ten sam major 6 → zgodne z discord.js; `pnpm why` potwierdza dedup na **6.27.0**.
+  - **Weryfikacja:** import discord.js OK (REST ładuje się z nowym undici), **46/46 testów vitest** zielonych. Zero zmian w kodzie źródłowym. Bramki: docs:check exit 0.
 
 ## [0.303.0] — 🧪 Bramka typów dla bota: `tsc` + biome w CI (14 błędów typów naprawionych)
 
