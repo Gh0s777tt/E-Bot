@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-385-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.315.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-386-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.316.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.316.0] — ♿ P2 a11y: prymityw dialogu (focus-trap) + semantyka MobileNav
+
+- `[#386]` ♿ **Pierwszy modal z prawdziwą semantyką dialogu i pułapką focusu.**
+  - Nowy reużywalny hook [`useFocusTrap`](dashboard/components/useFocusTrap.ts): po otwarciu focus wchodzi do dialogu, **Escape** zamyka, **Tab/Shift+Tab** krąży WEWNĄTRZ (focus-trap), po zamknięciu focus wraca na element wyzwalający (stabilny `onClose` przez `useCallback`).
+  - Zastosowany w [`MobileNav`](dashboard/components/MobileNav.tsx): drawer dostał `role="dialog"` + `aria-modal="true"` + `aria-label`, hamburger — `aria-expanded` + `aria-controls`. Wcześniej **0× semantyki dialogu** w panelu (audyt) — użytkownik klawiatury/czytnika „uciekał" do tła. To **wzorzec do rozszerzenia** na resztę overlayów (CommandPalette, Assistant, MobileGuildSwitcher…).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0. Interakcja zweryfikowana przeglądem kodu (logika standardowa; blast-radius = tylko mobile `md:hidden`).
 
 ## [0.315.0] — ⚡ P2 UX/perf: GuildSwitcher bez reloadu (router.refresh) + loading.tsx serwerowy
 
