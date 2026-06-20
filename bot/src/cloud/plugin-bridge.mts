@@ -39,8 +39,12 @@ export function startPluginBridge(client: Client): void {
     log.info('plugin-bridge: brak PLUGIN_BRIDGE_URL/SECRET (https) — pominięto');
     return;
   }
-  // Pierwsze zdarzenie reaktywne: nowy członek serwera (kanoniczny trigger powitań/community).
-  // Pomijamy boty — mniej szumu i mniejsza amplifikacja przy raidach.
+  // Forwardujemy WYŁĄCZNIE zdarzenia o ograniczonej częstotliwości — cykl życia członka.
+  // Wysokoczęstotliwościowe (messageCreate / reakcje / voice) świadomie pomijamy: bez filtra
+  // subskrypcji po stronie panelu zalałyby endpoint (każde = round-trip + odczyt Supabase).
+  // To osobny, przyszły temat (keyword-subscription). Boty pomijamy (mniej szumu/amplifikacji).
+
+  // Nowy członek (powitania / role startowe).
   client.on(Events.GuildMemberAdd, (member) => {
     if (member.user.bot) return;
     void sendEvent('guildMemberAdd', member.guild.id, {
@@ -48,5 +52,28 @@ export function startPluginBridge(client: Client): void {
       username: member.user.username,
     });
   });
-  log.info('plugin-bridge: aktywny (guildMemberAdd → panel)');
+
+  // Odejście członka (pożegnania / sprzątanie).
+  client.on(Events.GuildMemberRemove, (member) => {
+    if (member.user.bot) return;
+    void sendEvent('guildMemberRemove', member.guild.id, {
+      userId: member.id,
+      username: member.user.username,
+    });
+  });
+
+  // Boost: guildMemberUpdate odpala się często, ale forwardujemy TYLKO przejście w boost
+  // (premiumSince: brak → ustawione) — rzadkie i wartościowe („dziękujemy za boost").
+  // Partial-oldMember pomijamy: nie znamy poprzedniego stanu → ryzyko fałszywego triggera.
+  client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
+    if (oldMember.partial) return;
+    const startedBoosting = !oldMember.premiumSince && !!newMember.premiumSince;
+    if (!startedBoosting || newMember.user.bot) return;
+    void sendEvent('guildBoost', newMember.guild.id, {
+      userId: newMember.id,
+      username: newMember.user.username,
+    });
+  });
+
+  log.info('plugin-bridge: aktywny (guildMemberAdd/Remove/Boost → panel)');
 }

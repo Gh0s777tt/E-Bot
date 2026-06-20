@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-362-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.292.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-363-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.293.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.293.0] — 📡 M6: most pluginów — więcej zdarzeń (odejście + boost) z bezpieczeństwem częstotliwości
+
+- `[#363]` 📡 **Marketplace M6 — most bot→panel forwarduje pełen cykl życia członka.**
+  - [`plugin-bridge.mts`](bot/src/cloud/plugin-bridge.mts): dołożone zdarzenia **`guildMemberRemove`** (pożegnania/sprzątanie) i **`guildBoost`** (podziękowania za boost). Boost wykrywany z `guildMemberUpdate` **tylko** na przejściu `premiumSince: brak → ustawione`; partial-oldMember pomijany (brak fałszywych triggerów).
+  - **Bezpieczeństwo częstotliwości**: forwardujemy WYŁĄCZNIE zdarzenia o ograniczonej częstotliwości (cykl życia członka). Wysokoczęstotliwościowe (`messageCreate`/reakcje/voice) świadomie pominięte — bez filtra subskrypcji po stronie panelu zalałyby endpoint (każde = round-trip + odczyt Supabase). To osobny, przyszły temat (keyword-subscription).
+  - Bez zmian po stronie panelu — [`invokeGuildEvent`](dashboard/lib/pluginInvoke.ts) jest event-agnostyczny (dopasowuje `manifest.event` po nazwie); autor pluginu deklaruje `guildMemberRemove`/`guildBoost` w manifeście. Bramki: biome czysto, smoke importu mostu ✓, docs:check exit 0.
 
 ## [0.292.0] — 🤖 M6: auto-trigger pluginów community z bota (most bot→panel — „żywa" pętla)
 
