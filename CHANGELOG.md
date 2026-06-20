@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-387-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.317.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-388-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.318.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.318.0] — 🔐 P0 (re-audyt): IDOR — scope per-serwer na shop/tickets
+
+- `[#388]` 🔐 **Zamknięcie realnej luki IDOR wykrytej w re-audycie — tenant nie tknie cudzych danych.**
+  - Trzy zapytania Supabase działały po samym `id` bez `guild_id`, a klucz `service_role` **omija RLS** → tenant serwera A mógł skasować/odczytać dane serwera B:
+    - [`removeShopItem`](dashboard/lib/serverEconomy.ts) (DELETE itemu sklepu) — dodany `.eq('guild_id', gid)`,
+    - [`getTickets`](dashboard/lib/faza4.ts) (**ODCZYT — przeciekał cudze tickety!**) — dodany scope `getPrimaryGuildId`,
+    - [`closeTicket`](dashboard/lib/faza4.ts) (zamknięcie ticketu) — dodany `.eq('guild_id', gid)`.
+  - Wzorzec zgodny z resztą pliku (`getShopItems`/`addShopItem` już scoped). Tabela `tickets` ma `guild_id NOT NULL` ([faza4-schema.sql](dashboard/scripts/faza4-schema.sql)) — filtr bezpieczny.
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.317.0] — ♿ P2 a11y: focus-trap + semantyka dialogu na CommandPalette (Cmd+K)
 

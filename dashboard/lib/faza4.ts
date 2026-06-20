@@ -154,11 +154,14 @@ export type TicketRow = {
 export async function getTickets(limit = 100): Promise<TicketRow[]> {
   if (!hasSupabase) return [];
   try {
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (anty-przeciek tenantów)
+    if (!gid) return [];
     const { data, error } = await supabase()
       .from('tickets')
       .select(
         'id,channel_id,user_id,username,subject,status,claimed_by,created_at,closed_at,rating',
       )
+      .eq('guild_id', gid)
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);
@@ -180,10 +183,13 @@ export function ticketStats(rows: TicketRow[]): { open: number; claimed: number;
 export async function closeTicket(id: string): Promise<boolean> {
   if (!hasSupabase) return false;
   try {
+    const gid = await getPrimaryGuildId(); // anty-IDOR: tylko ticket z bieżącego serwera
+    if (!gid) return false;
     const { error } = await supabase()
       .from('tickets')
       .update({ status: 'closed', closed_at: new Date().toISOString() })
       .eq('id', id)
+      .eq('guild_id', gid)
       .neq('status', 'closed');
     if (error) throw new Error(error.message);
     return true;

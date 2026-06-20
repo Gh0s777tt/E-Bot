@@ -150,6 +150,9 @@ export async function addShopItem(item: ShopItemInput): Promise<{ ok: boolean; e
 
 export async function removeShopItem(id: string): Promise<{ ok: boolean; error?: string }> {
   if (!hasSupabase) return { ok: false, error: 'Brak Supabase' };
-  const { error } = await supabase().from('economy_shop').delete().eq('id', id);
+  const gid = await getPrimaryGuildId();
+  if (!gid) return { ok: false, error: 'Brak serwera' };
+  // Anty-IDOR: usuwa TYLKO item z bieżącego serwera (service_role omija RLS → scope w aplikacji).
+  const { error } = await supabase().from('economy_shop').delete().eq('id', id).eq('guild_id', gid);
   return error ? { ok: false, error: error.message } : { ok: true };
 }
