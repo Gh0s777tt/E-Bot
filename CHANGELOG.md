@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-368-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.298.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-369-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.299.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.299.0] — 🔐 Audyt #2 + naprawa F5: scoping analityki `/stats` (anty-przeciek cross-tenant)
+
+- `[#369]` 🔐 **Self-review nowych torów (most pluginów + retencja) — znaleziona i naprawiona luka cross-tenant na `/stats`.**
+  - **F5 (High):** analityka `/stats` — [`getLeaderboard`](dashboard/lib/faza4.ts)/`getTopActiveUsers`/`getHourlyActivity`/`getActivitySeries` + nowe [`getCohortRetention`](dashboard/lib/retention.ts) — czytała Supabase **bez `.eq('guild_id', …)`** (agregat WSZYSTKICH serwerów). Wzorzec panelu to chokepoint na danych, nie gate trasy → przy `MARKETPLACE_SELF_SERVE=1` tenant widział XP/aktywność/retencję **cudzych** serwerów.
+  - **Naprawa:** każda z 5 funkcji scoped przez `getPrimaryGuildId()` + `.eq('guild_id', gid)` (jak reszta panelu); `gid=''` → fail-closed. Eksport CSV scoped automatycznie. **To wyrównuje `/stats` do reszty panelu** (per wybrany serwer, nie globalny agregat).
+  - **Zweryfikowane jako bezpieczne:** most `/api/internal/*` (Bearer + constant-time + sekret ≥16 + 404 default), fan-out `invokeGuildEvent` (plugin zatwierdzony I włączony na TYM serwerze), filtr keywordów, tracking kohort (snowflake'y numeryczne → brak injekcji).
+  - **Rezydua (follow-up po stronie bota):** `ai_usage` (brak `guild_id`), `server_history` (globalny setting) — udokumentowane w [`SECURITY-REVIEW-MARKETPLACE.md`](docs/SECURITY-REVIEW-MARKETPLACE.md) (sekcja „Audyt #2"). Bramki: biome czysto, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.298.0] — 📊 Retencja kohortowa: wykres D1/D7/D30 na `/stats` (tor domknięty)
 

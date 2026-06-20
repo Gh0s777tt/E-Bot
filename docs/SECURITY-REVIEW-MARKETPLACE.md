@@ -52,4 +52,31 @@ przestało być prawdziwe. Rozróżnienie: **rola sesji** (admin tenanta) ≠ **
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Self-review · v0.283.0 · powiązane: <a href="PLAN-MARKETPLACE.md">PLAN-MARKETPLACE</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>
+
+## 🔁 Audyt #2 — most pluginów (auto-trigger) + retencja (v0.299.0)
+
+Adwersarialny przegląd kodu z v0.292–298: most bot→panel (`/api/internal/*`), fan-out wykonujący pluginy community, tracking kohort, wykres retencji. Realizuje też rekomendację z Audytu #1 (sprawdzenie stron „admin-only" pod kątem guild-scope).
+
+### 🔴 Znalezione i naprawione
+
+| # | Sev | Luka | Naprawa |
+|:--:|:--:|---|---|
+| **F5** | High | Analityka `/stats` (`getLeaderboard`/`getTopActiveUsers`/`getHourlyActivity`/`getActivitySeries` + nowe `getCohortRetention`) czytała Supabase **bez `.eq('guild_id', …)`** → agregat WSZYSTKICH serwerów bota. Trasa dostępna dla każdego zalogowanego (wzorzec: chokepoint na danych, nie gate trasy) → przy `MARKETPLACE_SELF_SERVE=1` tenant widział XP/aktywność/retencję **cudzych** serwerów. | Każda funkcja scoped przez `getPrimaryGuildId()` + `.eq('guild_id', gid)` (jak reszta panelu); `gid=''` → fail-closed (pusto). Eksport CSV scoped automatycznie. |
+
+### 🟢 Zweryfikowane jako bezpieczne
+
+- **Most `/api/internal/plugin-event` + `/plugin-subscriptions`** — `bridgeAuthorized` (Bearer, porównanie constant-time), `bridgeReady` wymaga sekretu **≥16 zn.** + `MARKETPLACE_COMMUNITY`; inaczej **404** (nie zdradza trasy). NIE sesja użytkownika — service-to-service.
+- **Fan-out `invokeGuildEvent`** — bot autorytatywny tylko co do `guild_id`; o wykonaniu decyduje sandbox: plugin musi być **zatwierdzony I włączony na TYM serwerze**. `guildId` z mostu nie omija strażników → brak cross-tenant.
+- **Filtr keywordów `messageCreate`** — dwuwarstwowy (bot = tania bramka częstotliwości, panel = autorytatywny per-plugin); dopasowanie substring na treści, bez injekcji.
+- **Tracking kohort (`cohorts.mts`)** — filtr PostgREST `guild_id=eq.…&user_id=eq.…` na snowflake'ach Discord (zawsze numeryczne, z bramy — nie od atakującego) → brak injekcji. Boty pomijane; no-op bez chmury; backfill ograniczony progiem 10 000 + oknem 90 dni.
+
+### 🟡 Rezydua (follow-up — wymagają zmian po stronie bota)
+
+- **`ai_usage`** — tabela **bez `guild_id`** (PK `user_id,day`); `getAiUsageToday`/`getAiUsageSeries` nie da się scope'ować bez migracji schematu + zapisu `guild_id` przez bota. Niższa waga (zagregowane liczniki AI).
+- **`server_history`** — **globalny** setting (jeden JSON/instancja); wymaga przechowywania per-serwer po stronie bota. Niższa waga (rozmiar serwera/boosty/kanały w czasie).
+- *Mitygacja, jeśli pilne przed pełnym scope'owaniem:* sekcje „AI" i „Wzrost serwera" renderować tylko dla `isInstanceAdminRequest` (ukryć tenantom).
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+<div align="center"><sub>Self-review · v0.283.0 (F1–F4) + v0.299.0 (F5) · powiązane: <a href="PLAN-MARKETPLACE.md">PLAN-MARKETPLACE</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>

@@ -2,6 +2,7 @@
 // Config trzymamy w tabeli `settings` (JSON, jak antinuke/presence) — działa od razu.
 // Dane (ranking, tickety) czytamy z nowych tabel (faza4-schema.sql); brak tabeli → pusto.
 import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
+import { getPrimaryGuildId } from './guild';
 import type { RichMessage } from './richMessage';
 import { hasSupabase, supabase } from './supabase';
 
@@ -72,9 +73,12 @@ export type LevelRow = { user_id: string; username: string | null; xp: number; l
 export async function getLeaderboard(limit = 50): Promise<LevelRow[]> {
   if (!hasSupabase) return [];
   try {
+    // Scoped do bieżącego serwera (chokepoint) — bez tego ranking przeciekał między tenantami.
+    const gid = await getPrimaryGuildId();
     const { data, error } = await supabase()
       .from('user_levels')
       .select('user_id,username,xp,level')
+      .eq('guild_id', gid)
       .order('xp', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);
@@ -337,9 +341,11 @@ export async function getTopActiveUsers(days = 14, limit = 10): Promise<TopUser[
   if (!hasSupabase) return [];
   try {
     const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
+    const gid = await getPrimaryGuildId(); // scoped do bieżącego serwera (anty-przeciek tenantów)
     const { data, error } = await supabase()
       .from('user_activity')
       .select('user_id,username,messages,voice_min')
+      .eq('guild_id', gid)
       .gte('day', since);
     if (error) throw new Error(error.message);
     type DbRow = { user_id: string; username?: string; messages?: number; voice_min?: number };
@@ -365,7 +371,11 @@ export async function getHourlyActivity(): Promise<number[]> {
   const out = new Array<number>(24).fill(0);
   if (!hasSupabase) return out;
   try {
-    const { data, error } = await supabase().from('activity_hourly').select('hour,messages');
+    const gid = await getPrimaryGuildId(); // scoped do bieżącego serwera (anty-przeciek tenantów)
+    const { data, error } = await supabase()
+      .from('activity_hourly')
+      .select('hour,messages')
+      .eq('guild_id', gid);
     if (error) throw new Error(error.message);
     for (const r of (data ?? []) as { hour: number; messages?: number }[]) {
       const h = Number(r.hour);
@@ -402,7 +412,12 @@ export async function getActivitySeries(days = 14): Promise<ActivityPoint[]> {
   if (!hasSupabase) return skeleton();
   try {
     const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
-    const { data, error } = await supabase().from('activity_daily').select('*').gte('day', since);
+    const gid = await getPrimaryGuildId(); // scoped do bieżącego serwera (anty-przeciek tenantów)
+    const { data, error } = await supabase()
+      .from('activity_daily')
+      .select('*')
+      .eq('guild_id', gid)
+      .gte('day', since);
     if (error) throw new Error(error.message);
     type DbRow = {
       day: string;

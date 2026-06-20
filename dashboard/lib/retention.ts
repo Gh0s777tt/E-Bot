@@ -1,7 +1,9 @@
 // Retencja kohortowa — liczona z `member_cohorts` (bot zapisuje joined_at/left_at per-członka).
 // „Z osób, które dołączyły, ilu przetrwało N dni." Liczone ELIGIBLE-BASED: do retencji D_n bierzemy
 // tylko członków, których kohorta ma już ≥N dni (inaczej wynik byłby nieokreślony — censoring).
-// Agreguje wszystkie serwery bota — spójnie z getActivitySeries (liczby pasują do trendów przyjść/odejść).
+// Scoped do bieżącego serwera (chokepoint getPrimaryGuildId), spójnie z getActivitySeries — liczby
+// pasują do trendów przyjść/odejść i NIE przeciekają między tenantami w trybie self-serve.
+import { getPrimaryGuildId } from './guild';
 import { hasSupabase, supabase } from './supabase';
 
 const DAY = 86_400_000;
@@ -48,9 +50,11 @@ export async function getCohortRetention(days = 90): Promise<RetentionSummary> {
   if (!hasSupabase) return EMPTY;
   try {
     const since = new Date(Date.now() - days * DAY).toISOString();
+    const gid = await getPrimaryGuildId(); // scoped do bieżącego serwera (anty-przeciek tenantów)
     const { data, error } = await supabase()
       .from('member_cohorts')
       .select('joined_at,left_at')
+      .eq('guild_id', gid)
       .gte('joined_at', since);
     if (error || !data || !data.length) return EMPTY;
 
