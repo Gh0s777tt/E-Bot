@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-379-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.309.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-380-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.310.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.310.0] — 🔐 Hardening P0 cz.3: bramka instance-admin na sekretach globalnych (Ko-fi, webhook-relay)
+
+- `[#380]` 🔐 **Domknięcie najgroźniejszego wycieku self-serve — sekrety configów globalnych nie wyciekają już między tenantami.**
+  - **`/api/kofi-config` i `/api/webhook-relay`** ([kofi-config](dashboard/app/api/kofi-config/route.ts), [webhook-relay](dashboard/app/api/webhook-relay/route.ts)) bramkowane `isInstanceAdminRequest` ([panelRoles.ts](dashboard/lib/panelRoles.ts)) na **GET i POST**. Wcześniej dowolny tenant-admin self-serve (`session.role='admin'`, lecz `resolveRole=null`) mógł **odczytać sekrety** (`kofi_config.verificationToken`, `webhook_relay.token`) i **przejąć** globalny kanał relaya / podszyć się pod webhook Ko-fi. Teraz nie-instance-admin → **403** (sekret nie wraca w GET, zapis zablokowany).
+  - **Bez zmian w bocie/danych** — to globalne configi single-instance; bot czyta je tą samą drogą, gate dotyczy wyłącznie panelu. Wzorzec gotowy do rozszerzenia na resztę globalnych tras (ai_config, integrations, social_feeds, setup/*).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.309.0] — 🔐 Hardening P0 cz.2: ujednolicenie uprawnień bota + sekret admina na web/api/settings
 
