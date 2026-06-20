@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-358-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.288.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-359-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.289.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.289.0] — 🧪 M6c: trigger produkcyjny — orchestrator + owner-run (REALNE wykonanie pluginu)
+
+- `[#359]` 🧪 **Marketplace M6c — pełne ożywienie sandboxa: orchestrator + owner-triggered wykonanie pluginu community.**
+  - Manifest rozszerzony ([`communityPlugins.ts`](dashboard/lib/communityPlugins.ts)): `endpoint` (**tylko https**), `secret` (HMAC, min 8 zn.), `event` — plugin staje się wykonywalny. Helpery: `getCommunityPlugin` (zatwierdzony), `guildPluginEnabled` (`guild_plugins`).
+  - Orchestrator [`lib/pluginInvoke.ts`](dashboard/lib/pluginInvoke.ts) `invokePlugin` spina łańcuch z **6 warstwami strażników**: env → community+`approved` → endpoint/secret → enabled-na-serwerze → SSRF-guard (runner) → per-akcja authz (executor).
+  - Trasa [`/api/community/run`](dashboard/app/api/community/run/route.ts): **owner/staff-only** + env-gated; ręcznie wywołuje **i WYKONUJE** plugin scoped do `guild_id`. **Pierwsza ścieżka realnego działania obcego pluginu** — świadomie tylko ręcznie (auto-trigger na zdarzenia Discorda = osobny temat po stronie bota).
+  - Bramki: biome czysto (324), `tsc` exit 0, docs:check exit 0.
 
 ## [0.288.0] — 🧪 M6c (start): dry-run testowy pluginu (owner-only, bez wykonania akcji)
 

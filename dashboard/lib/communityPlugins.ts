@@ -29,6 +29,15 @@ export const communityManifestSchema = z.object({
     .max(200)
     .refine((u) => /^https?:\/\//i.test(u), 'tylko adresy http(s)')
     .optional(),
+  // M6c — webhook pluginu (wykonywalny): endpoint autora (TYLKO https) + sekret HMAC + zdarzenie.
+  endpoint: z
+    .string()
+    .url()
+    .max(200)
+    .refine((u) => /^https:\/\//i.test(u), 'tylko https')
+    .optional(),
+  secret: z.string().min(8).max(200).optional(),
+  event: z.string().max(48).optional(),
 });
 export type CommunityManifest = z.infer<typeof communityManifestSchema>;
 
@@ -104,6 +113,41 @@ export async function reviewCommunityPlugin(
       .eq('key', key)
       .eq('source', 'community');
     return true;
+  } catch {
+    return false;
+  }
+}
+
+// Pojedynczy ZATWIERDZONY plugin community (z manifestem) po kluczu — do wykonania (M6c trigger).
+export async function getCommunityPlugin(key: string): Promise<CommunityPlugin | null> {
+  if (!key || !hasSupabase) return null;
+  try {
+    const { data, error } = await supabase()
+      .from('plugins')
+      .select('key,title,description,author_id,review_status,manifest')
+      .eq('key', key)
+      .eq('source', 'community')
+      .eq('review_status', 'approved')
+      .limit(1);
+    if (error || !data || !data.length) return null;
+    return data[0] as CommunityPlugin;
+  } catch {
+    return null;
+  }
+}
+
+// Czy plugin community jest WŁĄCZONY na danym serwerze (guild_plugins.enabled). Brak wiersza → false.
+export async function guildPluginEnabled(guildId: string, key: string): Promise<boolean> {
+  if (!guildId || !key || !hasSupabase) return false;
+  try {
+    const { data, error } = await supabase()
+      .from('guild_plugins')
+      .select('enabled')
+      .eq('guild_id', guildId)
+      .eq('plugin_key', key)
+      .limit(1);
+    if (error || !data || !data.length) return false;
+    return (data[0] as { enabled?: boolean }).enabled === true;
   } catch {
     return false;
   }
