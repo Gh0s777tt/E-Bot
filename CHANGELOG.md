@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-364-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.294.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-365-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.295.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.295.0] — 🧩 M6: deklaracja triggera w formularzu zgłoszeń (event + keywords, i18n ×14) — pętla auto-triggera UI-domknięta
+
+- `[#365]` 🧩 **Marketplace M6 — autor wybiera zdarzenie pluginu prosto w formularzu; auto-trigger osiągalny z UI.**
+  - [`CommunitySubmitForm`](dashboard/components/CommunitySubmitForm.tsx): nowy select **`event`** (`guildMemberAdd`/`Remove`/`guildBoost`/`messageCreate` lub „brak — tylko ręcznie") + warunkowe pole **`keywords`** (pojawia się dla `messageCreate`; dzielone po przecinku → tablica, max 20). Bez tego pola żaden zgłaszany plugin nie deklarował triggera — auto-trigger był nieosiągalny z UI.
+  - **i18n ×14**: 4 nowe klucze (`ui.mkt.fEvent`/`fEventNone`/`fKeywords`/`fKeywordsPh`) we wszystkich 14 językach (parzystość zachowana; nazwy zdarzeń jako tokeny — nietłumaczone).
+  - **Bez zmian backendu** — manifest (`event`, `keywords`) i trasa `/api/community/submit` już to przyjmują/walidują (`communityManifestSchema`). To czysto warstwa UI domykająca wzorzec „plumbing → UI".
+  - Pełna ścieżka UI: zgłoś z eventem → moderacja → włącz na serwerze → bot forwarduje to zdarzenie → sandbox wykonuje. Bramki: biome czysto, dashboard `tsc` exit 0, i18n parzystość 14×4, docs:check exit 0.
 
 ## [0.294.0] — 💬 M6: pluginy na `messageCreate` przez filtr słów-kluczy (bezpieczna wysoka częstotliwość)
 

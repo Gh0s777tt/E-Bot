@@ -14,6 +14,8 @@ type FormState = {
   homepage: string;
   endpoint: string;
   secret: string;
+  event: string;
+  keywords: string;
 };
 const EMPTY: FormState = {
   key: '',
@@ -23,7 +25,11 @@ const EMPTY: FormState = {
   homepage: '',
   endpoint: '',
   secret: '',
+  event: '',
+  keywords: '',
 };
+// Zdarzenia, na które plugin może się subskrybować (zgodne z mostem bot→panel). Tokeny — nietłumaczone.
+const EVENTS = ['guildMemberAdd', 'guildMemberRemove', 'guildBoost', 'messageCreate'] as const;
 
 export default function CommunitySubmitForm() {
   const { lang } = useLang();
@@ -40,12 +46,21 @@ export default function CommunitySubmitForm() {
     setBusy(true);
     setStatus(null);
     try {
-      const body: Record<string, string> = { key: form.key, title: form.title };
+      const body: Record<string, unknown> = { key: form.key, title: form.title };
       if (form.description) body.description = form.description;
       if (form.version) body.version = form.version;
       if (form.homepage) body.homepage = form.homepage;
       if (form.endpoint) body.endpoint = form.endpoint;
       if (form.secret) body.secret = form.secret;
+      if (form.event) body.event = form.event;
+      // keywords mają sens tylko dla messageCreate — tnij po przecinku, przytnij, usuń puste (max 20).
+      if (form.event === 'messageCreate' && form.keywords.trim()) {
+        body.keywords = form.keywords
+          .split(',')
+          .map((k) => k.trim())
+          .filter(Boolean)
+          .slice(0, 20);
+      }
       const r = await fetch('/api/community/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -171,6 +186,41 @@ export default function CommunitySubmitForm() {
             autoComplete="new-password"
           />
         </div>
+      </div>
+      <div className="flex gap-3">
+        <div className="flex-1">
+          <label className={lbl} htmlFor="cp-event">
+            {tp(lang, 'ui.mkt.fEvent')}
+          </label>
+          <select
+            id="cp-event"
+            className={input}
+            value={form.event}
+            onChange={(e) => set('event', e.target.value)}
+          >
+            <option value="">{tp(lang, 'ui.mkt.fEventNone')}</option>
+            {EVENTS.map((ev) => (
+              <option key={ev} value={ev}>
+                {ev}
+              </option>
+            ))}
+          </select>
+        </div>
+        {form.event === 'messageCreate' && (
+          <div className="flex-1">
+            <label className={lbl} htmlFor="cp-keywords">
+              {tp(lang, 'ui.mkt.fKeywords')}
+            </label>
+            <input
+              id="cp-keywords"
+              className={input}
+              value={form.keywords}
+              onChange={(e) => set('keywords', e.target.value)}
+              maxLength={400}
+              placeholder={tp(lang, 'ui.mkt.fKeywordsPh')}
+            />
+          </div>
+        )}
       </div>
       <button
         type="submit"
