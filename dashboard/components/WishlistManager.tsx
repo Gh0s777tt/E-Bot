@@ -60,6 +60,10 @@ export default function WishlistManager({ initial }: { initial: Item[] }) {
   }
 
   async function remove(id: string) {
+    // Potwierdzenie przed nieodwracalnym usunięciem (komunikat zlokalizowany — reużywamy etykiety akcji).
+    const it = items.find((i) => i.id === id);
+    const label = tp(lang, 'ui.wishlist.remove');
+    if (!window.confirm(it ? `${label} „${it.title}"?` : `${label}?`)) return;
     setItems((prev) => prev.filter((i) => i.id !== id));
     await fetch(`/api/wishlist?id=${id}`, { method: 'DELETE' }).catch(() => {});
   }

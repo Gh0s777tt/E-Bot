@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-394-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.324.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-395-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.325.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.325.0] — 🛟 P1 (UX): potwierdzenie przed usunięciem w panelu (wishlist + sklep)
+
+- `[#395]` 🛟 **Przypadkowy klik nie kasuje już danych bez pytania.**
+  - [`WishlistManager`](dashboard/components/WishlistManager.tsx) i [`ShopManager`](dashboard/components/ShopManager.tsx) kasowały pozycję **natychmiast** (optimistic UI + DELETE) — jeden klik = nieodwracalna utrata. Dodany `window.confirm` z **nazwą pozycji** w treści. Komunikat zlokalizowany przez reużycie istniejących etykiet akcji (`ui.wishlist.remove` / `ui.eco.delAria`) — **0 nowych kluczy i18n** (parzystość ×14 nienaruszona).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0. Interakcja zweryfikowana przeglądem kodu (overlay panelu za auth; preview server to `web/`).
 
 ## [0.324.0] — 🧰 P1: deklaracja `engines` (Node ≥24 · pnpm ≥11) w 5 pakietach
 

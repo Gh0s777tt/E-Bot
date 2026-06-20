@@ -65,6 +65,10 @@ export default function ShopManager({
   }
 
   async function remove(id: string) {
+    // Potwierdzenie przed nieodwracalnym usunięciem itemu sklepu (komunikat zlokalizowany).
+    const it = items.find((i) => i.id === id);
+    const label = tp(lang, 'ui.eco.delAria');
+    if (!window.confirm(it ? `${label} „${it.name}"?` : `${label}?`)) return;
     setItems((p) => p.filter((i) => i.id !== id));
     await fetch(`/api/economy/shop?id=${id}`, { method: 'DELETE' }).catch(() => {});
   }
