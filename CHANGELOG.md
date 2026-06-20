@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-384-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.314.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-385-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.315.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.315.0] — ⚡ P2 UX/perf: GuildSwitcher bez reloadu (router.refresh) + loading.tsx serwerowy
+
+- `[#385]` ⚡ **Drobne, bezpieczne wygrane UX/wydajności z audytu.**
+  - **`GuildSwitcher`** ([GuildSwitcher.tsx](dashboard/components/GuildSwitcher.tsx)): zmiana serwera robiła **twardy `window.location.reload()`** (biały flash + utrata stanu) → teraz `router.refresh()` (SSR przerysowuje panel z cookie, bez przeładowania; wzorzec jak w `LangContext`) + optymistyczny `setCurrent` (aktywny serwer od razu).
+  - **`loading.tsx`** ([loading.tsx](dashboard/app/loading.tsx)): był `'use client'` tylko po to, by czytać `useLang()` → blokował strumieniowanie szkieletu. Teraz **Server Component** czytający locale serwerowo (`getPanelLocale`), bez JS klienta — fallback strumieniuje się szybciej.
+  - **Weryfikacja v0.314 (przy okazji):** edge-cache `/api/img` potwierdzony na żywo — `X-Vercel-Cache: MISS → HIT → HIT` (s-maxage konsumowany przez CDN, dlatego znika z nagłówka do przeglądarki — to normalne).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.314.0] — ⚡ P2: edge-cache + timeout na proxy okładek (/api/img)
 

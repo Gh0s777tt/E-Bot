@@ -1,8 +1,10 @@
 'use client';
 
 // Etap K — przełącznik serwerów. Pokazuje się tylko gdy bot jest na >1 serwerze. Wybór zapisujemy
-// w cookie 'panel_guild' i przeładowujemy stronę (SSR czyta cookie → cały panel przełącza kontekst).
+// w cookie 'panel_guild' i odświeżamy router (SSR czyta cookie → cały panel przełącza kontekst,
+// bez twardego reloadu/flasha — wzorzec jak w LangContext).
 import { ChevronDown, Server } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
@@ -11,6 +13,7 @@ type BotGuild = { id: string; name: string; icon: string | null };
 
 export default function GuildSwitcher() {
   const { lang } = useLang();
+  const router = useRouter();
   const [guilds, setGuilds] = useState<BotGuild[]>([]);
   const [current, setCurrent] = useState('');
   const [open, setOpen] = useState(false);
@@ -50,7 +53,9 @@ export default function GuildSwitcher() {
     } catch {
       /* brak cookies */
     }
-    window.location.reload(); // SSR odczyta nowy serwer i przerysuje cały panel
+    setCurrent(id); // optymistycznie: aktywny serwer od razu (bez czekania na re-fetch)
+    setOpen(false);
+    router.refresh(); // SSR odczyta nowy serwer z cookie i przerysuje panel — bez twardego reloadu
   }
 
   const icon = (g: BotGuild) =>
