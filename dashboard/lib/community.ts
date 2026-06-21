@@ -653,7 +653,7 @@ export const SOCIAL_FEEDS_DEFAULT: SocialFeedsConfig = {
   feeds: [],
 };
 export async function getSocialFeedsConfig(): Promise<SocialFeedsConfig> {
-  const raw = await getRawSetting('social_feeds_config');
+  const raw = await getConfigSetting('social_feeds_config');
   if (!raw) return structuredClone(SOCIAL_FEEDS_DEFAULT);
   try {
     return { ...SOCIAL_FEEDS_DEFAULT, ...(JSON.parse(raw) as Partial<SocialFeedsConfig>) };
@@ -662,7 +662,7 @@ export async function getSocialFeedsConfig(): Promise<SocialFeedsConfig> {
   }
 }
 export async function saveSocialFeedsConfig(cfg: SocialFeedsConfig): Promise<void> {
-  await setRawSetting('social_feeds_config', JSON.stringify(cfg));
+  await setConfigSetting('social_feeds_config', JSON.stringify(cfg));
 }
 
 // ── Sezonowe rankingi levelingu (Faza 7 / F10.2) ──

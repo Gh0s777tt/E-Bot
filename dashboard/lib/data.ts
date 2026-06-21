@@ -313,6 +313,9 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'freegames_config',
   'patchnotes_config',
   'pricetracker_config',
+  'social_feeds_config',
+  'scheduled_posts',
+  'creator_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

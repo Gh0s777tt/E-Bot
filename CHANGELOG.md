@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-407-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.337.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-408-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.338.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.338.0] — 🔐🏁 Multi-tenant: ostatnie 3 pollery per-serwer — KONIEC migracji 9/9 configów
+
+- `[#408]` 🔐 **Domknięta migracja wszystkich „globalnych" configów panelu na per-serwer.**
+  - [`social_feeds`](bot/src/creator/social.mts) (RSS): feedy różnią się per-serwer → fetch per-guild; dedup `g:<id>:social_feeds_seen` per-serwer.
+  - [`scheduled_posts`](bot/src/engagement/scheduledPosts.mts) (Message Studio): lista postów + state (`g:<id>:scheduled_posts_state`) per-serwer; izolacja kanałów.
+  - [`creator/clips`](bot/src/creator/clips.mts) (Twitch): **źródło globalne** (kanał Twitch właściciela z env) → destynacja per-serwer (każdy serwer z relayem dostaje klipy na swój kanał); dedup `creator_clips_last` zostaje globalny (jedno źródło). Loop na stałym interwale (per-serwer `pollMin` był globalny).
+  - Panel: `community.ts`/`creator.ts`/`scheduledPosts.ts` → `setConfigSetting`; 3 klucze → [`MIGRATED_GUILD_KEYS`](dashboard/lib/data.ts).
+  - 🏁 **9/9 zmigrowane** (aimod · aihelp · aidigest · freegames · patchnotes · pricetracker · social_feeds · scheduled_posts · creator). Wszystkie: per-serwer config (fallback globalny) + per-serwer dedup + izolacja kanałów przez `guild.channels.fetch`.
+  - **Bramki:** biome czysty, bot `tsc` exit 0, dashboard `tsc` exit 0, docs:check exit 0. ⚠️ runtime-niewryfikowane (iteracja/dedup) — przetestuj feedy/posty/klipy na ≥2 serwerach.
 
 ## [0.337.0] — 🔐 Multi-tenant: 3 gaming-feedy per-serwer + fix przecieku wishlisty (pricetracker)
 

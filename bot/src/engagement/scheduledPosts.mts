@@ -1,11 +1,10 @@
 // Tor F+ — zaplanowane wiadomości BOGATE (RichMessage z Message Studio) sterowane z panelu.
 // Tryby: 'once' (jednorazowo, epoch ms), 'daily'/'weekly' (o godzinie HH:MM w strefie Europe/Warsaw,
-// DST automatycznie). Config w settings 'scheduled_posts' (JSON, sync przez bridge). Stan ostatniego
-// wysłania w cloud 'scheduled_posts_state' (klucz należący do bota → dedup, jak social_feeds_seen).
-// Poll co 60 s. Uzupełnia (nie zastępuje) komendowy /schedule (tabela 'scheduled_messages').
-import type { Client, TextChannel } from 'discord.js';
+// DST automatycznie). Config 'scheduled_posts' (PER-SERWER, JSON). Stan ostatniego wysłania w cloud
+// 'g:<id>:scheduled_posts_state' (PER-SERWER dedup). Poll co 60 s, iteracja gildii.
+import type { Client, Guild, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { buildSendOptions, hasRich, type RichMessage } from '../lib/richMessage.mts';
 
 type Mode = 'once' | 'daily' | 'weekly';
@@ -21,15 +20,13 @@ type Post = {
   weekday?: number; // 0=niedziela … 6=sobota (weekly)
 };
 
-let posts: Post[] = [];
-
-function refresh(): void {
-  const raw = getSettings()['scheduled_posts'];
+function postsFor(guildId: string): Post[] {
+  const raw = getGuildSettings(guildId)['scheduled_posts'];
   try {
     const arr = raw ? (JSON.parse(raw) as Post[]) : [];
-    posts = Array.isArray(arr) ? arr : [];
+    return Array.isArray(arr) ? arr : [];
   } catch {
-    /* zostaw poprzednią listę */
+    return [];
   }
 }
 
@@ -71,14 +68,14 @@ function dueNow(p: Post, now: Date, lastRun: number | undefined): boolean {
   return true;
 }
 
-async function tick(client: Client): Promise<void> {
-  if (!posts.length || !hasCloud()) return;
+// Zaplanowane posty JEDNEGO serwera (lista + state per-serwer; `guild.channels.fetch` = izolacja).
+async function tickForGuild(guild: Guild): Promise<void> {
+  const posts = postsFor(guild.id);
+  if (!posts.length) return;
+  const stateKey = `g:${guild.id}:scheduled_posts_state`;
   let state: Record<string, number> = {};
   try {
-    state = JSON.parse((await cloudGetSetting('scheduled_posts_state')) || '{}') as Record<
-      string,
-      number
-    >;
+    state = JSON.parse((await cloudGetSetting(stateKey)) || '{}') as Record<string, number>;
   } catch {
     /* pusty stan */
   }
@@ -88,14 +85,13 @@ async function tick(client: Client): Promise<void> {
   for (const p of posts) {
     if (!p.enabled || !p.channelId || !p.message) continue;
     if (!dueNow(p, now, state[p.id])) continue;
-    const ch = await client.channels.fetch(p.channelId).catch(() => null);
+    const ch = await guild.channels.fetch(p.channelId).catch(() => null);
     if (ch?.isTextBased() && 'send' in ch) {
-      const guild = (ch as TextChannel).guild;
       const vars: Record<string, string> = {
-        '{server}': guild?.name ?? '',
-        '{guild}': guild?.name ?? '',
-        '{memberCount}': String(guild?.memberCount ?? ''),
-        '{count}': String(guild?.memberCount ?? ''),
+        '{server}': guild.name,
+        '{guild}': guild.name,
+        '{memberCount}': String(guild.memberCount),
+        '{count}': String(guild.memberCount),
       };
       if (hasRich(p.message)) {
         // V2 (components + flaga) albo klasyka (content + embeds) — buildSendOptions decyduje.
@@ -110,13 +106,18 @@ async function tick(client: Client): Promise<void> {
   if (changed) {
     const ids = new Set(posts.map((p) => p.id));
     for (const k of Object.keys(state)) if (!ids.has(k)) delete state[k]; // sprzątanie sierot
-    await cloudSetSetting('scheduled_posts_state', JSON.stringify(state)).catch(() => {});
+    await cloudSetSetting(stateKey, JSON.stringify(state)).catch(() => {});
+  }
+}
+
+async function tick(client: Client): Promise<void> {
+  if (!hasCloud()) return;
+  for (const guild of client.guilds.cache.values()) {
+    await tickForGuild(guild).catch(() => {});
   }
 }
 
 export function startScheduledPosts(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   if (!hasCloud()) {
     console.log('[scheduled-posts] brak chmury — zaplanowane posty wyłączone.');
     return;
@@ -125,5 +126,5 @@ export function startScheduledPosts(client: Client): void {
     () => void tick(client).catch((e) => console.warn('[scheduled-posts]', (e as Error).message)),
     60_000,
   );
-  console.log('[scheduled-posts] aktywne (poll 60 s, config z panelu).');
+  console.log('[scheduled-posts] aktywne per-serwer (poll 60 s, config z panelu).');
 }

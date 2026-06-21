@@ -1,6 +1,6 @@
 // Zaplanowane posty (Message Studio) — config w settings 'scheduled_posts' (tablica JSON).
 // Bot (bot/src/engagement/scheduledPosts.mts) czyta to przez bridge i wysyła wg trybu/godziny.
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, setConfigSetting } from './data';
 import { normalizeRich, type RichMessage } from './richMessage';
 
 export type SchedMode = 'once' | 'daily' | 'weekly';
@@ -17,7 +17,7 @@ export type ScheduledPost = {
 };
 
 export async function getScheduledPosts(): Promise<ScheduledPost[]> {
-  const raw = await getRawSetting('scheduled_posts');
+  const raw = await getConfigSetting('scheduled_posts');
   if (!raw) return [];
   try {
     const arr = JSON.parse(raw) as ScheduledPost[];
@@ -29,5 +29,5 @@ export async function getScheduledPosts(): Promise<ScheduledPost[]> {
 }
 
 export async function saveScheduledPosts(posts: ScheduledPost[]): Promise<void> {
-  await setRawSetting('scheduled_posts', JSON.stringify(posts));
+  await setConfigSetting('scheduled_posts', JSON.stringify(posts));
 }

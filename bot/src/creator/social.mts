@@ -1,11 +1,11 @@
 // Faza 8 — powiadomienia o nowych postach z social (TikTok/IG/FB/Threads/X/YouTube/blog) przez RSS.
 // Discord/te platformy nie dają darmowego API „nowy post" → uniwersalnie: user podaje URL RSS/Atom
 // (np. z rss.app, nitter-bridge, kanału YouTube), bot pobiera i ogłasza nowe wpisy. Config
-// 'social_feeds_config'. Dedup w cloud 'social_feeds_seen'. Poll co 10 min. Pierwszy przebieg
-// danego feedu = tylko seed (bez spamu historią).
-import type { Client, TextChannel } from 'discord.js';
+// 'social_feeds_config' (PER-SERWER). Dedup PER-SERWER 'g:<id>:social_feeds_seen'. Poll co 10 min.
+// Feedy różnią się per-serwer → fetch per-guild. Pierwszy przebieg danego feedu = tylko seed (bez spamu).
+import type { Client, Guild, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 import { parseFeed } from '../lib/rss.mts';
 
 type Feed = { url: string; label: string };
@@ -16,26 +16,28 @@ const DEFAULT: Cfg = {
   message: '📣 Nowy post od **{label}**: {title}\n{link}',
   feeds: [],
 };
-let cfg: Cfg = { ...DEFAULT };
 
-function refresh(): void {
-  const raw = getSettings()['social_feeds_config'];
+function cfgFor(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['social_feeds_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Partial<Cfg>) : {};
-    cfg = { ...DEFAULT, ...c, feeds: Array.isArray(c.feeds) ? c.feeds : [] };
+    return { ...DEFAULT, ...c, feeds: Array.isArray(c.feeds) ? c.feeds : [] };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
-async function tick(client: Client): Promise<void> {
-  if (!cfg.enabled || !cfg.channelId || !cfg.feeds.length || !hasCloud()) return;
-  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
+// Feedy JEDNEGO serwera (config + dedup per-serwer; `guild.channels.fetch` = izolacja kanału).
+async function tickForGuild(guild: Guild): Promise<void> {
+  const cfg = cfgFor(guild.id);
+  if (!cfg.enabled || !cfg.channelId || !cfg.feeds.length) return;
+  const ch = await guild.channels.fetch(cfg.channelId).catch(() => null);
   if (!ch?.isTextBased() || !('send' in ch)) return;
 
+  const seenKey = `g:${guild.id}:social_feeds_seen`;
   let seen: string[] = [];
   try {
-    seen = JSON.parse((await cloudGetSetting('social_feeds_seen')) || '[]') as string[];
+    seen = JSON.parse((await cloudGetSetting(seenKey)) || '[]') as string[];
   } catch {
     /* pusta lista */
   }
@@ -67,15 +69,19 @@ async function tick(client: Client): Promise<void> {
         .catch(() => {});
     }
   }
-  if (changed)
-    await cloudSetSetting('social_feeds_seen', JSON.stringify([...seenSet].slice(-500))).catch(
-      () => {},
-    );
+  if (changed) {
+    await cloudSetSetting(seenKey, JSON.stringify([...seenSet].slice(-500))).catch(() => {});
+  }
+}
+
+async function tick(client: Client): Promise<void> {
+  if (!hasCloud()) return;
+  for (const guild of client.guilds.cache.values()) {
+    await tickForGuild(guild).catch(() => {});
+  }
 }
 
 export function startSocialFeeds(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   if (!hasCloud()) {
     console.log('[social] brak chmury — powiadomienia social wyłączone.');
     return;
@@ -85,5 +91,7 @@ export function startSocialFeeds(client: Client): void {
     () => void tick(client).catch((e) => console.warn('[social]', (e as Error).message)),
     10 * 60_000,
   );
-  console.log('[social] powiadomienia social (RSS) aktywne (poll 10 min, config z panelu).');
+  console.log(
+    '[social] powiadomienia social (RSS) aktywne per-serwer (poll 10 min, config z panelu).',
+  );
 }

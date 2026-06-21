@@ -1,6 +1,6 @@
 // Faza 6 / B4 — narzędzia twórcy: auto-wydarzenie Discord na live + relay klipów Twitch.
 // Config trzymamy w settings (JSON 'creator_config'); bot czyta przez settings-sync.
-import { getRawSetting, setRawSetting } from './data';
+import { getConfigSetting, setConfigSetting } from './data';
 
 export type CreatorConfig = {
   autoEvent: boolean; // utwórz wydarzenie Discord przy stream.online
@@ -19,7 +19,7 @@ export const CREATOR_DEFAULT: CreatorConfig = {
 };
 
 export async function getCreatorConfig(): Promise<CreatorConfig> {
-  const raw = await getRawSetting('creator_config');
+  const raw = await getConfigSetting('creator_config');
   if (!raw) return structuredClone(CREATOR_DEFAULT);
   try {
     return { ...CREATOR_DEFAULT, ...(JSON.parse(raw) as Partial<CreatorConfig>) };
@@ -29,5 +29,5 @@ export async function getCreatorConfig(): Promise<CreatorConfig> {
 }
 
 export async function saveCreatorConfig(cfg: CreatorConfig): Promise<void> {
-  await setRawSetting('creator_config', JSON.stringify(cfg));
+  await setConfigSetting('creator_config', JSON.stringify(cfg));
 }
