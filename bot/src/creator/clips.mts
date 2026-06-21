@@ -74,7 +74,8 @@ async function postForGuild(guild: Guild, clips: Clip[]): Promise<void> {
   }
 }
 
-async function tick(client: Client): Promise<void> {
+// Eksport dla testów izolacji (clips.isolation.test.ts): jeden cykl pollera.
+export async function tick(client: Client): Promise<void> {
   const login = process.env.TWITCH_CHANNEL;
   if (!login || !hasCloud()) return;
   const id = await resolveBroadcaster(login);

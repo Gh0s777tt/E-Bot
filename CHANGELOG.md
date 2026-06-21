@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-414-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.344.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-415-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.345.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.345.0] — 🧪 Testy izolacji 4 ostatnich pollerów (aidigest/social/clips/patchnotes) — KOMPLET 7/7
+
+- `[#415]` 🧪 **Domknięte pokrycie testami izolacji wszystkich pollerów per-serwer.**
+  - [`patchnotes`](bot/src/gaming/patchnotes.isolation.test.ts) (Steam News) + [`social`](bot/src/creator/social.isolation.test.ts) (RSS) — wzorzec fetch-per-guild + dedup per-serwer (`g:<id>:patchnotes_seen` / `…social_feeds_seen`), routing kanału, `enabled:false`→cisza; social dodatkowo: anty-spam „pierwszy przebieg = tylko seed".
+  - [`aidigest`](bot/src/community/aidigest.isolation.test.ts) — bramka godziny UTC (fake timers 18:00 + mock AI), dedup per-serwer `g:<id>:aidigest_last` (data dnia), izolacja kanałów źródło/cel.
+  - [`clips`](bot/src/creator/clips.isolation.test.ts) — **inny wzorzec udokumentowany testem**: źródło + dedup GLOBALNE (`creator_clips_last`, jedno źródło Twitch), destynacja per-serwer; asercja odróżniająca: brak kluczy `g:<id>:` (dedup świadomie globalny).
+  - `maybePost`/`tick` wyeksportowane z 4 pollerów (jedyne zmiany produkcyjne).
+  - **KOMPLET:** wszystkie **7 pollerów** (freegames · patchnotes · pricetracker · aidigest · social · clips · scheduledPosts) + rdzeń [`db.mts`](bot/src/lib/db.mts) + logika `scheduledPosts` mają rygiel izolacji. Suite: **16 plików / 106 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.344.0] — 🧪 Testy scheduledPosts: logika harmonogramu (DST/okno/tryby) + izolacja state per-serwer
 

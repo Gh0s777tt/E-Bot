@@ -82,7 +82,8 @@ async function maybePostForGuild(guild: Guild): Promise<void> {
   await cloudSetSetting(lastKey, day).catch(() => {});
 }
 
-async function maybePost(client: Client): Promise<void> {
+// Eksport dla testów izolacji (aidigest.isolation.test.ts): jeden cykl pollera.
+export async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   for (const guild of client.guilds.cache.values()) {
     await maybePostForGuild(guild).catch(() => {});

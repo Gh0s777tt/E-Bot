@@ -75,7 +75,8 @@ async function tickForGuild(guild: Guild): Promise<void> {
   }
 }
 
-async function tick(client: Client): Promise<void> {
+// Eksport dla testów izolacji (social.isolation.test.ts): jeden cykl pollera.
+export async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
   for (const guild of client.guilds.cache.values()) {
     await tickForGuild(guild).catch(() => {});
