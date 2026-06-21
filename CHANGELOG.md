@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-425-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.355.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-426-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.356.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.356.0] — 🔧🔍 Pełny audyt funkcjonalny + naprawa bramki `pnpm typecheck` (root → 3 pakiety)
+
+- `[#426]` 🔍 **Pełny audyt monorepo** (komendy · usługi · configi · trasy API · ingest, 4 równoległe sondy) — **werdykt: kod funkcjonalnie kompletny:**
+  - **95 slash-komend + 3 context-menu** — wszystkie zarejestrowane ORAZ dyspozycjonowane (rejestracja i runtime z jednej tablicy `commands[]` ⇒ „zarejestrowana bez handlera" niemożliwa); **117 subkomend** obsłużonych bez luk.
+  - **57/57 usług w tle** spiętych w `index.mts` (parytet 100%, 0 martwych) + 2 listenery ekonomii (gated).
+  - **93 trasy API** (150 handlerów) z realną logiką; ścieżki płatności/auth/webhook zabezpieczone (HMAC timing-safe · anty-replay · anty-SSRF · anomalia płatności → Sentry). `ingest/` (steam/psn/gog/igdb + sync) w pełni wpięty.
+  - **0 TODO/FIXME/stub/not-implemented** w całym kodzie; `MIGRATED_GUILD_KEYS` bot⊆panel spójne z testem.
+- `[#426]` 🔧 **Naprawiona zepsuta bramka `pnpm typecheck`** (znaleziona w audycie): root miał `pnpm -r --if-present exec tsc` — `--if-present` jest **nieprawidłowe dla `pnpm exec`** (komenda zwracała error), a i tak obejmowałaby tylko bota. Poprawione na `… run typecheck` + dodane skrypty `typecheck` w [`dashboard`](dashboard/package.json) i [`web`](web/package.json) → bramka pokrywa **3 pakiety** (bot + dashboard + web), exit 0.
+  - **Bramki:** `pnpm typecheck` exit 0 (3 pakiety) · biome czysty · 220 testów ✓ · docs:check exit 0.
 
 ## [0.355.0] — 🧪🌍🏁 Rygiel parytetu treści „Jak to działa?" — parytet i18n CAŁEGO projektu zaryglowany
 
