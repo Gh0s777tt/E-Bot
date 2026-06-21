@@ -54,7 +54,8 @@ function warsawParts(d: Date): { hh: number; mm: number; weekday: number; ymd: s
 }
 
 // Czy post powinien wysłać się teraz? (okno catch-up 10 min dla dziennych/tygodniowych)
-function dueNow(p: Post, now: Date, lastRun: number | undefined): boolean {
+// Czysta funkcja (now wstrzykiwany) — eksport dla testów harmonogramu (scheduledPosts.isolation.test.ts).
+export function dueNow(p: Post, now: Date, lastRun: number | undefined): boolean {
   if (p.mode === 'once') {
     return !!p.runAt && now.getTime() >= p.runAt && (lastRun === undefined || lastRun < p.runAt);
   }
@@ -111,7 +112,8 @@ async function tickForGuild(guild: Guild): Promise<void> {
   }
 }
 
-async function tick(client: Client): Promise<void> {
+// Eksport dla testów izolacji (scheduledPosts.isolation.test.ts): jeden cykl pollera.
+export async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
   for (const guild of client.guilds.cache.values()) {
     await tickForGuild(guild).catch(() => {});

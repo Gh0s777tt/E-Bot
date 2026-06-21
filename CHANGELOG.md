@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-413-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.343.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-414-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.344.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.344.0] — 🧪 Testy scheduledPosts: logika harmonogramu (DST/okno/tryby) + izolacja state per-serwer
+
+- `[#414]` 🧪 **Test scheduledPosts** ([`scheduledPosts.isolation.test.ts`](bot/src/engagement/scheduledPosts.isolation.test.ts), 8 testów) — dwie warstwy:
+  - **Logika harmonogramu `dueNow`** (czysta, `now` wstrzykiwany → bez fake-timerów): tryb `once` (odpala ≥`runAt`, nie dwa razy), `daily`/`weekly` w oknie catch-up `[cel, cel+10 min]`, **strefa Europe/Warsaw + DST** (ta sama godzina UTC → inna lokalna latem/zimą), anty-duplikat „raz dziennie", gating dnia tygodnia.
+  - **Izolacja runtime `tick`:** state PER-SERWER `g:<id>:scheduled_posts_state` (nigdy globalnie), routing przez `guild.channels.fetch`, `enabled:false`→cisza.
+  - **Dowód, że rygle gryzą:** mutacja strefy (`Europe/Warsaw`→`UTC`) zwala 4 testy logiki (tylko `once` przeżywa — bezstrefowy); mutacja klucza state na globalny zwala test izolacji.
+  - `dueNow` + `tick` wyeksportowane z [`scheduledPosts.mts`](bot/src/engagement/scheduledPosts.mts) (jedyne zmiany produkcyjne). Mock chmury / `getGuildSettings` / richMessage.
+  - Suite: **12 plików / 98 testów** zielone. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.343.0] — 🧪 Rygiel izolacji RUNTIME pricetracker (ITAD): scope `guild_id` na wishliście (anty-IDOR)
 
