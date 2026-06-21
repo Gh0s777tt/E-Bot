@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-402-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.332.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-403-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.333.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.333.0] — ⚡ Parytet hardeningu proxy obrazów `/api/img` (web/ dogania panel)
+
+- `[#403]` ⚡ **Publiczne proxy okładek GameVault dostaje timeout + edge-cache (web/ było w tyle za panelem).**
+  - [`web/ /api/img`](web/app/api/img/route.ts) zostało ze **starej** wersji: `force-dynamic` (każda okładka biła w origin — brak edge-cache) i **brak timeoutu** (zawis na wolnym CDN). Panel dostał ten hardening w v0.314, web/ — nie (rozjazd). Wyrównane do sprawdzonej wersji: usunięty `force-dynamic` + **edge-cache** (`s-maxage=86400` + `stale-while-revalidate`), **fetch z `AbortSignal.timeout(8s)`** + `try/catch` → `504` przy zawisie. Allowlista SSRF (6 hostów CDN) bez zmian.
+  - **Weryfikacja na żywo (preview web/):** host dozwolony → `200` + `image/jpeg` + `Cache-Control: …s-maxage=86400, stale-while-revalidate=604800`; host spoza listy → `403`; `http://` → `403`. Bramki: biome czysty, web `tsc` exit 0, docs:check exit 0.
 
 ## [0.332.0] — ♿ P2 (a11y): klawiatura na overlayach panelu (modal focus-trap + Escape na popover/tour)
 
