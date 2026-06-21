@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-431-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.361.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-432-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.362.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.362.0] — 🧪🎨 Rygiel katalogu skórek (SKINS) — cross-module spójność fontu z rendererem
+
+- `[#432]` 🧪 **Test katalogu skórek kart** ([`skins.test.ts`](bot/src/economy/skins.test.ts), 9 testów) — dotąd nietestowane, czyste dane ([`skins.mts`](bot/src/economy/skins.mts)). Skórka (kupowana za walutę) nadpisuje globalny styl w `/rank` i `/profile`.
+  - **RYGIEL cross-module (cichy tryb awarii):** jeśli `style.font` skórki NIE jest w `CARD_FONTS` ([`cards.mts`](bot/src/lib/cards.mts)), renderer (`safeFont`) **po cichu** podmienia ją na Poppins → user płaci za skórkę i nie dostaje jej fontu. Test rygluje, że każda z 5 skórek odnosi się do realnie renderowalnego fontu (import `CARD_FONTS` → realny link między modułami).
+  - **Integralność katalogu:** 5 skórek, unikalne id, niepuste nazwy; `classic` istnieje i jest **darmowa** (price 0, jedyna); drabina cen rośnie ściśle wg kolejności tierów `[0, 5000, 10000, 15000, 25000]`.
+  - **Walidacja stylu:** `from`/`to`/`textColor` = poprawny hex `#RRGGBB`, `angle` ∈ [0, 360); `skinById` round-trip + nieznane id → undefined.
+  - **Dowód, że gryzie (mutation-proof):** font `Bebas Neue`→`Comic Sans MS` zwala RYGIEL cross-module; `classic.price` 0→100 zauważa drabinę cen — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **31 plików / 277 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 277/277 · docs:check — exit 0.
 
 ## [0.361.0] — 🧪🏅 Rygiel progów odznak (BADGES) — dokładne `>=` + izolacja wymiaru
 
