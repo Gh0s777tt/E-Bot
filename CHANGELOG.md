@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-424-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.354.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-425-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.355.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.355.0] — 🧪🌍🏁 Rygiel parytetu treści „Jak to działa?" — parytet i18n CAŁEGO projektu zaryglowany
+
+- `[#425]` 🧪 **Test parytetu how-it-works** ([`howItWorksI18n.parity.test.ts`](dashboard/lib/howItWorksI18n.parity.test.ts), 15 testów) — ~256 KB treści, string-keyed (TS NIE pilnuje keysetu).
+  - Bazą jest **źródło pl** ([`HOW_IT_WORKS`](dashboard/lib/howItWorks.ts)); każde z **13 tłumaczeń** ([`HOW_CONTENT_I18N`](dashboard/lib/howItWorksI18n.ts)) musi pokryć komplet stron źródła (0 braków = żadna strona bez tłumaczenia w danym języku; 0 sierot). pl celowo poza słownikiem (jest fallbackiem).
+  - **Pomiar: parytet PEŁNY** (37 stron × 13 jęz., 0 dryfu) — komentarz „KOMPLET" potwierdzony; test go zamraża.
+  - **Dowód, że gryzie:** dodanie strony do źródła bez tłumaczeń zwala wszystkie 13 asercji; po cofnięciu zielono.
+  - **Zero zmian produkcyjnych** (oba słowniki już eksportowane). 🏁 **Domknięty parytet i18n CAŁEGO projektu:** bot (477) + panel UI (1430) + how-it-works (37 stron × 13).
+  - Suite: **26 plików / 220 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot + dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.354.0] — 🧪🌍 Rygiel parytetu i18n PANELU (UI 1430 × 14 jęz. + MODES) — największy słownik zaryglowany
 
