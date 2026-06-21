@@ -1,9 +1,11 @@
 // Kolektor GOG — czyta lokalną bazę GOG Galaxy 2.0 (bez tokenów).
 // Działa tylko, gdy GOG Galaxy jest zainstalowany. Inaczej zwraca [].
-import { DatabaseSync } from 'node:sqlite';
-import { existsSync } from 'node:fs';
 
-const GALAXY_DB = process.env.GOG_GALAXY_DB || 'C:/ProgramData/GOG.com/Galaxy/storage/galaxy-2.0.db';
+import { existsSync } from 'node:fs';
+import { DatabaseSync } from 'node:sqlite';
+
+const GALAXY_DB =
+  process.env.GOG_GALAXY_DB || 'C:/ProgramData/GOG.com/Galaxy/storage/galaxy-2.0.db';
 
 export type GogGame = { id: string; title: string };
 

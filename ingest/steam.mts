@@ -2,8 +2,8 @@
 export type SteamGame = {
   appid: number;
   name: string;
-  playtime_forever: number;     // minuty
-  rtime_last_played?: number;   // unix ts
+  playtime_forever: number; // minuty
+  rtime_last_played?: number; // unix ts
   img_icon_url?: string;
 };
 

@@ -8,9 +8,14 @@
     "pnpm": ">=11"
   },
   "scripts": {
-    "sync": "node sync.mts"
+    "sync": "node sync.mts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "psn-api": "^2.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "@types/node": "^25.9.2"
   }
 }

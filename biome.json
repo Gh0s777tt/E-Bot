@@ -8,7 +8,16 @@
   "files": {
     "ignoreUnknown": true,
     "maxSize": 2097152,
-    "includes": ["**", "!**/.next/**", "!**/node_modules/**", "!**/dist/**", "!docs/wiki/**", "!**/*.md", "!**/*.css"]
+    "includes": [
+      "**",
+      "!**/.next",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/next-env.d.ts",
+      "!docs/wiki",
+      "!**/*.md",
+      "!**/*.css"
+    ]
   },
   "formatter": {
     "enabled": true,

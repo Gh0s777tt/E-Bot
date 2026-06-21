@@ -1,15 +1,16 @@
 // Warstwa bazy danych — wbudowane node:sqlite (Node 22.5+). Zero zależności.
-import { DatabaseSync } from 'node:sqlite';
+
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 
 export type GameRow = {
-  platform: string;          // 'steam' | 'psn' | 'gog' | 'ubisoft'
+  platform: string; // 'steam' | 'psn' | 'gog' | 'ubisoft'
   platform_app_id: string;
   title: string;
   igdb_id: number | null;
   release_year: number | null;
-  genres: string | null;     // JSON: string[]
+  genres: string | null; // JSON: string[]
   summary: string | null;
   cover_url: string | null;
   playtime_min: number;
@@ -63,7 +64,15 @@ export function upsertGame(db: DatabaseSync, g: GameRow): void {
       updated_at   = unixepoch()
   `);
   stmt.run(
-    g.platform, g.platform_app_id, g.title, g.igdb_id, g.release_year,
-    g.genres, g.summary, g.cover_url, g.playtime_min, g.last_played,
+    g.platform,
+    g.platform_app_id,
+    g.title,
+    g.igdb_id,
+    g.release_year,
+    g.genres,
+    g.summary,
+    g.cover_url,
+    g.playtime_min,
+    g.last_played,
   );
 }

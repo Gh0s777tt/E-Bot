@@ -89,6 +89,13 @@ importers:
       psn-api:
         specifier: ^2.18.0
         version: 2.18.0
+    devDependencies:
+      '@types/node':
+        specifier: ^25.9.2
+        version: 25.9.2
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
   web:
     dependencies:

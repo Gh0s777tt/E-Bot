@@ -16,10 +16,19 @@ async function getToken(clientId: string, clientSecret: string): Promise<string>
   return ((await r.json()) as TokenResp).access_token;
 }
 
-async function igdbPost(endpoint: string, body: string, clientId: string, token: string): Promise<any[]> {
+async function igdbPost(
+  endpoint: string,
+  body: string,
+  clientId: string,
+  token: string,
+): Promise<any[]> {
   const r = await fetch(`https://api.igdb.com/v4/${endpoint}`, {
     method: 'POST',
-    headers: { 'Client-ID': clientId, Authorization: `Bearer ${token}`, Accept: 'application/json' },
+    headers: {
+      'Client-ID': clientId,
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    },
     body,
   });
   if (!r.ok) throw new Error(`IGDB ${endpoint} ${r.status}: ${await r.text()}`);
@@ -49,9 +58,11 @@ export async function enrichSteam(
     const rows = await igdbPost(
       'external_games',
       `fields game,uid; where external_game_source = 1 & uid = (${uids}); limit 500;`,
-      clientId, token,
+      clientId,
+      token,
     );
-    for (const row of rows) if (row.game && row.uid != null) uidToGame.set(String(row.uid), row.game);
+    for (const row of rows)
+      if (row.game && row.uid != null) uidToGame.set(String(row.uid), row.game);
   }
 
   const gameIds = [...new Set(uidToGame.values())];
@@ -60,7 +71,8 @@ export async function enrichSteam(
     const rows = await igdbPost(
       'games',
       `fields name,first_release_date,genres.name,cover.image_id,summary; where id = (${part.join(',')}); limit 500;`,
-      clientId, token,
+      clientId,
+      token,
     );
     for (const g of rows) {
       idToMeta.set(g.id, {
@@ -107,13 +119,16 @@ export async function enrichByNames(
       const rows = await igdbPost(
         'games',
         `search "${name}"; fields name,first_release_date,genres.name,cover.image_id,summary; limit 1;`,
-        clientId, token,
+        clientId,
+        token,
       );
       const g = rows[0];
       if (g) {
         out.set(raw, {
           igdb_id: g.id,
-          year: g.first_release_date ? new Date(g.first_release_date * 1000).getUTCFullYear() : null,
+          year: g.first_release_date
+            ? new Date(g.first_release_date * 1000).getUTCFullYear()
+            : null,
           genres: (g.genres ?? []).map((x: any) => x.name),
           summary: g.summary ?? null,
           cover_image_id: g.cover?.image_id ?? null,

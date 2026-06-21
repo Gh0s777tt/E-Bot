@@ -1,9 +1,9 @@
 // Orkiestrator ingestii: Steam (+IGDB) -> SQLite.  Uruchom: node ingest/sync.mts
 import { openDb, upsertGame } from './db.mts';
-import { getOwnedGames, steamCover } from './steam.mts';
-import { enrichSteam, igdbCover, enrichByNames, type IgdbMeta } from './igdb.mts';
-import { getPsnGames } from './psn.mts';
 import { getGogGames } from './gog.mts';
+import { enrichByNames, enrichSteam, type IgdbMeta, igdbCover } from './igdb.mts';
+import { getPsnGames } from './psn.mts';
+import { getOwnedGames, steamCover } from './steam.mts';
 
 process.loadEnvFile(); // wczytuje .env z bieżącego katalogu
 
@@ -26,7 +26,11 @@ async function main(): Promise<void> {
     let meta = new Map<string, IgdbMeta>();
     if (igdbId && igdbSecret) {
       try {
-        meta = await enrichSteam(games.map((g) => String(g.appid)), igdbId, igdbSecret);
+        meta = await enrichSteam(
+          games.map((g) => String(g.appid)),
+          igdbId,
+          igdbSecret,
+        );
         console.log(`[igdb]  dopasowano metadane/okładki dla ${meta.size}/${games.length} gier`);
       } catch (e) {
         console.warn('[igdb]  pominięto enrichment:', (e as Error).message);
@@ -63,7 +67,11 @@ async function main(): Promise<void> {
       console.log(`[psn] znaleziono ${psn.length} tytułów`);
       let meta = new Map<string, IgdbMeta>();
       if (igdbId && igdbSecret && psn.length) {
-        meta = await enrichByNames(psn.map((g) => g.name), igdbId, igdbSecret);
+        meta = await enrichByNames(
+          psn.map((g) => g.name),
+          igdbId,
+          igdbSecret,
+        );
         console.log(`[igdb]  dopasowano ${meta.size}/${psn.length} (PSN, po nazwie)`);
       }
       for (const g of psn) {
@@ -93,7 +101,11 @@ async function main(): Promise<void> {
     console.log(`[gog] znaleziono ${gog.length} gier (Galaxy)`);
     let meta = new Map<string, IgdbMeta>();
     if (igdbId && igdbSecret) {
-      meta = await enrichByNames(gog.map((g) => g.title), igdbId, igdbSecret);
+      meta = await enrichByNames(
+        gog.map((g) => g.title),
+        igdbId,
+        igdbSecret,
+      );
       console.log(`[igdb]  dopasowano ${meta.size}/${gog.length} (GOG)`);
     }
     for (const g of gog) {
@@ -117,8 +129,12 @@ async function main(): Promise<void> {
   }
 
   const count = (db.prepare('SELECT COUNT(*) AS c FROM games').get() as any).c;
-  const withCover = (db.prepare("SELECT COUNT(*) AS c FROM games WHERE cover_url IS NOT NULL").get() as any).c;
-  console.log(`\n✅ Gotowe. Przetworzono ${total} pozycji. W bibliotece: ${count} (z okładką: ${withCover}).`);
+  const withCover = (
+    db.prepare('SELECT COUNT(*) AS c FROM games WHERE cover_url IS NOT NULL').get() as any
+  ).c;
+  console.log(
+    `\n✅ Gotowe. Przetworzono ${total} pozycji. W bibliotece: ${count} (z okładką: ${withCover}).`,
+  );
   console.log(`   Baza: ${DB_PATH}`);
 }
 

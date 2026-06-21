@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-426-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.356.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-427-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.357.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.357.0] — 🔧🏁 Domknięcie znalezisk audytu: typy `ingest` + czysty `pnpm lint`
+
+- `[#427]` 🔧 **Naprawione pozostałe znaleziska audytu (#426):**
+  - **`ingest/` otypowany:** [`ingest/tsconfig.json`](ingest/tsconfig.json) (wzór bota: nodenext/strict/noEmit) + skrypt `typecheck` + devDeps `typescript`/`@types/node` → `pnpm typecheck` obejmuje teraz **4 pakiety** (bot · dashboard · web · ingest), wszystkie exit 0. Kolektory steam/psn/gog/igdb + sync były **type-clean** (0 latentnych błędów).
+  - **`pnpm lint` przestał kłamać:** failował na auto-naprawialnym drifcie (6 plików `ingest/` niesformatowanych + stara składnia glob w `biome.json`). Drift wyczyszczony, `next-env.d.ts` (auto-gen Next, re-driftuje przy buildzie) dodany do ignore [`biome.json`](biome.json) → `pnpm lint` exit 0, spójny z `pnpm check`.
+  - **Znalezisko #2 (twitch_sub/kofi) zweryfikowane jako NIE-bug:** oba toggle bramkują webhooki panelu (`/api/kofi`: `if(!enabled||!channelId)`, `/api/twitch/eventsub`: `if(!enabled||!roleId)` → nadanie roli przez Discord REST). Działają end-to-end po stronie panelu — poprawna architektura webhooków, nic do naprawy.
+  - 🏁 **Wszystkie 4 znaleziska audytu domknięte.** Bramki: `pnpm typecheck` (4 pakiety) · `pnpm lint` · 220 testów · biome `check` · docs:check — wszystko exit 0.
 
 ## [0.356.0] — 🔧🔍 Pełny audyt funkcjonalny + naprawa bramki `pnpm typecheck` (root → 3 pakiety)
 

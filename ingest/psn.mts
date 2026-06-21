@@ -1,5 +1,5 @@
 // Kolektor PlayStation — psn-api: NPSSO -> token -> tytuły (z trofeami).
-import { exchangeNpssoForCode, exchangeCodeForAccessToken, getUserTitles } from 'psn-api';
+import { exchangeCodeForAccessToken, exchangeNpssoForCode, getUserTitles } from 'psn-api';
 
 export type PsnGame = {
   npTitleId: string;
