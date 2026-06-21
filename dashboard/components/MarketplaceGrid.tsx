@@ -94,7 +94,7 @@ export default function MarketplaceGrid({
       )}
       {groups.map((group) => (
         <section key={group} className="space-y-3">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted/70">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
             {groupLabel(lang, group)}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

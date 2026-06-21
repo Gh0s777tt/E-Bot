@@ -45,7 +45,7 @@ export default function CommunityReview({ initial }: { initial: CommunityPlugin[
             </p>
             {p.description && <p className="truncate text-xs text-muted">{p.description}</p>}
             {p.author_id && (
-              <p className="text-[10px] text-muted/70">
+              <p className="text-[10px] text-muted">
                 {tp(lang, 'ui.mkt.author')}: {p.author_id}
               </p>
             )}

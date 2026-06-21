@@ -992,13 +992,13 @@ export default function MessageStudio({
 
       {/* Podgląd 1:1 jak Discord */}
       <div className="rounded-xl border border-line bg-[#313338] p-4">
-        <p className="mb-2 text-[10px] uppercase tracking-wide text-white/40">Podgląd</p>
+        <p className="mb-2 text-[10px] uppercase tracking-wide text-white/60">Podgląd</p>
         {isV2 && (
           <div
             className={`max-w-lg space-y-2 ${v2.accentColor ? 'rounded border-s-4 bg-[#2b2d31] p-3' : ''}`}
             style={v2.accentColor ? { borderLeftColor: v2.accentColor } : undefined}
           >
-            {v2.blocks.length === 0 && <p className="text-sm text-white/40">— dodaj bloki —</p>}
+            {v2.blocks.length === 0 && <p className="text-sm text-white/60">— dodaj bloki —</p>}
             {v2.blocks.map((b, i) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: bloki nie mają ID — kolejność jest tożsamością (podgląd tylko czyta)
               <div key={`${b.kind}-${i}`}>
@@ -1107,7 +1107,7 @@ export default function MessageStudio({
             </div>
           </div>
         ) : (
-          !isV2 && !value.content.trim() && <p className="text-sm text-white/40">— pusto —</p>
+          !isV2 && !value.content.trim() && <p className="text-sm text-white/60">— pusto —</p>
         )}
       </div>
     </div>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-398-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.328.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-399-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.329.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.329.0] — ♿ P2 (a11y): kontrast WCAG AA na etykietach panelu
+
+- `[#399]` ♿ **Niskokontrastowe etykiety panelu dociągnięte do WCAG AA (≥4.5:1).**
+  - Audyt kontrastu (tło panelu `#08080a`/`#121217`): solidny `text-muted` (#9a9aa6) = **7.2:1** ✅, ale z przezroczystością oblewał próg normalnego tekstu (4.5:1): `text-muted/50` = 2.5 · `/60` = 3.2 · `/70` = 4.0; `text-white/40` = 3.8. Dotyczyło **małych etykiet/footerów** (10–11px).
+  - Naprawione **9 etykiet → solidny `text-muted`**: [`login`](dashboard/app/login/page.tsx) ×2, [`Sidebar`](dashboard/components/Sidebar.tsx) ×3, [`MobileNav`](dashboard/components/MobileNav.tsx), [`LiveBoard`](dashboard/components/LiveBoard.tsx), [`MarketplaceGrid`](dashboard/components/MarketplaceGrid.tsx), [`CommunityReview`](dashboard/components/CommunityReview.tsx) + **3 × `text-white/40` → `/60`** w [`MessageStudio`](dashboard/components/MessageStudio.tsx) (preview Discorda `#313338`: 3.4→5.7:1). Strona **logowania** (publiczna) objęta.
+  - Świadomie zostawione: `text-muted/80` (4.8:1 ✅) i stopka embeda Discorda `text-white/50` (4.7:1 nad `#2b2d31` — wierna Discordowi).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0. Kontrast policzony wg WCAG; UI panelu za auth → bez weryfikacji w przeglądarce (preview server to `web/`).
 
 ## [0.328.0] — 🧹 P3 (kosmetyka docs/kodu): spójność liczby usług + martwe komentarze i18n + dedup README
 

@@ -79,7 +79,7 @@ export default function Sidebar() {
                 type="button"
                 onClick={() => toggle(group.label)}
                 aria-expanded={isOpen}
-                className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted/70 transition hover:text-white"
+                className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted transition hover:text-white"
               >
                 {groupLabel(lang, group.label)}
                 <ChevronDown
@@ -132,10 +132,10 @@ export default function Sidebar() {
             </button>
           ))}
         </div>
-        <p className="text-center text-[10px] text-muted/60">
+        <p className="text-center text-[10px] text-muted">
           {tp(lang, 'ui.mode')}: <span className="text-muted">{modeLabel(lang, mode)}</span>
         </p>
-        <label data-tour="lang" className="flex items-center gap-1.5 text-[10px] text-muted/60">
+        <label data-tour="lang" className="flex items-center gap-1.5 text-[10px] text-muted">
           <span aria-hidden>🌍</span>
           <span className="sr-only">{tp(lang, 'ui.language')}</span>
           <select

@@ -70,12 +70,12 @@ export default async function LoginPage({
           </svg>
           {tp(lang, 'ui.pub.loginBtn')}
         </a>
-        <p className="mt-5 text-[11px] uppercase tracking-widest text-muted/50">
+        <p className="mt-5 text-[11px] uppercase tracking-widest text-muted">
           {tp(lang, 'ui.pub.loginOwnerOnly')}
         </p>
       </div>
 
-      <div className="absolute bottom-5 text-[11px] uppercase tracking-[0.3em] text-muted/40">
+      <div className="absolute bottom-5 text-[11px] uppercase tracking-[0.3em] text-muted">
         E-BOT · GH0ST EMPIRE
       </div>
     </div>

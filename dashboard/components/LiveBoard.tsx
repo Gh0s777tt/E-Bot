@@ -98,7 +98,7 @@ export default function LiveBoard({ initial }: { initial: Live[] }) {
             tp(lang, 'ui.live.nobody')
           )}
         </p>
-        <span className="text-[11px] uppercase tracking-wide text-muted/60">
+        <span className="text-[11px] uppercase tracking-wide text-muted">
           {updatedAt
             ? `${tp(lang, 'ui.live.updated')} ${updatedAt}`
             : tp(lang, 'ui.live.autoRefresh')}

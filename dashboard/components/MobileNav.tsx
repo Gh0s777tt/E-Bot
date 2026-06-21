@@ -57,7 +57,7 @@ export default function MobileNav() {
             <nav className="flex-1 space-y-3 overflow-y-auto p-3">
               {groups.map((group) => (
                 <div key={group.label}>
-                  <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted/60">
+                  <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted">
                     {group.label}
                   </div>
                   <div className="space-y-0.5">
