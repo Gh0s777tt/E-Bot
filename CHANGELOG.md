@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-412-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.342.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-413-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.343.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.343.0] — 🧪 Rygiel izolacji RUNTIME pricetracker (ITAD): scope `guild_id` na wishliście (anty-IDOR)
+
+- `[#413]` 🧪 **Test runtime pricetracker** ([`pricetracker.isolation.test.ts`](bot/src/gaming/pricetracker.isolation.test.ts), 4 testy) — rygluje **naprawiony przeciek z v0.337**: lista życzeń była pobierana globalnie, teraz `cloudSelect('wishlist', …guild_id=eq.<id>…)`.
+  - **RYGIEL anty-IDOR:** KAŻDE zapytanie o wishlistę MUSI mieć filtr `guild_id` (serwer A nie zobaczy listy życzeń serwera B). Plus routing per-serwer (`guild.channels.fetch`), `enabled:false`→cisza, dedup per-serwer `g:<id>:pricetracker_seen`.
+  - **Dowód, że rygiel gryzie:** mutacja zapytania na globalne (usunięcie `guild_id=eq.`) zwala **3/4** testy (na czele anty-IDOR); po cofnięciu zielono.
+  - `tick` wyeksportowany z [`pricetracker.mts`](bot/src/gaming/pricetracker.mts) (jedyna zmiana produkcyjna). Mock dwóch endpointów ITAD (lookup + prices) + `cloudSelect`.
+  - **Inny wektor** niż freegames (scope zapytania DB, jak w panelowym `isolation.test.ts`, a nie klucz dedup) — domknięte oba typy izolacji pollerów.
+  - Suite: **11 plików / 90 testów** zielone. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.342.0] — 🧪 Rygiel izolacji RUNTIME pollera (freegames/Epic): routing per-serwer + dedup izolowany
 

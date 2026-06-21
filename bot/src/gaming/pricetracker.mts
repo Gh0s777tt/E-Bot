@@ -108,7 +108,8 @@ async function tickForGuild(guild: Guild, key: string): Promise<void> {
   if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-150))).catch(() => {});
 }
 
-async function tick(client: Client): Promise<void> {
+// Eksport dla testów izolacji (pricetracker.isolation.test.ts): jeden cykl pollera ITAD.
+export async function tick(client: Client): Promise<void> {
   const key = process.env.ITAD_API_KEY;
   if (!hasCloud() || !key) return;
   for (const guild of client.guilds.cache.values()) {
