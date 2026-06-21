@@ -57,8 +57,8 @@ const heat = new Map<string, Entry>(); // klucz: guildId:userId
 
 const EMOJI_RE = /\p{Extended_Pictographic}/gu;
 
-// Ciepło pojedynczej wiadomości — czynniki wg analizy Wick.
-function messageHeat(msg: Message, prev: Entry | undefined): number {
+// Ciepło pojedynczej wiadomości — czynniki wg analizy Wick. Eksport dla testów (heat.test.ts).
+export function messageHeat(msg: Message, prev: Entry | undefined): number {
   let h = 1;
   const content = msg.content ?? '';
   if (prev && content.length > 0 && content === prev.lastContent) h += 3; // powtórzenie

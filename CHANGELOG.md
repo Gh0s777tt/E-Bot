@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-416-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.346.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-417-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.347.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.347.0] — 🧪🛡️ Rygiel scoringu anty-spam (heat) — wagi czynników wykrywania spamu
+
+- `[#417]` 🧪 **Test logiki bezpieczeństwa — scoring heat** ([`heat.test.ts`](bot/src/security/heat.test.ts), 8 testów). **Nowy tor:** rygle krytycznej logiki decyzyjnej bota (poza izolacją multi-tenant).
+  - `messageHeat` ([`heat.mts`](bot/src/security/heat.mts)) — czysta funkcja oceny „ciepła" wiadomości. Zaryglowane **wszystkie czynniki**: baza (1), powtórzenie treści (+3), wzmianki userów (+2 każda, cap +6), `@everyone` (+8), ściana emoji >5 (+2), ściana tekstu >6 linii (+2), załącznik (+1), link (+2), długość >600 (+1), oraz kumulacja w kombinacji spamu.
+  - **Dlaczego ważne:** regresja wagi = ciche fałszywe trafienia (kara dla niewinnych) albo przeoczenia spamu — bez rygla niezauważalna.
+  - **Dowód, że gryzie:** osłabienie wagi `@everyone` (+8→+1) zwala 2/8 testów; po cofnięciu zielono.
+  - Eksport `messageHeat` (jedyna zmiana produkcyjna). Suite: **18 plików / 117 testów**. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.346.0] — 🧪 Rygiel spójności MIGRATED_GUILD_KEYS (bot ⊆ panel) — anty-rozjazd round-tripu multi-tenant
 
