@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-427-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.357.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-428-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.358.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.358.0] — 🧪💍 Rygiel logiki małżeństw (/marry): symetria zapisu + strażnik lustra przy rozwodzie
+
+- `[#428]` 🧪 **Test logiki małżeństw** ([`marriage.test.ts`](bot/src/lib/marriage.test.ts), 8 testów) — dotąd nietestowany magazyn symetryczny ([`marriage.mts`](bot/src/lib/marriage.mts)) z subtelnym, łatwym do zepsucia niezmiennikiem.
+  - **Zaryglowane 3 niezmienniki:** (1) **zapis symetryczny** — `setMarriage(A,B)` tworzy oba kierunki (A→B i B→A) z **identycznym** `since`; (2) **strażnik lustra przy rozwodzie** — `clearMarriage` kasuje lustro partnera **tylko** gdy ten nadal wskazuje na rozwodzącego się (ochrona cudzego, świeżego związku po re-marriage); (3) **izolacja multi-tenant** — związek serwera A niewidoczny na B, rozwód na jednym serwerze nie rusza tej samej pary na drugim.
+  - **Dlaczego to się liczy:** scenariusz A–B → B re-marries C → rozwód A. Bez strażnika `g[partner]?.partner === user` bezwarunkowe `delete g[partner]` skasowałoby **świeży** związek B–C. Test go zamraża.
+  - **Dowód, że gryzie (mutation-proof):** zdjęcie strażnika lustra (`delete` bezwarunkowy) zwala RYGIEL re-marriage; rozjechanie `since` lustra zwala test symetrii — po cofnięciu zielono, kod produkcyjny przywrócony co do bajta.
+  - **Zero zmian produkcyjnych.** Realny SQLite (tymczasowy `DATABASE_PATH`, bez sieci) — wzorzec [`db.isolation.test.ts`](bot/src/lib/db.isolation.test.ts). Suite: **27 plików / 228 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 228/228 · docs:check — wszystko exit 0.
 
 ## [0.357.0] — 🔧🏁 Domknięcie znalezisk audytu: typy `ingest` + czysty `pnpm lint`
 
