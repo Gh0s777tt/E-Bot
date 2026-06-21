@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-403-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.333.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-404-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.334.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.334.0] — 🔐 Multi-tenant: migracja `aimod_config` na per-serwer (WZORZEC — wymaga testu na multi-guild)
+
+- `[#404]` 🔐 **Pierwszy z „globalnych" configów panelu zmigrowany na per-serwer — jako sprawdzony wzorzec.**
+  - **Problem:** AI-moderacja czytała `aimod_config` GLOBALNIE (singleton w bocie) — wszystkie serwery dzieliły jedną konfigurację; panel pisał ją przez `setRawSetting`, omijając `MIGRATED_GUILD_KEYS`.
+  - **Bot** [`aimod.mts`](bot/src/community/aimod.mts): singleton `cfg`+`refresh` → wzorzec `cfgFor(guildId)` (cache 30 s per guild; `getGuildSettings` = override `g:<id>:` z **fallbackiem do globalnego**) — identycznie jak `leveling`/`automod`.
+  - **Panel** [`community.ts`](dashboard/lib/community.ts): `getRawSetting`/`setRawSetting` → `getConfigSetting`/`setConfigSetting`; `aimod_config` dodany do [`MIGRATED_GUILD_KEYS`](dashboard/lib/data.ts).
+  - **Profil ryzyka:** dzięki fallbackowi istniejący globalny config działa do nadpisania per-serwer, a błędne okablowanie **degraduje do obecnego (globalnego) zachowania**, nie do breakage.
+  - **Bramki:** biome czysty, **bot `tsc` exit 0**, dashboard `tsc` exit 0, docs:check exit 0. ⚠️ **NIE zweryfikowane runtime** (brak żywego multi-guild bota). **Test:** ustaw AI-mod różnie na serwerze A i B → potwierdź niezależność + dziedziczenie starego globalnego configu przez serwer bez własnego. Po potwierdzeniu — pozostałe ~8 (aihelp/aidigest/social_feeds/scheduled/creator/freegames/patchnotes/pricetracker) tym samym wzorcem.
 
 ## [0.333.0] — ⚡ Parytet hardeningu proxy obrazów `/api/img` (web/ dogania panel)
 

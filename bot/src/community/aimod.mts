@@ -1,5 +1,5 @@
 // Faza 7 / F8.3 — AI-moderacja: skanuje wiadomości przez DARMOWY endpoint OpenAI (omni-moderation)
-// i usuwa/ostrzega/loguje treści naruszające zasady. Config 'aimod_config'. Wymaga OPENAI_API_KEY.
+// i usuwa/ostrzega/loguje treści naruszające zasady. Config 'aimod_config' (PER-SERWER). Wymaga OPENAI_API_KEY.
 import {
   type Client,
   EmbedBuilder,
@@ -9,7 +9,7 @@ import {
   type TextChannel,
 } from 'discord.js';
 import { moderateText } from '../lib/ai.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type AiModConfig = {
   enabled: boolean;
@@ -23,15 +23,22 @@ const DEFAULT: AiModConfig = {
   logChannelId: '',
   exemptRoleId: '',
 };
-let cfg: AiModConfig = { ...DEFAULT };
 
-function refresh(): void {
-  const raw = getSettings()['aimod_config'];
+// Config PER-SERWER (Etap K): cache TTL 30 s per guild — override `g:<id>:aimod_config` z fallbackiem
+// do globalnego (getGuildSettings). Czyta dopiero przy braku/wygaśnięciu cache, nie na każdą wiadomość.
+const cfgCache = new Map<string, { cfg: AiModConfig; at: number }>();
+function cfgFor(guildId: string): AiModConfig {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['aimod_config'];
+  let cfg: AiModConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<AiModConfig>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    cfg = { ...DEFAULT };
   }
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
 let lastWarn = 0;
@@ -43,7 +50,12 @@ function warnOnce(msg: string): void {
   }
 }
 
-async function log(msg: Message, categories: string[], acted: string): Promise<void> {
+async function log(
+  msg: Message,
+  cfg: AiModConfig,
+  categories: string[],
+  acted: string,
+): Promise<void> {
   if (!cfg.logChannelId || !msg.guild) return;
   const ch = await msg.guild.channels.fetch(cfg.logChannelId).catch(() => null);
   if (!ch?.isTextBased() || !('send' in ch)) return;
@@ -62,11 +74,10 @@ async function log(msg: Message, categories: string[], acted: string): Promise<v
 }
 
 export function startAiMod(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
-
   client.on(Events.MessageCreate, async (msg: Message) => {
-    if (!cfg.enabled || msg.author.bot || !msg.guild) return;
+    if (msg.author.bot || !msg.guild) return;
+    const cfg = cfgFor(msg.guild.id);
+    if (!cfg.enabled) return;
     const member = msg.member;
     if (member?.permissions.has(PermissionFlagsBits.ManageMessages)) return;
     if (cfg.exemptRoleId && member?.roles.cache.has(cfg.exemptRoleId)) return;
@@ -91,11 +102,11 @@ export function startAiMod(client: Client): void {
           .catch(() => {});
         acted = 'ostrzeżono';
       }
-      await log(msg, categories, acted);
+      await log(msg, cfg, categories, acted);
     } catch (e) {
       warnOnce(`[aimod] ${(e as Error).message}`);
     }
   });
 
-  console.log('[aimod] AI-moderacja aktywna (config z panelu).');
+  console.log('[aimod] AI-moderacja aktywna (config per-serwer z panelu).');
 }

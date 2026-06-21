@@ -533,7 +533,7 @@ export const AIMOD_DEFAULT: AiModConfig = {
 };
 
 export async function getAiModConfig(): Promise<AiModConfig> {
-  const raw = await getRawSetting('aimod_config');
+  const raw = await getConfigSetting('aimod_config');
   if (!raw) return structuredClone(AIMOD_DEFAULT);
   try {
     return { ...AIMOD_DEFAULT, ...(JSON.parse(raw) as Partial<AiModConfig>) };
@@ -542,7 +542,7 @@ export async function getAiModConfig(): Promise<AiModConfig> {
   }
 }
 export async function saveAiModConfig(cfg: AiModConfig): Promise<void> {
-  await setRawSetting('aimod_config', JSON.stringify(cfg));
+  await setConfigSetting('aimod_config', JSON.stringify(cfg));
 }
 
 // ── Free-games feed (Faza 7 / F9.1) ──
