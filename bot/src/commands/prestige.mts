@@ -5,6 +5,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { levelForXp } from '../leveling.mts';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 
@@ -20,19 +21,6 @@ function prestigeCfg(guildId: string): { enabled: boolean; level: number; roleId
   } catch {
     return { enabled: false, level: 100, roleId: '' };
   }
-}
-
-function xpToNext(l: number): number {
-  return 5 * l * l + 50 * l + 100;
-}
-function levelForXp(xp: number): number {
-  let lvl = 0;
-  let acc = 0;
-  while (lvl < 1000 && acc + xpToNext(lvl) <= xp) {
-    acc += xpToNext(lvl);
-    lvl++;
-  }
-  return lvl;
 }
 
 export const data = new SlashCommandBuilder()

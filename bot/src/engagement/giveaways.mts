@@ -5,6 +5,7 @@
 import { type ButtonInteraction, type Client, MessageFlags, type TextChannel } from 'discord.js';
 import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
+import { levelForXp } from '../leveling.mts';
 import { cloudSelect, cloudUpdate, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getSettings, setSetting } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
@@ -26,18 +27,6 @@ type Entry = { user_id: string; weight?: number };
 
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
 
-function xpToNext(l: number): number {
-  return 5 * l * l + 50 * l + 100;
-}
-function levelForXp(xp: number): number {
-  let l = 0;
-  let a = 0;
-  while (l < 1000 && a + xpToNext(l) <= xp) {
-    a += xpToNext(l);
-    l++;
-  }
-  return l;
-}
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {

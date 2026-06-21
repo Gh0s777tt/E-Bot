@@ -10,24 +10,13 @@ import { syncBadges } from '../community/badges.mts';
 import { getEquippedStyle } from '../economy/skins.mts';
 import { getUser } from '../economy/store.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
+import { levelInfo } from '../leveling.mts';
 import { type CardStyle, renderProfileCard } from '../lib/cards.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 
 const ACCENT = 0xe50914;
 
-function xpToNext(l: number): number {
-  return 5 * l * l + 50 * l + 100;
-}
-function levelInfo(totalXp: number): { level: number; xpInto: number; xpFor: number } {
-  let lvl = 0;
-  let acc = 0;
-  while (lvl < 1000 && acc + xpToNext(lvl) <= totalXp) {
-    acc += xpToNext(lvl);
-    lvl++;
-  }
-  return { level: lvl, xpInto: totalXp - acc, xpFor: xpToNext(lvl) };
-}
 function rankStyle(guildId: string): Partial<CardStyle> {
   const raw = getGuildSettings(guildId)['rankcard_config'];
   try {

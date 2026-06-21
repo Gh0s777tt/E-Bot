@@ -108,6 +108,18 @@ export function levelForXp(xp: number): number {
   return lvl;
 }
 
+// Jedyne źródło prawdy dla rozbicia poziomu (level + XP w bieżącym poziomie + ile do następnego).
+// /rank, /profile i giveaway korzystają z tej funkcji zamiast lokalnych kopii (anty-rozjazd formuły).
+export function levelInfo(xp: number): { level: number; xpInto: number; xpFor: number } {
+  let lvl = 0;
+  let acc = 0;
+  while (lvl < 1000 && acc + xpToNext(lvl) <= xp) {
+    acc += xpToNext(lvl);
+    lvl++;
+  }
+  return { level: lvl, xpInto: xp - acc, xpFor: xpToNext(lvl) };
+}
+
 // ── Double-XP event (czasowy mnożnik globalny) — stan w pamięci + cloud key 'xp_event' ──
 let xpEvent = { mult: 1, until: 0 };
 export function getXpEvent(): { mult: number; until: number } {

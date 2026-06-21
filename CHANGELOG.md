@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-435-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.365.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-436-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.366.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.366.0] — ♻️🧪 DRY krzywej levelingu: 1 źródło prawdy (`levelInfo`) zamiast 5 kopii formuły
+
+- `[#436]` ♻️ **Koniec rozjazdu formuły XP→poziom — dedup 5 → 1.** Formuła `5L²+50L+100` była skopiowana **niezależnie w 5 miejscach** ([`leveling.mts`](bot/src/leveling.mts) + [`rank`](bot/src/commands/rank.mts) + [`profile`](bot/src/commands/profile.mts) + [`prestige`](bot/src/commands/prestige.mts) + [`giveaways`](bot/src/engagement/giveaways.mts)) — każda kopia mogła cicho dryfować ⇒ `/rank` pokazuje poziom 5, a `/prestige` liczy 6.
+  - **Jedyne źródło prawdy:** [`leveling.mts`](bot/src/leveling.mts) eksportuje teraz `levelInfo(xp)` (`{ level, xpInto, xpFor }`); `rank`/`profile` używają `levelInfo`, `prestige`/`giveaways` — istniejącego `levelForXp`. Usunięto **4 lokalne kopie** `xpToNext`+`levelForXp`/`levelInfo` (−34 linie netto, 0 zmian zachowania — formuły były bajt-w-bajt identyczne).
+  - 🧪 **Rygiel `levelInfo`** (rozszerzony [`leveling.test.ts`](bot/src/leveling.test.ts), +4 testy): `level` zgodny z `levelForXp`, `xpFor` = próg bieżącego poziomu (L0→100, L1→155, L2→220), `xpInto` = XP w bieżącym poziomie, niezmiennik `0 ≤ xpInto < xpFor` na całym sweepie. Mutacja `xp−acc`→`xp−acc+1` zwala test — po cofnięciu zielono.
+  - Suite: **34 plików / 315 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety, potwierdza spójność importów) · `pnpm test` 315/315 · docs:check — exit 0.
 
 ## [0.365.0] — 🧪🚦 Rygiel toggle-parserów bram funkcji (afk · highlights) — fail-safe OFF
 
