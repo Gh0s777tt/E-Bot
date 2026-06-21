@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-432-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.362.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-433-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.363.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.363.0] — 🧪⏱️ Rygiel warstwy danych eko: cooldown (minutesSince) + config per-serwer (ecoConfig)
+
+- `[#433]` 🧪 **Test warstwy danych ekonomii** ([`store-config.test.ts`](bot/src/economy/store-config.test.ts), 13 testów) — dotąd nietestowany fundament eko ([`store.mts`](bot/src/economy/store.mts)).
+  - **`minutesSince` — rdzeń KAŻDEJ bramki czasowej** (`/eco work`/`rob`/`daily` czytają `minutesSince(last_*)` vs cooldown): `null`→`+Infinity` (brak znacznika = akcja dozwolona), teraz→0, 60 s→1 min (dzielnik `60_000`), 90 min→90, przyszłość→ujemne (cofnięcie zegara nie wywala matematyki). Czas sterowany fałszywym zegarem `vi` → deterministyczne.
+  - **`ecoConfig` — per-serwer override + fallback global (Etap K):** brak configu → `ECO_DEFAULT` (świeża kopia, nie referencja); override per-serwer nadpisuje podane pola, reszta z defaultu (merge płytki); uszkodzony JSON → `ECO_DEFAULT` bez wyjątku; izolacja A↛B; fallback global widoczny dopóki serwer nie nadpisze. Realny SQLite (tymczasowy `DATABASE_PATH`).
+  - **`ECO_DEFAULT` — sanity (footgun-guard):** `workMin ≤ workMax`, procenty (`robChance`/`robMaxPercent`/`payTaxPct`/`bankInterestPct`) ∈ [0,100], cooldowny/kwoty nieujemne, `gambleMax > 0`, waluta niepusta.
+  - **Dowód, że gryzie (mutation-proof):** dzielnik `60_000`→`1_000` zwala 3 testy cooldownu; odwrócenie kolejności spreadu w merge'u (`...default, ...raw`→`...raw, ...default`) zwala 3 testy override/izolacji/fallback — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **32 plików / 290 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 290/290 · docs:check — exit 0.
 
 ## [0.362.0] — 🧪🎨 Rygiel katalogu skórek (SKINS) — cross-module spójność fontu z rendererem
 
