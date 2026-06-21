@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-429-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.359.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-430-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.360.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.360.0] — 🧪⏳ Rygiel TTL efektów itemów (XP-boost · tarcza) — granica wygaśnięcia + izolacja
+
+- `[#430]` 🧪 **Test chwilowych efektów** ([`effects.test.ts`](bot/src/economy/effects.test.ts), 11 testów) — dotąd nietestowana, czysta logika TTL w pamięci ([`effects.mts`](bot/src/economy/effects.mts)): XP×2 i tarcza anty-rabunek. Regresja = efekt żyje za długo/za krótko albo przecieka między userami (tarcza chroni cudzego, XP×2 wieczny).
+  - **Sercem jest GRANICA wygaśnięcia `exp < now` (ścisłe `<`):** w momencie **dokładnie** `exp` efekt jeszcze działa, dopiero po nim gaśnie + jest leniwie usuwany. Czas sterowany fałszywym zegarem (`vi.setSystemTime`) → w pełni **deterministyczne**.
+  - **Zaryglowane:** aktywacja/odpytanie, granica TTL (now===exp → aktywny, +1 ms → gaśnie, 999 ms → aktywny), mnożnik (`xpMultiplier` = 2 tylko dla `xp2`, inny efekt nie liczy), **izolacja klucza `guild:user:effect`** (efekt nie przecieka między userami / serwerami / typami).
+  - **Dowód, że gryzie (mutation-proof):** `<`→`<=` zwala granicę now===exp; podmiana `xp2`→`shield` w `xpMultiplier` zwala 2 testy mnożnika — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **29 plików / 249 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 249/249 · docs:check — exit 0.
 
 ## [0.359.0] — 🧪🃏 Rygiel blackjacka: miękki as (val) + integralność talii (freshDeck)
 
