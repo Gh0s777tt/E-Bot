@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-410-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.340.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-411-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.341.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.341.0] — 🧪 Rygiel izolacji per-serwer po stronie bota: testy `getGuildSettings`/`configWriteKey`
+
+- `[#411]` 🧪 **Test jednostkowy rdzenia multi-tenant bota** ([`db.isolation.test.ts`](bot/src/lib/db.isolation.test.ts), 8 testów na realnym tymczasowym SQLite, bez sieci).
+  - Pokrywa wspólny chokepoint, który czyta **każdy** poller per-serwer (`cfgFor → getGuildSettings`) i każdy zmigrowany config: override `g:<gid>:<key>` > globalny fallback > brak; **klucz wyłącznie serwera B NIE wycieka do widoku serwera A** (rygiel anty-cross-tenant); `configWriteKey` trafia w ten sam klucz, który czyta moduł per-serwer (zmigrowany → `g:<id>:<key>`, instancyjny np. `integrations` → globalny).
+  - **Dowód, że rygiel gryzie:** mutacja `getGuildSettings` (iteracja wszystkich `g:*` zamiast prefiksu serwera) zwala **5/8** testów (w tym leak B→A); po cofnięciu zielono.
+  - Komplementarny do panelowego [`isolation.test.ts`](dashboard/lib/isolation.test.ts) (scope `guild_id` po stronie Supabase) — teraz **obie strony** (zapis panelu + odczyt bota) mają rygiel regresji.
+  - ⚠️ **Zakres:** to rygiel ODCZYTU configu per-serwer. Pełen runtime pollerów (iteracja gildii + dedup `g:<id>:*_seen` + izolacja kanałów `guild.channels.fetch`) wciąż wymaga testu z mockiem discord.js/cloud — następny krok.
+  - Suite: **9 plików / 82 testy** zielone. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.340.0] — 🪵🏁 Loggery: reszta bota `console.*` → `log.*` — KONIEC sweepu (0 `console` w `bot/src`)
 
