@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-437-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.367.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-438-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.368.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.368.0] — 🧪🌍 Rygiel rejestru języków (locales) — dwukierunkowa spójność map Discord↔Locale
+
+- `[#438]` 🧪 **Test fundamentu i18n** ([`locales.test.ts`](bot/src/i18n/locales.test.ts), 11 testów) — dotąd nietestowany [`locales.mts`](bot/src/i18n/locales.mts) (routing języka 14 jęz.). Błąd = user widzi zły język.
+  - **RYGIEL dwukierunkowej spójności map (anti-drift):** `LOCALE_TO_DISCORD` (kody do rejestracji localizations komend) i `DISCORD_TO_LOCALE` (`interaction.locale` → nasz Locale) to **dwie niezależnie utrzymywane mapy** — gdyby się rozjechały, komenda zarejestrowana pod kodem X rozwiązałaby się na inny język. Test sprawdza **oba kierunki**: każdy kod z `LOCALE_TO_DISCORD` mapuje z powrotem na swój język (`fromDiscordLocale`), i każdy klucz `DISCORD_TO_LOCALE` istnieje w mapie odwrotnej. Udokumentowany wyjątek: `ar = []` (Discord bez arabskiego UI).
+  - **Zaryglowane też:** `isLocale` (walidacja, surowy kod Discorda ≠ Locale), `isRtl` (dokładnie 1 język RTL = `ar`), `fromDiscordLocale` (warianty regionalne `en-US`/`en-GB`→`en`, `pt-BR`→`pt`, `zh-CN`/`zh-TW`→`zh`, `es-419`→`es`; nieznane/null→null), kompletność `LOCALE_LABELS` (0 sierot).
+  - **Dowód, że gryzie (mutation-proof):** dodanie `pl` do `RTL_LOCALES` zwala isRtl; drift `pt-BR`→`en` zwala 3 testy spójności/wariantów — po cofnięciu zielono. Zmiana produkcyjna minimalna: tylko `export` na `DISCORD_TO_LOCALE` (1 linia).
+  - Suite: **36 plików / 332 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 332/332 · docs:check — exit 0.
 
 ## [0.367.0] — 🧪💬 Rygiel dopasowania autorespondera (matchTrigger) — anti-spam exact + pusty trigger
 

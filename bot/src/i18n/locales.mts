@@ -54,7 +54,7 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 
 // ─── Mapowanie locale Discorda (interaction.locale) → nasz Locale ───
 // Discord zwraca kody typu 'pl', 'en-US', 'pt-BR', 'zh-CN'. Sprowadzamy do naszych 14.
-const DISCORD_TO_LOCALE: Record<string, Locale> = {
+export const DISCORD_TO_LOCALE: Record<string, Locale> = {
   pl: 'pl',
   'en-US': 'en',
   'en-GB': 'en',
