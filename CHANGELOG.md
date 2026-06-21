@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-423-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.353.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-424-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.354.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.354.0] — 🧪🌍 Rygiel parytetu i18n PANELU (UI 1430 × 14 jęz. + MODES) — największy słownik zaryglowany
+
+- `[#424]` 🧪 **Test parytetu i18n panelu** ([`panelI18n.parity.test.ts`](dashboard/lib/panelI18n.parity.test.ts), 30 testów) — największy słownik projektu (`UI`: **1430 kluczy × 14 języków** + `MODES`).
+  - Każdy język musi mieć **identyczny keyset jak baza (pl)** — 0 braków, 0 kluczy-sierot; inaczej user widzi fallback (zła flaga w panelu) lub martwy klucz.
+  - **Pomiar: parytet PEŁNY** (1430×14, 0 dryfu) — panel był wzorowo utrzymany; test go zamraża przed regresją (i18n panelu to duży, aktywnie edytowany obszar).
+  - Komplementarny do bota ([`parity.test.ts`](bot/src/i18n/parity.test.ts), v0.353) — teraz **oba słowniki i18n** (bot 477 + panel 1430) mają rygiel.
+  - Zmiana produkcyjna: `export` na `UI`/`MODES` w [`panelI18n.ts`](dashboard/lib/panelI18n.ts) (NAV/GROUPS celowo Partial → poza zakresem). Mutacja (usunięcie klucza z `en`) zwala asercję.
+  - Suite: **25 plików / 205 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot + dashboard `tsc` exit 0, docs:check exit 0.
 
 ## [0.353.0] — 🧪🌍 Rygiel parytetu i18n bota (14 jęz.) + naprawa `error.generic` w 12 językach
 

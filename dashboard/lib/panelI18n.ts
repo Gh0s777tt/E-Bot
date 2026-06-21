@@ -731,7 +731,7 @@ const GROUPS: Partial<Record<PanelLocale, Dict>> = {
 
 // ── Wspólne teksty UI (pl = baza; reszta nadpisuje) ──
 // Klucze: tryb/język (stopka), zapis (SaveButton), Topbar (status+akcje), paleta ⌘K.
-const UI: Record<PanelLocale, Dict> = {
+export const UI: Record<PanelLocale, Dict> = {
   pl: {
     'ui.mode': 'Tryb',
     'ui.language': 'Język',
@@ -22889,7 +22889,7 @@ const UI: Record<PanelLocale, Dict> = {
 };
 
 // ── Tryby panelu (etykieta + podpowiedź) w 14 językach ──
-const MODES: Record<PanelLocale, Dict> = {
+export const MODES: Record<PanelLocale, Dict> = {
   pl: {
     simple: 'Prosty',
     adv: 'Zaawansowany',
