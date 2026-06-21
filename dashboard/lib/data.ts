@@ -287,6 +287,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'automod_config',
   'aimod_config',
   'aihelp_config',
+  'aidigest_config',
   'logging_config',
   'verification_config',
   'modmail_config',

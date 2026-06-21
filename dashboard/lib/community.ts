@@ -284,7 +284,7 @@ export const AIDIGEST_DEFAULT: AiDigestConfig = {
   hourUTC: 18,
 };
 export async function getAiDigestConfig(): Promise<AiDigestConfig> {
-  const raw = await getRawSetting('aidigest_config');
+  const raw = await getConfigSetting('aidigest_config');
   if (!raw) return structuredClone(AIDIGEST_DEFAULT);
   try {
     return { ...AIDIGEST_DEFAULT, ...(JSON.parse(raw) as Partial<AiDigestConfig>) };
@@ -293,7 +293,7 @@ export async function getAiDigestConfig(): Promise<AiDigestConfig> {
   }
 }
 export async function saveAiDigestConfig(cfg: AiDigestConfig): Promise<void> {
-  await setRawSetting('aidigest_config', JSON.stringify(cfg));
+  await setConfigSetting('aidigest_config', JSON.stringify(cfg));
 }
 
 // ── Aplikacje / rekrutacja (Tor K / Faza 8: wiele aplikacji) ──

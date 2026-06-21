@@ -1,14 +1,14 @@
 // Tor J — dzienny AI-digest: o wskazanej godzinie (UTC) bot streszcza ostatnie wiadomości kanału
-// źródłowego i wysyła embed na kanał docelowy. Config 'aidigest_config'; model z 'ai_config'.
-// Dedup przez setting 'aidigest_last' (data). Poller co 30 min.
-import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
+// źródłowego i wysyła embed na kanał docelowy. Config 'aidigest_config' (PER-SERWER); model z 'ai_config'.
+// Dedup przez setting 'g:<id>:aidigest_last' (data, PER-SERWER). Poller co 30 min iteruje gildie.
+import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { aiConfig, callModel } from '../lib/ai.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cfg = { on: boolean; sourceId: string; targetId: string; hour: number };
-function cfg(): Cfg {
-  const raw = getSettings()['aidigest_config'];
+function cfgFor(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['aidigest_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {
@@ -22,20 +22,22 @@ function cfg(): Cfg {
   }
 }
 
-async function maybePost(client: Client): Promise<void> {
-  if (!hasCloud()) return;
-  const c = cfg();
+// Digest JEDNEGO serwera: config + dedup per-serwer; `guild.channels.fetch` zwraca TYLKO kanały tej
+// gildii → naturalna izolacja multi-tenant (źródło/cel nie wycieknie na inny serwer).
+async function maybePostForGuild(guild: Guild): Promise<void> {
+  const c = cfgFor(guild.id);
   if (!c.on || !c.sourceId || !c.targetId) return;
   const ai = aiConfig();
   if (!ai.enabled) return;
   const now = new Date();
   if (now.getUTCHours() !== c.hour) return;
   const day = now.toISOString().slice(0, 10);
-  if ((await cloudGetSetting('aidigest_last').catch(() => null)) === day) return;
+  const lastKey = `g:${guild.id}:aidigest_last`;
+  if ((await cloudGetSetting(lastKey).catch(() => null)) === day) return;
 
-  const src = await client.channels.fetch(c.sourceId).catch(() => null);
+  const src = await guild.channels.fetch(c.sourceId).catch(() => null);
   if (!src?.isTextBased() || !('messages' in src)) {
-    await cloudSetSetting('aidigest_last', day).catch(() => {});
+    await cloudSetSetting(lastKey, day).catch(() => {});
     return;
   }
   const msgs = await (src as TextChannel).messages.fetch({ limit: 80 }).catch(() => null);
@@ -48,7 +50,7 @@ async function maybePost(client: Client): Promise<void> {
         .slice(0, 8000)
     : '';
   if (text.length < 50) {
-    await cloudSetSetting('aidigest_last', day).catch(() => {});
+    await cloudSetSetting(lastKey, day).catch(() => {});
     return;
   }
   try {
@@ -64,7 +66,7 @@ async function maybePost(client: Client): Promise<void> {
       ],
       500,
     );
-    const tgt = await client.channels.fetch(c.targetId).catch(() => null);
+    const tgt = await guild.channels.fetch(c.targetId).catch(() => null);
     if (tgt?.isTextBased() && 'send' in tgt) {
       const embed = new EmbedBuilder()
         .setColor(0xe50914)
@@ -76,11 +78,18 @@ async function maybePost(client: Client): Promise<void> {
   } catch (e) {
     console.warn('[aidigest]', (e as Error).message);
   }
-  await cloudSetSetting('aidigest_last', day).catch(() => {});
+  await cloudSetSetting(lastKey, day).catch(() => {});
+}
+
+async function maybePost(client: Client): Promise<void> {
+  if (!hasCloud()) return;
+  for (const guild of client.guilds.cache.values()) {
+    await maybePostForGuild(guild).catch(() => {});
+  }
 }
 
 export function startAiDigest(client: Client): void {
-  console.log('[aidigest] aktywny (dzienny, config z panelu).');
+  console.log('[aidigest] aktywny (dzienny per-serwer, config z panelu).');
   void maybePost(client);
   setInterval(
     () => void maybePost(client).catch((e) => console.warn('[aidigest]', (e as Error).message)),

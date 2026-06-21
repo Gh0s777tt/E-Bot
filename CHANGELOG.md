@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-405-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.335.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-406-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.336.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.336.0] — 🔐 Multi-tenant: aidigest per-serwer (WZORZEC POLLERA — wymaga testu)
+
+- `[#406]` 🔐 **Pierwszy POLLER zmigrowany na per-serwer — wzorzec dla 6 kolejnych.**
+  - **Problem:** dzienny AI-digest czytał JEDEN globalny `aidigest_config` + globalny dedup `aidigest_last` → tylko jeden serwer (ostatni zapis) miał digest; reszta nadpisana.
+  - **Bot** [`aidigest.mts`](bot/src/community/aidigest.mts): global poller → **iteracja `client.guilds.cache`**; per-serwer `cfgFor(guildId)` (`getGuildSettings` z fallbackiem) + **per-serwer dedup `g:<id>:aidigest_last`** + **izolacja kanałów przez `guild.channels.fetch`** (zwraca tylko kanały tej gildii — źródło/cel nie wycieknie na inny serwer).
+  - **Panel** [`community.ts`](dashboard/lib/community.ts): `getRawSetting`/`setRawSetting` → `getConfigSetting`/`setConfigSetting`; `aidigest_config` → [`MIGRATED_GUILD_KEYS`](dashboard/lib/data.ts).
+  - **Bramki:** biome czysty, bot `tsc` exit 0, dashboard `tsc` exit 0, docs:check exit 0. ⚠️ **Runtime-niewryfikowane** (logika iteracji/dedup — nie odpalę bez żywego bota). **TEST:** ustaw digest na serwerze A i B (różne kanały/godziny) → potwierdź, że każdy dostaje SWÓJ digest niezależnie. Po OK — replikuję wzorzec pollera na 6 (social_feeds/scheduled/creator/freegames/patchnotes/pricetracker).
 
 ## [0.335.0] — 🔐 Multi-tenant: migracja `aihelp_config` na per-serwer (2/~9, wzorzec aimod)
 
