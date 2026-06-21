@@ -242,7 +242,7 @@ export async function saveAntiRaidConfig(cfg: AntiRaidConfig): Promise<void> {
 export type AiHelpConfig = { enabled: boolean; channelId: string; knowledge: string };
 export const AIHELP_DEFAULT: AiHelpConfig = { enabled: false, channelId: '', knowledge: '' };
 export async function getAiHelpConfig(): Promise<AiHelpConfig> {
-  const raw = await getRawSetting('aihelp_config');
+  const raw = await getConfigSetting('aihelp_config');
   if (!raw) return structuredClone(AIHELP_DEFAULT);
   try {
     return { ...AIHELP_DEFAULT, ...(JSON.parse(raw) as Partial<AiHelpConfig>) };
@@ -251,7 +251,7 @@ export async function getAiHelpConfig(): Promise<AiHelpConfig> {
   }
 }
 export async function saveAiHelpConfig(cfg: AiHelpConfig): Promise<void> {
-  await setRawSetting('aihelp_config', JSON.stringify(cfg));
+  await setConfigSetting('aihelp_config', JSON.stringify(cfg));
 }
 
 // ── Tygodniowy digest serwera (Tor E) ──

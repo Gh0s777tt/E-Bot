@@ -3,21 +3,28 @@
 // (działa dla krótkich FAQ). Config 'aihelp_config'; korzysta z modelu z 'ai_config'.
 import { type Client, Events, type Message, type TextChannel } from 'discord.js';
 import { aiConfig, callModel } from '../lib/ai.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cfg = { on: boolean; channelId: string; knowledge: string };
-function cfg(): Cfg {
-  const raw = getSettings()['aihelp_config'];
+// Config PER-SERWER: cache TTL 30 s per guild (override `g:<id>:aihelp_config` z fallbackiem do globalnego).
+const cfgCache = new Map<string, { cfg: Cfg; at: number }>();
+function cfgFor(guildId: string): Cfg {
+  const hit = cfgCache.get(guildId);
+  if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
+  const raw = getGuildSettings(guildId)['aihelp_config'];
+  let cfg: Cfg;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
-    return {
+    cfg = {
       on: !!c.enabled,
       channelId: String(c.channelId || ''),
       knowledge: String(c.knowledge || ''),
     };
   } catch {
-    return { on: false, channelId: '', knowledge: '' };
+    cfg = { on: false, channelId: '', knowledge: '' };
   }
+  cfgCache.set(guildId, { cfg, at: Date.now() });
+  return cfg;
 }
 
 const cooldown = new Map<string, number>();
@@ -27,7 +34,7 @@ export function startAiHelp(client: Client): void {
   client.on(Events.MessageCreate, async (msg: Message) => {
     try {
       if (msg.author.bot || !msg.guild) return;
-      const c = cfg();
+      const c = cfgFor(msg.guild.id);
       if (!c.on || msg.channelId !== c.channelId) return;
       const q = msg.content.trim();
       if (q.length < 6) return; // ignoruj krótkie/śmieciowe

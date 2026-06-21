@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-404-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.334.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-405-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.335.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.335.0] — 🔐 Multi-tenant: migracja `aihelp_config` na per-serwer (2/~9, wzorzec aimod)
+
+- `[#405]` 🔐 **AI-pomoc (RAG-lite) per-serwer — drugi config tym samym sprawdzonym wzorcem.**
+  - **Bot** [`aihelp.mts`](bot/src/community/aihelp.mts): `cfg()` (global) → `cfgFor(guildId)` (cache 30 s, `getGuildSettings` = override `g:<id>:` z fallbackiem do globalnego). Handler `messageCreate` ma `msg.guild.id` — czysty swap (jak aimod).
+  - **Panel** [`community.ts`](dashboard/lib/community.ts): `getRawSetting`/`setRawSetting` → `getConfigSetting`/`setConfigSetting`; `aihelp_config` → [`MIGRATED_GUILD_KEYS`](dashboard/lib/data.ts).
+  - **Bramki:** biome czysty, bot `tsc` exit 0, dashboard `tsc` exit 0, docs:check exit 0. ⚠️ runtime-niewryfikowane (brak żywego multi-guild). **Pozostałe ~6 to POLLERY** (aidigest/social_feeds/scheduled/creator/freegames/patchnotes/pricetracker) — wymagają iteracji per-guild **+ migracji kluczy dedup** (np. `*_last`) → większy, ostrożniejszy refaktor (kolejne przyrosty).
 
 ## [0.334.0] — 🔐 Multi-tenant: migracja `aimod_config` na per-serwer (WZORZEC — wymaga testu na multi-guild)
 
