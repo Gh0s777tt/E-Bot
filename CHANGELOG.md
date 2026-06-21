@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-428-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.358.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-429-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.359.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.359.0] — 🧪🃏 Rygiel blackjacka: miękki as (val) + integralność talii (freshDeck)
+
+- `[#429]` 🧪 **Test logiki blackjacka** ([`blackjack.test.ts`](bot/src/economy/blackjack.test.ts), 10 testów) — dotąd nietestowana, subtelna matematyka gry **na pieniądze** (eko 2.0). Błąd = ciche złe wypłaty (fałszywy bust/win/push).
+  - **Sercem jest MIĘKKI AS:** as liczy się jako 11, ale gdy ręka przekracza 21 — schodzi do 1, **pojedynczo i tylko ile trzeba** (`while (total>21 && aces>0) { total-=10; aces-- }`). Zaryglowane przypadki: `A+K=21` (naturalny), `A+K+K=21`, `A+A=12`, `A+A+A=13`, `A+A+9=21`, 4 asy = 14, twardy bust bez asa.
+  - **Integralność talii** (`freshDeck`): dokładnie 52 karty, 4 kolory × 13 rang, 0 duplikatów, suma wartości całej talii = **380** (deterministyczna mimo tasowania `Math.random`).
+  - **Dowód, że gryzie (mutation-proof):** `total-=10`→`total-=11` zwala 3 testy asów; podmiana rangi w builderze talii zwala integralność (376≠380) — po cofnięciu zielono.
+  - **Minimalna zmiana produkcyjna:** tylko `export` na `val`/`freshDeck`/`Card` (0 zmian logiki — diff = 3 linie). Suite: **28 plików / 238 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 238/238 · docs:check — exit 0.
 
 ## [0.358.0] — 🧪💍 Rygiel logiki małżeństw (/marry): symetria zapisu + strażnik lustra przy rozwodzie
 

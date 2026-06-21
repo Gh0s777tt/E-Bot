@@ -18,13 +18,13 @@ const ACCENT = 0xe50914;
 const SUITS = ['♠', '♥', '♦', '♣'];
 const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
-type Card = { r: string; s: string };
+export type Card = { r: string; s: string };
 type Game = { bet: number; deck: Card[]; player: Card[]; dealer: Card[]; uid: string };
 const games = new Map<string, Game>();
 const key = (g: string, u: string): string => `${g}:${u}`;
 const draw = (d: Card[]): Card => d.pop() as Card;
 
-function freshDeck(): Card[] {
+export function freshDeck(): Card[] {
   const d: Card[] = [];
   for (const s of SUITS) for (const r of RANKS) d.push({ r, s });
   for (let i = d.length - 1; i > 0; i--) {
@@ -36,7 +36,7 @@ function freshDeck(): Card[] {
   return d;
 }
 
-function val(cards: Card[]): number {
+export function val(cards: Card[]): number {
   let total = 0;
   let aces = 0;
   for (const c of cards) {
