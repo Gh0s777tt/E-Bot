@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-421-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.351.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-422-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.352.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.352.0] — 🧪 Rygiel matematyki ekonomii (giełda · pety · format) — bundla czystej logiki eko 2.0
+
+- `[#422]` 🧪 **Test matematyki ekonomii** ([`economy-math.test.ts`](bot/src/economy/economy-math.test.ts), 10 testów) — zero zmian produkcyjnych (funkcje już eksportowane).
+  - **Giełda** ([`stocks.mts`](bot/src/economy/stocks.mts)): `priceAt` deterministyczne z czasu, każda spółka ≥1, GHOST w paśmie amplitud [60,140] przez sweep czasu; `changePct=0` przy zerowym upływie.
+  - **Pety** ([`pets.mts`](bot/src/economy/pets.mts)): `petLevel` (100 XP/poziom), `xpIntoLevel`, `fullness` (brak `last_fed`→0), `bar` (10 segmentów + klamra), `moodKey` (progi 70/35/0).
+  - **Format** ([`store.mts`](bot/src/economy/store.mts)): `fmt` — zaokrąglenie + separator tysięcy pl-PL + waluta.
+  - **Dowód, że gryzie:** mutacja amplitudy giełdy (×3 zmienność) wypycha cenę poza pasmo → zwala test; po cofnięciu zielono.
+  - Bundla 3 podsystemy w jednym przyroście (zamiast mikro-bumpów). Suite: **23 plików / 145 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.351.0] — 🧪 Rygiel progów odznak-tierów (tierAtLevel/nextTier) — dokładny próg vs spam
 
