@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-419-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.349.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-420-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.350.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.350.0] — 🧪 Rygiel krzywej XP→poziom (levelForXp) — formuła 5L²+50L+100
+
+- `[#420]` 🧪 **Test matematyki levelingu** ([`leveling.test.ts`](bot/src/leveling.test.ts), 4 testy) — zero zmian produkcyjnych (`levelForXp` był już eksportowany).
+  - Zaryglowane: progi kumulacyjne (100→L1, 255→L2, 475→L3 + wartości tuż pod progiem), monotoniczność (więcej XP nigdy nie obniża poziomu), odporność na ujemne XP.
+  - **Dlaczego ważne:** regresja formuły = cicha zmiana rankingu wszystkich użytkowników (mis-leveling).
+  - **Dowód, że gryzie:** mutacja progu `<=`→`<` (off-by-one krzywej) zwala test progów; po cofnięciu zielono.
+  - Suite: **21 plików / 131 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.349.0] — 🧪🛡️🏁 Rygiel scalania configu anti-nuke (mergeConfig) — KONIEC toru logiki bezpieczeństwa
 
