@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-418-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.348.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-419-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.349.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.349.0] — 🧪🛡️🏁 Rygiel scalania configu anti-nuke (mergeConfig) — KONIEC toru logiki bezpieczeństwa
+
+- `[#419]` 🧪 **Test logiki bezpieczeństwa — scalanie configu anti-nuke** ([`antinuke.test.ts`](bot/src/security/antinuke.test.ts), 5 testów).
+  - `mergeConfig` ([`antinuke.mts`](bot/src/security/antinuke.mts)) — czysta funkcja scalająca config z panelu (CZĘŚCIOWY, `JSON.parse → Partial`) z domyślnymi. Zaryglowane: pusty→pełne domyślne, **deep-merge ochron** (częściowa ochrona zachowuje `enabled`/`windowSec`), nadpisania top-level, whitelisty (`[]` gdy brak), **ignorowanie nieznanych kluczy ochron** (anty-wstrzyknięcie).
+  - **Dlaczego ważne:** regresja deep-merge = ciche zgubienie ochrony/whitelisty = dziura bezpieczeństwa (częściowa zmiana progu wyłączyłaby resztę ochron).
+  - **Dowód, że gryzie:** mutacja deep-merge na nadpisanie zwala test częściowej ochrony; po cofnięciu zielono. Eksport `mergeConfig` (jedyna zmiana produkcyjna).
+  - 🏁 **KONIEC toru „rygle logiki bezpieczeństwa":** scoring `heat` (v0.347) + detekcja fali `antiraid` (v0.348) + scalanie configu `antinuke` (v0.349). Suite: **20 plików / 127 testów** (start sesji: 8/74).
 
 ## [0.348.0] — 🧪🛡️ Rygiel detekcji fali anti-raid (detectWave) — okno przesuwne + próg
 

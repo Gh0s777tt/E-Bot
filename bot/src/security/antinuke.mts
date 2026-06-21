@@ -85,7 +85,8 @@ const ACTION_MAP: Partial<Record<AuditLogEvent, ProtKey>> = {
   [AuditLogEvent.BotAdd]: 'botAdd',
 };
 
-function mergeConfig(stored: Partial<AntinukeConfig>): AntinukeConfig {
+// Eksport dla testów (antinuke.test.ts): scalanie configu z domyślnymi (deep-merge ochron + whitelisty).
+export function mergeConfig(stored: Partial<AntinukeConfig>): AntinukeConfig {
   const base: AntinukeConfig = structuredClone(DEFAULT_CONFIG);
   Object.assign(base, { ...stored, protections: base.protections });
   if (stored.protections) {
