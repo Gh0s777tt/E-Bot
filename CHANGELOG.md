@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-401-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.331.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-402-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.332.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.332.0] — ♿ P2 (a11y): klawiatura na overlayach panelu (modal focus-trap + Escape na popover/tour)
+
+- `[#402]` ♿ **Domknięcie focus-trap/Escape na overlayach panelu — z właściwym rozróżnieniem modal vs non-modal.**
+  - [`GameDetailModal`](dashboard/components/GameDetailModal.tsx) (prawdziwy modal): ręczny listener Escape zastąpiony pełnym [`useFocusTrap`](dashboard/components/useFocusTrap.ts) — `role="dialog"` + `aria-modal` + `aria-label` (tytuł gry) + focus-trap + Escape + przywrócenie focusu.
+  - [`Assistant`](dashboard/components/Assistant.tsx) (non-modal popover czatu) i [`TourGuide`](dashboard/components/TourGuide.tsx) (coachmark wskazujący realne elementy strony): **świadomie BEZ focus-trapu** (uwięziłby focus tam, gdzie nie powinien) — dodany tylko `Escape` (Assistant: zamyka + focus na FAB; TourGuide: kończy samouczek).
+  - **Bramki:** biome czysty, dashboard `tsc` exit 0, docs:check exit 0. UI panelu za auth → bez weryfikacji w przeglądarce (prymityw `useFocusTrap` potwierdzony na żywo w web/Card v0.330 + używany w CommandPalette/MobileNav).
 
 ## [0.331.0] — ♿ P2 (a11y): Escape + przywrócenie focusu na dropdownie języka (GameVault)
 

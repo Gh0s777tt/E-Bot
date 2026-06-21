@@ -5,7 +5,7 @@
 // Odpowiedź w języku użytkownika (model). Bez kluczy AI → uczciwa podpowiedź. Etykiety w 14 językach.
 import { Send, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ASSISTANT_I18N } from '../lib/assistantI18n';
 import { useLang } from './LangContext';
 
@@ -19,6 +19,20 @@ export default function Assistant() {
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
   const [reply, setReply] = useState<Reply | null>(null);
+  const fabRef = useRef<HTMLButtonElement>(null);
+
+  // A11y: Escape zamyka panel (non-modal popover — bez focus-trapu) i przywraca focus na FAB.
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent): void {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        fabRef.current?.focus();
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
 
   async function ask(text?: string): Promise<void> {
     const prompt = (text ?? q).trim();
@@ -42,6 +56,7 @@ export default function Assistant() {
     <>
       {/* Pływający przycisk — zawsze widoczny */}
       <button
+        ref={fabRef}
         type="button"
         data-tour="assistant"
         onClick={() => setOpen((o) => !o)}

@@ -80,14 +80,24 @@ export default function TourGuide() {
     };
   }, [active, step]);
 
-  function finish() {
+  const finish = useCallback(() => {
     setActive(false);
     try {
       localStorage.setItem('panelTourDone', '1');
     } catch {
       /* brak localStorage */
     }
-  }
+  }, []);
+
+  // A11y: Escape kończy samouczek (coachmark wskazuje realne elementy strony — bez focus-trapu).
+  useEffect(() => {
+    if (!active) return;
+    function onKey(e: KeyboardEvent): void {
+      if (e.key === 'Escape') finish();
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [active, finish]);
 
   if (!active || !step) return null;
 

@@ -3,9 +3,10 @@
 // Faza 8 — szczegóły gry (modal): okładka, platforma, rok, gatunki, czas gry, ostatnio grane, opis
 // + link do sklepu Steam (gdy to gra Steam). Dane ze stored 'games' (bez zewnętrznych API).
 import { ExternalLink, X } from 'lucide-react';
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import type { Game } from '../lib/data';
 import CoverImg from './CoverImg';
+import { useFocusTrap } from './useFocusTrap';
 
 const PLATFORM_LABEL: Record<string, string> = {
   steam: 'Steam',
@@ -21,14 +22,9 @@ export default function GameDetailModal({
   game: Game | null;
   onClose: () => void;
 }) {
-  useEffect(() => {
-    if (!game) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [game, onClose]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // focus-trap + Escape + przywrócenie focusu (zastępuje ręczny listener Escape).
+  useFocusTrap(dialogRef, !!game, onClose);
 
   if (!game) return null;
   const hours = game.playtime_min ? Math.round(game.playtime_min / 60) : 0;
@@ -46,6 +42,10 @@ export default function GameDetailModal({
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={game.title}
         className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-line bg-card p-5"
         onClick={(e) => e.stopPropagation()}
       >
