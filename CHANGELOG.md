@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-399-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.329.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-400-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.330.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.330.0] — 🐛♿ Fix: modal GameVault się nie zamykał (AnimatePresence) + a11y dialogu
+
+- `[#400]` 🐛 **Realny pre-istniejący bug: modal szczegółów gry NIE dawał się zamknąć — naprawiony.**
+  - [`Card.tsx`](web/components/Card.tsx): modal nie zamykał się **żadną** ścieżką (✕, klik w tło, klawiatura). Diagnoza na żywo (preview): animacje exit dobiegały końca (`opacity→0`, `scale→0.92`), ale `AnimatePresence` **nie odmontowywał** custom-componentu `<Modal>` — `safeToRemove` nigdy nie wołane (kolizja **motion/react + React 19**), element zawisał w DOM. `key` ani usunięcie zagnieżdżonego `exit` nie pomogły → usunięty `AnimatePresence` (render warunkowy): **zamyka się niezawodnie** (animacja wejścia zostaje; ginie tylko fade zamknięcia). Gotcha zapisana w pamięci projektu.
+  - ♿ **A11y dialogu** (przy okazji): prymityw [`useFocusTrap`](web/components/useFocusTrap.ts) przeniesiony do web/ (osobny app) + nałożony na modal: `role="dialog"` + `aria-modal` + `aria-label` (tytuł gry) + focus-trap + **Escape zamyka** + przywrócenie focusu na kartę.
+  - **Weryfikacja na żywo (preview web/):** otwarcie (dialog + focus na „Zamknij"), Escape zamyka, focus wraca na kartę — wszystko ✓. Bramki: biome czysty, web `tsc` exit 0, docs:check exit 0.
 
 ## [0.329.0] — ♿ P2 (a11y): kontrast WCAG AA na etykietach panelu
 

@@ -1,10 +1,11 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
+import { motion } from 'motion/react';
+import { useCallback, useRef, useState } from 'react';
 import type { Game } from '../lib/types';
 import CoverImg from './CoverImg';
 import { useT } from './LangProvider';
+import { useFocusTrap } from './useFocusTrap';
 
 function hours(min: number): string {
   const h = min / 60;
@@ -13,19 +14,23 @@ function hours(min: number): string {
 
 function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
   const tt = useT();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, true, onClose); // focus-trap + Escape + przywrócenie focusu
   return (
     <motion.div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={game.title}
         className="relative w-full max-w-2xl overflow-hidden rounded-xl bg-elevated shadow-2xl"
         initial={{ scale: 0.92, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.92, y: 20 }}
         transition={{ type: 'spring', damping: 26, stiffness: 300 }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -92,6 +97,7 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
 
 export default function Card({ game }: { game: Game }) {
   const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []); // stabilne — wymóg useFocusTrap
 
   return (
     <>
@@ -111,9 +117,7 @@ export default function Card({ game }: { game: Game }) {
         </div>
       </motion.button>
 
-      <AnimatePresence>
-        {open && <Modal game={game} onClose={() => setOpen(false)} />}
-      </AnimatePresence>
+      {open && <Modal game={game} onClose={close} />}
     </>
   );
 }
