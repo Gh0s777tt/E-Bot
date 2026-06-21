@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-430-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.360.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-431-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.361.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.361.0] — 🧪🏅 Rygiel progów odznak (BADGES) — dokładne `>=` + izolacja wymiaru
+
+- `[#431]` 🧪 **Test silnika odznak** ([`badges.test.ts`](bot/src/community/badges.test.ts), 19 testów) — dotąd nietestowane, czyste predykaty `check(stats)` ([`badges.mts`](bot/src/community/badges.mts)). Odznaki są **permanentne** (utrwalane w `user_badges`, zostają po resecie sezonu XP), więc off-by-one w progu = ktoś **na zawsze** dostaje/traci odznakę niesłusznie.
+  - **Zaryglowane 13/13 progów** data-driven (poziom 5/10/25/50/100 · prestiż · majątek 10k/100k · streak 7/30 · zaproszenia 5/25 · gry 10): każdy próg ścisłe `>=` — dokładnie na progu wpada, jeden poniżej nie, wyżej dalej tak (monotoniczność).
+  - **Izolacja wymiaru:** każdy predykat patrzy WYŁĄCZNIE na swoje pole — odznaka levelowa nie wpada od kasy/zaproszeń, majątkowa nie od poziomu/streaka itd.
+  - **Anti-rozjazd test↔produkcja:** tabela progów musi pokryć komplet `BADGES` (dodanie odznaki bez progu w teście = czerwony).
+  - **Dowód, że gryzie (mutation-proof):** `>=`→`>` zwala próg na granicy; podmiana pola w predykacie (`s.invites`→`s.backlogDone`) zwala próg + test izolacji — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **30 plików / 268 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 268/268 · docs:check — exit 0.
 
 ## [0.360.0] — 🧪⏳ Rygiel TTL efektów itemów (XP-boost · tarcza) — granica wygaśnięcia + izolacja
 
