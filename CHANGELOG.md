@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-415-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.345.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-416-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.346.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.346.0] — 🧪 Rygiel spójności MIGRATED_GUILD_KEYS (bot ⊆ panel) — anty-rozjazd round-tripu multi-tenant
+
+- `[#416]` 🧪 **Test cross-package** ([`migrated-keys-consistency.test.ts`](bot/src/lib/migrated-keys-consistency.test.ts), 3 testy) — rygluje niezmiennik dotąd pilnowany tylko komentarzem „trzymać w sync!".
+  - Round-trip: panel ZAPISUJE config per-serwer gdy klucz ∈ zbiór panelu ([`data.ts`](dashboard/lib/data.ts)); bot ZAPISUJE per-serwer gdy klucz ∈ zbiór bota ([`db.mts`](bot/src/lib/db.mts) `configWriteKey`). Odczyt bota (`getGuildSettings`) **nie konsultuje** zbioru — czyta każdy override `g:<id>:`.
+  - **Niezmiennik: bot ⊆ panel.** Gdyby klucz trafił do zbioru bota, a nie panelu — panel pisałby config GLOBALNIE, a bot trzymał per-serwer → rozjazd cross-tenant. Potwierdzone: **29 kluczy bota ⊆ 38 panelu**; 9 extra panelu = configi panel-only (pollery/AI), których bot nie zapisuje.
+  - **Dowód, że rygiel gryzie:** dodanie fałszywego klucza do zbioru bota (nieobecnego w panelu) zwala test RYGIEL; po cofnięciu zielono. Czyta oba pliki jako tekst (bez importu — `data.ts` ciągnie moduły server-only Next).
+  - Suite: **17 plików / 109 testów** zielone. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.345.0] — 🧪 Testy izolacji 4 ostatnich pollerów (aidigest/social/clips/patchnotes) — KOMPLET 7/7
 
