@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-434-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.364.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-435-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.365.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.365.0] — 🧪🚦 Rygiel toggle-parserów bram funkcji (afk · highlights) — fail-safe OFF
+
+- `[#435]` 🧪 **Test bram funkcji** ([`feature-toggles.test.ts`](bot/src/community/feature-toggles.test.ts), 14 testów = 7 × 2 parsery) — dotąd nietestowane bramki „czy moduł działa": [`afkEnabled`](bot/src/community/afk.mts) + [`highlightsEnabled`](bot/src/community/highlights.mts).
+  - **Kluczowa właściwość FAIL-SAFE OFF:** brak configu / **uszkodzony JSON** / brak pola `enabled` MUSI dać `false` — nigdy wyjątek (który wywaliłby handler), nigdy przypadkowe włączenie funkcji. Każdy parser przebadany identyczną baterią.
+  - **Override per-serwer + izolacja (Etap K):** `{enabled:true}`→true, `{enabled:false}`→false; override serwera A (on) nie włącza B; fallback global widoczny dopóki serwer nie nadpisze. Realny SQLite (tymczasowy `DATABASE_PATH`).
+  - **Dowód, że gryzie (mutation-proof):** `catch → return true` zwala RYGIEL fail-safe (uszkodzony JSON); negacja koercji (`!!x`→`!x`) zwala 5 testów `enabled` — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **34 plików / 311 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 311/311 · docs:check — exit 0.
 
 ## [0.364.0] — 🧪🎁 Rygiel losowania giveawayów (weightedPick) — bez podwójnych zwycięzców
 
