@@ -32,6 +32,19 @@ function cfgFor(guildId: string): ResponderConfig {
   return cfg;
 }
 
+// Dopasowanie triggera autorespondera — czyste, case-insensitive. Pusty trigger nigdy nie pasuje
+// (inaczej `contains ''` łapałby KAŻDĄ wiadomość = spam). `exact` musi być ścisłą równością, nie podłańcuchem.
+export function matchTrigger(
+  content: string,
+  trigger: string,
+  mode: 'contains' | 'exact' | 'starts',
+): boolean {
+  const t = trigger.toLowerCase();
+  if (!t) return false;
+  const lc = content.toLowerCase();
+  return mode === 'exact' ? lc === t : mode === 'starts' ? lc.startsWith(t) : lc.includes(t);
+}
+
 function fill(s: string, msg: Message): string {
   return s
     .replaceAll('{user}', `<@${msg.author.id}>`)
@@ -57,13 +70,8 @@ export function startResponder(client: Client): void {
     }
 
     // Autoresponder: pierwszy pasujący trigger.
-    const lc = content.toLowerCase();
     for (const a of cfg.autoresponders) {
-      const t = a.trigger.toLowerCase();
-      if (!t) continue;
-      const hit =
-        a.match === 'exact' ? lc === t : a.match === 'starts' ? lc.startsWith(t) : lc.includes(t);
-      if (hit) {
+      if (matchTrigger(content, a.trigger, a.match)) {
         await msg.reply(fill(a.response, msg)).catch(() => {});
         return;
       }

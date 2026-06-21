@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-436-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.366.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-437-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.367.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.367.0] — 🧪💬 Rygiel dopasowania autorespondera (matchTrigger) — anti-spam exact + pusty trigger
+
+- `[#437]` 🧪 **Test dopasowania triggera** ([`responder.test.ts`](bot/src/community/responder.test.ts), 6 testów) — wydzielona, czysta funkcja `matchTrigger` ([`responder.mts`](bot/src/community/responder.mts)). Autoresponder reaguje na **każdą** wiadomość serwera, więc błąd dopasowania = spam całego czatu.
+  - **Wydzielenie (refactor behavior-preserving):** logika `exact`/`starts`/`contains` była zaszyta w handlerze — teraz eksportowany `matchTrigger(content, trigger, mode)`; handler woła go zamiast inline'u (diff = ekstrakcja, 0 zmian zachowania).
+  - **Zaryglowane:** `contains` (podłańcuch), `exact` (**ścisła równość, NIE podłańcuch** — `'ping pong'` exact `'ping'` → false), `starts` (prefiks), case-insensitive po obu stronach, **pusty trigger NIGDY nie pasuje** (inaczej `contains ''` łapałby każdą wiadomość = spam).
+  - **Dowód, że gryzie (mutation-proof):** `exact`→`includes` zwala test ścisłej równości; usunięcie `if (!t) return false` zwala test anti-spam — po cofnięciu zielono.
+  - Suite: **35 plików / 321 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 321/321 · docs:check — exit 0.
 
 ## [0.366.0] — ♻️🧪 DRY krzywej levelingu: 1 źródło prawdy (`levelInfo`) zamiast 5 kopii formuły
 
