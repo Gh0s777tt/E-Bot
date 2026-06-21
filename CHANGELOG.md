@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-417-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.347.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-418-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.348.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.348.0] — 🧪🛡️ Rygiel detekcji fali anti-raid (detectWave) — okno przesuwne + próg
+
+- `[#418]` 🧪 **Test logiki bezpieczeństwa — detekcja fali wejść anti-raid** ([`antiraid.test.ts`](bot/src/security/antiraid.test.ts), 5 testów).
+  - **Ostrożna ekstrakcja:** czysty predykat `detectWave(entries, now, windowSec, joinCount)` wydzielony z handlera `GuildMemberAdd` ([`antiraid.mts`](bot/src/security/antiraid.mts)) — zachowanie identyczne (handler dalej trzyma stan listy, woła `detectWave`; bot `tsc` exit 0 potwierdza wpięcie).
+  - Zaryglowane: okno przesuwne (wpisy starsze niż `windowSec` odcięte), próg `≥ joinCount`, brzeg okna (granica zachowana), `joinCount ≤ 0` = wyłączone.
+  - **Dlaczego ważne:** regresja = raid przepuszczony (za wysoki próg / złe okno) albo fałszywa fala (ban niewinnych przy zwykłym ruchu).
+  - **Dowód, że gryzie:** mutacja progu `≥`→`>` (off-by-one) zwala 2/5 testów (oba brzegi progu); po cofnięciu zielono.
+  - Suite: **19 plików / 122 testy**. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.347.0] — 🧪🛡️ Rygiel scoringu anty-spam (heat) — wagi czynników wykrywania spamu
 

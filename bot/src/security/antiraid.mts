@@ -129,6 +129,20 @@ async function alert(guild: Guild, channelId: string, text: string): Promise<voi
   if (ch?.isTextBased() && 'send' in ch) await (ch as TextChannel).send(text).catch(() => {});
 }
 
+// Czysta detekcja fali wejść (Etap K — wydzielona z handlera dla testowalności, antiraid.test.ts):
+// po odcięciu wpisów starszych niż okno zwraca przyciętą listę + czy próg fali osiągnięty (≥). Stan
+// (listę między wywołaniami) trzyma handler. `joinCount<=0` = detekcja wyłączona.
+export function detectWave<T extends { at: number }>(
+  entries: T[],
+  now: number,
+  windowSec: number,
+  joinCount: number,
+): { kept: T[]; isWave: boolean } {
+  const cut = now - windowSec * 1000;
+  const kept = entries.filter((e) => e.at >= cut);
+  return { kept, isWave: joinCount > 0 && kept.length >= joinCount };
+}
+
 export function startAntiRaid(client: Client): void {
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     const gid = member.guild.id;
@@ -196,11 +210,10 @@ export function startAntiRaid(client: Client): void {
       }
     }
 
-    // Okno przesuwne wejść — per-serwer.
-    const recent = recentByGuild.get(gid) ?? [];
-    recent.push({ m: member, at: now });
-    const cut = now - cfg.windowSec * 1000;
-    while (recent.length && recent[0].at < cut) recent.shift();
+    // Okno przesuwne wejść — per-serwer (detekcja w czystej `detectWave`).
+    const prior = recentByGuild.get(gid) ?? [];
+    prior.push({ m: member, at: now });
+    const { kept: recent, isWave } = detectWave(prior, now, cfg.windowSec, cfg.joinCount);
     recentByGuild.set(gid, recent);
 
     // Już w trybie obronnym — karz każde kolejne wejście.
@@ -210,7 +223,7 @@ export function startAntiRaid(client: Client): void {
     }
 
     // Próg przekroczony — start trybu obronnego + kara dla całej fali.
-    if (cfg.joinCount > 0 && recent.length >= cfg.joinCount) {
+    if (isWave) {
       const count = recent.length;
       const until = now + Math.max(cfg.windowSec, 30) * 1000;
       raidUntilByGuild.set(gid, until);
