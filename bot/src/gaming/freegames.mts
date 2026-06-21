@@ -82,7 +82,8 @@ async function postEpicForGuild(guild: Guild, games: FreeGame[]): Promise<void> 
   if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-50))).catch(() => {});
 }
 
-async function tick(client: Client): Promise<void> {
+// Eksport dla testów izolacji (freegames.isolation.test.ts): jeden cykl pollera Epic.
+export async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const r = await fetch(EPIC, { signal: AbortSignal.timeout(15_000) }).catch(() => null);
   if (!r?.ok) return;

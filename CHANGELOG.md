@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-411-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.341.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-412-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.342.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.342.0] — 🧪 Rygiel izolacji RUNTIME pollera (freegames/Epic): routing per-serwer + dedup izolowany
+
+- `[#412]` 🧪 **Test runtime pollera** ([`freegames.isolation.test.ts`](bot/src/gaming/freegames.isolation.test.ts), 4 testy) — wprost adresuje obawę „feedy na ≥2 serwerach". `tick(client)` z mockiem chmury / `getGuildSettings` / globalnego `fetch` (payload Epic) + atrapami Client/Guild/kanał:
+  - **routing per-serwer:** post idzie na kanał właściwego serwera przez jego `guild.channels.fetch` (nie globalny lookup),
+  - **enabled:false → cisza:** wyłączony serwer nic nie dostaje i nie sięga nawet po kanał,
+  - **dedup PER-SERWER:** zapis pod `g:<id>:freegames_seen` (nigdy globalnie); „widziane" na serwerze A nie tłumi postów na B.
+  - **Dowód, że rygiel gryzie:** mutacja klucza dedup na globalny (`'freegames_seen'` — dokładnie ten przeciek, który naprawiła migracja per-serwer) zwala **2/4** testy; po cofnięciu zielono.
+  - `tick` wyeksportowany z [`freegames.mts`](bot/src/gaming/freegames.mts) na potrzeby testu (jedyna zmiana produkcyjna). Pozostałe 6 pollerów dzieli **identyczny wzorzec** (`cfgFor` + `g:<id>:*_seen` + `guild.channels.fetch`) — ten test jest dla nich wzorcem do replikacji.
+  - Suite: **10 plików / 86 testów** zielone. **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.341.0] — 🧪 Rygiel izolacji per-serwer po stronie bota: testy `getGuildSettings`/`configWriteKey`
 
