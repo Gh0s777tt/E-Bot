@@ -1,7 +1,9 @@
 // Tor F — zaplanowane/cykliczne ogłoszenia. Poller co 60 s: wysyła wiadomości, których run_at minął;
 // jednorazowe usuwa, cykliczne przesuwa o interval_min. Dane w Supabase 'scheduled_messages'.
+
 import type { Client, TextChannel } from 'discord.js';
 import { cloudDelete, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 type Sched = {
   id: string;
@@ -12,7 +14,7 @@ type Sched = {
 };
 
 export function startScheduler(client: Client): void {
-  console.log('[scheduler] aktywny (zaplanowane ogłoszenia).');
+  log.info('[scheduler] aktywny (zaplanowane ogłoszenia).');
   setInterval(async () => {
     try {
       if (!hasCloud()) return;
@@ -35,7 +37,7 @@ export function startScheduler(client: Client): void {
         }
       }
     } catch (e) {
-      console.warn('[scheduler]', (e as Error).message);
+      log.warn('[scheduler]', { err: e });
     }
   }, 60_000);
 }

@@ -1,7 +1,9 @@
 // Faza 7 / F7.3 — AFK: /afk ustawia status (w pamięci); powrót czyści przy następnej wiadomości,
 // a wzmianka osoby AFK → bot informuje. Config 'afk_config' {enabled}. Bez tabeli (status ulotny).
+
 import { type Client, Events, type Message } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type AfkEntry = { reason: string; since: number };
 const afk = new Map<string, AfkEntry>();
@@ -40,5 +42,5 @@ export function startAfk(client: Client): void {
     }
   });
 
-  console.log('[afk] AFK aktywne (config z panelu).');
+  log.info('[afk] AFK aktywne (config z panelu).');
 }

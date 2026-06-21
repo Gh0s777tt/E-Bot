@@ -103,7 +103,7 @@ const economyOn =
 
 const token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
-  console.error('❌ Brak DISCORD_BOT_TOKEN w .env');
+  log.error('❌ Brak DISCORD_BOT_TOKEN w .env');
   process.exit(1);
 }
 
@@ -160,11 +160,9 @@ const registry = new Collection<string, Command>();
 for (const c of commands) registry.set(c.data.name, c);
 
 client.once(Events.ClientReady, (c) => {
-  console.log(
-    `✅ Zalogowano jako ${c.user.tag} (id ${c.user.id}) · serwery: ${c.guilds.cache.size}`,
-  );
+  log.info(`✅ Zalogowano jako ${c.user.tag} (id ${c.user.id}) · serwery: ${c.guilds.cache.size}`);
   if (process.argv.includes('--smoke')) {
-    console.log('🔎 smoke OK — połączenie z bramą działa, zamykam.');
+    log.info('🔎 smoke OK — połączenie z bramą działa, zamykam.');
     void client.destroy();
     process.exit(0);
   }
@@ -227,7 +225,7 @@ client.once(Events.ClientReady, (c) => {
   startPresenceRoles(c); // Etap I — live-rola + vanity-rola (/liverole /vanityrole; PRESENCE_INTENT)
   if (economyOn) {
     startEconomyConfigPolling();
-    console.log(
+    log.info(
       '   💰 GH0ST EMPIRE economy: ON — GT za wiadomości + voice (portal: ' +
         (process.env.GHOST_API_URL || 'default') +
         ')',
@@ -259,7 +257,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                       : id.startsWith('tv:')
                         ? handleTempvoiceButton(interaction)
                         : handleButton(interaction);
-    await h.catch((err) => console.error('button:', err));
+    await h.catch((err) => log.error('button', { err }));
     return;
   }
   if (interaction.isModalSubmit()) {
@@ -270,29 +268,29 @@ client.on(Events.InteractionCreate, async (interaction) => {
         : interaction.customId.startsWith('tv:')
           ? handleTempvoiceModal(interaction)
           : handleTicketModal(interaction);
-    await h.catch((err) => console.error('modal:', err));
+    await h.catch((err) => log.error('modal', { err }));
     return;
   }
   if (interaction.isStringSelectMenu()) {
     const h = interaction.customId.startsWith('help:')
       ? handleHelpSelect(interaction)
       : handleRoleMenu(interaction);
-    await h.catch((err) => console.error('select:', err));
+    await h.catch((err) => log.error('select', { err }));
     return;
   }
   if (interaction.isUserSelectMenu()) {
     if (interaction.customId.startsWith('tv:'))
-      await handleTempvoiceSelect(interaction).catch((err) => console.error('uselect:', err));
+      await handleTempvoiceSelect(interaction).catch((err) => log.error('uselect', { err }));
     return;
   }
   if (interaction.isUserContextMenuCommand()) {
-    await handleContextMenu(interaction).catch((err) => console.error('ctx:', err));
+    await handleContextMenu(interaction).catch((err) => log.error('ctx', { err }));
     return;
   }
   if (interaction.isAutocomplete()) {
     const ac = registry.get(interaction.commandName);
     if (ac?.autocomplete)
-      await ac.autocomplete(interaction).catch((err) => console.error('autocomplete:', err));
+      await ac.autocomplete(interaction).catch((err) => log.error('autocomplete', { err }));
     else await interaction.respond([]).catch(() => {});
     return;
   }
@@ -300,13 +298,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const cmd = registry.get(interaction.commandName);
   if (!cmd) {
     // komenda spoza rejestru — może być no-code komendą z panelu (settings 'custom_commands')
-    await handleCustomCommand(interaction).catch((err) => console.error('custom-cmd:', err));
+    await handleCustomCommand(interaction).catch((err) => log.error('custom-cmd', { err }));
     return;
   }
   try {
     await cmd.execute(interaction);
   } catch (err) {
-    console.error(`Błąd w /${interaction.commandName}:`, err);
+    log.error(`Błąd w /${interaction.commandName}`, { err });
     const msg = {
       content: t(resolveLocale(interaction), 'common.commandError'),
       flags: MessageFlags.Ephemeral as const,

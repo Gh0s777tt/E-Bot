@@ -1,9 +1,11 @@
 // Automod (Faza 6) — anti-invite / anti-link / limit wzmianek / anty-spam + mod-log.
 // Config z panelu (settings 'automod_config'). Wymaga intencji MessageContent (treść).
+
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from './lib/cloud.mts';
 import { findPII, type PiiOpts, piiLabel, scanScam } from './lib/contentScan.mts';
 import { getGuildSettings } from './lib/db.mts';
+import { log } from './lib/log.mts';
 
 type AutomodConfig = {
   enabled: boolean;
@@ -307,9 +309,9 @@ export function startAutomod(client: Client): void {
           .catch(() => {});
       }
     } catch (e) {
-      console.warn('[automod]', (e as Error).message);
+      log.warn('[automod]', { err: e });
     }
   });
 
-  console.log('[automod] aktywny (config z panelu).');
+  log.info('[automod] aktywny (config z panelu).');
 }

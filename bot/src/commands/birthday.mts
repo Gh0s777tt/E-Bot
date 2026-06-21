@@ -1,7 +1,9 @@
 // /birthday — ustaw/usuń swoje urodziny (ogłaszane przez poller z community/birthdays.mts).
+
 import { type ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { cloudDelete, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 const MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -81,7 +83,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       },
     ],
     'guild_id,user_id',
-  ).catch((e) => console.warn('[birthday]', (e as Error).message));
+  ).catch((e) => log.warn('[birthday]', { err: e }));
   await interaction.reply({
     content: t(locale, 'birthday.saved', { day, month }),
     flags: MessageFlags.Ephemeral,

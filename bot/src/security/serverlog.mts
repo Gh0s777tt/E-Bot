@@ -1,6 +1,7 @@
 // Faza 7 / F6.2 — logi serwera: zdarzenia (wiadomości/członkowie/bany/role/kanały/voice) → kanał logów.
 // Config z panelu (settings 'logging_config'). Każda grupa zdarzeń osobno włączana. Bez chmury działa
 // (czyta lokalne settings synced z panelu). Kanał logów + kanały ignorowane (dla zdarzeń wiadomości).
+
 import {
   type Client,
   EmbedBuilder,
@@ -17,6 +18,7 @@ import {
   type VoiceState,
 } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type LoggingConfig = {
   enabled: boolean;
@@ -282,5 +284,5 @@ export function startServerLog(client: Client): void {
     }
   });
 
-  console.log('[serverlog] logi serwera aktywne (config z panelu).');
+  log.info('[serverlog] logi serwera aktywne (config z panelu).');
 }

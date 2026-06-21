@@ -1,5 +1,6 @@
 // Odsetki bankowe — raz dziennie dolicza bankInterestPct% do salda w banku każdej osoby (bank>0).
 // Pasywny dochód zachęcający do trzymania kasy w banku. Dedup dnia przez 'eco_interest_last'.
+
 import type { Client } from 'discord.js';
 import {
   cloudGetSetting,
@@ -8,6 +9,7 @@ import {
   cloudUpsert,
   hasCloud,
 } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 import { ecoConfig } from './store.mts';
 import { logTx } from './txlog.mts';
 
@@ -53,13 +55,13 @@ async function tick(client: Client): Promise<void> {
 
 export function startEcoInterest(client: Client): void {
   if (!hasCloud()) {
-    console.log('[interest] brak Supabase — odsetki pominięte.');
+    log.info('[interest] brak Supabase — odsetki pominięte.');
     return;
   }
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[interest]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[interest]', { err: e })),
     6 * 3_600_000,
   );
-  console.log('[interest] odsetki bankowe aktywne (dzienne, jeśli włączone w configu eko).');
+  log.info('[interest] odsetki bankowe aktywne (dzienne, jeśli włączone w configu eko).');
 }

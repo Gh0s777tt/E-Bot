@@ -1,8 +1,10 @@
 // Faza 7 / F7.3 — highlighty: użytkownik rejestruje słowa (/highlight), bot DM-uje go, gdy słowo
 // padnie w wiadomości innej osoby (z poszanowaniem dostępu do kanału). Config 'highlights_config'.
+
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type HL = { user_id: string; word: string };
 let cache: HL[] = [];
@@ -25,7 +27,7 @@ async function refreshCache(): Promise<void> {
 
 export function startHighlights(client: Client): void {
   if (!hasCloud()) {
-    console.log('[highlights] brak chmury — highlighty wyłączone.');
+    log.info('[highlights] brak chmury — highlighty wyłączone.');
     return;
   }
   void refreshCache();
@@ -68,5 +70,5 @@ export function startHighlights(client: Client): void {
     }
   });
 
-  console.log('[highlights] highlighty aktywne (config z panelu, cache 60s).');
+  log.info('[highlights] highlighty aktywne (config z panelu, cache 60s).');
 }

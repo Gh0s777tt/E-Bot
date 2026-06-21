@@ -1,8 +1,10 @@
 // Etap J (eko 2.0) — role czasowe ze sklepu: kup rolę na X dni, bot sam ją zdejmie po czasie.
 // Wzorzec jak auto-unban tempbanów (security/moderation.mts): poller co 60 s + Supabase 'temp_roles'.
 // Bez chmury = no-op (rola nadana na stałe, bo nie ma gdzie zapisać wygaśnięcia).
+
 import type { Client, Guild } from 'discord.js';
 import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 type TempRole = { id: string; guild_id: string; user_id: string; role_id: string };
 
@@ -48,12 +50,9 @@ async function tick(client: Client): Promise<void> {
 
 export function startTempRoles(client: Client): void {
   if (!hasCloud()) {
-    console.log('[temp-roles] brak chmury — role czasowe ze sklepu nadawane na stałe.');
+    log.info('[temp-roles] brak chmury — role czasowe ze sklepu nadawane na stałe.');
     return;
   }
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[temp-roles]', (e as Error).message)),
-    60_000,
-  );
-  console.log('[temp-roles] aktywne (poll 60 s — zdejmowanie wygasłych ról ze sklepu).');
+  setInterval(() => void tick(client).catch((e) => log.warn('[temp-roles]', { err: e })), 60_000);
+  log.info('[temp-roles] aktywne (poll 60 s — zdejmowanie wygasłych ról ze sklepu).');
 }

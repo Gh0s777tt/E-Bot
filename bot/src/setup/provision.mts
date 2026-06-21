@@ -1,6 +1,7 @@
 // Architekt serwera — silnik provisioningu. Panel zapisuje zlecenie do cloud key 'setup_provision',
 // bot (poll co 4 s) tworzy kategorie/kanały/role (idempotentnie — pomija istniejące po nazwie) i
 // zapisuje log do 'setup_provision_result'. Dedup po id zlecenia. Wymaga ManageChannels/ManageRoles.
+
 import {
   ChannelType,
   type Client,
@@ -11,6 +12,7 @@ import {
 } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { configWriteKey, getGuildSettings } from '../lib/db.mts';
+import { log as logger } from '../lib/log.mts';
 
 type Role = { name: string; color?: number; hoist?: boolean };
 type Category = { key: string; name: string };
@@ -213,19 +215,16 @@ async function tick(client: Client): Promise<void> {
     'setup_provision_result',
     JSON.stringify({ id: plan.id, done: true, log, ts: Date.now() }),
   ).catch(() => {});
-  console.log(
+  logger.info(
     `[provision] wykonano zlecenie ${plan.id} (${log.filter((l) => l.ok).length}/${log.length} ok).`,
   );
 }
 
 export function startProvision(client: Client): void {
   if (!hasCloud()) {
-    console.log('[provision] brak Supabase — architekt serwera wyłączony.');
+    logger.info('[provision] brak Supabase — architekt serwera wyłączony.');
     return;
   }
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[provision]', (e as Error).message)),
-    4000,
-  );
-  console.log('[provision] architekt serwera aktywny (poll zleceń co 4 s).');
+  setInterval(() => void tick(client).catch((e) => logger.warn('[provision]', { err: e })), 4000);
+  logger.info('[provision] architekt serwera aktywny (poll zleceń co 4 s).');
 }

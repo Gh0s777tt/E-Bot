@@ -1,7 +1,9 @@
 // Faza 7 / F8 — współdzielona warstwa AI: config, wywołanie modelu (DeepSeek/OpenAI) + twardy
 // dzienny limit kosztów per użytkownik (tabela 'ai_usage'). Używane przez /ai, /tldr, /translate.
+
 import { cloudSelect, cloudUpsert, hasCloud } from './cloud.mts';
 import { getSettings } from './db.mts';
+import { log } from './log.mts';
 
 export type AiModel = 'deepseek' | 'openai';
 export type AiConfig = {
@@ -112,7 +114,7 @@ export async function bumpUsage(userId: string, u: Usage, addTokens: number): Pr
       },
     ],
     'guild_id,user_id,day',
-  ).catch((e) => console.warn('[ai]', (e as Error).message));
+  ).catch((e) => log.warn('[ai]', { err: e }));
 }
 
 /** Generuje obraz przez OpenAI (dall-e-3, 1024×1024) → PNG Buffer. Wymaga OPENAI_API_KEY. */

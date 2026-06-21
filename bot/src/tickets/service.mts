@@ -1,4 +1,5 @@
 // Faza 7 / F5 — serwis ticketów: otwieranie (przycisk/modal), zamykanie z TRANSKRYPTEM + oceną.
+
 import {
   ActionRowBuilder,
   AttachmentBuilder,
@@ -11,6 +12,7 @@ import {
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import type { RichMessage } from '../lib/richMessage.mts';
 
 export type TicketCategory = {
@@ -122,11 +124,11 @@ export async function openTicket(
           subject: labeledSubject,
           status: 'open',
         },
-      ]).catch((e) => console.warn('[ticket]', (e as Error).message));
+      ]).catch((e) => log.warn('[ticket]', { err: e }));
     }
     return thread;
   } catch (e) {
-    console.warn('[ticket] open:', (e as Error).message);
+    log.warn('[ticket] open:', { err: e });
     return null;
   }
 }

@@ -3,6 +3,7 @@
 // (auto-unban przez security/moderation.mts). Mod-log: kanał z automod_config.modlogChannelId.
 // i18n: efemeryczne odpowiedzi → język moderatora (resolveLocale); mod-log embed + DM ostrzeżenia
 // → resolveGuildLocale (język serwera). Kody akcji (WARN/BAN/…) zostają tokenami.
+
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -17,6 +18,7 @@ import { resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
 import { cloudDelete, cloudInsert, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { formatDuration, parseDuration } from '../lib/duration.mts';
+import { log } from '../lib/log.mts';
 
 const MAX_TEMPBAN_MS = 365 * 86_400_000; // 1 rok
 
@@ -46,7 +48,7 @@ async function logCase(
         action,
         reason: reason || null,
       },
-    ]).catch((e) => console.warn('[mod]', (e as Error).message));
+    ]).catch((e) => log.warn('[mod]', { err: e }));
   }
   const chId = modlogChannelId(interaction.guildId ?? '');
   if (chId && interaction.guild) {
@@ -296,7 +298,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
           },
         ],
         'guild_id,user_id',
-      ).catch((e) => console.warn('[mod]', (e as Error).message));
+      ).catch((e) => log.warn('[mod]', { err: e }));
       await logCase(interaction, 'tempban', user, `${human} · ${reason}`);
       await reply(interaction, t(locale, 'mod.tempbanOk', { user: user.id, duration: human }));
     } catch (e) {

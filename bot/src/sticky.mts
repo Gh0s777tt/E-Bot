@@ -1,6 +1,7 @@
 // Sticky messages — bot re-postuje wiadomość, by trzymała się dołu kanału.
 // Config: settings 'sticky_config' = JSON { [channelId]: { content } }. Sterowane /sticky.
 // Debounce 3 s na kanał (burst czatu = jeden repost), kasowanie poprzedniego sticky.
+
 import {
   type Client,
   EmbedBuilder,
@@ -10,6 +11,7 @@ import {
 } from 'discord.js';
 import { resolveGuildLocale, t } from './i18n/index.mts';
 import { getSettings, setSetting } from './lib/db.mts';
+import { log } from './lib/log.mts';
 
 const ACCENT = 0xe50914;
 const DEBOUNCE_MS = 3000;
@@ -57,7 +59,7 @@ async function repost(channel: GuildTextBasedChannel): Promise<void> {
     // Skasuj poprzedni dopiero po wysłaniu nowego (brak migotania/luki).
     if (prevId && prevId !== sent.id) await channel.messages.delete(prevId).catch(() => {});
   } catch (e) {
-    console.warn('[sticky] repost:', (e as Error).message);
+    log.warn('[sticky] repost:', { err: e });
   }
 }
 
@@ -119,5 +121,5 @@ export function startSticky(client: Client): void {
     schedule(ch as GuildTextBasedChannel);
   });
 
-  console.log('[sticky] aktywny (przypięte wiadomości; config z /sticky).');
+  log.info('[sticky] aktywny (przypięte wiadomości; config z /sticky).');
 }

@@ -1,7 +1,9 @@
 // Tor O — automatyzacje IFTTT-lite: reguły „event → akcja" z panelu (settings 'automations_config').
 // Triggery: dołączenie członka, słowo-klucz. Akcje: wyślij wiadomość / nadaj rolę / wyślij DM.
+
 import { type Client, Events, type GuildMember, type Message, type TextChannel } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Rule = {
   event: 'join' | 'keyword';
@@ -50,7 +52,7 @@ async function run(rule: Rule, member: GuildMember): Promise<void> {
 }
 
 export function startAutomations(client: Client): void {
-  console.log('[automations] aktywne (reguły z panelu).');
+  log.info('[automations] aktywne (reguły z panelu).');
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     for (const r of rules(member.guild.id)) if (r.event === 'join') await run(r, member);
   });

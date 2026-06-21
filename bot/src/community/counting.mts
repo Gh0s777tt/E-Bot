@@ -1,8 +1,10 @@
 // Tor 3 — gra w liczenie: kolejne liczby na dedykowanym kanale. Anti-cheat (nie dwa razy z rzędu)
 // + rekord serwera + kamienie milowe. Config 'counting_config'; stan w Supabase 'counting_state'.
+
 import { type Client, Events, type Message, type TextChannel } from 'discord.js';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { on: boolean; channelId: string; allowSameUser: boolean; resetOnFail: boolean };
 // Etap K — config per-serwer: świeży odczyt (stan gry i tak per-guild), fallback global.
@@ -46,11 +48,11 @@ function persist(guildId: string, st: State): void {
     'counting_state',
     [{ guild_id: guildId, count: st.count, last_user_id: st.lastUserId, record: st.record }],
     'guild_id',
-  ).catch((e) => console.warn('[counting]', (e as Error).message));
+  ).catch((e) => log.warn('[counting]', { err: e }));
 }
 
 export function startCounting(client: Client): void {
-  console.log('[counting] aktywny (config z panelu).');
+  log.info('[counting] aktywny (config z panelu).');
   client.on(Events.MessageCreate, async (msg: Message) => {
     try {
       if (msg.author.bot || !msg.guild) return;
@@ -112,7 +114,7 @@ export function startCounting(client: Client): void {
         await ch.send(`🎉 **${expected}** — kamień milowy! Tak trzymać.`).catch(() => {});
       }
     } catch (e) {
-      console.warn('[counting]', (e as Error).message);
+      log.warn('[counting]', { err: e });
     }
   });
 }

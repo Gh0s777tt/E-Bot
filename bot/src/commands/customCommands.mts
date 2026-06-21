@@ -2,12 +2,14 @@
 // ich wywołania tutaj: czyta settings 'custom_commands' (sync przez bridge/realtime) i odpowiada
 // zbudowanym RichMessage. Zwraca true, jeśli komenda była customowa (obsłużona).
 // CC 2.0 (Etap H): warunek requiredRoleId + akcje (addRole/removeRole/giveMoney/giveXp).
+
 import { type ChatInputCommandInteraction, type GuildMember, MessageFlags } from 'discord.js';
 import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { levelForXp } from '../leveling.mts';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { buildRichMessage, type RichMessage } from '../lib/richMessage.mts';
 
 type CustomAction = {
@@ -90,7 +92,7 @@ async function runActions(
         );
       }
     } catch (e) {
-      console.warn('[custom-cmd] akcja:', (e as Error).message);
+      log.warn('[custom-cmd] akcja:', { err: e });
     }
   }
 }

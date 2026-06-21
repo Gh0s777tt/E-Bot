@@ -2,7 +2,9 @@
 // quick-startem i (opcjonalnie) linkiem do panelu. WAŻNE: Events.GuildCreate odpala się też przy
 // starcie dla serwerów już cache'owanych — filtrujemy po joinedTimestamp (tylko świeże dołączenia),
 // żeby NIE spamować właścicieli istniejących serwerów przy każdym restarcie bota.
+
 import { type Client, EmbedBuilder, Events, type Guild } from 'discord.js';
+import { log } from './lib/log.mts';
 
 export function startOnboarding(client: Client): void {
   client.on(Events.GuildCreate, async (guild: Guild) => {
@@ -30,10 +32,10 @@ export function startOnboarding(client: Client): void {
       await owner.send({ embeds: [embed] }).catch(() => {
         /* właściciel ma zamknięte DM — trudno, nie spamujemy kanałów serwera */
       });
-      console.log(`[onboarding] dołączono do „${guild.name}" (${guild.id}) — DM do właściciela.`);
+      log.info(`[onboarding] dołączono do „${guild.name}" (${guild.id}) — DM do właściciela.`);
     } catch (e) {
-      console.warn('[onboarding]', (e as Error).message);
+      log.warn('[onboarding]', { err: e });
     }
   });
-  console.log('[onboarding] aktywne (DM powitalny do właściciela przy dołączeniu do serwera).');
+  log.info('[onboarding] aktywne (DM powitalny do właściciela przy dołączeniu do serwera).');
 }

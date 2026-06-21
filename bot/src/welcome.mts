@@ -1,4 +1,5 @@
 // Powitania + autorole (Faza 6) + baner-grafika (Faza 7/F2). Config z panelu ('welcome_config').
+
 import {
   type APIEmbed,
   AttachmentBuilder,
@@ -8,6 +9,7 @@ import {
 } from 'discord.js';
 import { type CardStyle, renderWelcomeBanner } from './lib/cards.mts';
 import { getGuildSettings } from './lib/db.mts';
+import { log } from './lib/log.mts';
 import {
   buildRichMessage,
   embedHasContent,
@@ -118,14 +120,14 @@ export function startWelcome(client: Client): void {
             .catch(() => {});
           return;
         } catch (e) {
-          console.warn('[welcome] baner:', (e as Error).message);
+          log.warn('[welcome] baner:', { err: e });
         }
       }
       await ch.send({ content, embeds }).catch(() => {});
     } catch (e) {
-      console.warn('[welcome]', (e as Error).message);
+      log.warn('[welcome]', { err: e });
     }
   });
 
-  console.log('[welcome] aktywny (powitania + autorole; config z panelu).');
+  log.info('[welcome] aktywny (powitania + autorole; config z panelu).');
 }

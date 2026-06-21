@@ -2,6 +2,7 @@
 
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { log } from './lib/log.mts';
 
 export function loadEnv(): void {
   const candidates = [
@@ -11,5 +12,5 @@ export function loadEnv(): void {
   ];
   const found = candidates.find((p) => existsSync(p));
   if (found) process.loadEnvFile(found);
-  else console.warn('[env] nie znaleziono .env w:', candidates.join(' | '));
+  else log.warn(`[env] nie znaleziono .env w: ${candidates.join(' | ')}`);
 }

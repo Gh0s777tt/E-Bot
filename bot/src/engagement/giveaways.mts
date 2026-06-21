@@ -1,11 +1,13 @@
 // Faza 6 / B5 + Tor G — poller giveawayów: kończy zaległe, losuje WAŻONYCH zwycięzców (bonus-losy).
 // Wejście sprawdza wymagania (rola/poziom/zaproszenia). Kolumny req/bonus + weight są opcjonalne
 // (select=* + fallback upsert) → brak regresji, jeśli ALTER jeszcze nie odpalony.
+
 import { type ButtonInteraction, type Client, MessageFlags, type TextChannel } from 'discord.js';
 import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { cloudSelect, cloudUpdate, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getSettings, setSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Gw = {
   id: string;
@@ -152,7 +154,7 @@ async function tick(client: Client): Promise<void> {
       )
       .catch(() => {});
     await awardReward(client, g.id, g.guild_id ?? '', winners, ch as TextChannel).catch((e) =>
-      console.warn('[giveaway] reward:', (e as Error).message),
+      log.warn('[giveaway] reward:', { err: e }),
     );
   }
 }
@@ -221,12 +223,9 @@ async function awardReward(
 
 export function startGiveaways(client: Client): void {
   if (!hasCloud()) {
-    console.log('[giveaway] brak chmury — giveawaye wyłączone.');
+    log.info('[giveaway] brak chmury — giveawaye wyłączone.');
     return;
   }
-  console.log('[giveaway] giveawaye aktywne (poll 30s).');
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[giveaway]', (e as Error).message)),
-    30_000,
-  );
+  log.info('[giveaway] giveawaye aktywne (poll 30s).');
+  setInterval(() => void tick(client).catch((e) => log.warn('[giveaway]', { err: e })), 30_000);
 }

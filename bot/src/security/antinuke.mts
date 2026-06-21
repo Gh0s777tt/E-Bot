@@ -4,6 +4,7 @@
 import type { Client, Guild, GuildTextBasedChannel } from 'discord.js';
 import { AuditLogEvent, EmbedBuilder, Events, PermissionFlagsBits } from 'discord.js';
 import { getGuildSettings, setGuildSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 export type Punishment = 'ban' | 'kick' | 'timeout' | 'strip' | 'quarantine';
 export type ProtKey =
@@ -196,10 +197,10 @@ export function startAntiNuke(client: Client): void {
         await punish(guild, executorId, cfg, prot, arr.length);
       }
     } catch (e) {
-      console.warn('[antinuke]', (e as Error).message);
+      log.warn('[antinuke]', { err: e });
     }
   });
-  console.log('[antinuke] aktywny (nasłuch audit-log).');
+  log.info('[antinuke] aktywny (nasłuch audit-log).');
 }
 
 async function punish(

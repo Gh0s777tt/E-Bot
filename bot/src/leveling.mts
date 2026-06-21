@@ -1,6 +1,7 @@
 // Leveling / XP — Faza 4 (strona bota).
 // Config czytamy z lokalnych settings (klucz 'leveling_config', synchronizowane z panelu przez
 // settings-sync). Dane piszemy do tabeli Supabase 'user_levels'. Panel czyta ranking z tej tabeli.
+
 import { type Client, Events, type GuildMember, type Message } from 'discord.js';
 import { xpMultiplier } from './economy/effects.mts';
 import {
@@ -20,6 +21,7 @@ import {
   hasCloud,
 } from './lib/cloud.mts';
 import { getGuildSettings } from './lib/db.mts';
+import { log } from './lib/log.mts';
 
 type Reward = { level: number; roleId: string };
 type Multiplier = { roleId: string; factor: number };
@@ -195,7 +197,7 @@ async function award(
 
     if (newLevel > curLevel) await onLevelUp(client, guildId, userId, newLevel);
   } catch (e) {
-    console.warn('[leveling]', (e as Error).message);
+    log.warn('[leveling]', { err: e });
   }
 }
 
@@ -243,7 +245,7 @@ async function onLevelUp(
         level: String(level),
       });
     } catch (e) {
-      console.warn('[leveling] level-up money:', (e as Error).message);
+      log.warn('[leveling] level-up money:', { err: e });
     }
   }
 
@@ -323,7 +325,5 @@ export function startLeveling(client: Client): void {
     }
   }, 60_000);
 
-  console.log(
-    '[leveling] aktywny (XP za czat/voice; config z panelu, dane → Supabase user_levels).',
-  );
+  log.info('[leveling] aktywny (XP za czat/voice; config z panelu, dane → Supabase user_levels).');
 }

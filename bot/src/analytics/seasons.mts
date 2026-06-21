@@ -1,5 +1,6 @@
 // Faza 7 / F10.2 — sezonowe rankingi levelingu: przy zmianie miesiąca robi snapshot top XP do
 // 'xp_hall_of_fame', ogłasza i (opcjonalnie) resetuje XP. Config 'seasons_config'. Dedup 'hof_last_month'.
+
 import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import {
   cloudGetSetting,
@@ -10,6 +11,7 @@ import {
   hasCloud,
 } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { enabled: boolean; channelId: string; top: number; reset: boolean };
 const DEFAULT: Cfg = { enabled: false, channelId: '', top: 10, reset: false };
@@ -46,7 +48,7 @@ async function snapshot(guild: Guild, endedMonth: string, c: Cfg): Promise<void>
       level: r.level,
       rank: i + 1,
     })),
-  ).catch((e) => console.warn('[seasons]', (e as Error).message));
+  ).catch((e) => log.warn('[seasons]', { err: e }));
 
   const ch = await guild.channels.fetch(c.channelId).catch(() => null);
   if (ch?.isTextBased() && 'send' in ch) {
@@ -85,20 +87,20 @@ async function tick(client: Client): Promise<void> {
       continue;
     }
     if (last === cur) continue;
-    await snapshot(guild, last, c).catch((e) => console.warn('[seasons]', (e as Error).message));
+    await snapshot(guild, last, c).catch((e) => log.warn('[seasons]', { err: e }));
     await cloudSetSetting(dedupKey, cur).catch(() => {});
   }
 }
 
 export function startSeasons(client: Client): void {
   if (!hasCloud()) {
-    console.log('[seasons] brak chmury — sezonowe rankingi wyłączone.');
+    log.info('[seasons] brak chmury — sezonowe rankingi wyłączone.');
     return;
   }
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[seasons]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[seasons]', { err: e })),
     6 * 3_600_000,
   );
-  console.log('[seasons] sezonowe rankingi aktywne (sprawdzanie co 6h).');
+  log.info('[seasons] sezonowe rankingi aktywne (sprawdzanie co 6h).');
 }

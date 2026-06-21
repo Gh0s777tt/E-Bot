@@ -1,8 +1,10 @@
 // Dzienny snapshot rozmiaru serwera → cloud key PER-SERWER `g:<guildId>:server_history` (90 dni).
 // Panel rysuje wykres wzrostu z danych WYBRANEGO serwera (chokepoint) — bez przecieku między tenantami
 // (luka F5, Audyt #2). Zapis co 30 min (odświeża wpis na dziś), cap 90 dni, osobno dla każdego serwera.
+
 import type { Client, Guild } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 type Snap = { day: string; members: number; boosts: number; channels: number };
 
@@ -65,15 +67,10 @@ async function tick(client: Client): Promise<void> {
 
 export function startServerHistory(client: Client): void {
   if (!hasCloud()) {
-    console.log('[history] brak Supabase — pomijam snapshot wzrostu.');
+    log.info('[history] brak Supabase — pomijam snapshot wzrostu.');
     return;
   }
   void tick(client).catch(() => {});
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[history]', (e as Error).message)),
-    30 * 60_000,
-  );
-  console.log(
-    '[history] snapshot rozmiaru serwera co 30 min → g:<id>:server_history (per-serwer).',
-  );
+  setInterval(() => void tick(client).catch((e) => log.warn('[history]', { err: e })), 30 * 60_000);
+  log.info('[history] snapshot rozmiaru serwera co 30 min → g:<id>:server_history (per-serwer).');
 }

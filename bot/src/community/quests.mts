@@ -2,6 +2,7 @@
 // Postęp liczony W PAMIĘCI (zero zapisów per-wiadomość); nagrody odbierane przyciskiem w /quests
 // i UTRWALANE w 'quest_claims' (brak podwójnej wypłaty). Punkty sezonu w 'season_points'.
 // Uwaga: restart bota zeruje bieżący postęp (limit MVP), ale odebrane nagrody zostają.
+
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -15,6 +16,7 @@ import {
 } from 'discord.js';
 import { getUser, saveUser } from '../economy/store.mts';
 import { cloudInsert, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 export type QuestMetric = 'messages' | 'work' | 'games' | 'gamesWon' | 'invites';
 type Period = 'daily' | 'weekly';
@@ -272,7 +274,7 @@ export async function handleQuestButton(interaction: ButtonInteraction): Promise
 }
 
 export function startQuests(client: Client): void {
-  console.log('[quests] aktywne (postęp w pamięci, nagrody w /quests).');
+  log.info('[quests] aktywne (postęp w pamięci, nagrody w /quests).');
   client.on(Events.MessageCreate, (m: Message) => {
     if (m.guild && !m.author.bot) bumpQuest(m.guild.id, m.author.id, 'messages', 1);
   });

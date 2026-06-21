@@ -1,8 +1,10 @@
 // Faza 7 / F7.3 — urodziny: dzienny poller ogłasza solenizantów + opcjonalna rola na dany dzień.
 // Config 'birthday_config', dane w Supabase 'birthdays'. Dedup po dacie w cloud setting 'birthday_last'.
+
 import type { Client, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type BirthdayConfig = { enabled: boolean; channelId: string; message: string; roleId: string };
 const DEFAULT: BirthdayConfig = {
@@ -66,13 +68,13 @@ async function tick(client: Client): Promise<void> {
 
 export function startBirthdays(client: Client): void {
   if (!hasCloud()) {
-    console.log('[birthdays] brak chmury — urodziny wyłączone.');
+    log.info('[birthdays] brak chmury — urodziny wyłączone.');
     return;
   }
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[birthdays]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[birthdays]', { err: e })),
     3_600_000, // co godzinę; ogłasza raz dziennie (dedup po dacie)
   );
-  console.log('[birthdays] urodziny aktywne (poll 1h, config z panelu).');
+  log.info('[birthdays] urodziny aktywne (poll 1h, config z panelu).');
 }

@@ -3,6 +3,7 @@
 // 'schedule_sync' {enabled, login}; login domyślnie z env TWITCH_CHANNEL (jak notifier).
 // Zsynchronizowane segmenty w settings 'twitch_schedule_synced' (klucz guildId:segmentId).
 // Graceful no-op bez TWITCH_CLIENT_ID/SECRET. Odświeżanie co 6 h + natychmiast po /streamsync.
+
 import {
   type Client,
   type Guild,
@@ -11,6 +12,7 @@ import {
   PermissionFlagsBits,
 } from 'discord.js';
 import { getSettings, setSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { twitchToken } from '../live/tokens.mts';
 
 type SyncConfig = { enabled: boolean; login: string };
@@ -151,7 +153,7 @@ async function syncGuild(
     if (ev) {
       synced[key] = { eventId: ev.id, start: seg.start_time };
       changed = true;
-      console.log(`[streamsync] utworzono wydarzenie "${name}" w ${guild.name}`);
+      log.info(`[streamsync] utworzono wydarzenie "${name}" w ${guild.name}`);
     }
   }
   return changed;
@@ -165,9 +167,7 @@ export async function syncNow(client: Client): Promise<void> {
   if (!hasTwitchCreds()) {
     if (!warnedNoCreds) {
       warnedNoCreds = true;
-      console.log(
-        '[streamsync] brak TWITCH_CLIENT_ID/SECRET — sync uśpiony do czasu dodania kluczy.',
-      );
+      log.info('[streamsync] brak TWITCH_CLIENT_ID/SECRET — sync uśpiony do czasu dodania kluczy.');
     }
     return;
   }
@@ -190,12 +190,12 @@ export async function syncNow(client: Client): Promise<void> {
     }
     if (changed) setSetting('twitch_schedule_synced', JSON.stringify(synced));
   } catch (e) {
-    console.error('[streamsync] sync nieudany:', e);
+    log.error('[streamsync] sync nieudany', { err: e });
   }
 }
 
 export function startScheduleSync(client: Client): void {
   setTimeout(() => void syncNow(client), 90_000); // pierwszy przebieg po starcie
   setInterval(() => void syncNow(client), INTERVAL_MS);
-  console.log('[streamsync] aktywny (Twitch schedule → Discord Events; /streamsync).');
+  log.info('[streamsync] aktywny (Twitch schedule → Discord Events; /streamsync).');
 }

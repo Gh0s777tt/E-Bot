@@ -1,7 +1,9 @@
 // Faza 7 / F6 — auto-unban tempbanów: poller co 60 s zdejmuje bany, którym minął czas.
 // Dane w Supabase 'temp_bans' (zapis przez /mod tempban). Bez chmury = no-op.
+
 import type { Client, Guild } from 'discord.js';
 import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 type TempBan = { id: string; guild_id: string; user_id: string; username: string | null };
 
@@ -38,12 +40,9 @@ async function tick(client: Client): Promise<void> {
 
 export function startModeration(client: Client): void {
   if (!hasCloud()) {
-    console.log('[moderation] brak chmury — auto-unban tempbanów wyłączony.');
+    log.info('[moderation] brak chmury — auto-unban tempbanów wyłączony.');
     return;
   }
-  console.log('[moderation] auto-unban tempbanów aktywny (poll 60 s).');
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[moderation]', (e as Error).message)),
-    60_000,
-  );
+  log.info('[moderation] auto-unban tempbanów aktywny (poll 60 s).');
+  setInterval(() => void tick(client).catch((e) => log.warn('[moderation]', { err: e })), 60_000);
 }

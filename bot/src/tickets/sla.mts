@@ -1,11 +1,13 @@
 // Tor D — SLA: automatyczne zamykanie ticketów bez aktywności po `slaHours` godzin.
 // Poller co 30 min; sprawdza otwarte/przejęte tickety i wiek ostatniej wiadomości w wątku.
+
 import type { Client } from 'discord.js';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 import { closeTicket, ticketConfig } from './service.mts';
 
 export function startTicketSla(client: Client): void {
-  console.log('[ticket-sla] aktywne (config z panelu).');
+  log.info('[ticket-sla] aktywne (config z panelu).');
   setInterval(async () => {
     try {
       if (!hasCloud()) return;
@@ -28,7 +30,7 @@ export function startTicketSla(client: Client): void {
         }
       }
     } catch (e) {
-      console.warn('[ticket-sla]', (e as Error).message);
+      log.warn('[ticket-sla]', { err: e });
     }
   }, 30 * 60_000);
 }

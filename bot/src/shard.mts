@@ -16,7 +16,7 @@ loadEnv();
 
 const token = process.env.DISCORD_BOT_TOKEN;
 if (!token) {
-  console.error('[shard] brak DISCORD_BOT_TOKEN — nie startuję.');
+  log.error('[shard] brak DISCORD_BOT_TOKEN — nie startuję.');
   process.exit(1);
 }
 
@@ -33,6 +33,6 @@ manager.on('shardCreate', (shard) => {
 
 log.info('shard: startuję ShardingManager', { totalShards });
 manager.spawn().catch((e) => {
-  console.error('[shard] spawn nieudany:', (e as Error).message);
+  log.error('[shard] spawn nieudany:', { err: e });
   process.exit(1);
 });

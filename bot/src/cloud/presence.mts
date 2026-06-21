@@ -4,6 +4,7 @@
 import type { Client, PresenceStatusData } from 'discord.js';
 import { ActivityType } from 'discord.js';
 import { cloudGetSetting, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 const INTERVAL_MS = 60_000;
 
@@ -44,7 +45,7 @@ function apply(client: Client, cfg: PresenceCfg): void {
 
 export function startPresenceSync(client: Client): void {
   if (!hasCloud()) {
-    console.log('[presence] brak konfiguracji Supabase — pomijam synchronizację.');
+    log.info('[presence] brak konfiguracji Supabase — pomijam synchronizację.');
     return;
   }
 
@@ -54,13 +55,13 @@ export function startPresenceSync(client: Client): void {
       if (!raw || raw === lastRaw) return; // brak zmian → nie ruszamy
       lastRaw = raw;
       apply(client, JSON.parse(raw) as PresenceCfg);
-      console.log('[presence] zastosowano ustawienia z panelu.');
+      log.info('[presence] zastosowano ustawienia z panelu.');
     } catch (e) {
-      console.warn('[presence]', (e as Error).message);
+      log.warn('[presence]', { err: e });
     }
   };
 
   void sync();
   setInterval(() => void sync(), INTERVAL_MS);
-  console.log(`[presence] synchronizacja z panelem co ${INTERVAL_MS / 1000}s.`);
+  log.info(`[presence] synchronizacja z panelem co ${INTERVAL_MS / 1000}s.`);
 }

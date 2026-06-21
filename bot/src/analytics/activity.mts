@@ -2,9 +2,11 @@
 // per-user (top aktywni) i per-godzina (heatmapa). Akumulacja w pamięci → flush co 5 min.
 // Zapisy per-user/per-hour i voice mają per-item try/catch (brak tabel/kolumn przed SQL = pomijane,
 // bez regresji dla głównych liczników).
+
 import type { Client, GuildMember, Message, PartialGuildMember } from 'discord.js';
 import { Events } from 'discord.js';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 type Delta = { messages: number; joins: number; leaves: number; voice: number };
 const deltas = new Map<string, Delta>();
@@ -61,7 +63,7 @@ async function flushGuild(day: string): Promise<void> {
       );
     } catch {
       await cloudUpsert('activity_daily', [base], 'guild_id,day').catch((e) =>
-        console.warn('[activity]', (e as Error).message),
+        log.warn('[activity]', { err: e }),
       );
     }
   }
@@ -130,7 +132,7 @@ async function flush(): Promise<void> {
 
 export function startActivity(client: Client): void {
   if (!hasCloud()) {
-    console.log('[activity] brak chmury — analityka aktywności wyłączona.');
+    log.info('[activity] brak chmury — analityka aktywności wyłączona.');
     return;
   }
   client.on(Events.MessageCreate, (m: Message) => {
@@ -160,9 +162,6 @@ export function startActivity(client: Client): void {
     }
   }, 60_000);
 
-  setInterval(
-    () => void flush().catch((e) => console.warn('[activity]', (e as Error).message)),
-    5 * 60_000,
-  );
-  console.log('[activity] analityka aktywna (serwer + per-user + heatmapa; flush co 5 min).');
+  setInterval(() => void flush().catch((e) => log.warn('[activity]', { err: e })), 5 * 60_000);
+  log.info('[activity] analityka aktywna (serwer + per-user + heatmapa; flush co 5 min).');
 }

@@ -1,9 +1,11 @@
 // Heat system (Etap G) — adaptacyjny anty-spam: każda wiadomość podgrzewa licznik użytkownika
 // (powtórzenia, wzmianki, emoji, ściany tekstu, linki, załączniki), ciepło wygasa wykładniczo
 // (half-life). Próg → kara (timeout/kick) + alert. Config 'heat_config' sterowany /heat.
+
 import { type Client, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { resolveGuildLocale, t } from '../i18n/index.mts';
 import { getGuildSettings, setGuildSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 export type HeatConfig = {
   enabled: boolean;
@@ -126,5 +128,5 @@ export function startHeat(client: Client): void {
     }
   });
 
-  console.log('[heat] heat system aktywny (config z /heat).');
+  log.info('[heat] heat system aktywny (config z /heat).');
 }

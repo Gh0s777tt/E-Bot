@@ -1,6 +1,7 @@
 // Pożegnania (goodbye, na wyjście) + podziękowania za boost (booster, na start boostu).
 // Config z /farewell → settings: goodbye_config / booster_config = JSON { enabled, channelId, message }.
 // Zmienne w treści: {user} {username} {server} {memberCount}. Cache odświeżany co 30 s.
+
 import {
   type Client,
   EmbedBuilder,
@@ -9,6 +10,7 @@ import {
   type PartialGuildMember,
 } from 'discord.js';
 import { getSettings } from './lib/db.mts';
+import { log } from './lib/log.mts';
 
 export const FAREWELL_ACCENT = 0xe50914; // czerwień marki (goodbye)
 export const FAREWELL_BOOST = 0xf47fff; // róż boostu (booster)
@@ -74,7 +76,7 @@ async function send(
     const embed = farewellEmbed(text, color, member.user?.displayAvatarURL());
     await ch.send({ embeds: [embed] }).catch(() => {});
   } catch (e) {
-    console.warn('[farewell]', (e as Error).message);
+    log.warn('[farewell]', { err: e });
   }
 }
 
@@ -100,5 +102,5 @@ export function startFarewell(client: Client): void {
     }
   });
 
-  console.log('[farewell] aktywny (pożegnania + podziękowania za boost; config z /farewell).');
+  log.info('[farewell] aktywny (pożegnania + podziękowania za boost; config z /farewell).');
 }

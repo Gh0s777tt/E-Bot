@@ -1,6 +1,8 @@
 // Diagnostyka: wypisuje bieżący status live dla skonfigurowanych platform.
 // Uruchom: node src/live/check.mts
+
 import { loadEnv } from '../env.mts';
+import { log } from '../lib/log.mts';
 import { getKickLive } from './kick.mts';
 import { getRumbleLive } from './rumble.mts';
 import { getTwitchLive } from './twitch.mts';
@@ -18,6 +20,6 @@ if (process.env.YOUTUBE_LIVE_CHANNEL_ID)
   results.push(await getYouTubeLive(process.env.YOUTUBE_LIVE_CHANNEL_ID));
 
 for (const s of results) {
-  console.log(`${s.platform.padEnd(8)} live=${s.live}${s.live ? ` | ${s.title ?? ''}` : ''}`);
+  log.info(`${s.platform.padEnd(8)} live=${s.live}${s.live ? ` | ${s.title ?? ''}` : ''}`);
 }
-console.log('\nLegenda: edge-trigger offline→online wyśle embed na NOTIFY_DISCORD_CHANNEL_ID.');
+log.info('\nLegenda: edge-trigger offline→online wyśle embed na NOTIFY_DISCORD_CHANNEL_ID.');

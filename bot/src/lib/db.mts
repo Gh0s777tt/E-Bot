@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { cloudSetSetting, hasCloud } from './cloud.mts';
+import { log } from './log.mts';
 
 export function dbPath(): string {
   if (process.env.DATABASE_PATH) return process.env.DATABASE_PATH;
@@ -50,7 +51,7 @@ async function mirrorUp(key: string, value: string): Promise<void> {
   try {
     if (hasCloud()) await cloudSetSetting(key, value);
   } catch (e) {
-    console.warn('[settings] mirror→cloud:', (e as Error).message);
+    log.warn('[settings] mirror→cloud:', { err: e });
   }
 }
 

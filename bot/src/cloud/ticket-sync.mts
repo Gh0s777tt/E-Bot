@@ -1,15 +1,17 @@
 // Faza 4 — domyka pętlę ticketów: gdy ticket zamknięto Z PANELU (status=closed w Supabase),
 // bot archiwizuje i blokuje odpowiadający wątek na Discordzie. (Zamknięcie z Discorda przez
 // /ticket zamknij robi to od razu — tu wątek jest już zarchiwizowany, więc pomijamy.)
+
 import type { Client, ThreadChannel } from 'discord.js';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 import { closeTicket } from '../tickets/service.mts';
 
 const handled = new Set<string>();
 
 export function startTicketSync(client: Client): void {
   if (!hasCloud()) {
-    console.log('[ticket-sync] brak Supabase — pomijam.');
+    log.info('[ticket-sync] brak Supabase — pomijam.');
     return;
   }
 
@@ -27,17 +29,17 @@ export function startTicketSync(client: Client): void {
           const thread = ch as ThreadChannel;
           if (!thread.archived) {
             await closeTicket(thread, { skipStatusUpdate: true });
-            console.log(`[ticket-sync] zamknięto + transkrypt wątku ${chId} (z panelu).`);
+            log.info(`[ticket-sync] zamknięto + transkrypt wątku ${chId} (z panelu).`);
           }
         }
         handled.add(chId); // nie próbuj ponownie tego samego ticketu
       }
     } catch (e) {
-      console.warn('[ticket-sync]', (e as Error).message);
+      log.warn('[ticket-sync]', { err: e });
     }
   };
 
   void sync();
   setInterval(() => void sync(), 60_000);
-  console.log('[ticket-sync] archiwizacja wątków zamkniętych z panelu (co 60s).');
+  log.info('[ticket-sync] archiwizacja wątków zamkniętych z panelu (co 60s).');
 }

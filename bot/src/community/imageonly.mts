@@ -1,8 +1,10 @@
 // Kanały tylko-obrazki (Etap H) — wiadomości bez załącznika/obrazka są kasowane (z krótką
 // notką, auto-usuwaną po 5 s). Lista kanałów w settings 'imageonly_channels'; sterowane /imageonly.
+
 import { type Client, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { resolveGuildLocale, t } from '../i18n/index.mts';
 import { getSettings, setSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 let channels = new Set<string>();
 
@@ -64,5 +66,5 @@ export function startImageOnly(client: Client): void {
     }
   });
 
-  console.log('[imageonly] aktywny (kanały tylko-obrazki; config z /imageonly).');
+  log.info('[imageonly] aktywny (kanały tylko-obrazki; config z /imageonly).');
 }

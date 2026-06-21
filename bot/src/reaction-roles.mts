@@ -3,6 +3,7 @@
 //  2) panel utworzony przez bota → 'reaction_role_panel' {pairs:[{emoji,roleId}]} + 'reaction_role_panel_msg' (id),
 //     publikowany komendą /reactionpanel (embed z Message Studio + auto-reakcje).
 // Wymaga intencji GuildMessageReactions + partials (reakcje na niecache'owanych wiadomościach).
+
 import {
   type Client,
   Events,
@@ -12,6 +13,7 @@ import {
   type User,
 } from 'discord.js';
 import { getSettings } from './lib/db.mts';
+import { log } from './lib/log.mts';
 
 type RR = { messageId: string; emoji: string; roleId: string };
 type Pair = { emoji: string; roleId: string };
@@ -90,7 +92,7 @@ async function apply(
       await member.roles.remove(roleId).catch(() => {});
     }
   } catch (e) {
-    console.warn('[reaction-roles]', (e as Error).message);
+    log.warn('[reaction-roles]', { err: e });
   }
 }
 
@@ -99,5 +101,5 @@ export function startReactionRoles(client: Client): void {
   setInterval(refresh, 30_000);
   client.on(Events.MessageReactionAdd, (reaction, user) => void apply(reaction, user, true));
   client.on(Events.MessageReactionRemove, (reaction, user) => void apply(reaction, user, false));
-  console.log('[reaction-roles] aktywny (role za reakcje + panel; config z panelu).');
+  log.info('[reaction-roles] aktywny (role za reakcje + panel; config z panelu).');
 }

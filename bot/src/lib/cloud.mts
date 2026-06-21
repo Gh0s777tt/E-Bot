@@ -5,6 +5,7 @@
 // UWAGA: env czytamy LENIWIE (przy wywołaniu), bo bot ładuje .env w ciele index.mts,
 // czyli PO hoistingu importów — odczyt na poziomie modułu złapałby puste process.env.
 
+import { log } from './log.mts';
 export function creds(): { url: string; key: string } {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const key =
@@ -43,7 +44,7 @@ const lastWarn = new Map<string, number>();
 function warnThrottled(key: string, msg: string): void {
   const now = Date.now();
   if ((lastWarn.get(key) ?? 0) + 600_000 < now) {
-    console.warn(msg);
+    log.warn(msg);
     lastWarn.set(key, now);
   }
 }

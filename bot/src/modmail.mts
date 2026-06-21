@@ -1,6 +1,7 @@
 // Faza 7 / F6.4 — modmail: DM do bota ↔ prywatny wątek na kanale obsługi (relay obustronny).
 // Config z panelu (settings 'modmail_config'). Mapowanie użytkownik↔wątek w Supabase 'modmail_threads'
 // (wymaga f6-modmail-schema.sql). Wymaga intencji DirectMessages (dodana w index.mts) + Partials.Channel.
+
 import {
   ChannelType,
   type Client,
@@ -12,6 +13,7 @@ import {
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from './lib/cloud.mts';
 import { getGuildSettings } from './lib/db.mts';
+import { log } from './lib/log.mts';
 
 type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
 const DEFAULT: ModmailConfig = {
@@ -50,7 +52,7 @@ async function inbound(client: Client, msg: Message): Promise<void> {
       .catch(() => false);
     if (!isMember) continue;
     const ok = await relayInbound(client, msg, gcfg).catch((e) => {
-      console.warn('[modmail] in:', (e as Error).message);
+      log.warn('[modmail] in:', { err: e });
       return false;
     });
     if (ok) delivered = true;
@@ -97,7 +99,7 @@ async function relayInbound(client: Client, msg: Message, gcfg: ModmailConfig): 
     isNew = true;
     await cloudInsert('modmail_threads', [
       { guild_id: text.guildId, user_id: msg.author.id, channel_id: thread.id, open: true },
-    ]).catch((e) => console.warn('[modmail]', (e as Error).message));
+    ]).catch((e) => log.warn('[modmail]', { err: e }));
     await thread
       .send({
         embeds: [
@@ -198,19 +200,17 @@ export function startModmail(client: Client): void {
     if (msg.author.bot) return;
     if (!msg.guild) {
       // DM → inbound sam sprawdza per-serwer (po wszystkich wspólnych serwerach).
-      await inbound(client, msg).catch((e) => console.warn('[modmail] in:', (e as Error).message));
+      await inbound(client, msg).catch((e) => log.warn('[modmail] in:', { err: e }));
       return;
     }
     // Wiadomość w wątku: czy to wątek modmaila TEGO serwera?
     if (msg.channel.isThread()) {
       const gcfg = modmailConfig(msg.guild.id);
       if (gcfg.enabled && msg.channel.parentId === gcfg.channelId) {
-        await outbound(client, msg).catch((e) =>
-          console.warn('[modmail] out:', (e as Error).message),
-        );
+        await outbound(client, msg).catch((e) => log.warn('[modmail] out:', { err: e }));
       }
     }
   });
 
-  console.log('[modmail] modmail aktywny (config per-serwer z panelu).');
+  log.info('[modmail] modmail aktywny (config per-serwer z panelu).');
 }

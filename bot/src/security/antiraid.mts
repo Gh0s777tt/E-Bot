@@ -1,9 +1,11 @@
 // Faza 7 / F6.3 — anti-raid: detektor fali wejść (N w oknie M s) → akcja na falę + alert.
 // Opcjonalnie: bramka minimalnego wieku konta (młodsze konta = akcja). Config 'antiraid_config'.
+
 import { type Client, Events, type Guild, type GuildMember, type TextChannel } from 'discord.js';
 import { applyLockdown } from '../commands/lockdown.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings, guildKey, setGuildSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Action = 'kick' | 'ban' | 'timeout';
 type AntiRaidConfig = {
@@ -232,5 +234,5 @@ export function startAntiRaid(client: Client): void {
     }
   });
 
-  console.log('[antiraid] anti-raid aktywny (config per-serwer z panelu).');
+  log.info('[antiraid] anti-raid aktywny (config per-serwer z panelu).');
 }

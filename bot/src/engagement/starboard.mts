@@ -1,4 +1,5 @@
 // Faza 6 / B5 — starboard: reakcja ⭐ ≥ próg → repost wiadomości na kanał starboardu. Config z panelu.
+
 import {
   type Client,
   EmbedBuilder,
@@ -8,6 +9,7 @@ import {
   type TextChannel,
 } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 const posted = new Set<string>(); // id wiadomości już na starboardzie (dedup w pamięci)
 
@@ -45,7 +47,7 @@ function emojiMatches(reaction: MessageReaction | PartialMessageReaction, want: 
 }
 
 export function startStarboard(client: Client): void {
-  console.log('[starboard] aktywny (config z panelu).');
+  log.info('[starboard] aktywny (config z panelu).');
   client.on(Events.MessageReactionAdd, async (reaction) => {
     try {
       const c = cfg(reaction.message.guildId ?? '');
@@ -77,7 +79,7 @@ export function startStarboard(client: Client): void {
       if (image) embed.setImage(image);
       await (star as TextChannel).send({ embeds: [embed] }).catch(() => {});
     } catch (e) {
-      console.warn('[starboard]', (e as Error).message);
+      log.warn('[starboard]', { err: e });
     }
   });
 }

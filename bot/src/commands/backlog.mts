@@ -1,4 +1,5 @@
 // /backlog — osobista lista gier (do ogrania / w trakcie / ukończone / porzucone). Tabela 'backlog'.
+
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -7,6 +8,7 @@ import {
 } from 'discord.js';
 import { cloudDelete, cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 const STATUS: Record<string, string> = {
   todo: '📥 Do ogrania',
@@ -144,7 +146,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         title,
         status: 'todo',
       },
-    ]).catch((e) => console.warn('[backlog]', (e as Error).message));
+    ]).catch((e) => log.warn('[backlog]', { err: e }));
     await interaction.reply({
       content: `📥 Dodano do backlogu: **${title}**`,
       flags: MessageFlags.Ephemeral,

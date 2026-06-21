@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-409-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.339.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-410-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.340.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.340.0] — 🪵🏁 Loggery: reszta bota `console.*` → `log.*` — KONIEC sweepu (0 `console` w `bot/src`)
+
+- `[#410]` 🪵 **Dokończony sweep `console.*` → strukturalny [`log`](bot/src/lib/log.mts) — batch 2 (finalny).**
+  - **62 pliki / 154 wywołania** (komendy, security, economy, live, analytics, cloud, tickets, engagement, community, top-level) → `log.*`. **Razem z batch 1: 0 `console.*` w `bot/src`** (poza samym `log.mts`, który używa `console` jako sink wyjścia).
+  - Wykonane skryptem jednorazowym (rename metod + auto-import wg głębokości ścieżki + dominujący `, (e as Error).message)` → `, { err: e })`), zweryfikowane bramkami i **ręcznie domknięte w 9 miejscach, których skrypt/tsc nie objął**:
+    - **Shadowing lokalnego `log`** — [`aimod`](bot/src/community/aimod.mts) (funkcja `log`) i [`provision`](bot/src/setup/provision.mts) (`const log: LogItem[]`): import aliasowany `log as logger`, wywołania loggera → `logger.*` (lokalne `log` nietknięte).
+    - **String/`unknown` jako 2. arg** — [`deploy-commands`](bot/src/deploy-commands.mts) ×2, [`env`](bot/src/env.mts), [`scheduleSync`](bot/src/creator/scheduleSync.mts): zwinięte do template literal albo `{ err }`.
+    - **🐛 Cichy zanik błędu** — 7× `log.error('tag:', err)` w [`index`](bot/src/index.mts) (catch-handlery interakcji): `err` ma typ `any` (z `.catch`), więc tsc milczał, ale w pozycji `fields` ginął przy `{...fields}` (pola `Error` są niewyliczalne → spread = `{}`). Naprawione na `log.error('tag', { err })` — replacer serializuje `Error → {name,message,stack}`. **To była realna regresja obserwowalności, gdyby zostawić mechaniczny wynik.**
+  - **Bramki:** biome czysty (0 errors; infos `useLiteralKeys` niełamiące), bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.339.0] — 🪵 Loggery strukturalne: 7 feedów/pollerów `console.*` → `log.*` (batch 1 sweepu)
 

@@ -1,5 +1,6 @@
 // /ticket — system zgłoszeń (Faza 4). Config z panelu (settings 'tickets_config', synchronizowane),
 // dane do Supabase 'tickets'. Panel pokazuje listę zgłoszeń.
+
 import {
   ChannelType,
   type ChatInputCommandInteraction,
@@ -8,6 +9,7 @@ import {
 } from 'discord.js';
 import { cloudInsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { closeTicket } from '../tickets/service.mts';
 
 type TicketsConfig = {
@@ -97,7 +99,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
             subject: temat,
             status: 'open',
           },
-        ]).catch((e) => console.warn('[ticket]', (e as Error).message));
+        ]).catch((e) => log.warn('[ticket]', { err: e }));
       }
 
       await interaction.editReply(`✅ Otwarto ticket: <#${thread.id}>`);

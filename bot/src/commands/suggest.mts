@@ -1,5 +1,6 @@
 // /suggest — zgłoś sugestię na kanał sugestii (głosowanie reakcjami + decyzje moderacji).
 // i18n: efemeryczne potwierdzenia → język nadawcy; publiczny embed na kanale → resolveGuildLocale.
+
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -10,6 +11,7 @@ import {
 import { STATUS, suggestionModRow, suggestionsConfig } from '../community/suggestions.mts';
 import { resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
 import { cloudInsert, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 export const data = new SlashCommandBuilder()
   .setName('suggest')
@@ -80,7 +82,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         message_id: msg.id,
         status: 'open',
       },
-    ]).catch((e) => console.warn('[suggest]', (e as Error).message));
+    ]).catch((e) => log.warn('[suggest]', { err: e }));
   }
   await interaction.reply({
     content: t(locale, 'suggest.sent', { channel: `<#${cfg.channelId}>` }),

@@ -1,7 +1,9 @@
 // Puls bota → Supabase (klucz settings 'bot_status'). Panel czyta to w pasku (świeże < 120 s).
 // Zapis co 60 s; przy zamknięciu (SIGINT/SIGTERM) oznacza bota jako offline.
+
 import type { Client } from 'discord.js';
 import { cloudSetSetting, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 const INTERVAL_MS = 60_000;
 
@@ -67,7 +69,7 @@ async function payload(client: Client, online: boolean): Promise<string> {
 
 export function startHeartbeat(client: Client): void {
   if (!hasCloud()) {
-    console.log('[heartbeat] brak konfiguracji Supabase — pomijam puls.');
+    log.info('[heartbeat] brak konfiguracji Supabase — pomijam puls.');
     return;
   }
 
@@ -80,7 +82,7 @@ export function startHeartbeat(client: Client): void {
     try {
       await cloudSetSetting('bot_status', await payload(client, true));
     } catch (e) {
-      console.warn('[heartbeat]', (e as Error).message);
+      log.warn('[heartbeat]', { err: e });
     }
   };
 
@@ -96,11 +98,11 @@ export function startHeartbeat(client: Client): void {
         /* trudno, zamykamy */
       }
     }
-    console.log(`[heartbeat] ${sig} — kończę.`);
+    log.info(`[heartbeat] ${sig} — kończę.`);
     process.exit(0);
   };
   process.once('SIGINT', () => void shutdown('SIGINT'));
   process.once('SIGTERM', () => void shutdown('SIGTERM'));
 
-  console.log(`[heartbeat] puls do Supabase co ${INTERVAL_MS / 1000}s.`);
+  log.info(`[heartbeat] puls do Supabase co ${INTERVAL_MS / 1000}s.`);
 }

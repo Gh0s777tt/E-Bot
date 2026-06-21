@@ -1,6 +1,8 @@
 // Faza 6 / B5 — poller przypomnień: wysyła zaległe i oznacza done.
+
 import type { Client, TextChannel } from 'discord.js';
 import { cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 type Reminder = { id: string; user_id: string; channel_id: string | null; message: string };
 
@@ -32,12 +34,9 @@ async function tick(client: Client): Promise<void> {
 
 export function startReminders(client: Client): void {
   if (!hasCloud()) {
-    console.log('[remind] brak chmury — przypomnienia wyłączone.');
+    log.info('[remind] brak chmury — przypomnienia wyłączone.');
     return;
   }
-  console.log('[remind] przypomnienia aktywne (poll 30s).');
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[remind]', (e as Error).message)),
-    30_000,
-  );
+  log.info('[remind] przypomnienia aktywne (poll 30s).');
+  setInterval(() => void tick(client).catch((e) => log.warn('[remind]', { err: e })), 30_000);
 }

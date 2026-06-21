@@ -1,9 +1,11 @@
 // Tor C — AI-pomoc (RAG-lite): na wskazanym kanale bot odpowiada na pytania WYŁĄCZNIE na podstawie
 // bazy wiedzy (FAQ/regulamin) wklejonej w panelu. Bez embeddingów — wiedza wstrzykiwana w prompt
 // (działa dla krótkich FAQ). Config 'aihelp_config'; korzysta z modelu z 'ai_config'.
+
 import { type Client, Events, type Message, type TextChannel } from 'discord.js';
 import { aiConfig, callModel } from '../lib/ai.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { on: boolean; channelId: string; knowledge: string };
 // Config PER-SERWER: cache TTL 30 s per guild (override `g:<id>:aihelp_config` z fallbackiem do globalnego).
@@ -30,7 +32,7 @@ function cfgFor(guildId: string): Cfg {
 const cooldown = new Map<string, number>();
 
 export function startAiHelp(client: Client): void {
-  console.log('[aihelp] aktywne (config z panelu).');
+  log.info('[aihelp] aktywne (config z panelu).');
   client.on(Events.MessageCreate, async (msg: Message) => {
     try {
       if (msg.author.bot || !msg.guild) return;
@@ -59,7 +61,7 @@ export function startAiHelp(client: Client): void {
       );
       if (text) await msg.reply(text.slice(0, 1900)).catch(() => {});
     } catch (e) {
-      console.warn('[aihelp]', (e as Error).message);
+      log.warn('[aihelp]', { err: e });
     }
   });
 }

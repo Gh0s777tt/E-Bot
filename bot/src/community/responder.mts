@@ -1,7 +1,9 @@
 // Faza 7 / F7.2 — komendy własne (prefiks np. !regulamin) + autoresponder (słowa-klucze → odpowiedź).
 // Config z panelu (settings 'responder_config'). Bez SQL, bez komend slash. Zmienne: {user}, {server}.
+
 import { type Client, Events, type Message } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cmd = { name: string; response: string };
 type Auto = { trigger: string; response: string; match: 'contains' | 'exact' | 'starts' };
@@ -68,5 +70,5 @@ export function startResponder(client: Client): void {
     }
   });
 
-  console.log('[responder] komendy własne + autoresponder aktywne (config z panelu).');
+  log.info('[responder] komendy własne + autoresponder aktywne (config z panelu).');
 }

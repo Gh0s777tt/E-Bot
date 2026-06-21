@@ -1,5 +1,6 @@
 // Faza 7 / F8.3 — AI-moderacja: skanuje wiadomości przez DARMOWY endpoint OpenAI (omni-moderation)
 // i usuwa/ostrzega/loguje treści naruszające zasady. Config 'aimod_config' (PER-SERWER). Wymaga OPENAI_API_KEY.
+
 import {
   type Client,
   EmbedBuilder,
@@ -10,6 +11,7 @@ import {
 } from 'discord.js';
 import { moderateText } from '../lib/ai.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log as logger } from '../lib/log.mts';
 
 type AiModConfig = {
   enabled: boolean;
@@ -45,7 +47,7 @@ let lastWarn = 0;
 function warnOnce(msg: string): void {
   const now = Date.now();
   if (now - lastWarn > 600_000) {
-    console.warn(msg);
+    logger.warn(msg);
     lastWarn = now;
   }
 }
@@ -108,5 +110,5 @@ export function startAiMod(client: Client): void {
     }
   });
 
-  console.log('[aimod] AI-moderacja aktywna (config per-serwer z panelu).');
+  logger.info('[aimod] AI-moderacja aktywna (config per-serwer z panelu).');
 }

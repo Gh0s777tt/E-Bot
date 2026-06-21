@@ -1,4 +1,5 @@
 // /highlight — rejestruj słowa, na które bot wyśle Ci DM, gdy padną w czacie (community/highlights.mts).
+
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -6,6 +7,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { log } from '../lib/log.mts';
 
 const MAX = 25;
 
@@ -85,6 +87,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
   await cloudInsert('highlights', [
     { guild_id: interaction.guildId, user_id: interaction.user.id, word },
-  ]).catch((e) => console.warn('[highlight]', (e as Error).message));
+  ]).catch((e) => log.warn('[highlight]', { err: e }));
   await interaction.reply({ content: `🔔 Dodano: **${word}**`, flags: MessageFlags.Ephemeral });
 }

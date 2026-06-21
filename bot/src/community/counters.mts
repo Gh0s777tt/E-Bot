@@ -1,8 +1,10 @@
 // Faza 7 / F7.4 — liczniki kanałów: nazwy wybranych kanałów pokazują statystyki serwera.
 // Config 'counters_config'. Poll co 10 min (Discord limituje zmianę nazwy kanału do 2/10 min!).
 // Liczone tanio z gateway/cache (bez fetchowania członków): members/boosts/channels/roles.
+
 import type { Client, Guild } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { STREAMER_TYPES, type StreamerType, streamerCount } from './streamerStats.mts';
 
 type CounterType =
@@ -148,8 +150,8 @@ async function tick(client: Client): Promise<void> {
 export function startCounters(client: Client): void {
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[counters]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[counters]', { err: e })),
     600_000, // 10 min — bezpiecznie pod limitem zmiany nazwy kanału
   );
-  console.log('[counters] liczniki kanałów aktywne (poll 10 min, config z panelu).');
+  log.info('[counters] liczniki kanałów aktywne (poll 10 min, config z panelu).');
 }

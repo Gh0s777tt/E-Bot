@@ -1,6 +1,7 @@
 // Sezon ekonomii — co miesiąc ogłasza top-eco (Hall of Fame), wypłaca podium nagrody (do historii
 // transakcji jako „sezon") i opcjonalnie resetuje salda. Lustro analytics/seasons.mts (XP).
 // Config 'eco_season_config'. Dedup miesiąca przez 'eco_season_last'.
+
 import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { ecoConfig } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
@@ -13,6 +14,7 @@ import {
   hasCloud,
 } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = {
   enabled: boolean;
@@ -116,7 +118,7 @@ async function tick(client: Client): Promise<void> {
   const parent = await client.channels.fetch(cfg.channelId).catch(() => null);
   if (parent && 'guild' in parent) {
     await snapshot((parent as TextChannel).guild, last).catch((e) =>
-      console.warn('[ecoSeason]', (e as Error).message),
+      log.warn('[ecoSeason]', { err: e }),
     );
   }
   await cloudSetSetting('eco_season_last', cur).catch(() => {});
@@ -126,13 +128,13 @@ export function startEcoSeason(client: Client): void {
   refresh();
   setInterval(refresh, 30_000);
   if (!hasCloud()) {
-    console.log('[ecoSeason] brak chmury — sezon ekonomii wyłączony.');
+    log.info('[ecoSeason] brak chmury — sezon ekonomii wyłączony.');
     return;
   }
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[ecoSeason]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[ecoSeason]', { err: e })),
     6 * 3_600_000,
   );
-  console.log('[ecoSeason] sezon ekonomii aktywny (sprawdzanie co 6h).');
+  log.info('[ecoSeason] sezon ekonomii aktywny (sprawdzanie co 6h).');
 }

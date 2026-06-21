@@ -1,6 +1,7 @@
 import type { TextChannel } from 'discord.js';
 import { ChannelType, type Client, EmbedBuilder } from 'discord.js';
 import { getSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { getKickLive } from './kick.mts';
 import { getRumbleLive } from './rumble.mts';
 import { getTwitchLive } from './twitch.mts';
@@ -62,10 +63,10 @@ export function startNotifier(client: Client): void {
     });
 
   if (!sources.length) {
-    console.log('[live] brak platform z danymi — pomijam.');
+    log.info('[live] brak platform z danymi — pomijam.');
     return;
   }
-  console.log(
+  log.info(
     `[live] monitoruję: ${sources.map((s) => s.name).join(', ')} (kanał/przełączniki z panelu lub .env)`,
   );
 
@@ -97,7 +98,7 @@ export function startNotifier(client: Client): void {
         cfg.notify_title || '',
       );
     } catch (e) {
-      console.warn(`[live:${s.name}]`, (e as Error).message);
+      log.warn(`[live:${s.name}]`, { err: e });
     }
   };
 
@@ -129,7 +130,7 @@ async function announce(
 ): Promise<void> {
   const ch = await client.channels.fetch(channelId).catch(() => null);
   if (!ch?.isTextBased() || !('send' in ch)) {
-    console.warn('[live] kanał docelowy niedostępny lub nie jest tekstowy.');
+    log.warn('[live] kanał docelowy niedostępny lub nie jest tekstowy.');
     return;
   }
   const title = titleTpl
@@ -153,5 +154,5 @@ async function announce(
   const sent = await (ch as TextChannel).send({ content: content || undefined, embeds: [embed] });
   // Kanał ogłoszeń (News) → auto-crosspost na serwery obserwujące.
   if (ch.type === ChannelType.GuildAnnouncement) await sent.crosspost().catch(() => {});
-  console.log(`[live] ogłoszono: ${st.platform} / ${st.channelName}`);
+  log.info(`[live] ogłoszono: ${st.platform} / ${st.channelName}`);
 }

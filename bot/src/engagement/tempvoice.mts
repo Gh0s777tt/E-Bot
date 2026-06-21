@@ -1,6 +1,7 @@
 // TempVoice 2.0 (Etap H) — kanały głosowe na żądanie + PANEL z przyciskami w czacie kanału:
 // ✏️ nazwa · 👥 limit · 🔒 zamknij/otwórz · 👻 ukryj/pokaż · 👢 wyrzuć · 👑 przejmij · 🔁 przekaż.
 // Właściciel śledzony w pamięci (kanały są ulotne). Routing: 'tv:' (button/modal/user-select).
+
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -23,6 +24,7 @@ import {
 } from 'discord.js';
 import { type Locale, resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 const ACCENT = 0xe50914;
 const temp = new Set<string>(); // id kanałów utworzonych przez bota
@@ -279,7 +281,7 @@ export async function handleTempvoiceModal(interaction: ModalSubmitInteraction):
 }
 
 export function startTempVoice(client: Client): void {
-  console.log('[tempvoice] aktywny 2.0 (panel z przyciskami; config z panelu).');
+  log.info('[tempvoice] aktywny 2.0 (panel z przyciskami; config z panelu).');
   client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     try {
       const c = cfg(newState.guild?.id ?? '');
@@ -308,7 +310,7 @@ export function startTempVoice(client: Client): void {
         await left.delete().catch(() => {});
       }
     } catch (e) {
-      console.warn('[tempvoice]', (e as Error).message);
+      log.warn('[tempvoice]', { err: e });
     }
   });
 }

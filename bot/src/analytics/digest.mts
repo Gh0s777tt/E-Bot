@@ -1,8 +1,10 @@
 // Tor E — tygodniowy auto-digest serwera (poniedziałek UTC). Sumuje activity_daily z 7 dni
 // i wysyła embed na wybrany kanał. Dedup przez setting 'digest_last' (tag tygodnia).
+
 import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { on: boolean; channelId: string };
 // Etap K — config per-serwer: świeży odczyt (poller tygodniowy), fallback global.
@@ -114,10 +116,10 @@ async function maybePost(client: Client): Promise<void> {
 }
 
 export function startDigest(client: Client): void {
-  console.log('[digest] aktywny (tygodniowy, config z panelu).');
+  log.info('[digest] aktywny (tygodniowy, config z panelu).');
   void maybePost(client);
   setInterval(
-    () => void maybePost(client).catch((e) => console.warn('[digest]', (e as Error).message)),
+    () => void maybePost(client).catch((e) => log.warn('[digest]', { err: e })),
     6 * 3_600_000,
   );
 }

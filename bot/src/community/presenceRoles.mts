@@ -3,8 +3,10 @@
 // 'liverole_config' / 'vanityrole_config'; sterowane /liverole i /vanityrole.
 // WYMAGA Presence Intent: przełącznik w Dev Portal + env PRESENCE_INTENT=1 (index.mts dodaje
 // intent warunkowo — bez przełącznika w portalu bot nie zalogowałby się wcale). Bez env: no-op.
+
 import { ActivityType, type Client, Events, type GuildMember, type Presence } from 'discord.js';
 import { getSettings, setSetting } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 export type LiveRoleConfig = { enabled: boolean; roleId: string; requireRoleId: string };
 export type VanityRoleConfig = { enabled: boolean; roleId: string; phrase: string };
@@ -74,7 +76,7 @@ export function startPresenceRoles(client: Client): void {
   refresh();
   setInterval(refresh, 30_000);
   if (!hasPresenceIntent()) {
-    console.log(
+    log.info(
       '[presence-roles] uśpione — włącz Presence Intent w Dev Portal i ustaw PRESENCE_INTENT=1.',
     );
     return;
@@ -99,5 +101,5 @@ export function startPresenceRoles(client: Client): void {
     }
   }, 60_000);
 
-  console.log('[presence-roles] aktywne (live-rola + vanity-rola; /liverole /vanityrole).');
+  log.info('[presence-roles] aktywne (live-rola + vanity-rola; /liverole /vanityrole).');
 }

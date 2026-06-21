@@ -1,6 +1,7 @@
 // Tor 3 — Invite Tracker: kto kogo zaprosił (diff snapshotów zaproszeń), fejki (młode konta),
 // odejścia, nagrody-role za progi. Config 'invites_config'; dane w Supabase 'invites'.
 // Wymaga intencji GuildInvites + uprawnienia bota „Zarządzanie serwerem" (do odczytu zaproszeń).
+
 import {
   type Client,
   Events,
@@ -11,6 +12,7 @@ import {
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { bumpQuest } from './quests.mts';
 
 type Reward = { count: number; roleId: string };
@@ -46,7 +48,7 @@ async function snapshot(guild: Guild): Promise<Map<string, number>> {
 }
 
 export function startInvites(client: Client): void {
-  console.log('[invites] aktywny (config z panelu).');
+  log.info('[invites] aktywny (config z panelu).');
 
   // wstępny snapshot (startInvites wołane już po ClientReady)
   void (async () => {
@@ -99,7 +101,7 @@ export function startInvites(client: Client): void {
             fake,
             has_left: false,
           },
-        ]).catch((e) => console.warn('[invites]', (e as Error).message));
+        ]).catch((e) => log.warn('[invites]', { err: e }));
       }
 
       if (c.logChannelId) {
@@ -135,7 +137,7 @@ export function startInvites(client: Client): void {
         }
       }
     } catch (e) {
-      console.warn('[invites]', (e as Error).message);
+      log.warn('[invites]', { err: e });
     }
   });
 
@@ -146,7 +148,7 @@ export function startInvites(client: Client): void {
         has_left: true,
       }).catch(() => {});
     } catch (e) {
-      console.warn('[invites]', (e as Error).message);
+      log.warn('[invites]', { err: e });
     }
   });
 }

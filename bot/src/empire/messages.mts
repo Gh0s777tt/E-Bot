@@ -1,6 +1,8 @@
 // GH0ST EMPIRE economy — award GT for Discord messages (anti-spam cooldown per user).
 // Requires the MessageContent privileged intent (added in index.mts only when economy is on).
+
 import { type Client, Events, type Message } from 'discord.js';
+import { log } from '../lib/log.mts';
 import { awardTokens } from './award.mts';
 import { economy } from './config.mts';
 
@@ -33,7 +35,7 @@ export function setupMessageEarning(client: Client): void {
       reason: 'message',
     });
     if ('ok' in r && r.ok && 'awarded' in r) {
-      console.log(`[empire/msg] ${msg.author.username} +${r.awarded} GT → ${r.newBalance}`);
+      log.info(`[empire/msg] ${msg.author.username} +${r.awarded} GT → ${r.newBalance}`);
     }
   });
 }
