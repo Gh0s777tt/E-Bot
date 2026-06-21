@@ -554,7 +554,7 @@ export const FREEGAMES_DEFAULT: FreeGamesConfig = {
 };
 
 export async function getFreeGamesConfig(): Promise<FreeGamesConfig> {
-  const raw = await getRawSetting('freegames_config');
+  const raw = await getConfigSetting('freegames_config');
   if (!raw) return structuredClone(FREEGAMES_DEFAULT);
   try {
     return { ...FREEGAMES_DEFAULT, ...(JSON.parse(raw) as Partial<FreeGamesConfig>) };
@@ -563,7 +563,7 @@ export async function getFreeGamesConfig(): Promise<FreeGamesConfig> {
   }
 }
 export async function saveFreeGamesConfig(cfg: FreeGamesConfig): Promise<void> {
-  await setRawSetting('freegames_config', JSON.stringify(cfg));
+  await setConfigSetting('freegames_config', JSON.stringify(cfg));
 }
 
 // ── Patch-notes (Faza 7 / F9.1) ──
@@ -572,7 +572,7 @@ export type PatchNotesConfig = { enabled: boolean; channelId: string; apps: Patc
 export const PATCHNOTES_DEFAULT: PatchNotesConfig = { enabled: false, channelId: '', apps: [] };
 
 export async function getPatchNotesConfig(): Promise<PatchNotesConfig> {
-  const raw = await getRawSetting('patchnotes_config');
+  const raw = await getConfigSetting('patchnotes_config');
   if (!raw) return structuredClone(PATCHNOTES_DEFAULT);
   try {
     return { ...PATCHNOTES_DEFAULT, ...(JSON.parse(raw) as Partial<PatchNotesConfig>) };
@@ -581,7 +581,7 @@ export async function getPatchNotesConfig(): Promise<PatchNotesConfig> {
   }
 }
 export async function savePatchNotesConfig(cfg: PatchNotesConfig): Promise<void> {
-  await setRawSetting('patchnotes_config', JSON.stringify(cfg));
+  await setConfigSetting('patchnotes_config', JSON.stringify(cfg));
 }
 
 // ── Donejty Ko-fi (Faza 7 / F9.3) ──
@@ -692,7 +692,7 @@ export type PriceTrackerConfig = { enabled: boolean; channelId: string };
 export const PRICETRACKER_DEFAULT: PriceTrackerConfig = { enabled: false, channelId: '' };
 
 export async function getPriceTrackerConfig(): Promise<PriceTrackerConfig> {
-  const raw = await getRawSetting('pricetracker_config');
+  const raw = await getConfigSetting('pricetracker_config');
   if (!raw) return structuredClone(PRICETRACKER_DEFAULT);
   try {
     return { ...PRICETRACKER_DEFAULT, ...(JSON.parse(raw) as Partial<PriceTrackerConfig>) };
@@ -701,5 +701,5 @@ export async function getPriceTrackerConfig(): Promise<PriceTrackerConfig> {
   }
 }
 export async function savePriceTrackerConfig(cfg: PriceTrackerConfig): Promise<void> {
-  await setRawSetting('pricetracker_config', JSON.stringify(cfg));
+  await setConfigSetting('pricetracker_config', JSON.stringify(cfg));
 }

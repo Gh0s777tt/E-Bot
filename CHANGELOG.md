@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-406-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.336.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-407-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.337.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.337.0] — 🔐 Multi-tenant: 3 gaming-feedy per-serwer + fix przecieku wishlisty (pricetracker)
+
+- `[#407]` 🔐 **Feedy gier per-serwer — batch 3 pollerów; przy okazji realny przeciek izolacji.**
+  - [`freegames`](bot/src/gaming/freegames.mts) (Epic + ITAD): fetch z API **RAZ** (wspólne gry) → post per-serwer; config + dedup (`g:<id>:freegames_seen`/`..._itad_seen`) per-serwer.
+  - [`patchnotes`](bot/src/gaming/patchnotes.mts) (Steam News): apps różnią się per-serwer → **fetch per-guild**; config + dedup per-serwer.
+  - [`pricetracker`](bot/src/gaming/pricetracker.mts) (ITAD): **naprawiony realny przeciek multi-tenant** — czytał tabelę `wishlist` GLOBALNIE (ceny z list życzeń **WSZYSTKICH** serwerów trafiały na jeden kanał). Teraz `guild_id=eq.<gid>` + config/dedup per-serwer.
+  - Wszystkie: iteracja `client.guilds.cache`, izolacja kanałów przez `guild.channels.fetch` (tylko kanały tej gildii), panel → `setConfigSetting` + `MIGRATED_GUILD_KEYS`.
+  - **Bramki:** biome czysty, bot `tsc` exit 0, dashboard `tsc` exit 0, docs:check exit 0. ⚠️ runtime-niewryfikowane (iteracja/dedup). **6/~9 zmigrowane**; zostają: `social_feeds`, `scheduled_posts`, `creator`.
 
 ## [0.336.0] — 🔐 Multi-tenant: aidigest per-serwer (WZORZEC POLLERA — wymaga testu)
 

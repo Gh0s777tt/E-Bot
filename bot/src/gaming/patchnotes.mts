@@ -1,20 +1,19 @@
 // Faza 7 / F9.1 — patch-notes / aktualności gier ze Steam News API (publiczne, bez klucza).
-// Config 'patchnotes_config' (lista appId + nazwa). Dedup w cloud setting 'patchnotes_seen'. Poll 1h.
-import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
+// Config 'patchnotes_config' (PER-SERWER: lista appId + nazwa). Dedup PER-SERWER 'g:<id>:patchnotes_seen'.
+// Apps różnią się per-serwer → fetch per-guild. Poll 1h.
+import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type App = { appId: number; name: string };
 type Cfg = { enabled: boolean; channelId: string; apps: App[] };
 const DEFAULT: Cfg = { enabled: false, channelId: '', apps: [] };
-let cfg: Cfg = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings()['patchnotes_config'];
+function cfgFor(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['patchnotes_config'];
   try {
-    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
+    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
@@ -38,20 +37,23 @@ async function fetchNews(appId: number): Promise<News[]> {
   return d.appnews?.newsitems ?? [];
 }
 
-async function tick(client: Client): Promise<void> {
-  if (!cfg.enabled || !cfg.channelId || !cfg.apps.length || !hasCloud()) return;
-  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
+// Patch-notes dla JEDNEGO serwera (apps + dedup per-serwer; `guild.channels.fetch` = izolacja kanału).
+async function tickForGuild(guild: Guild): Promise<void> {
+  const c = cfgFor(guild.id);
+  if (!c.enabled || !c.channelId || !c.apps.length) return;
+  const ch = await guild.channels.fetch(c.channelId).catch(() => null);
   if (!ch?.isTextBased() || !('send' in ch)) return;
 
+  const seenKey = `g:${guild.id}:patchnotes_seen`;
   let seen: string[] = [];
   try {
-    seen = JSON.parse((await cloudGetSetting('patchnotes_seen')) || '[]') as string[];
+    seen = JSON.parse((await cloudGetSetting(seenKey)) || '[]') as string[];
   } catch {
     /* pusta lista */
   }
 
   let changed = false;
-  for (const app of cfg.apps.slice(0, 20)) {
+  for (const app of c.apps.slice(0, 20)) {
     const items = (await fetchNews(app.appId)).reverse(); // od najstarszej
     for (const it of items) {
       if (!it.gid || seen.includes(it.gid)) continue;
@@ -66,14 +68,17 @@ async function tick(client: Client): Promise<void> {
       changed = true;
     }
   }
-  if (changed) {
-    await cloudSetSetting('patchnotes_seen', JSON.stringify(seen.slice(-100))).catch(() => {});
+  if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-100))).catch(() => {});
+}
+
+async function tick(client: Client): Promise<void> {
+  if (!hasCloud()) return;
+  for (const guild of client.guilds.cache.values()) {
+    await tickForGuild(guild).catch(() => {});
   }
 }
 
 export function startPatchNotes(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   if (!hasCloud()) {
     console.log('[patchnotes] brak chmury — patch-notes wyłączone.');
     return;
@@ -83,5 +88,5 @@ export function startPatchNotes(client: Client): void {
     () => void tick(client).catch((e) => console.warn('[patchnotes]', (e as Error).message)),
     3_600_000,
   );
-  console.log('[patchnotes] patch-notes Steam aktywne (poll 1h, config z panelu).');
+  console.log('[patchnotes] patch-notes Steam aktywne per-serwer (poll 1h, config z panelu).');
 }

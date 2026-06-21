@@ -1,19 +1,18 @@
-// Faza 7 / F9.3 — śledzenie cen (IsThereAnyDeal): sprawdza gry z listy życzeń i ogłasza promocje.
-// Config 'pricetracker_config'. Klucz ITAD_API_KEY w env (Railway). Dedup w 'pricetracker_seen'. Poll 12h.
-import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
+// Faza 7 / F9.3 — śledzenie cen (IsThereAnyDeal): sprawdza gry z listy życzeń SERWERA i ogłasza promocje.
+// Config 'pricetracker_config' (PER-SERWER). Klucz ITAD_API_KEY w env. Dedup PER-SERWER 'g:<id>:pricetracker_seen'.
+// Lista życzeń filtrowana per `guild_id` (izolacja). Poll 12h, iteracja gildii.
+import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cfg = { enabled: boolean; channelId: string };
 const DEFAULT: Cfg = { enabled: false, channelId: '' };
-let cfg: Cfg = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings()['pricetracker_config'];
+function cfgFor(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['pricetracker_config'];
   try {
-    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
+    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
@@ -37,11 +36,16 @@ async function lookupId(key: string, title: string): Promise<string | null> {
   return d.found && d.game?.id ? d.game.id : null;
 }
 
-async function tick(client: Client): Promise<void> {
-  const key = process.env.ITAD_API_KEY;
-  if (!cfg.enabled || !cfg.channelId || !hasCloud() || !key) return;
+// Śledzenie cen dla JEDNEGO serwera: lista życzeń TEGO serwera (filtr guild_id = izolacja multi-tenant),
+// config + dedup per-serwer, kanał przez `guild.channels.fetch` (tylko kanały tej gildii).
+async function tickForGuild(guild: Guild, key: string): Promise<void> {
+  const c = cfgFor(guild.id);
+  if (!c.enabled || !c.channelId) return;
 
-  const wl = await cloudSelect<{ title: string }>('wishlist', 'select=title&limit=100');
+  const wl = await cloudSelect<{ title: string }>(
+    'wishlist',
+    `select=title&guild_id=eq.${guild.id}&limit=100`,
+  );
   if (!wl.length) return;
 
   // Tytuł → ID ITAD (po jednym; lista życzeń jest mała).
@@ -62,14 +66,16 @@ async function tick(client: Client): Promise<void> {
   if (!pr?.ok) return;
   const rows = (await pr.json().catch(() => [])) as PriceRow[];
 
+  const ch = await guild.channels.fetch(c.channelId).catch(() => null);
+  if (!ch?.isTextBased() || !('send' in ch)) return;
+
+  const seenKey = `g:${guild.id}:pricetracker_seen`;
   let seen: string[] = [];
   try {
-    seen = JSON.parse((await cloudGetSetting('pricetracker_seen')) || '[]') as string[];
+    seen = JSON.parse((await cloudGetSetting(seenKey)) || '[]') as string[];
   } catch {
     /* pusta */
   }
-  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
-  if (!ch?.isTextBased() || !('send' in ch)) return;
 
   let changed = false;
   for (const row of rows) {
@@ -98,14 +104,18 @@ async function tick(client: Client): Promise<void> {
     seen.push(dedupKey);
     changed = true;
   }
-  if (changed) {
-    await cloudSetSetting('pricetracker_seen', JSON.stringify(seen.slice(-150))).catch(() => {});
+  if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-150))).catch(() => {});
+}
+
+async function tick(client: Client): Promise<void> {
+  const key = process.env.ITAD_API_KEY;
+  if (!hasCloud() || !key) return;
+  for (const guild of client.guilds.cache.values()) {
+    await tickForGuild(guild, key).catch(() => {});
   }
 }
 
 export function startPriceTracker(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   if (!hasCloud()) {
     console.log('[pricetracker] brak chmury — śledzenie cen wyłączone.');
     return;
@@ -119,5 +129,5 @@ export function startPriceTracker(client: Client): void {
     () => void tick(client).catch((e) => console.warn('[pricetracker]', (e as Error).message)),
     12 * 3_600_000,
   );
-  console.log('[pricetracker] śledzenie cen ITAD aktywne (poll 12h, config z panelu).');
+  console.log('[pricetracker] śledzenie cen ITAD aktywne per-serwer (poll 12h, config z panelu).');
 }

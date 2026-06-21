@@ -1,19 +1,18 @@
 // Faza 7 / F9.1 — feed darmowych gier z Epic Games Store (publiczny endpoint, bez klucza).
-// Config 'freegames_config'. Dedup w cloud setting 'freegames_seen'. Poll co 6h.
-import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
+// Config 'freegames_config' (PER-SERWER). Dedup PER-SERWER 'g:<id>:freegames_seen' / '...itad_seen'.
+// Fetch z API RAZ (te same gry dla wszystkich serwerów), post + dedup per-serwer. Poll co 6h.
+import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
-import { getSettings } from '../lib/db.mts';
+import { getGuildSettings } from '../lib/db.mts';
 
 type Cfg = { enabled: boolean; channelId: string; multiStore?: boolean };
 const DEFAULT: Cfg = { enabled: false, channelId: '', multiStore: false };
-let cfg: Cfg = { ...DEFAULT };
-
-function refresh(): void {
-  const raw = getSettings()['freegames_config'];
+function cfgFor(guildId: string): Cfg {
+  const raw = getGuildSettings(guildId)['freegames_config'];
   try {
-    cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
+    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
   } catch {
-    /* zostaw poprzedni */
+    return { ...DEFAULT };
   }
 }
 
@@ -46,22 +45,24 @@ function parseFree(d: unknown): FreeGame[] {
   return out;
 }
 
-async function tick(client: Client): Promise<void> {
-  if (!cfg.enabled || !cfg.channelId || !hasCloud()) return;
-  const r = await fetch(EPIC, { signal: AbortSignal.timeout(15_000) }).catch(() => null);
-  if (!r?.ok) return;
-  const games = parseFree(await r.json().catch(() => ({})));
-  if (!games.length) return;
-
-  let seen: string[] = [];
+// Wczytuje + zapisuje listę „widzianych" ID dla jednego serwera (per-serwer dedup).
+async function loadSeen(key: string): Promise<string[]> {
   try {
-    seen = JSON.parse((await cloudGetSetting('freegames_seen')) || '[]') as string[];
+    return JSON.parse((await cloudGetSetting(key)) || '[]') as string[];
   } catch {
-    /* pusta lista */
+    return [];
   }
-  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
-  if (!ch?.isTextBased() || !('send' in ch)) return;
+}
 
+// Post nowych gier Epic na kanał JEDNEGO serwera (config + dedup per-serwer; `guild.channels.fetch`
+// = izolacja: tylko kanały tej gildii).
+async function postEpicForGuild(guild: Guild, games: FreeGame[]): Promise<void> {
+  const c = cfgFor(guild.id);
+  if (!c.enabled || !c.channelId) return;
+  const ch = await guild.channels.fetch(c.channelId).catch(() => null);
+  if (!ch?.isTextBased() || !('send' in ch)) return;
+  const seenKey = `g:${guild.id}:freegames_seen`;
+  const seen = await loadSeen(seenKey);
   let changed = false;
   for (const g of games) {
     if (seen.includes(g.id)) continue;
@@ -77,33 +78,27 @@ async function tick(client: Client): Promise<void> {
     seen.push(g.id);
     changed = true;
   }
-  if (changed)
-    await cloudSetSetting('freegames_seen', JSON.stringify(seen.slice(-50))).catch(() => {});
+  if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-50))).catch(() => {});
 }
 
-// Faza 8 — multi-store darmowe gry przez ITAD (deals −100%). Defensywne: zła odpowiedź → pusto.
-async function tickItad(client: Client): Promise<void> {
-  const key = process.env.ITAD_API_KEY;
-  if (!cfg.enabled || !cfg.multiStore || !cfg.channelId || !hasCloud() || !key) return;
-  const r = await fetch(
-    `https://api.isthereanydeal.com/deals/v2?key=${key}&country=PL&limit=50&sort=-cut`,
-    { signal: AbortSignal.timeout(15_000) },
-  ).catch(() => null);
+async function tick(client: Client): Promise<void> {
+  if (!hasCloud()) return;
+  const r = await fetch(EPIC, { signal: AbortSignal.timeout(15_000) }).catch(() => null);
   if (!r?.ok) return;
-  const d = (await r.json().catch(() => ({}))) as { list?: unknown[] };
-  const list = Array.isArray(d?.list) ? d.list : [];
-  if (!list.length) return;
-
-  let seen: string[] = [];
-  try {
-    seen = JSON.parse((await cloudGetSetting('freegames_itad_seen')) || '[]') as string[];
-  } catch {
-    /* pusta lista */
+  const games = parseFree(await r.json().catch(() => ({})));
+  if (!games.length) return;
+  for (const guild of client.guilds.cache.values()) {
+    await postEpicForGuild(guild, games).catch(() => {});
   }
-  const ch = await client.channels.fetch(cfg.channelId).catch(() => null);
-  if (!ch?.isTextBased() || !('send' in ch)) return;
+}
 
-  let changed = false;
+type ItadDeal = { id: string; title: string; url: string | null; shop: string };
+
+function parseItad(d: unknown): ItadDeal[] {
+  const list = Array.isArray((d as { list?: unknown[] })?.list)
+    ? (d as { list: unknown[] }).list
+    : [];
+  const out: ItadDeal[] = [];
   for (const itRaw of list) {
     const it = itRaw as {
       id?: string;
@@ -116,24 +111,57 @@ async function tickItad(client: Client): Promise<void> {
     const free = (deal.cut ?? 0) >= 100 || deal.price?.amount === 0;
     if (!free) continue;
     const id = `itad:${it.id ?? it.slug ?? deal.url ?? it.title ?? ''}`;
-    if (id === 'itad:' || seen.includes(id)) continue;
+    if (id === 'itad:') continue;
+    out.push({
+      id,
+      title: String(it.title ?? 'Gra'),
+      url: deal.url || null,
+      shop: deal.shop?.name ?? 'sklepie',
+    });
+  }
+  return out;
+}
+
+async function postItadForGuild(guild: Guild, deals: ItadDeal[]): Promise<void> {
+  const c = cfgFor(guild.id);
+  if (!c.enabled || !c.multiStore || !c.channelId) return;
+  const ch = await guild.channels.fetch(c.channelId).catch(() => null);
+  if (!ch?.isTextBased() || !('send' in ch)) return;
+  const seenKey = `g:${guild.id}:freegames_itad_seen`;
+  const seen = await loadSeen(seenKey);
+  let changed = false;
+  for (const d of deals) {
+    if (seen.includes(d.id)) continue;
     const embed = new EmbedBuilder()
       .setColor(0xe50914)
-      .setTitle(`🆓 Za darmo: ${it.title ?? 'Gra'}`)
-      .setURL(deal.url || null)
-      .setDescription(`Darmowe rozdanie w **${deal.shop?.name ?? 'sklepie'}** — odbierz!`)
+      .setTitle(`🆓 Za darmo: ${d.title}`)
+      .setURL(d.url)
+      .setDescription(`Darmowe rozdanie w **${d.shop}** — odbierz!`)
       .setTimestamp(new Date());
     await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});
-    seen.push(id);
+    seen.push(d.id);
     changed = true;
   }
-  if (changed)
-    await cloudSetSetting('freegames_itad_seen', JSON.stringify(seen.slice(-80))).catch(() => {});
+  if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-80))).catch(() => {});
+}
+
+// Faza 8 — multi-store darmowe gry przez ITAD (deals −100%). Defensywne: zła odpowiedź → pusto.
+async function tickItad(client: Client): Promise<void> {
+  const key = process.env.ITAD_API_KEY;
+  if (!hasCloud() || !key) return;
+  const r = await fetch(
+    `https://api.isthereanydeal.com/deals/v2?key=${key}&country=PL&limit=50&sort=-cut`,
+    { signal: AbortSignal.timeout(15_000) },
+  ).catch(() => null);
+  if (!r?.ok) return;
+  const deals = parseItad(await r.json().catch(() => ({})));
+  if (!deals.length) return;
+  for (const guild of client.guilds.cache.values()) {
+    await postItadForGuild(guild, deals).catch(() => {});
+  }
 }
 
 export function startFreeGames(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
   if (!hasCloud()) {
     console.log('[freegames] brak chmury — feed darmowych gier wyłączony.');
     return;
@@ -144,5 +172,7 @@ export function startFreeGames(client: Client): void {
     void tick(client).catch((e) => console.warn('[freegames]', (e as Error).message));
     void tickItad(client).catch((e) => console.warn('[freegames:itad]', (e as Error).message));
   }, 6 * 3_600_000);
-  console.log('[freegames] feed darmowych gier (Epic + multi-store ITAD) aktywny (poll 6h).');
+  console.log(
+    '[freegames] feed darmowych gier (Epic + multi-store ITAD) aktywny per-serwer (poll 6h).',
+  );
 }
