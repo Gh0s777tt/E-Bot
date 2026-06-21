@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-422-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.352.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-423-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.353.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.353.0] — 🧪🌍 Rygiel parytetu i18n bota (14 jęz.) + naprawa `error.generic` w 12 językach
+
+- `[#423]` 🧪 **Test parytetu i18n** ([`parity.test.ts`](bot/src/i18n/parity.test.ts), 30 testów) — pilnuje, by KAŻDY klucz bazy (pl) istniał we wszystkich 14 językach (inaczej user widzi fallback pl/en = zła flaga). Dotąd pilnował tego tylko ręczny audyt.
+  - **Realne znalezisko + fix:** `error.generic` było tylko w pl/en → wydzielone do [`strings.errors.mts`](bot/src/i18n/strings.errors.mts) z tłumaczeniami na **wszystkie 14 języków** (brakowało w 12 — fallback je ratował, ale pokazywał angielski).
+  - **Udokumentowany wyjątek respektowany:** klucze `card.*` (etykiety rysowane na obrazku rank-karty) celowo TYLKO dla 8 języków łacińskich — renderer nie ma glifów CJK/cyrylicy/arabskiego i wymusza `en`; test je whitelistuje, ale wymaga kompletu `card.*` w łacińskich + zera kluczy-sierot.
+  - **Dowód, że gryzie:** test wykrył realny dryf (36 braków), a usunięcie dowolnego klucza z mapy języka zwala jego asercję.
+  - Suite: **24 plików / 175 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.352.0] — 🧪 Rygiel matematyki ekonomii (giełda · pety · format) — bundla czystej logiki eko 2.0
 
