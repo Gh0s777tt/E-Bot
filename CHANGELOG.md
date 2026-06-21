@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-420-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.350.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-421-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.351.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.351.0] — 🧪 Rygiel progów odznak-tierów (tierAtLevel/nextTier) — dokładny próg vs spam
+
+- `[#421]` 🧪 **Test progów osiągnięć** ([`achievements.test.ts`](bot/src/lib/achievements.test.ts), 4 testy) — zero zmian produkcyjnych (funkcje już eksportowane).
+  - `tierAtLevel` — odznaka ogłaszana **tylko gdy poziom == próg** (5/10/25/50/100/200); pomiędzy/powyżej → brak (inaczej spam odznaki co poziom). `nextTier` — pierwszy próg ściśle > poziom; powyżej najwyższego → undefined.
+  - **Dowód, że gryzie:** mutacja `===`→`<=` (nie-dokładny próg) zwala 2/4 testy; po cofnięciu zielono.
+  - Suite: **22 plików / 135 testów** (start sesji: 8/74). **Bramki:** biome czysty, bot `tsc` exit 0, docs:check exit 0.
 
 ## [0.350.0] — 🧪 Rygiel krzywej XP→poziom (levelForXp) — formuła 5L²+50L+100
 
