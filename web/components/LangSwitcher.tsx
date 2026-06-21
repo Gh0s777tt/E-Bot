@@ -2,13 +2,27 @@
 
 // Przełącznik języka dla odwiedzających: zapisuje wybór w cookie `lang` i przeładowuje stronę,
 // żeby komponenty serwerowe (w tym `<html lang dir>`) wyrenderowały się w nowym języku.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LOCALE_NAMES, WEB_LOCALES } from '../lib/i18n';
 import { useLang } from './LangProvider';
 
 export default function LangSwitcher() {
   const lang = useLang();
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // A11y klawiatury: Escape zamyka menu i przywraca focus na przycisk (dotąd dało się zamknąć tylko myszą).
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent): void {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
 
   function pick(code: string) {
     // biome-ignore lint/suspicious/noDocumentCookie: prosta, trwała preferencja UI; Cookie Store API ma słabe wsparcie przeglądarek
@@ -19,6 +33,7 @@ export default function LangSwitcher() {
   return (
     <div className="relative">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"

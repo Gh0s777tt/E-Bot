@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-400-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.330.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-401-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.331.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.331.0] — ♿ P2 (a11y): Escape + przywrócenie focusu na dropdownie języka (GameVault)
+
+- `[#401]` ♿ **Menu wyboru języka da się teraz zamknąć klawiaturą.**
+  - [`LangSwitcher`](web/components/LangSwitcher.tsx) (TopNav GameVault, 14 języków) miał dobre ARIA (`aria-haspopup`/`aria-expanded`/`role=menu`/`menuitem`) + klik-poza, ale **brak a11y klawiatury** — dało się zamknąć **tylko myszą**. Dodany handler `Escape` (zamyka + przywraca focus na przycisk-trigger via `ref`). Świadomie **bez `useFocusTrap`** (menu ≠ modal — nie powinno więzić `Tab`).
+  - **Weryfikacja na żywo (preview web/):** otwarcie (`aria-expanded=true`, 14 pozycji `menuitem`), Escape zamyka (`aria-expanded=false`) + focus wraca na trigger — ✓. Bramki: biome czysty, web `tsc` exit 0, docs:check exit 0.
 
 ## [0.330.0] — 🐛♿ Fix: modal GameVault się nie zamykał (AnimatePresence) + a11y dialogu
 
