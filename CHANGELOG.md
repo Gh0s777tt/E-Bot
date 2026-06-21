@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-408-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.338.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-409-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.339.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.339.0] — 🪵 Loggery strukturalne: 7 feedów/pollerów `console.*` → `log.*` (batch 1 sweepu)
+
+- `[#409]` 🪵 **Start sweepu `console.*` → strukturalny [`log`](bot/src/lib/log.mts) (JSON-lines, gating `LOG_LEVEL`).**
+  - Batch 1 = **7 pollerów/feedów** (24 wywołania): [`freegames`](bot/src/gaming/freegames.mts) · [`patchnotes`](bot/src/gaming/patchnotes.mts) · [`pricetracker`](bot/src/gaming/pricetracker.mts) · [`aidigest`](bot/src/community/aidigest.mts) · [`social`](bot/src/creator/social.mts) · [`clips`](bot/src/creator/clips.mts) · [`scheduledPosts`](bot/src/engagement/scheduledPosts.mts).
+  - Konwencja: `console.log/info` → `log.info`, `console.warn` → `log.warn`, `console.error` → `log.error`; catch-bloki `console.warn('[tag]', (e as Error).message)` → `log.warn('[tag]', { err: e })` (replacer w `log.mts` serializuje `Error` → `{name,message,stack}` zamiast gubić stack).
+  - Świadomy wybór feedów/pollerów na start: to świeżo zmigrowane na multi-tenant pliki (znana logika), więc niskie ryzyko regresji przy mechanicznej zamianie.
+  - **Bramki:** biome czysty (infos `useLiteralKeys` niełamiące), bot `tsc` exit 0, docs:check exit 0.
+  - Pozostaje **62 pliki / 154 wywołania** w reszcie bota (komendy, security, economy, live, analytics, top-level) — kolejne batche sweepu.
 
 ## [0.338.0] — 🔐🏁 Multi-tenant: ostatnie 3 pollery per-serwer — KONIEC migracji 9/9 configów
 

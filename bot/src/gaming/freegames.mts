@@ -4,6 +4,7 @@
 import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { enabled: boolean; channelId: string; multiStore?: boolean };
 const DEFAULT: Cfg = { enabled: false, channelId: '', multiStore: false };
@@ -163,16 +164,16 @@ async function tickItad(client: Client): Promise<void> {
 
 export function startFreeGames(client: Client): void {
   if (!hasCloud()) {
-    console.log('[freegames] brak chmury — feed darmowych gier wyłączony.');
+    log.info('[freegames] brak chmury — feed darmowych gier wyłączony.');
     return;
   }
   void tick(client).catch(() => {});
   void tickItad(client).catch(() => {});
   setInterval(() => {
-    void tick(client).catch((e) => console.warn('[freegames]', (e as Error).message));
-    void tickItad(client).catch((e) => console.warn('[freegames:itad]', (e as Error).message));
+    void tick(client).catch((e) => log.warn('[freegames]', { err: e }));
+    void tickItad(client).catch((e) => log.warn('[freegames:itad]', { err: e }));
   }, 6 * 3_600_000);
-  console.log(
+  log.info(
     '[freegames] feed darmowych gier (Epic + multi-store ITAD) aktywny per-serwer (poll 6h).',
   );
 }

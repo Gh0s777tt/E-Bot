@@ -5,6 +5,7 @@ import type { Client, Guild, TextChannel } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { twitchToken } from '../live/tokens.mts';
 
 type Clip = {
@@ -99,20 +100,20 @@ async function tick(client: Client): Promise<void> {
   }
   lastTs = Math.max(lastTs, ...clips.map((cl) => Date.parse(cl.created_at)));
   await cloudSetSetting('creator_clips_last', new Date(lastTs).toISOString()).catch(() => {});
-  console.log(`[clips] wrzucono ${clips.length} nowych klipów (per-serwer)`);
+  log.info(`[clips] wrzucono ${clips.length} nowych klipów (per-serwer)`);
 }
 
 export function startClipRelay(client: Client): void {
   if (!process.env.TWITCH_CHANNEL || !process.env.TWITCH_CLIENT_ID) {
-    console.log('[clips] brak TWITCH_CHANNEL/TWITCH_CLIENT_ID — relay klipów wyłączony.');
+    log.info('[clips] brak TWITCH_CHANNEL/TWITCH_CLIENT_ID — relay klipów wyłączony.');
     return;
   }
-  console.log('[clips] relay klipów aktywny per-serwer (config z panelu /creator).');
+  log.info('[clips] relay klipów aktywny per-serwer (config z panelu /creator).');
   const loop = async (): Promise<void> => {
     try {
       await tick(client);
     } catch (e) {
-      console.warn('[clips]', (e as Error).message);
+      log.warn('[clips]', { err: e });
     }
     setTimeout(() => void loop(), 10 * 60_000); // stały interwał (per-serwer pollMin był globalny)
   };

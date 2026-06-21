@@ -4,6 +4,7 @@
 import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { enabled: boolean; channelId: string };
 const DEFAULT: Cfg = { enabled: false, channelId: '' };
@@ -117,17 +118,17 @@ async function tick(client: Client): Promise<void> {
 
 export function startPriceTracker(client: Client): void {
   if (!hasCloud()) {
-    console.log('[pricetracker] brak chmury — śledzenie cen wyłączone.');
+    log.info('[pricetracker] brak chmury — śledzenie cen wyłączone.');
     return;
   }
   if (!process.env.ITAD_API_KEY) {
-    console.log('[pricetracker] brak ITAD_API_KEY — śledzenie cen wyłączone.');
+    log.info('[pricetracker] brak ITAD_API_KEY — śledzenie cen wyłączone.');
     return;
   }
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[pricetracker]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[pricetracker]', { err: e })),
     12 * 3_600_000,
   );
-  console.log('[pricetracker] śledzenie cen ITAD aktywne per-serwer (poll 12h, config z panelu).');
+  log.info('[pricetracker] śledzenie cen ITAD aktywne per-serwer (poll 12h, config z panelu).');
 }

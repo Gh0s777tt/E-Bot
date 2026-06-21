@@ -6,6 +6,7 @@
 import type { Client, Guild, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { parseFeed } from '../lib/rss.mts';
 
 type Feed = { url: string; label: string };
@@ -83,15 +84,12 @@ async function tick(client: Client): Promise<void> {
 
 export function startSocialFeeds(client: Client): void {
   if (!hasCloud()) {
-    console.log('[social] brak chmury — powiadomienia social wyłączone.');
+    log.info('[social] brak chmury — powiadomienia social wyłączone.');
     return;
   }
   void tick(client).catch(() => {});
-  setInterval(
-    () => void tick(client).catch((e) => console.warn('[social]', (e as Error).message)),
-    10 * 60_000,
-  );
-  console.log(
+  setInterval(() => void tick(client).catch((e) => log.warn('[social]', { err: e })), 10 * 60_000);
+  log.info(
     '[social] powiadomienia social (RSS) aktywne per-serwer (poll 10 min, config z panelu).',
   );
 }

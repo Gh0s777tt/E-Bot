@@ -5,6 +5,7 @@
 import type { Client, Guild, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 import { buildSendOptions, hasRich, type RichMessage } from '../lib/richMessage.mts';
 
 type Mode = 'once' | 'daily' | 'weekly';
@@ -119,12 +120,12 @@ async function tick(client: Client): Promise<void> {
 
 export function startScheduledPosts(client: Client): void {
   if (!hasCloud()) {
-    console.log('[scheduled-posts] brak chmury — zaplanowane posty wyłączone.');
+    log.info('[scheduled-posts] brak chmury — zaplanowane posty wyłączone.');
     return;
   }
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[scheduled-posts]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[scheduled-posts]', { err: e })),
     60_000,
   );
-  console.log('[scheduled-posts] aktywne per-serwer (poll 60 s, config z panelu).');
+  log.info('[scheduled-posts] aktywne per-serwer (poll 60 s, config z panelu).');
 }

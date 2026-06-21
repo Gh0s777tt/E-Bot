@@ -5,6 +5,7 @@ import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord
 import { aiConfig, callModel } from '../lib/ai.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type Cfg = { on: boolean; sourceId: string; targetId: string; hour: number };
 function cfgFor(guildId: string): Cfg {
@@ -76,7 +77,7 @@ async function maybePostForGuild(guild: Guild): Promise<void> {
       await (tgt as TextChannel).send({ embeds: [embed] }).catch(() => {});
     }
   } catch (e) {
-    console.warn('[aidigest]', (e as Error).message);
+    log.warn('[aidigest]', { err: e });
   }
   await cloudSetSetting(lastKey, day).catch(() => {});
 }
@@ -89,10 +90,10 @@ async function maybePost(client: Client): Promise<void> {
 }
 
 export function startAiDigest(client: Client): void {
-  console.log('[aidigest] aktywny (dzienny per-serwer, config z panelu).');
+  log.info('[aidigest] aktywny (dzienny per-serwer, config z panelu).');
   void maybePost(client);
   setInterval(
-    () => void maybePost(client).catch((e) => console.warn('[aidigest]', (e as Error).message)),
+    () => void maybePost(client).catch((e) => log.warn('[aidigest]', { err: e })),
     30 * 60_000,
   );
 }

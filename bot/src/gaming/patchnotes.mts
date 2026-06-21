@@ -4,6 +4,7 @@
 import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { log } from '../lib/log.mts';
 
 type App = { appId: number; name: string };
 type Cfg = { enabled: boolean; channelId: string; apps: App[] };
@@ -80,13 +81,13 @@ async function tick(client: Client): Promise<void> {
 
 export function startPatchNotes(client: Client): void {
   if (!hasCloud()) {
-    console.log('[patchnotes] brak chmury — patch-notes wyłączone.');
+    log.info('[patchnotes] brak chmury — patch-notes wyłączone.');
     return;
   }
   void tick(client).catch(() => {});
   setInterval(
-    () => void tick(client).catch((e) => console.warn('[patchnotes]', (e as Error).message)),
+    () => void tick(client).catch((e) => log.warn('[patchnotes]', { err: e })),
     3_600_000,
   );
-  console.log('[patchnotes] patch-notes Steam aktywne per-serwer (poll 1h, config z panelu).');
+  log.info('[patchnotes] patch-notes Steam aktywne per-serwer (poll 1h, config z panelu).');
 }
