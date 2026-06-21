@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-433-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.363.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-434-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.364.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.364.0] — 🧪🎁 Rygiel losowania giveawayów (weightedPick) — bez podwójnych zwycięzców
+
+- `[#434]` 🧪 **Test losowania zwycięzców** ([`giveaways.test.ts`](bot/src/engagement/giveaways.test.ts), 7 testów) — dotąd nietestowana, czysta logika ważonego losowania ([`weightedPick`](bot/src/engagement/giveaways.mts)). Niezmienniki muszą trzymać dla **dowolnego** tasowania `Math.random`, więc testowane w pętli **200 przebiegów** każdy.
+  - **Zaryglowane:** dokładnie `n` zwycięzców, **bez duplikatów** (wagi >1 nie dają tej samej osoby dwa razy = brak podwójnej nagrody), nie więcej niż liczba uczestników (`n` > osób → komplet), każdy zwycięzca z puli; brak uczestników → `[]`.
+  - **RYGIEL dolnego clampu wagi (`Math.max(1, …)`):** user z wagą `0`/ujemną/bez pola jest nadal uprawniony (≥1 los) — wpada gdy `n ≥ liczba osób`. Bez clampu wypadłby z losowania mimo prawa udziału.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie dedup (`if (!winners.includes(u))`) zwala test unikatowości (waga 5 → pula z duplikatami); usunięcie `Math.max(1, …)` zwala 2 testy clampu — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **33 plików / 297 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 297/297 · docs:check — exit 0.
 
 ## [0.363.0] — 🧪⏱️ Rygiel warstwy danych eko: cooldown (minutesSince) + config per-serwer (ecoConfig)
 
