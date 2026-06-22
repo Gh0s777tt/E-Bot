@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-488-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.418.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-489-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.419.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.419.0] — 🧪🖼️ Rygiel kanałów tylko-obrazki (hasMedia + lista) — bramka mediów
+
+- `[#489]` 🧪 **Test image-only** ([`imageonly.test.ts`](bot/src/community/imageonly.test.ts), 6 testów) — `hasMedia` + lista kanałów (`addImageOnly`/`removeImageOnly`/`listImageOnly`) ([`community/imageonly.mts`](bot/src/community/imageonly.mts)). **0 zmian produkcyjnych** (2× `export`). Lista w realnym SQLite (`persist↔refresh`).
+  - **RYGIEL bramki `hasMedia`:** wiadomość z załącznikiem (≥1) lub embedem z `image`/`thumbnail`/`video` → ma media; sam tekst / pusty embed → brak. Regresja = legalne obrazki kasowane (false-negatyw) albo spam tekstowy przepuszczony (false-pozytyw).
+  - **Lista kanałów:** `add` idempotentne (Set, bez duplikatu); **RYGIEL `removeImageOnly`** zwraca `true` dla obecnego (i usuwa), `false` dla nieobecnego; persystencja — po `add`+`refresh` (ponowny odczyt z SQLite) kanał zostaje.
+  - **Dowód, że gryzie (mutation-proof):** `attachments.size > 0`→`> 1` zwala detekcję pojedynczego załącznika; `return had`→`return true` zwala kontrakt zwrotu `removeImageOnly` — po cofnięciu zielono.
+  - Suite: **87 plików / 682 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 682/682 · docs:check — exit 0.
 
 ## [0.418.0] — 🧪🎭 Rygiel routingu reaction-roles (emojiMatches · matchRole) — izolacja wiadomości
 

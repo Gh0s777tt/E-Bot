@@ -8,7 +8,7 @@ import { log } from '../lib/log.mts';
 
 let channels = new Set<string>();
 
-function refresh(): void {
+export function refresh(): void {
   const raw = getSettings().imageonly_channels;
   try {
     const arr = raw ? (JSON.parse(raw) as unknown) : [];
@@ -36,7 +36,7 @@ export function listImageOnly(): string[] {
   return [...channels];
 }
 
-function hasMedia(msg: Message): boolean {
+export function hasMedia(msg: Message): boolean {
   if (msg.attachments.size > 0) return true;
   return msg.embeds.some((e) => e.image || e.thumbnail || e.video);
 }
