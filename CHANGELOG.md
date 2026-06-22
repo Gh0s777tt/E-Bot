@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-449-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.379.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-450-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.380.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.380.0] — 🧪📈 Rygiel katalogu giełdy (findStock · STOCKS · pasmo cen) — kontrakt uppercase
+
+- `[#450]` 🧪 **Test katalogu giełdy** ([`stocks-catalog.test.ts`](bot/src/economy/stocks-catalog.test.ts), 6 testów) — uzupełnia [`economy-math.test.ts`](bot/src/economy/economy-math.test.ts), który zaryglował `priceAt`/`changePct` tylko dla GHOST.
+  - **`findStock`** — case-insensitive + trim, nieznany → undefined.
+  - **RYGIEL kontraktu uppercase:** `findStock` UPPERCASE'uje wejście, więc **każdy symbol w `STOCKS` MUSI być wielką literą** — inaczej spółka jest niezznajdowalna (kup/sprzedaj nie działa). Test asercjuje uppercase + round-trip `findStock(symbol)===stock`. Plus unikalne symbole, `base`/`vol` dodatnie.
+  - **Pasmo cen per-spółka:** `priceAt` każdej spółki ∈ `base × [max(0.15, 1−0.38·vol), 1+0.38·vol]` przez sweep 400 punktów czasu (łapie regresję `vol`/amplitud dla spółek innych niż GHOST), zawsze ≥ 1, deterministyczne.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.toUpperCase()` z `findStock` zwala case-insensitive; zmiana symbolu na małe litery zwala kontrakt uppercase + lookup — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **48 plików / 421 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 421/421 · docs:check — exit 0.
 
 ## [0.379.0] — 🧪🎨 Rygiel presetów motywu (THEME_PRESETS) — kontrakt CSS "R G B"
 
