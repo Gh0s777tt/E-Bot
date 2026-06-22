@@ -20,7 +20,7 @@ function cfgFor(guildId: string): Cfg {
 
 type News = { gid: string; title: string; url: string; contents: string; date: number };
 
-function strip(s: string): string {
+export function strip(s: string): string {
   return s
     .replace(/\[[^\]]*\]/g, '')
     .replace(/\s+/g, ' ')

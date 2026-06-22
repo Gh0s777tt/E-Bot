@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-504-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.434.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-505-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.435.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.435.0] — 🧪📰 Rygiel czyszczenia patch-notes (strip) — BBCode + kolaps + kap 400
+
+- `[#505]` 🧪 **Test `strip`** ([`patchnotes.test.ts`](bot/src/gaming/patchnotes.test.ts), 5 testów) — czyszczenie surowej treści Steam News do plain ([`gaming/patchnotes.mts`](bot/src/gaming/patchnotes.mts)). **0 zmian produkcyjnych** (1× `export`).
+  - **Usuwa znaczniki BBCode `[..]`** (`[b]`/`[url=…]`/`[list]` itd.) — inaczej w ogłoszeniu patch-notes pojawiłby się surowy markup; kolapsuje białe znaki (nowe linie / wielokrotne spacje → pojedyncza); `trim`.
+  - **RYGIEL kapu 400 znaków** — limit pola embeda Discorda; dłuższy tekst wywaliłby publikację ogłoszenia.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.replace(/\[[^\]]*\]/g, '')` zwala test BBCode + realistyczny; `.slice(0, 400)`→`.slice(0, 4000)` zwala kap — po cofnięciu zielono.
+  - Suite: **103 pliki / 783 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 783/783 · docs:check — exit 0.
 
 ## [0.434.0] — 🧪🏷️ Rygiel parsera deali ITAD (parseItad) — filtr darmowości + strażnik klucza dedup
 
