@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-460-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.390.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-461-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.391.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.391.0] — 🧪🗂️ Rygiel grupowania komend (groupCommands) — konserwacja + kolejność widoku /commands
+
+- `[#461]` 🧪 **Test `groupCommands`** ([`commands.group.test.ts`](dashboard/lib/commands.group.test.ts), 5 testów) — Discord API nie zwraca kategorii komend; panel mapuje je do grup ([`commands.ts`](dashboard/lib/commands.ts)). Regresja = komenda gubiona / zduplikowana / w złej grupie / zła kolejność w widoku `/commands`.
+  - **Konserwacja:** każda komenda dokładnie raz (brak duplikatów dzięki `used` — bez niego: 4 zamiast 3); brak gubienia; **nieznana komenda → grupa „Inne"**.
+  - **Kolejność w grupie wg KATALOGU, nie wg wejścia** (iteracja po `g.names`); **„Inne" jest ostatnią grupą**; puste grupy pominięte (`if (cmds.length)`); brak „Inne" gdy wszystko znane; puste wejście → `[]`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `used.add(n)` zwala konserwację (komenda w grupie ORAZ w „Inne"); usunięcie guardu `if (cmds.length)` zwala test pustych grup + puste wejście — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **59 plików / 490 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 490/490 · docs:check — exit 0.
 
 ## [0.390.0] — 🧪👑 Rygiel whitelisty właściciela instancji (isOwner) — owner-bypass nie przecieka
 
