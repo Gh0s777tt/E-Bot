@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-471-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.401.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-472-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.402.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.402.0] — 🧪🔘 Rygiel paneli ról-za-przyciski (buildRoleRows) — twarde limity Discorda
+
+- `[#472]` 🧪 **Test `buildRoleRows`** ([`buttonroles.test.ts`](bot/src/engagement/buttonroles.test.ts), 8 testów) — budowa rzędów przycisków `/buttonpanel` ([`engagement/buttonroles.mts`](bot/src/engagement/buttonroles.mts)). `buildRoleRows` jest czyste → **0 zmian produkcyjnych**.
+  - **RYGIEL twardych limitów Discorda** (przekroczenie = API odrzuca CAŁĄ publikację panelu): max **5 przycisków/rząd** (chunk `slice(i, i+5)`), max **5 rzędów** = **kap 25 przycisków** (nadmiar cicho ucięty — 30 przycisków → 5 rzędów × 5); niezmiennik „każdy rząd ≤ 5" w sweepie 1..30.
+  - **Kontrakt przycisku:** `customId = role:<roleId>` (routing z `handleRoleButton`), pusty `label` → domyślnie `"Rola"`, `emoji` ustawiane tylko gdy podane; pusta lista → brak rzędów; 6 przycisków → 2 rzędy (5 + 1).
+  - **Dowód, że gryzie (mutation-proof):** kap `rows.length < 5`→`< 50` zwala test 25 (30 przycisków dałoby 6 rzędów); `slice(i, i+5)`→`i+6` zwala „≤5/rząd" — po cofnięciu zielono.
+  - Suite: **70 plików / 566 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 566/566 · docs:check — exit 0.
 
 ## [0.401.0] — 🧪⭐ Rygiel starboardu — parser configu (próg ≥1) + dopasowanie emoji
 
