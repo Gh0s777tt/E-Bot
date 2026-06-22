@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-515-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.445.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-516-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.446.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.446.0] — 🧪🔐 Rygiel hasła weryfikacji (phraseMatches) — puste hasło nigdy nie otwiera bramy
+
+- `[#516]` 🧪 **Test `phraseMatches`** ([`verification.test.ts`](bot/src/security/verification.test.ts), 5 testów) — porównanie hasła weryfikacji (tryb `phrase`) wyłonione **behavior-preserving** z handlera modala ([`security/verification.mts`](bot/src/security/verification.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania). To **brama anty-bot** — błąd = obejście weryfikacji.
+  - **RYGIEL bezpieczeństwa** — puste/białe hasło w configu **NIGDY** nie waliduje (`phraseMatches('', '')`, `phraseMatches('cokolwiek', '')`, `phraseMatches('', '   ')` → `false`); bez tego źle skonfigurowana brama (brak hasła) wpuszczałaby każdego.
+  - **Trim + nieczułość na wielkość liter PO OBU STRONACH** — `SwordFish`↔`swordfish`, `hasło`↔`HASŁO` (też PL), wiodące/końcowe spacje obcięte.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie strażnika `want !== ''` zwala test bezpieczeństwa (puste hasło zaczyna walidować); usunięcie `.toLowerCase()` po stronie wpisu zwala test wielkości liter — po cofnięciu zielono.
+  - Suite: **114 plików / 844 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 844/844 · docs:check — exit 0.
 
 ## [0.445.0] — 🧪📊 Rygiel paska postępu questów (bar) — klamra przepełnienia + strażnik dzielenia
 

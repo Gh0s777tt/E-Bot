@@ -45,6 +45,14 @@ export function verifyConfig(guildId: string): VerificationConfig {
   }
 }
 
+// Porównanie hasła weryfikacji (tryb 'phrase'): trim + nieczułość na wielkość liter PO OBU STRONACH.
+// KLUCZ BEZPIECZEŃSTWA: puste/białe hasło w configu NIGDY nie waliduje — inaczej brama stoi otworem
+// (dowolny, także pusty, wpis przechodziłby). Regresja = obejście weryfikacji anty-bot.
+export function phraseMatches(given: string, configured: string): boolean {
+  const want = configured.trim().toLowerCase();
+  return want !== '' && given.trim().toLowerCase() === want;
+}
+
 export function verifyRow(label: string): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
@@ -210,8 +218,8 @@ export async function handleVerifyModal(interaction: ModalSubmitInteraction): Pr
 
   // Tryb pass-phrase — porównanie bez rozróżniania wielkości liter.
   if (interaction.customId === 'verify:phrase:submit') {
-    const given = interaction.fields.getTextInputValue('phrase').trim().toLowerCase();
-    if (!cfg.phrase.trim() || given !== cfg.phrase.trim().toLowerCase()) {
+    const given = interaction.fields.getTextInputValue('phrase');
+    if (!phraseMatches(given, cfg.phrase)) {
       await interaction.reply({
         content: '❌ Błędne hasło. Spróbuj ponownie.',
         flags: MessageFlags.Ephemeral,
