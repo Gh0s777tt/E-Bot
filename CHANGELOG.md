@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-447-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.377.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-448-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.378.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.378.0] — 🧪🌍 Rygiel listy języków bota w panelu (botLocales) — spójność mirror ↔ bot
+
+- `[#448]` 🧪 **Test `botLocales`** ([`botLocales.test.ts`](dashboard/lib/botLocales.test.ts), 5 testów) — `normalizeBotLocale` + **spójność cross-package**. [`botLocales.ts`](dashboard/lib/botLocales.ts) to świadomy **mirror** [`bot/src/i18n/locales.mts`](bot/src/i18n/locales.mts) (dashboard to osobny pakiet, nie importuje z bot/).
+  - **Niezmiennik: oferta panelu == 14 języków bota + `auto`.** Opcje panelu (bez `auto`) muszą równać się zbiorowi `LOCALES` bota. Rozjazd ⇒ panel proponuje język, którego bot nie obsługuje, albo gubi nowo dodany → user wybiera locale i bot go ignoruje. Bot czytany jako **tekst** (jak [`migrated-keys-consistency.test.ts`](bot/src/lib/migrated-keys-consistency.test.ts) — dashboard `tsc` nie importuje `.mts` z bot/).
+  - **`normalizeBotLocale`:** znana wartość przechodzi, nieznana/`null`/`undefined`/pusta → `'auto'` (bezpieczny default; surowy kod Discorda `en-US` ≠ wartość panelu).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie języka z `BOT_LOCALE_OPTIONS` zwala równość zbiorów; usunięcie `.includes` z `normalizeBotLocale` zwala test fallbacku — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **46 plików / 411 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 411/411 · docs:check — exit 0.
 
 ## [0.377.0] — 🧪🖼️ Rygiel proxowania okładek (proxied · coverFallbacks) — data: bez proxy + enkodowanie
 
