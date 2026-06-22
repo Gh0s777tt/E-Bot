@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-457-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.387.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-458-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.388.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.388.0] — 🧪🔑 Rygiel parserów auth (parseCookie · getOrigin) — sesja + origin OAuth
+
+- `[#458]` 🧪 **Test parserów auth** ([`auth.parse.test.ts`](dashboard/lib/auth.parse.test.ts), 10 testów) — czyste, bezpieczeństwo-adjacent helpery ([`auth.ts`](dashboard/lib/auth.ts)). `parseCookie` wyłuskuje m.in. cookie sesji (HMAC) z nagłówka; `getOrigin` buduje `redirect_uri` OAuth (zły origin = zepsuty/niebezpieczny redirect).
+  - **`parseCookie`:** pojedyncze/wiele cookie, **trim** klucza+wartości, **decodeURIComponent** wartości, wartość może zawierać `=` (split po PIERWSZYM `=` — np. base64 sesji), `null`/pusty/bez `=`/wiodące `=` → pomijane (guard `i > 0`).
+  - **`getOrigin`:** `x-forwarded-host` > `host` > `localhost:3001`; `x-forwarded-proto` > heurystyka (`localhost` → `http`, reszta → `https`).
+  - **Dowód, że gryzie (mutation-proof):** `i > 0`→`i >= 0` zwala test wiodącego `=` (pusty klucz); usunięcie heurystyki `localhost ? http : https` zwala 2 testy localhost — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **56 plików / 471 test**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 471/471 · docs:check — exit 0.
 
 ## [0.387.0] — 🧪✏️ Rygiel panelowego edytora rich-message (embedTotal · v2 · normalizeRich)
 
