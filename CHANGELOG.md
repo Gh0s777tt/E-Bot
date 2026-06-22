@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-456-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.386.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-457-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.387.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.387.0] — 🧪✏️ Rygiel panelowego edytora rich-message (embedTotal · v2 · normalizeRich)
+
+- `[#457]` 🧪 **Test edytora rich-message panelu** ([`richMessage.test.ts`](dashboard/lib/richMessage.test.ts), 8 testów) — strona PANELU ([`richMessage.ts`](dashboard/lib/richMessage.ts); osobny pakiet, własna kopia typów — bot-side testowany osobno). Panel liczy sumy znaków, by ostrzec PRZED przekroczeniem limitów Discorda; błąd = user wysyła wiadomość, którą Discord odrzuca, albo panel blokuje poprawną.
+  - **`embedTotal`** (baza limitu **6000**): sumuje `title + description + authorName + footerText + Σ(field.name + field.value)`; pusty embed → 0.
+  - **`v2TextTotal`** (baza limitu **4000**): liczy tylko bloki `text`/`section`, ignoruje `gallery`/`separator`.
+  - **`v2HasContent`** (null/whitespace → false; separator / gallery z URL / niepusty text → true), **`normalizeRich`** (null → komplet domyślnych; częściowy → zachowuje podane + dopełnia, `fields` → `[]`), **`fromLegacy`** (string → content, bez embeda).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `footerText.length` z `embedTotal` zwala sumę; dołożenie `gallery` do `v2TextTotal` zwala test ignorowania galerii — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **55 plików / 461 test**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 461/461 · docs:check — exit 0.
 
 ## [0.386.0] — 🧪🧬 Rygiel kodeka recept Architekta (encode/decodeRecipe) — whitelist anty-wstrzyknięcie
 
