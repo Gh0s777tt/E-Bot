@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-505-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.435.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-506-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.436.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.436.0] — 🧪🎬 Rygiel embeda klipu Twitch (clipEmbed) — warunkowy obrazek + fallback tytułu
+
+- `[#506]` 🧪 **Test `clipEmbed`** ([`clips.test.ts`](bot/src/creator/clips.test.ts), 4 testy) — budowniczy embeda relayu klipów Twitch z odpowiedzi Helix API ([`creator/clips.mts`](bot/src/creator/clips.mts)). **0 zmian produkcyjnych** (1× `export` funkcji + 1× `export` typu `Clip`).
+  - **Mapowanie embeda:** tytuł, URL klipu, stopka „klip od `<autor>`", autor „Twitch • nowy klip", kolor Twitcha `0x9146ff`, timestamp z `created_at` — regresja = zepsuty link/stopka w ogłoszeniu klipu.
+  - **RYGIEL warunku `setImage`:** obrazek ustawiany **tylko** gdy `thumbnail_url` niepuste — puste → brak `image` (inaczej Discord odrzuca embed z pustym `image.url` i wywala publikację).
+  - **RYGIEL fallbacku tytułu:** puste `title` z API → „Klip" (embed bez tytułu byłby pusty wizualnie).
+  - **Dowód, że gryzie (mutation-proof):** zdjęcie warunku (`embed.setImage(cl.thumbnail_url)` bezwarunkowo) zwala test obrazka; zmiana fallbacku `'Klip'`→`'KLIP_MUT'` zwala test tytułu — po cofnięciu zielono.
+  - Suite: **104 pliki / 787 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 787/787 · docs:check — exit 0.
 
 ## [0.435.0] — 🧪📰 Rygiel czyszczenia patch-notes (strip) — BBCode + kolaps + kap 400
 

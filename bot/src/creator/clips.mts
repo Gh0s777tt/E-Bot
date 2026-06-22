@@ -8,7 +8,7 @@ import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 import { twitchToken } from '../live/tokens.mts';
 
-type Clip = {
+export type Clip = {
   id: string;
   url: string;
   title: string;
@@ -52,7 +52,7 @@ async function fetchClips(id: string, sinceIso: string): Promise<Clip[]> {
   return ((await r.json()) as { data?: Clip[] }).data ?? [];
 }
 
-function clipEmbed(cl: Clip): EmbedBuilder {
+export function clipEmbed(cl: Clip): EmbedBuilder {
   const embed = new EmbedBuilder()
     .setColor(0x9146ff)
     .setAuthor({ name: 'Twitch • nowy klip' })
