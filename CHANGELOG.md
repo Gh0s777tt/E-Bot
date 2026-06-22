@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-469-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.399.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-470-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.400.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.400.0] — 🧪↩️ Rygiel rejestru /undo — fail-safe cofania prowizjonowania Architekta
+
+- `[#470]` 🧪 **Test rejestru cofania** ([`undo.test.ts`](bot/src/lib/undo.test.ts), 8 testów) — `recordUndo`/`readUndo`/`clearUndo` ([`lib/undo.mts`](bot/src/lib/undo.mts)). Siatka bezpieczeństwa `/undo`: cofa kanały/role utworzone przez `/blueprint`/`/aiserver`. **0 zmian produkcyjnych** (funkcje już eksportowane). Realny SQLite (tymczasowy `DATABASE_PATH`).
+  - **Round-trip + „tylko ostatnia operacja":** `recordUndo`→`readUndo` zwraca te same `channels`/`roles`/`label`; drugie `record` nadpisuje pierwsze; `clearUndo`→`null`; brak rekordu → `null`.
+  - **RYGIEL fail-safe parsowania (nigdy połowiczny rekord / wyjątek):** uszkodzony JSON → `null` (nie rzuca); `channels`/`roles` nie-tablica → `null` (inaczej `/undo` dostałby śmieci i skasował przypadkowe obiekty); brak `label` → domyślnie `''` (rekord nadal ważny).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie strażnika `Array.isArray(channels)/roles` zwala 2 testy (zwraca śmieciowy rekord); `label: o.label ?? ''`→bez fallbacku zwala test domyślnej etykiety — po cofnięciu zielono.
+  - Suite: **68 plików / 550 testów** 🎉 (kamień: **v0.400.0**). **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 550/550 · docs:check — exit 0.
 
 ## [0.399.0] — 🧪🔐 Rygiel generatora captcha (generateCaptchaCode) — czytelny kod weryfikacji
 
