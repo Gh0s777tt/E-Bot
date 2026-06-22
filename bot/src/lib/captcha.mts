@@ -5,7 +5,7 @@ import { createCanvas } from '@napi-rs/canvas';
 import { ensureFonts } from './cards.mts';
 
 // Bez znaków dwuznacznych (0/O, 1/I/L) — łatwiej przepisać.
-const ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+export const ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
 export function generateCaptchaCode(len = 5): string {
   let s = '';

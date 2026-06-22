@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-468-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.398.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-469-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.399.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.399.0] — 🧪🔐 Rygiel generatora captcha (generateCaptchaCode) — czytelny kod weryfikacji
+
+- `[#469]` 🧪 **Test generatora captcha** ([`captcha.test.ts`](bot/src/lib/captcha.test.ts), 7 testów) — `generateCaptchaCode`/`ALPHABET` ([`lib/captcha.mts`](bot/src/lib/captcha.mts)). Captcha to brama weryfikacji anty-bot/raid — zły kod = człowiek oblewa legalną weryfikację. Render obrazka (`renderCaptcha`) pominięty (natywny `@napi-rs/canvas` + fonty).
+  - **RYGIEL czytelności `ALPHABET`:** brak znaków dwuznacznych (`0`/`O`/`1`/`I`/`L`) — inaczej user nie przepisze kodu i nie przejdzie weryfikacji + znaki unikalne (równomierny rozkład, żaden nie faworyzowany).
+  - **`generateCaptchaCode`:** domyślna długość 5, respektuje zadaną (`0`→`''`, 1, 8), każdy znak ∈ `ALPHABET` (sweep 2000).
+  - **RYGIEL pełnego zasięgu indeksu:** każdy znak `ALPHABET` osiągalny (coupon-collector 5000) — obcięcie `randomInt(len−1)` uczyniłoby ostatni znak nieosiągalnym.
+  - **Dowód, że gryzie (mutation-proof):** wstrzyknięcie `0` do `ALPHABET` zwala kontrakt czytelności; `i < len`→`i <= len` zwala długość (domyślna 5→6, `0`→1 znak) — po cofnięciu zielono. Zmiana produkcyjna = **1× `export`** (`ALPHABET`).
+  - Suite: **67 plików / 542 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 542/542 · docs:check — exit 0.
 
 ## [0.398.0] — 🧪✂️ Rygiel /rps — sprawiedliwy wynik rundy (anty-symetria + cykl BEATS)
 
