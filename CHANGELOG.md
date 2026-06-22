@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-481-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.411.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-482-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.412.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.412.0] — 🧪⌨️ Rygiel opcji komend no-code (buildCommandOptions) — wymagane przed opcjonalnymi
+
+- `[#482]` 🧪 **Test `buildCommandOptions`** ([`customCommands.options.test.ts`](dashboard/lib/customCommands.options.test.ts), 6 testów) — budowa opcji slash-komend no-code dla Discord API ([`lib/customCommands.ts`](dashboard/lib/customCommands.ts)). **Refactor behavior-preserving:** logika opcji wyjęta z `saveCustomCommands` do czystej `buildCommandOptions` (ryglowalna bez Discorda/bazy; `saveCustomCommands` ją wywołuje).
+  - **RYGIEL kolejności:** opcje **wymagane PRZED opcjonalnymi** (`sort` wg `required` malejąco) — Discord **odrzuca CAŁĄ rejestrację** `/custom-command`, jeśli opcjonalna poprzedza wymaganą.
+  - **RYGIEL kapu 25 opcji** (30 → 25). Typ `STRING` (3), opis fallbackuje na nazwę, `required` koercjonowane (`!!`), filtr opcji bez nazwy, pusta/`undefined` → `[]`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.sort(required-first)` zwala test kolejności; `.slice(0,25)`→`.slice(0,250)` zwala kap — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja + `export buildCommandOptions`, **0 zmian zachowania**.
+  - Suite: **80 plików / 635 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 635/635 · docs:check — exit 0.
 
 ## [0.411.0] — 🧪💾 Rygiel snapshotu serwera (captureGuild) — pomija role zarządzane + @everyone
 

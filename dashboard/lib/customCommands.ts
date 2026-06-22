@@ -63,6 +63,21 @@ async function getAppId(): Promise<string> {
 
 export type SyncResult = { ok: boolean; error?: string; registered: number };
 
+// Opcje slash-komendy → format Discord API (typ 3 = STRING). Discord WYMAGA: wymagane PRZED
+// opcjonalnymi (inaczej odrzuca rejestrację), max 25, bez bezimiennych. Wydzielone — ryglowalne bez Discorda.
+export function buildCommandOptions(options: CommandOption[] | undefined) {
+  return (options ?? [])
+    .filter((o) => o.name)
+    .slice(0, 25)
+    .map((o) => ({
+      type: 3,
+      name: o.name,
+      description: o.description || o.name,
+      required: !!o.required,
+    }))
+    .sort((a, b) => Number(b.required) - Number(a.required));
+}
+
 // Zapis configu + synchronizacja z Discord. Zwraca błąd przy kolizji z komendą wbudowaną.
 export async function saveCustomCommands(commands: CustomCommand[]): Promise<SyncResult> {
   const appId = await getAppId();
@@ -107,17 +122,8 @@ export async function saveCustomCommands(commands: CustomCommand[]): Promise<Syn
 
   let registered = 0;
   for (const c of commands) {
-    // opcje (typ 3 = STRING); Discord wymaga: wymagane PRZED opcjonalnymi
-    const options = (c.options ?? [])
-      .filter((o) => o.name)
-      .slice(0, 25)
-      .map((o) => ({
-        type: 3,
-        name: o.name,
-        description: o.description || o.name,
-        required: !!o.required,
-      }))
-      .sort((a, b) => Number(b.required) - Number(a.required));
+    // opcje (typ 3 = STRING); Discord wymaga: wymagane PRZED opcjonalnymi (zob. buildCommandOptions)
+    const options = buildCommandOptions(c.options);
     const r = await dfetch(base, {
       method: 'POST',
       body: JSON.stringify({
