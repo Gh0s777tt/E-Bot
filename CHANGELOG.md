@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-446-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.376.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-447-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.377.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.377.0] — 🧪🖼️ Rygiel proxowania okładek (proxied · coverFallbacks) — data: bez proxy + enkodowanie
+
+- `[#447]` 🧪 **Test proxowania okładek** ([`cover.test.ts`](dashboard/lib/cover.test.ts), 8 testów) — czysta logika [`cover.ts`](dashboard/lib/cover.ts) (GameVault/wishlist). `proxied` decyduje, czy URL idzie przez proxy `/api/img` (ze strażnikiem SSRF).
+  - **`proxied`:** `data:` URI przechodzi **bez proxy** (inline — proxowanie by je zepsuło, nie da się SSRF-ować); http(s) → `/api/img?u=<encodeURIComponent>` (znaki specjalne `?`/`&`/spacja zakodowane → brak wstrzyknięcia do query).
+  - **`coverFallbacks`:** uporządkowany łańcuch zapasowy `cover_url → steam 600x900 → steam header → placeholder`; zawsze kończy się placeholderem; nie-steam bez okładki → sam placeholder; dedup przez `Set`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `data:` passthrough zwala test inline (data: trafiłby do proxy); usunięcie `list.push(PLACEHOLDER)` zwala 4 testy łańcucha — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **45 plików / 406 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 406/406 · docs:check — exit 0.
 
 ## [0.376.0] — 🧪🎨 Rygiel spójności stylu kart bot↔panel — oferta czcionek == możliwości renderu
 
