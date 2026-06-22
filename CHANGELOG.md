@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-492-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.422.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-493-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.423.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.423.0] — 🧪🎟️ Rygiel escapingu transkryptu ticketów (esc) — anty-XSS + kolejność encji
+
+- `[#493]` 🧪 **Test `esc`** ([`service.test.ts`](bot/src/tickets/service.test.ts), 5 testów) — escaping HTML transkryptu ticketów ([`tickets/service.mts`](bot/src/tickets/service.mts)). Treść użytkownika trafia do HTML transkryptu → musi być escapowana (anty-XSS). **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL kolejności encji:** `&` escapowane **PIERWSZE** — inaczej `<`→`&lt;`, a potem `&`→`&amp;` zrobiłoby `&amp;lt;` (podwójny escape, zepsuty transkrypt). `<script>` → `&lt;script&gt;`.
+  - **RYGIEL anty-XSS:** payload `<img onerror=...>` → bez surowych `<`/`>`; podstawowe encje `&`/`<`/`>`; wszystkie wystąpienia (globalnie, nie tylko pierwsze); pusty/bez specjalnych → bez zmian.
+  - **Dowód, że gryzie (mutation-proof):** przestawienie kolejności (`&` na końcu) zwala 4 testy (podwójny escape `&amp;lt;`) — po cofnięciu zielono.
+  - Suite: **91 plików / 707 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 707/707 · docs:check — exit 0.
 
 ## [0.422.0] — 🧪📡 Rygiel powiadomień live (fillVars · sec) — render szablonu + parser interwału (700+ 🎉)
 
