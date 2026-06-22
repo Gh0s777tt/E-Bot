@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-482-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.412.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-483-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.413.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.413.0] — 🧪🤖 Rygiel parsera configu AI (aiConfig) — częściowy config nie gubi limitów kosztów
+
+- `[#483]` 🧪 **Test `aiConfig`** ([`ai.test.ts`](bot/src/lib/ai.test.ts), 4 testy) — parser configu AI ([`lib/ai.mts`](bot/src/lib/ai.mts)), bramka `/ai`·`/tldr`·`/translate` + twarde dzienne limity kosztów per użytkownik. Realny SQLite (tymczasowy `DATABASE_PATH`); **0 zmian produkcyjnych** (już eksportowany).
+  - **RYGIEL merge `{...DEFAULT, ...zapisane}`:** częściowy config (np. sam `enabled:true`) **zachowuje domyślne limity** (`dailyRequestLimit`/`dailyTokenLimit`/`model`). Bez merge'a zapis samego `enabled` zerowałby limit do `undefined` ⇒ brak ochrony kosztów AI.
+  - **Fail-safe:** brak configu → `DEFAULT`; uszkodzony JSON → `DEFAULT` (nie rzuca). Pełny override (model+limity+persona) respektowany.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie spreadu `...DEFAULT` zwala test częściowego merge'a (limity `undefined`); `catch → {}` zamiast `DEFAULT` zwala test uszkodzonego JSON — po cofnięciu zielono.
+  - Suite: **81 plików / 639 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 639/639 · docs:check — exit 0.
 
 ## [0.412.0] — 🧪⌨️ Rygiel opcji komend no-code (buildCommandOptions) — wymagane przed opcjonalnymi
 
