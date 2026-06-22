@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-452-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.382.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-453-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.383.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.383.0] — 🧪🛡️ Rygiel mappera AutoModa (mapRule) — raw API Discorda → NativeRule panelu
+
+- `[#453]` 🧪 **Test mappera natywnego AutoModa** ([`discordAutomod.test.ts`](dashboard/lib/discordAutomod.test.ts), 4 testy) — `mapRule` ([`discordAutomod.ts`](dashboard/lib/discordAutomod.ts)) konwertuje surową regułę API Discorda (snake_case) → `NativeRule` panelu (camelCase). Regresja = panel moderacji pokazuje/zarządza regułami błędnie (gubi keywords, zeruje limit wzmianek, traci kanał akcji).
+  - **Zaryglowane:** pełne mapowanie pól + metadanych akcji (`channel_id`→`channelId`, `duration_seconds`→`durationSec`); defaulty przy brakach (`keyword_filter`/`presets` → `[]`, `mention_total_limit` → `null`, `actions` → `[]`).
+  - **RYGIEL `?? null` vs `|| null`:** `mention_total_limit = 0` MUSI zostać `0` (limit „0 wzmianek"), nie `null` — `??` nuluje tylko `undefined`, nie zero.
+  - **Dowód, że gryzie (mutation-proof):** `?? null`→`|| null` zwala test zera (`0`→`null`); usunięcie `?? []` z `keywords` zwala test defaultów — po cofnięciu zielono, **0 zmian produkcyjnych**. (`next/headers` w imporcie modułu ładuje się w vitest — rzuca dopiero przy wywołaniu `cookies()`, nie przy imporcie.)
+  - Suite: **51 plików / 433 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 433/433 · docs:check — exit 0.
 
 ## [0.382.0] — 🧪✉️ Rygiel twardych limitów embeda (buildEmbed) — anty-odrzucenie wiadomości przez Discord
 
