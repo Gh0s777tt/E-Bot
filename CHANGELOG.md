@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-448-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.378.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-449-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.379.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.379.0] — 🧪🎨 Rygiel presetów motywu (THEME_PRESETS) — kontrakt CSS "R G B"
+
+- `[#449]` 🧪 **Test presetów koloru akcentu** ([`themes.test.ts`](dashboard/lib/themes.test.ts), 4 testy) — [`themes.ts`](dashboard/lib/themes.ts). Pola `rgb`/`hover`/`dark` zasilają CSS `rgb(var(--accent-rgb) / alpha)` — format MUSI być `"R G B"` (spacje, kanały 0–255). Przecinek zamiast spacji albo wartość >255 = **cicho zepsuty akcent CAŁEGO panelu**.
+  - **RYGIEL kontraktu CSS:** `rgb`/`hover`/`dark` każdego presetu = poprawny triplet (3 liczby, spacje, 0–255) + integralność katalogu (niepusta lista, unikalne id, niepuste nazwy). Helper `isRgbTriple` z własną samokontrolą (akceptuje poprawne, odrzuca przecinki/poza-zakresem/niekompletne).
+  - **Dowód, że gryzie (mutation-proof):** zmiana `rgb` na `229,9,20` (przecinki) zwala kontrakt CSS; duplikacja `id` zwala test unikalności — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **47 plików / 415 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 415/415 · docs:check — exit 0.
 
 ## [0.378.0] — 🧪🌍 Rygiel listy języków bota w panelu (botLocales) — spójność mirror ↔ bot
 
