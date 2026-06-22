@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-444-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.374.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-445-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.375.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.375.0] — 🧪🛡️ Rygiel rate-limitu publicznych sinków (panel) — anty-flood `/api/sentry`·`/api/hook`
+
+- `[#445]` 🧪 **Test rate-limitu panelu** ([`rateLimit.test.ts`](dashboard/lib/rateLimit.test.ts), 8 testów) — dotąd nietestowana, czysta logika sliding-window ([`rateLimit.ts`](dashboard/lib/rateLimit.ts)) chroniąca **publiczne sinki** `/api/sentry` + `/api/hook` przed naiwnym floodem. Pierwszy rygiel **czystej logiki panelu poza schematami/i18n/izolacją**.
+  - **`rateLimited`:** pierwsze `limit` żądań przechodzi, `(limit+1)`-te zablokowane (off-by-one); po upływie `windowMs` licznik się resetuje; **granica okna ścisła** (`now - t < windowMs` — w `windowMs` stary znacznik wygasa); izolacja kluczy (osobne kubełki per `sentry:<ip>`/`hook:<token>`). Czas sterowany fałszywym zegarem `vi`.
+  - **`clientIp`:** XFF → pierwszy token przycięty, fallback `x-real-ip` → `'unknown'`; XFF ma pierwszeństwo.
+  - **Dowód, że gryzie (mutation-proof):** `>`→`>=` (blokada legalnego ruchu) zwala 4 testy; `<`→`<=` na granicy okna (okno nigdy nie domyka → DoS) zwala 2 testy — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **43 pliki / 394 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 394/394 · docs:check — exit 0.
 
 ## [0.374.0] — 🧪🎭 Rygiel menu ról (rolemenu) — twarde limity Discorda (25 opcji · długości)
 
