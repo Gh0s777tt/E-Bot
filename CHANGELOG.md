@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-497-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.427.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-498-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.428.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.428.0] — 🧪🔢 Rygiel gry w liczenie (checkCount) — anti-cheat + zgodność liczby
+
+- `[#498]` 🧪 **Test `checkCount`** ([`counting.test.ts`](bot/src/community/counting.test.ts), 6 testów) — werdykt kolejnej liczby w grze w liczenie ([`community/counting.mts`](bot/src/community/counting.mts)). **Refactor behavior-preserving:** logika decyzji wyjęta z handlera do czystej `checkCount` (side-effecty reakcji/wiadomości/persist zostają w handlerze).
+  - **RYGIEL anti-cheat:** ten sam user dwa razy z rzędu (gdy `allowSameUser` off) → fail `same-user` — sprawdzany **PRZED** zgodnością liczby. `allowSameUser` on → dozwolone.
+  - **RYGIEL zgodności:** liczba musi być **dokładnie** `count+1` — inaczej fail `wrong` (z oczekiwaną liczbą). Poprawna liczba bijąca rekord → `record: true`.
+  - **RYGIEL kolejności:** ten sam user + zła liczba → `same-user` (anti-cheat ma priorytet).
+  - **Dowód, że gryzie (mutation-proof):** wyłączenie warunku same-user zwala anti-cheat; `n !== expected`→`n === expected` zwala zgodność — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja + `export` (`checkCount`/`CountVerdict`), **0 zmian zachowania**.
+  - Suite: **96 plików / 738 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 738/738 · docs:check — exit 0.
 
 ## [0.427.0] — 🧪📣 Rygiel parsera configu feedów social (cfgFor) — strażnik `feeds` po spreadzie
 

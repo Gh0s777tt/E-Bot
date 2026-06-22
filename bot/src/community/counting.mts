@@ -24,6 +24,27 @@ function cfg(guildId: string): Cfg {
 }
 
 type State = { count: number; lastUserId: string; record: number };
+
+// Werdykt liczenia (czysty, bez side-effectów). Kolejność reguł: najpierw anti-cheat (ten sam user
+// dwa razy z rzędu, o ile niedozwolone), potem zgodność z oczekiwaną liczbą (count+1). `record` = czy
+// pobity rekord serwera. Handler tylko wykonuje akcje (reakcja/wiadomość/persist) wg werdyktu.
+export type CountVerdict =
+  | { ok: true; count: number; record: boolean }
+  | { ok: false; reason: 'same-user' | 'wrong'; expected: number };
+
+export function checkCount(
+  st: State,
+  n: number,
+  userId: string,
+  allowSameUser: boolean,
+): CountVerdict {
+  const expected = st.count + 1;
+  if (!allowSameUser && userId === st.lastUserId)
+    return { ok: false, reason: 'same-user', expected };
+  if (n !== expected) return { ok: false, reason: 'wrong', expected };
+  return { ok: true, count: expected, record: expected > st.record };
+}
+
 const mem = new Map<string, State>();
 
 async function load(guildId: string): Promise<State> {
@@ -66,26 +87,10 @@ export function startCounting(client: Client): void {
 
       const st = await load(msg.guild.id);
       const ch = msg.channel as TextChannel;
+      const v = checkCount(st, n, msg.author.id, c.allowSameUser);
 
-      // anti-cheat: ten sam user dwa razy z rzędu
-      if (!c.allowSameUser && msg.author.id === st.lastUserId) {
-        await msg.react('🚫').catch(() => {});
-        if (c.resetOnFail) {
-          st.count = 0;
-          st.lastUserId = '';
-          persist(msg.guild.id, st);
-          await ch
-            .send(
-              `🚫 <@${msg.author.id}> — nie możesz liczyć dwa razy z rzędu! Zaczynamy od **1**.`,
-            )
-            .catch(() => {});
-        }
-        return;
-      }
-
-      const expected = st.count + 1;
-      if (n !== expected) {
-        await msg.react('❌').catch(() => {});
+      if (!v.ok) {
+        await msg.react(v.reason === 'same-user' ? '🚫' : '❌').catch(() => {});
         if (c.resetOnFail) {
           const prevRecord = st.record;
           st.count = 0;
@@ -93,7 +98,9 @@ export function startCounting(client: Client): void {
           persist(msg.guild.id, st);
           await ch
             .send(
-              `❌ Pomyłka! Poprawna liczba to **${expected}**. Licznik wraca do **1**. (rekord serwera: **${prevRecord}**)`,
+              v.reason === 'same-user'
+                ? `🚫 <@${msg.author.id}> — nie możesz liczyć dwa razy z rzędu! Zaczynamy od **1**.`
+                : `❌ Pomyłka! Poprawna liczba to **${v.expected}**. Licznik wraca do **1**. (rekord serwera: **${prevRecord}**)`,
             )
             .catch(() => {});
         }
@@ -101,17 +108,16 @@ export function startCounting(client: Client): void {
       }
 
       // poprawnie
-      st.count = expected;
+      st.count = v.count;
       st.lastUserId = msg.author.id;
-      const newRecord = expected > st.record;
-      if (newRecord) st.record = expected;
+      if (v.record) st.record = v.count;
       persist(msg.guild.id, st);
 
-      await msg.react(newRecord ? '🏆' : '✅').catch(() => {});
-      if (newRecord && expected > 1) {
-        await ch.send(`🏆 Nowy rekord serwera: **${expected}**!`).catch(() => {});
-      } else if (expected % 100 === 0) {
-        await ch.send(`🎉 **${expected}** — kamień milowy! Tak trzymać.`).catch(() => {});
+      await msg.react(v.record ? '🏆' : '✅').catch(() => {});
+      if (v.record && v.count > 1) {
+        await ch.send(`🏆 Nowy rekord serwera: **${v.count}**!`).catch(() => {});
+      } else if (v.count % 100 === 0) {
+        await ch.send(`🎉 **${v.count}** — kamień milowy! Tak trzymać.`).catch(() => {});
       }
     } catch (e) {
       log.warn('[counting]', { err: e });
