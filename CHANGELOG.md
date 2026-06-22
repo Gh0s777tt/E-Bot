@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-477-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.407.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-478-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.408.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.408.0] — 🧪👁️ Rygiel trybów widoku panelu (tierVisible) — Developer nie przecieka do Prostego
+
+- `[#478]` 🧪 **Test trybów widoku** ([`viewMode.test.ts`](dashboard/lib/viewMode.test.ts), 9 testów) — `tierVisible`/`isViewMode`/`VIEW_MODES` ([`lib/viewMode.ts`](dashboard/lib/viewMode.ts)). Bramka widoczności nawigacji (Prosty/Zaawansowany/Developer). Czysty moduł klient-safe; **0 zmian produkcyjnych** (już eksportowane).
+  - **RYGIEL przecieku dev:** próg `'dev'` (narzędzia techniczne, klucze, audyt) widoczny **tylko** w trybie Developer — **nie przecieka** do Prostego/Zaawansowanego. Esencja (brak progu) widoczna w **każdym** trybie; `'adv'` ukryty w Prostym.
+  - **Monotoniczność:** co widoczne w trybie niższym, widoczne w wyższym (sweep tier × mode × mode). `isViewMode` (type guard: akceptuje 3 tryby, odrzuca nieznane/`null`/`''`/`'SIMPLE'`).
+  - **`VIEW_MODES`:** dokładnie 3 tryby = zbiór `ViewMode`, unikalne, w kolejności rang; `DEFAULT_VIEW_MODE` poprawny i w katalogu; każdy wpis ma niepuste `label`/`short`/`hint`.
+  - **Dowód, że gryzie (mutation-proof):** `tierRank ≤ MODE_RANK`→`<` zwala widoczność esencji/dev-w-dev; usunięcie gałęzi `v === 'simple'` z `isViewMode` zwala akceptację Prostego — po cofnięciu zielono.
+  - Suite: **76 plików / 612 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 612/612 · docs:check — exit 0.
 
 ## [0.407.0] — 🧪🔗 Rygiel linku zaproszenia bota (botInviteUrl) — scope + permissions (>600 testów 🎉)
 
