@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-490-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.420.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-491-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.421.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.421.0] — 🧪📋 Rygiel aplikacji do ekipy (resolveApps · applyEnabled) — kap pytań + kanał recenzji
+
+- `[#491]` 🧪 **Test aplikacji** ([`applications.test.ts`](bot/src/community/applications.test.ts), 6 testów) — `resolveApps`/`applyEnabled` ([`community/applications.mts`](bot/src/community/applications.mts)). Config per-serwer z realnego SQLite; **0 zmian produkcyjnych** (już eksportowane).
+  - **RYGIEL kapu 5 pytań:** twardy limit Discorda — modal ma **max 5 pól** tekstowych; przekroczenie = Discord odrzuca modal. Aplikacja z 8 pytaniami → przycięta do 5.
+  - **`resolveApps`:** brak configu → jedna aplikacja `default` z domyślnymi pytaniami; config 2.0 → pola fallbackują na top-level (`reviewChannelId`/`acceptRoleId`) + domyślne `label`/`style`.
+  - **RYGIEL bramki `applyEnabled`:** wymaga `enabled` **ORAZ** ≥1 aplikacja z kanałem recenzji — włączone bez kanału → `false` (zgłoszenia trafiałyby donikąd). Wyłączone → `false`.
+  - **Dowód, że gryzie (mutation-proof):** `.slice(0,5)`→`.slice(0,50)` zwala kap pytań; usunięcie `.some((a) => a.reviewChannelId)` zwala wymóg kanału recenzji — po cofnięciu zielono.
+  - Suite: **89 plików / 695 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 695/695 · docs:check — exit 0.
 
 ## [0.420.0] — 🧪🟣 Rygiel ról z obecności (liveStreaming · vanityMatch) — filtr roli + fraza statusu
 
