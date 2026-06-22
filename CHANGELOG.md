@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-487-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.417.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-488-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.418.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.418.0] — 🧪🎭 Rygiel routingu reaction-roles (emojiMatches · matchRole) — izolacja wiadomości
+
+- `[#488]` 🧪 **Test reaction-roles** ([`reaction-roles.test.ts`](bot/src/reaction-roles.test.ts), 8 testów) — `emojiMatches`/`matchRole` ([`reaction-roles.mts`](bot/src/reaction-roles.mts)). Reakcja → rola; regresja = zła rola nadana / żadna, albo reakcja na innej wiadomości przypina rolę. **0 zmian produkcyjnych** (3× `export`). Stan z realnego SQLite przez `refresh()`.
+  - **`emojiMatches`:** dopasowanie po nazwie (unicode), `id` (custom) **lub** pełnym mention (`<:pog:123>`); inny emoji → false.
+  - **RYGIEL izolacji wiadomości (`matchRole`):** reguła pasuje **tylko** gdy `messageId` ORAZ emoji się zgadzają — ta sama reakcja na **innej** wiadomości → `undefined` (rola nie wycieka między wiadomościami). Fallback panelu **tylko** na wiadomości panelu. Uszkodzony JSON reguł → brak dopasowania (fail-safe, nie rzuca).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie gałęzi `val === e.toString()` zwala dopasowanie po mention; usunięcie warunku `r.messageId === messageId` zwala izolację wiadomości — po cofnięciu zielono.
+  - Suite: **86 plików / 676 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 676/676 · docs:check — exit 0.
 
 ## [0.417.0] — 🧪❓ Rygiel huba /help — katalog kategorii + spójność opisów komend
 

@@ -23,7 +23,7 @@ let panelPairs: Pair[] = [];
 let panelExclusive = false;
 let panelMsgId = '';
 
-function refresh(): void {
+export function refresh(): void {
   const raw = getSettings()['reaction_roles'];
   try {
     const a = raw ? (JSON.parse(raw) as unknown) : [];
@@ -45,12 +45,15 @@ function refresh(): void {
   panelMsgId = getSettings()['reaction_role_panel_msg'] || '';
 }
 
-function emojiMatches(val: string, reaction: MessageReaction | PartialMessageReaction): boolean {
+export function emojiMatches(
+  val: string,
+  reaction: MessageReaction | PartialMessageReaction,
+): boolean {
   const e = reaction.emoji;
   return val === e.name || val === e.id || val === e.toString();
 }
 
-function matchRole(
+export function matchRole(
   messageId: string,
   reaction: MessageReaction | PartialMessageReaction,
 ): string | undefined {
