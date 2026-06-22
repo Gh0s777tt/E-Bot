@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-483-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.413.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-484-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.414.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.414.0] — 🧪🎲 Rygiel /fun — rzut kostką (rollDie) w zakresie + losowanie + niepuste katalogi
+
+- `[#484]` 🧪 **Test `/fun`** ([`fun.test.ts`](bot/src/commands/fun.test.ts), 6 testów) — `pick`/`rollDie` + katalogi odpowiedzi ([`commands/fun.mts`](bot/src/commands/fun.mts)). **Refactor behavior-preserving:** rzut kostką wyjęty z handlera do czystej `rollDie(sides)`.
+  - **RYGIEL zakresu kostki:** `rollDie(sides) ∈ [1, sides]` (sweep 2/6/20/100 × 300 rzutów) — nigdy `0` ani `sides+1` (inaczej „k6 = 0" lub „k6 = 7"); k6 oba skrajne (1 i 6) osiągalne.
+  - **`pick`:** zawsze zwraca element tablicy (nigdy `undefined` → pusty embed), 1-elementowa → ten element, pokrywa wszystkie (coupon-collector). Niezmienniki dla **dowolnego** `Math.random` (pętle wielu przebiegów).
+  - **Katalogi** `TRUTHS`/`DARES`/`WYR`/`EIGHTBALL` niepuste, każdy wpis niepusty (brak pustej odpowiedzi `/fun`).
+  - **Dowód, że gryzie (mutation-proof, osobno):** `1 + floor(random*sides)`→`floor(random*(sides+1))` zwala dolną granicę (`0`); →`1 + floor(random*(sides+1))` zwala górną (`sides+1`) — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja + `export` (`pick`/`rollDie`/katalogi), **0 zmian zachowania**.
+  - Suite: **82 pliki / 645 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 645/645 · docs:check — exit 0.
 
 ## [0.413.0] — 🧪🤖 Rygiel parsera configu AI (aiConfig) — częściowy config nie gubi limitów kosztów
 

@@ -3,7 +3,7 @@ import { type ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } f
 
 const ACCENT = 0xe50914;
 
-const TRUTHS = [
+export const TRUTHS = [
   'Jaki jest Twój największy wstyd z dzieciństwa?',
   'Co ostatnio skłamałeś/aś, żeby uniknąć kłopotów?',
   'Jaką masz najdziwniejszą obsesję?',
@@ -15,7 +15,7 @@ const TRUTHS = [
   'Jaki jest Twój najgorszy nawyk?',
   'O czym marzysz, ale boisz się powiedzieć na głos?',
 ];
-const DARES = [
+export const DARES = [
   'Napisz wiadomość samymi emoji przez następne 10 minut.',
   'Zmień swój nick na "🤡 Klaun Serwera" na 1 godzinę.',
   'Wyślij ostatnie zdjęcie z galerii (bez podglądu!).',
@@ -27,7 +27,7 @@ const DARES = [
   'Wyślij GIF, który opisuje Twój dzień.',
   'Pochwal się najstarszym memem na dysku.',
 ];
-const WYR = [
+export const WYR = [
   'Wolałbyś umieć latać czy być niewidzialnym?',
   'Wolałbyś nie móc kłamać czy zawsze mówić prawdę?',
   'Wolałbyś mieć nieskończony czas czy nieskończone pieniądze?',
@@ -39,7 +39,7 @@ const WYR = [
   'Wolałbyś cofać się w czasie czy przenosić w przyszłość?',
   'Wolałbyś mieć pauzę na życie czy przewijanie?',
 ];
-const EIGHTBALL = [
+export const EIGHTBALL = [
   'Zdecydowanie tak. ✅',
   'Bez wątpienia.',
   'Raczej tak.',
@@ -52,8 +52,13 @@ const EIGHTBALL = [
   'Moje źródła mówią: nie.',
 ];
 
-function pick<T>(arr: T[]): T {
+export function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Rzut kością k-ściankową: wynik w [1, sides].
+export function rollDie(sides: number): number {
+  return 1 + Math.floor(Math.random() * sides);
 }
 
 export const data = new SlashCommandBuilder()
@@ -101,7 +106,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     );
   } else if (sub === 'kostka') {
     const sides = interaction.options.getInteger('scianki') ?? 6;
-    const roll = 1 + Math.floor(Math.random() * sides);
+    const roll = rollDie(sides);
     e.setTitle('🎲 Kostka').setDescription(`Rzut k${sides}: **${roll}**`);
   }
 
