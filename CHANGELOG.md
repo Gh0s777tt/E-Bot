@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-486-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.416.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-487-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.417.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.417.0] — 🧪❓ Rygiel huba /help — katalog kategorii + spójność opisów komend
+
+- `[#487]` 🧪 **Test `/help`** ([`help.test.ts`](bot/src/commands/help.test.ts), 7 testów) — katalog `CATEGORIES` + `cmdDesc` ([`commands/help.mts`](bot/src/commands/help.mts)). **0 zmian produkcyjnych** (2× `export`).
+  - **RYGIEL katalogu:** każda komenda w **dokładnie jednej** kategorii (brak duplikatów = zdublowany wpis w pomocy), klucze kategorii unikalne, **≤25 kategorii** (limit opcji select-menu Discord), każda kategoria ma ≥1 komendę.
+  - **RYGIEL spójności opisów:** **każda** z ~60 komend katalogu ma niepusty opis (`cmdDesc` — inaczej pusty wiersz w `/help`); łańcuch fallback `locale → en → pl → ''` (nieznane locale wciąż daje opis, nieznana komenda → `''`, nigdy `undefined`).
+  - **Dowód, że gryzie (mutation-proof):** zduplikowanie komendy między kategoriami zwala test „dokładnie jednej kategorii"; usunięcie fallbacku `en/pl` z `cmdDesc` zwala test nieznanego locale — po cofnięciu zielono.
+  - Suite: **85 plików / 668 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 668/668 · docs:check — exit 0.
 
 ## [0.416.0] — 🧪🛡️ Rygiel heurystyk automoda (normalizeText · capsViolation · linkNotAllowed)
 

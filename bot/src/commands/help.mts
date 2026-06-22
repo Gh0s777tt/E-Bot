@@ -17,7 +17,7 @@ import { type Locale, resolveLocale, t } from '../i18n/index.mts';
 const ACCENT = 0xe50914;
 
 // Kategorie → komendy. Klucz kategorii = sufiks kluczy i18n help.cat.* / help.blurb.*.
-const CATEGORIES: { key: string; cmds: string[] }[] = [
+export const CATEGORIES: { key: string; cmds: string[] }[] = [
   { key: 'moderation', cmds: ['mod', 'case', 'antinuke', 'lockdown'] },
   { key: 'levels', cmds: ['rank', 'profile', 'xp', 'xpevent', 'prestige', 'hof', 'quests'] },
   { key: 'economy', cmds: ['eco', 'market', 'lottery', 'skins'] },
@@ -52,7 +52,7 @@ const ALL_CMDS: { name: string; cat: string }[] = CATEGORIES.flatMap((c) =>
   c.cmds.map((name) => ({ name, cat: c.key })),
 );
 
-function cmdDesc(locale: Locale, name: string): string {
+export function cmdDesc(locale: Locale, name: string): string {
   return COMMAND_DESC[locale]?.[name] ?? COMMAND_DESC.en?.[name] ?? COMMAND_DESC.pl?.[name] ?? '';
 }
 
