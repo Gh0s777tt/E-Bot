@@ -96,7 +96,7 @@ export async function tick(client: Client): Promise<void> {
 
 type ItadDeal = { id: string; title: string; url: string | null; shop: string };
 
-function parseItad(d: unknown): ItadDeal[] {
+export function parseItad(d: unknown): ItadDeal[] {
   const list = Array.isArray((d as { list?: unknown[] })?.list)
     ? (d as { list: unknown[] }).list
     : [];

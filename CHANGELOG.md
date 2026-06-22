@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-503-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.433.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-504-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.434.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.434.0] — 🧪🏷️ Rygiel parsera deali ITAD (parseItad) — filtr darmowości + strażnik klucza dedup
+
+- `[#504]` 🧪 **Test `parseItad`** ([`freegames.itad.test.ts`](bot/src/gaming/freegames.itad.test.ts), 7 testów) — parser odpowiedzi API IsThereAnyDeal (multi-store darmówki) ([`gaming/freegames.mts`](bot/src/gaming/freegames.mts)). Bliźniak `parseFree` (#503), inny kształt JSON. **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL fail-safe:** garbage / brak tablicy `list` (`null`/`'x'`/`42`/`{}`/`{list:'…'}`) → `[]` (poller odporny na niezaufany kształt).
+  - **RYGIEL filtra darmowości:** deal trafia na kanał tylko gdy `cut ≥ 100%` **LUB** `price.amount === 0` — przecena (`cut 50`, cena > 0) pominięta (inaczej bot ogłasza przecenę jako rozdanie).
+  - **RYGIEL strażnika klucza dedup:** deal bez `id`/`slug`/`url`/`title` → id `itad:` (puste) → **pominięty** (brak stabilnego klucza = re-post bez końca). Fallbacki: `title`→„Gra", `url`→`null`, `shop`→„sklepie".
+  - **Dowód, że gryzie (mutation-proof):** `cut ≥ 100`→`> 100` zwala granicę (cut=100 wypadałby); usunięcie `if (id === 'itad:') continue` zwala strażnik klucza — po cofnięciu zielono.
+  - Suite: **102 pliki / 778 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 778/778 · docs:check — exit 0.
 
 ## [0.433.0] — 🧪🆓 Rygiel parsera darmówek Epic (parseFree) — fail-safe na niezaufany JSON
 
