@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-470-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.400.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-471-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.401.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.401.0] — 🧪⭐ Rygiel starboardu — parser configu (próg ≥1) + dopasowanie emoji
+
+- `[#471]` 🧪 **Test starboardu** ([`starboard.test.ts`](bot/src/engagement/starboard.test.ts), 8 testów) — `parseStarboardConfig`/`emojiMatches` ([`engagement/starboard.mts`](bot/src/engagement/starboard.mts)). **Refactor behavior-preserving:** logika parsowania configu wyjęta z `cfg` do czystej `parseStarboardConfig(raw)` (ryglowalna bez bazy; `cfg` ją wywołuje).
+  - **RYGIEL klamry progu (`Math.max(1, …)`):** próg ujemny/ułamkowy → `1`, brak/nie-liczba → `3`, poprawny zachowany. Próg `0`/ujemny bez klamry = **każda wiadomość ląduje na starboardzie** (spam).
+  - **Fail-safe OFF:** uszkodzony JSON → defaulty `{on:false, threshold:3, emoji:'⭐'}` (nie rzuca); brak configu → defaulty; `enabled` przez `!!`; `emoji` domyślnie `⭐`; `channelId` domyślnie `''`.
+  - **`emojiMatches`** (czy reakcja się liczy): unicode po nazwie (`⭐`), emoji własny po `toString` (`<:star:123>`) **i** po `id` (`123`), inny emoji → `false`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `Math.max(1, …)` zwala test klamry (próg −5 zostaje −5); usunięcie gałęzi `e.toString() === want` zwala dopasowanie emoji własnego — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja funkcji + `export` (`parseStarboardConfig`/`StarboardConfig`/`emojiMatches`), **0 zmian zachowania**.
+  - Suite: **69 plików / 558 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 558/558 · docs:check — exit 0.
 
 ## [0.400.0] — 🧪↩️ Rygiel rejestru /undo — fail-safe cofania prowizjonowania Architekta
 

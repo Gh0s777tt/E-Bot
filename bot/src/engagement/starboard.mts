@@ -13,14 +13,11 @@ import { log } from '../lib/log.mts';
 
 const posted = new Set<string>(); // id wiadomości już na starboardzie (dedup w pamięci)
 
-// Etap K — config per-serwer: świeży odczyt (kanał starboardu i tak per-serwer), fallback global.
-function cfg(guildId: string): {
-  on: boolean;
-  channelId: string;
-  threshold: number;
-  emoji: string;
-} {
-  const raw = getGuildSettings(guildId)['starboard_config'];
+export type StarboardConfig = { on: boolean; channelId: string; threshold: number; emoji: string };
+
+// Parser configu starboardu (czysty) — fail-safe OFF na uszkodzony JSON, próg klamrowany ≥1
+// (próg 0 wysyłałby wszystko), domyślny emoji ⭐. Wydzielony, by ryglować logikę bez bazy.
+export function parseStarboardConfig(raw: string | undefined): StarboardConfig {
   try {
     const c = raw
       ? (JSON.parse(raw) as {
@@ -41,7 +38,15 @@ function cfg(guildId: string): {
   }
 }
 
-function emojiMatches(reaction: MessageReaction | PartialMessageReaction, want: string): boolean {
+// Etap K — config per-serwer: świeży odczyt (kanał starboardu i tak per-serwer), fallback global.
+function cfg(guildId: string): StarboardConfig {
+  return parseStarboardConfig(getGuildSettings(guildId)['starboard_config']);
+}
+
+export function emojiMatches(
+  reaction: MessageReaction | PartialMessageReaction,
+  want: string,
+): boolean {
   const e = reaction.emoji;
   return e.name === want || e.toString() === want || `${e.id}` === want;
 }
