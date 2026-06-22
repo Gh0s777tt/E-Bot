@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-467-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.397.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-468-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.398.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.398.0] — 🧪✂️ Rygiel /rps — sprawiedliwy wynik rundy (anty-symetria + cykl BEATS)
+
+- `[#468]` 🧪 **Test `/rps`** ([`rps.test.ts`](bot/src/commands/rps.test.ts), 6 testów) — wynik rundy kamień-papier-nożyce ([`commands/rps.mts`](bot/src/commands/rps.mts)). **Refactor behavior-preserving:** logika zwycięstwa wyjęta z `execute` do czystej `rpsOutcome(you, bot)` (jedyne źródło prawdy, `execute` jej używa).
+  - **RYGIEL anty-symetrii (sprawiedliwość):** `win(a,b) ⟺ lose(b,a)` dla każdej pary różnych wyborów (sweep CHOICES×CHOICES). Regresja = bot „oszukuje" — gracz wygrywa rundę, którą powinien przegrać.
+  - **RYGIEL integralności `BEATS` (cykl 3):** każdy wybór wygrywa **dokładnie z 1** i przegrywa **dokładnie z 1**; remis tylko sam ze sobą. Zepsuty cykl (np. `rock: 'paper'`) = dwa wybory biją to samo, gra niesprawiedliwa.
+  - Remis na równym wyborze, kanoniczne zwycięstwa/porażki (rock>scissors>paper>rock), zawsze jeden z `win`/`lose`/`tie` (nigdy `undefined`).
+  - **Dowód, że gryzie (mutation-proof):** `rock: 'scissors'`→`rock: 'paper'` (zepsucie cyklu) zwala 3 testy (zwycięstwa + anty-symetria + integralność) — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja funkcji + `export` (`CHOICES`/`Choice`/`rpsOutcome`), **0 zmian zachowania**.
+  - Suite: **66 plików / 535 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 535/535 · docs:check — exit 0.
 
 ## [0.397.0] — 🧪💘 Rygiel /ship — deterministyczny i symetryczny % dopasowania
 

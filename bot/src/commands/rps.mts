@@ -3,9 +3,14 @@ import { type ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } f
 import { resolveLocale, t } from '../i18n/index.mts';
 
 const ACCENT = 0xe50914;
-const CHOICES = ['rock', 'paper', 'scissors'] as const;
-type Choice = (typeof CHOICES)[number];
+export const CHOICES = ['rock', 'paper', 'scissors'] as const;
+export type Choice = (typeof CHOICES)[number];
 const BEATS: Record<Choice, Choice> = { rock: 'scissors', scissors: 'paper', paper: 'rock' };
+
+// Wynik rundy z perspektywy gracza. Jedyne źródło prawdy o zwycięstwie (execute go używa).
+export function rpsOutcome(you: Choice, bot: Choice): 'tie' | 'win' | 'lose' {
+  return you === bot ? 'tie' : BEATS[you] === bot ? 'win' : 'lose';
+}
 
 export const data = new SlashCommandBuilder()
   .setName('rps')
@@ -26,7 +31,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const locale = resolveLocale(interaction);
   const you = interaction.options.getString('wybor', true) as Choice;
   const bot = CHOICES[Math.floor(Math.random() * CHOICES.length)];
-  const resultKey = you === bot ? 'rps.tie' : BEATS[you] === bot ? 'rps.win' : 'rps.lose';
+  const resultKey = `rps.${rpsOutcome(you, bot)}`;
   const label = (c: Choice): string => t(locale, `rps.${c}`);
   const embed = new EmbedBuilder()
     .setColor(ACCENT)
