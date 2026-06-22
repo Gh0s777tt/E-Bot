@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-475-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.405.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-476-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.406.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.406.0] — 🧪🕐 Rygiel formatera czasu względnego (relTime) — kubełki + clamp przyszłości
+
+- `[#476]` 🧪 **Test `relTime`** ([`insights.relTime.test.ts`](dashboard/lib/insights.relTime.test.ts), 6 testów) — formater „2 dni temu" na pulpicie ([`lib/insights.ts`](dashboard/lib/insights.ts)). Deterministyczny (`now` wstrzykiwany, bez fałszywego zegara); **0 zmian produkcyjnych** (już eksportowany).
+  - **Wybór jednostki + granice kubełków:** `<60 s`→sekundy, `60 s`→1 minuta, `<60 min`→minuty, `<24 h`→godziny, dalej dni. Asercje przez **lustro `Intl`** w teście (odporne na wersję ICU — sprawdzają wybór jednostki/ilości, nie dokładne brzmienie).
+  - **RYGIEL clampu przyszłości:** `ts > now` → `Math.max(0, …)` → „teraz" (0 s), nigdy „za X" na liście aktywności. **RYGIEL granicy dni:** 25 h → kubełek dni (`wczoraj`), nie godziny.
+  - Honoruje język (en daje inną frazę niż pl).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `Math.max(0, …)` zwala clamp przyszłości (daje „za X"); `h < 24`→`h < 2400` zwala granicę dni (25 h zostaje godzinami) — po cofnięciu zielono.
+  - Suite: **74 pliki / 598 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 598/598 · docs:check — exit 0.
 
 ## [0.405.0] — 🧪📊 Rygiel matematyki retencji kohortowej (survived · mondayKey)
 
