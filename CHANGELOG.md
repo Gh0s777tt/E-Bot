@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-507-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.437.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-508-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.438.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.438.0] — 🧪📊 Rygiel lidera tygodniowego digestu (topUserByMessages) — suma per-user + ranking
+
+- `[#508]` 🧪 **Test `topUserByMessages`** ([`digest.test.ts`](bot/src/analytics/digest.test.ts), 6 testów) — wyłonienie „najaktywniejszego" tygodnia **behavior-preserving** z `maybePost` ([`analytics/digest.mts`](bot/src/analytics/digest.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL sumy per-user** — wiersze `user_activity` (jeden/dzień) grupowane po `user_id` i **sumowane** (`+=`); ten sam user z 5 dni daje jedną sumę.
+  - **RYGIEL rankingu** — sort **malejąco** wg sumy → digest chwali realnego lidera (zła kolejność = chwali najmniej aktywnego).
+  - **RYGIEL rozwiązywania nazwy** — `username` z **dowolnego** wiersza wygrywa z fallbackiem `user_id` (inaczej w ogłoszeniu surowe id zamiast nicku); `messages` brakujące liczone jako `0` (bez NaN); pusta lista → `undefined`.
+  - **Dowód, że gryzie (mutation-proof):** `+=`→`=` (nadpisanie zamiast sumy) zwala sumę; `b.msgs - a.msgs`→`a.msgs - b.msgs` zwala ranking; usunięcie `if (r.username) cu.name = r.username` zwala rozwiązanie nazwy — po cofnięciu zielono.
+  - Suite: **106 plików / 798 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 798/798 · docs:check — exit 0.
 
 ## [0.437.0] — 🧪🏆 Rygiel rankingu sezonu eko (rankByTotal) — majątek wallet+bank + podium
 

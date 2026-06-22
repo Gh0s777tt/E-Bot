@@ -21,6 +21,23 @@ function cfg(guildId: string): Cfg {
 
 type Row = { messages?: number; joins?: number; leaves?: number; voice_minutes?: number };
 
+type UserActivityRow = { user_id: string; username?: string; messages?: number };
+
+// 🏆 „Najaktywniejszy" tygodnia: grupuje wiersze user_activity po user_id, SUMUJE wiadomości z dni,
+// rozwiązuje nazwę (username z dowolnego wiersza > fallback user_id) i zwraca lidera (sort malejąco).
+export function topUserByMessages(
+  rows: UserActivityRow[],
+): { name: string; msgs: number } | undefined {
+  const byUser = new Map<string, { name: string; msgs: number }>();
+  for (const r of rows) {
+    const cu = byUser.get(r.user_id) ?? { name: r.username || r.user_id, msgs: 0 };
+    cu.msgs += r.messages ?? 0;
+    if (r.username) cu.name = r.username;
+    byUser.set(r.user_id, cu);
+  }
+  return [...byUser.values()].sort((a, b) => b.msgs - a.msgs)[0];
+}
+
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const now = new Date();
@@ -63,18 +80,11 @@ async function maybePost(client: Client): Promise<void> {
       { m: 0, j: 0, l: 0, v: 0 },
     );
     // 🏆 Najaktywniejszy (per-user, 7 dni) danego serwera.
-    const ua = await cloudSelect<{ user_id: string; username?: string; messages?: number }>(
+    const ua = await cloudSelect<UserActivityRow>(
       'user_activity',
       `select=user_id,username,messages&guild_id=eq.${guild.id}&day=gte.${since}`,
-    ).catch(() => [] as { user_id: string; username?: string; messages?: number }[]);
-    const byUser = new Map<string, { name: string; msgs: number }>();
-    for (const r of ua) {
-      const cu = byUser.get(r.user_id) ?? { name: r.username || r.user_id, msgs: 0 };
-      cu.msgs += r.messages ?? 0;
-      if (r.username) cu.name = r.username;
-      byUser.set(r.user_id, cu);
-    }
-    const topUser = [...byUser.values()].sort((a, b) => b.msgs - a.msgs)[0];
+    ).catch(() => [] as UserActivityRow[]);
+    const topUser = topUserByMessages(ua);
 
     const ch = await client.channels.fetch(c.channelId).catch(() => null);
     // Kanał musi należeć do TEGO serwera (config mógł zostać po przeniesieniu/zmianie).
