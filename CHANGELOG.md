@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-496-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.426.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-497-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.427.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.427.0] — 🧪📣 Rygiel parsera configu feedów social (cfgFor) — strażnik `feeds` po spreadzie
+
+- `[#497]` 🧪 **Test `cfgFor`** ([`social.test.ts`](bot/src/creator/social.test.ts), 5 testów) — parser configu feedów RSS/social ([`creator/social.mts`](bot/src/creator/social.mts)). Config per-serwer z realnego SQLite; **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL strażnika `feeds` PO spreadzie:** `{...DEFAULT, ...c, feeds: Array.isArray(c.feeds) ? c.feeds : []}` — config z `feeds` nie-tablicą (`"x"`/`123`) **nie przecieka** (poller robi `.length`/iterację → inaczej crash). `feeds` z configu (tablica) zachowane.
+  - **Merge:** częściowy config zachowuje domyślny szablon wiadomości (`{title}`/`{link}`); brak configu / uszkodzony JSON → `DEFAULT` (fail-safe).
+  - **Dowód, że gryzie (mutation-proof):** zastąpienie merge'a przez `{...c, feeds: c.feeds}` (bez `DEFAULT` i bez strażnika) zwala 3 testy (feeds nie-tablica przecieka + brak domyślnego szablonu) — po cofnięciu zielono.
+  - Suite: **95 plików / 732 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 732/732 · docs:check — exit 0.
 
 ## [0.426.0] — 🧪📅 Rygiel synchronizacji harmonogramu Twitch (getSyncConfig · setScheduleSync · syncedCount)
 

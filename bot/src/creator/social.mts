@@ -18,7 +18,7 @@ const DEFAULT: Cfg = {
   feeds: [],
 };
 
-function cfgFor(guildId: string): Cfg {
+export function cfgFor(guildId: string): Cfg {
   const raw = getGuildSettings(guildId)['social_feeds_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Partial<Cfg>) : {};
