@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-445-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.375.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-446-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.376.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.376.0] — 🧪🎨 Rygiel spójności stylu kart bot↔panel — oferta czcionek == możliwości renderu
+
+- `[#446]` 🧪 **Test spójności cross-package** ([`cardstyle-consistency.test.ts`](bot/src/lib/cardstyle-consistency.test.ts), 4 testy) — [`bot/src/lib/cards.mts`](bot/src/lib/cards.mts) ↔ [`dashboard/lib/cardStyle.ts`](dashboard/lib/cardStyle.ts). `cardStyle.ts` to **świadomie zduplikowana, client-safe** kopia (bez importu canvas), więc TS nie pilnuje zgodności.
+  - **Niezmiennik: oferta panelu == możliwości bota.** Lista czcionek panelu (`CARD_FONTS`) musi równać się liście bota; domyślny styl rank-karty (`RANKCARD_DEFAULT`) identyczny z `CARD_STYLE_DEFAULT`; font domyślny ∈ `CARD_FONTS`. Rozjazd ⇒ panel proponuje czcionkę, której bot nie ma → cichy fallback na Poppins (user wybiera font i go nie dostaje) lub zły default.
+  - Wzorzec jak [`migrated-keys-consistency.test.ts`](bot/src/lib/migrated-keys-consistency.test.ts) (anty-drift bot↔panel).
+  - **Dowód, że gryzie (mutation-proof):** drift `RANKCARD_DEFAULT.angle` 135→90 zwala test identyczności default; usunięcie fontu z panelowego `CARD_FONTS` zwala test list — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **44 pliki / 398 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 398/398 · docs:check — exit 0.
 
 ## [0.375.0] — 🧪🛡️ Rygiel rate-limitu publicznych sinków (panel) — anty-flood `/api/sentry`·`/api/hook`
 
