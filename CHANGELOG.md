@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-480-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.410.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-481-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.411.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.411.0] — 🧪💾 Rygiel snapshotu serwera (captureGuild) — pomija role zarządzane + @everyone
+
+- `[#481]` 🧪 **Test `captureGuild`** ([`backup.test.ts`](bot/src/lib/backup.test.ts), 6 testów) — snapshot struktury serwera (role + kanały) dla Architekta/Security Etap G ([`lib/backup.mts`](bot/src/lib/backup.mts)). Czysta transformacja `Guild → Snapshot`; **0 zmian produkcyjnych** (już eksportowany).
+  - **RYGIEL bezpieczeństwa restore:** pomija role **zarządzane** (bot/integracje) i **@everyone** (`id === guild.id`) — restore próbowałby je odtworzyć (padłby albo zdublował uprawnienia). Sortuje malejąco wg pozycji, mapuje pola (`permissions` jako **string** bitfield).
+  - **RYGIEL kapów:** ≤100 ról (120 → 100). Kanały: tylko dozwolone typy (text/voice/category/announcement — **wątki/forum pominięte**), **kategorie pierwsze** w wyniku (restore tworzy rodziców przed dziećmi). Zawsze stempel `at` + tablice.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `!r.managed` z filtra zwala test pomijania ról zarządzanych; `.slice(0,100)`→`.slice(0,1000)` zwala kap — po cofnięciu zielono.
+  - Suite: **79 plików / 629 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 629/629 · docs:check — exit 0.
 
 ## [0.410.0] — ♻️🧪 DRY linku zaproszenia bota (botInviteUrl) — dedup 2 → 1 (enroll → invite)
 
