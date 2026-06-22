@@ -22,7 +22,7 @@ const EPIC =
 
 type FreeGame = { id: string; title: string; url: string; image: string; end: string };
 
-function parseFree(d: unknown): FreeGame[] {
+export function parseFree(d: unknown): FreeGame[] {
   const elements = (d as any)?.data?.Catalog?.searchStore?.elements ?? [];
   const out: FreeGame[] = [];
   for (const el of elements as any[]) {

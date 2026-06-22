@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-502-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.432.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-503-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.433.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.433.0] — 🧪🆓 Rygiel parsera darmówek Epic (parseFree) — fail-safe na niezaufany JSON
+
+- `[#503]` 🧪 **Test `parseFree`** ([`freegames.test.ts`](bot/src/gaming/freegames.test.ts), 6 testów) — parser odpowiedzi API Epic Games Store ([`gaming/freegames.mts`](bot/src/gaming/freegames.mts)). Wejście to **niezaufany JSON** z zewnętrznego API. **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL fail-safe:** `null`/`undefined`/`'x'`/`42`/`{}`/`{data:{}}` → `[]` (poller nie wybucha na nieoczekiwanym kształcie).
+  - **RYGIEL filtra darmowości:** tylko gry z `discountPrice === 0` **ORAZ** aktywną promocją trafiają na kanał — gra płatna / bez promocji pominięta (inaczej bot ogłasza płatną grę jako „za darmo").
+  - **Fallbacki:** slug (`pageSlug`→`productSlug`→`urlSlug`→URL `/free-games`), obrazek (`OfferImageWide`→pierwszy→`''`), `title`→„Gra", `id`→title.
+  - **Dowód, że gryzie (mutation-proof):** `discountPrice === 0`→`!== 0` zwala filtr darmowości; usunięcie fallbacku slug (`pageSlug || productSlug || urlSlug`→`pageSlug`) zwala 2 testy fallbacków — po cofnięciu zielono.
+  - Suite: **101 plików / 771 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 771/771 · docs:check — exit 0.
 
 ## [0.432.0] — 🧪🎛️ Rygiel rejestru modułów panelu (MODULES · MODULE_VIEWS) — 100 plików testów 🎉
 
