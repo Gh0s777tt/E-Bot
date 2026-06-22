@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-465-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.395.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-466-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.396.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.396.0] — 🧪🗺️ Rygiel integralności katalogu questów (QUESTS) — battle-pass bez podwójnego claimu
+
+- `[#466]` 🧪 **Test integralności `QUESTS`** ([`quests.catalog.test.ts`](bot/src/community/quests.catalog.test.ts), 9 testów) — katalog battle-pass lite ([`community/quests.mts`](bot/src/community/quests.mts)) był NIEpokryty, a każdy wpis wpływa na wypłatę monet i punktów sezonu.
+  - **Co rygluje (regresje, które realnie psują ekonomię):** `id` unikalne (duplikat = **podwójny claim** na ten sam `period_key`) i niepuste · `period ∈ {daily, weekly}` (steruje kluczem okresu `dayKey`/`weekKey` i resetem licznika) · `metric ∈` klucze liczników `zero()` (`messages·work·games·gamesWon·invites` — metric spoza zbioru **nigdy nie urośnie**) · `target ≥ 1` (target 0 → quest „gotowy" od startu = **darmowa nagroda**) · `reward > 0` i `points > 0` · `label` niepusty (renderowany w `/quests`) · ≥1 quest dzienny i ≥1 tygodniowy (obie sekcje mają treść).
+  - **Dowód, że gryzie (mutation-proof):** w `QUESTS` zduplikowano `id` (`d_work`→`d_msg`) i ustawiono `target: 0` — zwala 2 testy (unikalność id + `target ≥ 1`); po przywróceniu bajt-w-bajt zielono, **0 zmian produkcyjnych** (`git diff` czysty poza nowym plikiem testu).
+  - Suite: **64 pliki / 521 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 521/521 · docs:check — exit 0.
 
 ## [0.395.0] — ♻️🧪 DRY taga tygodnia (weekKey) — 1 źródło prawdy dla digestu + questów weekly
 
