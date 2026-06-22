@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-498-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.428.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-499-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.429.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.429.0] — 🧪⚙️ Rygiel parserów env configu ekonomii (int · bool) — finite-check + strict bool
+
+- `[#499]` 🧪 **Test `int`/`bool`** ([`config.test.ts`](bot/src/empire/config.test.ts), 6 testów) — parsery env wartości startowych nagród ([`empire/config.mts`](bot/src/empire/config.mts)). **0 zmian produkcyjnych** (2× `export`). Env sterowany z przywróceniem.
+  - **RYGIEL `int` finite-check:** env `"0"` jest **poprawne** (nie spada na default — nagroda `0` to świadomy wybór); NaN/pusty → default; `parseInt` parsuje wiodące cyfry (`"12px"`→12), ujemne OK.
+  - **RYGIEL `bool` strict:** tylko `"true"`/`"1"` → `true`; każda inna obecna wartość (`"false"`/`"0"`/`"yes"`/`""`) → `false`; brak zmiennej → default (oba kierunki).
+  - **Dowód, że gryzie (mutation-proof):** `Number.isFinite(n) ? n : d`→`n || d` zwala test `"0"` (0 || d → d); `=== 'true' || === '1'`→`v != null` zwala strict (`"false"` włączyłoby) — po cofnięciu zielono.
+  - Suite: **97 plików / 744 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 744/744 · docs:check — exit 0.
 
 ## [0.428.0] — 🧪🔢 Rygiel gry w liczenie (checkCount) — anti-cheat + zgodność liczby
 

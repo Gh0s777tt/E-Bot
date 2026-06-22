@@ -3,11 +3,11 @@
 // Initial values come from env (GHOST_* overrides), then /api/bot/config every 60s wins.
 const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
 
-const int = (k: string, d: number): number => {
+export const int = (k: string, d: number): number => {
   const n = parseInt(process.env[k] ?? '', 10);
   return Number.isFinite(n) ? n : d;
 };
-const bool = (k: string, d: boolean): boolean => {
+export const bool = (k: string, d: boolean): boolean => {
   const v = process.env[k];
   return v == null ? d : v === 'true' || v === '1';
 };
