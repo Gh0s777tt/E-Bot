@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-484-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.414.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-485-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.415.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.415.0] — 🧪🖼️ Rygiel escapingu memegen (/meme → esc) — kolejność operacji + placeholder
+
+- `[#485]` 🧪 **Test `esc`** ([`meme.test.ts`](bot/src/commands/meme.test.ts), 5 testów) — kodowanie tekstu do ścieżki URL memegen.link ([`commands/meme.mts`](bot/src/commands/meme.mts)). **0 zmian produkcyjnych** (zmiana = 1× `export`).
+  - **RYGIEL kolejności:** `_` i `-` podwajane **PRZED** zamianą spacji na `_` — `"a_b c"` → `"a__b_c"`. Gdyby spacja→`_` szła pierwsza, oryginalny `_` i spacja-jako-`_` stałyby się nierozróżnialne (zepsuty mem).
+  - **Placeholder:** pusty / blank / `null` → `"_"` (memegen wymaga niepustego panelu). Trim. Zwykły tekst bez zmian.
+  - **Znaki specjalne** → sekwencje `~x` (`?`→`~q`, `&`→`~a`, `%`→`~p`, `#`→`~h`, `/`→`~s`, `\`→`~b`, `<`→`~l`, `>`→`~g`, `"`→`''`, `\n`→`~n`) — anty-rozbicie URL.
+  - **Dowód, że gryzie (mutation-proof):** `replace(/_/g,'__')`→`'_'` zwala podwojenie i kolejność; `return '_'`→`''` zwala placeholder pustego — po cofnięciu zielono.
+  - Suite: **83 pliki / 650 testów** 🎉. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 650/650 · docs:check — exit 0.
 
 ## [0.414.0] — 🧪🎲 Rygiel /fun — rzut kostką (rollDie) w zakresie + losowanie + niepuste katalogi
 

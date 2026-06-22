@@ -28,7 +28,7 @@ const TEMPLATES: { id: string; label: string }[] = [
 ];
 
 // Escaping memegen: kolejność ma znaczenie (_ i - podwajamy PRZED zamianą spacji na _).
-function esc(s: string | null): string {
+export function esc(s: string | null): string {
   if (!s?.trim()) return '_';
   return s
     .trim()
