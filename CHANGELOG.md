@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-472-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.402.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-473-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.403.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.403.0] — 🧪🔊 Rygiel kontroli kanału tymczasowego (canControlVoice) — właściciel lub staff
+
+- `[#473]` 🧪 **Test `canControlVoice`** ([`tempvoice.test.ts`](bot/src/engagement/tempvoice.test.ts), 6 testów) — kto może sterować kanałem TempVoice (rename/limit/lock/kick/transfer) ([`engagement/tempvoice.mts`](bot/src/engagement/tempvoice.mts)). **Refactor behavior-preserving:** predykat uprawnień wyjęty z `isController` do czystej `canControlVoice(ownerId, userId, member)` (bez stanu `owners`; `isController` wstrzykuje właściciela).
+  - **RYGIEL bezpieczeństwa:** sterować może **tylko właściciel** (`ownerId === userId` — true nawet bez membera/uprawnień) **lub staff z `ManageChannels`**. Regresja = ktoś obcy przejmuje cudzy kanał albo prawowity właściciel zostaje zablokowany.
+  - **Guard niezcache'owanego membera:** `permissions` jako string (raw API) → `false` (nie wyjątek). Nie-właściciel bez `ManageChannels` / `member` null → `false`.
+  - **Dowód, że gryzie (mutation-proof):** `ownerId === userId` → `return false` zwala test właściciela; usunięcie grantu `.has(ManageChannels)` zwala test staffa — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja + `export canControlVoice`, **0 zmian zachowania**.
+  - Suite: **71 plików / 572 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 572/572 · docs:check — exit 0.
 
 ## [0.402.0] — 🧪🔘 Rygiel paneli ról-za-przyciski (buildRoleRows) — twarde limity Discorda
 

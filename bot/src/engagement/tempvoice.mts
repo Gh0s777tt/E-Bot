@@ -105,18 +105,27 @@ function tempChannelOf(interaction: Interaction): VoiceChannel | null {
   return ch as VoiceChannel;
 }
 
-function isController(
-  interaction: ButtonInteraction | UserSelectMenuInteraction | ModalSubmitInteraction,
-  channelId: string,
+// Czy użytkownik może sterować kanałem tymczasowym: właściciel LUB osoba z ManageChannels (staff).
+// Czysta (bez stanu `owners`) — ryglowalna; isController wstrzykuje aktualnego właściciela kanału.
+export function canControlVoice(
+  ownerId: string | undefined,
+  userId: string,
+  member: ButtonInteraction['member'],
 ): boolean {
-  if (owners.get(channelId) === interaction.user.id) return true;
-  const member = interaction.member;
+  if (ownerId === userId) return true;
   return !!(
     member &&
     'permissions' in member &&
     typeof member.permissions !== 'string' &&
     member.permissions.has(PermissionFlagsBits.ManageChannels)
   );
+}
+
+function isController(
+  interaction: ButtonInteraction | UserSelectMenuInteraction | ModalSubmitInteraction,
+  channelId: string,
+): boolean {
+  return canControlVoice(owners.get(channelId), interaction.user.id, interaction.member);
 }
 
 export async function handleTempvoiceButton(interaction: ButtonInteraction): Promise<void> {
