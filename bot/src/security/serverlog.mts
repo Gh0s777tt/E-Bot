@@ -51,7 +51,7 @@ const AMBER = 0xfaa61a;
 
 // Etap K — config per-serwer z cache TTL 30 s (logging reaguje na wiele zdarzeń).
 const cfgCache = new Map<string, { cfg: LoggingConfig; at: number }>();
-function cfgFor(guildId: string): LoggingConfig {
+export function cfgFor(guildId: string): LoggingConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
   const raw = getGuildSettings(guildId)['logging_config'];
@@ -65,7 +65,7 @@ function cfgFor(guildId: string): LoggingConfig {
   return cfg;
 }
 
-function trunc(s: string, n = 500): string {
+export function trunc(s: string, n = 500): string {
   return s.length > n ? `${s.slice(0, n)}…` : s;
 }
 

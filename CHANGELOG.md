@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-494-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.424.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-495-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.425.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.425.0] — 🧪📜 Rygiel logów serwera (cfgFor · trunc) — merge przełączników + przycięcie pola
+
+- `[#495]` 🧪 **Test logów serwera** ([`serverlog.test.ts`](bot/src/security/serverlog.test.ts), 6 testów) — `cfgFor`/`trunc` ([`security/serverlog.mts`](bot/src/security/serverlog.mts)). Config per-serwer z realnego SQLite (cache 30 s → unikalny `guildId`/test); **0 zmian produkcyjnych** (2× `export`).
+  - **RYGIEL merge `{...DEFAULT, ...zapisane}`:** częściowy config (np. `{enabled:true, channelId}`) **zachowuje domyślne przełączniki zdarzeń** (`messages`/`moderation` true, `voice` false); bez merge'a włączenie logów zerowałoby wszystkie grupy zdarzeń. Brak configu / uszkodzony JSON → `DEFAULT` (fail-safe).
+  - **`trunc` (przycięcie pola embeda):** ≤ `n` → bez zmian; granica `n+1` → `n` znaków + `…`; domyślny limit 500 (długi opis nie wywali limitu Discorda).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie spreadu `...DEFAULT` zwala merge (przełączniki `undefined`); `s.length > n`→`>= n` zwala granicę `trunc` (string długości `n` niepotrzebnie przycięty) — po cofnięciu zielono.
+  - Suite: **93 pliki / 719 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 719/719 · docs:check — exit 0.
 
 ## [0.424.0] — 🧪✉️ Rygiel relayu modmail (relayBody) — załącznik bez treści + placeholder pustej
 
