@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-510-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.440.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-511-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.441.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.441.0] — 🧪📈 Rygiel silnika cen giełdy (priceAt · changePct) — determinizm + klamry dodatniości
+
+- `[#511]` 🧪 **Test `priceAt`/`changePct`** ([`stocks-price.test.ts`](bot/src/economy/stocks-price.test.ts), 6 testów) — deterministyczny silnik cen giełdy ([`economy/stocks.mts`](bot/src/economy/stocks.mts), cena = suma sinusoid z czasu). Dopełnia `stocks-catalog.test.ts` (#380, `findStock` + pasmo). **0 zmian produkcyjnych** (już eksportowane). `nowMs` wstrzykiwany → test deterministyczny bez fałszowania zegara.
+  - **RYGIEL determinizmu** — ta sama spółka + ta sama chwila → **identyczna** cena (inaczej cena kupna ≠ cena sprzedaży w tym samym momencie = arbitraż/strata gracza).
+  - **RYGIEL klamry mnożnika `max(0.15, mult)`** — przy skrajnej zmienności cena nie spada poniżej `round(base·0.15)` (test na spółce `base 1000, vol 100` — **wysokie `base` odróżnia tę klamrę od zewnętrznej**, która maskowałaby tylko ≥1).
+  - **RYGIEL dolnej klamry `max(1, …)`** — maleńka, skrajnie zmienna spółka (`base 2`) nigdy < 1 (inaczej cena `0` → dzielenie przez zero w `changePct`); cena zawsze całkowita; `changePct(_, 0)` = `0%`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `max(0.15, mult)` zwala podłogę `base·0.15` na spółce o wysokim `base`; usunięcie `max(1, …)` zwala próg ≥1 na maleńkiej spółce — każda klamra zaryglowana **niezależnie**, po cofnięciu zielono.
+  - Suite: **109 plików / 815 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 815/815 · docs:check — exit 0.
 
 ## [0.440.0] 🎉 — 🧪🏦 Rygiel matematyki odsetek bankowych (interestGain) — floor + kolejność działań
 
