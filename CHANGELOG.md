@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-459-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.389.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-460-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.390.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.390.0] — 🧪👑 Rygiel whitelisty właściciela instancji (isOwner) — owner-bypass nie przecieka
+
+- `[#460]` 🧪 **Test `isOwner`** ([`tenant.isOwner.test.ts`](dashboard/lib/tenant.isOwner.test.ts), 5 testów) — `isOwner(uid)` ([`tenant.ts`](dashboard/lib/tenant.ts)) decyduje o **instance-admin**: owner = pełny dostęp do wszystkich serwerów bota (bypass autoryzacji w `guild.ts`). Regresja = obcy uid dostaje owner-bypass, albo właściciel zablokowany. Lista z env `DASHBOARD_OWNER_IDS` (split `,` + trim + filter pustych — przez `authConfig`).
+  - **Zaryglowane:** uid na liście → true, spoza → false; **id-y przycinane** (spacje wokół wpisów env nie psują dopasowania); puste segmenty (`,,`) odfiltrowane; **fail-closed:** brak env → nikt nie owner; `null`/`undefined`/pusty uid → false (nawet przy ustawionych właścicielach).
+  - **Dowód, że gryzie (mutation-proof):** negacja `includes`→`!includes` zwala 4 testy (owner↔nie-owner); usunięcie `.map(trim)` w `authConfig` zwala test przycinania (` 222 ` ≠ `222`) — po cofnięciu zielono, **0 zmian produkcyjnych**. Env sterowany z przywróceniem.
+  - Suite: **58 plików / 485 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 485/485 · docs:check — exit 0.
 
 ## [0.389.0] — 🧪🌉 Rygiel auth mostu bot→panel (bridgeAuthorized · bridgeReady) — pusty sekret nie autoryzuje
 
