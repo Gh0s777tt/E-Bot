@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-479-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.409.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-480-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.410.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.410.0] — ♻️🧪 DRY linku zaproszenia bota (botInviteUrl) — dedup 2 → 1 (enroll → invite)
+
+- `[#480]` ♻️ **Koniec duplikacji `botInviteUrl` — dedup 2 → 1.** Builder linku OAuth „dodaj bota" istniał w **2 bajt-w-bajt identycznych kopiach**: [`lib/invite.ts`](dashboard/lib/invite.ts) (powłoka panelu — `layout.tsx`/`page.tsx`) i [`lib/enroll.ts`](dashboard/lib/enroll.ts) (onboarding M4 — `/onboarding`). Rozjazd domyślnych `permissions`/`scope` = onboarding proponowałby inny link niż reszta panelu.
+  - **Jedyne źródło prawdy:** `enroll.ts` **re-eksportuje** `botInviteUrl` z `invite.ts` (`export { botInviteUrl } from './invite'`); callery `/onboarding` bez zmian. Usunięto lokalną kopię (−11 linii, **0 zmian zachowania** — funkcja identyczna, pokryta `invite.test.ts` z #477).
+  - 🧪 **Rygiel anty-redup** ([`enroll.invite-dry.test.ts`](dashboard/lib/enroll.invite-dry.test.ts), 1 test): `enroll.botInviteUrl === invite.botInviteUrl` (ta sama referencja). Przywrócenie lokalnej definicji w `enroll.ts` rozjeżdża referencję i zwala test — po cofnięciu zielono.
+  - Suite: **78 plików / 623 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 623/623 · docs:check — exit 0.
 
 ## [0.409.0] — 🧪🔐 Rygiel podpisanej sesji (signSession · verifySession · getAuthSecret) — HMAC
 

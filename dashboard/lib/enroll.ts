@@ -47,17 +47,6 @@ export async function enrollFromDiscord(uid: string, accessToken: string): Promi
   return results.some(Boolean);
 }
 
-// Link zaproszenia bota na serwer (Discord OAuth) — krok „dodaj bota" w onboardingu (M4).
-// Uprawnienia z env DISCORD_BOT_PERMISSIONS (domyślnie 8 = Administrator; zawęź wg potrzeb).
-// Pusty DISCORD_CLIENT_ID → '' (UI pokaże komunikat o braku konfiguracji).
-export function botInviteUrl(): string {
-  const clientId = process.env.DISCORD_CLIENT_ID || '';
-  if (!clientId) return '';
-  const permissions = (process.env.DISCORD_BOT_PERMISSIONS || '8').trim();
-  const params = new URLSearchParams({
-    client_id: clientId,
-    scope: 'bot applications.commands',
-    permissions,
-  });
-  return `https://discord.com/oauth2/authorize?${params.toString()}`;
-}
+// Link zaproszenia bota — JEDNO źródło prawdy w lib/invite.ts (re-eksport, by onboarding (M4)
+// i powłoka panelu używały identycznego URL/uprawnień; bez rozjazdu domyślnych permissions/scope).
+export { botInviteUrl } from './invite';
