@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-474-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.404.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-475-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.405.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.405.0] — 🧪📊 Rygiel matematyki retencji kohortowej (survived · mondayKey)
+
+- `[#475]` 🧪 **Test retencji** ([`retention.test.ts`](dashboard/lib/retention.test.ts), 10 testów) — `survived`/`mondayKey` ([`lib/retention.ts`](dashboard/lib/retention.ts)), rdzeń wykresu D1/D7/D30 na `/stats`. Pierwszy rygiel czystej matematyki analityki panelu.
+  - **RYGIEL granicy inkluzywnej (`survived`, censoring-correct):** „przetrwał D_n" gdy jeszcze jest (`left===null`) **lub** odszedł nie wcześniej niż n dni (`≥ n·DAY`). Odejście dokładnie w n-tym dniu **liczy się** jako przetrwane; tuż przed (−1 ms) — nie. Regresja = zafałszowana retencja.
+  - **RYGIEL kubełka tygodnia (`mondayKey`):** poniedziałek UTC danego tygodnia jako `YYYY-MM-DD`; **niedziela należy do BIEŻĄCEGO tygodnia** (poprzedzający poniedziałek), nie następnego (`(getUTCDay()+6)%7`); dowolne dni pon–niedz → ten sam klucz, kolejny poniedziałek → nowy.
+  - **Dowód, że gryzie (mutation-proof):** `≥ n·DAY`→`> n·DAY` zwala test granicy inkluzywnej; `(getUTCDay()+6)%7`→`getUTCDay()` zwala kubełkowanie tygodnia (7 testów na czerwono łącznie) — po cofnięciu zielono. Zmiana produkcyjna = **2× `export`** (`survived`/`mondayKey`).
+  - Suite: **73 pliki / 592 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 592/592 · docs:check — exit 0.
 
 ## [0.404.0] — 🧪❓ Rygiel /trivia — integralność banku pytań (poprawny indeks + kategorie)
 

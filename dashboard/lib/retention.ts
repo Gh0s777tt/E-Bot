@@ -34,7 +34,7 @@ const EMPTY: RetentionSummary = {
 type Row = { joined: number; left: number | null };
 
 // Klucz tygodnia = poniedziałek (UTC) tygodnia dołączenia, jako 'YYYY-MM-DD'.
-function mondayKey(ms: number): string {
+export function mondayKey(ms: number): string {
   const d = new Date(ms);
   const dow = (d.getUTCDay() + 6) % 7; // pon=0 … niedz=6
   const mon = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - dow));
@@ -42,7 +42,7 @@ function mondayKey(ms: number): string {
 }
 
 // Przetrwał D_n: jeszcze jest (left===null) albo odszedł nie wcześniej niż n dni po dołączeniu.
-function survived(r: Row, n: number): boolean {
+export function survived(r: Row, n: number): boolean {
   return r.left === null || r.left - r.joined >= n * DAY;
 }
 
