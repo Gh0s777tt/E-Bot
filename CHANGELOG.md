@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-501-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.431.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-502-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.432.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.432.0] — 🧪🎛️ Rygiel rejestru modułów panelu (MODULES · MODULE_VIEWS) — 100 plików testów 🎉
+
+- `[#502]` 🧪 **Test rejestru modułów** ([`modules.test.ts`](dashboard/lib/modules.test.ts), 6 testów) — `MODULES`/`MODULE_VIEWS` ([`lib/modules.ts`](dashboard/lib/modules.ts)), Centrum sterowania panelu. **0 zmian produkcyjnych** (już eksportowane).
+  - **RYGIEL unikalności kluczy:** każdy `key` unikalny — duplikat = kolizja toggle (dwa moduły dzielą stan włącz/wyłącz). Każdy wpis: niepuste `key`/`label`/`group`/`settingsKey`, `kind ∈ {json, bool}`.
+  - **RYGIEL spójności projekcji:** `MODULE_VIEWS` (klient-safe) ma tę samą długość i **klucze identyczne + w tej samej kolejności** co `MODULES` — inaczej klient widzi inne moduły niż serwer przełącza.
+  - **Dowód, że gryzie (mutation-proof):** zduplikowanie `key` (`logging`→`automod`) zwala unikalność; `key: m.key`→`m.label` w projekcji zwala spójność — po cofnięciu zielono.
+  - Suite: **100 plików / 765 testów** 🎉 (próg 100 plików przekroczony). **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 765/765 · docs:check — exit 0.
 
 ## [0.431.0] — 🧪🏗️ Rygiel silnika Architekta (findChannel · findId) — idempotencja + referencja po id
 
