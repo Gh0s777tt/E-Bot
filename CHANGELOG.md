@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-441-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.371.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-442-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.372.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.372.0] — 🧪👋 Rygiel renderowania pożegnań/boostu (renderVars · memberVars · embed)
+
+- `[#442]` 🧪 **Test renderowania wiadomości** ([`farewell.test.ts`](bot/src/farewell.test.ts), 11 testów) — user-facing ścieżka pożegnań i podziękowań za boost ([`farewell.mts`](bot/src/farewell.mts)): szablon z panelu + zmienne członka → embed.
+  - **`renderVars` (literalne `split/join` = replaceAll):** podstawia **wszystkie** wystąpienia (nie tylko pierwsze), wiele zmiennych naraz, klucz nieobecny → bez zmian, **odporne na znaki regex** w treści (`.*`/`+` nie psują), pusta mapa → bez zmian.
+  - **`memberVars`:** komplet 4 zmiennych (`{user}`/`{username}`/`{server}`/`{memberCount}`) z poprawnym formatem wzmianki `<@id>`; brak `user` → fallback `"user"` (nie wybucha). Pełna ścieżka `renderVars(memberVars)` zweryfikowana.
+  - **`farewellEmbed`:** kolor + opis; thumbnail tylko gdy podano URL.
+  - **Dowód, że gryzie (mutation-proof):** `split/join`→`replace` (tylko pierwsze wystąpienie) zwala test „wszystkie wystąpienia"; zmiana fallbacku `'user'`→`'unknown'` zwala test braku usera — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **40 plików / 373 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 373/373 · docs:check — exit 0.
 
 ## [0.371.0] — 🧪🐹 Rygiel ekonomii petów (giftValue · kap poziomu · katalog) — domknięcie eko 2.0
 
