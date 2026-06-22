@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-495-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.425.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-496-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.426.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.426.0] — 🧪📅 Rygiel synchronizacji harmonogramu Twitch (getSyncConfig · setScheduleSync · syncedCount)
+
+- `[#496]` 🧪 **Test schedule-sync** ([`scheduleSync.test.ts`](bot/src/creator/scheduleSync.test.ts), 8 testów) — `getSyncConfig`/`setScheduleSync`/`syncedCount` ([`creator/scheduleSync.mts`](bot/src/creator/scheduleSync.mts)). Sync harmonogramu Twitch → wydarzenia Discord. Config z realnego SQLite + env; **0 zmian produkcyjnych** (już eksportowane).
+  - **RYGIEL `enabled` STRICT `=== true`:** tylko boolean `true` włącza sync — zapisana wartość prawdziwa-ale-nie-boolean (`"true"`/`1`) NIE włącza przez przypadek.
+  - **RYGIEL fallback env:** pusty login w configu → `TWITCH_CHANNEL` (env). Login z configu przycięty (`trim`); uszkodzony JSON → wyłączone (fail-safe).
+  - **`setScheduleSync`:** round-trip `set→get`; `set(false)` bez login → zachowuje poprzedni login. **`syncedCount`:** liczba segmentów (mapa); brak/uszkodzony → `0`.
+  - **Dowód, że gryzie (mutation-proof):** `=== true`→`!!` zwala strict-enabled (string `"true"` włączyłby); usunięcie `|| envLogin()` zwala fallback env — po cofnięciu zielono.
+  - Suite: **94 pliki / 727 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 727/727 · docs:check — exit 0.
 
 ## [0.425.0] — 🧪📜 Rygiel logów serwera (cfgFor · trunc) — merge przełączników + przycięcie pola
 
