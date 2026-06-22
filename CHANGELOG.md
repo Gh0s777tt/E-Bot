@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-478-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.408.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-479-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.409.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.409.0] — 🧪🔐 Rygiel podpisanej sesji (signSession · verifySession · getAuthSecret) — HMAC
+
+- `[#479]` 🧪 **Test sesji panelu** ([`session.test.ts`](dashboard/lib/session.test.ts), 10 testów) — `signSession`/`verifySession`/`getAuthSecret` ([`lib/session.ts`](dashboard/lib/session.ts)). Bramka autoryzacji panelu (cookie HMAC-SHA256 na Web Crypto). Czysty moduł (bez bazy/sieci); **0 zmian produkcyjnych** (już eksportowane).
+  - **RYGIEL odporności na podrobienie:** round-trip zwraca payload; weryfikacja **innym sekretem** → `null`; **podmieniony body** (manipulacja payloadu) → `null`; **podmieniony podpis** (z innej sesji) → `null`. Token bez kropki / pusty / śmieci → `null` (nie rzuca).
+  - **RYGIEL wygaśnięcia:** `exp` w przeszłości → `null`, brak `exp` → `null`, przyszłość → ważna.
+  - **RYGIEL fail-closed sekretu (`getAuthSecret`):** `AUTH_SECRET` ≥16 → zwrócony; **produkcja** (`VERCEL=1` lub `NODE_ENV=production`) + krótki/brak sekretu → **wyjątek** (nie publiczny fallback = anty-podrabialne cookie); lokalnie → dev-fallback (≥16).
+  - **Dowód, że gryzie (mutation-proof, osobno):** pominięcie `if (!ok) return null` zwala 2 testy anty-forge (zły sekret + podmieniony podpis); `exp < Date.now()`→`>` zwala round-trip i wygaśnięcie — po cofnięciu zielono. (Env w teście przez `vi.stubEnv` — `NODE_ENV` jest read-only w typach Next.)
+  - Suite: **77 plików / 622 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 622/622 · docs:check — exit 0.
 
 ## [0.408.0] — 🧪👁️ Rygiel trybów widoku panelu (tierVisible) — Developer nie przecieka do Prostego
 
