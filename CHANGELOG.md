@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-442-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.372.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-443-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.373.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.373.0] — 🧪🛡️ Rygiel diagnozy uprawnień anti-nuke (missingPerms) — anty-cicha-dziura w obronie
+
+- `[#443]` 🧪 **Test `missingPerms`** ([`antinuke-perms.test.ts`](bot/src/security/antinuke-perms.test.ts), 5 testów) — dotąd nietestowana diagnoza uprawnień bota dla anti-nuke ([`antinuke.mts`](bot/src/security/antinuke.mts)). `/antinuke status` pokazuje, czego botowi brakuje, by **realnie** bronić serwera; regresja = bot raportuje „OK", a w praktyce nie może banować/timeoutować sprawcy (cicha dziura w obronie).
+  - **Zaryglowane:** brak `me` (bot nie w cache) → `["nieznane"]`; komplet 5 uprawnień → `[]`; brak konkretnych → dokładnie te etykiety **w kolejności** listy (`ViewAuditLog`/`BanMembers`/`KickMembers`/`ModerateMembers`/`ManageRoles` → Wyświetlanie dziennika audytu / Banowanie / Wyrzucanie / Timeout / Zarządzanie rolami); zero uprawnień → komplet 5 braków. Mapowanie flaga→etykieta zamrożone.
+  - **Dowód, że gryzie (mutation-proof):** flip negacji `!has`→`has` (raportowałby PRZYZNANE jako brakujące) zwala 4 testy; zmiana etykiety `Timeout`→`Wyciszanie` zwala 2 testy — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **41 plików / 378 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 378/378 · docs:check — exit 0.
 
 ## [0.372.0] — 🧪👋 Rygiel renderowania pożegnań/boostu (renderVars · memberVars · embed)
 
