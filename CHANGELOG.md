@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-450-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.380.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-451-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.381.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.381.0] — ♻️🧪 DRY helpera cooldownu: 1 źródło prawdy (minutesSince) zamiast 3 kopii
+
+- `[#451]` ♻️ **Koniec duplikacji helpera cooldownu — dedup 3 → 1.** Formuła `null→+Infinity` / `(Date.now()−Date.parse(iso))/60_000` była skopiowana w **3 miejscach**: [`store.mts`](bot/src/economy/store.mts) (`minutesSince`, testowane), [`cards.mts`](bot/src/economy/cards.mts) i [`pets.mts`](bot/src/economy/pets.mts) (`minutesSinceIso`).
+  - **Jedyne źródło prawdy:** `cards.mts` i `pets.mts` **re-eksportują** `minutesSince as minutesSinceIso` z `store.mts` (callery `/cards`/`/pet` bez zmian — ta sama nazwa publiczna). Usunięto 2 lokalne kopie (−4 linie netto, **0 zmian zachowania** — formuły bajt-w-bajt identyczne, potwierdzone typecheck+suite). Test `store-config` pokrywa teraz wszystkie 3 miejsca wywołań.
+  - 🧪 **Rygiel anty-redup** ([`cooldown-dry.test.ts`](bot/src/economy/cooldown-dry.test.ts), 2 testy): `cards.minutesSinceIso === store.minutesSince` i `pets.minutesSinceIso === store.minutesSince` (**ta sama referencja, nie kopia**) — gdyby ktoś przywrócił lokalną funkcję, referencja się rozjedzie i test zwala.
+  - Suite: **49 plików / 423 testy**. **Bramki:** `pnpm lint` (biome) · `pnpm typecheck` (4 pakiety, potwierdza spójność re-eksportu z importami komend) · `pnpm test` 423/423 · docs:check — exit 0.
 
 ## [0.380.0] — 🧪📈 Rygiel katalogu giełdy (findStock · STOCKS · pasmo cen) — kontrakt uppercase
 

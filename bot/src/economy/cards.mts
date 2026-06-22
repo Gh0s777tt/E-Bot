@@ -4,6 +4,9 @@
 // + economy_card_daily (graceful no-op bez chmury). Math.random — bot runtime.
 import { cloudDelete, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 
+// Cooldown: jedno źródło prawdy w store.mts (re-eksport, by nie duplikować formuły null→Infinity / /60_000).
+export { minutesSince as minutesSinceIso } from './store.mts';
+
 export type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
 export type Card = { id: string; emoji: string; name: string; rarity: Rarity };
 
@@ -120,9 +123,4 @@ export async function setCardDaily(guildId: string, userId: string): Promise<voi
     [{ guild_id: guildId, user_id: userId, last_pull: new Date().toISOString() }],
     'guild_id,user_id',
   );
-}
-
-export function minutesSinceIso(iso: string | null): number {
-  if (!iso) return Number.POSITIVE_INFINITY;
-  return (Date.now() - Date.parse(iso)) / 60_000;
 }

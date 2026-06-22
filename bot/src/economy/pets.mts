@@ -4,6 +4,9 @@
 // (graceful no-op bez chmury). Czas z Date.now() — bot runtime.
 import { cloudDelete, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 
+// Cooldown: jedno źródło prawdy w store.mts (re-eksport, by nie duplikować formuły null→Infinity / /60_000).
+export { minutesSince as minutesSinceIso } from './store.mts';
+
 export type Species = { id: string; emoji: string; adopt: number; giftBase: number };
 
 // id = klucz i18n (pet.kind.<id>). adopt = koszt adopcji, giftBase = baza prezentu (×poziom×sytość).
@@ -58,11 +61,6 @@ export async function deletePet(guildId: string, userId: string): Promise<void> 
 function hoursSince(iso: string | null): number {
   if (!iso) return Number.POSITIVE_INFINITY;
   return (Date.now() - Date.parse(iso)) / 3_600_000;
-}
-
-export function minutesSinceIso(iso: string | null): number {
-  if (!iso) return Number.POSITIVE_INFINITY;
-  return (Date.now() - Date.parse(iso)) / 60_000;
 }
 
 // Sytość 0–100 z czasu od ostatniego karmienia (karmienie ustawia 100).
