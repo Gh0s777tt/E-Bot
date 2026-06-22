@@ -6,10 +6,24 @@ import type { Client, Guild } from 'discord.js';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { log } from '../lib/log.mts';
 
-type Snap = { day: string; members: number; boosts: number; channels: number };
+export type Snap = { day: string; members: number; boosts: number; channels: number };
 
 const histories = new Map<string, Snap[]>(); // guildId → historia (90 dni)
 const loaded = new Set<string>(); // serwery już wczytane z chmury (lazy)
+
+// Upsert dziennego snapshotu: ten sam dzień co ostatni wpis → ODŚWIEŻ (bez duplikatu dnia — inaczej
+// wykres dubluje słupki), inny dzień → DOPISZ; cap (90) trzyma NAJNOWSZE (`slice(-cap)`). Czysta (nie
+// mutuje wejścia) — stan w `histories` ustawia caller.
+export function pushSnap(hist: Snap[], snap: Snap, cap = 90): Snap[] {
+  const out = hist.slice();
+  const last = out[out.length - 1];
+  if (last && last.day === snap.day) {
+    out[out.length - 1] = snap;
+  } else {
+    out.push(snap);
+  }
+  return out.length > cap ? out.slice(-cap) : out;
+}
 
 function today(): string {
   return new Date().toISOString().slice(0, 10);
@@ -38,19 +52,8 @@ async function loadGuild(guildId: string): Promise<Snap[]> {
 }
 
 async function tickGuild(g: Guild): Promise<void> {
-  let hist = await loadGuild(g.id);
-  const d = today();
-  const agg = snapshot(g);
-  const last = hist[hist.length - 1];
-  if (last && last.day === d) {
-    hist[hist.length - 1] = { day: d, ...agg }; // odśwież dzisiejszy odczyt
-  } else {
-    hist.push({ day: d, ...agg });
-  }
-  if (hist.length > 90) {
-    hist = hist.slice(-90);
-    histories.set(g.id, hist);
-  }
+  const hist = pushSnap(await loadGuild(g.id), { day: today(), ...snapshot(g) });
+  histories.set(g.id, hist);
   try {
     await cloudSetSetting(`g:${g.id}:server_history`, JSON.stringify(hist));
   } catch {

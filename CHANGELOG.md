@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-508-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.438.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-509-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.439.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.439.0] — 🧪📈 Rygiel upsertu snapshotu wzrostu serwera (pushSnap) — bez duplikatu dnia + cap 90
+
+- `[#509]` 🧪 **Test `pushSnap`** ([`serverHistory.test.ts`](bot/src/analytics/serverHistory.test.ts), 6 testów) — utrzymanie 90-dniowej historii rozmiaru serwera wyłonione **behavior-preserving** z `tickGuild` ([`analytics/serverHistory.mts`](bot/src/analytics/serverHistory.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL bez duplikatu dnia** — ten sam dzień co ostatni wpis → **odświeża** go (inaczej wykres 90-dniowy dubluje słupki); nowy dzień → **dopisuje**.
+  - **RYGIEL kapu** — trzyma **najnowsze** `cap` wpisów (`slice(-cap)`, domyślnie 90) → ograniczony rozrost klucza chmury, najstarszy dzień wypada, najnowszy zostaje.
+  - **Czystość** — nie mutuje tablicy wejściowej (`hist.slice()`), respektuje własny `cap`.
+  - **Dowód, że gryzie (mutation-proof):** wyłączenie gałęzi `last.day === snap.day` (zawsze push) zwala test braku duplikatu; `slice(-cap)`→`slice(0, cap)` (trzyma najstarsze) zwala 2 testy kapu — po cofnięciu zielono.
+  - Suite: **107 plików / 804 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 804/804 · docs:check — exit 0.
 
 ## [0.438.0] — 🧪📊 Rygiel lidera tygodniowego digestu (topUserByMessages) — suma per-user + ranking
 
