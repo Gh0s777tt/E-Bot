@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-463-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.393.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-464-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.394.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.394.0] — 🧪🔗 Rygiel budowy URL OAuth (authorizeUrl) — scope `guilds` tylko przy self-serve
+
+- `[#464]` 🧪 **Test `authorizeUrl`** ([`auth.authorizeUrl.test.ts`](dashboard/lib/auth.authorizeUrl.test.ts), 5 testów) — `authorizeUrl`/`selfServeEnabled` ([`auth.ts`](dashboard/lib/auth.ts)) buduje URL OAuth Discorda.
+  - **RYGIEL scope wg self-serve (prywatność):** scope `guilds` proszony **tylko** gdy `MARKETPLACE_SELF_SERVE` włączone (OFF → minimalnie `identify`). Regresja = panel nadmiernie prosi o dostęp do listy serwerów albo self-serve nie dostaje `guilds`.
+  - **Struktura:** endpoint `https://discord.com/oauth2/authorize`; `redirect_uri = origin + /api/auth/callback`; `response_type=code`; `prompt=consent`; `client_id` z env; `state` przeniesione 1:1 (URLSearchParams koduje znaki specjalne).
+  - **Dowód, że gryzie (mutation-proof):** odwrócenie warunku scope zwala 2 testy (off↔on); zmiana ścieżki `redirect_uri` zwala test struktury — po cofnięciu zielono, **0 zmian produkcyjnych**. Env sterowany z przywróceniem.
+  - Suite: **62 pliki / 508 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 508/508 · docs:check — exit 0.
 
 ## [0.393.0] — 🧪🏅 Rygiel odznak panelu (nextBadges) + spójność lustra z botem — 500+ testów
 
