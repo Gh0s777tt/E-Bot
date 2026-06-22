@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-461-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.391.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-462-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.392.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.392.0] — 🧪🌐 Rygiel detekcji języka panelu (isPanelLocale · detectBrowserLocale)
+
+- `[#462]` 🧪 **Test detekcji locale panelu** ([`panelI18n.detect.test.ts`](dashboard/lib/panelI18n.detect.test.ts), 6 testów) — `isPanelLocale`/`detectBrowserLocale` ([`panelI18n.ts`](dashboard/lib/panelI18n.ts)). Pierwsze wejście bez zapisu dopasowuje język przeglądarki; regresja = panel startuje w złym języku albo wybucha bez `navigator` (SSR).
+  - **`isPanelLocale`** (type guard): akceptuje 14 obsługiwanych, odrzuca `xx`/pusty/`null`/liczbę.
+  - **`detectBrowserLocale`**: odcina region (`pt-BR`→`pt`, `en-US`→`en`, `zh-CN`→`zh`), **case-insensitive** (`ZH-CN`→`zh`), bez regionu (`fr`→`fr`); nieobsługiwany → `DEFAULT_PANEL_LOCALE` (`pl`); **brak `navigator` (SSR) → DEFAULT bez wyjątku** (try/catch). `navigator` sterowany `vi.stubGlobal`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `split('-')[0]` zwala odcinanie regionu; usunięcie `.toLowerCase()` zwala case-insensitive — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **60 plików / 496 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 496/496 · docs:check — exit 0.
 
 ## [0.391.0] — 🧪🗂️ Rygiel grupowania komend (groupCommands) — konserwacja + kolejność widoku /commands
 
