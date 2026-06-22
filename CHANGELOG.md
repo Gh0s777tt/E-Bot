@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-458-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.388.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-459-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.389.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.389.0] — 🧪🌉 Rygiel auth mostu bot→panel (bridgeAuthorized · bridgeReady) — pusty sekret nie autoryzuje
+
+- `[#459]` 🧪 **Test uwierzytelnienia mostu** ([`pluginBridge.test.ts`](dashboard/lib/pluginBridge.test.ts), 9 testów) — `bridgeAuthorized`/`bridgeReady` ([`pluginBridge.ts`](dashboard/lib/pluginBridge.ts)): bramka tras `/api/internal/*` wołanych przez bota (service-to-service). Zła weryfikacja Bearer = obcy może wołać wewnętrzne trasy bota.
+  - **`bridgeAuthorized`:** poprawny `Bearer <secret>` → true; zły token / brak nagłówka / nie-Bearer / token innej długości → false; porównanie w **stałym czasie** (XOR-akumulacja, guard długości).
+  - **RYGIEL: pusty sekret NIE autoryzuje** — brak `PLUGIN_BRIDGE_SECRET` + `Bearer ` (pusty token) → false (guard `token.length > 0` blokuje `''==''`).
+  - **`bridgeReady`** (env-gated): sekret ≥16 znaków **I** `MARKETPLACE_COMMUNITY=1` → true; krótki/brak sekretu → false; community OFF → false.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie guardu `token.length > 0` zwala test pustego sekretu (bypass `''==''`); usunięcie `s.length >= 16` zwala test słabego sekretu — po cofnięciu zielono, **0 zmian produkcyjnych**. Env sterowany z przywróceniem.
+  - Suite: **57 plików / 480 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 480/480 · docs:check — exit 0.
 
 ## [0.388.0] — 🧪🔑 Rygiel parserów auth (parseCookie · getOrigin) — sesja + origin OAuth
 
