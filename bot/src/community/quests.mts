@@ -162,7 +162,9 @@ async function addSeasonPoints(gid: string, uid: string, delta: number): Promise
   ).catch(() => {});
 }
 
-function bar(p: number, t: number): string {
+// Pasek postępu questa (10 segmentów). KLAMRA `Math.min(1, …)`: postęp ≥ cel → pełny (nie >10
+// segmentów ani `repeat(ujemne)` = RangeError). STRAŻNIK `t > 0`: cel 0 → pusty (bez `p/0`=Infinity/NaN).
+export function bar(p: number, t: number): string {
   const filled = t > 0 ? Math.round(Math.min(1, p / t) * 10) : 0;
   return '▰'.repeat(filled) + '▱'.repeat(10 - filled);
 }

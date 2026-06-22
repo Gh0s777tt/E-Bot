@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-514-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.444.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-515-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.445.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.445.0] — 🧪📊 Rygiel paska postępu questów (bar) — klamra przepełnienia + strażnik dzielenia
+
+- `[#515]` 🧪 **Test `bar`** ([`quests.bar.test.ts`](bot/src/community/quests.bar.test.ts), 6 testów) — 10-segmentowy pasek postępu w widoku `/quests` ([`community/quests.mts`](bot/src/community/quests.mts)). Katalog `QUESTS` już zaryglowany (`quests.catalog.test.ts`, #396). **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL klamry przepełnienia** `Math.min(1, p/t)` — postęp **powyżej** celu → pasek pełny (10/10), nie >10 segmentów ani `repeat(ujemne)` = `RangeError` → crash całego widoku questów.
+  - **RYGIEL strażnika dzielenia** `t > 0` — cel `0` → pasek pusty (bez `p/0`=Infinity → `NaN` segmentów).
+  - **Niezmienniki** — proporcja (połowa → 5), zaokrąglenie (`55/100`→`round(5.5)`=6), **zawsze dokładnie 10 segmentów**.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `Math.min(1, …)` zwala test przepełnienia + długości (`RangeError`); usunięcie `t > 0` zwala test celu `0` (Infinity→pełny zamiast pustego) — po cofnięciu zielono.
+  - Suite: **113 plików / 839 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 839/839 · docs:check — exit 0.
 
 ## [0.444.0] — 🧪🔔 Rygiel dopasowania highlightów (highlightTargets) — bez auto-pingu + dedup
 
