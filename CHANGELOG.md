@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-462-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.392.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-463-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.393.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.393.0] — 🧪🏅 Rygiel odznak panelu (nextBadges) + spójność lustra z botem — 500+ testów
+
+- `[#463]` 🧪 **Test odznak panelu** ([`badges.test.ts`](dashboard/lib/badges.test.ts), 7 testów) — `nextBadges`/`resolveBadges`/`badgeById` ([`badges.ts`](dashboard/lib/badges.ts)). `badges.ts` to **LUSTRO** [`bot/src/community/badges.mts`](bot/src/community/badges.mts) (id muszą się zgadzać, inaczej panel renderuje odznaki, których bot nie nadaje / gubi nowe).
+  - **`nextBadges` („najbliższe do zdobycia" na profilu):** sortuje malejąco wg % postępu (`pct = round(cur/need*100)`), pomija bez metryki/need (`prestige`/`gamer`), już zdobyte (`ownedIds`) i **osiągnięte** (`cur >= need` — ścisłe), `limit` przycina.
+  - **`resolveBadges`** (id → def w kolejności katalogu, pomija nieznane) · **`badgeById`** (znane/undefined).
+  - **RYGIEL spójności cross-package:** zbiór id panelu = zbiór id bota (13; bot czytany jako tekst — dashboard `tsc` nie importuje `.mts` z bot/).
+  - **Dowód, że gryzie (mutation-proof):** `cur >= need`→`cur > need` zwala test osiągniętych; usunięcie odznaki z panelowego `BADGES` zwala spójność lustra — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **61 plików / 503 testy** (próg 500 przekroczony). **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 503/503 · docs:check — exit 0.
 
 ## [0.392.0] — 🧪🌐 Rygiel detekcji języka panelu (isPanelLocale · detectBrowserLocale)
 
