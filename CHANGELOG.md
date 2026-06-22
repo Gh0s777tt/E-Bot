@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-516-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.446.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-517-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.447.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.447.0] — 🧪🤖 Rygiel weryfikacji captchy (checkCaptcha) — kod jednorazowy + termin ważności
+
+- `[#517]` 🧪 **Test `checkCaptcha`** ([`verification.test.ts`](bot/src/security/verification.test.ts), +5 testów) — weryfikacja przepisanego kodu captchy wyłoniona **behavior-preserving** z handlera modala ([`security/verification.mts`](bot/src/security/verification.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania). Dopełnia `phraseMatches` (#516) — drugi tryb bramy anty-bot/raid.
+  - **RYGIEL terminu ważności** — wpis po terminie (`exp < now`) **lub brak wpisu** → `'expired'`, nawet przy poprawnym kodzie (kod jednorazowy i czasowy — nie da się reużyć starego/wygasłego); granica `exp === now` jeszcze ważna.
+  - **RYGIEL braku wpisu** — `undefined` → `'expired'` (nie crash przy `entry.exp`, nie przypadkowe `'ok'`).
+  - **Dopasowanie** — `trim` + **WIELKIE litery** (kod generowany uppercase); status (`ok`/`expired`/`wrong`) zamiast boola → caller daje odrębny komunikat (wygasł vs błędny).
+  - **Dowód, że gryzie (mutation-proof):** `exp < now`→`exp > now` (odwrócenie terminu) zwala 3 testy; usunięcie `.toUpperCase()` zwala normalizację wpisu — po cofnięciu zielono.
+  - Suite: **114 plików / 849 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 849/849 · docs:check — exit 0.
 
 ## [0.446.0] — 🧪🔐 Rygiel hasła weryfikacji (phraseMatches) — puste hasło nigdy nie otwiera bramy
 

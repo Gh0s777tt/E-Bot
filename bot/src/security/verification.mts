@@ -64,8 +64,21 @@ export function verifyRow(label: string): ActionRowBuilder<ButtonBuilder> {
 }
 
 // Kody captchy w pamięci, ważne 5 min. Klucz: guild:user.
-const captchaStore = new Map<string, { code: string; exp: number }>();
+type CaptchaEntry = { code: string; exp: number };
+const captchaStore = new Map<string, CaptchaEntry>();
 const CAPTCHA_TTL = 5 * 60_000;
+
+// Weryfikacja przepisanego kodu captchy (anty-bot/raid). KLUCZ: brak wpisu LUB po terminie (`exp < now`)
+// → 'expired' (kod jednorazowy, nie da się reużyć starego); dopasowanie po `trim().toUpperCase()`
+// (kod generowany WIELKIMI literami) → 'ok'/'wrong'. Status zamiast boola — caller daje odrębny komunikat.
+export function checkCaptcha(
+  entry: CaptchaEntry | undefined,
+  given: string,
+  nowMs: number,
+): 'ok' | 'expired' | 'wrong' {
+  if (!entry || entry.exp < nowMs) return 'expired';
+  return given.trim().toUpperCase() === entry.code ? 'ok' : 'wrong';
+}
 
 async function grantRole(
   interaction: ButtonInteraction | ModalSubmitInteraction,
@@ -230,24 +243,22 @@ export async function handleVerifyModal(interaction: ModalSubmitInteraction): Pr
     return;
   }
   const key = `${interaction.guild.id}:${interaction.user.id}`;
-  const entry = captchaStore.get(key);
-  const given = interaction.fields.getTextInputValue('code').trim().toUpperCase();
-  if (!entry || entry.exp < Date.now()) {
-    captchaStore.delete(key);
+  const given = interaction.fields.getTextInputValue('code');
+  const result = checkCaptcha(captchaStore.get(key), given, Date.now());
+  captchaStore.delete(key); // kod jednorazowy — zawsze kasujemy po próbie
+  if (result === 'expired') {
     await interaction.reply({
       content: '⌛ Kod wygasł. Kliknij „Zweryfikuj się" ponownie.',
       flags: MessageFlags.Ephemeral,
     });
     return;
   }
-  if (given !== entry.code) {
-    captchaStore.delete(key);
+  if (result === 'wrong') {
     await interaction.reply({
       content: '❌ Błędny kod. Kliknij „Zweryfikuj się", aby otrzymać nowy.',
       flags: MessageFlags.Ephemeral,
     });
     return;
   }
-  captchaStore.delete(key);
   await grantRole(interaction, cfg);
 }
