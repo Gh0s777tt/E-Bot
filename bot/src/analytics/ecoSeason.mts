@@ -46,15 +46,24 @@ function refresh(): void {
 type EcoRow = { user_id: string; username: string | null; wallet: number; bank: number };
 const MEDAL = ['🥇', '🥈', '🥉'];
 
+// Ranking sezonu eco: majątek = wallet+bank (DB sortuje tylko po wallet → re-sort po sumie, by ktoś
+// z dużym bankiem a małym portfelem nie wypadł), malejąco, top N. Indeksy 0–2 = podium z nagrodą.
+export function rankByTotal<T extends { wallet: number; bank: number }>(
+  rows: T[],
+  topN = 10,
+): (T & { total: number })[] {
+  return rows
+    .map((r) => ({ ...r, total: (r.wallet || 0) + (r.bank || 0) }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, topN);
+}
+
 async function snapshot(guild: Guild, endedMonth: string): Promise<void> {
   const rows = await cloudSelect<EcoRow>(
     'economy_users',
     `select=user_id,username,wallet,bank&guild_id=eq.${guild.id}&order=wallet.desc&limit=80`,
   );
-  const sorted = rows
-    .map((r) => ({ ...r, total: (r.wallet || 0) + (r.bank || 0) }))
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 10);
+  const sorted = rankByTotal(rows);
   if (!sorted.length) return;
 
   const cur = ecoConfig(guild.id).currency;

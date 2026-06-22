@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-506-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.436.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-507-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.437.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.437.0] — 🧪🏆 Rygiel rankingu sezonu eko (rankByTotal) — majątek wallet+bank + podium
+
+- `[#507]` 🧪 **Test `rankByTotal`** ([`ecoSeason.test.ts`](bot/src/analytics/ecoSeason.test.ts), 5 testów) — ranking miesięcznego sezonu ekonomii wyłoniony **behavior-preserving** ze `snapshot` ([`analytics/ecoSeason.mts`](bot/src/analytics/ecoSeason.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL sumy majątku** — total = `wallet + bank`; DB sortuje tylko po `wallet` (`order=wallet.desc`), więc re-sort po **sumie** jest po to, by gracz z dużym bankiem a małym portfelem nie wypadł z podium. Test: `bigBank` (10+500) bije `bigWallet` (400+0).
+  - **RYGIEL kolejności** — sort **malejąco** wg total; indeksy 0–2 = podium z nagrodą → zła kolejność = wypłata do niewłaściwego gracza.
+  - **RYGIEL kapu top N** (domyślnie 10) + `null`/`undefined` wallet/bank liczone jako `0` (`|| 0`).
+  - **Dowód, że gryzie (mutation-proof):** `b.total - a.total`→`a.total - b.total` zwala kolejność; `wallet + bank`→`wallet` (zerowanie banku) zwala sumę; `slice(0, topN)`→`slice(0, topN*10)` zwala kap — po cofnięciu zielono.
+  - Suite: **105 plików / 792 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 792/792 · docs:check — exit 0.
 
 ## [0.436.0] — 🧪🎬 Rygiel embeda klipu Twitch (clipEmbed) — warunkowy obrazek + fallback tytułu
 
