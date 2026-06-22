@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-453-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.383.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-454-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.384.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.384.0] — 🧪🔒 Rygiel kontraktu akcji pluginów (pluginActionSchema) — granica zaufania z obcym kodem
+
+- `[#454]` 🧪 **Test schematów akcji pluginów** ([`pluginRunner.schema.test.ts`](dashboard/lib/pluginRunner.schema.test.ts), 9 testów) — `pluginActionSchema`/`pluginResponseSchema` ([`pluginRunner.ts`](dashboard/lib/pluginRunner.ts)). To **granica zaufania z OBCYM kodem** (M6 sandbox): host wykonuje TYLKO akcje, które przejdą walidację. `security.test.ts` pokrył SSRF-guard tego modułu, NIE schematy akcji.
+  - **Discriminated union typów akcji:** akceptuje 3 znane (`sendMessage`/`addRole`/`setConfig`); **odrzuca nieznany typ** (plugin nie wymyśli sobie `banUser`/`deleteChannel`); brak wymaganego pola → odrzucone.
+  - **Limity anty-abuse:** **max 20 akcji** na odpowiedź (plugin nie zaleje hosta); pusta lista OK; zły kształt (`{}`, `actions: 'str'`, `null`) → odrzucone.
+  - **Limity długości pól (anty-przerost payloadu):** `content ≤ 2000`, id (channelId/userId/roleId) `≤ 32`, `setConfig.key ≤ 64`, `value ≤ 4000`.
+  - **Dowód, że gryzie (mutation-proof):** `.max(20)`→`.max(200)` zwala cap akcji; `content.max(2000)`→`max(20000)` zwala limit długości — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **52 pliki / 442 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 442/442 · docs:check — exit 0.
 
 ## [0.383.0] — 🧪🛡️ Rygiel mappera AutoModa (mapRule) — raw API Discorda → NativeRule panelu
 
