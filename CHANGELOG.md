@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-489-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.419.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-490-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.420.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.420.0] — 🧪🟣 Rygiel ról z obecności (liveStreaming · vanityMatch) — filtr roli + fraza statusu
+
+- `[#490]` 🧪 **Test presence-roles** ([`presenceRoles.test.ts`](bot/src/community/presenceRoles.test.ts), 7 testów) — `liveStreaming`/`vanityMatch` ([`community/presenceRoles.mts`](bot/src/community/presenceRoles.mts)). **Refactor behavior-preserving:** predykaty dopasowania wyjęte z `applyLive`/`applyVanity` (gating `enabled`/`roleId` zostaje w handlerach — wczesny `return` zachowany).
+  - **RYGIEL filtra roli (`liveStreaming`):** live-rola tylko gdy aktywność **Streaming** ORAZ (`requireRoleId` pusty LUB user ma wskazaną rolę) — bez filtra rola trafiłaby do każdego streamera. Brak streamingu → false.
+  - **`vanityMatch`:** vanity-rola gdy status niestandardowy **zawiera frazę** (case-insensitive); brak statusu (`null`/`undefined`/`''`) → false.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie filtra `requireRoleId && !hasRequireRole` zwala test filtra roli; usunięcie `toLowerCase()` zwala case-insensitive dopasowanie frazy — po cofnięciu zielono. Zmiana produkcyjna = ekstrakcja + `export` (`liveStreaming`/`vanityMatch`), **0 zmian zachowania**.
+  - Suite: **88 plików / 689 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 689/689 · docs:check — exit 0.
 
 ## [0.419.0] — 🧪🖼️ Rygiel kanałów tylko-obrazki (hasMedia + lista) — bramka mediów
 

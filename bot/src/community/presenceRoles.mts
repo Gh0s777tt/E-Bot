@@ -56,20 +56,39 @@ async function setRole(member: GuildMember, roleId: string, want: boolean): Prom
   else await member.roles.remove(roleId, 'presence-role (live/vanity)').catch(() => {});
 }
 
-async function applyLive(member: GuildMember, p: Presence): Promise<void> {
-  if (!live.enabled || !live.roleId) return;
-  let streaming = p.activities.some((a) => a.type === ActivityType.Streaming);
-  if (streaming && live.requireRoleId && !member.roles.cache.has(live.requireRoleId)) {
+// Czy aktywności kwalifikują do live-roli: streaming obecny ORAZ (brak requireRoleId LUB user go ma).
+// Czysta (bez side-effectów) — gating enabled/roleId zostaje w applyLive.
+export function liveStreaming(
+  activities: readonly { type: ActivityType }[],
+  requireRoleId: string,
+  hasRequireRole: boolean,
+): boolean {
+  let streaming = activities.some((a) => a.type === ActivityType.Streaming);
+  if (streaming && requireRoleId && !hasRequireRole) {
     streaming = false; // filtr: live-rola tylko dla posiadaczy wskazanej roli
   }
+  return streaming;
+}
+
+// Czy status niestandardowy zawiera frazę vanity (case-insensitive).
+export function vanityMatch(state: string | null | undefined, phrase: string): boolean {
+  return (state ?? '').toLowerCase().includes(phrase.toLowerCase());
+}
+
+async function applyLive(member: GuildMember, p: Presence): Promise<void> {
+  if (!live.enabled || !live.roleId) return;
+  const streaming = liveStreaming(
+    p.activities,
+    live.requireRoleId,
+    member.roles.cache.has(live.requireRoleId),
+  );
   await setRole(member, live.roleId, streaming);
 }
 
 async function applyVanity(member: GuildMember, p: Presence): Promise<void> {
   if (!vanity.enabled || !vanity.roleId || !vanity.phrase) return;
   const custom = p.activities.find((a) => a.type === ActivityType.Custom);
-  const match = (custom?.state ?? '').toLowerCase().includes(vanity.phrase.toLowerCase());
-  await setRole(member, vanity.roleId, match);
+  await setRole(member, vanity.roleId, vanityMatch(custom?.state, vanity.phrase));
 }
 
 export function startPresenceRoles(client: Client): void {
