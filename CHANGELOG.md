@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-454-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.384.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-455-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.385.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.385.0] — 🧪💳 Rygiel bramki monetyzacji (canUsePlugin) — paywall premium nie przecieka
+
+- `[#455]` 🧪 **Test bramki tieru** ([`billing.canUsePlugin.test.ts`](dashboard/lib/billing.canUsePlugin.test.ts), 4 testy) — `canUsePlugin(tierRequired, guildTier)` ([`billing.ts`](dashboard/lib/billing.ts)) decyduje, kto może użyć płatnego pluginu. Regresja = paywall przecieka (serwer `free` dostaje plugin `premium`), płacący serwer zablokowany, albo billing wyłączony przypadkowo paywalluje wszystkich.
+  - **Billing WYŁĄCZONY** (brak `STRIPE_SECRET_KEY` → billing uśpiony): **każda** kombinacja dozwolona (brak paywalla — panel działa jak dziś).
+  - **Billing WŁĄCZONY:** plugin `free` zawsze dostępny; **plugin `premium` na serwerze `free` → ZABLOKOWANY** (paywall trzyma); `premium` na `premium` → dozwolony.
+  - **Dowód, że gryzie (mutation-proof):** `if (!billingEnabled()) return true`→`return false` zwala test braku paywalla (billing-off paywalluje); `guildTier === 'premium'`→`!==` zwala gate premium — po cofnięciu zielono, **0 zmian produkcyjnych**. Env `STRIPE_SECRET_KEY` sterowany z zapisem/przywróceniem.
+  - Suite: **53 pliki / 446 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 446/446 · docs:check — exit 0.
 
 ## [0.384.0] — 🧪🔒 Rygiel kontraktu akcji pluginów (pluginActionSchema) — granica zaufania z obcym kodem
 
