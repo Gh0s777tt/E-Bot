@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-443-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.373.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-444-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.374.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.374.0] — 🧪🎭 Rygiel menu ról (rolemenu) — twarde limity Discorda (25 opcji · długości)
+
+- `[#444]` 🧪 **Test menu ról** ([`rolemenu.test.ts`](bot/src/engagement/rolemenu.test.ts), 8 testów) — `roleMenuConfig` + `buildRoleMenu` ([`rolemenu.mts`](bot/src/engagement/rolemenu.mts)). Discord ma **twarde limity** dla select-menu — ich przekroczenie = API **odrzuca** publikację (`/rolemenu` pada).
+  - **`roleMenuConfig`:** odrzuca opcje bez `roleId`, **kapuje do 25 opcji** (twardy limit Discorda), domyślne komunikat/placeholder, uszkodzony JSON → domyślne, izolacja per-serwer. Realny SQLite (tymczasowy `DATABASE_PATH`).
+  - **`buildRoleMenu`:** brak opcji → `null` (nie publikujemy pustego menu); `customId='rolemenu'`, `minValues=0`, `maxValues=liczba opcji`; **label ≤100 / placeholder ≤150 / description ≤100** (przycięte do limitów Discorda).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.slice(0,25)` zwala test kapu (30≠25); usunięcie `placeholder.slice(0,150)` zwala test przycięcia długości — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **42 pliki / 386 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 386/386 · docs:check — exit 0.
 
 ## [0.373.0] — 🧪🛡️ Rygiel diagnozy uprawnień anti-nuke (missingPerms) — anty-cicha-dziura w obronie
 
