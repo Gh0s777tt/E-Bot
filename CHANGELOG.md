@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-438-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.368.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-439-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.369.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.369.0] — 🧪🃏 Rygiel kart kolekcjonerskich (gacha) — drabina rzadkości + losowanie
+
+- `[#439]` 🧪 **Test gachy** ([`cards.test.ts`](bot/src/economy/cards.test.ts), 12 testów) — dotąd nietestowana czysta logika kart kolekcjonerskich ([`cards.mts`](bot/src/economy/cards.mts), eko 2.0). Regresja = zepsuta gacha.
+  - **Drabina rzadkości (`RARITY`):** waga **maleje** z rzadkością (rzadsze = mniej prawdopodobne: common 50 → mythic 1), wartość sprzedaży **rośnie** (common 50 → mythic 10000), suma wag = 100; każda waga ≥ 1.
+  - **Integralność `CARDS`:** unikalne id, każda karta ma rzadkość z `RARITY`, **każda rzadkość ma ≥1 kartę** (inaczej `drawCard` tej rzadkości spada na fallback).
+  - **`findCard`** (case-insensitive + trim, nieznane → undefined) · **`rarityRank`** (ścisła kolejność sortowania kolekcji: mythic < legendary < epic < rare < common) · **`drawCard`** (niezmienniki dla dowolnego `Math.random`: zawsze prawidłowa karta z `CARDS`; wszystkie 5 rzadkości osiągalnych — każda gałąź wag działa).
+  - **Dowód, że gryzie (mutation-proof):** waga legendary 5→20 zwala drabinę + sumę; odwrócenie `RARITY_ORDER` zwala `rarityRank` — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **37 plików / 344 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 344/344 · docs:check — exit 0.
 
 ## [0.368.0] — 🧪🌍 Rygiel rejestru języków (locales) — dwukierunkowa spójność map Discord↔Locale
 
