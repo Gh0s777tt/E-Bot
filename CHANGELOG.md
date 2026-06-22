@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-439-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.369.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-440-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.370.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.370.0] — 🧪🌐 Rygiel runtime'u i18n (t) — interpolacja {placeholder} + łańcuch fallback
+
+- `[#440]` 🧪 **Test funkcji `t()`** ([`t.test.ts`](bot/src/i18n/t.test.ts), 9 testów) — najgorętsza ścieżka i18n: **KAŻDY** zlokalizowany string bota przechodzi przez `t()` ([`index.mts`](bot/src/i18n/index.mts)). Regresja = surowe klucze w UI / niepodstawione `{placeholdery}` / wyjątek bez vars.
+  - **Interpolacja `{placeholder}`:** podstawia wszystkie wystąpienia (`/g`), nieznana zmienna zostaje **dosłownie** (nie gubimy placeholdera), liczby koercjonowane (`0` podstawione, nie pominięte), bez vars → treść surowa (brak przebiegu = brak wyjątku), tylko `{\w+}` (`{a.b}`/`{a-b}` dosłowne).
+  - **Łańcuch fallback** `locale → en → pl → sam klucz`: istniejący klucz → tłumaczenie; nieistniejący → **sam klucz** (nigdy `undefined`); nieobsługiwane locale spada do fallbacku bez wybuchu. Interpolacja testowana na nieistniejącym kluczu (raw = klucz) ⇒ test deterministyczny, niezależny od treści słowników.
+  - **Dowód, że gryzie (mutation-proof):** `: m`→`: ''` (gubienie nieznanego placeholdera) zwala test dosłowności; `?? key`→`?? ''` (utrata finalnego fallbacku) zwala 7 testów — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **38 plików / 353 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 353/353 · docs:check — exit 0.
 
 ## [0.369.0] — 🧪🃏 Rygiel kart kolekcjonerskich (gacha) — drabina rzadkości + losowanie
 
