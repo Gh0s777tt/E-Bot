@@ -5,14 +5,14 @@ import { resolveLocale, t } from '../i18n/index.mts';
 
 const ACCENT = 0xe50914;
 
-function shipPct(a: string, b: string): number {
+export function shipPct(a: string, b: string): number {
   const s = [a, b].sort().join(':');
   let h = 0;
   for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   return h % 101;
 }
 
-function bar(pct: number): string {
+export function bar(pct: number): string {
   const filled = Math.round(pct / 10);
   return '▰'.repeat(filled) + '▱'.repeat(10 - filled);
 }

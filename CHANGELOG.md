@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-466-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.396.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-467-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.397.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.397.0] — 🧪💘 Rygiel /ship — deterministyczny i symetryczny % dopasowania
+
+- `[#467]` 🧪 **Test `/ship`** ([`ship.test.ts`](bot/src/commands/ship.test.ts), 8 testów) — `shipPct`/`bar` ([`commands/ship.mts`](bot/src/commands/ship.mts)). Komenda obiecuje **stały wynik dla pary niezależnie od kolejności** — gwarancją jest jedynie `.sort()` przed hashem.
+  - **RYGIEL symetrii (rdzeń):** `shipPct(a,b) === shipPct(b,a)` dla każdej pary (sweep ID × ID). Regresja bez sortu = ta sama para dostaje **różny %** zależnie od kolejności argumentów (widoczny bug `/ship`).
+  - **Determinizm** (ta sama para → ten sam wynik, bez RNG/API) + **zakres `[0,100]` całkowity** (`h % 101`) — kontrakt dla progów (90/60/25) **i** dla `bar` (`filled = round(pct/10) ∈ [0,10]`; pct>100 → `'▱'.repeat(10-filled)` rzuca `RangeError`).
+  - **`bar`** (pasek 10 segmentów): zawsze dokładnie 10 znaków, `0`→same puste, `100`→same pełne, `round(pct/10)` (5→1, 94→9, 95→10) + **kompozycja `shipPct→bar` nigdy nie rzuca**.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.sort()` zwala symetrię; `pct/10`→`pct/5` zwala długość/liczbę/kompozycję (`RangeError: -3`) — po cofnięciu zielono. Zmiana produkcyjna = **2× `export`** (`shipPct`/`bar`).
+  - Suite: **65 plików / 529 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 529/529 · docs:check — exit 0.
 
 ## [0.396.0] — 🧪🗺️ Rygiel integralności katalogu questów (QUESTS) — battle-pass bez podwójnego claimu
 
