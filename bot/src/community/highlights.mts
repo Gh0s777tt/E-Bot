@@ -6,9 +6,26 @@ import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 
-type HL = { user_id: string; word: string };
+export type HL = { user_id: string; word: string };
 let cache: HL[] = [];
 const cooldown = new Map<string, number>(); // user:channel → ts
+
+// Czysty rdzeń dopasowania highlightów: zwraca pierwszy pasujący wpis na użytkownika.
+// POMIJA autora (bez auto-powiadomienia o własnej wiadomości) i DEDUPLIKUJE (jeden user raz na
+// wiadomość, choćby pasowało kilka jego słów). Dopasowanie case-insensitive (substring, jak `.includes`).
+// Cooldown / uprawnienia kanału / DM = sprawa callera.
+export function highlightTargets(cache: HL[], content: string, authorId: string): HL[] {
+  const lower = content.toLowerCase();
+  const seen = new Set<string>();
+  const out: HL[] = [];
+  for (const h of cache) {
+    if (h.user_id === authorId || seen.has(h.user_id)) continue;
+    if (!lower.includes(h.word.toLowerCase())) continue;
+    seen.add(h.user_id);
+    out.push(h);
+  }
+  return out;
+}
 
 // Etap K — config per-serwer: świeży odczyt {enabled}, fallback global.
 export function highlightsEnabled(guildId: string): boolean {
@@ -40,12 +57,7 @@ export function startHighlights(client: Client): void {
     const ch = msg.channel;
     if (!('permissionsFor' in ch)) return;
 
-    const notified = new Set<string>();
-    for (const h of cache) {
-      if (h.user_id === msg.author.id || notified.has(h.user_id)) continue;
-      if (!content.includes(h.word.toLowerCase())) continue;
-      notified.add(h.user_id);
-
+    for (const h of highlightTargets(cache, msg.content || '', msg.author.id)) {
       const key = `${h.user_id}:${msg.channelId}`;
       const now = Date.now();
       if ((cooldown.get(key) ?? 0) + 60_000 > now) continue;

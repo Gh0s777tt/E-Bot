@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-513-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.443.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-514-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.444.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.444.0] — 🧪🔔 Rygiel dopasowania highlightów (highlightTargets) — bez auto-pingu + dedup
+
+- `[#514]` 🧪 **Test `highlightTargets`** ([`highlights.test.ts`](bot/src/community/highlights.test.ts), 7 testów) — rdzeń dopasowania highlightów wyłoniony **behavior-preserving** z handlera `messageCreate` ([`community/highlights.mts`](bot/src/community/highlights.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export`; `highlightsEnabled` już zaryglowane (`feature-toggles.test.ts`, #365).
+  - **RYGIEL bez auto-pingu** — autor **nie** dostaje powiadomienia o własnym słowie w swojej wiadomości (inaczej każdy ping samego siebie).
+  - **RYGIEL dedup per-user** — użytkownik z kilkoma pasującymi słowami → **jeden** wpis (pierwsze słowo), inaczej seria DM-ów z jednej wiadomości.
+  - **RYGIEL case-insensitive** — dopasowanie nieczułe na wielkość liter po **obu** stronach (treść `DEPLOY` ↔ słowo `deploy`; zapisane `Crash` ↔ treść `crash`).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `h.user_id === authorId` zwala test auto-pingu; usunięcie `seen.has(...)` zwala dedup; usunięcie `h.word.toLowerCase()` zwala case-fold słowa — każdy strażnik zaryglowany niezależnie, po cofnięciu zielono.
+  - Suite: **112 plików / 833 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 833/833 · docs:check — exit 0.
 
 ## [0.443.0] — 🧪🎂 Rygiel walidacji daty urodzin (isValidBirthday) — dni w miesiącu + luty 29
 
