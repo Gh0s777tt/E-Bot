@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-491-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.421.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-492-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.422.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.422.0] — 🧪📡 Rygiel powiadomień live (fillVars · sec) — render szablonu + parser interwału (700+ 🎉)
+
+- `[#492]` 🧪 **Test live-notifier** ([`notifier.test.ts`](bot/src/live/notifier.test.ts), 7 testów) — `fillVars`/`sec` ([`live/notifier.mts`](bot/src/live/notifier.mts)). **0 zmian produkcyjnych** (2× `export`).
+  - **`fillVars` (render ogłoszenia „streamer LIVE"):** podstawia wszystkie znane placeholdery (`{mention}`/`{streamer}`/`{title}`/`{url}`/`{game}`/`{platform}`/`{viewers}`); puste/`null` pola → `""` (nie „undefined" w ogłoszeniu); `{platform}` → etykieta (`twitch`→`Twitch`); nieznany placeholder zostaje surowy; `trim`.
+  - **RYGIEL wszystkich wystąpień:** powtórzony placeholder podstawiony **wielokrotnie** (`replaceAll`, nie tylko pierwszy). **`{viewers}`:** liczba → string, brak → `""`.
+  - **`sec` (parser sekund interwału z env):** tylko skończona **dodatnia** liczba → wartość; `0`/ujemne/`NaN`/`undefined` → domyślna (anty-0/NaN — interwał 0 = busy-loop pollera).
+  - **Dowód, że gryzie (mutation-proof):** `replaceAll`→`replace` zwala test wszystkich wystąpień; `n > 0`→`n >= 0` zwala odrzucenie `0` w `sec` — po cofnięciu zielono.
+  - Suite: **90 plików / 702 testy** 🎉 (próg 700 przekroczony). **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 702/702 · docs:check — exit 0.
 
 ## [0.421.0] — 🧪📋 Rygiel aplikacji do ekipy (resolveApps · applyEnabled) — kap pytań + kanał recenzji
 

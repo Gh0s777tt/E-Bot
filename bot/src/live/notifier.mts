@@ -29,7 +29,7 @@ const DEFAULT_ENABLED: Record<Platform, boolean> = {
   youtube: false,
 };
 
-function sec(v: string | undefined, def: number): number {
+export function sec(v: string | undefined, def: number): number {
   const n = Number(v);
   return Number.isFinite(n) && n > 0 ? n : def;
 }
@@ -108,7 +108,7 @@ export function startNotifier(client: Client): void {
   }
 }
 
-function fillVars(tpl: string, st: LiveStatus, mention: string): string {
+export function fillVars(tpl: string, st: LiveStatus, mention: string): string {
   return tpl
     .replaceAll('{mention}', mention)
     .replaceAll('{streamer}', st.channelName ?? '')
