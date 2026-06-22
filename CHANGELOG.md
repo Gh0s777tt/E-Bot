@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-455-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.385.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-456-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.386.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.386.0] — 🧪🧬 Rygiel kodeka recept Architekta (encode/decodeRecipe) — whitelist anty-wstrzyknięcie
+
+- `[#456]` 🧪 **Test kodeka recept** ([`setup.recipe.test.ts`](dashboard/lib/setup.recipe.test.ts), 7 testów) — `encodeRecipe`/`decodeRecipe` ([`setup.ts`](dashboard/lib/setup.ts)): udostępnialny kod base64 setupu serwera (Architekt). Valid id-y brane z DOKŁADNIE tych whitelist, względem których filtruje decode (anty-hardcode).
+  - **Round-trip:** encode → decode zachowuje moduły i bloki; akceptuje kod z białymi znakami (`trim`).
+  - **RYGIEL whitelisty (anty-wstrzyknięcie):** decode FILTRUJE przez `BLUEPRINT_MODULES` / `PROV_BLOCKS` — udostępniony kod NIE może wstrzyknąć dowolnego modułu/bloku do prowizjonowania (nieznane id odpadają).
+  - **Wejścia degenerujące → null:** pusta recepta, same nieznane id (po filtrze puste), uszkodzony base64 / nie-JSON / pusty — wszystko `null` bez wyjątku.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie filtra `BLUEPRINT_MODULES.includes(x)` zwala whitelistę (nieznany moduł przechodzi); zamiana `return null`→`return {modules,blocks}` na pustej recepcie zwala 2 testy null — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **54 pliki / 453 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 453/453 · docs:check — exit 0.
 
 ## [0.385.0] — 🧪💳 Rygiel bramki monetyzacji (canUsePlugin) — paywall premium nie przecieka
 
