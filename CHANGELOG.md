@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-451-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.381.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-452-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.382.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.382.0] — 🧪✉️ Rygiel twardych limitów embeda (buildEmbed) — anty-odrzucenie wiadomości przez Discord
+
+- `[#452]` 🧪 **Test limitów rich-message** ([`richMessage.limits.test.ts`](bot/src/lib/richMessage.limits.test.ts), 6 testów) — uzupełnia [`richMessage.test.ts`](bot/src/lib/richMessage.test.ts) (który pokrył podstawienie/kolor/filtr pustych pól, ale NIE przycinanie długości). Przekroczenie **któregokolwiek** limitu Discorda = API odrzuca CAŁĄ wiadomość (custom-command / welcome / embed pada).
+  - **Zaryglowane limity:** `content ≤ 2000`, `title ≤ 256`, `description ≤ 4096`, `author.name ≤ 256`, `footer ≤ 2048`, `field.name ≤ 256`, `field.value ≤ 1024`, **max 25 pól**.
+  - **Kolejność: przycięcie PO podstawieniu zmiennych** — długi `{var}` po ekspansji też jest przycięty (`{x}` → 300×„A" → 256). Łapie regresję, gdyby ktoś przyciął szablon przed podstawieniem.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.slice(0,256)` z `title` zwala limit tytułu + test podstawienia; usunięcie `.slice(0,25)` z pól zwala kap 25 pól — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **50 plików / 429 testów**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 429/429 · docs:check — exit 0.
 
 ## [0.381.0] — ♻️🧪 DRY helpera cooldownu: 1 źródło prawdy (minutesSince) zamiast 3 kopii
 
