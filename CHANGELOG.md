@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-499-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.429.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-500-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.430.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.430.0] — 🎉🧪 #500 — Rygiel sugestii (suggestionsConfig · STATUS · suggestionModRow)
+
+- `[#500]` 🧪 **Test sugestii** ([`suggestions.test.ts`](bot/src/community/suggestions.test.ts), 8 testów) — `suggestionsConfig`/`STATUS`/`suggestionModRow` ([`community/suggestions.mts`](bot/src/community/suggestions.mts)). Jubileuszowy **500. update** 🎉. Config per-serwer z realnego SQLite; **0 zmian produkcyjnych** (wszystkie już eksportowane).
+  - **`suggestionsConfig`:** brak configu → DEFAULT (wyłączone, nieanonimowe); **RYGIEL merge** (częściowy config zachowuje domyślne pola); uszkodzony JSON → DEFAULT (fail-safe).
+  - **`STATUS` (katalog):** 4 statusy (`open`/`approved`/`denied`/`considered`), każdy z niepustym `label` i kolorem 24-bit `[0, 0xFFFFFF]`.
+  - **`suggestionModRow` + RYGIEL kontraktu:** 3 przyciski `sug:approve`/`sug:deny`/`sug:consider`, style Success/Danger/Secondary; **każda akcja customId mapuje się na istniejący status** (inaczej klik moderacji nic nie robi).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie spreadu `...DEFAULT` zwala merge; `sug:consider`→`sug:considerX` zwala customId + kontrakt akcja→status — po cofnięciu zielono.
+  - Suite: **98 plików / 752 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 752/752 · docs:check — exit 0.
 
 ## [0.429.0] — 🧪⚙️ Rygiel parserów env configu ekonomii (int · bool) — finite-check + strict bool
 
