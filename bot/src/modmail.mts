@@ -33,7 +33,7 @@ function modmailConfig(guildId: string): ModmailConfig {
 
 type Row = { id: string; user_id: string; channel_id: string };
 
-function relayBody(msg: Message): string {
+export function relayBody(msg: Message): string {
   const atts = [...msg.attachments.values()].map((a) => a.url).join('\n');
   return `${msg.content || ''}${atts ? `\n${atts}` : ''}`.trim() || '*(brak treści)*';
 }

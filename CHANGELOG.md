@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-493-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.423.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-494-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.424.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.424.0] — 🧪✉️ Rygiel relayu modmail (relayBody) — załącznik bez treści + placeholder pustej
+
+- `[#494]` 🧪 **Test `relayBody`** ([`modmail.test.ts`](bot/src/modmail.test.ts), 6 testów) — formater relayu modmail (DM ↔ kanał staff) ([`modmail.mts`](bot/src/modmail.mts)). **0 zmian produkcyjnych** (1× `export`).
+  - **Łączenie:** treść + URL-e załączników (każdy w nowej linii); wiele załączników → osobne linie; wynik przycięty (`trim`).
+  - **RYGIEL załącznika bez treści:** wiadomość z samym załącznikiem (pusta treść) → same URL-e — obrazek z DM **nie ginie** w relayu.
+  - **RYGIEL placeholder pustej:** brak treści i załączników (też sam whitespace) → `*(brak treści)*` — Discord nie wyśle pustej wiadomości.
+  - **Dowód, że gryzie (mutation-proof, osobno):** usunięcie `|| '*(brak treści)*'` zwala placeholder; usunięcie dołączania URL-i (`atts ? \n${atts}` → `''`) zwala 3 testy załączników — po cofnięciu zielono.
+  - Suite: **92 pliki / 713 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 713/713 · docs:check — exit 0.
 
 ## [0.423.0] — 🧪🎟️ Rygiel escapingu transkryptu ticketów (esc) — anty-XSS + kolejność encji
 
