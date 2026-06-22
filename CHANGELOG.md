@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-464-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.394.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-465-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.395.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.395.0] — ♻️🧪 DRY taga tygodnia (weekKey) — 1 źródło prawdy dla digestu + questów weekly
+
+- `[#465]` ♻️ **Koniec duplikacji wzoru tygodnia — dedup 2 → 1.** Tag `YYYY-Wnn` (UTC) był skopiowany w [`analytics/digest.mts`](bot/src/analytics/digest.mts) (`weekTag`, dedup digestu) i [`community/quests.mts`](bot/src/community/quests.mts) (`weekKey`, reset questów weekly). Rozjazd definicji „tygodnia" = digest wysłany dwa razy / quest zresetowany w złym tygodniu.
+  - **Jedyne źródło prawdy:** nowy [`lib/weekKey.mts`](bot/src/lib/weekKey.mts) — `weekKey(now: Date)`; oba moduły go importują (digest wprost, quests przez cienki wrapper `new Date()`). Usunięto 2 lokalne kopie (−8 linii netto, **0 zmian zachowania** — wzór bajt-w-bajt identyczny, potwierdzone typecheck+suite).
+  - 🧪 **Rygiel `weekKey`** ([`weekKey.test.ts`](bot/src/lib/weekKey.test.ts), 4 testy): 1 stycznia → `W0`, granica 7. dnia → `W1`, koniec roku → `W52`, reset `W0` w nowym roku, liczone w UTC (`2026-06-15` → `W23`). Mutacja `/7`→`/8` zwala numerację tygodnia; `/86_400_000`→`/3_600_000` zwala dzień roku — po cofnięciu zielono.
+  - Suite: **63 pliki / 512 testów**. **Bramki:** `pnpm lint` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 512/512 · docs:check — exit 0.
 
 ## [0.394.0] — 🧪🔗 Rygiel budowy URL OAuth (authorizeUrl) — scope `guilds` tylko przy self-serve
 

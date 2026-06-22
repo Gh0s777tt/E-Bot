@@ -5,6 +5,7 @@ import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
+import { weekKey } from '../lib/weekKey.mts';
 
 type Cfg = { on: boolean; channelId: string };
 // Etap K — config per-serwer: świeży odczyt (poller tygodniowy), fallback global.
@@ -20,16 +21,11 @@ function cfg(guildId: string): Cfg {
 
 type Row = { messages?: number; joins?: number; leaves?: number; voice_minutes?: number };
 
-function weekTag(now: Date): string {
-  const doy = Math.floor((now.getTime() - Date.UTC(now.getUTCFullYear(), 0, 1)) / 86_400_000);
-  return `${now.getUTCFullYear()}-W${Math.floor(doy / 7)}`;
-}
-
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const now = new Date();
   if (now.getUTCDay() !== 1) return; // tylko poniedziałek
-  const tag = weekTag(now);
+  const tag = weekKey(now);
   const since = new Date(now.getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
 
   // ⭐ Reputacja jest GLOBALNA (feature /rep, klucz 'reputation' bot-wide) — wspólna dla wszystkich.

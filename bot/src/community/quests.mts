@@ -17,6 +17,7 @@ import {
 import { getUser, saveUser } from '../economy/store.mts';
 import { cloudInsert, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { log } from '../lib/log.mts';
+import { weekKey as weekKeyUtc } from '../lib/weekKey.mts';
 
 export type QuestMetric = 'messages' | 'work' | 'games' | 'gamesWon' | 'invites';
 type Period = 'daily' | 'weekly';
@@ -88,12 +89,7 @@ export const QUESTS: Quest[] = [
 ];
 
 const dayKey = (): string => new Date().toISOString().slice(0, 10);
-function weekKey(): string {
-  const now = new Date();
-  const start = Date.UTC(now.getUTCFullYear(), 0, 1);
-  const doy = Math.floor((now.getTime() - start) / 86_400_000);
-  return `${now.getUTCFullYear()}-W${Math.floor(doy / 7)}`;
-}
+const weekKey = (): string => weekKeyUtc(new Date()); // wspólny wzór tygodnia (lib/weekKey)
 const seasonKey = (): string => new Date().toISOString().slice(0, 7); // YYYY-MM
 
 type Counters = {
