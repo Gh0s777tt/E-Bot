@@ -17,6 +17,13 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+// Dzienny przyrost odsetek bankowych: floor(bank · pct / 100). FLOOR — brak ułamkowej waluty;
+// mnożenie PRZED dzieleniem — inaczej grosze giną na zaokrągleniu. Saldo, dla którego daje <1, nie
+// dostaje nic (caller filtruje `gain <= 0`).
+export function interestGain(bank: number, pct: number): number {
+  return Math.floor((bank * pct) / 100);
+}
+
 async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const tag = today();
@@ -33,7 +40,7 @@ async function tick(client: Client): Promise<void> {
       `select=user_id,bank&guild_id=eq.${guild.id}&bank=gt.0`,
     ).catch(() => [] as { user_id: string; bank: number }[]);
     for (const r of rows) {
-      const gain = Math.floor((r.bank * pct) / 100);
+      const gain = interestGain(r.bank, pct);
       if (gain <= 0) continue;
       await cloudUpsert(
         'economy_users',

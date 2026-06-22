@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-509-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.439.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-510-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.440.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.440.0] 🎉 — 🧪🏦 Rygiel matematyki odsetek bankowych (interestGain) — floor + kolejność działań
+
+- `[#510]` 🧪 **Test `interestGain`** ([`interest.test.ts`](bot/src/economy/interest.test.ts), 5 testów) — dzienny przyrost odsetek bankowych wyłoniony **behavior-preserving** z `tick` ([`economy/interest.mts`](bot/src/economy/interest.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania). Pasywny dochód doliczany **codziennie każdej osobie z saldem w banku** — błąd = zła wypłata całemu serwerowi.
+  - **RYGIEL `floor`** — przyrost = `floor(bank · pct / 100)`; bez ułamkowej waluty (`199 @ 1%` = `1`, nie `1.99`/`2`), inaczej saldo dryfuje na groszach.
+  - **RYGIEL kolejności działań** — mnożenie **przed** dzieleniem (`150 @ 2%` = `3`; `floor(bank/100)·pct` dałoby `2` — grosze giną na przedwczesnym zaokrągleniu).
+  - **Sub-grosz → `0`** — `50 @ 1%` = `0` (caller pomija `gain <= 0`, więc takie salda nie dostają nic) + proporcjonalność (`10000 @ 3%` = `300`).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `Math.floor` zwala testy floor + sub-grosz; `floor(bank/100)·pct` (zła kolejność) zwala test kolejności — po cofnięciu zielono.
+  - Suite: **108 plików / 809 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 809/809 · docs:check — exit 0.
 
 ## [0.439.0] — 🧪📈 Rygiel upsertu snapshotu wzrostu serwera (pushSnap) — bez duplikatu dnia + cap 90
 
