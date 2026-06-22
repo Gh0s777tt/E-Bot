@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-512-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.442.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-513-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.443.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.443.0] — 🧪🎂 Rygiel walidacji daty urodzin (isValidBirthday) — dni w miesiącu + luty 29
+
+- `[#513]` 🧪 **Test `isValidBirthday`** ([`birthday.test.ts`](bot/src/commands/birthday.test.ts), 5 testów) — walidacja daty `/birthday set` wyłoniona **behavior-preserving** z `execute` ([`commands/birthday.mts`](bot/src/commands/birthday.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL liczby dni w miesiącu** — dzień musi mieścić się w danym miesiącu; `31 kwietnia/czerwca/września/listopada` odrzucone, `30` w nich OK (granica); `31 stycznia/grudnia` OK.
+  - **RYGIEL luty bez roku** — `29 lutego` przyjęte (urodziny nie patrzą na rok przestępny), `30 lutego` odrzucone.
+  - **Zakresy** — miesiąc spoza `1–12` → `false`, dzień `< 1` → `false`. Regresja = przyjęcie nieistniejącej daty → poller urodzinowy nigdy jej nie ogłosi.
+  - **Dowód, że gryzie (mutation-proof):** `MONTH_DAYS[month-1]`→`[month]` (off-by-one) zwala 3 testy; `<=`→`<` zwala dni graniczne (31 stycznia, 30 w 30-dniowych, 29 lutego) — po cofnięciu zielono.
+  - Suite: **111 plików / 826 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 826/826 · docs:check — exit 0.
 
 ## [0.442.0] — 🧪🧮 Rygiel bezpiecznego kalkulatora /math (safeEval) — bariera anty-injection
 
