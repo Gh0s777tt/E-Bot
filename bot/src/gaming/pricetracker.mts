@@ -19,7 +19,7 @@ function cfgFor(guildId: string): Cfg {
 
 const BASE = 'https://api.isthereanydeal.com';
 type Money = { amount: number; currency: string };
-type Deal = {
+export type Deal = {
   shop?: { name?: string };
   price?: Money;
   regular?: Money;
@@ -27,6 +27,14 @@ type Deal = {
   url?: string;
 };
 type PriceRow = { id: string; historyLow?: { all?: Money }; deals?: Deal[] };
+
+// Wybór deala do ogłoszenia: kandydaci to tylko REALNE promocje (`cut > 0`) z CENĄ; spośród nich
+// NAJTAŃSZY wg `price.amount` (nie wg największego %!). Brak kandydatów → undefined. Remis → pierwszy.
+export function bestDeal(deals: Deal[]): Deal | undefined {
+  const onSale = deals.filter((d) => (d.cut ?? 0) > 0 && d.price);
+  if (!onSale.length) return undefined;
+  return onSale.reduce((a, b) => ((a.price?.amount ?? 1e9) <= (b.price?.amount ?? 1e9) ? a : b));
+}
 
 async function lookupId(key: string, title: string): Promise<string | null> {
   const r = await fetch(`${BASE}/games/lookup/v1?key=${key}&title=${encodeURIComponent(title)}`, {
@@ -80,13 +88,9 @@ async function tickForGuild(guild: Guild, key: string): Promise<void> {
 
   let changed = false;
   for (const row of rows) {
-    const onSale = (row.deals ?? []).filter((d) => (d.cut ?? 0) > 0 && d.price);
-    if (!onSale.length) continue;
-    const best = onSale.reduce((a, b) =>
-      (a.price?.amount ?? 1e9) <= (b.price?.amount ?? 1e9) ? a : b,
-    );
+    const best = bestDeal(row.deals ?? []);
+    if (!best?.price) continue;
     const price = best.price;
-    if (!price) continue;
     const dedupKey = `${row.id}:${best.cut}:${Math.round(price.amount * 100)}`;
     if (seen.includes(dedupKey)) continue;
 

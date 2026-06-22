@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-517-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.447.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-518-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.448.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.448.0] — 🧪🏷️ Rygiel wyboru deala promocji (bestDeal) — najtańszy + filtr realnej obniżki
+
+- `[#518]` 🧪 **Test `bestDeal`** ([`pricetracker.bestdeal.test.ts`](bot/src/gaming/pricetracker.bestdeal.test.ts), 5 testów) — wybór deala do ogłoszenia promocji wyłoniony **behavior-preserving** z `tickForGuild` ([`gaming/pricetracker.mts`](bot/src/gaming/pricetracker.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (typu `Deal` + funkcji; 0 zmian zachowania).
+  - **RYGIEL filtra realnej obniżki** — kandydatami tylko deale z `cut > 0` **oraz** z ceną; bez tego bot ogłosiłby pełną cenę (`cut 0`) jako „promocję", a deal bez ceny by się prześlizgnął.
+  - **RYGIEL najtańszego** — spośród kandydatów wybiera **najniższą `price.amount`**, a **nie** największy % rabatu (−90% za 50 zł przegrywa z −50% za 10 zł); remis ceny → pierwszy kandydat.
+  - **Brak realnych promocji** → `undefined` (pusta lista / same `cut 0` / same bez ceny).
+  - **Dowód, że gryzie (mutation-proof):** `cut > 0`→`cut >= 0` wpuszcza deale bez obniżki (zwala 2 testy); odwrócenie reduktora `<=`→`>=` wybiera najdroższy (zwala test najtańszego) — po cofnięciu zielono.
+  - Suite: **115 plików / 854 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 854/854 · docs:check — exit 0.
 
 ## [0.447.0] — 🧪🤖 Rygiel weryfikacji captchy (checkCaptcha) — kod jednorazowy + termin ważności
 
