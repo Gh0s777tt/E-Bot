@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-473-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.403.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-474-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.404.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.404.0] — 🧪❓ Rygiel /trivia — integralność banku pytań (poprawny indeks + kategorie)
+
+- `[#474]` 🧪 **Test `/trivia`** ([`trivia.test.ts`](bot/src/commands/trivia.test.ts), 10 testów) — bank pytań `BANK` + losowanie `pick` + rząd przycisków `row` ([`commands/trivia.mts`](bot/src/commands/trivia.mts)). Bank był NIEpokryty, a zła pozycja = **pytanie niewygrywalne**.
+  - **RYGIEL integralności banku:** każde pytanie ma dokładnie **4 odpowiedzi**, poprawny indeks **`c ∈ [0,3]`** (poza zakresem → przycisk poprawnej odpowiedzi nie istnieje = pytanie nie do wygrania), pytanie i każda odpowiedź niepuste.
+  - **RYGIEL spójności kategorii:** każda z 5 kategorii oferowanych w `choices` komendy (`ogolna`/`gaming`/`film`/`nauka`/`polska`) ma **≥1 pytanie** — inaczej user wybiera „Nauka", a `pick` daje (fallback) losowe pytanie z innej kategorii.
+  - **`pick`:** `pick(kat)` zawsze zwraca pytanie tej kategorii (sweep 40×), `pick(null)` → z `BANK`, `pick(nieznana)` → fallback do `BANK` (poprawne pytanie, nie `undefined`). **`row`:** 4 przyciski `customId triv:0..3`, poprawna → styl Success.
+  - **Dowód, że gryzie (mutation-proof):** ustawienie `c: 4` (poza zakresem) zwala rygiel indeksu; `q.cat === cat`→`!== cat` w `pick` zwala test kategorii — po cofnięciu zielono. Zmiana produkcyjna = 4× `export` (`Q`/`BANK`/`pick`/`row`), **0 zmian zachowania**.
+  - Suite: **72 pliki / 582 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 582/582 · docs:check — exit 0.
 
 ## [0.403.0] — 🧪🔊 Rygiel kontroli kanału tymczasowego (canControlVoice) — właściciel lub staff
 

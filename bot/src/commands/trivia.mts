@@ -19,10 +19,10 @@ const ACCENT = 0xe50914;
 const REWARD = 50;
 const LABELS = ['A', 'B', 'C', 'D'];
 
-type Q = { q: string; a: [string, string, string, string]; c: number; cat: string };
+export type Q = { q: string; a: [string, string, string, string]; c: number; cat: string };
 
 // Banki pytań PL (kategorie: ogolna, gaming, film, nauka, polska).
-const BANK: Q[] = [
+export const BANK: Q[] = [
   { cat: 'ogolna', q: 'Ile kontynentów jest na Ziemi?', a: ['5', '6', '7', '8'], c: 2 },
   {
     cat: 'ogolna',
@@ -177,13 +177,13 @@ export const data = new SlashCommandBuilder()
       ),
   );
 
-function pick(cat: string | null): Q {
+export function pick(cat: string | null): Q {
   const pool = cat ? BANK.filter((q) => q.cat === cat) : BANK;
   const src = pool.length ? pool : BANK;
   return src[Math.floor(Math.random() * src.length)];
 }
 
-function row(disabled: boolean, correct = -1): ActionRowBuilder<ButtonBuilder> {
+export function row(disabled: boolean, correct = -1): ActionRowBuilder<ButtonBuilder> {
   const r = new ActionRowBuilder<ButtonBuilder>();
   for (let i = 0; i < 4; i++) {
     r.addComponents(
