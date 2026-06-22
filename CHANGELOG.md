@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-476-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.406.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-477-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.407.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.407.0] — 🧪🔗 Rygiel linku zaproszenia bota (botInviteUrl) — scope + permissions (>600 testów 🎉)
+
+- `[#477]` 🧪 **Test `botInviteUrl`** ([`invite.test.ts`](dashboard/lib/invite.test.ts), 5 testów) — link OAuth „dodaj bota" ([`lib/invite.ts`](dashboard/lib/invite.ts)). Czysty (env-driven), **0 zmian produkcyjnych** (już eksportowany). Env sterowany z przywróceniem.
+  - **Fail-safe braku clientId:** brak `DISCORD_CLIENT_ID` → **pusty string** (panel nie pokaże zepsutego linku „dodaj bota").
+  - **RYGIEL scope:** zawsze `bot` + `applications.commands` (inaczej slash-komendy się nie zarejestrują). **RYGIEL permissions:** domyślnie `8` (Administrator) spójnie z onboardingiem; env `DISCORD_BOT_PERMISSIONS` honorowane i przycięte (least-privilege bitfield).
+  - Struktura URL: endpoint `https://discord.com/oauth2/authorize`, `client_id` z env, kodowanie `URLSearchParams`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie guardu `if (!clientId) return ''` zwala test pustego linku; `|| '8'`→`|| '0'` zwala test domyślnych uprawnień — po cofnięciu zielono.
+  - Suite: **75 plików / 603 testy** 🎉 (próg 600 przekroczony). **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 603/603 · docs:check — exit 0.
 
 ## [0.406.0] — 🧪🕐 Rygiel formatera czasu względnego (relTime) — kubełki + clamp przyszłości
 
