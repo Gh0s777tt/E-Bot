@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-511-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.441.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-512-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.442.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.442.0] — 🧪🧮 Rygiel bezpiecznego kalkulatora /math (safeEval) — bariera anty-injection
+
+- `[#512]` 🧪 **Test `safeEval`** ([`math.test.ts`](bot/src/commands/math.test.ts), 6 testów) — bezpieczna ewaluacja wyrażenia `/math` wyłoniona **behavior-preserving** z `execute` ([`commands/math.mts`](bot/src/commands/math.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania). Komenda używa `new Function`, więc to **granica zaufania z wejściem użytkownika**.
+  - **RYGIEL anti-injection** — twardy whitelist `^[0-9+\-*/().%\s]+$` odrzuca wszystko z literami/`[]{},=>` (`process`, `alert(1)`, `(()=>5)()`, `[5][0]`, `(1,2,3)` → `null` **przed** ewaluacją) — bez tego liczbowe-ale-groźne konstrukcje sięgnęłyby globali / odpaliły funkcję = RCE.
+  - **RYGIEL skończoności** — `1/0`→Infinity i `0/0`→NaN → `null` (nie „Infinity"/„NaN" w odpowiedzi bota).
+  - **Normalizacja** `×÷−`→`*/-` + **zaokrąglenie** tnące szum float (`0.1+0.2`→`0.3`); puste/białe znaki → `null`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie whitelisty regex zwala test anti-injection (liczbowe konstrukcje przechodzą); usunięcie `Number.isFinite` zwala test skończoności (`1/0`→„Infinity") — po cofnięciu zielono.
+  - Suite: **110 plików / 821 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 821/821 · docs:check — exit 0.
 
 ## [0.441.0] — 🧪📈 Rygiel silnika cen giełdy (priceAt · changePct) — determinizm + klamry dodatniości
 
