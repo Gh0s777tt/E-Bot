@@ -27,7 +27,7 @@ type LogItem = { label: string; ok: boolean; detail?: string; id?: string };
 
 let lastId = '';
 
-function findChannel(guild: Guild, name: string, type: ChannelType) {
+export function findChannel(guild: Guild, name: string, type: ChannelType) {
   const lc = name.toLowerCase();
   return guild.channels.cache.find((c) => c.type === type && c.name.toLowerCase() === lc) ?? null;
 }
@@ -112,7 +112,7 @@ async function execute(guild: Guild, plan: Plan): Promise<LogItem[]> {
   return log;
 }
 
-function findId(log: LogItem[], label: string): string | undefined {
+export function findId(log: LogItem[], label: string): string | undefined {
   return log.find((l) => l.label === label && l.ok && l.id)?.id;
 }
 

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-500-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.430.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-501-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.431.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.431.0] — 🧪🏗️ Rygiel silnika Architekta (findChannel · findId) — idempotencja + referencja po id
+
+- `[#501]` 🧪 **Test silnika provisioningu** ([`provision.test.ts`](bot/src/setup/provision.test.ts), 7 testów) — `findChannel`/`findId` ([`setup/provision.mts`](bot/src/setup/provision.mts)). **0 zmian produkcyjnych** (2× `export`).
+  - **RYGIEL `findChannel` (idempotencja):** dopasowanie po nazwie (case-insensitive) **ORAZ** typie — kategoria i kanał tekstowy o tej samej nazwie to różne byty (bez typu provisioning pominąłby tworzenie / nadpisał zły kanał). Brak → `null`.
+  - **RYGIEL `findId` (referencja po id):** zwraca id **tylko** wpisu udanego (`ok`) **z** `id` — wpis nieudany (`ok:false`) → `undefined` (inaczej overwrite uprawnień wskazywałby nieutworzoną rolę); bez `id` → `undefined`; pierwszy pasujący wygrywa.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie warunku typu w `findChannel` zwala test „inny typ → null"; usunięcie `l.ok` w `findId` zwala test wpisu nieudanego — po cofnięciu zielono.
+  - Suite: **99 plików / 759 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 759/759 · docs:check — exit 0.
 
 ## [0.430.0] — 🎉🧪 #500 — Rygiel sugestii (suggestionsConfig · STATUS · suggestionModRow)
 
