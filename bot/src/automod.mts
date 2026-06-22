@@ -81,7 +81,7 @@ function cfgFor(guildId: string): AutomodCached {
 }
 
 // Anti-caps: udział WIELKICH liter ≥ próg, przy min. długości (ignoruje krótkie / bez liter).
-function capsViolation(content: string, c: NonNullable<AutomodConfig['antiCaps']>): boolean {
+export function capsViolation(content: string, c: NonNullable<AutomodConfig['antiCaps']>): boolean {
   const letters = content.match(/\p{L}/gu)?.length ?? 0;
   if (letters < Math.max(1, c.minLength)) return false;
   const upper = content.match(/\p{Lu}/gu)?.length ?? 0;
@@ -89,7 +89,7 @@ function capsViolation(content: string, c: NonNullable<AutomodConfig['antiCaps']
 }
 
 // Gdy blockLinks: przepuść, jeśli wszystkie linki są w whiteliscie domen (allowedLinks).
-function linkNotAllowed(content: string, cfg: AutomodConfig): boolean {
+export function linkNotAllowed(content: string, cfg: AutomodConfig): boolean {
   const allowed = (cfg.allowedLinks ?? []).map((d) => d.toLowerCase()).filter(Boolean);
   if (!allowed.length) return true;
   const urls = content.match(/https?:\/\/[^\s]+/gi) ?? [];
@@ -110,7 +110,7 @@ const LEET: Record<string, string> = {
   $: 's',
   '7': 't',
 };
-function normalizeText(s: string): string {
+export function normalizeText(s: string): string {
   return s
     .toLowerCase()
     .normalize('NFKD')

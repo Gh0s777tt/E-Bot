@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-485-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.415.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-486-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.416.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.416.0] — 🧪🛡️ Rygiel heurystyk automoda (normalizeText · capsViolation · linkNotAllowed)
+
+- `[#486]` 🧪 **Test heurystyk automoda** ([`automod.test.ts`](bot/src/automod.test.ts), 11 testów) — `normalizeText`/`capsViolation`/`linkNotAllowed` ([`automod.mts`](bot/src/automod.mts)), uruchamiane na KAŻDEJ wiadomości. **0 zmian produkcyjnych** (3× `export`). Regresja = spam/obejścia przechodzą albo legalne wiadomości fałszywie karane.
+  - **RYGIEL anty-bypass (`normalizeText`):** lowercase + leet (`3→e`/`5→s`/`0→o`/`@→o`/`1→i`/`4→a`) + zdjęcie diakrytyków (NFKD) i znaków zero-width/bidi (`\p{Cf}`) + kolaps powtórzeń 3+→2. Równoważność: `H3jt`/`héjt`/`h‌ejt`/`HEJT` → ta sama forma co `hejt` (obejścia zakazanych słów nie działają).
+  - **RYGIEL progu caps (`≥`):** dokładnie na progu = naruszenie (7/10 liter wielkich, próg 70% → tak; 6/10 → nie); poniżej `minLength` liter → false; liczy tylko litery (ignoruje symbole/spacje).
+  - **RYGIEL whitelisty linków (`linkNotAllowed`):** pusta whitelist → blok wszystkiego; **choć jeden** link spoza listy → `true` (nie da się przemycić obok dozwolonego); dopasowanie domen case-insensitive.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie leet-replace zwala anty-bypass; `≥`→`>` zwala próg na granicy; odwrócenie `!allowed.some` zwala whitelist — po cofnięciu zielono.
+  - Suite: **84 pliki / 661 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 661/661 · docs:check — exit 0.
 
 ## [0.415.0] — 🧪🖼️ Rygiel escapingu memegen (/meme → esc) — kolejność operacji + placeholder
 
