@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-440-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.370.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-441-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.371.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.371.0] — 🧪🐹 Rygiel ekonomii petów (giftValue · kap poziomu · katalog) — domknięcie eko 2.0
+
+- `[#441]` 🧪 **Test ekonomii petów** ([`pets-gift.test.ts`](bot/src/economy/pets-gift.test.ts), 9 testów) — części dotąd NIEpokryte przez [`economy-math.test.ts`](bot/src/economy/economy-math.test.ts) (który zaryglował `bar`/`fullness`/`petLevel`/`moodKey`/`xpIntoLevel`).
+  - **`giftValue` — źródło dochodu pet** (`giftBase × poziom × współczynnik sytości`): pełna sytość (factor 1.0) = `giftBase × poziom` (hamster lvl1 = 30, dragon = 200), głód maksymalny (`last_fed=null` → factor 0.2 → 6), skaluje poziomem (xp 250 → lvl3 → 90) i sytością (pełny > głodny), zawsze ≥ 1 (klamra). Sytość zależy od `Date.now` → fałszywy zegar `vi` ⇒ w pełni deterministyczne.
+  - **`petLevel` — kap `MAX_LEVEL = 50`** (nieobjęty wcześniej): ogromne XP nie przebija 50 (5000→50, próg 4900→50).
+  - **Katalog `SPECIES`** (unikalne id, `adopt`/`giftBase` dodatnie) + **`findSpecies`** (case-insensitive + trim, nieznane → undefined).
+  - **Dowód, że gryzie (mutation-proof):** factor `0.2`→`0.5` zwala 3 testy giftValue; usunięcie `Math.min(MAX_LEVEL, …)` zwala test kapu — po cofnięciu zielono, **0 zmian produkcyjnych**.
+  - Suite: **39 plików / 362 testy**. **Bramki:** biome `check` · `pnpm typecheck` (4 pakiety) · `pnpm test` 362/362 · docs:check — exit 0.
 
 ## [0.370.0] — 🧪🌐 Rygiel runtime'u i18n (t) — interpolacja {placeholder} + łańcuch fallback
 
