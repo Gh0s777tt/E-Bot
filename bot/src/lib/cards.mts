@@ -29,7 +29,9 @@ export const CARD_FONTS = ['Poppins', 'Anton', 'Bebas Neue', 'Pacifico', 'Lobste
 // Karty rysowane czcionkami TYLKO-ŁACIŃSKIMI (Poppins/Anton/…) — brak glifów CJK/cyrylicy/arabskiego.
 // Dla języków o innym piśmie etykiety renderujemy po angielsku (Latin-safe, bez „tofu" / kwadracików).
 const LATIN_LOCALES = new Set<Locale>(['pl', 'en', 'de', 'es', 'it', 'fr', 'pt', 'id']);
-function cardLocale(l: Locale | undefined): Locale {
+// Etykiety karty renderujemy w danym języku TYLKO jeśli ma pismo łacińskie; inaczej → angielski.
+// Bez tego CJK/cyrylica/arabski wyszłyby jako „tofu" (□□□) w czcionkach łacińskich. `undefined` → 'en'.
+export function cardLocale(l: Locale | undefined): Locale {
   return l && LATIN_LOCALES.has(l) ? l : 'en';
 }
 

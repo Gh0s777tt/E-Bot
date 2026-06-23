@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-523-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.453.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-524-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.454.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.454.0] — 🧪🖼️ Rygiel języka etykiet karty rangi (cardLocale) — Latin-safe (anty-„tofu")
+
+- `[#524]` 🧪 **Test `cardLocale`** ([`cards.test.ts`](bot/src/lib/cards.test.ts), 3 testy) — dobór języka etykiet karty rangi ([`lib/cards.mts`](bot/src/lib/cards.mts)). Karty rysowane są czcionkami **tylko-łacińskimi** (Poppins/Anton/…). Zmiana produkcyjna = 1× `export` (0 zmian zachowania).
+  - **RYGIEL anty-„tofu"** — języki o piśmie nie-łacińskim (`zh`/`ko`/`ru`/`uk`/`ja`/`ar`) **muszą** spaść na angielski; inaczej etykiety wyszłyby jako kwadraciki „tofu" (□□□) w czcionce bez tych glifów.
+  - **Łacińskie bez zmian** — `pl`/`en`/`de`/`es`/`it`/`fr`/`pt`/`id` renderowane wprost; `undefined` → `en` (bezpieczny fallback).
+  - **Pełny podział 14 języków** sprawdzony zgodnie z CLAUDE.md (8 łacińskich + 6 nie-łacińskich).
+  - **Dowód, że gryzie (mutation-proof):** odwrócenie warunku przynależności (`has(l)`→`!has(l)`) jednocześnie przepuszcza nie-łacińskie i zrzuca łacińskie na `en` — zwala oba kierunki; po cofnięciu zielono.
+  - Suite: **121 plików / 879 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 879/879 · docs:check — exit 0.
 
 ## [0.453.0] — 🧪📡 Rygiel parsera ustawień powiadomień LIVE (settingsFromMap) — koercja bool + domyślne
 
