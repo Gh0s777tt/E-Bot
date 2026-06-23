@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-528-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.458.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-529-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.459.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.459.0] 🎉 — 🧪🟣 Rygiel parsera transmisji LIVE Twitch (parseTwitchLive) — placeholdery miniatury + nazwa
+
+- `[#529]` 🧪 **Test `parseTwitchLive`** ([`twitch.test.ts`](bot/src/live/twitch.test.ts), 5 testów) — parser odpowiedzi Twitch `helix/streams` → `LiveStatus`, wyłoniony **behavior-preserving** z `getTwitchLive` ([`live/twitch.mts`](bot/src/live/twitch.mts)). **Domyka czwórkę** parserów live (YouTube/Kick/Rumble/Twitch — #526–#529). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL placeholderów miniatury** — thumbnail z API ma `{width}`/`{height}`, **muszą** być podmienione na `1280`×`720`; inaczej URL miniatury jest niepoprawny (404). Test sprawdza brak `{` w wyniku.
+  - **RYGIEL nazwy kanału** — `user_name` z API ma pierwszeństwo, fallback na `login` (gdy API nie zwraca nazwy).
+  - **Decyzja LIVE + fail-safe** — `data[0]` decyduje; brak/garbage → `live:false` bez wyjątku; mapowanie `title`/`game`/`viewers`/`url`.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `.replace('{width}', …)` zostawia placeholder w URL (zwala test miniatury); `user_name ?? login`→`login` ignoruje nazwę z API (zwala test nazwy) — po cofnięciu zielono.
+  - Suite: **126 plików / 901 test (przekroczono 900)**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 901/901 · docs:check — exit 0.
 
 ## [0.458.0] — 🧪🎬 Rygiel parsera transmisji LIVE Rumble (parseRumbleLive) — fallbacki widzów/URL/miniatury
 
