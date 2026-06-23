@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-521-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.451.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-522-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.452.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.452.0] — 🧪🛡️ Rygiel scalania configu anti-nuke panelu (mergeAnti) — bez wstrzyknięcia obcego progu
+
+- `[#522]` 🧪 **Test `mergeAnti`** ([`data.mergeanti.test.ts`](dashboard/lib/data.mergeanti.test.ts), 6 testów) — scalanie zapisanego configu anti-nuke na świeżym klonie `ANTINUKE_DEFAULT` ([`dashboard/lib/data.ts`](dashboard/lib/data.ts)). Panel zapisuje config, który bot czyta do obrony przed raidem/nuke. **0 zmian produkcyjnych** (1× `export`). Lustro bota (`mergeConfig`, #349), inna implementacja.
+  - **RYGIEL bez wstrzyknięcia obcego progu** — pętla iteruje **tylko** `ANTINUKE_PROTECTIONS` (9 znanych); nieznany klucz w zapisie (`evilProtection`) jest ignorowany (kopia ma dokładnie 9 progów).
+  - **RYGIEL płytkiego scalania progu** — brakujące pole zostaje domyślne (`channelDelete: {count: 99}` → `enabled: true`, `windowSec: 10` zachowane); whitelisty domyślnie `[]`.
+  - **RYGIEL izolacji klonu** — `structuredClone` chroni `ANTINUKE_DEFAULT` przed mutacją wyniku (bez tego dwa wczytania współdzieliłyby progi).
+  - **Dowód, że gryzie (mutation-proof):** zamiana scalania na podmianę (`= stored.protections[k]`) gubi domyślne pola (zwala próg); `structuredClone`→`{...DEFAULT}` (płytko) przecieka mutację do DEFAULT — po cofnięciu zielono.
+  - Suite: **119 plików / 873 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 873/873 · docs:check — exit 0.
 
 ## [0.451.0] — 🧪🎟️ Rygiel agregacji statystyk ticketów (ticketStats) — dokładny status, bez przecieku
 

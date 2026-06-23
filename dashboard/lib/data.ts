@@ -509,7 +509,10 @@ export const ANTINUKE_DEFAULT: AntinukeConfig = {
   },
 };
 
-function mergeAnti(stored: Partial<AntinukeConfig>): AntinukeConfig {
+// Scala zapisany config anti-nuke na świeżym klonie DEFAULT. KLUCZ: iteruje TYLKO znane progi
+// (ANTINUKE_PROTECTIONS) — zapis nie wstrzyknie obcego progu; każdy próg scalany PŁYTKO nad domyślnym
+// (brak pola w zapisie → zostaje domyślne, np. `windowSec`). Klon izoluje DEFAULT (bez przecieku).
+export function mergeAnti(stored: Partial<AntinukeConfig>): AntinukeConfig {
   const base = structuredClone(ANTINUKE_DEFAULT);
   base.enabled = stored.enabled ?? base.enabled;
   base.logChannelId = stored.logChannelId ?? base.logChannelId;
