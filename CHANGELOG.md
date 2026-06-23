@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-519-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.449.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-520-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.450.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.450.0] 🎉 — 🧪🏗️ Rygiel budowy planu Architekta (buildPlan) — bloki → role/kategorie/kanały
+
+- `[#520]` 🧪 **Test `buildPlan`** ([`setup.buildplan.test.ts`](dashboard/lib/setup.buildplan.test.ts), 6 testów) — silnik zamieniający wybrane bloki setupu na konkretny plan prowizjonowania, który trafia do bota i **TWORZY byty na serwerze** ([`dashboard/lib/setup.ts`](dashboard/lib/setup.ts)). **0 zmian produkcyjnych** (już eksportowane). Dopełnia `encode`/`decodeRecipe` (#386).
+  - **RYGIEL typu kanału** — blok `announce` daje kanał typu **`announcement`**, nie zwykły tekst (inaczej ogłoszenia bez „obserwowania"/cross-postu).
+  - **RYGIEL liczników** — blok `counters` tworzy kategorię `📊 Statystyki` + 2 kanały **głosowe** z `lockSend` i wspólnym `categoryKey: 'stats'` (bez `lockSend` każdy mógłby pisać w kanale-liczniku).
+  - **Mapowanie bloków** — `welcome`/`logs`/`tickets` → kanały tekstowe o właściwych nazwach; `levelRoles` → 3 role wyróżnione (`hoist`), `muted` → rola zwykła; **brak bloków → pusty plan** (nic nie tworzymy); `id` zachowane; wiele bloków składa się w jeden plan.
+  - **Dowód, że gryzie (mutation-proof):** `kind: 'announcement'`→`'text'` zwala test typu kanału; usunięcie `lockSend: true` z kanału-licznika zwala test liczników — po cofnięciu zielono.
+  - Suite: **117 plików / 864 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety, w tym dashboard `tsc`) · `pnpm test` 864/864 · docs:check — exit 0.
 
 ## [0.449.0] — 🧪🔢 Rygiel nazwy kanału-licznika (counterName) — limit 100 + format pl-PL
 
