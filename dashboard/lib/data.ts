@@ -128,7 +128,10 @@ export async function getStats() {
   };
 }
 
-function settingsFromMap(map: Map<string, string>): Settings {
+// Parser ustawień powiadomień LIVE z mapy klucz→wartość (settings). Bool: tylko `'1'`/`'true'` → true
+// (inne/puste → false); brak klucza → DOMYŚLNA wartość pola (uwaga: twitch/kick/rumble domyślnie ON,
+// youtube domyślnie OFF). Stringi: brak → domyślny szablon/etykieta.
+export function settingsFromMap(map: Map<string, string>): Settings {
   const b = (k: string, d: boolean) => {
     const v = map.get(k);
     return v === undefined ? d : v === '1' || v === 'true';

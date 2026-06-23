@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-522-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.452.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-523-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.453.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.453.0] — 🧪📡 Rygiel parsera ustawień powiadomień LIVE (settingsFromMap) — koercja bool + domyślne
+
+- `[#523]` 🧪 **Test `settingsFromMap`** ([`data.settings.test.ts`](dashboard/lib/data.settings.test.ts), 3 testy) — parser ustawień powiadomień LIVE z mapy klucz→wartość tabeli `settings` ([`dashboard/lib/data.ts`](dashboard/lib/data.ts)). **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL koercji bool** — tylko `'1'`/`'true'` → `true`; `'0'`/`'false'`/`''`/`'yes'`/`'TRUE'` → `false` (ścisłe, case-sensitive).
+  - **RYGIEL domyślnych przełączników** — brak klucza → **domyślna wartość pola**, a domyślne **różnią się**: `twitch`/`kick`/`rumble` ON, `youtube` OFF (regresja = ciche włączenie YouTube lub wyłączenie Twitcha).
+  - **Stringi** — brak → domyślny szablon/etykieta; obecny → wartość.
+  - **Dowód, że gryzie (mutation-proof):** usunięcie gałęzi `|| v === 'true'` zwala test koercji (`'true'`→false); zmiana domyślnej YouTube `false`→`true` zwala test domyślnych — po cofnięciu zielono.
+  - Suite: **120 plików / 876 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 876/876 · docs:check — exit 0.
 
 ## [0.452.0] — 🧪🛡️ Rygiel scalania configu anti-nuke panelu (mergeAnti) — bez wstrzyknięcia obcego progu
 
