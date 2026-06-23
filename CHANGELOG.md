@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-526-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.456.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-527-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.457.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.457.0] — 🧪🟢 Rygiel parsera transmisji LIVE Kick (parseKickLive) — decyduje is_live
+
+- `[#527]` 🧪 **Test `parseKickLive`** ([`kick.test.ts`](bot/src/live/kick.test.ts), 4 testy) — parser odpowiedzi Kick `channels` → `LiveStatus`, wyłoniony **behavior-preserving** z `getKickLive` ([`live/kick.mts`](bot/src/live/kick.mts)). Bliźniak `parseYouTubeLive` (#526), inna logika decyzji. Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL `is_live`** — kanał Kick **istnieje zawsze**, więc o transmisji decyduje **wyłącznie** `stream.is_live`; istniejący-ale-offline kanał → `live:false` (inaczej bot ogłasza „LIVE" dla niegrającego streamera); `channelName=slug` zostaje też offline.
+  - **RYGIEL fail-safe** — brak `data` / garbage (`null`/`'x'`/`42`/`{data:[]}`/`{data:[null]}`) → `live:false`, bez wyjątku.
+  - **Mapowanie** — `title`/`viewers`/`url`/`thumbnail`; puste `game`/`thumbnail` (`''`) → `undefined` (`|| undefined`), nie pusty string.
+  - **Dowód, że gryzie (mutation-proof):** osłabienie warunku `!c?.stream?.is_live`→`!c?.stream` ogłasza offline jako LIVE (zwala test is_live); usunięcie `|| undefined` przy `game` przepuszcza pusty string (zwala test mapowania) — po cofnięciu zielono.
+  - Suite: **124 pliki / 891 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 891/891 · docs:check — exit 0.
 
 ## [0.456.0] — 🧪📺 Rygiel parsera transmisji LIVE YouTube (parseYouTubeLive) — items[0] decyduje + fail-safe
 

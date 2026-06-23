@@ -1,16 +1,11 @@
 import { kickToken } from './tokens.mts';
 import type { LiveStatus } from './types.mts';
 
-export async function getKickLive(slug: string): Promise<LiveStatus> {
-  const token = await kickToken();
-  const r = await fetch(
-    `https://api.kick.com/public/v1/channels?slug=${encodeURIComponent(slug)}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  );
-  const j = (await r.json()) as { data?: any[] };
-  const c = j.data?.[0];
+// Czysty parser odpowiedzi Kick channels → LiveStatus. UWAGA: kanał ISTNIEJE zawsze — o transmisji
+// decyduje WYŁĄCZNIE `stream.is_live` (offline → live:false, ale channelName=slug zostaje). Niezaufany
+// kształt JSON (`?.`) → bez wyjątku; puste `game`/`thumbnail` → undefined (nie pusty string).
+export function parseKickLive(j: unknown, slug: string): LiveStatus {
+  const c = (j as { data?: any[] })?.data?.[0];
   if (!c?.stream?.is_live) return { platform: 'kick', live: false, channelName: slug };
   return {
     platform: 'kick',
@@ -22,4 +17,15 @@ export async function getKickLive(slug: string): Promise<LiveStatus> {
     url: `https://kick.com/${slug}`,
     thumbnail: c.stream.thumbnail || undefined,
   };
+}
+
+export async function getKickLive(slug: string): Promise<LiveStatus> {
+  const token = await kickToken();
+  const r = await fetch(
+    `https://api.kick.com/public/v1/channels?slug=${encodeURIComponent(slug)}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+  return parseKickLive(await r.json(), slug);
 }
