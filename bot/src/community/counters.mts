@@ -117,6 +117,12 @@ async function ytCountOf(type: CounterType, arg?: string): Promise<number | null
   return st.subs;
 }
 
+// Nazwa kanału-licznika: podstawia PIERWSZE `{count}` (format pl-PL, separator tysięcy) i przycina do
+// 100 znaków (twardy limit nazwy kanału Discorda — dłuższe API odrzuca → `setName` zawodzi).
+export function counterName(template: string, count: number): string {
+  return template.replace('{count}', count.toLocaleString('pl-PL')).slice(0, 100);
+}
+
 async function tick(client: Client): Promise<void> {
   // Per-serwer: każdy serwer ma własną listę liczników; kanał musi należeć do tego serwera.
   for (const guild of client.guilds.cache.values()) {
@@ -141,7 +147,7 @@ async function tick(client: Client): Promise<void> {
       } else {
         count = countOf(ch.guild, it.type);
       }
-      const name = it.template.replace('{count}', count.toLocaleString('pl-PL')).slice(0, 100);
+      const name = counterName(it.template, count);
       if (ch.name !== name) await ch.setName(name).catch(() => {});
     }
   }

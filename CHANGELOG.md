@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-518-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.448.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-519-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.449.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.449.0] — 🧪🔢 Rygiel nazwy kanału-licznika (counterName) — limit 100 + format pl-PL
+
+- `[#519]` 🧪 **Test `counterName`** ([`counters.test.ts`](bot/src/community/counters.test.ts), 4 testy) — render nazwy kanału-licznika wyłoniony **behavior-preserving** z `tick` ([`community/counters.mts`](bot/src/community/counters.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL twardego limitu 100 znaków** — nazwa przycinana do 100 (limit nazwy kanału Discorda); dłuższa → API odrzuca `setName` i licznik przestaje się aktualizować.
+  - **Format pl-PL** — `{count}` zastąpione liczbą z separatorem tysięcy (asercja przez lustro `Intl` — odporna na wersję ICU).
+  - **Semantyka `String.replace`** — podstawiane **tylko pierwsze** `{count}` (`'{count}-{count}'`→`'12-{count}'`); brak placeholdera → szablon bez zmian.
+  - **Dowód, że gryzie (mutation-proof):** `slice(0, 100)`→`slice(0, 1000)` zwala test limitu; `replace`→`replaceAll` zwala test „tylko pierwsze" — po cofnięciu zielono.
+  - Suite: **116 plików / 858 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 858/858 · docs:check — exit 0.
 
 ## [0.448.0] — 🧪🏷️ Rygiel wyboru deala promocji (bestDeal) — najtańszy + filtr realnej obniżki
 
