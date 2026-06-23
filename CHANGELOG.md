@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-525-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.455.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-526-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.456.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.456.0] — 🧪📺 Rygiel parsera transmisji LIVE YouTube (parseYouTubeLive) — items[0] decyduje + fail-safe
+
+- `[#526]` 🧪 **Test `parseYouTubeLive`** ([`youtube.test.ts`](bot/src/live/youtube.test.ts), 4 testy) — parser odpowiedzi YouTube `search.list` → `LiveStatus`, wyłoniony **behavior-preserving** z `getYouTubeLive` ([`live/youtube.mts`](bot/src/live/youtube.mts)). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL decyzji LIVE** — obecność `items[0]` to jedyny wyznacznik: jest element → `live:true`, brak → `live:false` (`search.list` zwraca element tylko podczas transmisji); `null`-owy item też → `live:false`.
+  - **RYGIEL fail-safe** — niezaufany kształt JSON (`null`/`'x'`/`42`/`{items:'nie-tablica'}`/`{items:[null]}`) parsowany przez `?.` → **bez wyjątku**, brakujące pola jako `undefined` (poller odporny na nietypową odpowiedź API).
+  - **Mapowanie** — `title`/`channelName`/`thumbnail` ze `snippet`, `url` z `id.videoId`; item bez snippetu → `live:true`, pola `undefined`.
+  - **Dowód, że gryzie (mutation-proof):** flip `live:false`→`true` w gałęzi „brak item" zwala test offline + fail-safe; flip `live:true`→`false` w gałęzi „jest item" zwala test mapowania — po cofnięciu zielono.
+  - Suite: **123 pliki / 887 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 887/887 · docs:check — exit 0.
 
 ## [0.455.0] — 🧪🌐 Rygiel runtime'u i18n panelu (tp) — łańcuch fallbacku locale→pl→klucz
 
