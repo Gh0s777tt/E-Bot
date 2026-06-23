@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-520-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.450.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-521-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.451.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.451.0] — 🧪🎟️ Rygiel agregacji statystyk ticketów (ticketStats) — dokładny status, bez przecieku
+
+- `[#521]` 🧪 **Test `ticketStats`** ([`faza4.ticketstats.test.ts`](dashboard/lib/faza4.ticketstats.test.ts), 3 testy) — agregacja liczników ticketów (open/claimed/closed) na pulpicie panelu ([`dashboard/lib/faza4.ts`](dashboard/lib/faza4.ts)). **0 zmian produkcyjnych** (już eksportowane).
+  - **RYGIEL dokładnego statusu** — każdy kubełek liczony przez ścisłe `=== 'open'`/`'claimed'`/`'closed'`; status spoza trójki (np. `'pending'`) **nie wpada** do żadnego kubełka (inaczej zafałszowana statystyka).
+  - **Niezmienniki** — pusta lista → same zera; dane testowe celowo z `open ≠ liczba „nie-open"`, by wykryć też odwrócenie dopasowania.
+  - **Dowód, że gryzie (mutation-proof):** `=== 'open'`→`!== 'open'` zwala test (przy 3≠2 kubełkach); `'closed'`→`'closedX'` zeruje licznik zamkniętych — po cofnięciu zielono.
+  - Suite: **118 plików / 867 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 867/867 · docs:check — exit 0.
 
 ## [0.450.0] 🎉 — 🧪🏗️ Rygiel budowy planu Architekta (buildPlan) — bloki → role/kategorie/kanały
 
