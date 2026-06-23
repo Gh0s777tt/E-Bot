@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-524-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.454.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-525-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.455.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.455.0] — 🧪🌐 Rygiel runtime'u i18n panelu (tp) — łańcuch fallbacku locale→pl→klucz
+
+- `[#525]` 🧪 **Test `tp`** ([`panelI18n.tp.test.ts`](dashboard/lib/panelI18n.tp.test.ts), 4 testy) — runtime tłumaczenia etykiet panelu ([`dashboard/lib/panelI18n.ts`](dashboard/lib/panelI18n.ts)); **każda** etykieta panelu przez nią przechodzi. Lustro bota (`t()`, #370), prostsza wersja (bez interpolacji). **0 zmian produkcyjnych** (już eksportowane). Klucze brane z realnego `UI` (anti-drift).
+  - **RYGIEL fallbacku na PL** — nieznany język → wartość PL (baza), nie `undefined`.
+  - **RYGIEL ostatniej deski** — brakujący klucz → **sam klucz** (nigdy `undefined` → w UI nie pojawi się „undefined").
+  - **Honoruje język** — istniejący klucz w żądanym języku → jego wartość (test na kluczu różnym EN vs PL, nie zawsze PL).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie rungu `?? UI.pl[key]` zwala fallback PL (nieznany język → `undefined`/klucz zamiast PL); usunięcie `?? key` zwala ostatnią deskę (brakujący klucz → `undefined`) — po cofnięciu zielono.
+  - Suite: **122 pliki / 883 testy**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 883/883 · docs:check — exit 0.
 
 ## [0.454.0] — 🧪🖼️ Rygiel języka etykiet karty rangi (cardLocale) — Latin-safe (anty-„tofu")
 
