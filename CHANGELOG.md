@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-527-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.457.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-528-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.458.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.458.0] — 🧪🎬 Rygiel parsera transmisji LIVE Rumble (parseRumbleLive) — fallbacki widzów/URL/miniatury
+
+- `[#528]` 🧪 **Test `parseRumbleLive`** ([`rumble.test.ts`](bot/src/live/rumble.test.ts), 5 testów) — parser odpowiedzi Rumble → `LiveStatus`, wyłoniony **behavior-preserving** z `getRumbleLive` ([`live/rumble.mts`](bot/src/live/rumble.mts)). Trójka z `parseYouTubeLive`/`parseKickLive` (#526/#527). Zmiana produkcyjna = ekstrakcja czystej funkcji + `export` (0 zmian zachowania).
+  - **RYGIEL decyzji LIVE** — obecność `livestreams[0]` decyduje; brak → `live:false` (`channelName` z `username` zostaje też offline); garbage → `live:false`, bez wyjątku.
+  - **RYGIEL fallbacku widzów** — `watching_now ?? viewers` (gdy brak `watching_now`, bierze `viewers` — niespójny kształt API).
+  - **RYGIEL fallbacku URL** — bezpośredni `url` wygrywa, inaczej budowany z **względnego** `link` (`https://rumble.com{link}`), inaczej `undefined`.
+  - **RYGIEL polimorfizmu miniatury** — `thumbnail` jako **string** wprost lub **obiekt** `{url}` (API zwraca oba kształty).
+  - **Dowód, że gryzie (mutation-proof):** usunięcie `?? s.viewers` gubi widzów przy alternatywnym polu; spłaszczenie thumbnail do `s.thumbnail` zwraca obiekt zamiast `.url` — po cofnięciu zielono.
+  - Suite: **125 plików / 896 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 896/896 · docs:check — exit 0.
 
 ## [0.457.0] — 🧪🟢 Rygiel parsera transmisji LIVE Kick (parseKickLive) — decyduje is_live
 
