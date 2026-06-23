@@ -35,7 +35,9 @@ async function igdbPost(
   return (await r.json()) as any[];
 }
 
-function chunk<T>(arr: T[], n: number): T[][] {
+// Dzieli tablicę na paczki ≤ n (ostatnia bywa mniejsza) — IGDB ma limit ~500 id/zapytanie, więc każdy
+// appid MUSI trafić do dokładnie jednej paczki (bez gubienia/duplikatów = bez utraty/zdublowania gier).
+export function chunk<T>(arr: T[], n: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
   return out;

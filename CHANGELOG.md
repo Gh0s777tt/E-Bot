@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-529-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.459.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-530-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.460.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.460.0] 🎉 — 🧪📦 Rygiel batchowania zapytań IGDB (chunk) — bez gubienia/duplikatów (pakiet ingest)
+
+- `[#530]` 🧪 **Test `chunk`** ([`igdb.chunk.test.ts`](ingest/igdb.chunk.test.ts), 4 testy) — batchowanie listy appidów na paczki w kolektorze IGDB ([`ingest/igdb.mts`](ingest/igdb.mts)). **Pierwszy test w pakiecie `ingest`** (Steam · PSN · GOG · IGDB). **0 zmian produkcyjnych** (1× `export`).
+  - **RYGIEL bez gubienia/duplikatów** — IGDB ma limit ~500 id/zapytanie; każdy appid MUSI trafić do dokładnie jednej paczki → **konkatenacja paczek === wejście** (sprawdzone na wielu długościach × rozmiarach paczki); inaczej znikają/dublują się gry w bibliotece.
+  - **Rozmiar i kształt** — każda paczka `≤ n`, ostatnia bywa mniejsza, kolejność zachowana; pusta → `[]`; `n ≥ długość` → jedna paczka.
+  - **Dowód, że gryzie (mutation-proof):** `i += n`→`i += 1` tworzy zachodzące paczki (duplikaty); `slice(i, i+n)`→`slice(i, i+n-1)` gubi po jednym elemencie na paczkę — oba zwalają niezmiennik konkatenacji, po cofnięciu zielono.
+  - **Uwaga pakietowa:** test jako `.test.ts` (tsconfig `ingest` obejmuje tylko `*.mts`, więc `tsc` go nie tyka i nie wymaga typów vitest); vitest łapie go globem `**/*.test.{ts,mts}`.
+  - Suite: **127 plików / 905 testów**. **Bramki:** `pnpm check` (biome) · `pnpm typecheck` (4 pakiety) · `pnpm test` 905/905 · docs:check — exit 0.
 
 ## [0.459.0] 🎉 — 🧪🟣 Rygiel parsera transmisji LIVE Twitch (parseTwitchLive) — placeholdery miniatury + nazwa
 
