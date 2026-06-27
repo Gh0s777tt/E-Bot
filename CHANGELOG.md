@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-540-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.470.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-541-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.471.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.471.0] — 🔒 CSP nonce: script-src przez nonce + strict-dynamic (koniec 'unsafe-inline' dla skryptów)
+
+- `[#541]` 🔒 **Pełne CSP z nonce dla `script-src`** — zastępuje `'unsafe-inline'` (główny wektor XSS). Nonce per-request w [`dashboard/proxy.ts`](dashboard/proxy.ts) (Next 16 middleware) + nakładany na nagłówek CSP; Next bierze go dla swoich skryptów, a skrypt motywu (anty-FOUC) w [`layout.tsx`](dashboard/app/layout.tsx) czyta `x-nonce`. CSP przeniesione ze statycznego `next.config.mjs` do per-request. `style-src` zostaje `'unsafe-inline'` (Tailwind/Next inline-style — niski wektor XSS).
+  - **Zweryfikowane RUNTIME:** build prod + Playwright na `/login` + `/p/leaderboard` + `/p/u/[id]` → **0 naruszeń CSP** w konsoli (skrypt motywu + skrypty Next wykonują się z nonce; brak FOUC). Nagłówek: `script-src 'self' 'nonce-…' 'strict-dynamic'`, bez `unsafe-inline`.
+  - Domyka ostatnią pozycję hardeningu z audytu (maintainer oznaczył ją jako „osobny, większy krok").
+  - **Bramki:** `pnpm lint` · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** · build dashboard — exit 0 (Node 26.4.0).
 
 ## [0.470.0] — ⚡ Cache 5 usług per-wiadomość (invalidacja epoką) — domknięcie audytu perf #2
 

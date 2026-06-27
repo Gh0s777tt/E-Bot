@@ -24,10 +24,46 @@ function isOpen(pathname: string): boolean {
   );
 }
 
+// CSP per-request z nonce — anty-XSS: script-src przez nonce + strict-dynamic zamiast 'unsafe-inline'.
+// Next czyta nonce z nagłówka CSP ŻĄDANIA i nakłada na swoje skrypty; skrypt motywu w layout.tsx czyta
+// `x-nonce`. style-src zostaje 'unsafe-inline' (Tailwind/Next inline-style — niski wektor XSS).
+function buildCsp(nonce: string): string {
+  const isDev = process.env.NODE_ENV !== 'production';
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ''}`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' https: wss:${isDev ? ' ws:' : ''}`,
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+    'upgrade-insecure-requests',
+  ].join('; ');
+}
+
 // Next 16: konwencja `proxy` zastępuje `middleware` (ten sam mechanizm: gating tras + redirect).
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  if (isOpen(pathname)) return NextResponse.next();
+
+  const nonce = btoa(crypto.randomUUID());
+  const csp = buildCsp(nonce);
+  const reqHeaders = new Headers(req.headers);
+  reqHeaders.set('x-nonce', nonce);
+  reqHeaders.set('content-security-policy', csp); // Next bierze stąd nonce dla swoich skryptów
+  const pass = () => {
+    const r = NextResponse.next({ request: { headers: reqHeaders } });
+    r.headers.set('Content-Security-Policy', csp);
+    return r;
+  };
+  const withCsp = (r: NextResponse): NextResponse => {
+    r.headers.set('Content-Security-Policy', csp);
+    return r;
+  };
+
+  if (isOpen(pathname)) return pass();
 
   const secret = getAuthSecret();
   const token = req.cookies.get(SESSION_COOKIE)?.value;
@@ -37,7 +73,7 @@ export async function proxy(req: NextRequest) {
     const url = req.nextUrl.clone();
     url.pathname = '/login';
     url.search = '';
-    return NextResponse.redirect(url);
+    return withCsp(NextResponse.redirect(url));
   }
 
   // Role: brak pola (legacy/owner sesja) → admin. Admin = pełen dostęp.
@@ -49,13 +85,13 @@ export async function proxy(req: NextRequest) {
       method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE';
     const adminOnly = pathname.startsWith('/api/panel-staff') || pathname === '/api/config/import';
     if (adminOnly) {
-      return new NextResponse('Brak uprawnień (tylko admin).', { status: 403 });
+      return withCsp(new NextResponse('Brak uprawnień (tylko admin).', { status: 403 }));
     }
     if (role === 'viewer' && isMutation && pathname.startsWith('/api/')) {
-      return new NextResponse('Tryb tylko do odczytu (rola: viewer).', { status: 403 });
+      return withCsp(new NextResponse('Tryb tylko do odczytu (rola: viewer).', { status: 403 }));
     }
   }
-  return NextResponse.next();
+  return pass();
 }
 
 export const config = {

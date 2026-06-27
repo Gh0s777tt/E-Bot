@@ -1,26 +1,9 @@
 // ── Nagłówki bezpieczeństwa (stosowane do wszystkich tras) ───────────────────
-// CSP celowo dopuszcza 'unsafe-inline' dla script/style (Next wstrzykuje inline
-// bootstrap + skrypt motywu w layout.tsx; pełne CSP z nonce to osobny, większy
-// krok). 'unsafe-eval'/'ws:' tylko w dev (HMR Next). frame-ancestors 'none' +
-// X-Frame-Options = anty-clickjacking; do tego HSTS, nosniff, Referrer-Policy,
-// Permissions-Policy. object-src 'none' + base-uri 'self' domykają wektory CSP.
-const isDev = process.env.NODE_ENV !== 'production';
-const csp = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  `connect-src 'self' https: wss:${isDev ? ' ws:' : ''}`,
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-  'upgrade-insecure-requests',
-].join('; ');
-
+// CSP jest ustawiane PER-REQUEST z nonce w proxy.ts (script-src przez nonce + strict-dynamic zamiast
+// 'unsafe-inline' — anty-XSS; skrypt motywu w layout.tsx dostaje nonce z `x-nonce`). style-src zostaje
+// 'unsafe-inline' (Tailwind/Next inline-style, niski wektor XSS). 'unsafe-eval'/'ws:' tylko w dev (HMR).
+// X-Frame-Options = anty-clickjacking; HSTS, nosniff, Referrer-Policy, Permissions-Policy poniżej.
 const securityHeaders = [
-  { key: 'Content-Security-Policy', value: csp },
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
