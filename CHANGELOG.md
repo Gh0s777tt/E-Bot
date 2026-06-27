@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-573-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.503.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-574-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.504.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.504.0] — 🎛️ Redesign „Dowództwo" (krok 2): Tickety + wspólny StatusPill
+
+- `[#574]` 🎛️ **Dowództwo na panelu Tickety** + wydzielony [`StatusPill`](dashboard/components/StatusPill.tsx) (wspólny komponent stanu on/off, server-safe, reużywany; Security przepięty na niego — koniec duplikatu). [`/tickets`](dashboard/app/tickets/page.tsx): status-pill w nagłówku i przy sekcji konfiguracji (zamiast zielono/czerwonego tekstu) + nowa karta **podglądu na Discordzie** (`cmd-embed` z realnym `cfg.panelMessage` + przycisk) — widać, co zobaczą członkowie. Reużywalny klucz i18n `ui.cmd.preview` ×14. Kafelki statystyk (otwarte/przejęte/zamknięte) bez zmian.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **995/995** (parytet i18n ×14) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.503.0] — 🎛️ Redesign „Dowództwo" (krok 1): prymitywy motywu + pilot na Bezpieczeństwie
 

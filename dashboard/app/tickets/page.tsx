@@ -1,5 +1,6 @@
-import { CheckCircle2, Hand, Inbox, Ticket } from 'lucide-react';
+import { CheckCircle2, Eye, Hand, Inbox, Plus, Ticket } from 'lucide-react';
 import StatCard from '../../components/StatCard';
+import StatusPill from '../../components/StatusPill';
 import TicketCloseButton from '../../components/TicketCloseButton';
 import TicketsConfigForm from '../../components/TicketsConfigForm';
 import { getTickets, getTicketsConfig, ticketStats } from '../../lib/faza4';
@@ -25,14 +26,10 @@ export default async function TicketsPage() {
 
   return (
     <div className="space-y-6">
-      <p className="max-w-3xl text-sm text-muted">
-        {tp(lang, 'ui.tickets.intro')}{' '}
-        {cfg.enabled ? (
-          <span className="font-semibold text-green-400">{tp(lang, 'ui.tickets.statusOn')}</span>
-        ) : (
-          <span className="font-semibold text-accent">{tp(lang, 'ui.tickets.statusOff')}</span>
-        )}
-      </p>
+      <header className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-2xl text-sm text-muted">{tp(lang, 'ui.tickets.intro')}</p>
+        <StatusPill on={cfg.enabled} lang={lang} />
+      </header>
 
       <div className="grid grid-cols-3 gap-4">
         <StatCard
@@ -56,8 +53,32 @@ export default async function TicketsPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Ticket size={16} className="text-accent" /> {tp(lang, 'ui.tickets.cfgHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={cfg.enabled} lang={lang} />
+          </span>
         </h2>
         <TicketsConfigForm initial={cfg} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Eye size={16} className="text-accent" /> {tp(lang, 'ui.cmd.preview')}
+        </h2>
+        <div className="max-w-md rounded-xl border border-line bg-bg/40 p-3">
+          <div className="mb-2 flex items-center gap-2">
+            <span className="grid h-6 w-6 place-items-center rounded-full bg-accent text-[11px] font-semibold text-white">
+              E
+            </span>
+            <span className="text-xs font-medium">E-BOT</span>
+            <span className="rounded bg-elevated px-1.5 py-0.5 text-[10px] text-muted">bot</span>
+          </div>
+          <div className="cmd-embed">
+            <p className="text-sm leading-relaxed">{cfg.panelMessage}</p>
+            <span className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-semibold text-white">
+              <Plus size={13} /> Ticket
+            </span>
+          </div>
+        </div>
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

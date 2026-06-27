@@ -1,24 +1,15 @@
 import { ShieldAlert, Siren, UserCheck } from 'lucide-react';
 import AntinukeForm from '../../components/AntinukeForm';
 import AntiRaidForm from '../../components/AntiRaidForm';
+import StatusPill from '../../components/StatusPill';
 import VerificationForm from '../../components/VerificationForm';
 import { getAntiRaidConfig, getVerificationConfig } from '../../lib/community';
 import { getAntinuke } from '../../lib/data';
 import { getGuildMeta } from '../../lib/guild';
-import { type PanelLocale, tp } from '../../lib/panelI18n';
+import { tp } from '../../lib/panelI18n';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
-
-// Status modułu jako pill (kropka + etykieta) — odzwierciedla REALNY config.enabled (uczciwie).
-function StatusPill({ on, lang }: { on: boolean; lang: PanelLocale }) {
-  return (
-    <span className={`status-pill${on ? ' is-on' : ''}`}>
-      <span className="dot" />
-      {on ? tp(lang, 'ui.cmd.on') : tp(lang, 'ui.cmd.off')}
-    </span>
-  );
-}
 
 export default async function SecurityPage() {
   const [config, verification, antiraid, guild, lang] = await Promise.all([
