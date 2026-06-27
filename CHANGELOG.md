@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-563-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.493.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-564-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.494.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.494.0] — 🧭 AI-asystent panelu: testy parsera + uzupełniony katalog stron
+
+- `[#564]` 🧭 **Wzmocnienie istniejącego asystenta** — `Assistant` ([`dashboard/lib/assistant.ts`](dashboard/lib/assistant.ts)) już jest (pływający czat → plan krok-po-kroku z klikalnymi linkami do stron + i18n ×14). Dołożone: (1) `parseReply` wyeksportowany + **otestowany** (code-fence, zmyślony href → null/anty-404, fallback na nie-JSON, cap 8 kroków); (2) katalog `FEATURES` uzupełniony o brakujące strony `/wishlist`, `/stats`, `/marketplace`, `/audit` — asystent kieruje teraz na **cały** panel. Egzekucja zmian (auto-config z czatu) świadomie poza zakresem (ryzyko bezpieczeństwa).
+  - **Testy:** nowy `assistant.test.ts` +6 (parsowanie/walidacja href/fallback/cap) → **979/979** (132 pliki). Bramki: dashboard `tsc` · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.493.0] — 🎁 Battle-pass: nagrody coins za tiery (raz na sezon)
 

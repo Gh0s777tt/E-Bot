@@ -79,6 +79,16 @@ const FEATURES: { href: string; line: string }[] = [
     href: '/integrations',
     line: 'Integracje — KLUCZE API (Twitch, YouTube, AI, Supabase, Stripe) i ich status',
   },
+  { href: '/wishlist', line: 'Lista życzeń gier — dodawanie gier do śledzenia cen i okładek' },
+  {
+    href: '/stats',
+    line: 'Statystyki — wykresy aktywności, retencja D1/D7/D30, ranking, eksport CSV',
+  },
+  {
+    href: '/marketplace',
+    line: 'Marketplace pluginów — instalacja i zarządzanie rozszerzeniami społeczności',
+  },
+  { href: '/audit', line: 'Dziennik audytu — historia zmian w panelu (kto co zmienił)' },
   { href: '/settings', line: 'Ustawienia — język bota, dostęp do panelu, kopia konfiguracji' },
 ];
 
@@ -99,7 +109,7 @@ ZASADY:
 - Jeśli funkcja wymaga klucza API lub bazy → dodaj krok kierujący na /integrations.
 - Kolejność kroków sensowna (najpierw fundamenty: setup/bezpieczeństwo, potem reszta).`;
 
-function parseReply(raw: string): { summary: string; steps: AssistantStep[] } {
+export function parseReply(raw: string): { summary: string; steps: AssistantStep[] } {
   const cleaned = raw
     .trim()
     .replace(/^```(?:json)?/i, '')
