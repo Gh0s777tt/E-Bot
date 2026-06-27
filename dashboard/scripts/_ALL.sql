@@ -655,6 +655,27 @@ create table if not exists temp_roles (
 create index if not exists temp_roles_expires_idx on temp_roles (expires_at);
 alter table temp_roles enable row level security;
 
+-- klany / gildie (eko 2.0): klan + wspólny bank, przynależność jeden-klan-na-usera, ranking wg banku
+create table if not exists clans (
+  guild_id   text        not null,
+  id         text        not null,
+  name       text        not null,
+  owner_id   text        not null,
+  bank       integer     not null default 0,
+  created_at timestamptz default now(),
+  primary key (guild_id, id)
+);
+alter table clans enable row level security;
+create table if not exists clan_members (
+  guild_id  text        not null,
+  clan_id   text        not null,
+  user_id   text        not null,
+  joined_at timestamptz default now(),
+  primary key (guild_id, user_id)
+);
+alter table clan_members enable row level security;
+create index if not exists clan_members_clan_idx on clan_members (guild_id, clan_id);
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

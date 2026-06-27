@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-588-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.518.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-589-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.519.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.519.0] — 🛡️ Klany/gildie: silnik + schemat (czyste funkcje, ranking wg banku)
+
+- `[#589]` 🛡️ **Klany — silnik + schemat** (fundament pod `/clan`): nowy [`clans.mts`](bot/src/economy/clans.mts) — czyste, otestowane `normalizeClanName` (trim + zwijanie spacji, 3–24 zn.), `clanKey` (deterministyczny klucz FNV-1a → base36, URL-safe i **niezależny od alfabetu** — cyrylica/CJK/arabski nie dają pustego klucza, w przeciwieństwie do slugifikacji ASCII), `sortClansByBank`/`clanRankByBank` (ranking malejąco wg wspólnego banku, stabilny, remis → nazwa), `donationError` (walidacja dotacji). Warstwa IO (graceful no-op bez chmury): `getClan`/`getClanByName`/`listClans`/`getMembership`/`listMembers`/`saveClan`/`addMember`/`removeMember`/`removeClan`. Dwie nowe tabele `clans` + `clan_members` (jeden klan na usera/serwer wymuszony PK) w [`clans-schema.sql`](dashboard/scripts/clans-schema.sql) + `_ALL.sql` (48 tabel).
+  - **Testy:** nowy `clans.test.ts` +12 (`normalizeClanName` · `clanKey`: determinizm / URL-safe / cyrylica·CJK·emoji niepuste · `sortClansByBank` bez mutacji · `clanRankByBank` 1-based · `donationError`) → **1051/1051**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` (docs + schema 48 tab. + env) — exit 0 (Node 26.4.0).
 
 ## [0.518.0] — ⚔️ Pety: walki PvP (`/pet battle`) — czysty, deterministyczny silnik
 
