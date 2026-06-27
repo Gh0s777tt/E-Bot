@@ -21,7 +21,7 @@ function cfg(guildId: string): Cfg {
 
 type Row = { messages?: number; joins?: number; leaves?: number; voice_minutes?: number };
 
-type UserActivityRow = { user_id: string; username?: string; messages?: number };
+type UserActivityRow = { user_id: string; username?: string; messages?: number; day?: string };
 
 // 🏆 „Najaktywniejszy" tygodnia: grupuje wiersze user_activity po user_id, SUMUJE wiadomości z dni,
 // rozwiązuje nazwę (username z dowolnego wiersza > fallback user_id) i zwraca lidera (sort malejąco).
@@ -36,6 +36,28 @@ export function topUserByMessages(
     byUser.set(r.user_id, cu);
   }
   return [...byUser.values()].sort((a, b) => b.msgs - a.msgs)[0];
+}
+
+// 🧊 Stygnący członkowie (churn-risk, czysta funkcja): aktywni w PIERWSZEJ części okna (dzień < splitDay),
+// ucichli w DRUGIEJ (0 wiadomości od splitDay). Wczesny sygnał odejścia — mod może odezwać się zanim
+// znikną. Sort malejąco po wcześniejszych wiadomościach (najwięksi „byli aktywni" pierwsi). Wiersz bez
+// `day` lub z dnia ≥ splitDay liczy się jako „później" (konserwatywnie — nie fałszuje stygnięcia).
+export function coolingMembers(
+  rows: { user_id: string; username?: string; messages?: number; day?: string }[],
+  splitDay: string,
+): { name: string; before: number }[] {
+  const agg = new Map<string, { name: string; before: number; after: number }>();
+  for (const r of rows) {
+    const cur = agg.get(r.user_id) ?? { name: r.username || r.user_id, before: 0, after: 0 };
+    if (r.day && r.day < splitDay) cur.before += r.messages ?? 0;
+    else cur.after += r.messages ?? 0;
+    if (r.username) cur.name = r.username;
+    agg.set(r.user_id, cur);
+  }
+  return [...agg.values()]
+    .filter((u) => u.before > 0 && u.after === 0)
+    .sort((a, b) => b.before - a.before)
+    .map((u) => ({ name: u.name, before: u.before }));
 }
 
 async function maybePost(client: Client): Promise<void> {
@@ -82,9 +104,12 @@ async function maybePost(client: Client): Promise<void> {
     // 🏆 Najaktywniejszy (per-user, 7 dni) danego serwera.
     const ua = await cloudSelect<UserActivityRow>(
       'user_activity',
-      `select=user_id,username,messages&guild_id=eq.${guild.id}&day=gte.${since}`,
+      `select=user_id,username,messages,day&guild_id=eq.${guild.id}&day=gte.${since}`,
     ).catch(() => [] as UserActivityRow[]);
     const topUser = topUserByMessages(ua);
+    // 🧊 Stygnący: aktywni w 1. połowie okna, cisza w ostatnich 3 dniach (wczesny churn-risk).
+    const splitDay = new Date(now.getTime() - 3 * 86_400_000).toISOString().slice(0, 10);
+    const cooling = coolingMembers(ua, splitDay);
 
     const ch = await client.channels.fetch(c.channelId).catch(() => null);
     // Kanał musi należeć do TEGO serwera (config mógł zostać po przeniesieniu/zmianie).
@@ -107,6 +132,15 @@ async function maybePost(client: Client): Promise<void> {
         embed.addFields({
           name: '🏆 Najaktywniejszy',
           value: `${topUser.name} — ${topUser.msgs.toLocaleString('pl-PL')} wiad.`,
+          inline: false,
+        });
+      if (cooling.length)
+        embed.addFields({
+          name: '🧊 Stygnący (ucichli w tym tygodniu)',
+          value: cooling
+            .slice(0, 5)
+            .map((u) => `${u.name} (${u.before} wiad. wcześniej)`)
+            .join('\n'),
           inline: false,
         });
       if (topRep)

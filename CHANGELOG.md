@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-557-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.487.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-558-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.488.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.488.0] — 🧊 Analityka: stygnący członkowie (wczesny churn-risk) w digescie
+
+- `[#558]` 🧊 **Wykrywanie odpływu w tygodniowym digescie** — `digest` ([`bot/src/analytics/digest.mts`](bot/src/analytics/digest.mts)) dostał czystą `coolingMembers`: kto był aktywny w 1. połowie tygodnia, ale ucichł w ostatnich 3 dniach (msgs>0 wcześniej, 0 później) = **wczesny sygnał odejścia**. Nowe pole embeda „🧊 Stygnący (ucichli w tym tygodniu)" (top 5) — mod może odezwać się, zanim znikną. Retencja z wizji, bez AI/infry.
+  - **Testy:** `digest.test.ts` +4 (stygnący / nie-stygnący / sort / nowy członek) → **957/957**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.487.0] — 🖼️ AI-moderacja obrazów w panelu: przełącznik + i18n ×14
 

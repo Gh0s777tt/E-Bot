@@ -3,7 +3,7 @@
 // (jeden wiersz/dzień), wyłania lidera (sort MALEJĄCO), rozwiązuje nazwę (username z dowolnego wiersza
 // > fallback user_id). Regresja = digest chwali złą osobę albo pokazuje surowe id zamiast nicku.
 import { describe, expect, it } from 'vitest';
-import { topUserByMessages } from './digest.mts';
+import { coolingMembers, topUserByMessages } from './digest.mts';
 
 describe('topUserByMessages — lider aktywności tygodnia', () => {
   it('SUMUJE wiadomości tego samego usera z wielu dni', () => {
@@ -45,5 +45,46 @@ describe('topUserByMessages — lider aktywności tygodnia', () => {
 
   it('pusta lista → undefined (brak najaktywniejszego)', () => {
     expect(topUserByMessages([])).toBeUndefined();
+  });
+});
+
+describe('coolingMembers — stygnący (wczesny churn-risk)', () => {
+  it('aktywny przed splitem, cisza po → stygnący', () => {
+    const out = coolingMembers(
+      [
+        { user_id: 'a', username: 'Ala', messages: 5, day: '2026-06-20' },
+        { user_id: 'a', username: 'Ala', messages: 0, day: '2026-06-25' },
+      ],
+      '2026-06-24',
+    );
+    expect(out).toEqual([{ name: 'Ala', before: 5 }]);
+  });
+
+  it('aktywny też po splicie → NIE stygnący', () => {
+    const out = coolingMembers(
+      [
+        { user_id: 'b', messages: 5, day: '2026-06-20' },
+        { user_id: 'b', messages: 2, day: '2026-06-25' },
+      ],
+      '2026-06-24',
+    );
+    expect(out).toEqual([]);
+  });
+
+  it('sort malejąco po wcześniejszych wiadomościach', () => {
+    const out = coolingMembers(
+      [
+        { user_id: 'a', username: 'Ala', messages: 3, day: '2026-06-20' },
+        { user_id: 'b', username: 'Bob', messages: 9, day: '2026-06-20' },
+      ],
+      '2026-06-24',
+    );
+    expect(out.map((u) => u.name)).toEqual(['Bob', 'Ala']);
+  });
+
+  it('aktywny dopiero po splicie (nowy) → pomijany', () => {
+    expect(
+      coolingMembers([{ user_id: 'c', messages: 4, day: '2026-06-25' }], '2026-06-24'),
+    ).toEqual([]);
   });
 });
