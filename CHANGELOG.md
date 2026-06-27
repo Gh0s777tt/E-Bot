@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-583-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.513.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-584-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.514.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.514.0] — 🎛️ Redesign „Dowództwo" (krok 8, finał): status-pille na engagement + notifications
+
+- `[#584]` 🎛️ **Domknięcie rollouta status-pille** — `/engagement` (button-roles · starboard · temp-voice · counting · invites — pill per sekcja z `enabled`; button-roles aktywne gdy są przyciski) i `/notifications` (Twitch-sub; NotifSettings to per-platforma → bez pojedynczego pilla). **Rollout kompletny**: status Dowództwa na wszystkich panelach z jednoznaczną flagą `enabled`. Zero nowych stringów.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **1015/1015** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.513.0] — 🎛️ Redesign „Dowództwo" (krok 7): status-pille per-sekcja na panelach multi-config
 

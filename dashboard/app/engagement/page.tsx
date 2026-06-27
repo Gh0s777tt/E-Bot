@@ -3,6 +3,7 @@ import ButtonRolesForm from '../../components/ButtonRolesForm';
 import CountingForm from '../../components/CountingForm';
 import InvitesForm from '../../components/InvitesForm';
 import StarboardForm from '../../components/StarboardForm';
+import StatusPill from '../../components/StatusPill';
 import TempVoiceForm from '../../components/TempVoiceForm';
 import {
   getButtonRoles,
@@ -50,6 +51,9 @@ export default async function EngagementPage() {
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <MousePointerClick size={16} className="text-accent" />{' '}
           {tp(lang, 'ui.engagement.buttonRolesHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={btn.buttons.length > 0} lang={lang} />
+          </span>
         </h2>
         <ButtonRolesForm initial={btn} guild={guild} />
       </section>
@@ -57,6 +61,9 @@ export default async function EngagementPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Star size={16} className="text-accent" /> {tp(lang, 'ui.engagement.starboardHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={star.enabled} lang={lang} />
+          </span>
         </h2>
         <StarboardForm initial={star} guild={guild} />
       </section>
@@ -64,6 +71,9 @@ export default async function EngagementPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Volume2 size={16} className="text-accent" /> {tp(lang, 'ui.engagement.tempVoiceHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={tv.enabled} lang={lang} />
+          </span>
         </h2>
         <TempVoiceForm initial={tv} guild={guild} />
       </section>
@@ -71,6 +81,9 @@ export default async function EngagementPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Hash size={16} className="text-accent" /> {tp(lang, 'ui.engagement.countingHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={counting.enabled} lang={lang} />
+          </span>
         </h2>
         <CountingForm initial={counting} guild={guild} />
       </section>
@@ -78,6 +91,9 @@ export default async function EngagementPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <UserPlus size={16} className="text-accent" /> {tp(lang, 'ui.engagement.invitesHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={invites.enabled} lang={lang} />
+          </span>
         </h2>
         <InvitesForm initial={invites} guild={guild} />
       </section>
