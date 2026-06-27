@@ -18,6 +18,7 @@ import * as buttonpanel from './buttonpanel.mts';
 import * as cards from './cards.mts';
 import * as caseCmd from './case.mts';
 import * as cat from './cat.mts';
+import * as clan from './clan.mts';
 import * as confess from './confess.mts';
 import * as dadjoke from './dadjoke.mts';
 import * as describe from './describe.mts';
@@ -200,6 +201,7 @@ export const commands: Command[] = [
   vanityrole,
   stocks,
   pet,
+  clan,
   cards,
   meme,
 ];

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-589-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.519.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-590-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.520.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.520.0] — 🛡️ Klany/gildie: komenda `/clan` (create/join/leave/info/top/donate/disband)
+
+- `[#590]` 🛡️ **`/clan` — pełna komenda klanów** (na silniku #589): 7 podkomend — `create` (założenie za 10 000, sink; lider auto-dołącza), `join`/`leave` (jeden klan na usera — `leave` blokowane dla lidera, ma `disband`), `info` (lider, liczebność, bank, pozycja w rankingu — własny klan lub `[nazwa]`), `top` (ranking wg wspólnego banku, 🥇🥈🥉 + liczebność, top 10), `donate` (wpłata coinów do banku klanu, sink → napędza ranking), `disband` (tylko lider, usuwa klan + członków). Embedy w czerwieni Dowództwa; respektuje `economy.enabled` + chmurę (bez Supabase: uczciwy komunikat). i18n `clan.*` ×14 (23 klucze). Wpięte do [`commands/index.mts`](bot/src/commands/index.mts) i katalogu „Komendy" panelu ([`commands.ts`](dashboard/lib/commands.ts), grupa Społeczność).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1051/1051** · `sync:check` (docs + schema 48 tab. + env) — exit 0 (Node 26.4.0).
 
 ## [0.519.0] — 🛡️ Klany/gildie: silnik + schemat (czyste funkcje, ranking wg banku)
 

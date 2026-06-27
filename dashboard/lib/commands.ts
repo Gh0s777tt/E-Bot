@@ -124,6 +124,7 @@ const COMMAND_GROUPS: { label: string; names: string[] }[] = [
       'marry',
       'ship',
       'pet',
+      'clan',
     ],
   },
   { label: 'Twórca & live', names: ['link', 'linktwitch', 'portal', 'donate', 'streamsync'] },
