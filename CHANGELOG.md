@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-558-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.488.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-559-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.489.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.489.0] — 🤖 AI co-pilot moderacji: /modai (streszczenie + sugestia akcji)
+
+- `[#559]` 🤖 **Komenda `/modai` (mod-only)** — [`bot/src/commands/modai.mts`](bot/src/commands/modai.mts): AI streszcza historię spraw użytkownika (`mod_cases`), sugeruje akcję (brak / ostrzeżenie / timeout / kick / ban) z uzasadnieniem i draftuje wiadomość — wszystko jako **rekomendacja** (decyzję podejmuje moderator). Ephemeral, `ManageMessages`, wspólne limity kosztów `ai_usage` (jak `/ask`). Czysta `buildModPrompt` buduje kontekst z historii. Rejestracja w `commands/index` + `/help` (moderation) + opisy i18n ×14.
+  - **Testy:** nowy `modai.test.ts` +3 (czysta historia / kontekst / cap 20) → **960/960** (130 plików). Bramki: `pnpm typecheck` (4 pakiety) · Biome · `help.test` · i18n parity — exit 0 (Node 26.4.0).
 
 ## [0.488.0] — 🧊 Analityka: stygnący członkowie (wczesny churn-risk) w digescie
 

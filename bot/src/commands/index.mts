@@ -48,6 +48,7 @@ import * as marry from './marry.mts';
 import * as math from './math.mts';
 import * as meme from './meme.mts';
 import * as mod from './mod.mts';
+import * as modai from './modai.mts';
 import * as panic from './panic.mts';
 import * as persona from './persona.mts';
 import * as pet from './pet.mts';
@@ -111,6 +112,7 @@ export const commands: Command[] = [
   ticket,
   ai,
   mod,
+  modai,
   caseCmd,
   describe,
   donate,
