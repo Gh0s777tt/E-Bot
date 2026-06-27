@@ -340,3 +340,60 @@ html.smallcaps .font-display {
   text-transform: lowercase;
   letter-spacing: 0.05em;
 }
+
+/* ── Dowództwo: prymitywy redesignu (kierunek „D") ──────────────────────────────────
+   Additywne klasy współdzielone przez panele — status-pill, kafelki statusu, podgląd
+   embeda Discorda (lewy czerwony pasek), subtelne uniesienie na hover. NIE ruszają
+   .panel-glow (zero regresji). Akcent = runtime --accent-rgb. */
+
+/* status modułu: kropka + etykieta (nagłówki paneli, kafelki) */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
+}
+.status-pill > .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: currentColor;
+}
+.status-pill.is-on {
+  color: rgb(var(--accent-rgb));
+  border-color: rgb(var(--accent-rgb) / 0.32);
+  background: rgb(var(--accent-rgb) / 0.1);
+}
+
+/* kafelek statusu/metryki (kokpit Dowództwa) */
+.stat-tile {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+/* podgląd „jak widać na Discordzie" — lewy czerwony pasek */
+.cmd-embed {
+  border-left: 3px solid rgb(var(--accent-rgb));
+  border-radius: 0 10px 10px 0;
+  background: var(--color-surface);
+  padding: 12px 14px;
+}
+
+/* subtelne uniesienie karty interaktywnej na hover */
+.lift {
+  transition:
+    transform 0.18s var(--ease-soft),
+    border-color 0.18s var(--ease-soft);
+}
+.lift:hover {
+  transform: translateY(-2px);
+  border-color: rgb(var(--accent-rgb) / 0.45);
+}

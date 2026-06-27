@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-572-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.502.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-573-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.503.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.503.0] — 🎛️ Redesign „Dowództwo" (krok 1): prymitywy motywu + pilot na Bezpieczeństwie
+
+- `[#573]` 🎛️ **Start wdrożenia kierunku D (Dowództwo)** — po wyborze usera (czerwień #E50914, ciemny kokpit). Globalne, reużywalne prymitywy w [`globals.css`](dashboard/app/globals.css): `.status-pill` (kropka + stan modułu, wariant `is-on`), `.stat-tile` (kafelek statusu), `.cmd-embed` (podgląd Discorda z lewym czerwonym paskiem), `.lift` (subtelne uniesienie na hover) — **additywne**, NIE ruszają `.panel-glow` (zero regresji). Reużywalne klucze i18n `ui.cmd.on`/`ui.cmd.off` ×14. Pilot: panel [`/security`](dashboard/app/security/page.tsx) dostał kokpit — kafelki statusu 3 ochron (stan z realnego `config.enabled`, **uczciwie**) + licznik aktywnych + status-pille w nagłówkach sekcji.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **995/995** (parytet i18n ×14 z nowymi kluczami) · `sync:check` — exit 0 (Node 26.4.0). *(Podgląd przeglądarkowy nie dotyczy: panel za logowaniem, a uruchomiony serwer preview to osobny `web`/GameVault — weryfikacja przez typy + parytet + testy.)*
 
 ## [0.502.0] — 🌐 Audyt hardcode: koniec zaszytej domeny portalu GH0ST (publiczne wydanie)
 
