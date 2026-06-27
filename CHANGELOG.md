@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-567-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.497.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-568-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.498.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.498.0] — 🛍️ Marketplace: klik w kafelek otwiera panel modułu (stretched-link)
+
+- `[#568]` 🛍️ **Cała karta marketplace klikalna** — w [`MarketplaceGrid`](dashboard/components/MarketplaceGrid.tsx) klik w **środek** kafelka prowadzi teraz do panelu modułu (dotąd trzeba było trafić w mały link „config →"). Wzorzec **stretched-link**: tytuł = `Link` z nakładką `after:inset-0` rozciągniętą na całą kartę; **suwak** wyniesiony na `z-[2]` ponad nakładkę → przełącza on/off **bez** nawigacji. Zero `onClick` na `div` (jeden semantyczny link + osobny przycisk → brak naruszeń a11y, działa z klawiatury i czytnika ekranu). Karty bez panelu (`href`) zostają nieklikalne, suwak nadal działa.
+  - **Bramki:** dashboard `tsc` · Biome (a11y) · pełny zestaw **990/990** · `sync:check` — exit 0 (Node 26.4.0). *(Zmiana czysto prezentacyjna — brak nowej logiki do testu jednostkowego; poprawność wymuszona typami + a11y-lintem.)*
 
 ## [0.497.0] — 🔒 Panel: server-side bramki na wrażliwe powierzchnie (audyt/diagnostyka/integracje)
 

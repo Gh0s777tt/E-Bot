@@ -105,16 +105,28 @@ export default function MarketplaceGrid({
                 // M5 — premium-plugin na serwerze 'free' (gdy billing włączony) → zablokowany.
                 const locked = billingOn && p.tierRequired === 'premium' && guildTier !== 'premium';
                 return (
+                  // Wzorzec „stretched link": klik w ŚRODEK karty → panel modułu (tytuł = Link z
+                  // nakładką after:inset-0). Suwak wyniesiony na z-[2] ponad nakładkę → przełącza
+                  // bez nawigacji (zero onClick na divie → brak naruszeń a11y; jeden semantyczny link).
                   <div
                     key={p.key}
-                    className="flex flex-col gap-2 rounded-lg border border-line bg-card p-4 transition hover:border-accent/60"
+                    className="relative flex flex-col gap-2 rounded-lg border border-line bg-card p-4 transition hover:border-accent/60"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <span
-                        className={`font-semibold ${states[p.key] ? 'text-white' : 'text-white/70'}`}
-                      >
-                        {p.title}
-                      </span>
+                      {p.href ? (
+                        <Link
+                          href={p.href}
+                          className={`font-semibold transition after:absolute after:inset-0 after:z-[1] hover:text-accent ${states[p.key] ? 'text-white' : 'text-white/70'}`}
+                        >
+                          {p.title}
+                        </Link>
+                      ) : (
+                        <span
+                          className={`font-semibold ${states[p.key] ? 'text-white' : 'text-white/70'}`}
+                        >
+                          {p.title}
+                        </span>
+                      )}
                       <div className="flex shrink-0 items-center gap-1.5">
                         {community && (
                           <span className="rounded-full border border-line px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">
@@ -131,20 +143,19 @@ export default function MarketplaceGrid({
                     {p.description && <p className="text-xs text-muted">{p.description}</p>}
                     <div className="mt-auto flex items-center justify-between gap-2 pt-1">
                       {p.href ? (
-                        <Link
-                          href={p.href}
-                          className="inline-flex items-center gap-1 text-xs text-accent transition hover:underline"
-                        >
+                        <span className="inline-flex items-center gap-1 text-xs text-accent">
                           {tp(lang, 'ui.modules.config')} →
-                        </Link>
+                        </span>
                       ) : (
                         <span />
                       )}
-                      <Toggle
-                        on={!!states[p.key]}
-                        onClick={() => flip(p.key, community)}
-                        disabled={locked}
-                      />
+                      <span className="relative z-[2]">
+                        <Toggle
+                          on={!!states[p.key]}
+                          onClick={() => flip(p.key, community)}
+                          disabled={locked}
+                        />
+                      </span>
                     </div>
                   </div>
                 );
