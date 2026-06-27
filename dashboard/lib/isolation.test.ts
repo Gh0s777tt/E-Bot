@@ -3,7 +3,15 @@
 // `.eq('guild_id', gid)`. Klient Supabase mockujemy chainable+thenable proxy (nagrywa `.eq`/`.from`/
 // `.insert`) + `getPrimaryGuildId` — bez sieci, bez realnej bazy. Ktoś, kto usunie scope → test failuje.
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { closeTicket, getTickets } from './faza4';
+import { getGiveaways } from './engagement';
+import {
+  closeTicket,
+  getHallOfFame,
+  getModCases,
+  getSuggestions,
+  getTempBans,
+  getTickets,
+} from './faza4';
 import { addShopItem, getShopItems, removeShopItem } from './serverEconomy';
 
 const h = vi.hoisted(() => {
@@ -97,11 +105,46 @@ describe('Izolacja multi-tenant — scope guild_id (rygiel anty-IDOR z v0.318)',
     expect(scopedToGuild()).toBe(true);
   });
 
+  it('getModCases (SELECT) nakłada .eq(guild_id) — historia moderacji nie przecieka', async () => {
+    await getModCases();
+    expect(scopedToGuild()).toBe(true);
+    expect(h.fromTables).toContain('mod_cases');
+  });
+
+  it('getTempBans (SELECT) nakłada .eq(guild_id)', async () => {
+    await getTempBans();
+    expect(scopedToGuild()).toBe(true);
+    expect(h.fromTables).toContain('temp_bans');
+  });
+
+  it('getSuggestions (SELECT) nakłada .eq(guild_id)', async () => {
+    await getSuggestions();
+    expect(scopedToGuild()).toBe(true);
+    expect(h.fromTables).toContain('suggestions');
+  });
+
+  it('getHallOfFame (SELECT) nakłada .eq(guild_id) na obu zapytaniach', async () => {
+    await getHallOfFame();
+    expect(scopedToGuild()).toBe(true);
+    expect(h.fromTables).toContain('xp_hall_of_fame');
+  });
+
+  it('getGiveaways (SELECT) nakłada .eq(guild_id)', async () => {
+    await getGiveaways();
+    expect(scopedToGuild()).toBe(true);
+    expect(h.fromTables).toContain('giveaways');
+  });
+
   it('fail-closed: brak primary guild → brak zapytania (pusto/false), builder nietknięty', async () => {
     h.getPrimaryGuildId.mockImplementation(() => Promise.resolve<string | null>(null));
     expect(await getTickets()).toEqual([]);
     expect(await closeTicket('x')).toBe(false);
     expect(await removeShopItem('x')).toEqual({ ok: false, error: 'Brak serwera' });
+    expect(await getModCases()).toEqual([]);
+    expect(await getTempBans()).toEqual([]);
+    expect(await getSuggestions()).toEqual([]);
+    expect(await getHallOfFame()).toEqual([]);
+    expect(await getGiveaways()).toEqual([]);
     expect(h.eqCalls).toHaveLength(0);
   });
 });

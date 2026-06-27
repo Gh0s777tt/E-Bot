@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-531-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.461.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-532-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.462.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.462.0] — 🔐🛡️ Domknięcie izolacji multi-tenant: 5× IDOR (mod/tempban/sugestie/HoF/giveaway) + clamp mintowania
+
+- `[#532]` 🔐 **Naprawa 5 przecieków cross-tenant (rodzeństwo F5)** — funkcje odczytu panelu czytały tabele per-gildia BEZ `.eq('guild_id', gid)`; przy `service_role` (omija RLS) dane WSZYSTKICH serwerów wyciekały do panelu jednego tenanta (realne w trybie self-serve; rozjazd z wyborem serwera nawet single-tenant). Wszystkie scoped wg wzorca `getTickets` (chokepoint `getPrimaryGuildId` + fail-closed na pusty gid).
+  - **Naprawione:** `getModCases` (`mod_cases`), `getTempBans` (`temp_bans`), `getSuggestions` (`suggestions`), `getHallOfFame` (`xp_hall_of_fame` — scope na OBU zapytaniach), `getGiveaways` (`giveaways`) — [`dashboard/lib/faza4.ts`](dashboard/lib/faza4.ts) + [`engagement.ts`](dashboard/lib/engagement.ts).
+  - **Rygiel anty-regresja:** rozszerzony [`isolation.test.ts`](dashboard/lib/isolation.test.ts) — 5 nowych testów (każdy nakłada `.eq(guild_id)`; brak primary guild → `[]` bez zapytania). Usunięcie scope = czerwony test.
+  - **Clamp mintowania no-code** — akcje `giveMoney`/`giveXp` własnych komend ([`bot/src/commands/customCommands.mts`](bot/src/commands/customCommands.mts)) miały kwotę bez górnego limitu (autor mógł pominąć `requiredRoleId` → każdy członek); dodany twardy `MAX_ACTION_AMOUNT` (1M/użycie) + floor/non-negative.
+  - **Bramki:** `pnpm lint` · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** (+5) · `docs:check` — exit 0 (Node 26.4.0).
 
 ## [0.461.0] — 🛡️🎭 Odporność publicznych stron /p/* (fail-fast Supabase) + opcjonalny e2e na buildzie prod
 

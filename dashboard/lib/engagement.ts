@@ -1,5 +1,6 @@
 // Faza 6 / B5 — engagement: button-role, starboard, temp-voice (config w settings) + lista giveawayów.
 import { getConfigSetting, setConfigSetting } from './data';
+import { getPrimaryGuildId } from './guild';
 import { hasSupabase, supabase } from './supabase';
 
 // ── Button-role ──
@@ -163,9 +164,12 @@ export type GiveawayRow = {
 export async function getGiveaways(limit = 20): Promise<GiveawayRow[]> {
   if (!hasSupabase) return [];
   try {
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (anty-przeciek tenantów)
+    if (!gid) return [];
     const { data, error } = await supabase()
       .from('giveaways')
       .select('id,prize,winners,ends_at,ended')
+      .eq('guild_id', gid)
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);

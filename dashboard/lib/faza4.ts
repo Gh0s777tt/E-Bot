@@ -467,9 +467,12 @@ export type HofEntry = {
 export async function getHallOfFame(limit = 10): Promise<HofEntry[]> {
   if (!hasSupabase) return [];
   try {
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (anty-przeciek tenantów)
+    if (!gid) return [];
     const latest = await supabase()
       .from('xp_hall_of_fame')
       .select('month')
+      .eq('guild_id', gid)
       .order('month', { ascending: false })
       .limit(1);
     if (latest.error) throw new Error(latest.error.message);
@@ -478,6 +481,7 @@ export async function getHallOfFame(limit = 10): Promise<HofEntry[]> {
     const { data, error } = await supabase()
       .from('xp_hall_of_fame')
       .select('month,user_id,username,xp,level,rank')
+      .eq('guild_id', gid)
       .eq('month', month)
       .order('rank', { ascending: true })
       .limit(limit);
@@ -502,9 +506,12 @@ export type ModCase = {
 export async function getModCases(limit = 30): Promise<ModCase[]> {
   if (!hasSupabase) return [];
   try {
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (anty-przeciek tenantów)
+    if (!gid) return [];
     const { data, error } = await supabase()
       .from('mod_cases')
       .select('id,user_id,username,moderator_name,action,reason,created_at')
+      .eq('guild_id', gid)
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);
@@ -527,9 +534,12 @@ export type TempBan = {
 export async function getTempBans(limit = 50): Promise<TempBan[]> {
   if (!hasSupabase) return [];
   try {
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (anty-przeciek tenantów)
+    if (!gid) return [];
     const { data, error } = await supabase()
       .from('temp_bans')
       .select('id,user_id,username,reason,unban_at,created_at')
+      .eq('guild_id', gid)
       .order('unban_at', { ascending: true })
       .limit(limit);
     if (error) throw new Error(error.message);
@@ -552,9 +562,12 @@ export type Suggestion = {
 export async function getSuggestions(limit = 40): Promise<Suggestion[]> {
   if (!hasSupabase) return [];
   try {
+    const gid = await getPrimaryGuildId(); // scoped per-serwer (anty-przeciek tenantów)
+    if (!gid) return [];
     const { data, error } = await supabase()
       .from('suggestions')
       .select('id,user_id,username,content,status,created_at')
+      .eq('guild_id', gid)
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw new Error(error.message);

@@ -44,6 +44,11 @@ function load(guildId: string): CustomCommand[] {
   }
 }
 
+// Twardy limit anty-nadużycie: pojedyncza akcja no-code nie może zmintować absurdalnej kwoty
+// waluty/XP (autor komendy z panelu może pominąć `requiredRoleId` → wtedy każdy członek). Clamp
+// ogranicza szkodę do rozsądnego pułapu na użycie (rygiel #532).
+const MAX_ACTION_AMOUNT = 1_000_000;
+
 // CC 2.0 — akcje przy użyciu komendy (rola/kasa/XP). Błędy pojedynczych akcji nie blokują reszty.
 async function runActions(
   interaction: ChatInputCommandInteraction,
@@ -57,26 +62,25 @@ async function runActions(
       if ((a.kind === 'addRole' || a.kind === 'removeRole') && a.roleId && member) {
         if (a.kind === 'addRole') await member.roles.add(a.roleId);
         else await member.roles.remove(a.roleId);
-      } else if (
-        a.kind === 'giveMoney' &&
-        (a.amount ?? 0) > 0 &&
-        ecoConfig(gid).enabled &&
-        hasCloud()
-      ) {
+      } else if (a.kind === 'giveMoney' && ecoConfig(gid).enabled && hasCloud()) {
+        const amt = Math.max(0, Math.min(Math.floor(Number(a.amount) || 0), MAX_ACTION_AMOUNT));
+        if (amt <= 0) continue;
         const u = await getEcoUser(gid, interaction.user.id);
         await saveEcoUser({
           guild_id: gid,
           user_id: interaction.user.id,
           username: interaction.user.username,
-          wallet: u.wallet + (a.amount ?? 0),
+          wallet: u.wallet + amt,
         });
-        logTx(gid, interaction.user.id, a.amount ?? 0, `cmd:/${interaction.commandName}`);
-      } else if (a.kind === 'giveXp' && (a.amount ?? 0) > 0 && hasCloud()) {
+        logTx(gid, interaction.user.id, amt, `cmd:/${interaction.commandName}`);
+      } else if (a.kind === 'giveXp' && hasCloud()) {
+        const amt = Math.max(0, Math.min(Math.floor(Number(a.amount) || 0), MAX_ACTION_AMOUNT));
+        if (amt <= 0) continue;
         const rows = await cloudSelect<{ xp: number }>(
           'user_levels',
           `select=xp&guild_id=eq.${gid}&user_id=eq.${interaction.user.id}`,
         );
-        const newXp = (rows[0]?.xp ?? 0) + (a.amount ?? 0);
+        const newXp = (rows[0]?.xp ?? 0) + amt;
         await cloudUpsert(
           'user_levels',
           [
