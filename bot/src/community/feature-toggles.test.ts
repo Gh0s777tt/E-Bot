@@ -6,7 +6,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { guildKey, setSettingLocal } from '../lib/db.mts';
+import { closeDb, guildKey, setSettingLocal } from '../lib/db.mts';
 import { afkEnabled } from './afk.mts';
 import { highlightsEnabled } from './highlights.mts';
 
@@ -17,6 +17,7 @@ beforeAll(() => {
   if (existsSync(DB)) rmSync(DB);
 });
 afterAll(() => {
+  closeDb();
   if (existsSync(DB)) rmSync(DB);
   delete process.env.DATABASE_PATH;
 });

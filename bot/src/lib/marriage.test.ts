@@ -10,7 +10,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { setSettingLocal } from './db.mts';
+import { closeDb, setSettingLocal } from './db.mts';
 import { clearMarriage, getMarriage, setMarriage } from './marriage.mts';
 
 const DB = path.join(tmpdir(), `ebot-marriage-${process.pid}.db`);
@@ -30,6 +30,7 @@ beforeEach(() => {
 });
 
 afterAll(() => {
+  closeDb();
   if (existsSync(DB)) rmSync(DB);
   delete process.env.DATABASE_PATH;
 });

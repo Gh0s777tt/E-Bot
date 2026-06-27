@@ -16,34 +16,69 @@ export function dbPath(): string {
   return candidates.find((p) => existsSync(p)) ?? candidates[0];
 }
 
-export function getSettings(): Record<string, string> {
+// ── Singleton połączenia: JEDNO trwałe połączenie SQLite (WAL) + cache prepared statements.
+// Wcześniej KAŻDY odczyt/zapis ustawień otwierał+zamykał połączenie i robił CREATE TABLE — na
+// gorącej ścieżce (handlery messageCreate × każda wiadomość) to było największe obciążenie bota.
+// WAL jest też bezpieczny dla wielu połączeń/procesów (sharding) — lepszy niż open/close per-call.
+// `conn()` jest path-aware: gdy zmieni się DATABASE_PATH (np. w testach), zamyka stare połączenie
+// i otwiera nowe — utrzymuje izolację. `closeDb()` zwalnia uchwyt (testy: rm tymczasowej bazy).
+let _db: DatabaseSync | null = null;
+let _dbPath: string | null = null;
+let _selAll: ReturnType<DatabaseSync['prepare']> | null = null;
+let _upsert: ReturnType<DatabaseSync['prepare']> | null = null;
+
+function conn(): DatabaseSync {
   const p = dbPath();
-  if (!existsSync(p)) return {};
+  if (_db && _dbPath === p) return _db;
+  if (_db) closeDb(); // ścieżka się zmieniła → zamknij stare połączenie (izolacja)
   const db = new DatabaseSync(p);
   try {
-    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
-    const rows = db.prepare('SELECT key, value FROM settings').all() as {
-      key: string;
-      value: string;
-    }[];
-    return Object.fromEntries(rows.map((r) => [r.key, r.value]));
-  } finally {
-    db.close();
+    db.exec('PRAGMA journal_mode = WAL');
+    db.exec('PRAGMA busy_timeout = 5000');
+  } catch {
+    /* PRAGMA może nie być wspierane na nietypowym FS — niekrytyczne */
   }
+  db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+  _db = db;
+  _dbPath = p;
+  return db;
+}
+
+// Zamyka połączenie i zeruje cache statementów. Produkcja: opcjonalny graceful-shutdown.
+// Testy: WOŁAĆ w afterAll PRZED `rmSync` tymczasowej bazy (otwarty uchwyt blokuje rm na Windows).
+export function closeDb(): void {
+  if (_db) {
+    try {
+      _db.close();
+    } catch {
+      /* już zamknięte */
+    }
+  }
+  _db = null;
+  _dbPath = null;
+  _selAll = null;
+  _upsert = null;
+}
+
+export function getSettings(): Record<string, string> {
+  // Read-only: bez pliku ORAZ bez otwartego połączenia nie twórz bazy (zachowanie sprzed singletona).
+  if (!_db && !existsSync(dbPath())) return {};
+  const db = conn();
+  if (!_selAll) _selAll = db.prepare('SELECT key, value FROM settings');
+  const rows = _selAll.all() as { key: string; value: string }[];
+  return Object.fromEntries(rows.map((r) => [r.key, r.value]));
 }
 
 // Zapis TYLKO do lokalnego SQLite (bez chmury). Używany m.in. przez settings-sync,
 // żeby pobieranie z chmury nie wywoływało mirror-up i nie tworzyło pętli.
 export function setSettingLocal(key: string, value: string): void {
-  const db = new DatabaseSync(dbPath());
-  try {
-    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
-    db.prepare(
+  const db = conn();
+  if (!_upsert) {
+    _upsert = db.prepare(
       'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
-    ).run(key, value);
-  } finally {
-    db.close();
+    );
   }
+  _upsert.run(key, value);
 }
 
 // Mirror zmian lokalnych do Supabase (fire-and-forget) — by panel widział zmiany z bota (np. /antinuke).

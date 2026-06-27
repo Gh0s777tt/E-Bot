@@ -6,7 +6,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { setSettingLocal } from '../lib/db.mts';
+import { closeDb, setSettingLocal } from '../lib/db.mts';
 import { cfgFor } from './social.mts';
 
 const DB = path.join(tmpdir(), `ebot-social-${process.pid}.db`);
@@ -18,6 +18,7 @@ beforeAll(() => {
   if (existsSync(DB)) rmSync(DB);
 });
 afterAll(() => {
+  closeDb();
   if (existsSync(DB)) rmSync(DB);
   delete process.env.DATABASE_PATH;
 });

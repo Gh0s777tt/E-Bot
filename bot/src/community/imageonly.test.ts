@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import type { Message } from 'discord.js';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { setSettingLocal } from '../lib/db.mts';
+import { closeDb, setSettingLocal } from '../lib/db.mts';
 import { addImageOnly, hasMedia, listImageOnly, refresh, removeImageOnly } from './imageonly.mts';
 
 const DB = path.join(tmpdir(), `ebot-imgonly-${process.pid}.db`);
@@ -18,6 +18,7 @@ beforeAll(() => {
   if (existsSync(DB)) rmSync(DB);
 });
 afterAll(() => {
+  closeDb();
   if (existsSync(DB)) rmSync(DB);
   delete process.env.DATABASE_PATH;
 });

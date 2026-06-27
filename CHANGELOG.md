@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-536-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.466.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-537-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.467.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.467.0] — ⚡ Singleton SQLite + WAL: koniec open/close/CREATE per odczyt (rdzeń perf bota)
+
+- `[#537]` ⚡ **Jedno trwałe połączenie SQLite (WAL) zamiast open+close per wywołanie** ([`bot/src/lib/db.mts`](bot/src/lib/db.mts)) — `getSettings`/`setSettingLocal` otwierały NOWE połączenie + `CREATE TABLE` + (przy odczycie) pełny skan + `close()` na KAŻDE wywołanie. Na gorącej ścieżce (handlery `messageCreate` × każda wiadomość, ~40 callerów) to było największe obciążenie bota (audyt wydajności #1). Teraz: singleton `conn()` (path-aware) + prepared statements w cache + `PRAGMA journal_mode=WAL` + `busy_timeout` raz. WAL bezpieczny też dla wielu połączeń/procesów (sharding).
+  - **`closeDb()`** — eksport zwalniający uchwyt; dodany do `afterAll` **14 testów** z tymczasową bazą (otwarty uchwyt blokował `rmSync` na Windows = EPERM). To była przyczyna wcześniejszego cofnięcia — teraz domknięte na czysto.
+  - **0 zmian zachowania** (odczyty/zapisy identyczne); izolacja testów zachowana (path-aware reopen przy zmianie `DATABASE_PATH`).
+  - **Bramki:** `pnpm lint` · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** — exit 0 (Node 26.4.0).
 
 ## [0.466.0] — 🛡️💸 Hardening: twardy limit kosztów AI działa też bez chmury (anty-otwarty-kran)
 

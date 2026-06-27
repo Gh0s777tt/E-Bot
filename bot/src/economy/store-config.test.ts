@@ -6,7 +6,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { guildKey, setSettingLocal } from '../lib/db.mts';
+import { closeDb, guildKey, setSettingLocal } from '../lib/db.mts';
 import { ECO_DEFAULT, ecoConfig, minutesSince } from './store.mts';
 
 const DB = path.join(tmpdir(), `ebot-eco-config-${process.pid}.db`);
@@ -19,6 +19,7 @@ beforeAll(() => {
   if (existsSync(DB)) rmSync(DB);
 });
 afterAll(() => {
+  closeDb();
   if (existsSync(DB)) rmSync(DB);
   delete process.env.DATABASE_PATH;
 });
