@@ -17,6 +17,7 @@ import {
   GIFT_COOLDOWN,
   getPet,
   giftValue,
+  listPets,
   minutesSinceIso,
   moodKey,
   type Pet,
@@ -25,6 +26,7 @@ import {
   petPower,
   SPECIES,
   savePet,
+  topPetsByPower,
   xpIntoLevel,
 } from '../economy/pets.mts';
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
@@ -34,6 +36,7 @@ import type { Locale } from '../i18n/locales.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
+const MEDALS = ['🥇', '🥈', '🥉'];
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
 
 function feedCost(speciesId: string): number {
@@ -76,7 +79,8 @@ export const data = new SlashCommandBuilder()
       .addUserOption((o) =>
         o.setName('przeciwnik').setDescription('Z kim walczysz').setRequired(true),
       ),
-  );
+  )
+  .addSubcommand((s) => s.setName('top').setDescription('Ranking najsilniejszych petów serwera.'));
 
 function statusEmbed(locale: Locale, pet: Pet, cur: string): EmbedBuilder {
   const sp = findSpecies(pet.species);
@@ -179,6 +183,32 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         cost: fmt(sp.adopt, cur),
       }),
     );
+    return;
+  }
+
+  if (sub === 'top') {
+    const ranked = topPetsByPower(await listPets(gid), 10);
+    if (!ranked.length) {
+      await interaction.reply(eph(t(locale, 'pet.topEmpty')));
+      return;
+    }
+    const lines = ranked.map((r, i) =>
+      t(locale, 'pet.topRow', {
+        medal: MEDALS[i] ?? `\`#${i + 1}\``,
+        emoji: findSpecies(r.species)?.emoji ?? '🐾',
+        name: r.name,
+        power: String(r.power),
+        lvl: String(r.level),
+      }),
+    );
+    await interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(ACCENT)
+          .setTitle(t(locale, 'pet.topTitle'))
+          .setDescription(lines.join('\n')),
+      ],
+    });
     return;
   }
 

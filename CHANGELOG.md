@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-600-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.530.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-601-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.531.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.531.0] — 🏆 Pety: ranking serwera (`/pet top`) — najsilniejsze pety
+
+- `[#601]` 🏆 **`/pet top`** — ranking najsilniejszych petów serwera wg mocy bojowej (`petPower` z #588): medale 🥇🥈🥉, emoji gatunku, moc + poziom. Domyka pety (adopt / karm / prezent / walka → teraz rywalizacja). Dostępny **bez posiadania peta** (podgląd przed bramką „wymaga peta"). Czysty, otestowany `topPetsByPower` (sort malejąco wg mocy; remis → poziom → nazwa; limit top-10) + IO `listPets` ([`pets.mts`](bot/src/economy/pets.mts)). i18n `pet.top*` ×14.
+  - **Testy:** `petBattle.test.ts` +4 (`topPetsByPower`: sort / moc+poziom / limit / pusta) → **1084/1084**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.530.0] — 📈 Digest: „największy skok aktywności" (docenia rosnących, nie tylko liderów)
 

@@ -132,3 +132,20 @@ export function petBattle(powerA: number, powerB: number, seed: number): BattleR
   const scoreB = powerB + Math.round(powerB * 0.5 * seededFloat(seed ^ 0x55555555));
   return { winner: scoreA > scoreB ? 'a' : scoreB > scoreA ? 'b' : 'draw', scoreA, scoreB };
 }
+
+// Lista wszystkich petów serwera (do rankingu /pet top). Graceful pusta bez chmury.
+export async function listPets(guildId: string): Promise<Pet[]> {
+  if (!hasCloud()) return [];
+  return cloudSelect<Pet>('economy_pets', `select=*&guild_id=eq.${guildId}`);
+}
+
+// Ranking petów wg mocy bojowej (petPower) — malejąco; remis → wyższy poziom, potem nazwa. Czysty.
+export function topPetsByPower(
+  pets: Pet[],
+  limit = 10,
+): { name: string; species: string; power: number; level: number }[] {
+  return pets
+    .map((p) => ({ name: p.name, species: p.species, power: petPower(p), level: petLevel(p.xp) }))
+    .sort((a, b) => b.power - a.power || b.level - a.level || a.name.localeCompare(b.name))
+    .slice(0, Math.max(1, limit));
+}

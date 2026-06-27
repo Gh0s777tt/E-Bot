@@ -7,6 +7,10 @@ type Dict = Record<string, string>;
 export const PET_STRINGS: Record<Locale, Dict> = {
   pl: {
     'pet.disabled': '🚫 Ekonomia jest wyłączona na tym serwerze.',
+    'pet.topTitle': '🏆 Najsilniejsze pety serwera',
+    'pet.topEmpty':
+      '🐾 Na tym serwerze nikt nie ma jeszcze peta. Adoptuj pierwszego: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (poz. {lvl})',
     'pet.battleTitle': '⚔️ Walka petów',
     'pet.battleWin': '🏆 **{name}** wygrywa!',
     'pet.battleDraw': '🤝 Remis — równo!',
@@ -46,6 +50,9 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   en: {
     'pet.disabled': '🚫 Economy is disabled on this server.',
+    'pet.topTitle': '🏆 Strongest pets on the server',
+    'pet.topEmpty': '🐾 No one has a pet on this server yet. Adopt the first: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (lvl {lvl})',
     'pet.battleTitle': '⚔️ Pet battle',
     'pet.battleWin': '🏆 **{name}** wins!',
     'pet.battleDraw': "🤝 Draw — it's a tie!",
@@ -86,6 +93,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   de: {
     'pet.disabled': '🚫 Die Ökonomie ist auf diesem Server deaktiviert.',
+    'pet.topTitle': '🏆 Stärkste Pets des Servers',
+    'pet.topEmpty':
+      '🐾 Auf diesem Server hat noch niemand ein Pet. Adoptiere das erste: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (Lvl {lvl})',
     'pet.battleTitle': '⚔️ Pet-Kampf',
     'pet.battleWin': '🏆 **{name}** gewinnt!',
     'pet.battleDraw': '🤝 Unentschieden!',
@@ -126,6 +137,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   es: {
     'pet.disabled': '🚫 La economía está desactivada en este servidor.',
+    'pet.topTitle': '🏆 Las mascotas más fuertes del servidor',
+    'pet.topEmpty':
+      '🐾 Nadie tiene mascota en este servidor todavía. Adopta la primera: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (nv. {lvl})',
     'pet.battleTitle': '⚔️ Batalla de mascotas',
     'pet.battleWin': '🏆 ¡**{name}** gana!',
     'pet.battleDraw': '🤝 ¡Empate!',
@@ -166,6 +181,9 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   it: {
     'pet.disabled': '🚫 L’economia è disattivata su questo server.',
+    'pet.topTitle': '🏆 I pet più forti del server',
+    'pet.topEmpty': '🐾 Nessuno ha ancora un pet su questo server. Adotta il primo: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (liv. {lvl})',
     'pet.battleTitle': '⚔️ Battaglia tra pet',
     'pet.battleWin': '🏆 **{name}** vince!',
     'pet.battleDraw': '🤝 Pareggio!',
@@ -206,6 +224,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   fr: {
     'pet.disabled': '🚫 L’économie est désactivée sur ce serveur.',
+    'pet.topTitle': '🏆 Les familiers les plus forts du serveur',
+    'pet.topEmpty':
+      '🐾 Personne n’a encore de familier sur ce serveur. Adopte le premier : `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (niv. {lvl})',
     'pet.battleTitle': '⚔️ Combat de familiers',
     'pet.battleWin': '🏆 **{name}** gagne !',
     'pet.battleDraw': '🤝 Égalité !',
@@ -247,6 +269,9 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   pt: {
     'pet.disabled': '🚫 A economia está desativada neste servidor.',
+    'pet.topTitle': '🏆 Os pets mais fortes do servidor',
+    'pet.topEmpty': '🐾 Ninguém tem pet neste servidor ainda. Adote o primeiro: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (nv. {lvl})',
     'pet.battleTitle': '⚔️ Batalha de pets',
     'pet.battleWin': '🏆 **{name}** vence!',
     'pet.battleDraw': '🤝 Empate!',
@@ -287,6 +312,9 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   zh: {
     'pet.disabled': '🚫 本服务器的经济系统已关闭。',
+    'pet.topTitle': '🏆 服务器最强宠物',
+    'pet.topEmpty': '🐾 本服务器还没有人拥有宠物。领养第一只：`/pet adopt`。',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power}（等级 {lvl}）',
     'pet.battleTitle': '⚔️ 宠物对战',
     'pet.battleWin': '🏆 **{name}** 获胜！',
     'pet.battleDraw': '🤝 平局！',
@@ -326,6 +354,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ko: {
     'pet.disabled': '🚫 이 서버에서는 경제가 비활성화되어 있습니다.',
+    'pet.topTitle': '🏆 서버 최강 펫',
+    'pet.topEmpty':
+      '🐾 이 서버에는 아직 펫을 가진 사람이 없어요. 첫 펫을 입양하세요: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (Lv {lvl})',
     'pet.battleTitle': '⚔️ 펫 대결',
     'pet.battleWin': '🏆 **{name}** 승리!',
     'pet.battleDraw': '🤝 무승부!',
@@ -366,6 +398,9 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ru: {
     'pet.disabled': '🚫 Экономика отключена на этом сервере.',
+    'pet.topTitle': '🏆 Сильнейшие питомцы сервера',
+    'pet.topEmpty': '🐾 На этом сервере пока ни у кого нет питомца. Заведи первого: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (ур. {lvl})',
     'pet.battleTitle': '⚔️ Битва питомцев',
     'pet.battleWin': '🏆 **{name}** побеждает!',
     'pet.battleDraw': '🤝 Ничья!',
@@ -406,6 +441,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   uk: {
     'pet.disabled': '🚫 Економіку вимкнено на цьому сервері.',
+    'pet.topTitle': '🏆 Найсильніші улюбленці сервера',
+    'pet.topEmpty':
+      '🐾 На цьому сервері ще ні в кого немає улюбленця. Заведи першого: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (рів. {lvl})',
     'pet.battleTitle': '⚔️ Битва улюбленців',
     'pet.battleWin': '🏆 **{name}** перемагає!',
     'pet.battleDraw': '🤝 Нічия!',
@@ -446,6 +485,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ja: {
     'pet.disabled': '🚫 このサーバーでは経済が無効です。',
+    'pet.topTitle': '🏆 サーバー最強のペット',
+    'pet.topEmpty':
+      '🐾 このサーバーにはまだ誰もペットを飼っていません。最初のペットを養子に: `/pet adopt`。',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power}（Lv {lvl}）',
     'pet.battleTitle': '⚔️ ペットバトル',
     'pet.battleWin': '🏆 **{name}** の勝ち！',
     'pet.battleDraw': '🤝 引き分け！',
@@ -486,6 +529,9 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ar: {
     'pet.disabled': '🚫 الاقتصاد معطّل في هذا الخادم.',
+    'pet.topTitle': '🏆 أقوى الحيوانات الأليفة في الخادم',
+    'pet.topEmpty': '🐾 لا أحد لديه حيوان أليف على هذا الخادم بعد. تبنَّ الأول: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (مستوى {lvl})',
     'pet.battleTitle': '⚔️ معركة الحيوانات الأليفة',
     'pet.battleWin': '🏆 **{name}** يفوز!',
     'pet.battleDraw': '🤝 تعادل!',
@@ -526,6 +572,10 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   id: {
     'pet.disabled': '🚫 Ekonomi dinonaktifkan di server ini.',
+    'pet.topTitle': '🏆 Peliharaan terkuat di server',
+    'pet.topEmpty':
+      '🐾 Belum ada yang punya peliharaan di server ini. Adopsi yang pertama: `/pet adopt`.',
+    'pet.topRow': '{medal} {emoji} **{name}** — 💪 {power} (Lv {lvl})',
     'pet.battleTitle': '⚔️ Pertarungan peliharaan',
     'pet.battleWin': '🏆 **{name}** menang!',
     'pet.battleDraw': '🤝 Seri!',
