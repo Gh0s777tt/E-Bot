@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-592-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.522.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-593-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.523.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.523.0] — 🎭 Battle-pass: nagrody-role za tiery (bot, opcjonalne)
+
+- `[#593]` 🎭 **Role za tiery battle-passa** (bot): `/battlepass` synchronizuje teraz role Discord do bieżącego tieru sezonu — nadaje role za tiery ≤ current, zdejmuje za tiery > current (po miesięcznym resecie aktywności `current=0` → zdejmie wszystkie role tierów). Mapowanie tier→rola z configu `g:<gid>:bp_roles` (ustawiane w panelu — następny etap); brak configu = **no-op (zero regresji)**. Czyste, otestowane `parseTierRoles` (odporny parser JSON) i `syncTierRoles` (rozłączne `add`/`remove`, idempotentne). Nadawanie ról wzorowane na levelingu (graceful `roles.add`/`remove`, wymaga uprawnienia bota do zarządzania rolami).
+  - **Testy:** `battlepass.test.ts` +6 (`parseTierRoles`: śmieci / złe typy · `syncTierRoles`: nadaj / zdejmij / reset sezonu / idempotencja) → **1061/1061**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.522.0] — 🛡️ Panel: strona „Klany" (ranking klanów wg banku)
 

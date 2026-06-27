@@ -55,6 +55,48 @@ export function claimRewards(
   return { coins, newClaimed: currentTier };
 }
 
+// Opcjonalne nagrody-role za tiery (config per-serwer, mapowanie tier→rola z panelu).
+export type TierRole = { tier: number; roleId: string };
+
+// Parsuje config ról tierów z surowego ustawienia (JSON TierRole[]). Odporne na śmieci/zły typ → [].
+export function parseTierRoles(raw: string | null | undefined): TierRole[] {
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw) as unknown;
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter(
+        (x): x is TierRole =>
+          typeof x === 'object' &&
+          x !== null &&
+          typeof (x as TierRole).tier === 'number' &&
+          typeof (x as TierRole).roleId === 'string',
+      )
+      .map((x) => ({ tier: x.tier, roleId: x.roleId }));
+  } catch {
+    return [];
+  }
+}
+
+// Czysta synchronizacja ról tierów do BIEŻĄCEGO tieru: nadaj role za tiery ≤ current, których członek
+// nie ma; zdejmij skonfigurowane role tierów > current, które ma (po resecie sezonu current=0 → zdejmie
+// wszystkie). Idempotentne; zwraca rozłączne listy add/remove (roleId). Pusty roleId pomijany.
+export function syncTierRoles(
+  currentTier: number,
+  tierRoles: TierRole[],
+  memberRoleIds: Set<string>,
+): { add: string[]; remove: string[] } {
+  const add: string[] = [];
+  const remove: string[] = [];
+  for (const tr of tierRoles) {
+    if (!tr.roleId) continue;
+    const shouldHave = tr.tier <= currentTier;
+    if (shouldHave && !memberRoleIds.has(tr.roleId)) add.push(tr.roleId);
+    else if (!shouldHave && memberRoleIds.has(tr.roleId)) remove.push(tr.roleId);
+  }
+  return { add, remove };
+}
+
 function bar(pct: number): string {
   const filled = Math.round(pct / 10);
   return '▰'.repeat(filled) + '▱'.repeat(10 - filled);
@@ -113,6 +155,23 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     }
   }
 
+  // Role-nagrody za tiery (opcjonalne) — synchronizacja do bieżącego tieru (config `g:<gid>:bp_roles`
+  // z panelu). Wymaga uprawnienia bota do zarządzania rolami; błędy łykane (jak w levelingu).
+  let roleLine = '';
+  const tierRoles = parseTierRoles(
+    await cloudGetSetting(`g:${interaction.guildId}:bp_roles`).catch(() => null),
+  );
+  if (tierRoles.length) {
+    const member = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
+    if (member) {
+      const { add, remove } = syncTierRoles(current, tierRoles, new Set(member.roles.cache.keys()));
+      for (const id of add) await member.roles.add(id).catch(() => {});
+      for (const id of remove) await member.roles.remove(id).catch(() => {});
+      if (add.length)
+        roleLine = `\n🎭 Odblokowano role tierów: ${add.map((id) => `<@&${id}>`).join(' ')}`;
+    }
+  }
+
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
     .setTitle(`🎟️ Battle-pass — sezon ${month}`)
@@ -123,7 +182,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         (next
           ? `Do **Tier ${next.tier} (${next.title})**: jeszcze ${(next.need - xp).toLocaleString('pl-PL')} wiad.`
           : '🏆 Maksymalny tier sezonu osiągnięty!') +
-        rewardLine,
+        rewardLine +
+        roleLine,
     )
     .setFooter({ text: 'Tiery dają coins (raz na sezon) i są kamieniami milowymi aktywności.' });
   await interaction.editReply({ embeds: [embed] });
