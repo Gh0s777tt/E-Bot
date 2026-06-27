@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-551-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.481.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-552-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.482.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.482.0] — 🌐 Anti-raid: cross-server threat intel (federacyjna blocklista)
+
+- `[#552]` 🌐 **Federacyjna obrona w obrębie instancji** — [`bot/src/security/antiraid.mts`](bot/src/security/antiraid.mts): gdy anti-raid zbanuje falę lub honeypot trafi, hash ID raidera (`threatHash` — SHA-256, **anonimizacja** współdzielonego store) ląduje w globalnym `threat_intel`. Serwer z włączonym `crossIntel` rozpoznaje takie konto **przy wejściu** i ostrzega (opcjonalnie akcja). Recording bezwarunkowy (ta sama instancja), checking **opt-in, domyślnie alert-only** (anty-false-positive). Czyste `threatHash`/`isKnownThreat`/`pushThreat` (dedup + cap 500, zostają najnowsze). Panel (przełącznik + i18n ×14) w kroku #553.
+  - **Testy:** `antiraid.test.ts` +4 (hash deterministyczny, match po hashu, dedup, cap) → **941/941**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.481.0] — 💎 GameVault: alert „najniższa cena w historii" w pricetrackerze
 

@@ -5,10 +5,13 @@ import {
   clusterSimilarNames,
   detectWave,
   isHoneypotHit,
+  isKnownThreat,
   isSuspiciousName,
   largestNameCluster,
   nameSkeleton,
+  pushThreat,
   scoreMember,
+  threatHash,
 } from './antiraid.mts';
 
 const NOW = 100_000;
@@ -137,5 +140,28 @@ describe('scoreMember — threat-score 0-100', () => {
       weighNoAvatar: true,
     });
     expect(r.score).toBeLessThanOrEqual(100);
+  });
+});
+
+describe('cross-server threat intel — hash + store', () => {
+  it('threatHash deterministyczny, 16 hex, różny dla różnych ID', () => {
+    expect(threatHash('123')).toBe(threatHash('123'));
+    expect(threatHash('123')).toMatch(/^[0-9a-f]{16}$/);
+    expect(threatHash('123')).not.toBe(threatHash('124'));
+  });
+  it('isKnownThreat: trafienie po hashu (nie po surowym ID)', () => {
+    const store = [threatHash('raider1')];
+    expect(isKnownThreat(threatHash('raider1'), store)).toBe(true);
+    expect(isKnownThreat(threatHash('niewinny'), store)).toBe(false);
+  });
+  it('pushThreat dodaje + deduplikuje', () => {
+    let s: string[] = [];
+    s = pushThreat(s, 'a');
+    s = pushThreat(s, 'a');
+    s = pushThreat(s, 'b');
+    expect(s).toEqual(['a', 'b']);
+  });
+  it('pushThreat przycina do cap (zostają najnowsze)', () => {
+    expect(pushThreat(['x', 'y'], 'z', 2)).toEqual(['y', 'z']);
   });
 });

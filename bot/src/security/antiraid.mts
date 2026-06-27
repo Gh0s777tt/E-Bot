@@ -1,6 +1,7 @@
 // Faza 7 / F6.3 — anti-raid: detektor fali wejść (N w oknie M s) → akcja na falę + alert.
 // Opcjonalnie: bramka minimalnego wieku konta (młodsze konta = akcja). Config 'antiraid_config'.
 
+import { createHash } from 'node:crypto';
 import {
   type Client,
   Events,
@@ -31,6 +32,8 @@ type AntiRaidConfig = {
   autoLockdown: boolean; // przy wykryciu fali → automatyczna blokada serwera (/lockdown)
   // Honeypot: kanał-pułapka ukryty przed ludźmi → kto (nie-mod) napisze, jest selfbotem.
   honeypot: { enabled: boolean; channelId: string; action: Action };
+  // Cross-server threat intel: rozpoznaj przy wejściu raidera zbanowanego na INNYM serwerze instancji.
+  crossIntel: { enabled: boolean; action: 'alert' | Action };
 };
 
 const DEFAULT: AntiRaidConfig = {
@@ -46,6 +49,7 @@ const DEFAULT: AntiRaidConfig = {
   altAction: 'alert',
   autoLockdown: false,
   honeypot: { enabled: false, channelId: '', action: 'ban' },
+  crossIntel: { enabled: false, action: 'alert' },
 };
 
 // Etap K — config per-serwer z cache TTL 30 s (handler reaguje na każde wejście).
@@ -83,7 +87,7 @@ const lastManualAlertByGuild = new Map<string, number>(); // throttle alertów r
 // ── Log zdarzeń do chmury (PER-SERWER 'g:<id>:antiraid_state') → panel pokazuje alarm + historię ──
 type RaidEvent = {
   ts: number;
-  type: 'raid' | 'alt' | 'young' | 'honeypot';
+  type: 'raid' | 'alt' | 'young' | 'honeypot' | 'intel';
   detail: string;
   count: number;
 };
@@ -245,7 +249,58 @@ export function scoreMember(i: {
   return { score: Math.min(100, score), reasons };
 }
 
+// ── Cross-server threat intel ─────────────────────────────────────────────────────────────────
+// Federacyjna pamięć raiderów W OBRĘBIE jednej instancji bota: gdy anti-raid zbanuje falę / honeypot
+// trafi, hash ID ląduje w GLOBALNYM store; inny serwer (opt-in) rozpoznaje konto przy wejściu. Hash =
+// anonimizacja (współdzielony store nie trzyma surowych ID „zbanowanych" gdziekolwiek) + deterministyczny
+// → matchowalny. Czyste funkcje (testowalne); stan (listę) trzyma moduł.
+export function threatHash(userId: string): string {
+  return createHash('sha256').update(`ebot-intel:${userId}`).digest('hex').slice(0, 16);
+}
+export function isKnownThreat(hash: string, store: string[]): boolean {
+  return store.includes(hash);
+}
+export function pushThreat(store: string[], hash: string, cap = 500): string[] {
+  if (store.includes(hash)) return store; // dedup
+  const next = [...store, hash];
+  return next.length > cap ? next.slice(-cap) : next; // zostają NAJNOWSZE (raid to zjawisko czasowe)
+}
+
+const INTEL_KEY = 'threat_intel'; // globalny (NIE per-serwer) — współdzielony przez serwery instancji
+let threatList: string[] = [];
+let threatLoaded = false;
+let threatDirty = false;
+async function loadThreats(): Promise<void> {
+  if (threatLoaded) return;
+  threatLoaded = true;
+  if (!hasCloud()) return;
+  try {
+    threatList = JSON.parse((await cloudGetSetting(INTEL_KEY)) || '[]') as string[];
+  } catch {
+    threatList = [];
+  }
+}
+async function flagThreat(userId: string): Promise<void> {
+  if (!hasCloud()) return;
+  await loadThreats();
+  threatList = pushThreat(threatList, threatHash(userId));
+  threatDirty = true;
+}
+async function isKnownThreatNow(userId: string): Promise<boolean> {
+  if (!hasCloud()) return false;
+  await loadThreats();
+  return isKnownThreat(threatHash(userId), threatList);
+}
+async function flushThreats(): Promise<void> {
+  if (!threatDirty || !hasCloud()) return;
+  threatDirty = false;
+  await cloudSetSetting(INTEL_KEY, JSON.stringify(threatList)).catch(() => {});
+}
+
 export function startAntiRaid(client: Client): void {
+  void loadThreats();
+  setInterval(() => void flushThreats(), 60_000);
+
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     const gid = member.guild.id;
 
@@ -267,6 +322,22 @@ export function startAntiRaid(client: Client): void {
     const cfg = cfgFor(gid);
     if (!cfg.enabled) return;
     const now = Date.now();
+
+    // Cross-server threat intel — konto znane jako raider na INNYM serwerze tej instancji? (opt-in).
+    if (cfg.crossIntel?.enabled && (await isKnownThreatNow(member.id))) {
+      await alert(
+        member.guild,
+        cfg.alertChannelId,
+        `🌐 **Cross-server intel:** <@${member.id}> (\`${member.user.tag}\`) — znany raider z innego serwera.${
+          cfg.crossIntel.action !== 'alert' ? ` → ${cfg.crossIntel.action}` : ''
+        }`,
+      );
+      void record(gid, 'intel', `${member.user.tag} — znany raider (cross-server)`);
+      if (cfg.crossIntel.action !== 'alert') {
+        await punishWith(member, cfg.crossIntel.action, 'Cross-server threat intel');
+        return;
+      }
+    }
 
     // Bramka wieku konta (niezależna od fali).
     if (cfg.minAccountAgeDays > 0) {
@@ -361,7 +432,10 @@ export function startAntiRaid(client: Client): void {
       }
       const wave = [...recent];
       recentByGuild.set(gid, []);
-      for (const r of wave) await punishWith(r.m, cfg.action, 'Anti-raid (fala wejść)');
+      for (const r of wave) {
+        await punishWith(r.m, cfg.action, 'Anti-raid (fala wejść)');
+        void flagThreat(r.m.id); // współdziel z innymi serwerami instancji (cross-server intel)
+      }
     }
   });
 
@@ -377,6 +451,7 @@ export function startAntiRaid(client: Client): void {
     if (!isHoneypotHit(hp.channelId, msg.channelId, privileged)) return;
     await msg.delete().catch(() => {});
     if (member) await punishWith(member, hp.action, 'Honeypot: wiadomość w kanale-pułapce');
+    void flagThreat(msg.author.id); // selfbot → współdziel (cross-server intel)
     await alert(
       msg.guild,
       cfgFor(gid).alertChannelId,
