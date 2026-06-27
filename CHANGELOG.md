@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-564-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.494.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-565-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.495.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.495.0] — 🔐 Asystent panelu: bezpieczne akcje (backend) — propozycje toggle modułu
+
+- `[#565]` 🔐 **Egzekucja z asystenta — bezpieczny backend** — `askAssistant` ([`dashboard/lib/assistant.ts`](dashboard/lib/assistant.ts)) może teraz **proponować** akcje `toggleModule` (whitelista kluczy `MODULES`). Czysta `parseActions` waliduje typ + klucz względem rejestru (**obrona w głąb** — odrzuca zmyślone klucze i obce typy; etykieta brana z rejestru, nie od modelu), cap 5. **Nigdy auto-zapis** — to tylko propozycje; „Zastosuj" pójdzie przez istniejące, autoryzowane+audytowane `/api/modules` (UI w #566). Prompt rozszerzony o listę modułów.
+  - **Testy:** `assistant.test.ts` +7 (whitelista / anty-zmyślenie / obcy typ / cap 5 / twardy boolean) → **986/986**. Bramki: dashboard `tsc` · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.494.0] — 🧭 AI-asystent panelu: testy parsera + uzupełniony katalog stron
 

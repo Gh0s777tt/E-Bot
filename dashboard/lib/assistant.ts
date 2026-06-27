@@ -1,14 +1,34 @@
 // Etap K — asystent AI panelu. Użytkownik opisuje, czego chce dla serwera; model rozpisuje plan
 // krok-po-kroku ze WSKAZANIEM konkretnych stron panelu (href). Używa tych samych kluczy co bot
 // (DEEPSEEK_API_KEY / OPENAI_API_KEY). Graceful: bez klucza zwraca podpowiedź, nie błąd.
+//
+// EGZEKUCJA (bezpieczna): model może PROPONOWAĆ akcje `toggleModule` (TYLKO whitelista kluczy MODULES);
+// UI pokazuje „Zastosuj" → istniejące /api/modules (autoryzacja + audyt + walidacja klucza w
+// setModuleEnabled). NIGDY auto-zapis — zawsze klik użytkownika. Dowolne pisanie do configów = poza zakresem.
+import { MODULES } from './modules';
 
 export type AssistantStep = { title: string; detail: string; href: string | null };
+// Akcja proponowana przez asystenta — WYŁĄCZNIE przełączenie znanego modułu (whitelista). Apply idzie
+// przez /api/modules (ta sama, autoryzowana ścieżka co ręczny toggle). Brak innych typów = brak dowolnego zapisu.
+export type AssistantAction = {
+  type: 'toggleModule';
+  key: string;
+  enabled: boolean;
+  label: string;
+};
 export type AssistantReply = {
   ok: boolean;
   summary: string;
   steps: AssistantStep[];
+  actions: AssistantAction[];
   error?: string;
 };
+
+// Whitelista modułów do akcji (klucz → etykieta). Walidujemy propozycje względem niej (obrona w głąb —
+// `setModuleEnabled` też odrzuca nieznany klucz). Lista trafia do promptu, by model nie zmyślał kluczy.
+const MODULE_KEYS = new Set(MODULES.map((m) => m.key));
+const MODULE_LABEL = new Map(MODULES.map((m) => [m.key, m.label]));
+const MODULE_LIST = MODULES.map((m) => `${m.key} — ${m.label} (${m.group})`).join('\n');
 
 // Katalog funkcji panelu dla modelu (href — nazwa: po co). Trzymany blisko nawigacji, żeby model
 // kierował do właściwych stron.
@@ -100,39 +120,74 @@ nadać botowi i dlaczego.
 Dostępne strony panelu (href — opis):
 ${FEATURES.map((f) => `${f.href} — ${f.line}`).join('\n')}
 
+Moduły, które możesz zaproponować do WŁĄCZENIA/WYŁĄCZENIA (klucz — nazwa):
+${MODULE_LIST}
+
 ZASADY:
 - Odpowiadaj w TYM SAMYM JĘZYKU co prośba użytkownika.
 - Zwróć WYŁĄCZNIE poprawny JSON, bez markdown, w formacie:
-  {"summary":"krótkie podsumowanie planu","steps":[{"title":"co zrobić","detail":"jak dokładnie + jakie uprawnienia i dlaczego","href":"/security"}]}
+  {"summary":"krótkie podsumowanie","steps":[{"title":"co zrobić","detail":"jak + uprawnienia i dlaczego","href":"/security"}],"actions":[{"type":"toggleModule","key":"tickets","enabled":true}]}
 - "href" MUSI być jedną z powyższych ścieżek albo null (gdy krok nie dotyczy konkretnej strony).
+- "actions": gdy użytkownik chce WŁĄCZYĆ/WYŁĄCZYĆ moduł — dodaj toggleModule z "key" Z LISTY MODUŁÓW wyżej (inaczej pomiń). To tylko PROPOZYCJA — użytkownik zatwierdza klikiem w panelu. Pusta tablica, gdy brak.
 - Maksymalnie 8 kroków. Bądź konkretny i praktyczny.
 - Jeśli funkcja wymaga klucza API lub bazy → dodaj krok kierujący na /integrations.
 - Kolejność kroków sensowna (najpierw fundamenty: setup/bezpieczeństwo, potem reszta).`;
 
-export function parseReply(raw: string): { summary: string; steps: AssistantStep[] } {
+// Czysta walidacja proponowanych akcji względem whitelisty modułów (testowalna). Odrzuca obcy typ i
+// nieznany klucz; przycina do 5. Etykieta brana z REJESTRU (nie od modelu) — model nie kontroluje UI.
+export function parseActions(raw: unknown): AssistantAction[] {
+  if (!Array.isArray(raw)) return [];
+  const out: AssistantAction[] = [];
+  for (const a of raw) {
+    const o = a as { type?: unknown; key?: unknown; enabled?: unknown };
+    if (o.type !== 'toggleModule' || typeof o.key !== 'string' || !MODULE_KEYS.has(o.key)) continue;
+    out.push({
+      type: 'toggleModule',
+      key: o.key,
+      enabled: o.enabled === true,
+      label: MODULE_LABEL.get(o.key) ?? o.key,
+    });
+    if (out.length >= 5) break;
+  }
+  return out;
+}
+
+export function parseReply(raw: string): {
+  summary: string;
+  steps: AssistantStep[];
+  actions: AssistantAction[];
+} {
   const cleaned = raw
     .trim()
     .replace(/^```(?:json)?/i, '')
     .replace(/```$/i, '')
     .trim();
   try {
-    const j = JSON.parse(cleaned) as { summary?: string; steps?: AssistantStep[] };
+    const j = JSON.parse(cleaned) as {
+      summary?: string;
+      steps?: AssistantStep[];
+      actions?: unknown;
+    };
     const valid = new Set(FEATURES.map((f) => f.href));
     const steps = (Array.isArray(j.steps) ? j.steps : []).slice(0, 8).map((s) => ({
       title: String(s.title ?? '').slice(0, 160),
       detail: String(s.detail ?? '').slice(0, 600),
       href: s.href && valid.has(s.href) ? s.href : null,
     }));
-    return { summary: String(j.summary ?? '').slice(0, 600), steps };
+    return {
+      summary: String(j.summary ?? '').slice(0, 600),
+      steps,
+      actions: parseActions(j.actions),
+    };
   } catch {
     // Model nie zwrócił czystego JSON — pokaż surowy tekst jako podsumowanie.
-    return { summary: cleaned.slice(0, 1500), steps: [] };
+    return { summary: cleaned.slice(0, 1500), steps: [], actions: [] };
   }
 }
 
 export async function askAssistant(prompt: string): Promise<AssistantReply> {
   const q = prompt.trim().slice(0, 1000);
-  if (!q) return { ok: false, summary: '', steps: [], error: 'empty' };
+  if (!q) return { ok: false, summary: '', steps: [], actions: [], error: 'empty' };
 
   const deepseek = process.env.DEEPSEEK_API_KEY;
   const openai = process.env.OPENAI_API_KEY;
@@ -143,6 +198,7 @@ export async function askAssistant(prompt: string): Promise<AssistantReply> {
       ok: false,
       summary: '',
       steps: [],
+      actions: [],
       error: 'nokey',
     };
   }
@@ -170,11 +226,17 @@ export async function askAssistant(prompt: string): Promise<AssistantReply> {
       error?: { message?: string };
     };
     if (!r.ok)
-      return { ok: false, summary: '', steps: [], error: d.error?.message || `HTTP ${r.status}` };
+      return {
+        ok: false,
+        summary: '',
+        steps: [],
+        actions: [],
+        error: d.error?.message || `HTTP ${r.status}`,
+      };
     const text = d.choices?.[0]?.message?.content ?? '';
     const parsed = parseReply(text);
     return { ok: true, ...parsed };
   } catch (e) {
-    return { ok: false, summary: '', steps: [], error: (e as Error).message };
+    return { ok: false, summary: '', steps: [], actions: [], error: (e as Error).message };
   }
 }
