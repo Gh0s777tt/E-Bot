@@ -90,6 +90,16 @@ export const levelingSchema = z.object({
 });
 export type LevelingInput = z.infer<typeof levelingSchema>;
 
+// Battle-pass: mapowanie tier→rola (config 'bp_roles' = g:<gid>:bp_roles; bot synchronizuje role).
+export const bpRoleSchema = z.object({
+  tier: z.number().int().min(1).max(50),
+  roleId: z.string().max(40),
+});
+export const bpRolesSchema = z.object({
+  roles: z.array(bpRoleSchema).max(50),
+});
+export type BpRolesInput = z.infer<typeof bpRolesSchema>;
+
 // ── Bogata wiadomość / embed (Message Studio, Faza 8) ──────
 export const richEmbedSchema = z.object({
   title: z.string().max(256).default(''),

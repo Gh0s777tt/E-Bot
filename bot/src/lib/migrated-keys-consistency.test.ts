@@ -48,6 +48,7 @@ describe('Spójność MIGRATED_GUILD_KEYS: bot ⊆ panel (round-trip multi-tenan
         'social_feeds_config',
         'scheduled_posts',
         'creator_config',
+        'bp_roles',
       ]),
     );
   });

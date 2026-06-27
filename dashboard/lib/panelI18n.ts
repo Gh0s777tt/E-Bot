@@ -2198,6 +2198,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'Brak klanów na tym serwerze. Gracze tworzą je komendą `/clan create`.',
     'ui.clans.rankTitle': 'Ranking klanów',
     'ui.clans.members': 'członków',
+    'ui.bp.heading': 'Role za tiery battle-passa',
+    'ui.bp.intro':
+      'Przypisz rolę do tieru — gracz otrzymuje ją po osiągnięciu tieru w sezonie (i traci po miesięcznym resecie aktywności).',
+    'ui.bp.none': '— brak roli —',
+    'ui.bp.footNote':
+      'Bot wymaga uprawnienia „Zarządzanie rolami", a jego rola musi być wyżej niż nadawane role.',
     'ui.logging.intro':
       'Dziennik zdarzeń serwera — bot wysyła embed na wybrany kanał przy: usunięciu/edycji wiadomości, dołączeniu/wyjściu członków, zmianie nicku/ról, banach, tworzeniu/usuwaniu kanałów i ról oraz aktywności na voice. Każdą grupę włączasz osobno. Konfigurację bot pobiera na żywo (~30 s).',
     'ui.logging.statusOn': 'Logi: WŁĄCZONE',
@@ -3796,6 +3802,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'No clans on this server yet. Players create them with `/clan create`.',
     'ui.clans.rankTitle': 'Clan ranking',
     'ui.clans.members': 'members',
+    'ui.bp.heading': 'Battle-pass tier roles',
+    'ui.bp.intro':
+      'Assign a role to a tier — players get it on reaching the tier this season (and lose it after the monthly activity reset).',
+    'ui.bp.none': '— no role —',
+    'ui.bp.footNote':
+      'The bot needs the "Manage Roles" permission, and its role must be higher than the granted roles.',
     'ui.logging.intro':
       'Server event log — the bot sends an embed to the chosen channel on: message deletion/edit, member join/leave, nickname/role changes, bans, channel and role creation/deletion, and voice activity. You enable each group separately. The bot reads the config live (~30 s).',
     'ui.logging.statusOn': 'Logs: ON',
@@ -5416,6 +5428,12 @@ export const UI: Record<PanelLocale, Dict> = {
       'Noch keine Clans auf diesem Server. Spieler erstellen sie mit `/clan create`.',
     'ui.clans.rankTitle': 'Clan-Rangliste',
     'ui.clans.members': 'Mitglieder',
+    'ui.bp.heading': 'Battle-Pass-Tier-Rollen',
+    'ui.bp.intro':
+      'Weise einem Tier eine Rolle zu — Spieler erhalten sie beim Erreichen des Tiers in der Saison (und verlieren sie nach dem monatlichen Aktivitäts-Reset).',
+    'ui.bp.none': '— keine Rolle —',
+    'ui.bp.footNote':
+      'Der Bot benötigt die Berechtigung „Rollen verwalten", und seine Rolle muss über den vergebenen Rollen stehen.',
     'ui.logging.intro':
       'Server-Ereignisprotokoll — der Bot sendet ein embed an den gewählten Kanal bei: Löschen/Bearbeiten von Nachrichten, Beitritt/Verlassen von Mitgliedern, Nick-/Rollenänderungen, Bans, Erstellen/Löschen von Kanälen und Rollen sowie Aktivität im Voice. Jede Gruppe aktivierst du einzeln. Die Konfiguration liest der Bot live (~30 s).',
     'ui.logging.statusOn': 'Logs: AN',
@@ -7034,6 +7052,12 @@ export const UI: Record<PanelLocale, Dict> = {
       'Aún no hay clanes en este servidor. Los jugadores los crean con `/clan create`.',
     'ui.clans.rankTitle': 'Clasificación de clanes',
     'ui.clans.members': 'miembros',
+    'ui.bp.heading': 'Roles por niveles del battle-pass',
+    'ui.bp.intro':
+      'Asigna un rol a un nivel: los jugadores lo reciben al alcanzar el nivel en la temporada (y lo pierden tras el reinicio mensual de actividad).',
+    'ui.bp.none': '— sin rol —',
+    'ui.bp.footNote':
+      'El bot necesita el permiso «Gestionar roles» y su rol debe estar por encima de los roles otorgados.',
     'ui.logging.intro':
       'Registro de eventos del servidor — el bot envía un embed al canal elegido cuando: se elimina/edita un mensaje, un miembro entra/sale, cambian el apodo/los roles, hay baneos, se crean/eliminan canales y roles, y hay actividad en Voice. Cada grupo se activa por separado. El bot lee la configuración en vivo (~30 s).',
     'ui.logging.statusOn': 'Registros: ACTIVADOS',
@@ -8655,6 +8679,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'Nessun clan su questo server. I giocatori li creano con `/clan create`.',
     'ui.clans.rankTitle': 'Classifica dei clan',
     'ui.clans.members': 'membri',
+    'ui.bp.heading': 'Ruoli per livelli del battle-pass',
+    'ui.bp.intro':
+      'Assegna un ruolo a un livello: i giocatori lo ottengono raggiungendo il livello nella stagione (e lo perdono dopo il reset mensile di attività).',
+    'ui.bp.none': '— nessun ruolo —',
+    'ui.bp.footNote':
+      'Il bot richiede il permesso «Gestire i ruoli» e il suo ruolo deve essere più in alto dei ruoli assegnati.',
     'ui.logging.intro':
       'Registro eventi del server — il bot invia un embed sul canale scelto quando: un messaggio viene eliminato/modificato, un membro entra/esce, cambiano il nickname/i ruoli, ci sono ban, vengono creati/eliminati canali e ruoli e c’è attività in Voice. Ogni gruppo si attiva separatamente. Il bot legge la configurazione in tempo reale (~30 s).',
     'ui.logging.statusOn': 'Log: ATTIVI',
@@ -10276,6 +10306,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'Aucun clan sur ce serveur. Les joueurs les créent avec `/clan create`.',
     'ui.clans.rankTitle': 'Classement des clans',
     'ui.clans.members': 'membres',
+    'ui.bp.heading': 'Rôles de paliers du battle-pass',
+    'ui.bp.intro':
+      'Attribue un rôle à un palier — les joueurs le reçoivent en atteignant le palier de la saison (et le perdent après la réinitialisation mensuelle).',
+    'ui.bp.none': '— aucun rôle —',
+    'ui.bp.footNote':
+      'Le bot a besoin de la permission « Gérer les rôles » et son rôle doit être au-dessus des rôles attribués.',
     'ui.logging.intro':
       'Journal des événements du serveur — le bot envoie un embed sur le salon choisi lors de : suppression/modification de message, arrivée/départ de membres, changement de pseudo/rôles, bannissements, création/suppression de salons et de rôles, ainsi que l’activité vocale. Tu actives chaque groupe séparément. Le bot récupère la configuration en direct (~30 s).',
     'ui.logging.statusOn': 'Logs : ACTIVÉS',
@@ -11888,6 +11924,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'Ainda não há clãs neste servidor. Os jogadores os criam com `/clan create`.',
     'ui.clans.rankTitle': 'Ranking de clãs',
     'ui.clans.members': 'membros',
+    'ui.bp.heading': 'Cargos por níveis do battle-pass',
+    'ui.bp.intro':
+      'Atribua um cargo a um nível — os jogadores o recebem ao alcançar o nível na temporada (e o perdem após o reset mensal de atividade).',
+    'ui.bp.none': '— sem cargo —',
+    'ui.bp.footNote':
+      'O bot precisa da permissão «Gerenciar cargos» e o cargo dele deve estar acima dos cargos concedidos.',
     'ui.logging.intro':
       'Registo de eventos do servidor — o bot envia um embed para o canal escolhido em: eliminação/edição de mensagem, entrada/saída de membros, alteração de alcunha/cargos, banimentos, criação/eliminação de canais e cargos, bem como atividade no Voice. Ativas cada grupo separadamente. O bot lê a configuração em direto (~30 s).',
     'ui.logging.statusOn': 'Registos: LIGADOS',
@@ -13438,6 +13480,10 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': '本服务器还没有战队。玩家可用 `/clan create` 创建。',
     'ui.clans.rankTitle': '战队排行榜',
     'ui.clans.members': '名成员',
+    'ui.bp.heading': '战令等级身份组',
+    'ui.bp.intro': '为等级分配身份组——玩家在本赛季达到该等级时获得（并在每月活跃度重置后失去）。',
+    'ui.bp.none': '— 无身份组 —',
+    'ui.bp.footNote': '机器人需要「管理身份组」权限，且其身份组必须高于所授予的身份组。',
     'ui.logging.intro':
       '服务器事件日志 — 在以下情况下机器人会向所选频道发送 embed：消息删除/编辑、成员加入/退出、昵称/身份组变更、封禁、频道与身份组的创建/删除，以及语音活动。每个分组需单独启用。机器人会实时读取配置（~30 s）。',
     'ui.logging.statusOn': '日志：已开启',
@@ -15018,6 +15064,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': '이 서버에는 아직 클랜이 없습니다. 플레이어가 `/clan create` 로 만듭니다.',
     'ui.clans.rankTitle': '클랜 순위',
     'ui.clans.members': '명',
+    'ui.bp.heading': '배틀패스 등급 역할',
+    'ui.bp.intro':
+      '등급에 역할을 지정하세요 — 시즌에 해당 등급에 도달하면 부여되고, 월간 활동 초기화 후 회수됩니다.',
+    'ui.bp.none': '— 역할 없음 —',
+    'ui.bp.footNote':
+      '봇에는 "역할 관리" 권한이 필요하며, 봇의 역할이 부여하는 역할보다 위에 있어야 합니다.',
     'ui.logging.intro':
       '서버 이벤트 로그 — 다음 상황에서 봇이 선택한 채널로 embed를 전송합니다: 메시지 삭제/편집, 멤버 입장/퇴장, 닉네임/역할 변경, 차단, 채널 및 역할 생성/삭제, 음성 활동. 각 그룹은 개별적으로 활성화합니다. 봇은 설정을 실시간으로 읽어옵니다(~30 s).',
     'ui.logging.statusOn': '로그: 켜짐',
@@ -16619,6 +16671,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'На этом сервере пока нет кланов. Игроки создают их командой `/clan create`.',
     'ui.clans.rankTitle': 'Рейтинг кланов',
     'ui.clans.members': 'участн.',
+    'ui.bp.heading': 'Роли за уровни боевого пропуска',
+    'ui.bp.intro':
+      'Назначь роль уровню — игроки получают её при достижении уровня в сезоне (и теряют после ежемесячного сброса активности).',
+    'ui.bp.none': '— без роли —',
+    'ui.bp.footNote':
+      'Боту нужно право «Управление ролями», а его роль должна быть выше выдаваемых ролей.',
     'ui.logging.intro':
       'Журнал событий сервера — бот отправляет embed в выбранный канал при: удалении/редактировании сообщений, входе/выходе участников, изменении ника/ролей, банах, создании/удалении каналов и ролей, а также активности в голосовых каналах. Каждую группу вы включаете отдельно. Конфигурацию бот считывает в реальном времени (~30 s).',
     'ui.logging.statusOn': 'Логи: ВКЛЮЧЕНЫ',
@@ -18223,6 +18281,12 @@ export const UI: Record<PanelLocale, Dict> = {
       'На цьому сервері ще немає кланів. Гравці створюють їх командою `/clan create`.',
     'ui.clans.rankTitle': 'Рейтинг кланів',
     'ui.clans.members': 'учасн.',
+    'ui.bp.heading': 'Ролі за рівні бойової перепустки',
+    'ui.bp.intro':
+      'Признач роль рівню — гравці отримують її при досягненні рівня в сезоні (і втрачають після щомісячного скидання активності).',
+    'ui.bp.none': '— без ролі —',
+    'ui.bp.footNote':
+      'Боту потрібне право «Керування ролями», а його роль має бути вищою за видавані ролі.',
     'ui.logging.intro':
       'Журнал подій сервера — бот надсилає embed на вибраний канал при: видаленні/редагуванні повідомлень, вході/виході учасників, зміні ніку/ролей, банах, створенні/видаленні каналів і ролей, а також активності в голосових каналах. Кожну групу ви вмикаєте окремо. Конфігурацію бот зчитує в реальному часі (~30 s).',
     'ui.logging.statusOn': 'Логи: УВІМКНЕНО',
@@ -19831,6 +19895,12 @@ export const UI: Record<PanelLocale, Dict> = {
       'このサーバーにはまだクランがありません。プレイヤーは `/clan create` で作成します。',
     'ui.clans.rankTitle': 'クランランキング',
     'ui.clans.members': '人',
+    'ui.bp.heading': 'バトルパス階級ロール',
+    'ui.bp.intro':
+      '階級にロールを割り当てます — プレイヤーはシーズン中にその階級に到達すると付与され、毎月の活動リセット後に外れます。',
+    'ui.bp.none': '— ロールなし —',
+    'ui.bp.footNote':
+      'ボットには「ロールの管理」権限が必要で、ボットのロールは付与するロールより上位である必要があります。',
     'ui.logging.intro':
       'サーバーイベントログ — 次の場合にボットが選択したチャンネルへ embed を送信します：メッセージの削除/編集、メンバーの参加/退出、ニックネーム/ロールの変更、BAN、チャンネルおよびロールの作成/削除、ボイスアクティビティ。各グループは個別に有効化します。ボットは設定をリアルタイムで読み込みます（~30 s）。',
     'ui.logging.statusOn': 'ログ：オン',
@@ -21412,6 +21482,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'لا توجد عشائر على هذا الخادم بعد. ينشئها اللاعبون عبر `/clan create`.',
     'ui.clans.rankTitle': 'ترتيب العشائر',
     'ui.clans.members': 'عضو',
+    'ui.bp.heading': 'رتب مستويات تذكرة القتال',
+    'ui.bp.intro':
+      'عيّن رتبة لمستوى — يحصل عليها اللاعبون عند بلوغ المستوى في الموسم (ويفقدونها بعد إعادة ضبط النشاط الشهرية).',
+    'ui.bp.none': '— بلا رتبة —',
+    'ui.bp.footNote':
+      'يحتاج البوت إلى صلاحية «إدارة الرتب»، ويجب أن تكون رتبته أعلى من الرتب الممنوحة.',
     'ui.logging.intro':
       'سجل أحداث الخادم — يرسل البوت embed إلى القناة المختارة عند: حذف/تعديل الرسائل، انضمام/مغادرة الأعضاء، تغيير اللقب/الأدوار، الحظر، إنشاء/حذف القنوات والأدوار، وكذلك النشاط في القنوات الصوتية. تُفعِّل كل مجموعة على حدة. يقرأ البوت الإعدادات مباشرةً (~30 s).',
     'ui.logging.statusOn': 'السجلات: مُفعَّلة',
@@ -23018,6 +23094,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.clans.empty': 'Belum ada klan di server ini. Pemain membuatnya dengan `/clan create`.',
     'ui.clans.rankTitle': 'Peringkat klan',
     'ui.clans.members': 'anggota',
+    'ui.bp.heading': 'Peran tingkat battle-pass',
+    'ui.bp.intro':
+      'Tetapkan peran ke tingkat — pemain mendapatkannya saat mencapai tingkat di musim ini (dan kehilangannya setelah reset aktivitas bulanan).',
+    'ui.bp.none': '— tanpa peran —',
+    'ui.bp.footNote':
+      'Bot memerlukan izin "Kelola Peran", dan perannya harus lebih tinggi dari peran yang diberikan.',
     'ui.logging.intro':
       'Log peristiwa server — bot mengirim embed ke channel yang dipilih saat: penghapusan/penyuntingan pesan, anggota bergabung/keluar, perubahan nama panggilan/role, ban, pembuatan/penghapusan channel dan role, serta aktivitas di Voice. Kamu mengaktifkan setiap grup secara terpisah. Bot membaca konfigurasi secara langsung (~30 s).',
     'ui.logging.statusOn': 'Log: AKTIF',

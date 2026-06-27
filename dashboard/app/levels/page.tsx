@@ -1,8 +1,10 @@
-import { Award, Crown, Trophy, Users } from 'lucide-react';
+import { Award, Crown, Swords, Trophy, Users } from 'lucide-react';
+import BattlePassRolesForm from '../../components/BattlePassRolesForm';
 import LevelingForm from '../../components/LevelingForm';
 import SeasonsForm from '../../components/SeasonsForm';
 import StatCard from '../../components/StatCard';
 import StatusPill from '../../components/StatusPill';
+import { getBattlePassRoles } from '../../lib/battlepass';
 import { getSeasonsConfig } from '../../lib/community';
 import { getHallOfFame, getLeaderboard, getLevelingConfig } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
@@ -14,12 +16,13 @@ export const dynamic = 'force-dynamic';
 const MEDAL = ['🥇', '🥈', '🥉'];
 
 export default async function LevelsPage() {
-  const [cfg, board, guild, seasons, hof, lang] = await Promise.all([
+  const [cfg, board, guild, seasons, hof, bpRoles, lang] = await Promise.all([
     getLevelingConfig(),
     getLeaderboard(50),
     getGuildMeta(),
     getSeasonsConfig(),
     getHallOfFame(10),
+    getBattlePassRoles(),
     getPanelLocale(),
   ]);
 
@@ -82,6 +85,13 @@ export default async function LevelsPage() {
             </div>
           </div>
         )}
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <Swords size={16} className="text-accent" /> {tp(lang, 'ui.bp.heading')}
+        </h2>
+        <BattlePassRolesForm initial={bpRoles} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

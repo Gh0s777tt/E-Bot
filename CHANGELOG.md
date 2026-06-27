@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-593-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.523.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-594-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.524.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.524.0] — 🎭 Panel: konfigurator ról za tiery battle-passa (tier→rola)
+
+- `[#594]` 🎭 **Panel: mapowanie tier→rola battle-passa** — domyka #593 (bot czytał config, teraz jest ustawialny end-to-end): nowa sekcja na stronie **Levele** ([`/levels`](dashboard/app/levels/page.tsx)) z 8 tierami i selectem roli na każdy (z ról serwera). Zapis przez [`/api/battlepass`](dashboard/app/api/battlepass/route.ts) → klucz `bp_roles` (dodany do `MIGRATED_GUILD_KEYS` → per-serwer `g:<gid>:bp_roles`, ten sam, który czyta bot). Walidacja Zod (`bpRolesSchema`), helpery `getBattlePassRoles`/`saveBattlePassRoles`, komponent [`BattlePassRolesForm`](dashboard/components/BattlePassRolesForm.tsx). Stałe/typy tierów w osobnym, klient-bezpiecznym module [`battlepassTiers.ts`](dashboard/lib/battlepassTiers.ts) (bez importów server-only — czysta granica server/client). i18n `ui.bp.*` ×14.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1061/1061** (w tym zaktualizowany rygiel spójności `MIGRATED_GUILD_KEYS` bot⊆panel) · `sync:check` — exit 0 (Node 26.4.0). Podgląd: `/levels` kompiluje się czysto (granica server/client zweryfikowana — przejściowy błąd `next/headers` w bundlu klienta naprawiony wydzieleniem stałych do `battlepassTiers.ts`), redirect do `/login` (gated).
 
 ## [0.523.0] — 🎭 Battle-pass: nagrody-role za tiery (bot, opcjonalne)
 
