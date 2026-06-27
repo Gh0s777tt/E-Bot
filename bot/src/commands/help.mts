@@ -28,7 +28,7 @@ export const CATEGORIES: { key: string; cmds: string[] }[] = [
   { key: 'creator', cmds: ['link', 'linktwitch', 'portal', 'donate'] },
   { key: 'fun', cmds: ['fun', 'trivia', 'giveaway'] },
   { key: 'ai', cmds: ['ai', 'ask', 'tldr', 'translate', 'imagine', 'describe', 'rewrite'] },
-  { key: 'games', cmds: ['library', 'wishlist', 'backlog'] },
+  { key: 'games', cmds: ['library', 'wishlist', 'backlog', 'pricealert'] },
   { key: 'tools', cmds: ['ping', 'remind'] },
   {
     key: 'panels',

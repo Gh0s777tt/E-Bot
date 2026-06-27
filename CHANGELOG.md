@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-553-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.483.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-554-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.484.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.484.0] — 🔔 GameVault: /pricealert — osobiste alerty cenowe (komenda)
+
+- `[#554]` 🔔 **Komenda `/pricealert` (add/list/remove)** — osobiste progi cenowe gier per-user, **bez nowej tabeli**: zapis w ustawieniu serwera `g:<id>:price_targets` (mapa `userId → [{title, target}]`). Czyste `addTarget`/`removeTarget`/`isTargetHit` w [`pricetracker.mts`](bot/src/gaming/pricetracker.mts) (dedup po tytule, cap 25). Komenda w rejestrze + `/help` (kategoria games) + opisy i18n ×14 (Discord-localizations). DM przy spadku ceny dokłada poller w kroku #555.
+  - **Testy:** nowy `pricetracker.targets.test.ts` +5 → **946/946** (128 plików). Bramki: `pnpm typecheck` (4 pakiety) · Biome · `help.test` · i18n parity — exit 0 (Node 26.4.0).
 
 ## [0.483.0] — 🌐 Cross-server intel w panelu: przełącznik + akcja + i18n ×14
 

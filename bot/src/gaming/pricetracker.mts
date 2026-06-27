@@ -49,6 +49,39 @@ export function isHistoricalLow(
   return price.amount <= historyLow.amount * (1 + tolerancePct / 100);
 }
 
+// ── Osobiste alerty cenowe (per-user, per-serwer) ──────────────────────────────────────────────
+// Bez nowej tabeli: mapa userId → [{title, target}] trzymana w ustawieniu serwera 'g:<id>:price_targets'.
+// Komenda /pricealert pisze, poller pricetracker DM-uje przy spadku. Czyste operacje na mapie (testowalne).
+export type PriceTarget = { title: string; target: number };
+export type TargetMap = Record<string, PriceTarget[]>;
+export function targetsKey(guildId: string): string {
+  return `g:${guildId}:price_targets`;
+}
+export function addTarget(
+  map: TargetMap,
+  userId: string,
+  title: string,
+  target: number,
+  cap = 25,
+): TargetMap {
+  const t = title.trim();
+  const lower = t.toLowerCase();
+  const list = (map[userId] ?? []).filter((x) => x.title.toLowerCase() !== lower);
+  list.push({ title: t, target });
+  return { ...map, [userId]: list.slice(-cap) };
+}
+export function removeTarget(map: TargetMap, userId: string, title: string): TargetMap {
+  const lower = title.trim().toLowerCase();
+  const list = (map[userId] ?? []).filter((x) => x.title.toLowerCase() !== lower);
+  const next = { ...map };
+  if (list.length) next[userId] = list;
+  else delete next[userId];
+  return next;
+}
+export function isTargetHit(priceAmount: number, targetAmount: number): boolean {
+  return targetAmount > 0 && priceAmount <= targetAmount;
+}
+
 async function lookupId(key: string, title: string): Promise<string | null> {
   const r = await fetch(`${BASE}/games/lookup/v1?key=${key}&title=${encodeURIComponent(title)}`, {
     signal: AbortSignal.timeout(12_000),

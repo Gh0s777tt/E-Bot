@@ -55,6 +55,7 @@ import * as ping from './ping.mts';
 import * as poll from './poll.mts';
 import * as portal from './portal.mts';
 import * as prestige from './prestige.mts';
+import * as pricealert from './pricealert.mts';
 import * as profile from './profile.mts';
 import * as quests from './quests.mts';
 import * as raidmode from './raidmode.mts';
@@ -121,6 +122,7 @@ export const commands: Command[] = [
   giveaway,
   buttonpanel,
   wishlist,
+  pricealert,
   rank,
   economy,
   prestige,
