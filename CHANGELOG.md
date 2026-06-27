@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-534-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.464.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-535-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.465.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.465.0] — 📝 Zgodność README z rzeczywistością: blurb „Najnowsze" + liczba komend
+
+- `[#535]` 📝 **Higiena dokumentacji (zero driftu prozy).** `docs:check` pilnuje tylko markera SYNC, nie treści — więc ręcznie domknięte rozjazdy wykryte w audycie:
+  - Blurb **„Najnowsze"** w [`README.md`](README.md) prowadzi teraz v0.464.0 z podsumowaniem #531–534 (został był na v0.460.0).
+  - Liczba komend bota w tabeli modułów doprecyzowana: **92** slash-komendy (faktyczna liczba builderów; było „~95"); usługi tła oznaczone jako przybliżone (`~59`).
+  - **0 zmian w kodzie** — bramki bez zmian (910 testów).
 
 ## [0.464.0] — 🧱🛡️ Strażniki driftu (schema + env) + kompletny _ALL.sql i .env.example + CI
 
