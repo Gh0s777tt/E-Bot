@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-596-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.526.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-597-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.527.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.527.0] — 🧹 Panel: wyciszenie łagodnego ostrzeżenia hydracji `nonce` (CSP bez zmian)
+
+- `[#597]` 🧹 **`suppressHydrationWarning` na skrypcie motywu (layout)** — per-request `nonce` CSP różni się server↔klient, bo przeglądarka usuwa atrybut `nonce` z DOM dla bezpieczeństwa → React hydratuje z pustym nonce i zgłaszał łagodny mismatch na KAŻDEJ stronie panelu (zalewał konsolę, „1 Issue" w dev-toolbarze). Dodano `suppressHydrationWarning` TYLKO na tym jednym skrypcie — wycisza znane, nieszkodliwe ostrzeżenie. **CSP/nonce bez zmian** (nadal `script-src 'nonce-…' 'strict-dynamic'`, anty-XSS nietknięte); zero zmiany zachowania. Diagnoza: setup nonce [`proxy.ts`](dashboard/proxy.ts) → [`layout.tsx`](dashboard/app/layout.tsx) jest poprawny — mismatch to oczekiwany efekt strip-nonce przeglądarki, nie bug.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1067/1067** · `sync:check` — exit 0 (Node 26.4.0). Weryfikacja server-side: `GET /p/clans` → **200** z treścią, `nonce` obecny na skryptach, `suppressHydrationWarning` NIE renderowany jako atrybut DOM (poprawny strip przez React); „1 Issue" znikło z dev-toolbara.
 
 ## [0.526.0] — 🛡️ Publiczna strona klanów (`/p/clans`) — udostępnialny ranking
 
