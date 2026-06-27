@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-595-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.525.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-596-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.526.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.526.0] — 🛡️ Publiczna strona klanów (`/p/clans`) — udostępnialny ranking
+
+- `[#596]` 🛡️ **Publiczna strona „Klany"** (`/p/clans`, bez logowania) — udostępnialny ranking klanów serwera wg wspólnego banku, jak `/p/leaderboard`. Reużywa `topClans` (server-side z Supabase) + `ClanBoard`; nagłówek z ikoną ⚔️ ([`page.tsx`](dashboard/app/p/clans/page.tsx)). Na stronie admina `/clans` dochodzi przycisk „Publiczny ranking" (link do `/p/clans`, jak na `/leaderboard`). i18n `ui.pub.clans*` ×14 (parytet UI), board reużywa istniejących `ui.clans.*`.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1067/1067** (parytet i18n ×14) · `sync:check` — exit 0 (Node 26.4.0). Podgląd: `GET /p/clans` → **200** (renderuje się server-side, bez redirectu — publiczna); screenshot niedostępny przez wcześniej istniejącą niezgodność `nonce` (hydracja root-layoutu w dev, widoczna też na `/login`).
 
 ## [0.525.0] — 📈 Analityka: benchmarking trendu tydzień-do-tygodnia w digescie
 
