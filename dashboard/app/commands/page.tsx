@@ -3,8 +3,11 @@ import {
   Dices,
   Gamepad2,
   type LucideIcon,
+  Radio,
+  Server,
   ShieldAlert,
   Sparkles,
+  Tags,
   TerminalSquare,
   Ticket,
   Trophy,
@@ -18,15 +21,18 @@ import { getPanelLocale } from '../../lib/serverPanelLocale';
 export const dynamic = 'force-dynamic';
 
 const GROUP_ICONS: Record<string, LucideIcon> = {
-  Ogólne: Wrench,
+  'Ogólne & narzędzia': Wrench,
   'Biblioteka & gry': Gamepad2,
   'Moderacja & bezpieczeństwo': ShieldAlert,
-  Wsparcie: Ticket,
+  'Role & uprawnienia': Tags,
+  'Wsparcie & panele': Ticket,
   AI: Sparkles,
-  Poziomy: Trophy,
+  'Poziomy & profil': Trophy,
   Ekonomia: Banknote,
   Społeczność: Users,
-  'Zabawa & engagement': Dices,
+  'Twórca & live': Radio,
+  Zabawa: Dices,
+  'Administracja serwera': Server,
   Inne: TerminalSquare,
 };
 

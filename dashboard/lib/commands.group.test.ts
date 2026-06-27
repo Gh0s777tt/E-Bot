@@ -22,10 +22,11 @@ describe('groupCommands — konserwacja i przydział', () => {
   });
 
   it('kolejność w grupie wg KATALOGU, nie wg kolejności wejścia', () => {
-    // Katalog „Ogólne" = [ping, portal, link]; wejście podajemy w innej kolejności.
-    const groups = groupCommands([cmd('link'), cmd('portal'), cmd('ping')]);
-    const ogolne = groups.find((g) => g.label === 'Ogólne');
-    expect(ogolne?.commands.map((c) => c.name)).toEqual(['ping', 'portal', 'link']);
+    // Katalog „Ogólne & narzędzia" zaczyna się od [ping, help, …, math, heat, remind]; wejście
+    // podajemy w innej kolejności, oczekujemy kolejności katalogu (ping < math < remind).
+    const groups = groupCommands([cmd('remind'), cmd('ping'), cmd('math')]);
+    const ogolne = groups.find((g) => g.label === 'Ogólne & narzędzia');
+    expect(ogolne?.commands.map((c) => c.name)).toEqual(['ping', 'math', 'remind']);
   });
 });
 
@@ -38,7 +39,7 @@ describe('groupCommands — struktura grup', () => {
   it('puste grupy pominięte (tylko grupy z komendami; brak „Inne" gdy wszystko znane)', () => {
     const groups = groupCommands([cmd('ping')]);
     expect(groups).toHaveLength(1);
-    expect(groups[0].label).toBe('Ogólne');
+    expect(groups[0].label).toBe('Ogólne & narzędzia');
     expect(groups.some((g) => g.label === 'Inne')).toBe(false);
   });
 

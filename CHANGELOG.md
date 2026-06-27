@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-570-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.500.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-571-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.501.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.501.0] — 🗃️ Zakładka „Komendy": pełny podział (12 grup) zamiast wielkiego „Inne"
+
+- `[#571]` 🗃️ **Uporządkowanie komend** — `/commands` ([`groupCommands`](dashboard/lib/commands.ts)) dzieli teraz **wszystkie ~98** zarejestrowanych komend na **12 spójnych grup** (Ogólne & narzędzia · Biblioteka & gry · Moderacja & bezpieczeństwo · Role & uprawnienia · Wsparcie & panele · AI · Poziomy & profil · Ekonomia · Społeczność · Twórca & live · Zabawa · Administracja serwera) — koniec wielkiego worka „Inne", do którego trafiało ~43 komend fun/social/admin bez podziału. Grupowanie spójne z kategoriami bota ([`help.mts`](bot/src/commands/help.mts)), rozszerzone o role/administrację/zabawę (których `/help` nie pokazuje). Nowe ikony grup w [`commands/page.tsx`](dashboard/app/commands/page.tsx). „Inne" zostaje jako bezpieczny fallback dla przyszłych komend spoza mapy.
+  - **Testy:** `commands.group.test.ts` zaktualizowany pod nową mapę (kolejność wg katalogu + etykieta pierwszej grupy); niezmienniki bez zmian — brak gubienia/duplikatów, nieznana → 'Inne' (ostatnia), puste grupy pominięte → **995/995** (133 pliki). Bramki: dashboard `tsc` · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.500.0] — 🌐 Hardcode → env: zero-config URL panelu (Ko-fi · webhook-relay · EventSub)
 
