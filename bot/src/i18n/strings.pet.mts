@@ -7,6 +7,11 @@ type Dict = Record<string, string>;
 export const PET_STRINGS: Record<Locale, Dict> = {
   pl: {
     'pet.disabled': '🚫 Ekonomia jest wyłączona na tym serwerze.',
+    'pet.battleTitle': '⚔️ Walka petów',
+    'pet.battleWin': '🏆 **{name}** wygrywa!',
+    'pet.battleDraw': '🤝 Remis — równo!',
+    'pet.battleNoPet': '🐾 {name} nie ma jeszcze peta.',
+    'pet.battleSelf': '🤺 Nie możesz walczyć z własnym petem.',
     'pet.noCloud': '⚠️ Pety wymagają połączenia z bazą (Supabase).',
     'pet.badSpecies': '❓ Nie znam takiego gatunku.',
     'pet.alreadyHave': '🐾 Masz już peta: {emoji} **{name}**. Najpierw go wypuść (`/pet release`).',
@@ -41,6 +46,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   en: {
     'pet.disabled': '🚫 Economy is disabled on this server.',
+    'pet.battleTitle': '⚔️ Pet battle',
+    'pet.battleWin': '🏆 **{name}** wins!',
+    'pet.battleDraw': "🤝 Draw — it's a tie!",
+    'pet.battleNoPet': "🐾 {name} doesn't have a pet yet.",
+    'pet.battleSelf': "🤺 You can't battle your own pet.",
     'pet.noCloud': '⚠️ Pets need a database (Supabase).',
     'pet.badSpecies': '❓ Unknown species.',
     'pet.alreadyHave':
@@ -76,6 +86,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   de: {
     'pet.disabled': '🚫 Die Ökonomie ist auf diesem Server deaktiviert.',
+    'pet.battleTitle': '⚔️ Pet-Kampf',
+    'pet.battleWin': '🏆 **{name}** gewinnt!',
+    'pet.battleDraw': '🤝 Unentschieden!',
+    'pet.battleNoPet': '🐾 {name} hat noch kein Pet.',
+    'pet.battleSelf': '🤺 Du kannst nicht gegen dein eigenes Pet kämpfen.',
     'pet.noCloud': '⚠️ Pets benötigen eine Datenbank (Supabase).',
     'pet.badSpecies': '❓ Unbekannte Art.',
     'pet.alreadyHave':
@@ -111,6 +126,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   es: {
     'pet.disabled': '🚫 La economía está desactivada en este servidor.',
+    'pet.battleTitle': '⚔️ Batalla de mascotas',
+    'pet.battleWin': '🏆 ¡**{name}** gana!',
+    'pet.battleDraw': '🤝 ¡Empate!',
+    'pet.battleNoPet': '🐾 {name} aún no tiene mascota.',
+    'pet.battleSelf': '🤺 No puedes luchar contra tu propia mascota.',
     'pet.noCloud': '⚠️ Las mascotas necesitan una base de datos (Supabase).',
     'pet.badSpecies': '❓ Especie desconocida.',
     'pet.alreadyHave':
@@ -146,6 +166,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   it: {
     'pet.disabled': '🚫 L’economia è disattivata su questo server.',
+    'pet.battleTitle': '⚔️ Battaglia tra pet',
+    'pet.battleWin': '🏆 **{name}** vince!',
+    'pet.battleDraw': '🤝 Pareggio!',
+    'pet.battleNoPet': '🐾 {name} non ha ancora un pet.',
+    'pet.battleSelf': '🤺 Non puoi combattere contro il tuo pet.',
     'pet.noCloud': '⚠️ I pet richiedono un database (Supabase).',
     'pet.badSpecies': '❓ Specie sconosciuta.',
     'pet.alreadyHave': '🐾 Hai già un pet: {emoji} **{name}**. Rilascialo prima (`/pet release`).',
@@ -181,6 +206,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   fr: {
     'pet.disabled': '🚫 L’économie est désactivée sur ce serveur.',
+    'pet.battleTitle': '⚔️ Combat de familiers',
+    'pet.battleWin': '🏆 **{name}** gagne !',
+    'pet.battleDraw': '🤝 Égalité !',
+    'pet.battleNoPet': "🐾 {name} n'a pas encore de familier.",
+    'pet.battleSelf': '🤺 Tu ne peux pas combattre ton propre familier.',
     'pet.noCloud': '⚠️ Les familiers nécessitent une base de données (Supabase).',
     'pet.badSpecies': '❓ Espèce inconnue.',
     'pet.alreadyHave':
@@ -217,6 +247,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   pt: {
     'pet.disabled': '🚫 A economia está desativada neste servidor.',
+    'pet.battleTitle': '⚔️ Batalha de pets',
+    'pet.battleWin': '🏆 **{name}** vence!',
+    'pet.battleDraw': '🤝 Empate!',
+    'pet.battleNoPet': '🐾 {name} ainda não tem um pet.',
+    'pet.battleSelf': '🤺 Você não pode batalhar contra o seu próprio pet.',
     'pet.noCloud': '⚠️ Os pets precisam de um banco de dados (Supabase).',
     'pet.badSpecies': '❓ Espécie desconhecida.',
     'pet.alreadyHave':
@@ -252,6 +287,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   zh: {
     'pet.disabled': '🚫 本服务器的经济系统已关闭。',
+    'pet.battleTitle': '⚔️ 宠物对战',
+    'pet.battleWin': '🏆 **{name}** 获胜！',
+    'pet.battleDraw': '🤝 平局！',
+    'pet.battleNoPet': '🐾 {name} 还没有宠物。',
+    'pet.battleSelf': '🤺 你不能和自己的宠物对战。',
     'pet.noCloud': '⚠️ 宠物需要数据库（Supabase）。',
     'pet.badSpecies': '❓ 未知物种。',
     'pet.alreadyHave': '🐾 你已经有宠物了：{emoji} **{name}**。请先放生（`/pet release`）。',
@@ -286,6 +326,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ko: {
     'pet.disabled': '🚫 이 서버에서는 경제가 비활성화되어 있습니다.',
+    'pet.battleTitle': '⚔️ 펫 대결',
+    'pet.battleWin': '🏆 **{name}** 승리!',
+    'pet.battleDraw': '🤝 무승부!',
+    'pet.battleNoPet': '🐾 {name} 님은 아직 펫이 없어요.',
+    'pet.battleSelf': '🤺 자신의 펫과는 대결할 수 없어요.',
     'pet.noCloud': '⚠️ 펫은 데이터베이스(Supabase)가 필요합니다.',
     'pet.badSpecies': '❓ 알 수 없는 종입니다.',
     'pet.alreadyHave':
@@ -321,6 +366,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ru: {
     'pet.disabled': '🚫 Экономика отключена на этом сервере.',
+    'pet.battleTitle': '⚔️ Битва питомцев',
+    'pet.battleWin': '🏆 **{name}** побеждает!',
+    'pet.battleDraw': '🤝 Ничья!',
+    'pet.battleNoPet': '🐾 У {name} ещё нет питомца.',
+    'pet.battleSelf': '🤺 Нельзя сражаться со своим питомцем.',
     'pet.noCloud': '⚠️ Питомцам нужна база данных (Supabase).',
     'pet.badSpecies': '❓ Неизвестный вид.',
     'pet.alreadyHave':
@@ -356,6 +406,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   uk: {
     'pet.disabled': '🚫 Економіку вимкнено на цьому сервері.',
+    'pet.battleTitle': '⚔️ Битва улюбленців',
+    'pet.battleWin': '🏆 **{name}** перемагає!',
+    'pet.battleDraw': '🤝 Нічия!',
+    'pet.battleNoPet': '🐾 У {name} ще немає улюбленця.',
+    'pet.battleSelf': '🤺 Не можна битися з власним улюбленцем.',
     'pet.noCloud': '⚠️ Улюбленцям потрібна база даних (Supabase).',
     'pet.badSpecies': '❓ Невідомий вид.',
     'pet.alreadyHave':
@@ -391,6 +446,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ja: {
     'pet.disabled': '🚫 このサーバーでは経済が無効です。',
+    'pet.battleTitle': '⚔️ ペットバトル',
+    'pet.battleWin': '🏆 **{name}** の勝ち！',
+    'pet.battleDraw': '🤝 引き分け！',
+    'pet.battleNoPet': '🐾 {name} はまだペットを飼っていません。',
+    'pet.battleSelf': '🤺 自分のペットとは対戦できません。',
     'pet.noCloud': '⚠️ ペットにはデータベース（Supabase）が必要です。',
     'pet.badSpecies': '❓ 不明な種類です。',
     'pet.alreadyHave':
@@ -426,6 +486,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   ar: {
     'pet.disabled': '🚫 الاقتصاد معطّل في هذا الخادم.',
+    'pet.battleTitle': '⚔️ معركة الحيوانات الأليفة',
+    'pet.battleWin': '🏆 **{name}** يفوز!',
+    'pet.battleDraw': '🤝 تعادل!',
+    'pet.battleNoPet': '🐾 {name} ليس لديه حيوان أليف بعد.',
+    'pet.battleSelf': '🤺 لا يمكنك محاربة حيوانك الأليف.',
     'pet.noCloud': '⚠️ تحتاج الحيوانات الأليفة إلى قاعدة بيانات (Supabase).',
     'pet.badSpecies': '❓ نوع غير معروف.',
     'pet.alreadyHave':
@@ -461,6 +526,11 @@ export const PET_STRINGS: Record<Locale, Dict> = {
   },
   id: {
     'pet.disabled': '🚫 Ekonomi dinonaktifkan di server ini.',
+    'pet.battleTitle': '⚔️ Pertarungan peliharaan',
+    'pet.battleWin': '🏆 **{name}** menang!',
+    'pet.battleDraw': '🤝 Seri!',
+    'pet.battleNoPet': '🐾 {name} belum punya peliharaan.',
+    'pet.battleSelf': '🤺 Kamu tidak bisa bertarung dengan peliharaanmu sendiri.',
     'pet.noCloud': '⚠️ Pet butuh basis data (Supabase).',
     'pet.badSpecies': '❓ Spesies tidak dikenal.',
     'pet.alreadyHave': '🐾 Kamu sudah punya pet: {emoji} **{name}**. Lepas dulu (`/pet release`).',

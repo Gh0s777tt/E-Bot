@@ -20,7 +20,9 @@ import {
   minutesSinceIso,
   moodKey,
   type Pet,
+  petBattle,
   petLevel,
+  petPower,
   SPECIES,
   savePet,
   xpIntoLevel,
@@ -66,7 +68,15 @@ export const data = new SlashCommandBuilder()
         o.setName('imie').setDescription('Nowe imię').setRequired(true).setMaxLength(30),
       ),
   )
-  .addSubcommand((s) => s.setName('release').setDescription('Wypuść peta (usuwa go).'));
+  .addSubcommand((s) => s.setName('release').setDescription('Wypuść peta (usuwa go).'))
+  .addSubcommand((s) =>
+    s
+      .setName('battle')
+      .setDescription('Stocz walkę swojego peta z petem innego użytkownika.')
+      .addUserOption((o) =>
+        o.setName('przeciwnik').setDescription('Z kim walczysz').setRequired(true),
+      ),
+  );
 
 function statusEmbed(locale: Locale, pet: Pet, cur: string): EmbedBuilder {
   const sp = findSpecies(pet.species);
@@ -180,6 +190,36 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
 
   if (sub === 'status') {
     await interaction.reply({ embeds: [statusEmbed(locale, pet, cur)] });
+    return;
+  }
+
+  if (sub === 'battle') {
+    const opp = interaction.options.getUser('przeciwnik', true);
+    if (opp.id === uid) {
+      await interaction.reply(eph(t(locale, 'pet.battleSelf')));
+      return;
+    }
+    const oppPet = await getPet(gid, opp.id);
+    if (!oppPet) {
+      await interaction.reply(eph(t(locale, 'pet.battleNoPet', { name: opp.username })));
+      return;
+    }
+    const spA = findSpecies(pet.species);
+    const spB = findSpecies(oppPet.species);
+    const res = petBattle(petPower(pet), petPower(oppPet), Date.now() & 0x7fffffff);
+    const line = `${spA?.emoji ?? '🐾'} **${pet.name}** \`${res.scoreA}\`  ⚔️  \`${res.scoreB}\` **${oppPet.name}** ${spB?.emoji ?? '🐾'}`;
+    const outcome =
+      res.winner === 'draw'
+        ? t(locale, 'pet.battleDraw')
+        : t(locale, 'pet.battleWin', { name: res.winner === 'a' ? pet.name : oppPet.name });
+    await interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(ACCENT)
+          .setTitle(t(locale, 'pet.battleTitle'))
+          .setDescription(`${line}\n\n${outcome}`),
+      ],
+    });
     return;
   }
 

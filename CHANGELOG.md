@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-587-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.517.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-588-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.518.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.518.0] — ⚔️ Pety: walki PvP (`/pet battle`) — czysty, deterministyczny silnik
+
+- `[#588]` ⚔️ **Walki petów** — nowa podkomenda `/pet battle @user`: Twój pet kontra pet innego gracza. Czysty, **deterministyczny** silnik ([`pets.mts`](bot/src/economy/pets.mts)): `petPower` (moc = poziom ×10 + sytość + baza gatunku — głodny pet słabszy, `dragon` > `hamster`) i `petBattle` (moc + seedowana wariancja ≤ 50%; ten sam seed → ten sam wynik, znacznie mocniejszy zawsze wygrywa). Kosmetyczna (bragging rights, **bez nagród** → brak sensu rerollu, zero abuse'u); embed z wynikiem ⚔️ i zwycięzcą. i18n `pet.battle*` ×14 (tytuł / wygrana / remis / brak-peta / sam-ze-sobą).
+  - **Testy:** nowy `petBattle.test.ts` +7 (`petPower`: poziom / gatunek / ≥ 1 · `petBattle`: determinizm / dominacja mocniejszego / zakres score / `winner∈{a,b,draw}`) → **1039/1039**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.517.0] — 🏗️ AI Architect: przepływ podgląd → potwierdź (bezpieczne tworzenie struktury)
 

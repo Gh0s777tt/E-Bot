@@ -102,3 +102,33 @@ export function moodKey(pct: number): string {
   if (pct > 0) return 'hungry';
   return 'starving';
 }
+
+// ── Walka petów (PvP, kosmetyczna — bragging rights, bez nagród) ─────────────────────────────────
+// Moc bojowa: poziom dominuje (×10), sytość modyfikuje (głodny pet słabszy), gatunek daje bazę
+// (rzadszy = mocniejszy, z giftBase). Czysta funkcja → test.
+export function petPower(pet: Pet): number {
+  const lvl = petLevel(pet.xp);
+  const full = fullness(pet);
+  const sp = findSpecies(pet.species);
+  const speciesBase = sp ? Math.round(sp.giftBase / 10) : 3;
+  return Math.max(1, Math.round(lvl * 10 + full * 0.3 + speciesBase));
+}
+
+// Deterministyczny float [0,1) z seeda (mix bitowy) — powtarzalny wynik dla tych samych wejść.
+function seededFloat(seed: number): number {
+  let x = (Math.trunc(seed) ^ 0x9e3779b9) >>> 0;
+  x = Math.imul(x ^ (x >>> 15), 0x2c1b3c6d) >>> 0;
+  x = Math.imul(x ^ (x >>> 13), 0x297a2d39) >>> 0;
+  x ^= x >>> 15;
+  return (x >>> 0) / 4294967296;
+}
+
+export type BattleResult = { winner: 'a' | 'b' | 'draw'; scoreA: number; scoreB: number };
+
+// Walka: każdy pet = moc + seedowana wariancja (do 50% mocy). Deterministyczna względem seeda →
+// sprawiedliwa i testowalna. Kosmetyczna (bez nagród → reroll nie ma sensu, brak abuse'u).
+export function petBattle(powerA: number, powerB: number, seed: number): BattleResult {
+  const scoreA = powerA + Math.round(powerA * 0.5 * seededFloat(seed));
+  const scoreB = powerB + Math.round(powerB * 0.5 * seededFloat(seed ^ 0x55555555));
+  return { winner: scoreA > scoreB ? 'a' : scoreB > scoreA ? 'b' : 'draw', scoreA, scoreB };
+}
