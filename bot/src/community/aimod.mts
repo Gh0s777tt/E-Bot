@@ -9,7 +9,7 @@ import {
   PermissionFlagsBits,
   type TextChannel,
 } from 'discord.js';
-import { moderateText } from '../lib/ai.mts';
+import { moderateImages, moderateText } from '../lib/ai.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log as logger } from '../lib/log.mts';
 
@@ -18,13 +18,28 @@ type AiModConfig = {
   action: 'delete' | 'warn' | 'log';
   logChannelId: string;
   exemptRoleId: string;
+  scanImages: boolean; // skan załączników-obrazów przez vision-moderację (NSFW/przemoc itp.)
 };
 const DEFAULT: AiModConfig = {
   enabled: false,
   action: 'delete',
   logChannelId: '',
   exemptRoleId: '',
+  scanImages: false,
 };
+
+// Załączniki-obrazy do moderacji (czysta funkcja, testowalna): tylko `image/*`, do `maxBytes`, max `maxCount`
+// (limit kosztu/czasu — skan chodzi na każdej wiadomości z załącznikiem, gdy scanImages=on).
+export function imageUrls(
+  items: { contentType: string | null; url: string; size: number }[],
+  maxCount = 4,
+  maxBytes = 8_000_000,
+): string[] {
+  return items
+    .filter((a) => a.contentType?.startsWith('image/') && a.size <= maxBytes)
+    .slice(0, maxCount)
+    .map((a) => a.url);
+}
 
 // Config PER-SERWER (Etap K): cache TTL 30 s per guild — override `g:<id>:aimod_config` z fallbackiem
 // do globalnego (getGuildSettings). Czyta dopiero przy braku/wygaśnięciu cache, nie na każdą wiadomość.
@@ -84,10 +99,27 @@ export function startAiMod(client: Client): void {
     if (member?.permissions.has(PermissionFlagsBits.ManageMessages)) return;
     if (cfg.exemptRoleId && member?.roles.cache.has(cfg.exemptRoleId)) return;
     const content = msg.content || '';
-    if (content.length < 3) return;
+    const imgs = cfg.scanImages ? imageUrls([...msg.attachments.values()]) : [];
+    if (content.length < 3 && !imgs.length) return;
 
     try {
-      const { flagged, categories } = await moderateText(content);
+      let flagged = false;
+      const categories: string[] = [];
+      if (content.length >= 3) {
+        const t = await moderateText(content);
+        if (t.flagged) {
+          flagged = true;
+          categories.push(...t.categories);
+        }
+      }
+      // Obrazy skanujemy tylko, gdy tekst nie wystarczył (oszczędza wywołania, ten sam skutek).
+      if (!flagged && imgs.length) {
+        const im = await moderateImages(imgs);
+        if (im.flagged) {
+          flagged = true;
+          categories.push(...im.categories.map((c) => `obraz:${c}`));
+        }
+      }
       if (!flagged) return;
 
       let acted = 'zalogowano';

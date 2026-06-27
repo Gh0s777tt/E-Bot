@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-555-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.485.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-556-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.486.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.486.0] — 🖼️ AI-moderacja obrazów: skan załączników (omni-moderation)
+
+- `[#556]` 🖼️ **Moderacja obrazów (bot)** — `aimod` ([`bot/src/community/aimod.mts`](bot/src/community/aimod.mts)) skanował tylko tekst; teraz przy `scanImages` skanuje też **załączniki-obrazy** przez nową `moderateImages` ([`ai.mts`](bot/src/lib/ai.mts), omni-moderation-latest multimodalny — **darmowe** jak tekst). Czysta `imageUrls` (tylko `image/*`, cap **4 × ≤8 MB** — anty-koszt/zalanie). Obrazy skanowane tylko, gdy tekst nie wystarczył (oszczędność wywołań). Config `scanImages` w `aimod_config`; panel toggle w kroku #557.
+  - **Testy:** nowy `aimod.test.ts` +4 (filtr `image/*`, cap liczby, limit rozmiaru) → **953/953** (129 plików). Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.485.0] — 🔔 GameVault: /pricealert DM przy spadku (integracja pollera)
 

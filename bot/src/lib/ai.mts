@@ -190,6 +190,34 @@ export async function moderateText(
   return { flagged: !!res?.flagged, categories };
 }
 
+/** Moderacja OBRAZÓW przez omni-moderation-latest (multimodalny, `image_url`). DARMOWE jak tekst.
+ *  Zwraca zbiorczo: flagged gdy KTÓRYKOLWIEK obraz naruszający + suma kategorii. Wymaga OPENAI_API_KEY. */
+export async function moderateImages(
+  urls: string[],
+): Promise<{ flagged: boolean; categories: string[] }> {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) throw new Error('brak OPENAI_API_KEY (moderacja AI wymaga OpenAI)');
+  if (!urls.length) return { flagged: false, categories: [] };
+  const r = await fetch('https://api.openai.com/v1/moderations', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'omni-moderation-latest',
+      input: urls.map((url) => ({ type: 'image_url', image_url: { url } })),
+    }),
+    signal: AbortSignal.timeout(20_000),
+  });
+  const d = (await r.json().catch(() => ({}))) as {
+    results?: { flagged?: boolean; categories?: Record<string, boolean> }[];
+    error?: { message?: string };
+  };
+  if (!r.ok) throw new Error(d.error?.message || `HTTP ${r.status}`);
+  const cats = new Set<string>();
+  for (const res of d.results ?? [])
+    if (res.categories) for (const [k, v] of Object.entries(res.categories)) if (v) cats.add(k);
+  return { flagged: (d.results ?? []).some((res) => res.flagged), categories: [...cats] };
+}
+
 /** Tor C — opis obrazka (vision). Wymaga OPENAI_API_KEY (gpt-4o-mini z wejściem image_url). */
 export async function describeImage(
   imageUrl: string,
