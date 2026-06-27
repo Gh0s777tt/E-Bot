@@ -3,6 +3,7 @@
 // którym idzie ranking. Respektuje economy.enabled; dane w Supabase clans/clan_members (bez chmury:
 // uczciwy komunikat). Prestiżowe (bez wypłat z banku → brak abuse'u dotacją tam-i-z-powrotem).
 import {
+  ChannelType,
   type ChatInputCommandInteraction,
   EmbedBuilder,
   MessageFlags,
@@ -12,6 +13,7 @@ import {
   addMember,
   CLAN_CREATE_COST,
   type Clan,
+  channelLinkError,
   clanKey,
   clanRankByBank,
   donationError,
@@ -100,6 +102,24 @@ export const data = new SlashCommandBuilder()
       .addRoleOption((o) =>
         o.setName('rola').setDescription('Rola dla członków (puste = wyczyść)').setRequired(false),
       ),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('channel')
+      .setDescription('Ustaw lub odepnij prywatny kanał klanu (wymaga roli klanu; tylko lider).')
+      .addChannelOption((o) =>
+        o
+          .setName('kanal')
+          .setDescription('Kanał klanu (puste = odepnij)')
+          .setRequired(false)
+          .addChannelTypes(
+            ChannelType.GuildText,
+            ChannelType.GuildVoice,
+            ChannelType.GuildAnnouncement,
+            ChannelType.GuildStageVoice,
+            ChannelType.GuildForum,
+          ),
+      ),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -169,6 +189,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       bank: 0,
       created_at: nowIso,
       role_id: null,
+      channel_id: null,
     });
     await addMember({ guild_id: gid, clan_id: id, user_id: uid, joined_at: nowIso });
     logTx(gid, uid, -CLAN_CREATE_COST, `clan:create:${id}`);
@@ -250,6 +271,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         const gm = await interaction.guild.members.fetch(m.user_id).catch(() => null);
         await gm?.roles.remove(roleId).catch(() => {});
       }
+      if (clan.channel_id) {
+        const ch = await interaction.guild.channels.fetch(clan.channel_id).catch(() => null);
+        if (ch && 'permissionOverwrites' in ch) {
+          await ch.permissionOverwrites.delete(roleId).catch(() => {});
+        }
+      }
     }
     await removeClan(gid, clan.id);
     await interaction.editReply(t(locale, 'clan.disbanded', { name: clan.name }));
@@ -329,6 +356,53 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         }
       }
       await interaction.editReply(t(locale, 'clan.roleCleared'));
+    }
+    return;
+  }
+
+  if (sub === 'channel') {
+    if (!membership) {
+      await interaction.reply(eph(t(locale, 'clan.notInClan')));
+      return;
+    }
+    const clan = await getClan(gid, membership.clan_id);
+    if (!clan || clan.owner_id !== uid) {
+      await interaction.reply(eph(t(locale, 'clan.notOwner')));
+      return;
+    }
+    const channel = interaction.options.getChannel('kanal');
+    await interaction.deferReply();
+    if (channel) {
+      const manageable = 'manageable' in channel ? channel.manageable : false;
+      const err = channelLinkError(!!clan.role_id, { type: channel.type, manageable });
+      if (err === 'noRole') {
+        await interaction.editReply(t(locale, 'clan.channelNeedRole'));
+        return;
+      }
+      if (err) {
+        await interaction.editReply(t(locale, 'clan.channelBad'));
+        return;
+      }
+      if (clan.role_id && 'permissionOverwrites' in channel) {
+        const role = await interaction.guild.roles.fetch(clan.role_id).catch(() => null);
+        if (role) {
+          await channel.permissionOverwrites.edit(role, { ViewChannel: true }).catch(() => {});
+        }
+      }
+      clan.channel_id = channel.id;
+      await saveClan(clan);
+      await interaction.editReply(t(locale, 'clan.channelSet', { channel: `<#${channel.id}>` }));
+    } else {
+      const old = clan.channel_id;
+      if (old && clan.role_id) {
+        const ch = await interaction.guild.channels.fetch(old).catch(() => null);
+        if (ch && 'permissionOverwrites' in ch) {
+          await ch.permissionOverwrites.delete(clan.role_id).catch(() => {});
+        }
+      }
+      clan.channel_id = null;
+      await saveClan(clan);
+      await interaction.editReply(t(locale, 'clan.channelCleared'));
     }
     return;
   }

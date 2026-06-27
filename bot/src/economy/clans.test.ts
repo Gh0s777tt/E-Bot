@@ -4,6 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   type Clan,
+  channelLinkError,
   clanKey,
   clanRankByBank,
   donationError,
@@ -23,6 +24,7 @@ const clan = (o: Partial<Clan>): Clan => ({
   bank: 0,
   created_at: null,
   role_id: null,
+  channel_id: null,
   ...o,
 });
 
@@ -136,5 +138,28 @@ describe('roleAssignableError — walidacja roli klanu przed nadaniem', () => {
 
   it('rola zwykła poniżej bota → null (można użyć)', () => {
     expect(roleAssignableError(ok, 10, 'g1')).toBeNull();
+  });
+});
+
+describe('channelLinkError — walidacja kanału klanu (bramkowany rolą)', () => {
+  const text = { type: 0, manageable: true };
+
+  it('brak roli klanu → noRole (rola bramkuje dostęp)', () => {
+    expect(channelLinkError(false, text)).toBe('noRole');
+  });
+
+  it('zły typ kanału (np. kategoria=4) lub brak → badType', () => {
+    expect(channelLinkError(true, { type: 4, manageable: true })).toBe('badType');
+    expect(channelLinkError(true, null)).toBe('badType');
+  });
+
+  it('kanał niezarządzalny przez bota → unmanageable', () => {
+    expect(channelLinkError(true, { type: 0, manageable: false })).toBe('unmanageable');
+  });
+
+  it('rola + tekst/głos/forum zarządzalny → null', () => {
+    expect(channelLinkError(true, text)).toBeNull();
+    expect(channelLinkError(true, { type: 2, manageable: true })).toBeNull();
+    expect(channelLinkError(true, { type: 15, manageable: true })).toBeNull();
   });
 });

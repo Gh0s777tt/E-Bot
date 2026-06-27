@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-598-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.528.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-599-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.529.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.529.0] — 📌 Klany: prywatny kanał klanu (`/clan channel`, bramkowany rolą)
+
+- `[#599]` 📌 **Kanał klanu** — `/clan channel [kanał]` (tylko lider): linkuje prywatny kanał, **bramkowany rolą klanu** (#598) — bot nadaje **roli** dostęp `ViewChannel` JEDNYM overwrite (bez pętli per-member → brak ryzyka rate-limitów; wejście/wyjście NIC nie robią, bo dostęp daje rola). Wymaga ustawionej roli klanu (`channelNeedRole`). Bez argumentu = odepnij (zdejmij overwrite roli). Rozwiązanie klanu sprząta overwrite. Czysta, otestowana `channelLinkError` (wymaga roli / poprawny typ: tekst·głos·forum·ogłoszenia·scena / zarządzalny przez bota). Kolumna `channel_id` na `clans` (`alter … add column if not exists`). i18n `clan.channel*` ×14.
+  - **Testy:** `clans.test.ts` +4 (`channelLinkError`: noRole / badType / unmanageable / ok) → **1075/1075**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` (docs + schemat 48 tab. + env) — exit 0 (Node 26.4.0). Wymaga uprawnień bota „Zarządzanie kanałami/rolami".
 
 ## [0.528.0] — 🎭 Klany: rola klanu (`/clan role`) — nadawana na wejściu, zdejmowana na wyjściu
 

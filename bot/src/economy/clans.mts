@@ -17,6 +17,7 @@ export type Clan = {
   bank: number;
   created_at: string | null;
   role_id: string | null; // opcjonalna rola klanu (właściciel linkuje przez /clan role)
+  channel_id: string | null; // opcjonalny kanał klanu (bramkowany rolą klanu, /clan channel)
 };
 
 export type ClanMember = {
@@ -89,6 +90,22 @@ export function roleAssignableError(
   if (role.id === everyoneId) return 'everyone';
   if (role.managed) return 'managed';
   if (role.position >= botHighestPosition) return 'tooHigh';
+  return null;
+}
+
+// Typy kanałów dopuszczalne na kanał klanu (wspierają uprawnienia/overwrite per-rola): tekst(0),
+// głos(2), ogłoszenia(5), scena(13), forum(15).
+export const CLAN_CHANNEL_TYPES = new Set([0, 2, 5, 13, 15]);
+
+// Walidacja linkowania kanału do klanu: wymaga ustawionej roli klanu (to ONA bramkuje dostęp — kanał
+// dostaje overwrite dla roli, nie per-member), kanał musi być wspieranego typu i zarządzalny przez bota.
+export function channelLinkError(
+  hasRole: boolean,
+  channel: { type: number; manageable: boolean } | null,
+): 'noRole' | 'badType' | 'unmanageable' | null {
+  if (!hasRole) return 'noRole';
+  if (!channel || !CLAN_CHANNEL_TYPES.has(channel.type)) return 'badType';
+  if (!channel.manageable) return 'unmanageable';
   return null;
 }
 
