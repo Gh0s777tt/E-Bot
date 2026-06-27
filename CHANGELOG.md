@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-585-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.515.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-586-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.516.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.516.0] — 🏗️ AI Server Architect 2.0: rekomendacja MODUŁÓW + testowalny parser
+
+- `[#586]` 🏗️ **Architekt serwera 2.0** — `/aiserver` (opis → AI projektuje kategorie/kanały/role → bot tworzy, z `/undo`) **poleca teraz też MODUŁY** dopasowane do serwera (domyka wizję „kanały, role, **moduły**"). AI zwraca pole `modules` (whitelista 21 kluczy: leveling/economy/welcome/automod/antiraid/tickets/…); czysta [`pickModules`](bot/src/commands/aiserver.mts) waliduje względem whitelisty (**anty-halucynacja** — model nie wymyśli klucza spoza listy), dedupuje, cap 8. Po utworzeniu struktury bot dopisuje „🧩 polecane moduły" (niezależnie językowo) → user włącza je w Centrum sterowania. `parsePlan` wyeksportowany + otestowany (wyłuskuje JSON z prozy modelu, wymaga `categories`).
+  - **Testy:** nowy `aiserver.parse.test.ts` +9 (`parsePlan`: JSON / proza / zły / bez categories · `pickModules`: whitelista / case / dedup / nie-tablica / cap 8) → **1029/1029**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.515.0] — 🔥 Ekonomia: nagrody za kamienie milowe serii dziennej (/eco daily)
 

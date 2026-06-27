@@ -11,20 +11,47 @@ import { resolveLocale, t } from '../i18n/index.mts';
 import { aiConfig, type ChatMsg, callModel } from '../lib/ai.mts';
 import { recordUndo } from '../lib/undo.mts';
 
+// Whitelista modułów, które architekt może POLECIĆ (anty-halucynacja — model nie wymyśli klucza spoza
+// listy; klucze odpowiadają modułom bota włączanym w panelu / Centrum sterowania).
+export const RECOMMENDABLE_MODULES = [
+  'leveling',
+  'economy',
+  'welcome',
+  'automod',
+  'antiraid',
+  'verification',
+  'tickets',
+  'modmail',
+  'reactionroles',
+  'starboard',
+  'tempvoice',
+  'counting',
+  'suggestions',
+  'giveaway',
+  'birthdays',
+  'counters',
+  'freegames',
+  'patchnotes',
+  'pricetracker',
+  'logging',
+  'aimod',
+] as const;
+
 const SYSTEM = [
   'You are a Discord server architect. Read the description and design a server layout.',
   'Respond with ONLY a raw JSON object (no markdown, no code fences, no commentary), exactly this shape:',
-  '{"categories":[{"name":"🎮 Name","channels":[{"name":"💬 general","voice":false}]}],"roles":[{"name":"Member"}]}',
+  '{"categories":[{"name":"🎮 Name","channels":[{"name":"💬 general","voice":false}]}],"roles":[{"name":"Member"}],"modules":["leveling","welcome"]}',
   'Rules: 2-4 categories, each 2-6 channels; 0-6 roles (names only).',
+  `"modules": 0-8 keys EXACTLY from this list that best fit the server (keys only, no others): ${RECOMMENDABLE_MODULES.join(', ')}.`,
   'Prefix every category and channel name with a fitting emoji. Use the same language as the description.',
   'Keep it focused and relevant. Output JSON only.',
 ].join('\n');
 
 type PlanChannel = { name?: string; voice?: boolean };
 type PlanCategory = { name?: string; channels?: PlanChannel[] };
-type Plan = { categories?: PlanCategory[]; roles?: { name?: string }[] };
+type Plan = { categories?: PlanCategory[]; roles?: { name?: string }[]; modules?: unknown };
 
-function parsePlan(text: string): Plan | null {
+export function parsePlan(text: string): Plan | null {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
   if (start < 0 || end <= start) return null;
@@ -34,6 +61,22 @@ function parsePlan(text: string): Plan | null {
   } catch {
     return null;
   }
+}
+
+// Wybiera polecane moduły z odpowiedzi modelu, walidując względem whitelisty (anty-halucynacja),
+// deduplikując i ograniczając do 8. Czysta funkcja → test.
+export function pickModules(raw: unknown, whitelist: readonly string[]): string[] {
+  if (!Array.isArray(raw)) return [];
+  const allow = new Set(whitelist);
+  const out: string[] = [];
+  for (const m of raw) {
+    const k = String(m ?? '')
+      .toLowerCase()
+      .trim();
+    if (allow.has(k) && !out.includes(k)) out.push(k);
+    if (out.length >= 8) break;
+  }
+  return out;
 }
 
 const nm = (s: unknown): string =>
@@ -121,12 +164,16 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       roleIds.push(role.id);
     }
     recordUndo({ channels: chIds, roles: roleIds, label: 'aiserver' });
+    // Architekt 2.0: AI poleca też MODUŁY pasujące do serwera (whitelista) — dopisek niezależny
+    // językowo (🧩 + klucze), użytkownik włącza je w Centrum sterowania.
+    const modules = pickModules(plan.modules, RECOMMENDABLE_MODULES);
+    const base = t(locale, 'aiserver.created', {
+      cats: String(cats),
+      channels: String(channels),
+      roles: String(roleIds.length),
+    });
     await interaction.editReply({
-      content: t(locale, 'aiserver.created', {
-        cats: String(cats),
-        channels: String(channels),
-        roles: String(roleIds.length),
-      }),
+      content: modules.length ? `${base}\n🧩 ${modules.join(' · ')}` : base,
     });
   } catch {
     await interaction.editReply({ content: t(locale, 'aiserver.fail') });
