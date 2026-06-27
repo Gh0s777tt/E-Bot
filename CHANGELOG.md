@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-549-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.479.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-550-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.480.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.480.0] — ✨ Panel: widoczny feedback błędu na przełącznikach + mikro-animacja
+
+- `[#550]` ✨ **ControlCenter — koniec cichego revertu** — [`ControlCenter`](dashboard/components/ControlCenter.tsx) miał już optymistyczne UI (natychmiastowy flip + revert przy błędzie), ale revert był **niemy** („kliknąłem, nic się nie stało"). Teraz nieudany zapis pokazuje komunikat `ui.saveError` (**reużyty klucz ×14, zero nowego i18n**), a przełącznik dostał mikro-animację wciśnięcia (`active:scale-95`). Domyka tor UI: optymistyczne toggle + animowane przejścia tras (`PageTransition`) + globalny `prefers-reduced-motion` (oba już istniały) — świadomie BEZ ryzykownej migracji na eksperymentalne View Transitions API.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **932/932** — exit 0 (Node 26.4.0).
 
 ## [0.479.0] — 💀 Panel: skeleton loadery (postrzegana szybkość)
 

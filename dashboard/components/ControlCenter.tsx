@@ -13,7 +13,7 @@ function Toggle({ on, onClick }: { on: boolean; onClick: () => void }) {
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? 'bg-accent' : 'bg-white/20'}`}
+      className={`relative h-6 w-11 shrink-0 rounded-full transition active:scale-95 ${on ? 'bg-accent' : 'bg-white/20'}`}
     >
       <span
         className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'start-[22px]' : 'start-0.5'}`}
@@ -31,10 +31,12 @@ export default function ControlCenter({
 }) {
   const { lang } = useLang();
   const [states, setStates] = useState<Record<string, boolean>>(initial);
+  const [failed, setFailed] = useState(false);
 
   async function flip(key: string) {
     const next = !states[key];
-    setStates((s) => ({ ...s, [key]: next }));
+    setStates((s) => ({ ...s, [key]: next })); // optymistycznie
+    setFailed(false);
     try {
       const r = await fetch('/api/modules', {
         method: 'POST',
@@ -43,7 +45,10 @@ export default function ControlCenter({
       });
       if (!r.ok) throw new Error('fail');
     } catch {
-      setStates((s) => ({ ...s, [key]: !next })); // revert
+      // revert + WIDOCZNY feedback — sam cichy revert mylił („kliknąłem, a nic się nie stało").
+      setStates((s) => ({ ...s, [key]: !next }));
+      setFailed(true);
+      setTimeout(() => setFailed(false), 4000);
     }
   }
 
@@ -56,6 +61,11 @@ export default function ControlCenter({
         {tp(lang, 'ui.modules.active')} <span className="text-accent">{onCount}</span> /{' '}
         {modules.length}
       </p>
+      {failed && (
+        <p className="text-xs text-accent" role="alert">
+          {tp(lang, 'ui.saveError')}
+        </p>
+      )}
       {groups.map((g) => (
         <section key={g} className="panel-glow rounded-2xl border border-line bg-card p-5">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-white/80">{g}</h2>
