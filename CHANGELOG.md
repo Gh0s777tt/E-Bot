@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-537-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.467.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-538-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.468.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.468.0] — 🛡️ Hardening P2/P3: anty host-header poisoning (opt-in) + SSRF/anti-OOM RSS + ReDoS-guard
+
+- `[#538]` 🛡️ **Trzy utwardzenia z audytu bezpieczeństwa:**
+  - **getOrigin — opt-in allowlist hostów** ([`dashboard/lib/auth.ts`](dashboard/lib/auth.ts)) — `DASHBOARD_ALLOWED_HOSTS` (po przecinku) → OAuth `redirect_uri` budowany TYLKO z dozwolonych hostów (anty host-header poisoning). Bez env = zachowanie domyślne (zero regresji dla istniejących wdrożeń).
+  - **RSS poller — SSRF-guard + anti-OOM** ([`bot/src/creator/social.mts`](bot/src/creator/social.mts)) — odrzucenie feedów na literalne prywatne IP/loopback/link-local (`isFetchableFeedUrl`) + twardy cap body 3 MB (`readCapped`). Best-effort (DNS-rebinding poza zakresem; URL admin-gated).
+  - **Automod — ReDoS-guard** ([`bot/src/automod.mts`](bot/src/automod.mts)) — odrzucenie wzorców `bannedRegex` z klasycznym wektorem katastroficznego backtrackingu (`(a+)+`) + cap długości; dep-free (regex chodzi na każdej wiadomości).
+  - **Bramki:** `pnpm sync:check` · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** — exit 0 (Node 26.4.0).
 
 ## [0.467.0] — ⚡ Singleton SQLite + WAL: koniec open/close/CREATE per odczyt (rdzeń perf bota)
 

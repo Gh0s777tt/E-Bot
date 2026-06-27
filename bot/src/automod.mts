@@ -69,6 +69,12 @@ function cfgFor(guildId: string): AutomodCached {
   const compiled = (cfg.bannedRegex ?? [])
     .map((p) => {
       try {
+        // ReDoS-guard (dep-free, best-effort): odrzuć absurdalnie długie wzorce ORAZ klasyczny wektor
+        // katastroficznego backtrackingu — kwantyfikator wewnątrz grupy + kwantyfikator NA grupie
+        // (np. `(a+)+`, `(.*)*`). Legalne słowo-wzorce automoda tego nie potrzebują; regex chodzi na
+        // każdej wiadomości, więc katastroficzny wzorzec = DoS bota.
+        if (typeof p !== 'string' || p.length > 200) return null;
+        if (/\([^)]*[+*][^)]*\)[+*]/.test(p)) return null;
         return new RegExp(p, 'i');
       } catch {
         return null;

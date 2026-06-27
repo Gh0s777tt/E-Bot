@@ -20,6 +20,17 @@ export function getOrigin(request: Request): string {
   const h = request.headers;
   const host = h.get('x-forwarded-host') || h.get('host') || 'localhost:3001';
   const proto = h.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+  // Anty host-header poisoning OAuth (opt-in): gdy DASHBOARD_ALLOWED_HOSTS ustawione, host MUSI być
+  // na liście — inaczej fallback na pierwszy dozwolony (atakujący nie wpłynie na redirect_uri/callback).
+  // Bez env = zachowanie sprzed zmiany (zero regresji dla istniejących wdrożeń).
+  const allowed = (process.env.DASHBOARD_ALLOWED_HOSTS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (allowed.length > 0 && !allowed.includes(host)) {
+    const fb = allowed[0];
+    return `${fb.includes('localhost') ? 'http' : 'https'}://${fb}`;
+  }
   return `${proto}://${host}`;
 }
 
