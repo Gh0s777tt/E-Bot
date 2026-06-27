@@ -1,26 +1,25 @@
 // Faza 7 / F1 — odczyt/zapis stanu włączenia modułów (Centrum sterowania).
 // Etap K — przez getConfigSetting/setConfigSetting: klucze zmigrowane na per-serwer idą per-serwer.
-import { getConfigSetting, setConfigSetting } from './data';
+import { getConfigSetting, getConfigSettings, setConfigSetting } from './data';
 import { MODULES } from './modules';
 
 export async function getModuleStates(): Promise<Record<string, boolean>> {
   const out: Record<string, boolean> = {};
-  await Promise.all(
-    MODULES.map(async (m) => {
-      const raw = await getConfigSetting(m.settingsKey);
-      if (m.kind === 'bool') {
-        out[m.key] =
-          raw === null || raw === undefined ? !!m.default : raw === '1' || raw === 'true';
-      } else {
-        try {
-          const j = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
-          out[m.key] = !!j[m.path ?? 'enabled'];
-        } catch {
-          out[m.key] = false;
-        }
+  // Anty-N+1: JEDNO batchowe zapytanie (.in) zamiast getConfigSetting per moduł (~41 → ~60-80 zapytań).
+  const settings = await getConfigSettings(MODULES.map((m) => m.settingsKey));
+  for (const m of MODULES) {
+    const raw = settings.get(m.settingsKey) ?? null;
+    if (m.kind === 'bool') {
+      out[m.key] = raw === null || raw === undefined ? !!m.default : raw === '1' || raw === 'true';
+    } else {
+      try {
+        const j = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+        out[m.key] = !!j[m.path ?? 'enabled'];
+      } catch {
+        out[m.key] = false;
       }
-    }),
-  );
+    }
+  }
   return out;
 }
 

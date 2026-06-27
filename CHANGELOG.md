@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-541-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.471.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-542-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.472.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.472.0] — ⚡ Anty-N+1 na /modules: getModuleStates batchuje ~41 zapytań w 1 (.in)
+
+- `[#542]` ⚡ **Likwidacja N+1 na renderze `/modules`** — `getModuleStates` ([`dashboard/lib/moduleState.ts`](dashboard/lib/moduleState.ts)) wołało `getConfigSetting` per moduł (~41 modułów × do 2 round-tripów przez override+fallback per-guild = ~60-80 zapytań Supabase na render). Nowy batch `getConfigSettings([...])` ([`dashboard/lib/data.ts`](dashboard/lib/data.ts)) pobiera wszystkie klucze w **JEDNYM** `.in()` (gid raz; zmigrowane → override `g:<gid>:<key>` + global; reszta → global), rozwiązuje override→fallback lokalnie. **Identyczna semantyka** (override ≠ null wygrywa) — zero zmian zachowania.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** · lint — exit 0 (Node 26.4.0).
 
 ## [0.471.0] — 🔒 CSP nonce: script-src przez nonce + strict-dynamic (koniec 'unsafe-inline' dla skryptów)
 

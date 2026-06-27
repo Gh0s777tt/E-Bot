@@ -228,6 +228,35 @@ async function rawGet(key: string): Promise<string | null> {
     db.close();
   }
 }
+// Batch: pobiera wiele kluczy `settings` w JEDNYM zapytaniu (`.in`) — anty-N+1. SQLite fallback (IN).
+async function rawGetMany(keys: string[]): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  if (keys.length === 0) return out;
+  if (hasSupabase) {
+    try {
+      const { data, error } = await supabase().from('settings').select('key,value').in('key', keys);
+      if (error) throw new Error(error.message);
+      for (const r of (data ?? []) as { key: string; value: string }[]) out.set(r.key, r.value);
+      return out;
+    } catch {
+      /* fallback */
+    }
+  }
+  const db = await sqliteDb();
+  if (!db) return out;
+  try {
+    db.exec('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)');
+    const placeholders = keys.map(() => '?').join(',');
+    const rows = db
+      .prepare(`SELECT key, value FROM settings WHERE key IN (${placeholders})`)
+      .all(...keys) as { key: string; value: string }[];
+    for (const r of rows) out.set(r.key, r.value);
+    return out;
+  } finally {
+    db.close();
+  }
+}
+
 async function rawSet(key: string, value: string): Promise<void> {
   if (hasSupabase) {
     try {
@@ -323,6 +352,24 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
 
 export async function getConfigSetting(key: string): Promise<string | null> {
   return MIGRATED_GUILD_KEYS.has(key) ? getGuildRawSetting(key) : getRawSetting(key);
+}
+// Batch wielu kluczy configu w JEDNYM zapytaniu (anty-N+1, np. getModuleStates: ~41 modułów → 1 zapytanie
+// zamiast ~41-80). Identyczna semantyka co getConfigSetting per klucz: zmigrowany → override g:<gid>:<key>
+// (jeśli istnieje) → fallback global; reszta → global. gid pobierany RAZ.
+export async function getConfigSettings(keys: string[]): Promise<Map<string, string | null>> {
+  const gid = await getPrimaryGuildId();
+  const wanted = new Set<string>();
+  for (const k of keys) {
+    wanted.add(k);
+    if (gid && MIGRATED_GUILD_KEYS.has(k)) wanted.add(`g:${gid}:${k}`);
+  }
+  const raw = await rawGetMany([...wanted]);
+  const out = new Map<string, string | null>();
+  for (const k of keys) {
+    const override = gid && MIGRATED_GUILD_KEYS.has(k) ? raw.get(`g:${gid}:${k}`) : undefined;
+    out.set(k, override ?? raw.get(k) ?? null);
+  }
+  return out;
 }
 export async function setConfigSetting(key: string, value: string): Promise<void> {
   return MIGRATED_GUILD_KEYS.has(key) ? setGuildRawSetting(key, value) : setRawSetting(key, value);
