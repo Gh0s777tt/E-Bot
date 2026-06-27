@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-556-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.486.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-557-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.487.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.487.0] — 🖼️ AI-moderacja obrazów w panelu: przełącznik + i18n ×14
+
+- `[#557]` 🖼️ **Toggle „Skanuj też obrazy" w panelu** (domyka #556) — `AiModConfig` ([`dashboard/lib/community.ts`](dashboard/lib/community.ts)) + `aimodSchema` ([`dashboard/lib/schemas.ts`](dashboard/lib/schemas.ts)) + [`AiModForm`](dashboard/components/AiModForm.tsx) rozszerzone o `scanImages` z i18n ×14 (`ui.mod.aiScanImages`). Admin włącza moderację obrazów z panelu, bot (#556) ją egzekwuje. **Moderacja obrazów kompletna end-to-end.**
+  - **Bramki:** `panelI18n.parity.test` 30/30 (parzystość ×14) · dashboard `tsc` · Biome · pełny zestaw **953/953** — exit 0 (Node 26.4.0).
 
 ## [0.486.0] — 🖼️ AI-moderacja obrazów: skan załączników (omni-moderation)
 

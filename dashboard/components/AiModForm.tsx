@@ -84,6 +84,16 @@ export default function AiModForm({ initial, guild }: { initial: AiModConfig; gu
         </label>
       </div>
 
+      <label className="flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={c.scanImages}
+          onChange={(e) => setC({ ...c, scanImages: e.target.checked })}
+          className="h-4 w-4 accent-accent"
+        />
+        <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.aiScanImages')}</span>
+      </label>
+
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.mod.aiFooterPre')} <strong>{tp(lang, 'ui.mod.aiFooterStrong')}</strong>{' '}

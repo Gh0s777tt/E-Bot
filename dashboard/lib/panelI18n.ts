@@ -1280,6 +1280,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Akcja po wykryciu',
     'ui.mod.aiLogChannel': 'Kanał logów',
     'ui.mod.aiExemptRole': 'Rola zwolniona',
+    'ui.mod.aiScanImages': 'Skanuj też obrazy (NSFW / przemoc)',
     'ui.mod.aiFooterPre': 'Skanuje wiadomości',
     'ui.mod.aiFooterStrong': 'darmowym',
     'ui.mod.aiFooterMid':
@@ -2867,6 +2868,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Action on detection',
     'ui.mod.aiLogChannel': 'Log channel',
     'ui.mod.aiExemptRole': 'Exempt role',
+    'ui.mod.aiScanImages': 'Also scan images (NSFW / violence)',
     'ui.mod.aiFooterPre': "Scans messages with OpenAI's",
     'ui.mod.aiFooterStrong': 'free',
     'ui.mod.aiFooterMid':
@@ -4463,6 +4465,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Aktion bei Erkennung',
     'ui.mod.aiLogChannel': 'Log-Kanal',
     'ui.mod.aiExemptRole': 'Ausgenommene Rolle',
+    'ui.mod.aiScanImages': 'Auch Bilder scannen (NSFW / Gewalt)',
     'ui.mod.aiFooterPre': 'Scannt Nachrichten mit dem',
     'ui.mod.aiFooterStrong': 'kostenlosen',
     'ui.mod.aiFooterMid':
@@ -6071,6 +6074,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Acción al detectar',
     'ui.mod.aiLogChannel': 'Canal de registros',
     'ui.mod.aiExemptRole': 'Rol exento',
+    'ui.mod.aiScanImages': 'Escanear también imágenes (NSFW / violencia)',
     'ui.mod.aiFooterPre': 'Escanea mensajes con el endpoint de moderación',
     'ui.mod.aiFooterStrong': 'gratuito',
     'ui.mod.aiFooterMid':
@@ -7675,6 +7679,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Azione al rilevamento',
     'ui.mod.aiLogChannel': 'Canale log',
     'ui.mod.aiExemptRole': 'Ruolo esente',
+    'ui.mod.aiScanImages': 'Scansiona anche le immagini (NSFW / violenza)',
     'ui.mod.aiFooterPre': "Scansiona i messaggi con l'endpoint di moderazione",
     'ui.mod.aiFooterStrong': 'gratuito',
     'ui.mod.aiFooterMid':
@@ -9283,6 +9288,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Action à la détection',
     'ui.mod.aiLogChannel': 'Salon des journaux',
     'ui.mod.aiExemptRole': 'Rôle exempté',
+    'ui.mod.aiScanImages': 'Analyser aussi les images (NSFW / violence)',
     'ui.mod.aiFooterPre': "Analyse les messages avec l'endpoint de modération",
     'ui.mod.aiFooterStrong': 'gratuit',
     'ui.mod.aiFooterMid':
@@ -10892,6 +10898,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Ação ao detectar',
     'ui.mod.aiLogChannel': 'Canal de logs',
     'ui.mod.aiExemptRole': 'Cargo isento',
+    'ui.mod.aiScanImages': 'Verificar também imagens (NSFW / violência)',
     'ui.mod.aiFooterPre': 'Escaneia mensagens com o endpoint de moderação',
     'ui.mod.aiFooterStrong': 'gratuito',
     'ui.mod.aiFooterMid':
@@ -12467,6 +12474,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': '检测后的操作',
     'ui.mod.aiLogChannel': '日志频道',
     'ui.mod.aiExemptRole': '豁免身份组',
+    'ui.mod.aiScanImages': '同时扫描图片（NSFW / 暴力）',
     'ui.mod.aiFooterPre': '使用 OpenAI 的',
     'ui.mod.aiFooterStrong': '免费',
     'ui.mod.aiFooterMid':
@@ -14012,6 +14020,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': '감지 시 조치',
     'ui.mod.aiLogChannel': '로그 채널',
     'ui.mod.aiExemptRole': '면제 역할',
+    'ui.mod.aiScanImages': '이미지도 검사(NSFW / 폭력)',
     'ui.mod.aiFooterPre': 'OpenAI의',
     'ui.mod.aiFooterStrong': '무료',
     'ui.mod.aiFooterMid':
@@ -15591,6 +15600,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Действие при обнаружении',
     'ui.mod.aiLogChannel': 'Канал логов',
     'ui.mod.aiExemptRole': 'Освобождённая роль',
+    'ui.mod.aiScanImages': 'Сканировать и изображения (NSFW / насилие)',
     'ui.mod.aiFooterPre': 'Сканирует сообщения',
     'ui.mod.aiFooterStrong': 'бесплатным',
     'ui.mod.aiFooterMid':
@@ -17183,6 +17193,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Дія при виявленні',
     'ui.mod.aiLogChannel': 'Канал логів',
     'ui.mod.aiExemptRole': 'Звільнена роль',
+    'ui.mod.aiScanImages': 'Сканувати й зображення (NSFW / насильство)',
     'ui.mod.aiFooterPre': 'Сканує повідомлення',
     'ui.mod.aiFooterStrong': 'безкоштовним',
     'ui.mod.aiFooterMid':
@@ -18776,6 +18787,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': '検出時のアクション',
     'ui.mod.aiLogChannel': 'ログチャンネル',
     'ui.mod.aiExemptRole': '除外ロール',
+    'ui.mod.aiScanImages': '画像もスキャン（NSFW / 暴力）',
     'ui.mod.aiFooterPre': 'OpenAI の',
     'ui.mod.aiFooterStrong': '無料',
     'ui.mod.aiFooterMid':
@@ -20363,6 +20375,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'الإجراء عند الاكتشاف',
     'ui.mod.aiLogChannel': 'قناة السجلّات',
     'ui.mod.aiExemptRole': 'الدور المُعفى',
+    'ui.mod.aiScanImages': 'افحص الصور أيضًا (محتوى للبالغين / عنف)',
     'ui.mod.aiFooterPre': 'يفحص الرسائل عبر نقطة نهاية الإشراف',
     'ui.mod.aiFooterStrong': 'المجانية',
     'ui.mod.aiFooterMid':
@@ -21937,6 +21950,7 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.mod.aiActionLabel': 'Tindakan saat terdeteksi',
     'ui.mod.aiLogChannel': 'Saluran log',
     'ui.mod.aiExemptRole': 'Peran dikecualikan',
+    'ui.mod.aiScanImages': 'Pindai juga gambar (NSFW / kekerasan)',
     'ui.mod.aiFooterPre': 'Memindai pesan dengan endpoint moderasi',
     'ui.mod.aiFooterStrong': 'gratis',
     'ui.mod.aiFooterMid':

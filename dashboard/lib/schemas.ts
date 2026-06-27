@@ -648,6 +648,7 @@ export const aimodSchema = z.object({
   action: z.enum(['delete', 'warn', 'log']),
   logChannelId: z.string().max(40),
   exemptRoleId: z.string().max(40),
+  scanImages: z.boolean().optional().default(false),
 });
 export type AiModInput = z.infer<typeof aimodSchema>;
 

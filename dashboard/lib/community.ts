@@ -528,12 +528,14 @@ export type AiModConfig = {
   action: 'delete' | 'warn' | 'log';
   logChannelId: string;
   exemptRoleId: string;
+  scanImages: boolean;
 };
 export const AIMOD_DEFAULT: AiModConfig = {
   enabled: false,
   action: 'delete',
   logChannelId: '',
   exemptRoleId: '',
+  scanImages: false,
 };
 
 export async function getAiModConfig(): Promise<AiModConfig> {
