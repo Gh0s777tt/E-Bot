@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-548-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.478.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-549-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.479.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.479.0] — 💀 Panel: skeleton loadery (postrzegana szybkość)
+
+- `[#549]` 💀 **Skeleton zamiast spinnera** — nowy komponent [`Skeleton`](dashboard/components/Skeleton.tsx) (na istniejącej klasie `.shimmer`) z wariantami `PageSkeleton`/`StatCardSkeleton`/`RowsSkeleton`. Globalny [`loading.tsx`](dashboard/app/loading.tsx) pokazuje teraz układ **o kształcie treści** zamiast logo-spinnera, a najcięższe strony dostały dopasowane loadery: `/stats` (kafelki metryk + bloki wykresów) i `/leaderboard` (wiersze rankingu). Mniej „skoku" przy nawigacji → lepsza postrzegana szybkość. Zachowane locale (`sr-only`) + `role=status`/`aria-busy`.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **932/932** — exit 0 (Node 26.4.0).
 
 ## [0.478.0] — 🎯 Anti-raid: zunifikowany threat-score (0-100)
 
