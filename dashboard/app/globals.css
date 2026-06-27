@@ -157,7 +157,8 @@ textarea,
   width: 50%;
   height: 80%;
   pointer-events: none;
-  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.13), transparent 70%);
+  /* Dowództwo: czystsze karty (bliżej makiety) — wyciszony narożny glow. */
+  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.06), transparent 70%);
 }
 .panel-glow::before {
   content: "";

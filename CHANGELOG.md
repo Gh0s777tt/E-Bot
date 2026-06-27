@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-575-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.505.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-576-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.506.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.506.0] — 🎛️ Redesign „Dowództwo" (krok 4): globalny nagłówek + czystsze karty (widoczne wszędzie)
+
+- `[#576]` 🎛️ **Dowództwo na CAŁYM panelu** — wspólny [`GlobalPageHeader`](dashboard/components/GlobalPageHeader.tsx) przebudowany na wyrazisty „command bar": czerwony pasek akcentu pełnej wysokości + wypełniona-czerwona ikona + tytuł z poświatą, w kontenerze z ramką — pojawia się na **każdej** z ~37 stron, więc cała aplikacja zmienia się po jednym pull (a nie tylko 3 panele). Karty `.panel-glow` w [`globals.css`](dashboard/app/globals.css) wyciszone (narożny glow 0.13→0.06) → **czystsze, bliżej makiety**, globalnie. Zero zmian logiki/i18n.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **995/995** · `sync:check` — exit 0 (Node 26.4.0). *(Dashboard uruchomiony lokalnie na :3001 — efekt widoczny po zalogowaniu Discordem.)*
 
 ## [0.505.0] — 🎛️ Redesign „Dowództwo" (krok 3): Auto-role + podgląd ról
 

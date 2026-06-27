@@ -17,20 +17,23 @@ export default function GlobalPageHeader() {
   if (!item) return null;
   const Icon = item.icon;
   const desc = pageDesc(lang, pathname);
+  // „Command bar" Dowództwa — wyrazisty, spójny nagłówek na KAŻDEJ stronie: czerwony pasek akcentu
+  // (pełnej wysokości), wypełniona-czerwona ikona, tytuł z poświatą. Reveal = wejście fadeInUp.
   return (
-    <header className="mb-6 flex items-start gap-3.5">
-      <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-accent/30 bg-accent/10 text-accent shadow-glow-sm">
-        <Icon size={22} />
-      </span>
-      <div className="min-w-0">
-        <h1 className="font-display text-2xl leading-none tracking-wide">
-          {navLabel(lang, item.href, item.label)}
-        </h1>
-        {desc ? (
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{desc}</p>
-        ) : (
-          <div className="mt-2 h-[3px] w-14 rounded-full bg-gradient-to-r from-accent via-accent-dark to-transparent" />
-        )}
+    <header className="reveal mb-6 flex overflow-hidden rounded-2xl border border-line bg-surface">
+      <div className="w-[3px] shrink-0 bg-accent" aria-hidden="true" />
+      <div className="flex min-w-0 flex-1 items-center gap-4 p-4 ps-5">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-accent text-white shadow-glow-sm">
+          <Icon size={24} />
+        </span>
+        <div className="min-w-0">
+          <h1 className="font-display text-2xl leading-none tracking-wide text-glow">
+            {navLabel(lang, item.href, item.label)}
+          </h1>
+          {desc ? (
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{desc}</p>
+          ) : null}
+        </div>
       </div>
     </header>
   );
