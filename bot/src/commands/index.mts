@@ -11,6 +11,7 @@ import * as ask from './ask.mts';
 import * as avatar from './avatar.mts';
 import * as backlog from './backlog.mts';
 import * as backup from './backup.mts';
+import * as battlepass from './battlepass.mts';
 import * as birthday from './birthday.mts';
 import * as blueprint from './blueprint.mts';
 import * as buttonpanel from './buttonpanel.mts';
@@ -126,6 +127,7 @@ export const commands: Command[] = [
   wishlist,
   pricealert,
   rank,
+  battlepass,
   economy,
   prestige,
   profile,

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-561-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.491.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-562-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.492.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.492.0] — 🎟️ Gamifikacja: /battlepass — sezonowy battle-pass (kamienie milowe)
+
+- `[#562]` 🎟️ **Komenda `/battlepass`** — [`bot/src/commands/battlepass.mts`](bot/src/commands/battlepass.mts): miesięczny battle-pass — postęp tierów wg aktywności (wiadomości w bieżącym miesiącu z `user_activity`). Czysty silnik `battlePassTier` (aktualny tier, próg następnego, % postępu, odblokowane) + drabina 8 tierów jako **kamienie milowe** (tytuły, BEZ przyznawania nagród — uczciwa gamifikacja, zero nowego storage). Pasek postępu, rejestracja + `/help` (levels) + opisy i18n ×14.
+  - **Testy:** nowy `battlepass.test.ts` +4 (poniżej progu / na progu / maks / zero) → **970/970** (131 plików). Bramki: `pnpm typecheck` (4 pakiety) · Biome · `help.test` · i18n parity — exit 0 (Node 26.4.0).
 
 ## [0.491.0] — 📥 Analityka: lejek nowych członków w digescie
 

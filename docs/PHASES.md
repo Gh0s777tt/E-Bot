@@ -1,4 +1,4 @@
-<!-- SYNC: v0.491.0 · #561 · 2026-06-27 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.492.0 · #562 · 2026-06-27 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.491.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.492.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,9 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.491.0)
+## 🔭 Bieżący tor (v0.492.0)
 
-**🧪🏁 Kampania testów (Rygiel) — TOR BIEŻĄCY** — produkt jest **funkcjonalnie kompletny** (fazy 0–8 · etapy A–K · i18n 14 jęz. · Marketplace M1–M6 + auto-trigger); obecny tor to **systematyczne ryglowanie czystej logiki testami jednostkowymi**: **130 plików / 966 testów** (`pnpm test` zielone). Wzorzec „jeden rygiel na update" — testy **mutation-proof** (dowód, że gryzą: po wstrzyknięciu mutacji czerwone, po cofnięciu zielone), zmiany produkcyjne minimalne (ekstrakcja czystej funkcji + `export`, **0 zmian zachowania**). Kamienie: 500+ (v0.393) · 600+ (v0.407) · 700+ (v0.422) · 100 plików (v0.432) · 900+ (v0.459). Pokryty rdzeń bota (bezpieczeństwo · ekonomia · leveling · live · i18n), warstwa danych panelu i silnik Architekta; **pakiet `ingest` dopiero wszedł w pokrycie** (pierwszy test `igdb.chunk`, v0.460) → naturalny kolejny target: kolektory **Steam · PSN · GOG · IGDB**.
+**🧪🏁 Kampania testów (Rygiel) — TOR BIEŻĄCY** — produkt jest **funkcjonalnie kompletny** (fazy 0–8 · etapy A–K · i18n 14 jęz. · Marketplace M1–M6 + auto-trigger); obecny tor to **systematyczne ryglowanie czystej logiki testami jednostkowymi**: **131 plików / 970 testów** (`pnpm test` zielone). Wzorzec „jeden rygiel na update" — testy **mutation-proof** (dowód, że gryzą: po wstrzyknięciu mutacji czerwone, po cofnięciu zielone), zmiany produkcyjne minimalne (ekstrakcja czystej funkcji + `export`, **0 zmian zachowania**). Kamienie: 500+ (v0.393) · 600+ (v0.407) · 700+ (v0.422) · 100 plików (v0.432) · 900+ (v0.459). Pokryty rdzeń bota (bezpieczeństwo · ekonomia · leveling · live · i18n), warstwa danych panelu i silnik Architekta; **pakiet `ingest` dopiero wszedł w pokrycie** (pierwszy test `igdb.chunk`, v0.460) → naturalny kolejny target: kolektory **Steam · PSN · GOG · IGDB**.
 
 #### ✅ Wcześniejszy tor (ukończony): i18n UI panelu — 14 języków
 

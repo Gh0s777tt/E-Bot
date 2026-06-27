@@ -19,7 +19,10 @@ const ACCENT = 0xe50914;
 // Kategorie → komendy. Klucz kategorii = sufiks kluczy i18n help.cat.* / help.blurb.*.
 export const CATEGORIES: { key: string; cmds: string[] }[] = [
   { key: 'moderation', cmds: ['mod', 'modai', 'case', 'antinuke', 'lockdown'] },
-  { key: 'levels', cmds: ['rank', 'profile', 'xp', 'xpevent', 'prestige', 'hof', 'quests'] },
+  {
+    key: 'levels',
+    cmds: ['rank', 'profile', 'xp', 'xpevent', 'prestige', 'hof', 'quests', 'battlepass'],
+  },
   { key: 'economy', cmds: ['eco', 'market', 'lottery', 'skins'] },
   {
     key: 'community',
