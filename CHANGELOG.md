@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-554-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.484.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-555-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.485.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.485.0] — 🔔 GameVault: /pricealert DM przy spadku (integracja pollera)
+
+- `[#555]` 🔔 **Alerty cenowe odpalają DM** (domyka #554) — poller `pricetracker` ([`bot/src/gaming/pricetracker.mts`](bot/src/gaming/pricetracker.mts)) dostał `checkTargetsForGuild`: dla targetów serwera sprawdza ceny ITAD i wysyła użytkownikowi **DM, gdy cena ≤ jego próg** (dedup per-trafienie w `g:<id>:pricetarget_seen`). Niezależne od kanału ogłoszeń. Decyzja „kto dostaje DM" w czystej `targetsToNotify` (pomija inną walutę / brak ceny / już-powiadomione). **Per-user price-DM kompletny end-to-end** — działa od razu, bez migracji.
+  - **Testy:** `pricetracker.targets.test.ts` +3 (`targetsToNotify`) → **949/949**. Bramki: `pnpm typecheck` (4 pakiety) · Biome (4 warn. zastane) · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.484.0] — 🔔 GameVault: /pricealert — osobiste alerty cenowe (komenda)
 

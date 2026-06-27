@@ -1,7 +1,16 @@
 // Rygiel osobistych alertów cenowych (czyste operacje na mapie targetów) — wyłonione z /pricealert
 // + pollera. Regresja = zgubiony/zduplikowany target, brak dedupu po tytule, albo zły warunek trafienia.
 import { describe, expect, it } from 'vitest';
-import { addTarget, isTargetHit, removeTarget, type TargetMap } from './pricetracker.mts';
+import {
+  addTarget,
+  isTargetHit,
+  type Money,
+  removeTarget,
+  type TargetMap,
+  targetsToNotify,
+} from './pricetracker.mts';
+
+const price = (amount: number, currency = 'PLN'): Money => ({ amount, currency });
 
 describe('price targets — operacje na mapie', () => {
   it('addTarget dodaje + dedup po tytule (case-insensitive nadpisuje)', () => {
@@ -37,5 +46,40 @@ describe('price targets — operacje na mapie', () => {
     expect(isTargetHit(50, 50)).toBe(true);
     expect(isTargetHit(60, 50)).toBe(false);
     expect(isTargetHit(40, 0)).toBe(false);
+  });
+});
+
+describe('targetsToNotify — kto dostaje DM', () => {
+  it('zwraca trafione, pomija nietrafione', () => {
+    const map: TargetMap = {
+      u1: [
+        { title: 'Hades', target: 30 },
+        { title: 'Celeste', target: 10 },
+      ],
+    };
+    const prices = new Map([
+      ['hades', price(25)],
+      ['celeste', price(15)],
+    ]);
+    expect(targetsToNotify(map, prices, [])).toEqual([
+      { userId: 'u1', title: 'Hades', target: 30 },
+    ]);
+  });
+
+  it('dedup po liście seen', () => {
+    const map: TargetMap = { u1: [{ title: 'Hades', target: 30 }] };
+    const prices = new Map([['hades', price(25)]]);
+    expect(targetsToNotify(map, prices, ['u1:hades:3000'])).toEqual([]);
+  });
+
+  it('inna waluta / brak ceny pomijane', () => {
+    const map: TargetMap = {
+      u1: [
+        { title: 'X', target: 30 },
+        { title: 'Y', target: 30 },
+      ],
+    };
+    const prices = new Map([['x', price(10, 'EUR')]]);
+    expect(targetsToNotify(map, prices, [])).toEqual([]);
   });
 });

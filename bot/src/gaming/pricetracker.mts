@@ -82,6 +82,27 @@ export function isTargetHit(priceAmount: number, targetAmount: number): boolean 
   return targetAmount > 0 && priceAmount <= targetAmount;
 }
 
+// Czysta decyzja „kto dostaje DM" (testowalna): dla mapy targetów + cen (klucz=tytuł lowercase) + listy
+// już powiadomionych zwraca trafienia do wysłania. Pomija inną walutę, brak ceny i już-powiadomione.
+export function targetsToNotify(
+  map: TargetMap,
+  priceByTitle: Map<string, Money>,
+  seen: string[],
+): { userId: string; title: string; target: number }[] {
+  const out: { userId: string; title: string; target: number }[] = [];
+  for (const [userId, list] of Object.entries(map)) {
+    for (const t of list ?? []) {
+      const price = priceByTitle.get(t.title.toLowerCase());
+      if (!price) continue;
+      if (price.currency !== 'PLN' || !isTargetHit(price.amount, t.target)) continue;
+      if (seen.includes(`${userId}:${t.title.toLowerCase()}:${Math.round(t.target * 100)}`))
+        continue;
+      out.push({ userId, title: t.title, target: t.target });
+    }
+  }
+  return out;
+}
+
 async function lookupId(key: string, title: string): Promise<string | null> {
   const r = await fetch(`${BASE}/games/lookup/v1?key=${key}&title=${encodeURIComponent(title)}`, {
     signal: AbortSignal.timeout(12_000),
@@ -160,12 +181,85 @@ async function tickForGuild(guild: Guild, key: string): Promise<void> {
   if (changed) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-150))).catch(() => {});
 }
 
+// Per-user alerty cenowe: dla targetów serwera ('g:<id>:price_targets') sprawdza ceny i DM-uje
+// użytkownika przy spadku ≤ jego próg. Dedup per-trafienie ('g:<id>:pricetarget_seen'). Niezależne od
+// kanału ogłoszeń (DM nie wymaga kanału). Decyzja „kto" w czystej targetsToNotify (test).
+async function checkTargetsForGuild(guild: Guild, key: string): Promise<void> {
+  const raw = await cloudGetSetting(targetsKey(guild.id));
+  if (!raw) return;
+  let map: TargetMap;
+  try {
+    map = JSON.parse(raw) as TargetMap;
+  } catch {
+    return;
+  }
+  const titles = [...new Set(Object.values(map).flatMap((l) => (l ?? []).map((t) => t.title)))];
+  if (!titles.length) return;
+
+  const titleToId = new Map<string, string>();
+  for (const title of titles) {
+    const id = await lookupId(key, title);
+    if (id) titleToId.set(title, id);
+  }
+  if (!titleToId.size) return;
+
+  const pr = await fetch(`${BASE}/games/prices/v3?key=${key}&country=PL`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify([...new Set(titleToId.values())]),
+    signal: AbortSignal.timeout(15_000),
+  }).catch(() => null);
+  if (!pr?.ok) return;
+  const rows = (await pr.json().catch(() => [])) as PriceRow[];
+  const bestById = new Map<string, Deal | undefined>();
+  for (const row of rows) bestById.set(row.id, bestDeal(row.deals ?? []));
+
+  const priceByTitle = new Map<string, Money>();
+  const dealByTitle = new Map<string, Deal>();
+  for (const [title, id] of titleToId) {
+    const best = bestById.get(id);
+    if (best?.price) {
+      priceByTitle.set(title.toLowerCase(), best.price);
+      dealByTitle.set(title.toLowerCase(), best);
+    }
+  }
+
+  const seenKey = `g:${guild.id}:pricetarget_seen`;
+  let seen: string[] = [];
+  try {
+    seen = JSON.parse((await cloudGetSetting(seenKey)) || '[]') as string[];
+  } catch {
+    /* pusta */
+  }
+
+  const toNotify = targetsToNotify(map, priceByTitle, seen);
+  for (const n of toNotify) {
+    const deal = dealByTitle.get(n.title.toLowerCase());
+    const user = await guild.client.users.fetch(n.userId).catch(() => null);
+    if (user && deal?.price) {
+      const embed = new EmbedBuilder()
+        .setColor(0x2ecc71)
+        .setTitle(`🔔 Cena spadła: ${n.title}`)
+        .setURL(deal.url || null)
+        .setDescription(
+          `**${deal.price.amount.toFixed(2)} ${deal.price.currency}** (−${deal.cut}%) w ${deal.shop?.name ?? 'sklepie'}\nTwój próg: ≤ ${n.target.toFixed(2)} zł · serwer **${guild.name}**`,
+        )
+        .setTimestamp(new Date());
+      await user.send({ embeds: [embed] }).catch(() => {});
+    }
+    seen.push(`${n.userId}:${n.title.toLowerCase()}:${Math.round(n.target * 100)}`);
+  }
+  if (toNotify.length)
+    await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-300))).catch(() => {});
+}
+
 // Eksport dla testów izolacji (pricetracker.isolation.test.ts): jeden cykl pollera ITAD.
 export async function tick(client: Client): Promise<void> {
   const key = process.env.ITAD_API_KEY;
   if (!hasCloud() || !key) return;
   for (const guild of client.guilds.cache.values()) {
     await tickForGuild(guild, key).catch(() => {});
+    await checkTargetsForGuild(guild, key).catch(() => {});
   }
 }
 
