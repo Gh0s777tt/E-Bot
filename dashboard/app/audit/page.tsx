@@ -1,6 +1,8 @@
 import { History } from 'lucide-react';
+import { redirect } from 'next/navigation';
 import { getAuditLog } from '../../lib/audit';
 import { type PanelLocale, tp } from '../../lib/panelI18n';
+import { isInstanceAdmin } from '../../lib/panelRoles';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
@@ -29,6 +31,8 @@ function fmt(ts: string | undefined, locale: PanelLocale): string {
 }
 
 export default async function AuditPage() {
+  // Powierzchnia instancyjna (log z IP) — tylko admin instancji; inni → przekierowanie na pulpit.
+  if (!(await isInstanceAdmin())) redirect('/');
   const [entries, lang] = await Promise.all([getAuditLog(100), getPanelLocale()]);
   return (
     <div className="max-w-4xl space-y-6">

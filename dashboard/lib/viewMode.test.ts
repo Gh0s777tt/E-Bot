@@ -2,7 +2,14 @@
 // KLUCZ: esencja (brak tier) widoczna ZAWSZE; 'dev' (narzędzia techniczne, klucze, audyt) widoczny
 // TYLKO w trybie Developer — nie może przeciekać do Prostego/Zaawansowanego. Czysty moduł klient-safe.
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_VIEW_MODE, isViewMode, tierVisible, VIEW_MODES, type ViewMode } from './viewMode';
+import {
+  DEFAULT_VIEW_MODE,
+  isViewMode,
+  navItemVisible,
+  tierVisible,
+  VIEW_MODES,
+  type ViewMode,
+} from './viewMode';
 
 const MODES: ViewMode[] = ['simple', 'adv', 'dev'];
 
@@ -30,6 +37,33 @@ describe('tierVisible — widoczność elementu wg progu i trybu', () => {
         for (const hi of MODES)
           if (rank[lo] <= rank[hi] && tierVisible(tier, lo))
             expect(tierVisible(tier, hi)).toBe(true);
+  });
+});
+
+describe('navItemVisible — widoczność = próg trybu ORAZ uprawnienie', () => {
+  it('RYGIEL BEZPIECZEŃSTWA: element dev NIGDY nie pokazuje się nie-adminowi — w żadnym trybie', () => {
+    for (const m of MODES) expect(navItemVisible('dev', m, false)).toBe(false);
+  });
+
+  it('admin widzi element dev tak jak dotąd: tylko w trybie Developer (próg trybu nadal działa)', () => {
+    expect(navItemVisible('dev', 'simple', true)).toBe(false);
+    expect(navItemVisible('dev', 'adv', true)).toBe(false);
+    expect(navItemVisible('dev', 'dev', true)).toBe(true);
+  });
+
+  it('elementy nie-dev (esencja / adv) niezależne od uprawnienia — zależą tylko od trybu', () => {
+    for (const isAdmin of [true, false]) {
+      expect(navItemVisible(undefined, 'simple', isAdmin)).toBe(true);
+      expect(navItemVisible('adv', 'simple', isAdmin)).toBe(false);
+      expect(navItemVisible('adv', 'adv', isAdmin)).toBe(true);
+    }
+  });
+
+  it('dla nie-elementów-dev navItemVisible == tierVisible (brak wpływu flagi admina)', () => {
+    for (const tier of [undefined, 'adv'] as const)
+      for (const m of MODES)
+        for (const isAdmin of [true, false])
+          expect(navItemVisible(tier, m, isAdmin)).toBe(tierVisible(tier, m));
   });
 });
 

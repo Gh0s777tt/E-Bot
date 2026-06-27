@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-566-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.496.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-567-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.497.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.497.0] — 🔒 Panel: server-side bramki na wrażliwe powierzchnie (audyt/diagnostyka/integracje)
+
+- `[#567]` 🔒 **Server-side bramki bezpieczeństwa (instance-admin)** — strony `/audit`, `/diagnostics`, `/integrations` oraz `GET /api/audit` to powierzchnie **instancyjne** (log z IP, stan kluczy/integracji, globalny config providera AI). Dotąd widział je **każdy zalogowany** — w tym `editor`/`viewer` i self-serve tenant-admin (`session.role='admin'`, lecz `resolveRole=null`) po przełączeniu trybu „Developer". Teraz: strony robią `redirect('/')`, a `GET /api/audit` zwraca **403** dla nie-admina instancji ([`isInstanceAdmin`](dashboard/lib/panelRoles.ts) / `isInstanceAdminRequest` — właściciel z env lub staff-admin, **nie** sama rola sesji). Linki „dev" znikają też z [`Sidebar`](dashboard/components/Sidebar.tsx) i palety komend (nowa czysta [`navItemVisible(tier, mode, isAdmin)`](dashboard/lib/viewMode.ts) — tryb widoku to preferencja gęstości, **nie** bramka; `isAdmin` płynie z serwera przez `layout`→`Shell`). `POST /api/settings` świadomie zostaje otwarte dla `editora` — `saveSettings` ma allowlistę `notify_*` (brak eskalacji do `panel_staff`).
+  - **Testy:** `viewMode.test.ts` +4 (`navItemVisible`: element dev **nigdy** dla nie-admina w żadnym trybie / admin nadal wg progu trybu / elementy nie-dev niezależne od roli) → **990/990** (132 pliki). Bramki: dashboard `tsc` · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.496.0] — 🔧 Asystent panelu: przycisk „Zastosuj" (UI egzekucji) + i18n ×14
 

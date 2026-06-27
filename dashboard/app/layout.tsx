@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import Shell from '../components/Shell';
 import { botInviteUrl } from '../lib/invite';
 import { tp } from '../lib/panelI18n';
+import { isInstanceAdmin } from '../lib/panelRoles';
 import { getPanelLocale } from '../lib/serverPanelLocale';
 
 const display = Oswald({
@@ -30,6 +31,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const lang = await getPanelLocale();
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  // Czy bieżący użytkownik to admin instancji — decyduje o widoczności linków „dev"
+  // (audyt/diagnostyka/integracje) w nawigacji i palecie komend (server-side, anty-podejrzenie).
+  const isAdmin = await isInstanceAdmin();
   return (
     <html
       lang={lang}
@@ -45,7 +49,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body className="bg-bg font-sans text-text antialiased">
-        <Shell inviteUrl={botInviteUrl()}>{children}</Shell>
+        <Shell inviteUrl={botInviteUrl()} isAdmin={isAdmin}>
+          {children}
+        </Shell>
       </body>
     </html>
   );

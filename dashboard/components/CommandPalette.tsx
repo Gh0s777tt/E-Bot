@@ -14,7 +14,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { navLabel, tp } from '../lib/panelI18n';
-import { tierVisible } from '../lib/viewMode';
+import { navItemVisible } from '../lib/viewMode';
 import { useLang } from './LangContext';
 import { NAV_ITEMS } from './nav-items';
 import { useFocusTrap } from './useFocusTrap';
@@ -57,7 +57,7 @@ function toggleClass(cls: string): void {
   }
 }
 
-export default function CommandPalette() {
+export default function CommandPalette({ isAdmin }: { isAdmin: boolean }) {
   const router = useRouter();
   const { mode } = useViewMode();
   const { lang } = useLang();
@@ -71,7 +71,7 @@ export default function CommandPalette() {
   const commands = useMemo<Cmd[]>(() => {
     const goto = tp(lang, 'ui.groupGoto');
     const action = tp(lang, 'ui.groupAction');
-    const nav: Cmd[] = NAV_ITEMS.filter((n) => tierVisible(n.tier, mode)).map((n) => ({
+    const nav: Cmd[] = NAV_ITEMS.filter((n) => navItemVisible(n.tier, mode, isAdmin)).map((n) => ({
       id: `nav:${n.href}`,
       label: navLabel(lang, n.href, n.label),
       group: goto,
@@ -127,7 +127,7 @@ export default function CommandPalette() {
       },
     ];
     return [...nav, ...actions];
-  }, [router, mode, lang]);
+  }, [router, mode, lang, isAdmin]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();

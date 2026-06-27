@@ -52,3 +52,12 @@ export async function isInstanceAdminRequest(request: Request): Promise<boolean>
   const s = token ? await verifySession(token, getAuthSecret()) : null;
   return !!s?.uid && (await resolveRole(s.uid)) === 'admin';
 }
+
+// Wariant dla SERVER-COMPONENTÓW (czyta sesję z cookies()) — odpowiednik isInstanceAdminRequest bez
+// obiektu Request. Do bramkowania wrażliwych STRON (audyt/diagnostyka/integracje) redirectem oraz
+// chowania ich linków w nawigacji: powierzchnie instancyjne (IP/klucze/globalny config) tylko dla
+// właściciela/developera, nie dla zwykłych użytkowników/klientów.
+export async function isInstanceAdmin(): Promise<boolean> {
+  const s = await currentSession();
+  return !!s?.uid && (await resolveRole(s.uid)) === 'admin';
+}

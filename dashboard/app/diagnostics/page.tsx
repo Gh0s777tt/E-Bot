@@ -1,8 +1,10 @@
 import { AlertTriangle, Bot, CheckCircle2, Database, Plug, XCircle } from 'lucide-react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { activeSource, getRawSetting, getSetupChecklist } from '../../lib/data';
 import { getIntegrations } from '../../lib/integrations';
 import { tp } from '../../lib/panelI18n';
+import { isInstanceAdmin } from '../../lib/panelRoles';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
@@ -16,6 +18,8 @@ function Dot({ ok }: { ok: boolean }) {
 }
 
 export default async function DiagnosticsPage() {
+  // Stan integracji/kluczy/health to info instancyjne — tylko admin instancji; inni → pulpit.
+  if (!(await isInstanceAdmin())) redirect('/');
   const [src, integrations, checklist, rawStatus, lang] = await Promise.all([
     activeSource(),
     Promise.resolve(getIntegrations()),

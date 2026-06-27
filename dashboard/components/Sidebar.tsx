@@ -14,12 +14,12 @@ import {
   PANEL_LOCALES,
   tp,
 } from '../lib/panelI18n';
-import { tierVisible, VIEW_MODES } from '../lib/viewMode';
+import { navItemVisible, VIEW_MODES } from '../lib/viewMode';
 import { useLang } from './LangContext';
 import { NAV_GROUPS } from './nav-items';
 import { useViewMode } from './ViewModeContext';
 
-export default function Sidebar() {
+export default function Sidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
   const { mode, setMode } = useViewMode();
   const { lang, setLang } = useLang();
@@ -51,10 +51,11 @@ export default function Sidebar() {
     });
   }
 
-  // Filtr widoczności wg trybu (Prosty/Zaawansowany/Developer) — chowa moduły o wyższym progu.
+  // Filtr widoczności wg trybu (Prosty/Zaawansowany/Developer) ORAZ uprawnienia — chowa moduły o
+  // wyższym progu, a linki „dev" (audyt/diagnostyka/integracje) ukrywa przed nie-adminem instancji.
   const groups = NAV_GROUPS.map((g) => ({
     ...g,
-    items: g.items.filter((i) => tierVisible(i.tier, mode)),
+    items: g.items.filter((i) => navItemVisible(i.tier, mode, isAdmin)),
   })).filter((g) => g.items.length > 0);
 
   return (

@@ -15,17 +15,26 @@ import TourGuide from './TourGuide';
 import { ViewModeProvider } from './ViewModeContext';
 
 // Publiczne strony (/p/*) renderujemy bez panelowego chromu (sidebar/topbar) — to widok dla gości.
-export default function Shell({ children, inviteUrl }: { children: ReactNode; inviteUrl: string }) {
+// isAdmin (z serwera) chowa linki „dev" (audyt/diagnostyka/integracje) przed nie-adminami instancji.
+export default function Shell({
+  children,
+  inviteUrl,
+  isAdmin,
+}: {
+  children: ReactNode;
+  inviteUrl: string;
+  isAdmin: boolean;
+}) {
   const pathname = usePathname();
   if (pathname.startsWith('/p/')) return <main className="min-h-screen">{children}</main>;
   return (
     <LangProvider>
       <ViewModeProvider>
         <div className="relative z-10 flex min-h-screen">
-          <CommandPalette />
+          <CommandPalette isAdmin={isAdmin} />
           <Assistant />
           <TourGuide />
-          <Sidebar />
+          <Sidebar isAdmin={isAdmin} />
           <div className="content-pane min-w-0 flex-1 md:ps-60">
             <Topbar inviteUrl={inviteUrl} />
             <main className="mx-auto max-w-7xl px-5 py-6 md:px-8">
