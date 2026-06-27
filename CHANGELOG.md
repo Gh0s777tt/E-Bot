@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-535-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.465.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-536-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.466.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.466.0] — 🛡️💸 Hardening: twardy limit kosztów AI działa też bez chmury (anty-otwarty-kran)
+
+- `[#536]` 🛡️ **Limit kosztów AI bez Supabase** ([`bot/src/lib/ai.mts`](bot/src/lib/ai.mts)) — `checkUsage` bez chmury zawsze widział zużycie = 0, więc dzienne limity zapytań/tokenów NIE działały → otwarty kran OpenAI/DeepSeek (P2 z audytu bezpieczeństwa). Dodany **licznik in-memory** (per serwer+user+dzień) jako fallback gdy `!hasCloud()`: `checkUsage` z niego czyta, `bumpUsage` dolicza; auto-reset dzienny (klucz z `day`) + przycinanie starych dni przy rozroście mapy (anty-wyciek pamięci). **Z chmurą — zero zmian zachowania.**
+  - **Bramki:** `pnpm lint` · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** · `docs:check` — exit 0 (Node 26.4.0).
 
 ## [0.465.0] — 📝 Zgodność README z rzeczywistością: blurb „Najnowsze" + liczba komend
 

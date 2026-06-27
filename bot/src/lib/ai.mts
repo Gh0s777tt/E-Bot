@@ -77,6 +77,13 @@ export type Usage = {
   guildId: string;
 };
 
+// Fallback in-memory licznika zużycia AI gdy BRAK chmury (Supabase). Bez tego checkUsage zawsze
+// widzi 0 → twarde limity kosztów nie działają (otwarty kran OpenAI/DeepSeek). Klucz zawiera `day`
+// (auto-reset dzienny); stare dni przycinane przy rozroście mapy (anty-wyciek pamięci).
+const memUsage = new Map<string, { tokens: number; requests: number }>();
+const memKey = (guildId: string, userId: string, day: string): string =>
+  `${guildId}:${userId}:${day}`;
+
 /** Sprawdza dzisiejsze zużycie PRZED wywołaniem; `limited` = komunikat gdy limit przekroczony.
  *  Liczone PER-SERWER (Audyt #2): zużycie i dzienny limit są niezależne na każdym serwerze. */
 export async function checkUsage(userId: string, guildId: string, cfg: AiConfig): Promise<Usage> {
@@ -90,6 +97,11 @@ export async function checkUsage(userId: string, guildId: string, cfg: AiConfig)
     );
     usedTokens = rows[0]?.tokens_used ?? 0;
     usedReq = rows[0]?.requests ?? 0;
+  } else {
+    // Bez chmury: zużycie z licznika in-memory (inaczej limit nigdy nie zadziała).
+    const m = memUsage.get(memKey(guildId, userId, day));
+    usedTokens = m?.tokens ?? 0;
+    usedReq = m?.requests ?? 0;
   }
   let limited: string | null = null;
   if (cfg.dailyRequestLimit > 0 && usedReq >= cfg.dailyRequestLimit) {
@@ -101,7 +113,16 @@ export async function checkUsage(userId: string, guildId: string, cfg: AiConfig)
 }
 
 export async function bumpUsage(userId: string, u: Usage, addTokens: number): Promise<void> {
-  if (!hasCloud()) return;
+  if (!hasCloud()) {
+    // Bez chmury: dolicz do licznika in-memory (parzyste z checkUsage powyżej).
+    const k = memKey(u.guildId, userId, u.day);
+    const m = memUsage.get(k) ?? { tokens: 0, requests: 0 };
+    memUsage.set(k, { tokens: m.tokens + addTokens, requests: m.requests + 1 });
+    if (memUsage.size > 5000) {
+      for (const key of memUsage.keys()) if (!key.endsWith(`:${u.day}`)) memUsage.delete(key);
+    }
+    return;
+  }
   await cloudUpsert(
     'ai_usage',
     [
