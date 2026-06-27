@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-578-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.508.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-579-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.509.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.509.0] — 📤 Eksport CSV dziennika audytu + utwardzenie eksportu statystyk
+
+- `[#579]` 📤 **Eksport CSV** — `/audit` dostał przycisk „Eksport CSV" → [`/api/audit/export`](dashboard/app/api/audit/export/route.ts) (bramka **instance-admin** jak `GET /audit`; log z IP — do raportów/RODO; cap 1000). Wspólny, **otestowany** serializer [`toCsv`](dashboard/lib/csv.ts) (RFC 4180: cytowanie pól z przecinkiem/cudzysłowem/nową linią, CRLF, BOM dla Excela). Przy okazji **utwardzony** istniejący eksport `/stats` ([`ExportStatsButton`](dashboard/components/ExportStatsButton.tsx)) — przepięty na `toCsv` (koniec naiwnego `join`, który psuł pola z przecinkiem). Reużyty klucz `ui.stats.exportCsv` (zero nowych stringów). *(Audyt błędnie zgłaszał brak eksportu /stats — istniał; realna luka była tylko /audit.)*
+  - **Testy:** nowy `csv.test.ts` +7 (escapowanie przecinka/cudzysłowu/newline · CRLF · null/liczby · pusty → nagłówek) → **1011/1011**. Bramki: dashboard `tsc` · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.508.0] — 🎛️ Redesign „Dowództwo" (krok 5): Powitania · Ekonomia · Leveling (status-pille)
 
