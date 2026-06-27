@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-538-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.468.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-539-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.469.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,10 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.469.0] — 🔒 Przewodnik hardeningu produkcyjnego (infra-gated + focused-PR backlog)
+
+- `[#539]` 🔒 **`docs/HARDENING-PROD.md`** — domknięcie backlogu audytu, którego nie da się wykonać z repo: precyzyjne przepisy dla pozycji wymagających Twojej infry (Railway wolumen+healthcheck · Vercel regiony+`maxDuration`+`CRON_SECRET` · CodeQL GHAS) + szablon **RLS per-guild** (po migracji na Supabase Auth) + **dowodowe uzasadnienie pominięć**: cache 5 usług (kontrakt natychmiastowego configu w `feature-toggles.test.ts`) i `@ebot/live` (`bot/Dockerfile` kopiuje tylko `bot/` → pakiet z `packages/` nie trafiłby do obrazu Railway). **0 zmian w kodzie.**
 
 ## [0.468.0] — 🛡️ Hardening P2/P3: anty host-header poisoning (opt-in) + SSRF/anti-OOM RSS + ReDoS-guard
 
