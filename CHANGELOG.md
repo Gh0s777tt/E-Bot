@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-532-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.462.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-533-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.463.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.463.0] — ⬆️ Aktualizacja zależności do najnowszych (Next 16.2.9 · Biome 2.5.1 · Supabase 2.108.2 · …)
+
+- `[#533]` ⬆️ **`pnpm update --latest`** — 45 pakietów na najnowsze wersje w obrębie majorów (zero migracji majorów): Next **16.2.9**, Biome **2.5.1**, @supabase/supabase-js **2.108.2**, lucide-react **1.21.0**, motion **12.42.0**, Vitest **4.1.9**, Tailwind **4.3.1**, @playwright/test **1.61.1**, @napi-rs/canvas **1.0.1**, @types/node **26** (dogania Node 26). `pnpm outdated` → pusto.
+  - **0 podatności** (`pnpm audit`). Po bumpie Playwright odświeżona binarka chromium (Headless Shell 149).
+  - **Bramki:** `pnpm lint` (Biome 2.5.1) · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** · build web + dashboard · `E2E_PROD=1 pnpm test:e2e` **5/5** · `docs:check` — exit 0 (Node 26.4.0).
 
 ## [0.462.0] — 🔐🛡️ Domknięcie izolacji multi-tenant: 5× IDOR (mod/tempban/sugestie/HoF/giveaway) + clamp mintowania
 
