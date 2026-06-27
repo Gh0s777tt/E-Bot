@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-546-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.476.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-547-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.477.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.477.0] — 🍯 Honeypot w panelu: przełącznik + wybór kanału + i18n ×14
+
+- `[#547]` 🍯 **Honeypot — pełne wpięcie w panel** (domyka #546) — `AntiRaidConfig` ([`dashboard/lib/community.ts`](dashboard/lib/community.ts)) + `antiraidSchema` ([`dashboard/lib/schemas.ts`](dashboard/lib/schemas.ts)) rozszerzone o `honeypot {enabled, channelId, action}`; nowa sekcja w [`AntiRaidForm`](dashboard/components/AntiRaidForm.tsx) (przełącznik + wybór kanału-pułapki + akcja) z pełnym **i18n ×14** (`ui.security.honeypot*`). Admin włącza pułapkę z panelu, bot (#546) ją egzekwuje. Honeypot kompletny end-to-end.
+  - **Bramki:** `panelI18n.parity.test` 30/30 (parzystość ×14) · dashboard `tsc` · Biome · pełny zestaw **925/925** — exit 0 (Node 26.4.0).
 
 ## [0.476.0] — 🍯 Anti-raid: honeypot (kanał-pułapka → auto-ban selfbotów)
 

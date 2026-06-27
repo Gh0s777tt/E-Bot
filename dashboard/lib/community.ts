@@ -210,6 +210,7 @@ export type AntiRaidConfig = {
   altNoAvatar: boolean;
   altAction: 'alert' | 'kick' | 'ban' | 'timeout';
   autoLockdown: boolean;
+  honeypot: { enabled: boolean; channelId: string; action: 'kick' | 'ban' | 'timeout' };
 };
 export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   enabled: false,
@@ -223,6 +224,7 @@ export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   altNoAvatar: true,
   altAction: 'alert',
   autoLockdown: false,
+  honeypot: { enabled: false, channelId: '', action: 'ban' },
 };
 
 export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {

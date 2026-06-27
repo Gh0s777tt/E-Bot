@@ -501,6 +501,14 @@ export const antiraidSchema = z.object({
   altNoAvatar: z.boolean().optional().default(true),
   altAction: z.enum(['alert', 'kick', 'ban', 'timeout']).optional().default('alert'),
   autoLockdown: z.boolean().optional().default(false),
+  honeypot: z
+    .object({
+      enabled: z.boolean().default(false),
+      channelId: z.string().max(40).default(''),
+      action: z.enum(['kick', 'ban', 'timeout']).default('ban'),
+    })
+    .optional()
+    .default({ enabled: false, channelId: '', action: 'ban' }),
 });
 export type AntiRaidInput = z.infer<typeof antiraidSchema>;
 

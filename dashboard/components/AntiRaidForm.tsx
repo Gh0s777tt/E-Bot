@@ -176,6 +176,51 @@ export default function AntiRaidForm({
         </span>
       </label>
 
+      <div className="space-y-4 rounded-lg border border-line/60 bg-elevated/40 p-4">
+        <label className="flex items-center gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={c.honeypot.enabled}
+            onChange={(e) => setC({ ...c, honeypot: { ...c.honeypot, enabled: e.target.checked } })}
+            className="h-4 w-4 accent-accent"
+          />
+          <span className="font-semibold text-white/90">🍯 {tp(lang, 'ui.security.honeypot')}</span>
+        </label>
+        <p className="text-xs text-muted">{tp(lang, 'ui.security.honeypotHelp')}</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="space-y-1 text-sm">
+            <span className="font-semibold text-white/90">
+              {tp(lang, 'ui.security.honeypotChannel')}
+            </span>
+            <ChannelSelect
+              value={c.honeypot.channelId}
+              onChange={(v) => setC({ ...c, honeypot: { ...c.honeypot, channelId: v } })}
+              channels={guild.channels}
+              placeholder={tp(lang, 'ui.security.noAlerts')}
+            />
+          </label>
+          <label className="space-y-1 text-sm">
+            <span className="font-semibold text-white/90">{tp(lang, 'ui.security.action')}</span>
+            <select
+              value={c.honeypot.action}
+              onChange={(e) =>
+                setC({
+                  ...c,
+                  honeypot: { ...c.honeypot, action: e.target.value as AntiRaidConfig['action'] },
+                })
+              }
+              className={inputCls}
+            >
+              {ACTIONS.map((a) => (
+                <option key={a.v} value={a.v}>
+                  {a.l}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </div>
+
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">{tp(lang, 'ui.security.raidFootNote')}</p>
     </div>
