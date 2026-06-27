@@ -5,8 +5,10 @@ import {
   clusterSimilarNames,
   detectWave,
   isHoneypotHit,
+  isSuspiciousName,
   largestNameCluster,
   nameSkeleton,
+  scoreMember,
 } from './antiraid.mts';
 
 const NOW = 100_000;
@@ -78,4 +80,62 @@ describe('isHoneypotHit — kanał-pułapka', () => {
     expect(isHoneypotHit('honeyCh', 'honeyCh', true)).toBe(false));
   it('brak skonfigurowanego kanału → brak', () =>
     expect(isHoneypotHit('', 'innyCh', false)).toBe(false));
+});
+
+describe('isSuspiciousName — auto-generowane nicki', () => {
+  it('długi sufiks cyfr → podejrzany', () => {
+    expect(isSuspiciousName('user_47120')).toBe(true);
+    expect(isSuspiciousName('x_99887766')).toBe(true);
+  });
+  it('przewaga cyfr nad literami → podejrzany', () =>
+    expect(isSuspiciousName('a12345')).toBe(true));
+  it('zwykłe imię+rok → NIE podejrzany (precyzja)', () => {
+    expect(isSuspiciousName('john2024')).toBe(false);
+    expect(isSuspiciousName('AlicePL')).toBe(false);
+  });
+});
+
+describe('scoreMember — threat-score 0-100', () => {
+  it('świeże konto + brak awatara + podejrzana nazwa → wysoki', () => {
+    const r = scoreMember({
+      ageDays: 0.2,
+      noAvatar: true,
+      nameSuspicious: true,
+      altAgeThresholdDays: 7,
+      weighNoAvatar: true,
+    });
+    expect(r.score).toBe(90); // 45 + 25 + 20
+    expect(r.reasons).toHaveLength(3);
+  });
+  it('stare konto, awatar, zwykła nazwa → 0 i brak powodów', () => {
+    const r = scoreMember({
+      ageDays: 400,
+      noAvatar: false,
+      nameSuspicious: false,
+      altAgeThresholdDays: 7,
+      weighNoAvatar: true,
+    });
+    expect(r.score).toBe(0);
+    expect(r.reasons).toEqual([]);
+  });
+  it('próg wieku 0 → wiek nieoceniany', () => {
+    const r = scoreMember({
+      ageDays: 0.1,
+      noAvatar: false,
+      nameSuspicious: false,
+      altAgeThresholdDays: 0,
+      weighNoAvatar: true,
+    });
+    expect(r.score).toBe(0);
+  });
+  it('wynik przycięty do 100', () => {
+    const r = scoreMember({
+      ageDays: 0,
+      noAvatar: true,
+      nameSuspicious: true,
+      altAgeThresholdDays: 30,
+      weighNoAvatar: true,
+    });
+    expect(r.score).toBeLessThanOrEqual(100);
+  });
 });

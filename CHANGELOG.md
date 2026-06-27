@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-547-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.477.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-548-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.478.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.478.0] — 🎯 Anti-raid: zunifikowany threat-score (0-100)
+
+- `[#548]` 🎯 **Threat-score zamiast binarnego „alt/nie-alt"** — [`bot/src/security/antiraid.mts`](bot/src/security/antiraid.mts): czyste `scoreMember` (waży wiek konta + brak awatara + podejrzaną nazwę → **0-100 + powody**) i `isSuspiciousName` (długi sufiks cyfr / przewaga cyfr nad literami; wąsko, by nie łapać „imię+rok" typu `john2024`). Alt-detekcja pokazuje teraz severność (`ryzyko 90/100`) w alercie, akcji i evencie panelu, i łapie też numerowane nicki **mimo awatara**. Domyka chipy „konto 4 min / brak awatara" z koncepcji „pokoju dowodzenia".
+  - **Testy:** `antiraid.test.ts` +7 (`scoreMember`, `isSuspiciousName` + precyzja) → **932/932**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.477.0] — 🍯 Honeypot w panelu: przełącznik + wybór kanału + i18n ×14
 

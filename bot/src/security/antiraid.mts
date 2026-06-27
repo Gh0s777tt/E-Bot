@@ -208,6 +208,43 @@ export function isHoneypotHit(
   return !!honeypotChannelId && msgChannelId === honeypotChannelId && !isPrivileged;
 }
 
+// Podejrzana nazwa konta (czysta funkcja): długi sufiks cyfr (auto-generowany nick raidera) lub
+// wyraźna przewaga cyfr nad literami. Trzymane wąsko, by nie łapać zwykłych „imię+rok" (np. john2024).
+export function isSuspiciousName(name: string): boolean {
+  if (/\d{5,}$/.test(name)) return true;
+  const letters = (name.match(/\p{L}/gu) ?? []).length;
+  const digits = (name.match(/\d/g) ?? []).length;
+  return digits > letters && digits >= 3;
+}
+
+// Zunifikowany threat-score (0-100, czysta funkcja): waży sygnały podejrzanego konta → wynik + powody.
+// Zastępuje binarne „alt/nie-alt" sortowalną severnością (admin widzi 90/100 vs 30/100). Próg/akcję
+// decyduje handler na podstawie `reasons` (niepuste = trafienie), score służy do priorytetyzacji.
+export function scoreMember(i: {
+  ageDays: number;
+  noAvatar: boolean;
+  nameSuspicious: boolean;
+  altAgeThresholdDays: number; // 0 = nie oceniaj wieku
+  weighNoAvatar: boolean;
+}): { score: number; reasons: string[] } {
+  const reasons: string[] = [];
+  let score = 0;
+  if (i.altAgeThresholdDays > 0 && i.ageDays < i.altAgeThresholdDays) {
+    const sub = i.ageDays < 1 ? 45 : i.ageDays < 7 ? 30 : i.ageDays < 30 ? 18 : 10;
+    score += sub;
+    reasons.push(`konto ${Math.floor(i.ageDays)}d (< ${i.altAgeThresholdDays}d)`);
+  }
+  if (i.weighNoAvatar && i.noAvatar) {
+    score += 25;
+    reasons.push('brak awatara');
+  }
+  if (i.nameSuspicious) {
+    score += 20;
+    reasons.push('podejrzana nazwa');
+  }
+  return { score: Math.min(100, score), reasons };
+}
+
 export function startAntiRaid(client: Client): void {
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     const gid = member.guild.id;
@@ -254,24 +291,32 @@ export function startAntiRaid(client: Client): void {
       }
     }
 
-    // Alt-detection — miękki scoring podejrzanych kont → alert (opcjonalnie kara).
+    // Alt-detection — zunifikowany threat-score (scoreMember): wiek + brak awatara + podejrzana nazwa
+    // → wynik 0-100 + powody. Trigger jak dotąd (reasons niepuste), wzbogacony o severność w alercie.
     if (cfg.altDetect) {
-      const reasons: string[] = [];
       const ageDays = (now - member.user.createdTimestamp) / 86_400_000;
-      if (cfg.altMinAgeDays > 0 && ageDays < cfg.altMinAgeDays)
-        reasons.push(`konto ${Math.floor(ageDays)}d (< ${cfg.altMinAgeDays}d)`);
-      if (cfg.altNoAvatar && !member.user.avatar) reasons.push('brak avatara');
+      const { score, reasons } = scoreMember({
+        ageDays,
+        noAvatar: !member.user.avatar,
+        nameSuspicious: isSuspiciousName(member.user.username),
+        altAgeThresholdDays: cfg.altMinAgeDays,
+        weighNoAvatar: cfg.altNoAvatar,
+      });
       if (reasons.length) {
         await alert(
           member.guild,
           cfg.alertChannelId,
-          `🕵️ **Możliwy alt:** <@${member.id}> (\`${member.user.tag}\`) — ${reasons.join(', ')}.${
+          `🕵️ **Możliwy alt** (ryzyko ${score}/100): <@${member.id}> (\`${member.user.tag}\`) — ${reasons.join(', ')}.${
             cfg.altAction !== 'alert' ? ` → ${cfg.altAction}` : ''
           }`,
         );
         if (cfg.altAction !== 'alert')
-          await punishWith(member, cfg.altAction, `Alt-detection: ${reasons.join(', ')}`);
-        void record(gid, 'alt', `${member.user.tag} — ${reasons.join(', ')}`);
+          await punishWith(
+            member,
+            cfg.altAction,
+            `Alt-detection (${score}/100): ${reasons.join(', ')}`,
+          );
+        void record(gid, 'alt', `${member.user.tag} (${score}/100) — ${reasons.join(', ')}`);
       }
     }
 
