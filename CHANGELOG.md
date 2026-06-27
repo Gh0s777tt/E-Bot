@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-562-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.492.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-563-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.493.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.493.0] — 🎁 Battle-pass: nagrody coins za tiery (raz na sezon)
+
+- `[#563]` 🎁 **Nagrody battle-passa** (domyka #562) — tiery dają teraz **coins** (50→3000), przyznawane **raz na sezon** za nowo-odblokowane tiery przy `/battlepass` (dedup w ustawieniu `g:<id>:bp_claims:<month>`). Czysta `claimRewards(current, claimed, tiers)` (**idempotentna** — brak podwójnej wypłaty). Grant gated ekonomią (`ecoConfig.enabled`) przez `getUser`/`saveUser`; gdy ekonomia off → battle-pass zostaje czystym trackerem.
+  - **Testy:** `battlepass.test.ts` +3 (`claimRewards`: suma od claimed+1 / idempotencja / przyrost) → **973/973**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.492.0] — 🎟️ Gamifikacja: /battlepass — sezonowy battle-pass (kamienie milowe)
 

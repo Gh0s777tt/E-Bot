@@ -1,26 +1,27 @@
 // /battlepass — sezonowy (miesięczny) battle-pass: postęp tierów wg aktywności (wiadomości w bieżącym
-// miesiącu z user_activity). Tiery = KAMIENIE MILOWE (tytuły), nie przyznawane nagrody — gamifikacja
-// aktywności bez nowego storage. Silnik battlePassTier czysty i testowalny.
+// miesiącu z user_activity) + nagroda coins za nowo-odblokowane tiery (RAZ na sezon, dedup w ustawieniu;
+// tylko gdy ekonomia włączona). Silniki battlePassTier / claimRewards czyste i testowalne.
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
-import { cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 
-export type Tier = { tier: number; need: number; title: string };
+export type Tier = { tier: number; need: number; title: string; reward: number };
 
-// Drabina kamieni milowych (próg = wiadomości w miesiącu). Rosnące progi; tytuły tematyczne.
+// Drabina tierów (próg = wiadomości w miesiącu, reward = coins). Rosnące progi i nagrody; tytuły tematyczne.
 export const TIERS: Tier[] = [
-  { tier: 1, need: 10, title: '🌱 Rozgrzewka' },
-  { tier: 2, need: 30, title: '🔥 Rozkręcasz się' },
-  { tier: 3, need: 75, title: '⭐ Stały bywalec' },
-  { tier: 4, need: 150, title: '💪 Aktywny' },
-  { tier: 5, need: 300, title: '🚀 Napędowy' },
-  { tier: 6, need: 600, title: '👑 Filar społeczności' },
-  { tier: 7, need: 1000, title: '🏆 Weteran sezonu' },
-  { tier: 8, need: 1500, title: '🌟 Legenda sezonu' },
+  { tier: 1, need: 10, title: '🌱 Rozgrzewka', reward: 50 },
+  { tier: 2, need: 30, title: '🔥 Rozkręcasz się', reward: 100 },
+  { tier: 3, need: 75, title: '⭐ Stały bywalec', reward: 200 },
+  { tier: 4, need: 150, title: '💪 Aktywny', reward: 350 },
+  { tier: 5, need: 300, title: '🚀 Napędowy', reward: 600 },
+  { tier: 6, need: 600, title: '👑 Filar społeczności', reward: 1000 },
+  { tier: 7, need: 1000, title: '🏆 Weteran sezonu', reward: 1750 },
+  { tier: 8, need: 1500, title: '🌟 Legenda sezonu', reward: 3000 },
 ];
 
 // Czysty silnik: dla XP (aktywności) i drabiny tierów zwraca aktualny tier, następny, % postępu do
@@ -38,6 +39,20 @@ export function battlePassTier(
     ? Math.min(100, Math.max(0, Math.round(((xp - base) / (next.need - base)) * 100)))
     : 100;
   return { current: last?.tier ?? 0, next, progressPct, unlocked };
+}
+
+// Czysta: ile coins przyznać za tiery odblokowane OD ostatniego odebrania (claimedTier) DO bieżącego.
+// Idempotentne — drugie wywołanie z tym samym `current` daje 0 (current ≤ claimed). Zapobiega podwójnej
+// wypłacie tej samej nagrody w sezonie.
+export function claimRewards(
+  currentTier: number,
+  claimedTier: number,
+  tiers: Tier[],
+): { coins: number; newClaimed: number } {
+  if (currentTier <= claimedTier) return { coins: 0, newClaimed: claimedTier };
+  let coins = 0;
+  for (const t of tiers) if (t.tier > claimedTier && t.tier <= currentTier) coins += t.reward;
+  return { coins, newClaimed: currentTier };
 }
 
 function bar(pct: number): string {
@@ -71,6 +86,33 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const { current, next, progressPct, unlocked } = battlePassTier(xp, TIERS);
   const curTitle = unlocked[unlocked.length - 1]?.title ?? '— jeszcze nic (napisz coś!)';
 
+  // Nagroda coins za nowo-odblokowane tiery — RAZ na sezon (dedup w ustawieniu per-miesiąc), tylko gdy
+  // ekonomia włączona (inaczej battle-pass to czysty tracker postępu).
+  let rewardLine = '';
+  const eco = ecoConfig(interaction.guildId);
+  if (eco.enabled && current > 0) {
+    const claimsKey = `g:${interaction.guildId}:bp_claims:${month}`;
+    let claims: Record<string, number> = {};
+    try {
+      claims = JSON.parse((await cloudGetSetting(claimsKey)) || '{}') as Record<string, number>;
+    } catch {
+      /* puste */
+    }
+    const { coins, newClaimed } = claimRewards(current, claims[interaction.user.id] ?? 0, TIERS);
+    if (coins > 0) {
+      const u = await getUser(interaction.guildId, interaction.user.id);
+      await saveUser({
+        guild_id: interaction.guildId,
+        user_id: interaction.user.id,
+        username: interaction.user.username,
+        wallet: u.wallet + coins,
+      }).catch(() => {});
+      claims[interaction.user.id] = newClaimed;
+      await cloudSetSetting(claimsKey, JSON.stringify(claims)).catch(() => {});
+      rewardLine = `\n🎁 Odebrano **+${fmt(coins, eco.currency)}** za nowe tiery!`;
+    }
+  }
+
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
     .setTitle(`🎟️ Battle-pass — sezon ${month}`)
@@ -80,8 +122,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         `${bar(progressPct)} ${progressPct}%\n` +
         (next
           ? `Do **Tier ${next.tier} (${next.title})**: jeszcze ${(next.need - xp).toLocaleString('pl-PL')} wiad.`
-          : '🏆 Maksymalny tier sezonu osiągnięty!'),
+          : '🏆 Maksymalny tier sezonu osiągnięty!') +
+        rewardLine,
     )
-    .setFooter({ text: 'Tiery to kamienie milowe aktywności w bieżącym miesiącu.' });
+    .setFooter({ text: 'Tiery dają coins (raz na sezon) i są kamieniami milowymi aktywności.' });
   await interaction.editReply({ embeds: [embed] });
 }
