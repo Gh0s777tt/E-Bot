@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-582-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.512.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-583-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.513.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.513.0] — 🎛️ Redesign „Dowództwo" (krok 7): status-pille per-sekcja na panelach multi-config
+
+- `[#583]` 🎛️ **Status-pille per-sekcja** — panele wielomodułowe `/moderation`, `/ai`, `/gaming`, `/creator`, `/donations` dostały status-pille **przy każdej sekcji** (z własnym `config.enabled`): automod + AI-mod; AI config + help + digest; free-games + patch-notes + price-tracker; social feeds; Ko-fi + donate-links. Tam gdzie sensowne — także page-level (moderacja/AI/donejty). Sekcje z zagnieżdżonymi przełącznikami (creator clips/events) lub bez `enabled` (native-automod, listy) świadomie bez pilla. Zero nowych stringów.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **1015/1015** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.512.0] — 🖼️ /appearance: realistyczny live-preview KARTY rangi (avatar + poziom + pasek XP)
 

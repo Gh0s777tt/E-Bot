@@ -3,6 +3,7 @@ import AiConfigForm from '../../components/AiConfigForm';
 import AiDigestForm from '../../components/AiDigestForm';
 import AiHelpForm from '../../components/AiHelpForm';
 import StatCard from '../../components/StatCard';
+import StatusPill from '../../components/StatusPill';
 import { getAiDigestConfig, getAiHelpConfig } from '../../lib/community';
 import { getAiConfig, getAiUsageToday } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
@@ -23,22 +24,20 @@ export default async function AiPage() {
 
   return (
     <div className="space-y-6">
-      <p className="max-w-3xl text-sm text-muted">
-        {tp(lang, 'ui.ai.introPre')}
-        <code className="text-accent">/ai</code>
-        {tp(lang, 'ui.ai.introAi')}
-        <code className="text-accent">/tldr</code>
-        {tp(lang, 'ui.ai.introTldr')}
-        <code className="text-accent">/translate</code>
-        {tp(lang, 'ui.ai.introTranslate')}
-        <code className="text-accent">/imagine</code>
-        {tp(lang, 'ui.ai.introImagine')}{' '}
-        {cfg.enabled ? (
-          <span className="font-semibold text-green-400">{tp(lang, 'ui.ai.enabledOn')}</span>
-        ) : (
-          <span className="font-semibold text-accent">{tp(lang, 'ui.ai.enabledOff')}</span>
-        )}
-      </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <p className="max-w-3xl text-sm text-muted">
+          {tp(lang, 'ui.ai.introPre')}
+          <code className="text-accent">/ai</code>
+          {tp(lang, 'ui.ai.introAi')}
+          <code className="text-accent">/tldr</code>
+          {tp(lang, 'ui.ai.introTldr')}
+          <code className="text-accent">/translate</code>
+          {tp(lang, 'ui.ai.introTranslate')}
+          <code className="text-accent">/imagine</code>
+          {tp(lang, 'ui.ai.introImagine')}
+        </p>
+        <StatusPill on={cfg.enabled} lang={lang} />
+      </header>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
@@ -67,6 +66,9 @@ export default async function AiPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Sparkles size={16} className="text-accent" /> {tp(lang, 'ui.ai.configHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={cfg.enabled} lang={lang} />
+          </span>
         </h2>
         <AiConfigForm initial={cfg} />
       </section>
@@ -74,6 +76,9 @@ export default async function AiPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <HelpCircle size={16} className="text-accent" /> {tp(lang, 'ui.ai.helpHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={aihelp.enabled} lang={lang} />
+          </span>
         </h2>
         <AiHelpForm initial={aihelp} guild={guild} />
       </section>
@@ -81,6 +86,9 @@ export default async function AiPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <FileText size={16} className="text-accent" /> {tp(lang, 'ui.ai.digestHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={aidigest.enabled} lang={lang} />
+          </span>
         </h2>
         <AiDigestForm initial={aidigest} guild={guild} />
       </section>

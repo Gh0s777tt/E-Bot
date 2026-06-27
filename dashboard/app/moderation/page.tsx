@@ -4,6 +4,7 @@ import AutomodForm from '../../components/AutomodForm';
 import AutomodStats from '../../components/AutomodStats';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
+import StatusPill from '../../components/StatusPill';
 import { getAiModConfig, getAutomodConfig, getAutomodStats } from '../../lib/community';
 import { getNativeRules } from '../../lib/discordAutomod';
 import { getModCases, getTempBans } from '../../lib/faza4';
@@ -58,20 +59,21 @@ export default async function ModerationPage() {
   ]);
   return (
     <div className="space-y-6">
-      <p className="max-w-3xl text-sm text-muted">
-        {tp(lang, 'ui.mod.introPre')} <code className="text-accent">/mod</code>{' '}
-        {tp(lang, 'ui.mod.introMid')} <code className="text-accent">/case user|recent</code>{' '}
-        {tp(lang, 'ui.mod.introMid2')} <strong>{tp(lang, 'ui.mod.introSecurity')}</strong>
-        {tp(lang, 'ui.mod.introPost')}{' '}
-        {cfg.enabled ? (
-          <span className="font-semibold text-green-400">{tp(lang, 'ui.mod.statusOn')}</span>
-        ) : (
-          <span className="font-semibold text-accent">{tp(lang, 'ui.mod.statusOff')}</span>
-        )}
-      </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <p className="max-w-3xl text-sm text-muted">
+          {tp(lang, 'ui.mod.introPre')} <code className="text-accent">/mod</code>{' '}
+          {tp(lang, 'ui.mod.introMid')} <code className="text-accent">/case user|recent</code>{' '}
+          {tp(lang, 'ui.mod.introMid2')} <strong>{tp(lang, 'ui.mod.introSecurity')}</strong>
+          {tp(lang, 'ui.mod.introPost')}
+        </p>
+        <StatusPill on={cfg.enabled} lang={lang} />
+      </header>
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <ShieldCheck size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAutomod')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={cfg.enabled} lang={lang} />
+          </span>
         </h2>
         <AutomodForm initial={cfg} guild={guild} />
       </section>
@@ -90,6 +92,9 @@ export default async function ModerationPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Bot size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAiMod')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={aimod.enabled} lang={lang} />
+          </span>
         </h2>
         <AiModForm initial={aimod} guild={guild} />
       </section>
