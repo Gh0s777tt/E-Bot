@@ -1,7 +1,13 @@
 // Test detekcji fali wejść anti-raid (detectWave) — czysty predykat wydzielony z handlera. Regresja =
 // raid przepuszczony (za wysoki próg / złe okno) albo fałszywa fala (ban niewinnych przy zwykłym ruchu).
 import { describe, expect, it } from 'vitest';
-import { clusterSimilarNames, detectWave, largestNameCluster, nameSkeleton } from './antiraid.mts';
+import {
+  clusterSimilarNames,
+  detectWave,
+  isHoneypotHit,
+  largestNameCluster,
+  nameSkeleton,
+} from './antiraid.mts';
 
 const NOW = 100_000;
 const at = (...ts: number[]) => ts.map((t) => ({ at: t }));
@@ -62,4 +68,14 @@ describe('clusterSimilarNames — armie botów po podobnych nazwach', () => {
   it('zbyt krótki rdzeń literowy nie sklejony (precyzja)', () => {
     expect(largestNameCluster(['ab1', 'ab2'])).toBe(0);
   });
+});
+
+describe('isHoneypotHit — kanał-pułapka', () => {
+  it('trafienie: nie-uprzywilejowany pisze w kanale-pułapce', () =>
+    expect(isHoneypotHit('honeyCh', 'honeyCh', false)).toBe(true));
+  it('inny kanał → brak', () => expect(isHoneypotHit('honeyCh', 'innyCh', false)).toBe(false));
+  it('uprzywilejowany (mod/test) → brak', () =>
+    expect(isHoneypotHit('honeyCh', 'honeyCh', true)).toBe(false));
+  it('brak skonfigurowanego kanału → brak', () =>
+    expect(isHoneypotHit('', 'innyCh', false)).toBe(false));
 });

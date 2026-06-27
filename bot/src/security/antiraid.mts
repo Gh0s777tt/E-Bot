@@ -1,7 +1,15 @@
 // Faza 7 / F6.3 — anti-raid: detektor fali wejść (N w oknie M s) → akcja na falę + alert.
 // Opcjonalnie: bramka minimalnego wieku konta (młodsze konta = akcja). Config 'antiraid_config'.
 
-import { type Client, Events, type Guild, type GuildMember, type TextChannel } from 'discord.js';
+import {
+  type Client,
+  Events,
+  type Guild,
+  type GuildMember,
+  type Message,
+  PermissionFlagsBits,
+  type TextChannel,
+} from 'discord.js';
 import { applyLockdown } from '../commands/lockdown.mts';
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings, guildKey, setGuildSetting } from '../lib/db.mts';
@@ -21,6 +29,8 @@ type AntiRaidConfig = {
   altNoAvatar: boolean;
   altAction: 'alert' | Action;
   autoLockdown: boolean; // przy wykryciu fali → automatyczna blokada serwera (/lockdown)
+  // Honeypot: kanał-pułapka ukryty przed ludźmi → kto (nie-mod) napisze, jest selfbotem.
+  honeypot: { enabled: boolean; channelId: string; action: Action };
 };
 
 const DEFAULT: AntiRaidConfig = {
@@ -35,6 +45,7 @@ const DEFAULT: AntiRaidConfig = {
   altNoAvatar: true,
   altAction: 'alert',
   autoLockdown: false,
+  honeypot: { enabled: false, channelId: '', action: 'ban' },
 };
 
 // Etap K — config per-serwer z cache TTL 30 s (handler reaguje na każde wejście).
@@ -70,7 +81,12 @@ const raidUntilByGuild = new Map<string, number>();
 const lastManualAlertByGuild = new Map<string, number>(); // throttle alertów raidmode (1/min)
 
 // ── Log zdarzeń do chmury (PER-SERWER 'g:<id>:antiraid_state') → panel pokazuje alarm + historię ──
-type RaidEvent = { ts: number; type: 'raid' | 'alt' | 'young'; detail: string; count: number };
+type RaidEvent = {
+  ts: number;
+  type: 'raid' | 'alt' | 'young' | 'honeypot';
+  detail: string;
+  count: number;
+};
 const eventsByGuild = new Map<string, RaidEvent[]>();
 const lastRaidAtByGuild = new Map<string, number>();
 const evLoaded = new Set<string>();
@@ -179,6 +195,17 @@ export function clusterSimilarNames(
 // Rozmiar największego klastra podobnych nazw (0 = brak klastra ≥2).
 export function largestNameCluster(names: string[], minLetters = 3): number {
   return clusterSimilarNames(names, minLetters)[0]?.size ?? 0;
+}
+
+// Honeypot — czysta decyzja (testowalna): kanał-pułapka ukryty przed ludźmi (deny VIEW_CHANNEL dla
+// @everyone). Człowiek go nie widzi, więc każda wiadomość tam = selfbot/skrypt → kara. Uprzywilejowani
+// (mod testujący kanał) są wyłączeni, by uniknąć przypadkowego bana.
+export function isHoneypotHit(
+  honeypotChannelId: string,
+  msgChannelId: string,
+  isPrivileged: boolean,
+): boolean {
+  return !!honeypotChannelId && msgChannelId === honeypotChannelId && !isPrivileged;
 }
 
 export function startAntiRaid(client: Client): void {
@@ -291,6 +318,26 @@ export function startAntiRaid(client: Client): void {
       recentByGuild.set(gid, []);
       for (const r of wave) await punishWith(r.m, cfg.action, 'Anti-raid (fala wejść)');
     }
+  });
+
+  // Honeypot — kanał-pułapka ukryty przed ludźmi (deny VIEW_CHANNEL @everyone). Kto (nie-mod) tam
+  // napisze, jest selfbotem/skryptem skanującym serwer → kara + alert + event panelu.
+  client.on(Events.MessageCreate, async (msg: Message) => {
+    if (!msg.guild || msg.author.bot) return;
+    const gid = msg.guild.id;
+    const hp = cfgFor(gid).honeypot;
+    if (!hp?.enabled || !hp.channelId) return;
+    const member = msg.member;
+    const privileged = member?.permissions.has(PermissionFlagsBits.ManageMessages) ?? false;
+    if (!isHoneypotHit(hp.channelId, msg.channelId, privileged)) return;
+    await msg.delete().catch(() => {});
+    if (member) await punishWith(member, hp.action, 'Honeypot: wiadomość w kanale-pułapce');
+    await alert(
+      msg.guild,
+      cfgFor(gid).alertChannelId,
+      `🍯 **Honeypot:** <@${msg.author.id}> (\`${msg.author.tag}\`) napisał w kanale-pułapce → ${hp.action}.`,
+    );
+    void record(gid, 'honeypot', `${msg.author.tag} — kanał-pułapka → ${hp.action}`);
   });
 
   log.info('[antiraid] anti-raid aktywny (config per-serwer z panelu).');

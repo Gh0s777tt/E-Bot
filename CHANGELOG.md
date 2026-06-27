@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-545-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.475.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-546-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.476.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.476.0] — 🍯 Anti-raid: honeypot (kanał-pułapka → auto-ban selfbotów)
+
+- `[#546]` 🍯 **Honeypot anti-selfbot (bot)** — [`bot/src/security/antiraid.mts`](bot/src/security/antiraid.mts): kanał-pułapka ukryty przed ludźmi (deny `VIEW_CHANNEL` dla @everyone). Człowiek go nie widzi, więc każda wiadomość tam = selfbot/skrypt skanujący serwer → natychmiastowa kara (domyślnie ban) + alert + event panelu. Uprzywilejowani (mod) wyłączeni z pułapki. Config `honeypot` w `antiraid_config`; czysta decyzja `isHoneypotHit` (testowalna). Panel (przełącznik + wybór kanału + i18n ×14) w kolejnym kroku (#547).
+  - **Testy:** `antiraid.test.ts` +4 → **925/925**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.475.0] — 🛡️ Anti-raid: klastrowanie podobnych nazw (armie botów)
 
