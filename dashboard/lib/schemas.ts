@@ -509,6 +509,13 @@ export const antiraidSchema = z.object({
     })
     .optional()
     .default({ enabled: false, channelId: '', action: 'ban' }),
+  crossIntel: z
+    .object({
+      enabled: z.boolean().default(false),
+      action: z.enum(['alert', 'kick', 'ban', 'timeout']).default('alert'),
+    })
+    .optional()
+    .default({ enabled: false, action: 'alert' }),
 });
 export type AntiRaidInput = z.infer<typeof antiraidSchema>;
 

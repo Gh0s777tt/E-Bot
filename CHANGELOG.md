@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-552-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.482.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-553-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.483.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.483.0] — 🌐 Cross-server intel w panelu: przełącznik + akcja + i18n ×14
+
+- `[#553]` 🌐 **Cross-server intel — wpięcie w panel** (domyka #552) — `AntiRaidConfig` ([`dashboard/lib/community.ts`](dashboard/lib/community.ts)) + `antiraidSchema` ([`dashboard/lib/schemas.ts`](dashboard/lib/schemas.ts)) + [`AntiRaidForm`](dashboard/components/AntiRaidForm.tsx) rozszerzone o `crossIntel {enabled, action}` (alert/kick/ban/timeout) z pełnym **i18n ×14** (`ui.security.crossIntel*`). Admin włącza federacyjną obronę z panelu, bot (#552) ją egzekwuje. Cross-server intel kompletny end-to-end.
+  - **Bramki:** `panelI18n.parity.test` 30/30 (parzystość ×14) · dashboard `tsc` · Biome · pełny zestaw **941/941** — exit 0 (Node 26.4.0).
 
 ## [0.482.0] — 🌐 Anti-raid: cross-server threat intel (federacyjna blocklista)
 

@@ -2083,6 +2083,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Brak avatara = podejrzany',
     'ui.security.autoLockdown': '🔒 Auto-lockdown przy wykryciu fali',
     'ui.security.honeypot': 'Honeypot (kanał-pułapka)',
+    'ui.security.crossIntel': 'Cross-server intel (znani raiderzy)',
+    'ui.security.crossIntelHelp':
+      '— rozpoznaj przy wejściu konto zbanowane jako raider na innym Twoim serwerze (domyślnie tylko alert).',
     'ui.security.honeypotChannel': 'Kanał-pułapka',
     'ui.security.honeypotHelp':
       '— ukryj ten kanał przed @everyone (odbierz „Wyświetlanie kanału"). Kto tam napisze, jest selfbotem → akcja od razu.',
@@ -3665,6 +3668,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'No avatar = suspicious',
     'ui.security.autoLockdown': '🔒 Auto-lockdown on detected wave',
     'ui.security.honeypot': 'Honeypot (trap channel)',
+    'ui.security.crossIntel': 'Cross-server intel (known raiders)',
+    'ui.security.crossIntelHelp':
+      '— flag accounts banned as raiders on another of your servers when they join (alert-only by default).',
     'ui.security.honeypotChannel': 'Trap channel',
     'ui.security.honeypotHelp':
       '— hide this channel from @everyone (deny "View channel"). Anyone who posts there is a selfbot → instant action.',
@@ -5269,6 +5275,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Kein Avatar = verdächtig',
     'ui.security.autoLockdown': '🔒 Auto-Lockdown bei erkannter Welle',
     'ui.security.honeypot': 'Honeypot (Fallen-Kanal)',
+    'ui.security.crossIntel': 'Cross-Server-Intel (bekannte Raider)',
+    'ui.security.crossIntelHelp':
+      '— erkenne beim Beitritt Konten, die auf einem anderen deiner Server als Raider gebannt wurden (standardmäßig nur Alarm).',
     'ui.security.honeypotChannel': 'Fallen-Kanal',
     'ui.security.honeypotHelp':
       '— blende diesen Kanal für @everyone aus (Recht „Kanal anzeigen" entziehen). Wer dort schreibt, ist ein Selfbot → sofortige Aktion.',
@@ -6871,6 +6880,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Sin avatar = sospechoso',
     'ui.security.autoLockdown': '🔒 Auto-bloqueo al detectar una oleada',
     'ui.security.honeypot': 'Honeypot (canal trampa)',
+    'ui.security.crossIntel': 'Intel entre servidores (raiders conocidos)',
+    'ui.security.crossIntelHelp':
+      '— detecta al entrar cuentas baneadas como raiders en otro de tus servidores (solo alerta por defecto).',
     'ui.security.honeypotChannel': 'Canal trampa',
     'ui.security.honeypotHelp':
       '— oculta este canal a @everyone (quita "Ver canal"). Quien escriba ahí es un selfbot → acción inmediata.',
@@ -8477,6 +8489,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Nessun avatar = sospetto',
     'ui.security.autoLockdown': '🔒 Auto-lockdown al rilevamento di un’ondata',
     'ui.security.honeypot': 'Honeypot (canale trappola)',
+    'ui.security.crossIntel': 'Intel tra server (raider noti)',
+    'ui.security.crossIntelHelp':
+      '— segnala all’ingresso gli account bannati come raider su un altro tuo server (solo avviso per impostazione predefinita).',
     'ui.security.honeypotChannel': 'Canale trappola',
     'ui.security.honeypotHelp':
       '— nascondi questo canale a @everyone (togli "Visualizza canale"). Chi scrive lì è un selfbot → azione immediata.',
@@ -10083,6 +10098,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Pas d’avatar = suspect',
     'ui.security.autoLockdown': '🔒 Auto-confinement à la détection d’une vague',
     'ui.security.honeypot': 'Honeypot (salon piège)',
+    'ui.security.crossIntel': 'Intel inter-serveurs (raiders connus)',
+    'ui.security.crossIntelHelp':
+      '— repère à l’arrivée les comptes bannis comme raiders sur un autre de tes serveurs (alerte seule par défaut).',
     'ui.security.honeypotChannel': 'Salon piège',
     'ui.security.honeypotHelp':
       '— masque ce salon à @everyone (retire « Voir le salon »). Quiconque y écrit est un selfbot → action immédiate.',
@@ -11680,6 +11698,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Sem avatar = suspeito',
     'ui.security.autoLockdown': '🔒 Auto-bloqueio ao detetar uma vaga',
     'ui.security.honeypot': 'Honeypot (canal-armadilha)',
+    'ui.security.crossIntel': 'Intel entre servidores (raiders conhecidos)',
+    'ui.security.crossIntelHelp':
+      '— sinaliza ao entrar contas banidas como raiders noutro dos teus servidores (apenas alerta por predefinição).',
     'ui.security.honeypotChannel': 'Canal-armadilha',
     'ui.security.honeypotHelp':
       '— oculte este canal de @everyone (remova "Ver canal"). Quem escrever ali é um selfbot → ação imediata.',
@@ -13221,6 +13242,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': '无头像 = 可疑',
     'ui.security.autoLockdown': '🔒 检测到一波时自动锁定',
     'ui.security.honeypot': '蜜罐(陷阱频道)',
+    'ui.security.crossIntel': '跨服务器情报(已知突袭者)',
+    'ui.security.crossIntelHelp':
+      '— 加入时识别在你另一台服务器上被封为突袭者的账号（默认仅警报）。',
     'ui.security.honeypotChannel': '陷阱频道',
     'ui.security.honeypotHelp':
       '— 对 @everyone 隐藏此频道（取消"查看频道"权限）。在那里发言者即为自助机器人 → 立即处理。',
@@ -14783,6 +14807,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': '아바타 없음 = 의심',
     'ui.security.autoLockdown': '🔒 파도 감지 시 자동 잠금',
     'ui.security.honeypot': '허니팟(함정 채널)',
+    'ui.security.crossIntel': '서버 간 인텔(알려진 레이더)',
+    'ui.security.crossIntelHelp':
+      '— 다른 내 서버에서 레이더로 차단된 계정을 입장 시 표시(기본값은 경보만).',
     'ui.security.honeypotChannel': '함정 채널',
     'ui.security.honeypotHelp':
       '— 이 채널을 @everyone에게서 숨기세요("채널 보기" 권한 제거). 거기에 글을 쓰면 셀프봇 → 즉시 조치.',
@@ -16368,6 +16395,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Нет аватара = подозрительный',
     'ui.security.autoLockdown': '🔒 Авто-локдаун при обнаружении волны',
     'ui.security.honeypot': 'Ловушка (канал-приманка)',
+    'ui.security.crossIntel': 'Меж-серверный интел (известные рейдеры)',
+    'ui.security.crossIntelHelp':
+      '— при входе отмечает аккаунты, забаненные как рейдеры на другом вашем сервере (по умолчанию только оповещение).',
     'ui.security.honeypotChannel': 'Канал-приманка',
     'ui.security.honeypotHelp':
       '— скройте этот канал от @everyone (уберите «Просмотр канала»). Кто там напишет — селфбот → действие сразу.',
@@ -17956,6 +17986,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Немає аватара = підозрілий',
     'ui.security.autoLockdown': '🔒 Авто-локдаун при виявленні хвилі',
     'ui.security.honeypot': 'Пастка (канал-приманка)',
+    'ui.security.crossIntel': 'Між-серверний інтел (відомі рейдери)',
+    'ui.security.crossIntelHelp':
+      '— при вході позначає акаунти, забанені як рейдери на іншому вашому сервері (типово лише сповіщення).',
     'ui.security.honeypotChannel': 'Канал-приманка',
     'ui.security.honeypotHelp':
       '— сховайте цей канал від @everyone (заберіть «Перегляд каналу»). Хто там напише — селфбот → дія одразу.',
@@ -19548,6 +19581,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'アバターなし = 疑わしい',
     'ui.security.autoLockdown': '🔒 波の検知時に自動ロックダウン',
     'ui.security.honeypot': 'ハニーポット(罠チャンネル)',
+    'ui.security.crossIntel': 'サーバー間インテル(既知のレイダー)',
+    'ui.security.crossIntelHelp':
+      '— 別の自サーバーでレイダーとしてBANされたアカウントを参加時に検出（既定はアラートのみ）。',
     'ui.security.honeypotChannel': '罠チャンネル',
     'ui.security.honeypotHelp':
       '— このチャンネルを @everyone から隠します（「チャンネルを見る」を外す）。そこに書き込む者はセルフボット → 即対応。',
@@ -21115,6 +21151,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'بلا صورة = مشبوه',
     'ui.security.autoLockdown': '🔒 إغلاق تلقائي عند كشف موجة',
     'ui.security.honeypot': 'مصيدة (قناة فخ)',
+    'ui.security.crossIntel': 'استخبارات بين الخوادم (مغيرون معروفون)',
+    'ui.security.crossIntelHelp':
+      '— نبّه عند الانضمام على الحسابات المحظورة كمغيرين على خادم آخر لك (تنبيه فقط افتراضيًا).',
     'ui.security.honeypotChannel': 'قناة الفخ',
     'ui.security.honeypotHelp':
       '— أخفِ هذه القناة عن @everyone (أزل صلاحية "عرض القناة"). من يكتب هناك فهو سِلف-بوت ← إجراء فوري.',
@@ -22705,6 +22744,9 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.security.altNoAvatar': 'Tanpa avatar = mencurigakan',
     'ui.security.autoLockdown': '🔒 Auto-lockdown saat gelombang terdeteksi',
     'ui.security.honeypot': 'Honeypot (kanal jebakan)',
+    'ui.security.crossIntel': 'Intel antar-server (raider dikenal)',
+    'ui.security.crossIntelHelp':
+      '— tandai saat masuk akun yang dibanned sebagai raider di server Anda yang lain (hanya peringatan secara default).',
     'ui.security.honeypotChannel': 'Kanal jebakan',
     'ui.security.honeypotHelp':
       '— sembunyikan kanal ini dari @everyone (cabut "Lihat kanal"). Siapa pun yang menulis di sana adalah selfbot → tindakan langsung.',

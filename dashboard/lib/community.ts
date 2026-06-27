@@ -211,6 +211,7 @@ export type AntiRaidConfig = {
   altAction: 'alert' | 'kick' | 'ban' | 'timeout';
   autoLockdown: boolean;
   honeypot: { enabled: boolean; channelId: string; action: 'kick' | 'ban' | 'timeout' };
+  crossIntel: { enabled: boolean; action: 'alert' | 'kick' | 'ban' | 'timeout' };
 };
 export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   enabled: false,
@@ -225,6 +226,7 @@ export const ANTIRAID_DEFAULT: AntiRaidConfig = {
   altAction: 'alert',
   autoLockdown: false,
   honeypot: { enabled: false, channelId: '', action: 'ban' },
+  crossIntel: { enabled: false, action: 'alert' },
 };
 
 export async function getAntiRaidConfig(): Promise<AntiRaidConfig> {
