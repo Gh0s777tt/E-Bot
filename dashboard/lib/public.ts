@@ -67,6 +67,23 @@ export async function topEco(limit = 15): Promise<LbRow[]> {
 export async function topActive(limit = 15, days = 30): Promise<LbRow[]> {
   if (!hasSupabase) return [];
   try {
+    // Agregacja po stronie DB (RPC `top_active` — dashboard/scripts/topactive-rpc.sql): Postgres grupuje
+    // i zwraca top-N zamiast ciągnięcia całego okna i sumowania w JS. Fallback niżej, gdy RPC nieutworzony.
+    const rpc = await withTimeout(supabase().rpc('top_active', { p_days: days, p_limit: limit }));
+    if (!rpc.error && Array.isArray(rpc.data)) {
+      return (
+        rpc.data as { user_id: string; username: string | null; value: number; voice_min: number }[]
+      ).map((r) => ({
+        user_id: r.user_id,
+        username: r.username || r.user_id,
+        value: r.value || 0,
+        sub:
+          (r.voice_min || 0) >= 60
+            ? `${Math.floor((r.voice_min || 0) / 60)}h voice`
+            : `${r.voice_min || 0}m voice`,
+      }));
+    }
+    // Fallback (RPC nieutworzony): skan okna + agregacja w JS — dotychczasowe zachowanie, zero regresji.
     const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
     const { data, error } = await withTimeout(
       supabase()

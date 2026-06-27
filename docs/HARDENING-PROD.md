@@ -69,15 +69,19 @@ create policy guild_isolation on user_levels
 -- Powtórz dla pozostałych tabel per-gildia. guild_members/guilds: scope po discord_id = sub.
 ```
 
-## 🧩 Pozycje świadomie POMINIĘTE (z dowodem)
-- **Cache TTL w 5 usługach per-wiadomość** — kontrakt afk/highlights **wymaga natychmiastowego zastosowania
-  configu** (`feature-toggles.test.ts`: set→read na tym samym serwerze oczekuje nowej wartości). Naiwny
-  cache 30 s zwala test; invalidacja-na-zapis to nieproporcjonalna infra wobec marginalnego zysku — singleton
-  SQLite (v0.467) zdjął już główny koszt (otwarcie połączenia). Pozostaje tani prepared-SELECT.
-- **Pakiet `@ebot/live` (likwidacja dryfu luster)** — `bot/Dockerfile` kopiuje **tylko `bot/`**
-  (`pnpm --filter bot-dc-bot`), więc pakiet w `packages/` nie trafiłby do obrazu Railway → cichy crash
-  produkcji. Wymaga jednoczesnej zmiany Dockerfile + weryfikacji buildu obrazu — **osobny PR** (nie do
-  zweryfikowania lokalnymi bramkami).
+## ⚡ Perf opcjonalne (DB) — `topActive` agregacja po stronie Postgresa
+Publiczny `/p/leaderboard` (topActive) domyślnie skanuje okno `user_activity` i sumuje w JS. Szybsza droga:
+funkcja Postgres `top_active` (GROUP BY + top-N). Uruchom RAZ w Supabase → SQL Editor:
+[`dashboard/scripts/topactive-rpc.sql`](../dashboard/scripts/topactive-rpc.sql). Kod NAJPIERW próbuje RPC,
+a bez niej wraca do skanu+JS (**zero regresji** bez tego pliku). Perf-only, bezpieczne do pominięcia.
+
+## 🧩 Pozycje zamknięte z dowodem
+- **Cache 5 usług per-wiadomość** — ✅ **ZROBIONE** (v0.470, #540) inaczej niż TTL: **invalidacja epoką**
+  (`settingsEpoch()` rośnie przy zapisie) → cache hit między zapisami + natychmiastowy config po zmianie.
+- **Pakiet `@ebot/live` (dryf luster)** — ❌ **NIE robić — byłby BUGIEM.** `MIGRATED_GUILD_KEYS` bot=29 ⊊
+  panel=32 (panel ma aimod/aihelp/aidigest więcej) to **intencjonalny podzbiór** (staging), strzeżony testem
+  `migrated-keys-consistency.test.ts` — unifikacja złamałaby go. Parsery live = osobne implementacje. Plus
+  Dockerfile kopiuje tylko `bot/` (nieweryfikowalne bez Dockera). Brak bezpiecznego celu dedup.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-542-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.472.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-543-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.473.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.473.0] — ⚡ topActive: agregacja po stronie DB (RPC top_active) z fallbackiem na skan
+
+- `[#543]` ⚡ **Anty-skan na publicznym `/p/leaderboard`** — `topActive` ([`dashboard/lib/public.ts`](dashboard/lib/public.ts)) skanowało całe okno `user_activity` i sumowało w JS. Teraz NAJPIERW próbuje funkcji Postgres `top_active` (GROUP BY + ORDER + LIMIT po stronie DB) — [`dashboard/scripts/topactive-rpc.sql`](dashboard/scripts/topactive-rpc.sql), uruchamiasz RAZ w Supabase. Gdy RPC nieutworzony → **fallback na dotychczasowy skan+JS (zero regresji)**. Domyka ostatnią pozycję perf-panelu z audytu. Reszta perf-panelu (`getPanelAccessList`, `getGames`) okazała się po czytaniu kodu **już dobra** (memo 60 s / `rowToGame` spreaduje `*`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** · `schema:check` · lint — exit 0 (Node 26.4.0).
 
 ## [0.472.0] — ⚡ Anty-N+1 na /modules: getModuleStates batchuje ~41 zapytań w 1 (.in)
 
