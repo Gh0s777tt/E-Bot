@@ -3,7 +3,7 @@
 // jako „promocję" albo wybiera deal bez ceny). Spośród kandydatów wybiera NAJTAŃSZY wg `price.amount`
 // (nie wg największego %!). Regresja = ogłoszenie droższej/niepromocyjnej oferty.
 import { describe, expect, it } from 'vitest';
-import { bestDeal, type Deal } from './pricetracker.mts';
+import { bestDeal, type Deal, isHistoricalLow } from './pricetracker.mts';
 
 const deal = (cut: number, amount: number | null, shop = 'X'): Deal => ({
   cut,
@@ -37,5 +37,20 @@ describe('bestDeal — najtańsza realna promocja', () => {
     expect(bestDeal([deal(50, 30, 'pierwszy'), deal(70, 30, 'drugi')])?.shop?.name).toBe(
       'pierwszy',
     );
+  });
+});
+
+describe('isHistoricalLow — wyróżnienie historycznego minimum', () => {
+  const m = (amount: number, currency = 'PLN') => ({ amount, currency });
+  it('cena == ATL → true', () => expect(isHistoricalLow(m(10), m(10))).toBe(true));
+  it('w granicach tolerancji 3% nad ATL → true', () =>
+    expect(isHistoricalLow(m(10.2), m(10))).toBe(true));
+  it('wyraźnie nad ATL → false', () => expect(isHistoricalLow(m(15), m(10))).toBe(false));
+  it('różne waluty → false (bez jabłek do gruszek)', () =>
+    expect(isHistoricalLow(m(10, 'EUR'), m(10, 'PLN'))).toBe(false));
+  it('brak danych / ATL≤0 → false', () => {
+    expect(isHistoricalLow(undefined, m(10))).toBe(false);
+    expect(isHistoricalLow(m(10), undefined)).toBe(false);
+    expect(isHistoricalLow(m(10), m(0))).toBe(false);
   });
 });

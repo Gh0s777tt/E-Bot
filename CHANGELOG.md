@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-550-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.480.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-551-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.481.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.481.0] — 💎 GameVault: alert „najniższa cena w historii" w pricetrackerze
+
+- `[#551]` 💎 **Wyróżnienie historycznego minimum** — [`pricetracker`](bot/src/gaming/pricetracker.mts) ogłaszał każdą promocję jednakowo. Teraz czysta `isHistoricalLow` (cena ≤ ATL + tolerancja 3% na drgania groszowe; różne waluty / braki / ATL≤0 → false) odróżnia **najmocniejszy sygnał „kupuj teraz"**: historyczne minimum dostaje osobny embed (💎 zielony „Najniższa cena w historii"), zwykła promocja zostaje 🔥 czerwona. Sygnał vs szum. (Per-user DM z progiem ceny = większy follow-up: wymaga per-user wishlist + target price.)
+  - **Testy:** `pricetracker.bestdeal.test.ts` +5 (ATL, tolerancja, różne waluty, braki danych) → **937/937**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.480.0] — ✨ Panel: widoczny feedback błędu na przełącznikach + mikro-animacja
 

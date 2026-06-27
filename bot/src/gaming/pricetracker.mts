@@ -18,7 +18,7 @@ function cfgFor(guildId: string): Cfg {
 }
 
 const BASE = 'https://api.isthereanydeal.com';
-type Money = { amount: number; currency: string };
+export type Money = { amount: number; currency: string };
 export type Deal = {
   shop?: { name?: string };
   price?: Money;
@@ -34,6 +34,19 @@ export function bestDeal(deals: Deal[]): Deal | undefined {
   const onSale = deals.filter((d) => (d.cut ?? 0) > 0 && d.price);
   if (!onSale.length) return undefined;
   return onSale.reduce((a, b) => ((a.price?.amount ?? 1e9) <= (b.price?.amount ?? 1e9) ? a : b));
+}
+
+// Czy cena to (blisko) historyczne minimum — najmocniejszy sygnał „kupuj teraz", odróżniany od zwykłej
+// promocji. Tolerancja w % (ceny drgają groszami: 3% nad ATL nadal traktujemy jako „najniżej w historii").
+// Różne waluty / brak danych / ATL≤0 → false. Czysta funkcja (test: pricetracker.bestdeal).
+export function isHistoricalLow(
+  price: Money | undefined,
+  historyLow: Money | undefined,
+  tolerancePct = 3,
+): boolean {
+  if (!price || !historyLow || historyLow.amount <= 0) return false;
+  if (price.currency !== historyLow.currency) return false;
+  return price.amount <= historyLow.amount * (1 + tolerancePct / 100);
 }
 
 async function lookupId(key: string, title: string): Promise<string | null> {
@@ -96,9 +109,11 @@ async function tickForGuild(guild: Guild, key: string): Promise<void> {
 
     const title = idToTitle.get(row.id) ?? 'Gra';
     const low = row.historyLow?.all;
+    // Historyczne minimum = osobny, mocniejszy alert (💎 zielony) vs zwykła promocja (🔥 czerwony).
+    const atLow = isHistoricalLow(price, low);
     const embed = new EmbedBuilder()
-      .setColor(0xe50914)
-      .setTitle(`🔥 Promocja: ${title}`)
+      .setColor(atLow ? 0x2ecc71 : 0xe50914)
+      .setTitle(`${atLow ? '💎 Najniższa cena w historii' : '🔥 Promocja'}: ${title}`)
       .setURL(best.url || null)
       .setDescription(
         `**${price.amount.toFixed(2)} ${price.currency}** (−${best.cut}%) w ${best.shop?.name ?? 'sklepie'}` +
