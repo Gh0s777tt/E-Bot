@@ -95,6 +95,35 @@ export function trendLabel(t: Trend): string {
   return `${t.arrow} ${t.pct > 0 ? '+' : ''}${t.pct}%`;
 }
 
+// 📈 „Największy skok aktywności" (czysta): per-user różnica wiadomości między oknem BIEŻĄCYM a POPRZEDNIM.
+// Wyłania największy DODATNI przyrost (≥ minDelta, by odfiltrować szum). Docenia ROSNĄCYCH członków, nie
+// tylko stałych liderów (uzupełnienie topUserByMessages). undefined, gdy nikt znacząco nie urósł.
+export function mostImproved(
+  current: UserActivityRow[],
+  previous: UserActivityRow[],
+  minDelta = 20,
+): { name: string; before: number; after: number; delta: number } | undefined {
+  const agg = new Map<string, { name: string; before: number; after: number }>();
+  const fold = (rows: UserActivityRow[], key: 'before' | 'after') => {
+    for (const r of rows) {
+      const cur = agg.get(r.user_id) ?? { name: r.username || r.user_id, before: 0, after: 0 };
+      cur[key] += r.messages ?? 0;
+      if (r.username) cur.name = r.username;
+      agg.set(r.user_id, cur);
+    }
+  };
+  fold(previous, 'before');
+  fold(current, 'after');
+  let best: { name: string; before: number; after: number; delta: number } | undefined;
+  for (const u of agg.values()) {
+    const delta = u.after - u.before;
+    if (delta >= minDelta && (!best || delta > best.delta)) {
+      best = { name: u.name, before: u.before, after: u.after, delta };
+    }
+  }
+  return best;
+}
+
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const now = new Date();
@@ -155,6 +184,12 @@ async function maybePost(client: Client): Promise<void> {
     // 🧊 Stygnący: aktywni w 1. połowie okna, cisza w ostatnich 3 dniach (wczesny churn-risk).
     const splitDay = new Date(now.getTime() - 3 * 86_400_000).toISOString().slice(0, 10);
     const cooling = coolingMembers(ua, splitDay);
+    // 📈 Największy skok aktywności: per-user przyrost vs poprzednie 7 dni (user_activity z [−14, −7)).
+    const prevUa = await cloudSelect<UserActivityRow>(
+      'user_activity',
+      `select=user_id,username,messages,day&guild_id=eq.${guild.id}&day=gte.${since14}&day=lt.${since}`,
+    ).catch(() => [] as UserActivityRow[]);
+    const improved = mostImproved(ua, prevUa);
     // 📥 Lejek nowych: dołączenia z okna (member_cohorts) → ilu napisało → ilu zostało.
     const joiners = await cloudSelect<{ user_id: string; left_at?: string | null }>(
       'member_cohorts',
@@ -191,6 +226,12 @@ async function maybePost(client: Client): Promise<void> {
         embed.addFields({
           name: '🏆 Najaktywniejszy',
           value: `${topUser.name} — ${topUser.msgs.toLocaleString('pl-PL')} wiad.`,
+          inline: false,
+        });
+      if (improved)
+        embed.addFields({
+          name: '📈 Największy skok aktywności',
+          value: `${improved.name} — ${improved.before} → ${improved.after} wiad. (+${improved.delta})`,
           inline: false,
         });
       if (cooling.length)

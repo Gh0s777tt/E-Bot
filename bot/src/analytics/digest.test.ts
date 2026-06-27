@@ -3,7 +3,14 @@
 // (jeden wiersz/dzień), wyłania lidera (sort MALEJĄCO), rozwiązuje nazwę (username z dowolnego wiersza
 // > fallback user_id). Regresja = digest chwali złą osobę albo pokazuje surowe id zamiast nicku.
 import { describe, expect, it } from 'vitest';
-import { coolingMembers, memberFunnel, topUserByMessages, trend, trendLabel } from './digest.mts';
+import {
+  coolingMembers,
+  memberFunnel,
+  mostImproved,
+  topUserByMessages,
+  trend,
+  trendLabel,
+} from './digest.mts';
 
 describe('topUserByMessages — lider aktywności tygodnia', () => {
   it('SUMUJE wiadomości tego samego usera z wielu dni', () => {
@@ -141,5 +148,43 @@ describe('trendLabel — etykieta trendu do embeda', () => {
   it('bez bazy: przyrost → 🆕 +N, oba zerowe → ▬', () => {
     expect(trendLabel(trend(50, 0))).toBe('🆕 +50');
     expect(trendLabel(trend(0, 0))).toBe('▬');
+  });
+});
+
+describe('mostImproved — największy skok aktywności (per-user, okno do okna)', () => {
+  it('wyłania największy DODATNI przyrost wiadomości', () => {
+    const prev = [
+      { user_id: 'a', username: 'Ala', messages: 10 },
+      { user_id: 'b', username: 'Bob', messages: 50 },
+    ];
+    const cur = [
+      { user_id: 'a', username: 'Ala', messages: 100 }, // +90
+      { user_id: 'b', username: 'Bob', messages: 60 }, // +10
+    ];
+    expect(mostImproved(cur, prev)).toEqual({ name: 'Ala', before: 10, after: 100, delta: 90 });
+  });
+
+  it('SUMUJE wiele dni per-user w każdym oknie', () => {
+    const cur = [
+      { user_id: 'a', username: 'Ala', messages: 30 },
+      { user_id: 'a', username: 'Ala', messages: 40 },
+    ];
+    expect(mostImproved(cur, [], 20)?.after).toBe(70);
+  });
+
+  it('przyrost < minDelta → undefined (filtr szumu)', () => {
+    const cur = [{ user_id: 'a', username: 'Ala', messages: 25 }];
+    const prev = [{ user_id: 'a', username: 'Ala', messages: 15 }]; // +10 < 20
+    expect(mostImproved(cur, prev, 20)).toBeUndefined();
+  });
+
+  it('spadek aktywności ignorowany (tylko dodatnie skoki)', () => {
+    const cur = [{ user_id: 'a', username: 'Ala', messages: 5 }];
+    const prev = [{ user_id: 'a', username: 'Ala', messages: 80 }];
+    expect(mostImproved(cur, prev)).toBeUndefined();
+  });
+
+  it('nowy aktywny (brak w poprzednim oknie) liczy się jako pełny przyrost', () => {
+    expect(mostImproved([{ user_id: 'n', username: 'Nowy', messages: 60 }], [])?.delta).toBe(60);
   });
 });

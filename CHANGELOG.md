@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-599-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.529.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-600-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.530.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.530.0] — 📈 Digest: „największy skok aktywności" (docenia rosnących, nie tylko liderów)
+
+- `[#600]` 📈 **„Największy skok aktywności" w digescie** — tygodniowe podsumowanie wyłania teraz członka z **największym przyrostem** wiadomości tydzień-do-tygodnia (np. `Ala — 10 → 100 wiad. (+90)`), obok dotychczasowego „🏆 Najaktywniejszego". Docenia ROSNĄCYCH (świeżo aktywujących się, wracających), nie tylko stałych „whali". Czysta, otestowana `mostImproved` ([`digest.mts`](bot/src/analytics/digest.mts) — per-user delta między oknami, próg `minDelta=20` filtruje szum, nowy aktywny = pełny przyrost, spadki ignorowane); reużywa drugie okno `user_activity` z [−14, −7) (jak benchmark trendu #595).
+  - **Testy:** `digest.test.ts` +5 (`mostImproved`: max przyrost / suma dni / próg / spadek-ignorowany / nowy) → **1080/1080**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.529.0] — 📌 Klany: prywatny kanał klanu (`/clan channel`, bramkowany rolą)
 
