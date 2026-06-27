@@ -60,6 +60,22 @@ export function coolingMembers(
     .map((u) => ({ name: u.name, before: u.before }));
 }
 
+// 📥 Lejek nowych członków (czysta funkcja): z dołączeń w oknie liczy aktywację (napisali ≥1 wiadomość →
+// są w zbiorze aktywnych) i retencję (zostali → brak `left_at`). Pokazuje, gdzie tracimy nowych:
+// dołączyli, ale nie odezwali się / od razu wyszli. `joiners` = wiersze member_cohorts z okna.
+export function memberFunnel(
+  joiners: { user_id: string; left_at?: string | null }[],
+  activeUserIds: Set<string>,
+): { joined: number; activated: number; retained: number } {
+  let activated = 0;
+  let retained = 0;
+  for (const j of joiners) {
+    if (activeUserIds.has(j.user_id)) activated++;
+    if (!j.left_at) retained++;
+  }
+  return { joined: joiners.length, activated, retained };
+}
+
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const now = new Date();
@@ -110,6 +126,12 @@ async function maybePost(client: Client): Promise<void> {
     // 🧊 Stygnący: aktywni w 1. połowie okna, cisza w ostatnich 3 dniach (wczesny churn-risk).
     const splitDay = new Date(now.getTime() - 3 * 86_400_000).toISOString().slice(0, 10);
     const cooling = coolingMembers(ua, splitDay);
+    // 📥 Lejek nowych: dołączenia z okna (member_cohorts) → ilu napisało → ilu zostało.
+    const joiners = await cloudSelect<{ user_id: string; left_at?: string | null }>(
+      'member_cohorts',
+      `select=user_id,left_at&guild_id=eq.${guild.id}&joined_at=gte.${since}`,
+    ).catch(() => [] as { user_id: string; left_at?: string | null }[]);
+    const funnel = memberFunnel(joiners, new Set(ua.map((r) => r.user_id)));
 
     const ch = await client.channels.fetch(c.channelId).catch(() => null);
     // Kanał musi należeć do TEGO serwera (config mógł zostać po przeniesieniu/zmianie).
@@ -141,6 +163,12 @@ async function maybePost(client: Client): Promise<void> {
             .slice(0, 5)
             .map((u) => `${u.name} (${u.before} wiad. wcześniej)`)
             .join('\n'),
+          inline: false,
+        });
+      if (funnel.joined > 0)
+        embed.addFields({
+          name: '📥 Lejek nowych (7 dni)',
+          value: `Dołączyli: **${funnel.joined}** → napisali: **${funnel.activated}** → zostali: **${funnel.retained}**`,
           inline: false,
         });
       if (topRep)

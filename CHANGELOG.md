@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-560-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.490.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-561-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.491.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.491.0] — 📥 Analityka: lejek nowych członków w digescie
+
+- `[#561]` 📥 **Lejek nowych w tygodniowym digescie** — `digest` ([`bot/src/analytics/digest.mts`](bot/src/analytics/digest.mts)) dostał czystą `memberFunnel`: z dołączeń tygodnia (`member_cohorts`) liczy **aktywację** (napisali ≥1 wiadomość → są w aktywnych) i **retencję** (zostali → brak `left_at`). Nowe pole „📥 Lejek nowych: Dołączyli X → napisali Y → zostali Z" pokazuje, gdzie tracimy nowych (cisza / natychmiastowe wyjście). Wzrost z wizji, bez AI/infry/panelu.
+  - **Testy:** `digest.test.ts` +3 (`memberFunnel`: aktywacja+retencja / zera / brak aktywnych) → **966/966**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.490.0] — 🤖 Co-pilot moderacji 2.0: /modai queue (streszczenie kolejki serwera)
 

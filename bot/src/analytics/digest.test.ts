@@ -3,7 +3,7 @@
 // (jeden wiersz/dzień), wyłania lidera (sort MALEJĄCO), rozwiązuje nazwę (username z dowolnego wiersza
 // > fallback user_id). Regresja = digest chwali złą osobę albo pokazuje surowe id zamiast nicku.
 import { describe, expect, it } from 'vitest';
-import { coolingMembers, topUserByMessages } from './digest.mts';
+import { coolingMembers, memberFunnel, topUserByMessages } from './digest.mts';
 
 describe('topUserByMessages — lider aktywności tygodnia', () => {
   it('SUMUJE wiadomości tego samego usera z wielu dni', () => {
@@ -86,5 +86,28 @@ describe('coolingMembers — stygnący (wczesny churn-risk)', () => {
     expect(
       coolingMembers([{ user_id: 'c', messages: 4, day: '2026-06-25' }], '2026-06-24'),
     ).toEqual([]);
+  });
+});
+
+describe('memberFunnel — lejek nowych (dołączyli → napisali → zostali)', () => {
+  it('liczy aktywację (w zbiorze aktywnych) i retencję (brak left_at)', () => {
+    const joiners = [
+      { user_id: 'a', left_at: null },
+      { user_id: 'b', left_at: '2026-06-25T00:00:00Z' },
+      { user_id: 'c' },
+    ];
+    expect(memberFunnel(joiners, new Set(['a']))).toEqual({ joined: 3, activated: 1, retained: 2 });
+  });
+
+  it('brak dołączeń → same zera', () => {
+    expect(memberFunnel([], new Set())).toEqual({ joined: 0, activated: 0, retained: 0 });
+  });
+
+  it('nikt nie napisał → activated 0, retencja niezależna', () => {
+    expect(memberFunnel([{ user_id: 'x' }, { user_id: 'y' }], new Set())).toEqual({
+      joined: 2,
+      activated: 0,
+      retained: 2,
+    });
   });
 });
