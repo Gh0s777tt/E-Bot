@@ -9,7 +9,8 @@ import { getAuthSecret, verifySession } from '../../lib/session';
 
 export const dynamic = 'force-dynamic';
 
-const GHOST_URL = 'https://ghost-empire-web.vercel.app';
+// URL portalu GH0ST z env (bez zaszytej domeny instancji); puste → link „otwórz portal" ukryty.
+const GHOST_URL = (process.env.GHOST_API_URL || '').replace(/\/+$/, '');
 
 export default async function ProfilePage() {
   const token = (await cookies()).get('ebot_session')?.value;
@@ -89,14 +90,16 @@ export default async function ProfilePage() {
             {tp(lang, 'ui.profile.linkHelpPost')}
           </p>
         )}
-        <a
-          href={GHOST_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover"
-        >
-          {tp(lang, 'ui.profile.openPortal')} <ExternalLink size={14} />
-        </a>
+        {GHOST_URL && (
+          <a
+            href={GHOST_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover"
+          >
+            {tp(lang, 'ui.profile.openPortal')} <ExternalLink size={14} />
+          </a>
+        )}
       </section>
     </div>
   );

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-571-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.501.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-572-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.502.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.502.0] — 🌐 Audyt hardcode: koniec zaszytej domeny portalu GH0ST (publiczne wydanie)
+
+- `[#572]` 🌐 **Domknięcie audytu hardcode pod publiczne udostępnienie** — usunięto zaszyty URL wdrożenia portalu GH0ST (`ghost-empire-web.vercel.app`) z 3 miejsc: [`profile/page.tsx`](dashboard/app/profile/page.tsx) (był **w pełni** zaszyty, bez env — link „otwórz portal" teraz ukryty przy braku `GHOST_API_URL`), [`economy.ts`](dashboard/lib/economy.ts) (`ghostUrl()` env-only; `getEconomyConfig` bailuje bez bazy) i [`ghostLink.ts`](dashboard/lib/ghostLink.ts) (status `/link` wymaga `GHOST_API_URL`). `.env.example` przestał defaultować na domenę instancji (`GHOST_API_URL=` puste + opis). Test `auth.parse.test.ts` używa neutralnego hosta (`bot.example.com`). Branding „GH0ST EMPIRE" w domyślnych tekstach/podglądach **zostaje** — to nazwa projektu, nie wyciek. Reszta repo czysta (audyt agentem: brak zaszytych Discord ID / sekretów / ścieżek maszynowych w runtime).
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **995/995** · `sync:check` (env 69) — exit 0 (Node 26.4.0). *(Zmiana konfiguracyjna — łagodna degradacja, gdy integracja GH0ST nieskonfigurowana.)*
 
 ## [0.501.0] — 🗃️ Zakładka „Komendy": pełny podział (12 grup) zamiast wielkiego „Inne"
 

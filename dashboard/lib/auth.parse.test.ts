@@ -42,7 +42,7 @@ describe('getOrigin', () => {
   });
 
   it('fallback do host; produkcja → https', () => {
-    expect(getOrigin(req({ host: 'e-bot-dc.vercel.app' }))).toBe('https://e-bot-dc.vercel.app');
+    expect(getOrigin(req({ host: 'bot.example.com' }))).toBe('https://bot.example.com');
   });
 
   it('localhost → http (nie https)', () => {

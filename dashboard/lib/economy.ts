@@ -27,15 +27,18 @@ export type EconomyConfig = {
   updatedAt?: string;
 };
 
+// URL portalu GH0ST z env (bez zaszytej domeny instancji); puste → integracja wyłączona.
 export function ghostUrl(): string {
   ensureEnv();
-  return process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
+  return (process.env.GHOST_API_URL || '').replace(/\/+$/, '');
 }
 
 // /api/bot/config w portalu GH0ST jest publiczny — zwraca stawki ekonomii GT.
 export async function getEconomyConfig(): Promise<EconomyConfig | null> {
+  const base = ghostUrl();
+  if (!base) return null; // GHOST_API_URL nieustawione → łagodna degradacja (brak ekonomii GT)
   try {
-    const r = await fetch(`${ghostUrl()}/api/bot/config`, { cache: 'no-store' });
+    const r = await fetch(`${base}/api/bot/config`, { cache: 'no-store' });
     if (!r.ok) return null;
     return (await r.json()) as EconomyConfig;
   } catch {

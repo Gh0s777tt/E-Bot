@@ -4,9 +4,9 @@
 export type LinkStatus = { linked: boolean; username: string | null; tokens: number | null };
 
 export async function getLinkStatus(discordId: string | undefined): Promise<LinkStatus | null> {
-  const base = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
+  const base = (process.env.GHOST_API_URL || '').replace(/\/+$/, '');
   const secret = process.env.GHOST_BOT_SECRET;
-  if (!discordId || !secret) return null;
+  if (!discordId || !secret || !base) return null;
   try {
     const r = await fetch(
       `${base}/api/internal/link-status?discordId=${encodeURIComponent(discordId)}`,
