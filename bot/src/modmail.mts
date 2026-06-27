@@ -12,7 +12,7 @@ import {
   type ThreadChannel,
 } from 'discord.js';
 import { cloudInsert, cloudSelect, cloudUpdate, hasCloud } from './lib/cloud.mts';
-import { getGuildSettings } from './lib/db.mts';
+import { getGuildSettings, settingsEpoch } from './lib/db.mts';
 import { log } from './lib/log.mts';
 
 type ModmailConfig = { enabled: boolean; channelId: string; greeting: string };
@@ -21,14 +21,21 @@ const DEFAULT: ModmailConfig = {
   channelId: '',
   greeting: 'Twoja wiadomość trafiła do obsługi. Odpiszemy najszybciej, jak to możliwe. 📨',
 };
-// Etap K — config per-serwer: świeży odczyt (low-freq: DM/relay), fallback global.
+// Etap K — config per-serwer; cache invalidowany epoką ustawień (DM iteruje serwery → cache się liczy).
+const _mmCache = new Map<string, { v: ModmailConfig; epoch: number }>();
 function modmailConfig(guildId: string): ModmailConfig {
+  const e = settingsEpoch();
+  const hit = _mmCache.get(guildId);
+  if (hit && hit.epoch === e) return hit.v;
   const raw = getGuildSettings(guildId)['modmail_config'];
+  let v: ModmailConfig;
   try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) } : { ...DEFAULT };
+    v = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) } : { ...DEFAULT };
   } catch {
-    return { ...DEFAULT };
+    v = { ...DEFAULT };
   }
+  _mmCache.set(guildId, { v, epoch: e });
+  return v;
 }
 
 type Row = { id: string; user_id: string; channel_id: string };

@@ -2,20 +2,27 @@
 // a wzmianka osoby AFK → bot informuje. Config 'afk_config' {enabled}. Bez tabeli (status ulotny).
 
 import { type Client, Events, type Message } from 'discord.js';
-import { getGuildSettings } from '../lib/db.mts';
+import { getGuildSettings, settingsEpoch } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 
 type AfkEntry = { reason: string; since: number };
 const afk = new Map<string, AfkEntry>();
 
-// Etap K — config per-serwer: świeży odczyt {enabled}, fallback global.
+// Etap K — config per-serwer; cache invalidowany epoką ustawień (hit między zapisami, świeżo po zmianie).
+const _afkCache = new Map<string, { v: boolean; epoch: number }>();
 export function afkEnabled(guildId: string): boolean {
+  const e = settingsEpoch();
+  const hit = _afkCache.get(guildId);
+  if (hit && hit.epoch === e) return hit.v;
   const raw = getGuildSettings(guildId)['afk_config'];
+  let v = false;
   try {
-    return raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;
+    v = raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;
   } catch {
-    return false;
+    v = false;
   }
+  _afkCache.set(guildId, { v, epoch: e });
+  return v;
 }
 
 export function setAfk(userId: string, reason: string): void {

@@ -2,7 +2,7 @@
 // Triggery: dołączenie członka, słowo-klucz. Akcje: wyślij wiadomość / nadaj rolę / wyślij DM.
 
 import { type Client, Events, type GuildMember, type Message, type TextChannel } from 'discord.js';
-import { getGuildSettings } from '../lib/db.mts';
+import { getGuildSettings, settingsEpoch } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 
 type Rule = {
@@ -14,15 +14,22 @@ type Rule = {
   text: string;
 };
 
-// Etap K — config per-serwer: świeży odczyt (reguły z roleId/channelId są per-serwer), fallback global.
+// Etap K — config per-serwer; cache invalidowany epoką ustawień (hit między zapisami, świeżo po zmianie).
+const _autoCache = new Map<string, { v: Rule[]; epoch: number }>();
 function rules(guildId: string): Rule[] {
+  const e = settingsEpoch();
+  const hit = _autoCache.get(guildId);
+  if (hit && hit.epoch === e) return hit.v;
   const raw = getGuildSettings(guildId)['automations_config'];
+  let v: Rule[] = [];
   try {
     const c = raw ? (JSON.parse(raw) as { enabled?: boolean; rules?: Rule[] }) : {};
-    return c.enabled && Array.isArray(c.rules) ? c.rules : [];
+    v = c.enabled && Array.isArray(c.rules) ? c.rules : [];
   } catch {
-    return [];
+    v = [];
   }
+  _autoCache.set(guildId, { v, epoch: e });
+  return v;
 }
 
 const cd = new Map<string, number>();

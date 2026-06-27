@@ -3,7 +3,7 @@
 
 import { type Client, EmbedBuilder, Events, type Message, PermissionFlagsBits } from 'discord.js';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
-import { getGuildSettings } from '../lib/db.mts';
+import { getGuildSettings, settingsEpoch } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 
 export type HL = { user_id: string; word: string };
@@ -27,14 +27,21 @@ export function highlightTargets(cache: HL[], content: string, authorId: string)
   return out;
 }
 
-// Etap K — config per-serwer: świeży odczyt {enabled}, fallback global.
+// Etap K — config per-serwer; cache invalidowany epoką ustawień (hit między zapisami, świeżo po zmianie).
+const _hlCache = new Map<string, { v: boolean; epoch: number }>();
 export function highlightsEnabled(guildId: string): boolean {
+  const e = settingsEpoch();
+  const hit = _hlCache.get(guildId);
+  if (hit && hit.epoch === e) return hit.v;
   const raw = getGuildSettings(guildId)['highlights_config'];
+  let v = false;
   try {
-    return raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;
+    v = raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;
   } catch {
-    return false;
+    v = false;
   }
+  _hlCache.set(guildId, { v, epoch: e });
+  return v;
 }
 
 async function refreshCache(): Promise<void> {

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-539-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.469.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-540-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.470.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.470.0] — ⚡ Cache 5 usług per-wiadomość (invalidacja epoką) — domknięcie audytu perf #2
+
+- `[#540]` ⚡ **Cache configu w 5 usługach hot-path** (afk · counting · highlights · automations · modmail) — eliminuje pełny skan `settings` + parse JSON na KAŻDEJ wiadomości. Zamiast TTL (który łamałby kontrakt natychmiastowego configu) — **invalidacja epoką**: `settingsEpoch()` w [`bot/src/lib/db.mts`](bot/src/lib/db.mts) rośnie przy każdym zapisie/zamknięciu; cache trzyma epokę i odświeża się przy zmianie → **cache hit między zapisami + świeży config natychmiast po zmianie z panelu** (lepsze niż 30 s TTL, zero stale). Rozwiązuje bloker `feature-toggles.test.ts` (set→read) u korzenia.
+  - Domyka audyt wydajności: #1 singleton SQLite (v0.467) + #2 cache usług.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** (w tym set→read) · lint — exit 0 (Node 26.4.0).
 
 ## [0.469.0] — 🔒 Przewodnik hardeningu produkcyjnego (infra-gated + focused-PR backlog)
 

@@ -26,6 +26,7 @@ let _db: DatabaseSync | null = null;
 let _dbPath: string | null = null;
 let _selAll: ReturnType<DatabaseSync['prepare']> | null = null;
 let _upsert: ReturnType<DatabaseSync['prepare']> | null = null;
+let _epoch = 0; // rośnie przy każdym zapisie/zamknięciu → cache usług wie, kiedy odświeżyć
 
 function conn(): DatabaseSync {
   const p = dbPath();
@@ -58,6 +59,13 @@ export function closeDb(): void {
   _dbPath = null;
   _selAll = null;
   _upsert = null;
+  _epoch++; // reset stanu → unieważnij cache usług (m.in. izolacja między testami)
+}
+
+// Numer „epoki" ustawień — rośnie przy KAŻDYM zapisie (i zamknięciu). Cache w usługach trzyma epokę
+// swojej budowy i odświeża się, gdy się zmieni → natychmiastowe zastosowanie configu z panelu BEZ stale.
+export function settingsEpoch(): number {
+  return _epoch;
 }
 
 export function getSettings(): Record<string, string> {
@@ -79,6 +87,7 @@ export function setSettingLocal(key: string, value: string): void {
     );
   }
   _upsert.run(key, value);
+  _epoch++;
 }
 
 // Mirror zmian lokalnych do Supabase (fire-and-forget) — by panel widział zmiany z bota (np. /antinuke).

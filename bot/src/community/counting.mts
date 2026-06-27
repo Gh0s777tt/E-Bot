@@ -3,24 +3,31 @@
 
 import { type Client, Events, type Message, type TextChannel } from 'discord.js';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
-import { getGuildSettings } from '../lib/db.mts';
+import { getGuildSettings, settingsEpoch } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 
 type Cfg = { on: boolean; channelId: string; allowSameUser: boolean; resetOnFail: boolean };
-// Etap K — config per-serwer: świeży odczyt (stan gry i tak per-guild), fallback global.
+// Etap K — config per-serwer; cache invalidowany epoką ustawień (hit między zapisami, świeżo po zmianie).
+const _cntCache = new Map<string, { v: Cfg; epoch: number }>();
 function cfg(guildId: string): Cfg {
+  const e = settingsEpoch();
+  const hit = _cntCache.get(guildId);
+  if (hit && hit.epoch === e) return hit.v;
   const raw = getGuildSettings(guildId)['counting_config'];
+  let v: Cfg;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
-    return {
+    v = {
       on: !!c.enabled,
       channelId: String(c.channelId || ''),
       allowSameUser: !!c.allowSameUser,
       resetOnFail: c.resetOnFail !== false, // domyślnie true
     };
   } catch {
-    return { on: false, channelId: '', allowSameUser: false, resetOnFail: true };
+    v = { on: false, channelId: '', allowSameUser: false, resetOnFail: true };
   }
+  _cntCache.set(guildId, { v, epoch: e });
+  return v;
 }
 
 type State = { count: number; lastUserId: string; record: number };
