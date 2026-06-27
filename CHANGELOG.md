@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-559-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.489.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-560-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.490.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.490.0] — 🤖 Co-pilot moderacji 2.0: /modai queue (streszczenie kolejki serwera)
+
+- `[#560]` 🤖 **`/modai` → subkomendy `user` + `queue`** (pogłębia #559) — nowy tryb `queue`: AI streszcza ostatnią aktywność moderacyjną **całego serwera** (ostatnie `mod_cases`), wskazuje wzorce i eskalacje (możliwa skoordynowana akcja, recydywa) i daje 1-3 rekomendacje. Czysta `buildQueuePrompt` (testowalna). Tryb `user` bez zmian. Bez nowej komendy/i18n (subkomendy inline). *(Przycisk „wyślij draft" wymaga magazynu draftów + handlera komponentu — świadomy follow-up.)*
+  - **Testy:** `modai.test.ts` +3 (`buildQueuePrompt`: spokój / kontekst / cap 25) → **963/963**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · `help.test` · i18n parity — exit 0 (Node 26.4.0).
 
 ## [0.489.0] — 🤖 AI co-pilot moderacji: /modai (streszczenie + sugestia akcji)
 
