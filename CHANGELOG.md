@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-579-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.509.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-580-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.510.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.510.0] — 🎛️ Redesign „Dowództwo" (krok 6): status-pille na kolejnych 6 panelach
+
+- `[#580]` 🎛️ **Status-pille na kolejne panele** — `/logging`, `/modmail`, `/suggestions`, `/birthdays`, `/responder`, `/counters`: nagłówek + sekcja konfiguracji ze status-pillem z realnego `config.enabled` (zamiast zielono/czerwonego tekstu), spójnie z resztą (wspólny `StatusPill`). Panele bez flagi `enabled` (automations/custom-commands — listy reguł/komend) świadomie pominięte. Zero nowych stringów.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **1011/1011** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.509.0] — 📤 Eksport CSV dziennika audytu + utwardzenie eksportu statystyk
 
