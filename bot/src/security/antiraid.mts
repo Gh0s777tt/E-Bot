@@ -143,6 +143,44 @@ export function detectWave<T extends { at: number }>(
   return { kept, isWave: joinCount > 0 && kept.length >= joinCount };
 }
 
+// Klastrowanie podobnych nazw (czysta funkcja, testowalna): armie botów dołączają jako
+// `user_47120`, `user_88213`, … — różnią się tylko ciągiem cyfr/sufiksem. Sprowadzamy nick do
+// „szkieletu" (litery + marker `#` w miejscu ciągów cyfr) i grupujemy. Duży klaster w fali wejść =
+// silny sygnał raidu SKOORDYNOWANEGO (nie przypadkowego ruchu) → wzmacnia pewność detekcji.
+export function nameSkeleton(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/\p{Cf}/gu, '')
+    .replace(/\d+/g, '#')
+    .replace(/[^a-z#]+/g, '')
+    .replace(/#+/g, '#');
+}
+
+// Klastry (szkielet → liczność) o rozmiarze ≥2, malejąco. Pomija zbyt krótkie rdzenie literowe
+// (minLetters), by nie sklejać przypadkowo niezwiązanych krótkich nicków (np. „ab1", „ab2").
+export function clusterSimilarNames(
+  names: string[],
+  minLetters = 3,
+): { skeleton: string; size: number }[] {
+  const groups = new Map<string, number>();
+  for (const n of names) {
+    const sk = nameSkeleton(n);
+    if (sk.replace(/#/g, '').length < minLetters) continue;
+    groups.set(sk, (groups.get(sk) ?? 0) + 1);
+  }
+  return [...groups.entries()]
+    .map(([skeleton, size]) => ({ skeleton, size }))
+    .filter((g) => g.size >= 2)
+    .sort((a, b) => b.size - a.size);
+}
+
+// Rozmiar największego klastra podobnych nazw (0 = brak klastra ≥2).
+export function largestNameCluster(names: string[], minLetters = 3): number {
+  return clusterSimilarNames(names, minLetters)[0]?.size ?? 0;
+}
+
 export function startAntiRaid(client: Client): void {
   client.on(Events.GuildMemberAdd, async (member: GuildMember) => {
     const gid = member.guild.id;
@@ -225,14 +263,22 @@ export function startAntiRaid(client: Client): void {
     // Próg przekroczony — start trybu obronnego + kara dla całej fali.
     if (isWave) {
       const count = recent.length;
+      // Sygnał wzmacniający: ile z fali ma podobne nazwy (armia botów). ≥3 → dopisz do alertu/eventu.
+      const cluster = largestNameCluster(recent.map((r) => r.m.user.username));
+      const clusterNote = cluster >= 3 ? ` · ${cluster}× podobne nazwy` : '';
       const until = now + Math.max(cfg.windowSec, 30) * 1000;
       raidUntilByGuild.set(gid, until);
       await alert(
         member.guild,
         cfg.alertChannelId,
-        `🚨 **Anti-raid:** ${count} wejść w ${cfg.windowSec}s — tryb obronny (${cfg.action}) na ~${Math.round((until - now) / 1000)}s.`,
+        `🚨 **Anti-raid:** ${count} wejść w ${cfg.windowSec}s${clusterNote} — tryb obronny (${cfg.action}) na ~${Math.round((until - now) / 1000)}s.`,
       );
-      void record(gid, 'raid', `${count} wejść w ${cfg.windowSec}s → ${cfg.action}`, count);
+      void record(
+        gid,
+        'raid',
+        `${count} wejść w ${cfg.windowSec}s${clusterNote} → ${cfg.action}`,
+        count,
+      );
       if (cfg.autoLockdown) {
         const locked = await applyLockdown(member.guild, true, 'Auto anti-raid: fala wejść');
         await alert(

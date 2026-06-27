@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-544-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.474.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-545-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.475.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.475.0] — 🛡️ Anti-raid: klastrowanie podobnych nazw (armie botów)
+
+- `[#545]` 🛡️ **Wykrywanie armii botów po nazwach** — [`bot/src/security/antiraid.mts`](bot/src/security/antiraid.mts) dostał czyste funkcje `nameSkeleton`/`clusterSimilarNames`/`largestNameCluster`: sprowadzają nick do „szkieletu" (litery + `#` w miejscu ciągów cyfr) i grupują, więc fala `user_47120`/`user_88213`/… zapala się jako **jeden klaster**. Przy wykryciu fali wejść rozmiar największego klastra (≥3) trafia do alertu i eventu panelu (`N× podobne nazwy`) — silny sygnał raidu **skoordynowanego**, nie przypadkowego ruchu. Logika kar bez zmian (czysto additywne). Domyka chip „nazwa-podobna ×N" z koncepcji „pokoju dowodzenia".
+  - **Testy:** `antiraid.test.ts` +5 (szkielet, grupowanie numerowanej armii, precyzja krótkich rdzeni) → **921/921**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.474.0] — 🛡️ Anti-scam: zwodniczy @ w URL, punycode i skracacze w scanScam
 

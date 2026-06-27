@@ -1,7 +1,7 @@
 // Test detekcji fali wejść anti-raid (detectWave) — czysty predykat wydzielony z handlera. Regresja =
 // raid przepuszczony (za wysoki próg / złe okno) albo fałszywa fala (ban niewinnych przy zwykłym ruchu).
 import { describe, expect, it } from 'vitest';
-import { detectWave } from './antiraid.mts';
+import { clusterSimilarNames, detectWave, largestNameCluster, nameSkeleton } from './antiraid.mts';
 
 const NOW = 100_000;
 const at = (...ts: number[]) => ts.map((t) => ({ at: t }));
@@ -34,5 +34,32 @@ describe('detectWave — okno przesuwne + próg fali wejść', () => {
 
   it('joinCount ≤ 0 (detekcja wyłączona) → nigdy fala', () => {
     expect(detectWave(at(NOW, NOW, NOW, NOW, NOW, NOW), NOW, 10, 0).isWave).toBe(false);
+  });
+});
+
+describe('clusterSimilarNames — armie botów po podobnych nazwach', () => {
+  it('szkielet: cyfry → marker, znaki specjalne usunięte, lowercase', () => {
+    expect(nameSkeleton('user_47120')).toBe('user#');
+    expect(nameSkeleton('User_88213')).toBe('user#');
+    expect(nameSkeleton('ShadowKnight')).toBe('shadowknight');
+  });
+
+  it('grupuje numerowaną armię, pomija zwykłe nicki', () => {
+    const names = ['user_47120', 'user_88213', 'user_5', 'ShadowKnight', 'AlicePL'];
+    const top = clusterSimilarNames(names)[0];
+    expect(top.skeleton).toBe('user#');
+    expect(top.size).toBe(3);
+  });
+
+  it('largestNameCluster zwraca rozmiar największego klastra', () => {
+    expect(largestNameCluster(['raid001', 'raid002', 'raid003', 'Normalny'])).toBe(3);
+  });
+
+  it('same różne nicki → brak klastra (0)', () => {
+    expect(largestNameCluster(['alice', 'bob', 'carol'])).toBe(0);
+  });
+
+  it('zbyt krótki rdzeń literowy nie sklejony (precyzja)', () => {
+    expect(largestNameCluster(['ab1', 'ab2'])).toBe(0);
   });
 });
