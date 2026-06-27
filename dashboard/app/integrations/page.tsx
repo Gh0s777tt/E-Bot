@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import ConnectionTest from '../../components/ConnectionTest';
 import IntegrationsManager from '../../components/IntegrationsManager';
 import WebhookRelayForm from '../../components/WebhookRelayForm';
 import { getGuildMeta } from '../../lib/guild';
@@ -18,6 +19,9 @@ export default async function IntegrationsPage() {
   ]);
   return (
     <div className="space-y-6">
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <ConnectionTest />
+      </section>
       <IntegrationsManager integrations={integrations} config={config} />
       <WebhookRelayForm initial={relay} guild={guild} />
     </div>

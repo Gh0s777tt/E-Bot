@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-580-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.510.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-581-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.511.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.511.0] — 🔌 „Testuj połączenia" — realne pingi integracji (Discord · Supabase · AI)
+
+- `[#581]` 🔌 **Realny test połączeń** (luka UX z audytu) — `/diagnostics` i `/integrations` dostały przycisk „Testuj połączenia" → [`/api/diagnostics/test`](dashboard/app/api/diagnostics/test/route.ts) (bramka **instance-admin**) → [`runConnectionTests`](dashboard/lib/connectionTest.ts) **realnie pinguje** Discord (`/users/@me` z tokenem bota), Supabase (lekki `select`) i providera AI (OpenAI/DeepSeek `/models`) — z **latencją** i timeoutem 6 s, zamiast statycznego „klucz jest w env". Wynik per integracja (✓/✗ + szczegół + ms). Klient `ConnectionTest` (bez auto-uruchamiania — klik usera). i18n `ui.diagnostics.testBtn` ×14.
+  - **Testy:** nowy `connectionTest.test.ts` +4 (`timed`: sukces / ok:false / wyjątek → ok:false / przycięcie komunikatu) → **1015/1015**. Bramki: dashboard `tsc` · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.510.0] — 🎛️ Redesign „Dowództwo" (krok 6): status-pille na kolejnych 6 panelach
 

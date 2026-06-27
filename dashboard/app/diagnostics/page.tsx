@@ -1,6 +1,7 @@
 import { AlertTriangle, Bot, CheckCircle2, Database, Plug, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import ConnectionTest from '../../components/ConnectionTest';
 import { activeSource, getRawSetting, getSetupChecklist } from '../../lib/data';
 import { getIntegrations } from '../../lib/integrations';
 import { tp } from '../../lib/panelI18n';
@@ -123,6 +124,9 @@ export default async function DiagnosticsPage() {
               </span>
             </li>
           </ul>
+          <div className="mt-4 border-t border-line/60 pt-4">
+            <ConnectionTest />
+          </div>
           {!botOnline && (
             <p className="mt-3 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
               <AlertTriangle size={14} className="mt-0.5 shrink-0" />
