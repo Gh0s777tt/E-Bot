@@ -63,6 +63,42 @@ export async function topEco(limit = 15): Promise<LbRow[]> {
   }
 }
 
+export type ClanRow = { id: string; name: string; owner_id: string; bank: number; members: number };
+
+// Ranking klanów wg wspólnego banku (+ liczebność z clan_members). Bez filtra guild — spójnie z topEco
+// (instancja = serwer główny). Graceful: pusta lista przy braku Supabase / błędzie / timeoucie.
+export async function topClans(limit = 25): Promise<ClanRow[]> {
+  if (!hasSupabase) return [];
+  try {
+    const [clansRes, membersRes] = await Promise.all([
+      withTimeout(
+        supabase()
+          .from('clans')
+          .select('id,name,owner_id,bank')
+          .order('bank', { ascending: false })
+          .limit(limit),
+      ),
+      withTimeout(supabase().from('clan_members').select('clan_id')),
+    ]);
+    if (clansRes.error) throw new Error(clansRes.error.message);
+    const counts = new Map<string, number>();
+    for (const m of (membersRes.data ?? []) as { clan_id: string }[]) {
+      counts.set(m.clan_id, (counts.get(m.clan_id) ?? 0) + 1);
+    }
+    return (
+      (clansRes.data ?? []) as { id: string; name: string; owner_id: string; bank: number | null }[]
+    ).map((c) => ({
+      id: c.id,
+      name: c.name,
+      owner_id: c.owner_id,
+      bank: c.bank || 0,
+      members: counts.get(c.id) ?? 0,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 // Top aktywni (suma wiadomości w oknie N dni; voice w podpisie). Agregacja po user_id.
 export async function topActive(limit = 15, days = 30): Promise<LbRow[]> {
   if (!hasSupabase) return [];

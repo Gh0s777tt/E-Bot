@@ -2193,6 +2193,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Najaktywniejsi',
     'ui.lb.msgUnit': 'wiad.',
     'ui.lb.empty': 'Brak danych.',
+    'ui.clans.intro':
+      'Ranking klanów na serwerze — wg wspólnego banku (dotacje członków przez `/clan donate`).',
+    'ui.clans.empty': 'Brak klanów na tym serwerze. Gracze tworzą je komendą `/clan create`.',
+    'ui.clans.rankTitle': 'Ranking klanów',
+    'ui.clans.members': 'członków',
     'ui.logging.intro':
       'Dziennik zdarzeń serwera — bot wysyła embed na wybrany kanał przy: usunięciu/edycji wiadomości, dołączeniu/wyjściu członków, zmianie nicku/ról, banach, tworzeniu/usuwaniu kanałów i ról oraz aktywności na voice. Każdą grupę włączasz osobno. Konfigurację bot pobiera na żywo (~30 s).',
     'ui.logging.statusOn': 'Logi: WŁĄCZONE',
@@ -3787,6 +3792,10 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Most active',
     'ui.lb.msgUnit': 'msg',
     'ui.lb.empty': 'No data.',
+    'ui.clans.intro': 'Server clan ranking — by shared bank (member donations via `/clan donate`).',
+    'ui.clans.empty': 'No clans on this server yet. Players create them with `/clan create`.',
+    'ui.clans.rankTitle': 'Clan ranking',
+    'ui.clans.members': 'members',
     'ui.logging.intro':
       'Server event log — the bot sends an embed to the chosen channel on: message deletion/edit, member join/leave, nickname/role changes, bans, channel and role creation/deletion, and voice activity. You enable each group separately. The bot reads the config live (~30 s).',
     'ui.logging.statusOn': 'Logs: ON',
@@ -5401,6 +5410,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Aktivste',
     'ui.lb.msgUnit': 'Nachr.',
     'ui.lb.empty': 'Keine Daten.',
+    'ui.clans.intro':
+      'Clan-Rangliste des Servers — nach gemeinsamer Bank (Mitgliederspenden via `/clan donate`).',
+    'ui.clans.empty':
+      'Noch keine Clans auf diesem Server. Spieler erstellen sie mit `/clan create`.',
+    'ui.clans.rankTitle': 'Clan-Rangliste',
+    'ui.clans.members': 'Mitglieder',
     'ui.logging.intro':
       'Server-Ereignisprotokoll — der Bot sendet ein embed an den gewählten Kanal bei: Löschen/Bearbeiten von Nachrichten, Beitritt/Verlassen von Mitgliedern, Nick-/Rollenänderungen, Bans, Erstellen/Löschen von Kanälen und Rollen sowie Aktivität im Voice. Jede Gruppe aktivierst du einzeln. Die Konfiguration liest der Bot live (~30 s).',
     'ui.logging.statusOn': 'Logs: AN',
@@ -7013,6 +7028,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Más activos',
     'ui.lb.msgUnit': 'mens.',
     'ui.lb.empty': 'Sin datos.',
+    'ui.clans.intro':
+      'Clasificación de clanes del servidor — por banco compartido (donaciones con `/clan donate`).',
+    'ui.clans.empty':
+      'Aún no hay clanes en este servidor. Los jugadores los crean con `/clan create`.',
+    'ui.clans.rankTitle': 'Clasificación de clanes',
+    'ui.clans.members': 'miembros',
     'ui.logging.intro':
       'Registro de eventos del servidor — el bot envía un embed al canal elegido cuando: se elimina/edita un mensaje, un miembro entra/sale, cambian el apodo/los roles, hay baneos, se crean/eliminan canales y roles, y hay actividad en Voice. Cada grupo se activa por separado. El bot lee la configuración en vivo (~30 s).',
     'ui.logging.statusOn': 'Registros: ACTIVADOS',
@@ -8629,6 +8650,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Più attivi',
     'ui.lb.msgUnit': 'mess.',
     'ui.lb.empty': 'Nessun dato.',
+    'ui.clans.intro':
+      'Classifica dei clan del server — per banca comune (donazioni con `/clan donate`).',
+    'ui.clans.empty': 'Nessun clan su questo server. I giocatori li creano con `/clan create`.',
+    'ui.clans.rankTitle': 'Classifica dei clan',
+    'ui.clans.members': 'membri',
     'ui.logging.intro':
       'Registro eventi del server — il bot invia un embed sul canale scelto quando: un messaggio viene eliminato/modificato, un membro entra/esce, cambiano il nickname/i ruoli, ci sono ban, vengono creati/eliminati canali e ruoli e c’è attività in Voice. Ogni gruppo si attiva separatamente. Il bot legge la configurazione in tempo reale (~30 s).',
     'ui.logging.statusOn': 'Log: ATTIVI',
@@ -10245,6 +10271,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Les plus actifs',
     'ui.lb.msgUnit': 'msg',
     'ui.lb.empty': 'Aucune donnée.',
+    'ui.clans.intro':
+      'Classement des clans du serveur — par banque commune (dons via `/clan donate`).',
+    'ui.clans.empty': 'Aucun clan sur ce serveur. Les joueurs les créent avec `/clan create`.',
+    'ui.clans.rankTitle': 'Classement des clans',
+    'ui.clans.members': 'membres',
     'ui.logging.intro':
       'Journal des événements du serveur — le bot envoie un embed sur le salon choisi lors de : suppression/modification de message, arrivée/départ de membres, changement de pseudo/rôles, bannissements, création/suppression de salons et de rôles, ainsi que l’activité vocale. Tu actives chaque groupe séparément. Le bot récupère la configuration en direct (~30 s).',
     'ui.logging.statusOn': 'Logs : ACTIVÉS',
@@ -11852,6 +11883,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Mais ativos',
     'ui.lb.msgUnit': 'msg',
     'ui.lb.empty': 'Sem dados.',
+    'ui.clans.intro':
+      'Ranking de clãs do servidor — pelo banco compartilhado (doações via `/clan donate`).',
+    'ui.clans.empty': 'Ainda não há clãs neste servidor. Os jogadores os criam com `/clan create`.',
+    'ui.clans.rankTitle': 'Ranking de clãs',
+    'ui.clans.members': 'membros',
     'ui.logging.intro':
       'Registo de eventos do servidor — o bot envia um embed para o canal escolhido em: eliminação/edição de mensagem, entrada/saída de membros, alteração de alcunha/cargos, banimentos, criação/eliminação de canais e cargos, bem como atividade no Voice. Ativas cada grupo separadamente. O bot lê a configuração em direto (~30 s).',
     'ui.logging.statusOn': 'Registos: LIGADOS',
@@ -13398,6 +13434,10 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': '最活跃',
     'ui.lb.msgUnit': '条',
     'ui.lb.empty': '暂无数据。',
+    'ui.clans.intro': '服务器战队排行榜——按共享金库排名（成员通过 `/clan donate` 捐赠）。',
+    'ui.clans.empty': '本服务器还没有战队。玩家可用 `/clan create` 创建。',
+    'ui.clans.rankTitle': '战队排行榜',
+    'ui.clans.members': '名成员',
     'ui.logging.intro':
       '服务器事件日志 — 在以下情况下机器人会向所选频道发送 embed：消息删除/编辑、成员加入/退出、昵称/身份组变更、封禁、频道与身份组的创建/删除，以及语音活动。每个分组需单独启用。机器人会实时读取配置（~30 s）。',
     'ui.logging.statusOn': '日志：已开启',
@@ -14974,6 +15014,10 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': '가장 활발한',
     'ui.lb.msgUnit': '개',
     'ui.lb.empty': '데이터 없음.',
+    'ui.clans.intro': '서버 클랜 순위 — 공유 금고 기준 (`/clan donate` 로 멤버 기부).',
+    'ui.clans.empty': '이 서버에는 아직 클랜이 없습니다. 플레이어가 `/clan create` 로 만듭니다.',
+    'ui.clans.rankTitle': '클랜 순위',
+    'ui.clans.members': '명',
     'ui.logging.intro':
       '서버 이벤트 로그 — 다음 상황에서 봇이 선택한 채널로 embed를 전송합니다: 메시지 삭제/편집, 멤버 입장/퇴장, 닉네임/역할 변경, 차단, 채널 및 역할 생성/삭제, 음성 활동. 각 그룹은 개별적으로 활성화합니다. 봇은 설정을 실시간으로 읽어옵니다(~30 s).',
     'ui.logging.statusOn': '로그: 켜짐',
@@ -16570,6 +16614,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Самые активные',
     'ui.lb.msgUnit': 'сообщ.',
     'ui.lb.empty': 'Нет данных.',
+    'ui.clans.intro':
+      'Рейтинг кланов сервера — по общему банку (пожертвования через `/clan donate`).',
+    'ui.clans.empty': 'На этом сервере пока нет кланов. Игроки создают их командой `/clan create`.',
+    'ui.clans.rankTitle': 'Рейтинг кланов',
+    'ui.clans.members': 'участн.',
     'ui.logging.intro':
       'Журнал событий сервера — бот отправляет embed в выбранный канал при: удалении/редактировании сообщений, входе/выходе участников, изменении ника/ролей, банах, создании/удалении каналов и ролей, а также активности в голосовых каналах. Каждую группу вы включаете отдельно. Конфигурацию бот считывает в реальном времени (~30 s).',
     'ui.logging.statusOn': 'Логи: ВКЛЮЧЕНЫ',
@@ -18168,6 +18217,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Найактивніші',
     'ui.lb.msgUnit': 'повідомл.',
     'ui.lb.empty': 'Немає даних.',
+    'ui.clans.intro':
+      'Рейтинг кланів сервера — за спільним банком (пожертви через `/clan donate`).',
+    'ui.clans.empty':
+      'На цьому сервері ще немає кланів. Гравці створюють їх командою `/clan create`.',
+    'ui.clans.rankTitle': 'Рейтинг кланів',
+    'ui.clans.members': 'учасн.',
     'ui.logging.intro':
       'Журнал подій сервера — бот надсилає embed на вибраний канал при: видаленні/редагуванні повідомлень, вході/виході учасників, зміні ніку/ролей, банах, створенні/видаленні каналів і ролей, а також активності в голосових каналах. Кожну групу ви вмикаєте окремо. Конфігурацію бот зчитує в реальному часі (~30 s).',
     'ui.logging.statusOn': 'Логи: УВІМКНЕНО',
@@ -19770,6 +19825,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': '最も活発',
     'ui.lb.msgUnit': '件',
     'ui.lb.empty': 'データなし。',
+    'ui.clans.intro':
+      'サーバーのクランランキング — 共有金庫順（`/clan donate` でメンバーが寄付）。',
+    'ui.clans.empty':
+      'このサーバーにはまだクランがありません。プレイヤーは `/clan create` で作成します。',
+    'ui.clans.rankTitle': 'クランランキング',
+    'ui.clans.members': '人',
     'ui.logging.intro':
       'サーバーイベントログ — 次の場合にボットが選択したチャンネルへ embed を送信します：メッセージの削除/編集、メンバーの参加/退出、ニックネーム/ロールの変更、BAN、チャンネルおよびロールの作成/削除、ボイスアクティビティ。各グループは個別に有効化します。ボットは設定をリアルタイムで読み込みます（~30 s）。',
     'ui.logging.statusOn': 'ログ：オン',
@@ -21346,6 +21407,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'الأكثر نشاطاً',
     'ui.lb.msgUnit': 'رسالة',
     'ui.lb.empty': 'لا توجد بيانات.',
+    'ui.clans.intro':
+      'ترتيب عشائر الخادم — حسب الخزينة المشتركة (تبرعات الأعضاء عبر `/clan donate`).',
+    'ui.clans.empty': 'لا توجد عشائر على هذا الخادم بعد. ينشئها اللاعبون عبر `/clan create`.',
+    'ui.clans.rankTitle': 'ترتيب العشائر',
+    'ui.clans.members': 'عضو',
     'ui.logging.intro':
       'سجل أحداث الخادم — يرسل البوت embed إلى القناة المختارة عند: حذف/تعديل الرسائل، انضمام/مغادرة الأعضاء، تغيير اللقب/الأدوار، الحظر، إنشاء/حذف القنوات والأدوار، وكذلك النشاط في القنوات الصوتية. تُفعِّل كل مجموعة على حدة. يقرأ البوت الإعدادات مباشرةً (~30 s).',
     'ui.logging.statusOn': 'السجلات: مُفعَّلة',
@@ -22947,6 +23013,11 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.lb.topActive': 'Paling aktif',
     'ui.lb.msgUnit': 'pesan',
     'ui.lb.empty': 'Tidak ada data.',
+    'ui.clans.intro':
+      'Peringkat klan server — berdasarkan bank bersama (donasi anggota via `/clan donate`).',
+    'ui.clans.empty': 'Belum ada klan di server ini. Pemain membuatnya dengan `/clan create`.',
+    'ui.clans.rankTitle': 'Peringkat klan',
+    'ui.clans.members': 'anggota',
     'ui.logging.intro':
       'Log peristiwa server — bot mengirim embed ke channel yang dipilih saat: penghapusan/penyuntingan pesan, anggota bergabung/keluar, perubahan nama panggilan/role, ban, pembuatan/penghapusan channel dan role, serta aktivitas di Voice. Kamu mengaktifkan setiap grup secara terpisah. Bot membaca konfigurasi secara langsung (~30 s).',
     'ui.logging.statusOn': 'Log: AKTIF',

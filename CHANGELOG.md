@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-591-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.521.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-592-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.522.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.522.0] — 🛡️ Panel: strona „Klany" (ranking klanów wg banku)
+
+- `[#592]` 🛡️ **Strona panelu „Klany"** — domyka klany end-to-end (bot + panel): nowa trasa `/clans` z rankingiem klanów serwera wg wspólnego banku (medale 🥇🥈🥉, pasek względem lidera rankingu, liczebność). Server-side z Supabase ([`topClans`](dashboard/lib/public.ts) — bez filtra guild, spójnie z `topEco`; graceful pustka bez chmury/klanów), komponent [`ClanBoard`](dashboard/components/ClanBoard.tsx) w stylu Dowództwa (wiersz linkuje do profilu lidera), skeleton loader. Pozycja w nawigacji (grupa Społeczność, ikona `Swords`, tier Zaawansowany). i18n `ui.clans.*` ×14 (parytet UI utrzymany). Gated za logowaniem (jak reszta panelu).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1055/1055** (parytet i18n ×14) · `sync:check` — exit 0 (Node 26.4.0). Podgląd: `/clans` kompiluje się czysto i przekierowuje do `/login` (bramka auth działa).
 
 ## [0.521.0] — 🛡️ Klany: `/clan transfer` (przekazanie przywództwa)
 
