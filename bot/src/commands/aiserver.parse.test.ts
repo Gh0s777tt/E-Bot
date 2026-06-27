@@ -2,7 +2,7 @@
 // (nawet z prozą wokół) i wymaga tablicy categories; pickModules waliduje polecane moduły względem
 // whitelisty (anty-halucynacja), dedupuje i ogranicza do 8. Czyste funkcje.
 import { describe, expect, it } from 'vitest';
-import { parsePlan, pickModules, RECOMMENDABLE_MODULES } from './aiserver.mts';
+import { parsePlan, pickModules, planTree, RECOMMENDABLE_MODULES } from './aiserver.mts';
 
 describe('parsePlan', () => {
   it('poprawny JSON z categories → obiekt', () => {
@@ -48,5 +48,32 @@ describe('pickModules — whitelista + dedup + cap', () => {
   it('ogranicza do 8 (względem realnej whitelisty)', () => {
     const many = [...RECOMMENDABLE_MODULES];
     expect(pickModules(many, RECOMMENDABLE_MODULES).length).toBe(8);
+  });
+});
+
+describe('planTree — podgląd struktury (czysty render)', () => {
+  it('renderuje kategorie, kanały (＃ tekst / 🔊 głos) i role', () => {
+    const out = planTree({
+      categories: [{ name: 'Cat', channels: [{ name: 'txt' }, { name: 'vc', voice: true }] }],
+      roles: [{ name: 'Member' }],
+    });
+    expect(out).toContain('**Cat**');
+    expect(out).toContain('＃ txt');
+    expect(out).toContain('🔊 vc');
+    expect(out).toContain('Member');
+  });
+
+  it('pusty plan → "—"', () => {
+    expect(planTree({ categories: [] })).toBe('—');
+  });
+
+  it('pomija kategorie bez nazwy', () => {
+    const out = planTree({
+      categories: [
+        { name: '', channels: [] },
+        { name: 'X', channels: [] },
+      ],
+    });
+    expect(out).toBe('**X**');
   });
 });

@@ -1,15 +1,23 @@
-// /aiserver — AI-kreator struktury serwera (Architekt v2). Opis → AI projektuje kategorie/kanały/role
-// (JSON) → bot tworzy. Używa istniejącego silnika AI (lib/ai.mts). Graceful, gdy AI off / bez klucza.
+// /aiserver — AI-kreator struktury serwera (Architekt 2.0). Opis → AI projektuje kategorie/kanały/role
+// + poleca MODUŁY → PODGLĄD z przyciskami → po potwierdzeniu bot tworzy (z /undo). Graceful gdy AI off.
 import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  type ButtonInteraction,
+  ButtonStyle,
   ChannelType,
   type ChatInputCommandInteraction,
+  EmbedBuilder,
+  type Guild,
   MessageFlags,
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from 'discord.js';
-import { resolveLocale, t } from '../i18n/index.mts';
+import { type Locale, resolveLocale, t } from '../i18n/index.mts';
 import { aiConfig, type ChatMsg, callModel } from '../lib/ai.mts';
 import { recordUndo } from '../lib/undo.mts';
+
+const ACCENT = 0xe50914;
 
 // Whitelista modułów, które architekt może POLECIĆ (anty-halucynacja — model nie wymyśli klucza spoza
 // listy; klucze odpowiadają modułom bota włączanym w panelu / Centrum sterowania).
@@ -84,6 +92,81 @@ const nm = (s: unknown): string =>
     .slice(0, 90)
     .trim();
 
+// Czytelne drzewo podglądu (kategorie → kanały + role). Czysta funkcja → test. Cap pod limit opisu embeda.
+export function planTree(plan: Plan): string {
+  const lines: string[] = [];
+  for (const cat of (plan.categories ?? []).slice(0, 4)) {
+    if (!nm(cat?.name)) continue;
+    lines.push(`**${nm(cat.name)}**`);
+    for (const ch of (Array.isArray(cat.channels) ? cat.channels : []).slice(0, 6)) {
+      if (!nm(ch?.name)) continue;
+      lines.push(` ${ch.voice ? '🔊' : '＃'} ${nm(ch.name)}`);
+    }
+  }
+  const roles = (plan.roles ?? [])
+    .slice(0, 6)
+    .map((r) => nm(r?.name))
+    .filter(Boolean);
+  if (roles.length) lines.push(`\n🏷️ ${roles.join(' · ')}`);
+  return lines.join('\n').slice(0, 3900) || '—';
+}
+
+// Magazyn planów oczekujących na potwierdzenie (klucz = interaction.id). TTL 10 min, sprzątany leniwie.
+const PENDING_TTL = 10 * 60_000;
+const pending = new Map<string, { plan: Plan; userId: string; ts: number }>();
+function prunePending(): void {
+  const now = Date.now();
+  for (const [k, v] of pending) if (now - v.ts > PENDING_TTL) pending.delete(k);
+}
+
+// Tworzy strukturę z planu (kategorie/kanały/role) + rejestruje /undo. Wydzielone: używane po potwierdzeniu.
+async function createStructure(
+  guild: Guild,
+  plan: Plan,
+): Promise<{ cats: number; channels: number; roles: number }> {
+  let cats = 0;
+  let channels = 0;
+  const chIds: string[] = [];
+  const roleIds: string[] = [];
+  for (const cat of (plan.categories ?? []).slice(0, 4)) {
+    if (!nm(cat?.name)) continue;
+    const category = await guild.channels.create({
+      name: nm(cat.name),
+      type: ChannelType.GuildCategory,
+    });
+    cats++;
+    const list = Array.isArray(cat.channels) ? cat.channels.slice(0, 6) : [];
+    for (const ch of list) {
+      if (!nm(ch?.name)) continue;
+      const created = await guild.channels.create({
+        name: nm(ch.name),
+        type: ch.voice ? ChannelType.GuildVoice : ChannelType.GuildText,
+        parent: category.id,
+      });
+      chIds.push(created.id);
+      channels++;
+    }
+    chIds.push(category.id); // kategoria po dzieciach (kolejność usuwania w /undo)
+  }
+  for (const r of (plan.roles ?? []).slice(0, 6)) {
+    if (!nm(r?.name)) continue;
+    const role = await guild.roles.create({ name: nm(r.name) });
+    roleIds.push(role.id);
+  }
+  recordUndo({ channels: chIds, roles: roleIds, label: 'aiserver' });
+  return { cats, channels, roles: roleIds.length };
+}
+
+function previewEmbed(locale: Locale, plan: Plan): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(ACCENT)
+    .setTitle(t(locale, 'aiserver.preview'))
+    .setDescription(planTree(plan));
+  const modules = pickModules(plan.modules, RECOMMENDABLE_MODULES);
+  if (modules.length) embed.addFields({ name: '🧩', value: modules.join(' · ') });
+  return embed;
+}
+
 export const data = new SlashCommandBuilder()
   .setName('aiserver')
   .setDescription('AI zaprojektuje i utworzy strukturę serwera z Twojego opisu.')
@@ -123,7 +206,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const out = await callModel(cfg.model, messages, 900);
     text = out.text;
   } catch {
-    await interaction.editReply({ content: t(locale, 'aiserver.off') }); // brak klucza / model niedostępny
+    await interaction.editReply({ content: t(locale, 'aiserver.off') });
     return;
   }
 
@@ -133,49 +216,65 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
 
+  // Architekt 2.0: PODGLĄD przed utworzeniem — plan trafia do magazynu, user potwierdza przyciskiem.
+  prunePending();
+  pending.set(interaction.id, { plan, userId: interaction.user.id, ts: Date.now() });
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`aiserver:apply:${interaction.id}`)
+      .setStyle(ButtonStyle.Success)
+      .setEmoji('✅'),
+    new ButtonBuilder()
+      .setCustomId(`aiserver:cancel:${interaction.id}`)
+      .setStyle(ButtonStyle.Danger)
+      .setEmoji('✖️'),
+  );
+  await interaction.editReply({ embeds: [previewEmbed(locale, plan)], components: [row] });
+}
+
+// Routing z index.mts dla przycisków „aiserver:apply|cancel:<token>".
+export async function handleAiServerButton(interaction: ButtonInteraction): Promise<void> {
+  const locale = resolveLocale(interaction);
+  const [, action, token] = interaction.customId.split(':');
+  const entry = token ? pending.get(token) : undefined;
+  // Tylko autor + ważny (niewygasły) token — inaczej efemerycznie odrzuć (np. klik innego usera / TTL).
+  if (!entry || entry.userId !== interaction.user.id) {
+    await interaction.reply({ content: t(locale, 'aiserver.fail'), flags: MessageFlags.Ephemeral });
+    return;
+  }
+  pending.delete(token);
+
+  if (action === 'cancel') {
+    await interaction.update({
+      content: t(locale, 'aiserver.cancelled'),
+      embeds: [],
+      components: [],
+    });
+    return;
+  }
+  const guild = interaction.guild;
+  if (!guild) {
+    await interaction.update({
+      content: t(locale, 'sticky.guildOnly'),
+      embeds: [],
+      components: [],
+    });
+    return;
+  }
+  await interaction.update({ components: [] }); // zdejmij przyciski (tworzenie w toku)
   try {
-    let cats = 0;
-    let channels = 0;
-    const chIds: string[] = [];
-    const roleIds: string[] = [];
-    for (const cat of plan.categories.slice(0, 4)) {
-      if (!nm(cat?.name)) continue;
-      const category = await guild.channels.create({
-        name: nm(cat.name),
-        type: ChannelType.GuildCategory,
-      });
-      cats++;
-      const list = Array.isArray(cat.channels) ? cat.channels.slice(0, 6) : [];
-      for (const ch of list) {
-        if (!nm(ch?.name)) continue;
-        const created = await guild.channels.create({
-          name: nm(ch.name),
-          type: ch.voice ? ChannelType.GuildVoice : ChannelType.GuildText,
-          parent: category.id,
-        });
-        chIds.push(created.id);
-        channels++;
-      }
-      chIds.push(category.id); // kategoria po dzieciach (kolejność usuwania w /undo)
-    }
-    for (const r of (plan.roles ?? []).slice(0, 6)) {
-      if (!nm(r?.name)) continue;
-      const role = await guild.roles.create({ name: nm(r.name) });
-      roleIds.push(role.id);
-    }
-    recordUndo({ channels: chIds, roles: roleIds, label: 'aiserver' });
-    // Architekt 2.0: AI poleca też MODUŁY pasujące do serwera (whitelista) — dopisek niezależny
-    // językowo (🧩 + klucze), użytkownik włącza je w Centrum sterowania.
-    const modules = pickModules(plan.modules, RECOMMENDABLE_MODULES);
+    const r = await createStructure(guild, entry.plan);
+    const modules = pickModules(entry.plan.modules, RECOMMENDABLE_MODULES);
     const base = t(locale, 'aiserver.created', {
-      cats: String(cats),
-      channels: String(channels),
-      roles: String(roleIds.length),
+      cats: String(r.cats),
+      channels: String(r.channels),
+      roles: String(r.roles),
     });
     await interaction.editReply({
       content: modules.length ? `${base}\n🧩 ${modules.join(' · ')}` : base,
+      embeds: [],
     });
   } catch {
-    await interaction.editReply({ content: t(locale, 'aiserver.fail') });
+    await interaction.editReply({ content: t(locale, 'aiserver.fail'), embeds: [] });
   }
 }

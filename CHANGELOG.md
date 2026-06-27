@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-586-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.516.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-587-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.517.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.517.0] — 🏗️ AI Architect: przepływ podgląd → potwierdź (bezpieczne tworzenie struktury)
+
+- `[#587]` 🏗️ **`/aiserver` z podglądem przed utworzeniem** — zamiast natychmiast tworzyć kanały/role, bot pokazuje teraz **podgląd struktury** (drzewo kategorii/kanałów + role + polecane moduły) z przyciskami **✅ Utwórz / ✖ Anuluj**; dopiero potwierdzenie tworzy (z `/undo`). Plan trzymany w magazynie (klucz = interaction.id, TTL 10 min); tylko autor może potwierdzić. Wydzielone, otestowane czyste `planTree` (drzewo podglądu) + `createStructure`. Handler `aiserver:` wpięty w router przycisków ([`index.mts`](bot/src/index.mts)). i18n `aiserver.preview`/`cancelled` ×14.
+  - **Testy:** `aiserver.parse.test.ts` +3 (`planTree`: render ＃/🔊 + role / pusty → „—" / pomija bez nazwy) → **1032/1032**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.516.0] — 🏗️ AI Server Architect 2.0: rekomendacja MODUŁÓW + testowalny parser
 

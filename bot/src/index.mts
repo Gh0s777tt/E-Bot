@@ -21,6 +21,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startRealtimeSync } from './cloud/realtime.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
+import { handleAiServerButton } from './commands/aiserver.mts';
 import { handleContextMenu } from './commands/contextmenu.mts';
 import { handleCustomCommand } from './commands/customCommands.mts';
 import { handleHelpSelect } from './commands/help.mts';
@@ -256,7 +257,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
                       ? handleTttButton(interaction)
                       : id.startsWith('tv:')
                         ? handleTempvoiceButton(interaction)
-                        : handleButton(interaction);
+                        : id.startsWith('aiserver:')
+                          ? handleAiServerButton(interaction)
+                          : handleButton(interaction);
     await h.catch((err) => log.error('button', { err }));
     return;
   }
