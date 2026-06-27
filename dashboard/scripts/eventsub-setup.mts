@@ -9,10 +9,19 @@ const id = process.env.TWITCH_CLIENT_ID;
 const secret = process.env.TWITCH_CLIENT_SECRET;
 const channel = process.env.TWITCH_CHANNEL;
 const esSecret = process.env.TWITCH_EVENTSUB_SECRET;
-const callback = process.env.EVENTSUB_CALLBACK || 'https://e-bot-dc.vercel.app/api/twitch/eventsub';
+// Callback: jawny EVENTSUB_CALLBACK, inaczej zbudowany z DASHBOARD_URL (bez zaszytej domeny instancji).
+const base = (process.env.DASHBOARD_URL || '').trim().replace(/\/+$/, '');
+const callback =
+  process.env.EVENTSUB_CALLBACK?.trim() || (base ? `${base}/api/twitch/eventsub` : '');
 
 if (!id || !secret || !channel || !esSecret) {
   console.error('Brak TWITCH_CLIENT_ID/SECRET, TWITCH_CHANNEL lub TWITCH_EVENTSUB_SECRET w .env');
+  process.exit(1);
+}
+if (!callback) {
+  console.error(
+    'Brak EVENTSUB_CALLBACK ani DASHBOARD_URL w .env — nie wiem, dokąd Twitch ma wołać webhook.',
+  );
   process.exit(1);
 }
 

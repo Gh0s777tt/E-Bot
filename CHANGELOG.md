@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-569-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.499.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-570-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.500.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.500.0] — 🌐 Hardcode → env: zero-config URL panelu (Ko-fi · webhook-relay · EventSub)
+
+- `[#570]` 🌐 **Koniec zaszytej domeny instancji** — URL-e webhooków pokazywane w panelu nie są już zaszyte na `e-bot-dc.vercel.app`. Nowy hook [`useDashboardOrigin`](dashboard/lib/useDashboardOrigin.ts): bierze `NEXT_PUBLIC_DASHBOARD_URL` jeśli ustawione, inaczej `window.location.origin` → **działa na dowolnej domenie bez konfiguracji**. Objęte: [`KofiForm`](dashboard/components/KofiForm.tsx) (`/api/kofi`) i [`WebhookRelayForm`](dashboard/components/WebhookRelayForm.tsx) (`/api/hook`). Skrypt [`eventsub-setup`](dashboard/scripts/eventsub-setup.mts) buduje callback z `DASHBOARD_URL` (twardy błąd przy braku — zamiast cichego defaultu instancji). Label hostingu w `/settings` odchudzony z wewnętrznej nazwy projektu („kraina-duchow") do `Vercel`. `.env.example` + `NEXT_PUBLIC_DASHBOARD_URL` (env parity 69).
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **995/995** · `sync:check` (env 69) — exit 0 (Node 26.4.0). *(Zmiana konfiguracyjno-prezentacyjna — bez nowej logiki do testu jednostkowego.)*
 
 ## [0.499.0] — 🗂️ Dziennik zmian jako zwijana lista pogrupowana po dniach
 

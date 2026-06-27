@@ -67,7 +67,7 @@ export default async function SettingsPage() {
       value: hasSupabase ? tp(lang, 'ui.settings.sysYesKeys') : tp(lang, 'ui.settings.sysNo'),
     },
     { label: tp(lang, 'ui.settings.sysGamesInLibrary'), value: String(stats.total) },
-    { label: tp(lang, 'ui.settings.sysHosting'), value: 'Vercel (kraina-duchow / e-bot)' },
+    { label: tp(lang, 'ui.settings.sysHosting'), value: 'Vercel' },
   ];
 
   return (

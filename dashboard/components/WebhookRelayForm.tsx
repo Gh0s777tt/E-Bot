@@ -5,13 +5,13 @@ import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
 import type { WebhookRelayConfig } from '../lib/integrations';
 import { tp } from '../lib/panelI18n';
+import { useDashboardOrigin } from '../lib/useDashboardOrigin';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
-const BASE = 'https://e-bot-dc.vercel.app/api/hook';
 
 export default function WebhookRelayForm({
   initial,
@@ -23,6 +23,7 @@ export default function WebhookRelayForm({
   const { lang } = useLang();
   const [c, setC] = useState<WebhookRelayConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const BASE = `${useDashboardOrigin()}/api/hook`;
 
   async function save() {
     setSt('saving');

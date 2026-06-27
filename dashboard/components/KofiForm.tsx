@@ -4,18 +4,19 @@ import { useState } from 'react';
 import type { KofiConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { useDashboardOrigin } from '../lib/useDashboardOrigin';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
-const WEBHOOK_URL = 'https://e-bot-dc.vercel.app/api/kofi';
 
 export default function KofiForm({ initial, guild }: { initial: KofiConfig; guild: GuildMeta }) {
   const { lang } = useLang();
   const [c, setC] = useState<KofiConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const WEBHOOK_URL = `${useDashboardOrigin()}/api/kofi`;
 
   async function save() {
     setSt('saving');
