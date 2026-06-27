@@ -55,6 +55,27 @@ export function ecoConfig(guildId: string): EcoConfig {
   }
 }
 
+// ── Kamienie milowe serii dziennej (/eco daily) — extra bonus w dniu osiągnięcia progu ──────────
+// Mnożnik bazowego dailyAmount, przyznawany RAZ dokładnie gdy streak == day (czysta funkcja → test).
+// Nagradza konsekwencję mocniej niż liniowy streak-bonus; po przerwaniu serii progi można zdobyć znów.
+export const STREAK_MILESTONES: { day: number; mult: number }[] = [
+  { day: 7, mult: 2 },
+  { day: 14, mult: 3 },
+  { day: 30, mult: 5 },
+  { day: 60, mult: 8 },
+  { day: 100, mult: 12 },
+];
+
+export function streakMilestoneBonus(
+  streak: number,
+  base: number,
+): { bonus: number; mult: number } {
+  const m = STREAK_MILESTONES.find((x) => x.day === streak);
+  return m
+    ? { bonus: Math.max(0, Math.round(base * m.mult)), mult: m.mult }
+    : { bonus: 0, mult: 0 };
+}
+
 export type EcoUser = {
   guild_id: string;
   user_id: string;

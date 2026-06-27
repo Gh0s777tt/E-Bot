@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-584-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.514.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-585-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.515.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.515.0] — 🔥 Ekonomia: nagrody za kamienie milowe serii dziennej (/eco daily)
+
+- `[#585]` 🔥 **Streak milestones** — `/eco daily` przyznaje teraz **extra bonus za kamienie milowe serii** (7 dni ×2 · 14 ×3 · 30 ×5 · 60 ×8 · 100 ×12 bazowego `dailyAmount`), obok dotychczasowego liniowego streak-bonusu — mocniej nagradza konsekwencję. Czysta, otestowana `streakMilestoneBonus` ([`store.mts`](bot/src/economy/store.mts)): bonus dokładnie w dniu progu, zaokrąglony, 0 poza progiem; po przerwaniu serii progi do zdobycia znów. Komunikat dopisuje „🔥 ×{mult} (+bonus)" niezależnie językowo (zero nowych kluczy i18n).
+  - **Testy:** nowy `streak.test.ts` +5 (progi / poza progiem / zaokrąglenie / base 0 / katalog rosnący+unikalny) → **1020/1020**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.514.0] — 🎛️ Redesign „Dowództwo" (krok 8, finał): status-pille na engagement + notifications
 

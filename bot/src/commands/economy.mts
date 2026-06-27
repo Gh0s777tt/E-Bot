@@ -19,6 +19,7 @@ import {
   getUser,
   minutesSince,
   saveUser,
+  streakMilestoneBonus,
 } from '../economy/store.mts';
 import { grantTempRole } from '../economy/tempRoles.mts';
 import { logTx } from '../economy/txlog.mts';
@@ -196,7 +197,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     }
     const continued = minutesSince(u.last_daily) < 48 * 60;
     const streak = continued ? u.daily_streak + 1 : 1;
-    const reward = cfg.dailyAmount + (streak - 1) * cfg.dailyStreakBonus;
+    const milestone = streakMilestoneBonus(streak, cfg.dailyAmount);
+    const reward = cfg.dailyAmount + (streak - 1) * cfg.dailyStreakBonus + milestone.bonus;
     await saveUser({
       guild_id: gid,
       user_id: interaction.user.id,
@@ -206,7 +208,13 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       last_daily: new Date().toISOString(),
     });
     logTx(gid, interaction.user.id, reward, 'daily');
-    await interaction.reply(t(locale, 'eco.dailyOk', { reward: fmt(reward, cur), streak }));
+    const dailyMsg = t(locale, 'eco.dailyOk', { reward: fmt(reward, cur), streak });
+    // Kamień milowy serii → dopisek niezależny językowo (emoji + mnożnik + bonus), bez nowego i18n.
+    await interaction.reply(
+      milestone.bonus > 0
+        ? `${dailyMsg} 🔥 ×${milestone.mult} (+${fmt(milestone.bonus, cur)})`
+        : dailyMsg,
+    );
     return;
   }
 
