@@ -10,6 +10,7 @@ import {
   MAX_CLAN_NAME,
   MIN_CLAN_NAME,
   normalizeClanName,
+  roleAssignableError,
   sortClansByBank,
   transferError,
 } from './clans.mts';
@@ -21,6 +22,7 @@ const clan = (o: Partial<Clan>): Clan => ({
   owner_id: 'o',
   bank: 0,
   created_at: null,
+  role_id: null,
   ...o,
 });
 
@@ -113,5 +115,26 @@ describe('transferError — przekazanie przywództwa', () => {
 
   it('poprawne przekazanie liderowi → null', () => {
     expect(transferError('owner', 'owner', 'czlonek', true)).toBeNull();
+  });
+});
+
+describe('roleAssignableError — walidacja roli klanu przed nadaniem', () => {
+  const ok = { id: 'r1', managed: false, position: 5 };
+
+  it('@everyone (id = guildId) odrzucone', () => {
+    expect(roleAssignableError({ ...ok, id: 'g1' }, 10, 'g1')).toBe('everyone');
+  });
+
+  it('rola zarządzana (bot/integracja/boost) odrzucona', () => {
+    expect(roleAssignableError({ ...ok, managed: true }, 10, 'g1')).toBe('managed');
+  });
+
+  it('rola ≥ najwyższej roli bota → tooHigh (Discord odrzuci nadanie)', () => {
+    expect(roleAssignableError({ ...ok, position: 10 }, 10, 'g1')).toBe('tooHigh');
+    expect(roleAssignableError({ ...ok, position: 11 }, 10, 'g1')).toBe('tooHigh');
+  });
+
+  it('rola zwykła poniżej bota → null (można użyć)', () => {
+    expect(roleAssignableError(ok, 10, 'g1')).toBeNull();
   });
 });

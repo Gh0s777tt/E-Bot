@@ -16,6 +16,7 @@ export type Clan = {
   owner_id: string;
   bank: number;
   created_at: string | null;
+  role_id: string | null; // opcjonalna rola klanu (właściciel linkuje przez /clan role)
 };
 
 export type ClanMember = {
@@ -74,6 +75,20 @@ export function transferError(
   if (actorId !== ownerId) return 'notOwner';
   if (targetId === ownerId) return 'self';
   if (!targetIsMember) return 'notMember';
+  return null;
+}
+
+// Czy rola nadaje się na rolę klanu (czysta walidacja przed nadaniem): nie @everyone (id = guildId),
+// nie zarządzana (rola bota/integracji/boost — Discord zabrania ręcznego nadania), i poniżej najwyższej
+// roli bota (inaczej brak uprawnień do nadania). null = można użyć.
+export function roleAssignableError(
+  role: { id: string; managed: boolean; position: number },
+  botHighestPosition: number,
+  everyoneId: string,
+): 'everyone' | 'managed' | 'tooHigh' | null {
+  if (role.id === everyoneId) return 'everyone';
+  if (role.managed) return 'managed';
+  if (role.position >= botHighestPosition) return 'tooHigh';
   return null;
 }
 

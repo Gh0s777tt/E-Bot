@@ -666,6 +666,7 @@ create table if not exists clans (
   primary key (guild_id, id)
 );
 alter table clans enable row level security;
+alter table clans add column if not exists role_id text;
 create table if not exists clan_members (
   guild_id  text        not null,
   clan_id   text        not null,

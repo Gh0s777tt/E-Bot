@@ -10,6 +10,8 @@ create table if not exists clans (
   primary key (guild_id, id)
 );
 alter table clans enable row level security;
+-- opcjonalna rola klanu (właściciel linkuje przez /clan role; bot nadaje na wejściu, zdejmuje na wyjściu)
+alter table clans add column if not exists role_id text;
 
 create table if not exists clan_members (
   guild_id  text        not null,

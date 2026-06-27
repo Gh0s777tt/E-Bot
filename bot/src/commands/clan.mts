@@ -25,6 +25,7 @@ import {
   normalizeClanName,
   removeClan,
   removeMember,
+  roleAssignableError,
   saveClan,
   sortClansByBank,
   transferError,
@@ -91,6 +92,14 @@ export const data = new SlashCommandBuilder()
       .addUserOption((o) =>
         o.setName('uzytkownik').setDescription('Nowy lider (członek klanu)').setRequired(true),
       ),
+  )
+  .addSubcommand((s) =>
+    s
+      .setName('role')
+      .setDescription('Ustaw lub wyczyść rolę klanu nadawaną członkom (tylko lider).')
+      .addRoleOption((o) =>
+        o.setName('rola').setDescription('Rola dla członków (puste = wyczyść)').setRequired(false),
+      ),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -152,7 +161,15 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       username: interaction.user.username,
       wallet: u.wallet,
     });
-    await saveClan({ guild_id: gid, id, name, owner_id: uid, bank: 0, created_at: nowIso });
+    await saveClan({
+      guild_id: gid,
+      id,
+      name,
+      owner_id: uid,
+      bank: 0,
+      created_at: nowIso,
+      role_id: null,
+    });
     await addMember({ guild_id: gid, clan_id: id, user_id: uid, joined_at: nowIso });
     logTx(gid, uid, -CLAN_CREATE_COST, `clan:create:${id}`);
     await interaction.reply(t(locale, 'clan.created', { name, cost: fmt(CLAN_CREATE_COST, cur) }));
@@ -188,6 +205,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       user_id: uid,
       joined_at: new Date().toISOString(),
     });
+    if (clan.role_id) {
+      const gm = await interaction.guild.members.fetch(uid).catch(() => null);
+      await gm?.roles.add(clan.role_id).catch(() => {});
+    }
     await interaction.reply(t(locale, 'clan.joined', { name: clan.name }));
     return;
   }
@@ -201,6 +222,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (clan && clan.owner_id === uid) {
       await interaction.reply(eph(t(locale, 'clan.ownerLeave')));
       return;
+    }
+    if (clan?.role_id) {
+      const gm = await interaction.guild.members.fetch(uid).catch(() => null);
+      await gm?.roles.remove(clan.role_id).catch(() => {});
     }
     await removeMember(gid, uid);
     await interaction.reply(t(locale, 'clan.left', { name: clan?.name ?? '—' }));
@@ -217,8 +242,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       await interaction.reply(eph(t(locale, 'clan.notOwner')));
       return;
     }
+    await interaction.deferReply();
+    if (clan.role_id) {
+      const roleId = clan.role_id;
+      const members = await listMembers(gid, clan.id);
+      for (const m of members) {
+        const gm = await interaction.guild.members.fetch(m.user_id).catch(() => null);
+        await gm?.roles.remove(roleId).catch(() => {});
+      }
+    }
     await removeClan(gid, clan.id);
-    await interaction.reply(t(locale, 'clan.disbanded', { name: clan.name }));
+    await interaction.editReply(t(locale, 'clan.disbanded', { name: clan.name }));
     return;
   }
 
@@ -251,6 +285,51 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     clan.owner_id = target.id;
     await saveClan(clan);
     await interaction.reply(t(locale, 'clan.transferred', { name: clan.name, owner: target.id }));
+    return;
+  }
+
+  if (sub === 'role') {
+    if (!membership) {
+      await interaction.reply(eph(t(locale, 'clan.notInClan')));
+      return;
+    }
+    const clan = await getClan(gid, membership.clan_id);
+    if (!clan || clan.owner_id !== uid) {
+      await interaction.reply(eph(t(locale, 'clan.notOwner')));
+      return;
+    }
+    const role = interaction.options.getRole('rola');
+    await interaction.deferReply();
+    const members = await listMembers(gid, clan.id);
+    if (role) {
+      const err = roleAssignableError(
+        { id: role.id, managed: role.managed, position: role.position },
+        interaction.guild.members.me?.roles.highest.position ?? 0,
+        gid,
+      );
+      if (err) {
+        await interaction.editReply(t(locale, 'clan.roleBad'));
+        return;
+      }
+      clan.role_id = role.id;
+      await saveClan(clan);
+      for (const m of members) {
+        const gm = await interaction.guild.members.fetch(m.user_id).catch(() => null);
+        await gm?.roles.add(role.id).catch(() => {});
+      }
+      await interaction.editReply(t(locale, 'clan.roleSet', { role: `<@&${role.id}>` }));
+    } else {
+      const old = clan.role_id;
+      clan.role_id = null;
+      await saveClan(clan);
+      if (old) {
+        for (const m of members) {
+          const gm = await interaction.guild.members.fetch(m.user_id).catch(() => null);
+          await gm?.roles.remove(old).catch(() => {});
+        }
+      }
+      await interaction.editReply(t(locale, 'clan.roleCleared'));
+    }
     return;
   }
 

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-597-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.527.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-598-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.528.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.528.0] — 🎭 Klany: rola klanu (`/clan role`) — nadawana na wejściu, zdejmowana na wyjściu
+
+- `[#598]` 🎭 **Rola klanu** — `/clan role [rola]` (tylko lider): linkuje istniejącą rolę Discord do klanu. Bot nadaje ją automatycznie na **wejściu** (`/clan join`), zdejmuje na **wyjściu** (`/clan leave`), a przy ustawieniu/wyczyszczeniu/rozwiązaniu robi **backfill** (nadaje/zdejmuje wszystkim obecnym członkom). Bez argumentu = wyczyść (zdejmij członkom). Czysta, otestowana `roleAssignableError` ([`clans.mts`](bot/src/economy/clans.mts)) waliduje rolę PRZED nadaniem (odrzuca `@everyone` / zarządzaną / wyżej niż rola bota). Kolumna `role_id` na `clans` (`alter … add column if not exists` — migracja istniejących instalacji). i18n `clan.roleSet/roleCleared/roleBad` ×14.
+  - **Testy:** `clans.test.ts` +4 (`roleAssignableError`: everyone / managed / tooHigh / ok) → **1071/1071**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` (docs + schemat 48 tab. + env) — exit 0 (Node 26.4.0). Wymaga uprawnienia bota „Zarządzanie rolami"; błędy nadania łykane (graceful).
 
 ## [0.527.0] — 🧹 Panel: wyciszenie łagodnego ostrzeżenia hydracji `nonce` (CSP bez zmian)
 
