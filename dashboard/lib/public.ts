@@ -1,16 +1,30 @@
 // Tor M — dane do PUBLICZNYCH stron (/p/*): rankingi i profil. Czyta Supabase (server-side).
 import { hasSupabase, supabase } from './supabase';
 
+// Fail-fast: publiczne strony (/p/*) renderują się server-side i bez tego zapytanie, które WISI
+// (Supabase wolny/niedostępny/zły klucz), zostawia stronę na fallbacku „Ładowanie…" w nieskończoność.
+// Po PUBLIC_FETCH_TIMEOUT_MS degradujemy do pustki (przez istniejące try/catch) zamiast blokować render.
+const PUBLIC_FETCH_TIMEOUT_MS = 7000;
+function withTimeout<T>(p: PromiseLike<T>, ms = PUBLIC_FETCH_TIMEOUT_MS): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error('supabase-timeout')), ms);
+  });
+  return Promise.race([Promise.resolve(p).finally(() => clearTimeout(timer)), timeout]);
+}
+
 export type LbRow = { user_id: string; username: string; value: number; sub?: string };
 
 export async function topXp(limit = 15): Promise<LbRow[]> {
   if (!hasSupabase) return [];
   try {
-    const { data, error } = await supabase()
-      .from('user_levels')
-      .select('user_id,username,xp,level')
-      .order('xp', { ascending: false })
-      .limit(limit);
+    const { data, error } = await withTimeout(
+      supabase()
+        .from('user_levels')
+        .select('user_id,username,xp,level')
+        .order('xp', { ascending: false })
+        .limit(limit),
+    );
     if (error) throw new Error(error.message);
     return (data ?? []).map(
       (r: { user_id: string; username?: string; xp?: number; level?: number }) => ({
@@ -28,11 +42,13 @@ export async function topXp(limit = 15): Promise<LbRow[]> {
 export async function topEco(limit = 15): Promise<LbRow[]> {
   if (!hasSupabase) return [];
   try {
-    const { data, error } = await supabase()
-      .from('economy_users')
-      .select('user_id,username,wallet,bank')
-      .order('wallet', { ascending: false })
-      .limit(80);
+    const { data, error } = await withTimeout(
+      supabase()
+        .from('economy_users')
+        .select('user_id,username,wallet,bank')
+        .order('wallet', { ascending: false })
+        .limit(80),
+    );
     if (error) throw new Error(error.message);
     return (data ?? [])
       .map((r: { user_id: string; username?: string; wallet?: number; bank?: number }) => ({
@@ -52,10 +68,12 @@ export async function topActive(limit = 15, days = 30): Promise<LbRow[]> {
   if (!hasSupabase) return [];
   try {
     const since = new Date(Date.now() - (days - 1) * 86_400_000).toISOString().slice(0, 10);
-    const { data, error } = await supabase()
-      .from('user_activity')
-      .select('user_id,username,messages,voice_min')
-      .gte('day', since);
+    const { data, error } = await withTimeout(
+      supabase()
+        .from('user_activity')
+        .select('user_id,username,messages,voice_min')
+        .gte('day', since),
+    );
     if (error) throw new Error(error.message);
     type DbRow = { user_id: string; username?: string; messages?: number; voice_min?: number };
     const map = new Map<string, { username: string; messages: number; voice: number }>();
@@ -107,17 +125,19 @@ export async function publicProfile(uid: string): Promise<PublicProfile> {
   if (!hasSupabase) return empty;
   try {
     const sb = supabase();
-    const [lvl, eco, inv, badges] = await Promise.all([
-      sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
-      sb.from('economy_users').select('username,wallet,bank').eq('user_id', uid).maybeSingle(),
-      sb
-        .from('invites')
-        .select('invited_id')
-        .eq('inviter_id', uid)
-        .eq('fake', false)
-        .eq('has_left', false),
-      sb.from('user_badges').select('badge_id').eq('user_id', uid),
-    ]);
+    const [lvl, eco, inv, badges] = await withTimeout(
+      Promise.all([
+        sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
+        sb.from('economy_users').select('username,wallet,bank').eq('user_id', uid).maybeSingle(),
+        sb
+          .from('invites')
+          .select('invited_id')
+          .eq('inviter_id', uid)
+          .eq('fake', false)
+          .eq('has_left', false),
+        sb.from('user_badges').select('badge_id').eq('user_id', uid),
+      ]),
+    );
     const l = (lvl.data ?? null) as { username?: string; xp?: number; level?: number } | null;
     const e = (eco.data ?? null) as { username?: string; wallet?: number; bank?: number } | null;
     const found = Boolean(l || e);
@@ -195,29 +215,31 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
   if (!hasSupabase) return empty;
   try {
     const sb = supabase();
-    const [lvl, eco, act, inv, badges, invtory, tx] = await Promise.all([
-      sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
-      sb
-        .from('economy_users')
-        .select('username,wallet,bank,daily_streak')
-        .eq('user_id', uid)
-        .maybeSingle(),
-      sb.from('user_activity').select('messages,voice_min').eq('user_id', uid),
-      sb
-        .from('invites')
-        .select('invited_id')
-        .eq('inviter_id', uid)
-        .eq('fake', false)
-        .eq('has_left', false),
-      sb.from('user_badges').select('badge_id').eq('user_id', uid),
-      sb.from('economy_inventory').select('qty').eq('user_id', uid),
-      sb
-        .from('economy_tx')
-        .select('delta,reason,created_at')
-        .eq('user_id', uid)
-        .order('created_at', { ascending: true })
-        .limit(40),
-    ]);
+    const [lvl, eco, act, inv, badges, invtory, tx] = await withTimeout(
+      Promise.all([
+        sb.from('user_levels').select('username,xp,level').eq('user_id', uid).maybeSingle(),
+        sb
+          .from('economy_users')
+          .select('username,wallet,bank,daily_streak')
+          .eq('user_id', uid)
+          .maybeSingle(),
+        sb.from('user_activity').select('messages,voice_min').eq('user_id', uid),
+        sb
+          .from('invites')
+          .select('invited_id')
+          .eq('inviter_id', uid)
+          .eq('fake', false)
+          .eq('has_left', false),
+        sb.from('user_badges').select('badge_id').eq('user_id', uid),
+        sb.from('economy_inventory').select('qty').eq('user_id', uid),
+        sb
+          .from('economy_tx')
+          .select('delta,reason,created_at')
+          .eq('user_id', uid)
+          .order('created_at', { ascending: true })
+          .limit(40),
+      ]),
+    );
     const l = (lvl.data ?? null) as { username?: string; xp?: number; level?: number } | null;
     const e = (eco.data ?? null) as {
       username?: string;
@@ -230,10 +252,9 @@ export async function profileCard(uid: string): Promise<ProfileCardData> {
     const actRows = (act.data ?? []) as { messages?: number; voice_min?: number }[];
     let rank = 0;
     if (xp > 0) {
-      const { count } = await sb
-        .from('user_levels')
-        .select('user_id', { count: 'exact', head: true })
-        .gt('xp', xp);
+      const { count } = await withTimeout(
+        sb.from('user_levels').select('user_id', { count: 'exact', head: true }).gt('xp', xp),
+      );
       rank = (count ?? 0) + 1;
     }
     // Transakcje (rosnąco) → historia (8 najnowszych) + seria ≈salda (rekonstrukcja z bieżącego stanu).

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-530-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.460.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-531-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.461.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.461.0] — 🛡️🎭 Odporność publicznych stron /p/* (fail-fast Supabase) + opcjonalny e2e na buildzie prod
+
+- `[#531]` 🛡️ **Fail-fast `withTimeout` na publicznych `/p/*`** ([`lib/public.ts`](dashboard/lib/public.ts)) + **opcjonalny tryb e2e na buildzie produkcyjnym** ([`playwright.config.ts`](playwright.config.ts)). Bez zmian zachowania w ścieżce sukcesu — utwardzenie ścieżki awarii + stabilny lokalny e2e. Wyłonione przy naprawie toolchainu na odtworzonej maszynie (Node 26).
+  - **RYGIEL anty-zawieszenie `/p/*`** — rankingi/profil renderują się server-side; gdy Supabase jest wolny/niedostępny/zły klucz, zapytanie potrafiło **wisieć w nieskończoność** na fallbacku „Ładowanie…" (istniejące `try/catch` łapie tylko *błędy*, nie *zawieszenie*). `withTimeout` (7 s) owija każde zapytanie → po przekroczeniu degradacja do pustego szkieletu (przez `catch`). Odporność też produkcyjna.
+  - **E2E na zimnej maszynie** — ciężkie `/p/*` nie mieściły się w 10 s asercji przez latencję kompilacji `next dev` (Turbopack on-demand). `E2E_PROD=1` → `next build && next start` (prekompilowane trasy, **5/5** zielone); domyślnie nadal szybki `next dev` (CI/dev bez zmian).
+  - **Docs:** „🔭 Bieżący tor" w [`PHASES.md`](docs/PHASES.md) opisuje teraz realny tor (kampania testów 905/127), nie ukończony i18n.
+  - **Bramki:** `pnpm lint` · `pnpm typecheck` (4 pakiety) · `pnpm test` **905/905** · `E2E_PROD=1 pnpm test:e2e` **5/5** · `docs:check` — exit 0 (Node 26.4.0).
 
 ## [0.460.0] 🎉 — 🧪📦 Rygiel batchowania zapytań IGDB (chunk) — bez gubienia/duplikatów (pakiet ingest)
 

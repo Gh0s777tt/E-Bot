@@ -27,12 +27,17 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    // Cold-start `next dev` panelu na dedykowanym porcie; Playwright czeka na gotowość portu.
-    // `pnpm exec` pewnie rozwiązuje `next` w workspace (node-linker=hoisted).
-    command: `pnpm exec next dev -p ${PORT}`,
+    // Domyślnie cold-start `next dev` (szybki iteracyjnie). `pnpm exec` pewnie rozwiązuje `next`
+    // w workspace (node-linker=hoisted). Playwright czeka na gotowość portu.
+    // E2E_PROD=1 → build produkcyjny: prekompilowane trasy znoszą latencję Turbopacka on-demand,
+    // przez którą ciężkie strony /p/* potrafią nie zmieścić się w 10 s asercji na zimnej maszynie
+    // (lokalnie zalecane do stabilnego pełnego przebiegu; CI/dev domyślnie zostają na `next dev`).
+    command: process.env.E2E_PROD
+      ? `pnpm exec next build && pnpm exec next start -p ${PORT}`
+      : `pnpm exec next dev -p ${PORT}`,
     cwd: 'dashboard',
     url: BASE_URL,
-    timeout: 180_000,
+    timeout: 240_000,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
