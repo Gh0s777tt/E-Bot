@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { getConfigSetting, setConfigSetting } from './data';
 
 let envLoaded = false;
 function ensureEnv(): void {
@@ -62,8 +63,7 @@ async function kickToken(): Promise<string> {
   return kkTok.t;
 }
 
-async function twitch(): Promise<Live> {
-  const channel = process.env.TWITCH_CHANNEL ?? '';
+async function twitch(channel: string): Promise<Live> {
   const base: Live = {
     platform: 'twitch',
     label: 'Twitch',
@@ -100,8 +100,7 @@ async function twitch(): Promise<Live> {
   }
   return base;
 }
-async function kick(): Promise<Live> {
-  const channel = process.env.KICK_CHANNEL ?? '';
+async function kick(channel: string): Promise<Live> {
   const base: Live = {
     platform: 'kick',
     label: 'Kick',
@@ -136,8 +135,7 @@ async function kick(): Promise<Live> {
   }
   return base;
 }
-async function rumble(): Promise<Live> {
-  const url = process.env.RUMBLE_LIVESTREAM_API_URL ?? '';
+async function rumble(url: string): Promise<Live> {
   const base: Live = {
     platform: 'rumble',
     label: 'Rumble',
@@ -165,8 +163,7 @@ async function rumble(): Promise<Live> {
   }
   return base;
 }
-async function youtube(): Promise<Live> {
-  const ch = process.env.YOUTUBE_LIVE_CHANNEL_ID ?? '';
+async function youtube(ch: string): Promise<Live> {
   const key = process.env.YOUTUBE_API_KEY ?? '';
   const base: Live = {
     platform: 'youtube',
@@ -199,7 +196,31 @@ async function youtube(): Promise<Live> {
   return base;
 }
 
+export type LiveConfig = { twitch: string; kick: string; youtube: string; rumble: string };
+export const LIVE_CONFIG_DEFAULT: LiveConfig = { twitch: '', kick: '', youtube: '', rumble: '' };
+
+// `live_config` (JSON) — kanały źródłowe ustawiane z panelu; puste pole = fallback na .env. Czytane też
+// przez bota (notifier.mts: parseLiveCfg/liveChannel) → panel i podgląd statusu pokazują to samo źródło.
+export async function getLiveConfig(): Promise<LiveConfig> {
+  const raw = await getConfigSetting('live_config');
+  if (!raw) return { ...LIVE_CONFIG_DEFAULT };
+  try {
+    return { ...LIVE_CONFIG_DEFAULT, ...(JSON.parse(raw) as Partial<LiveConfig>) };
+  } catch {
+    return { ...LIVE_CONFIG_DEFAULT };
+  }
+}
+export async function saveLiveConfig(cfg: LiveConfig): Promise<void> {
+  await setConfigSetting('live_config', JSON.stringify(cfg));
+}
+
 export async function getLiveStatuses(): Promise<Live[]> {
   ensureEnv();
-  return Promise.all([twitch(), kick(), rumble(), youtube()]);
+  const cfg = await getLiveConfig();
+  return Promise.all([
+    twitch(cfg.twitch || process.env.TWITCH_CHANNEL || ''),
+    kick(cfg.kick || process.env.KICK_CHANNEL || ''),
+    rumble(cfg.rumble || process.env.RUMBLE_LIVESTREAM_API_URL || ''),
+    youtube(cfg.youtube || process.env.YOUTUBE_LIVE_CHANNEL_ID || ''),
+  ]);
 }

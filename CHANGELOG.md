@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-576-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.506.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-577-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.507.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.507.0] — 📡 /live konfigurowalny z panelu (kanały per-instancja, koniec env-only) — luka z audytu
+
+- `[#577]` 📡 **Kanały live z panelu, nie tylko z `.env`** (domyka jedyną realną lukę funkcjonalną wykrytą w audycie) — bot [`notifier`](bot/src/live/notifier.mts) czyta teraz globalny `live_config` (JSON) z **fallbackiem na env** (wstecznie zgodne): czyste, otestowane `parseLiveCfg` + `liveChannel` (panel wygrywa · env fallback · zły JSON nie wywala bota). Twitch/Kick/Rumble czytają kanał **dynamicznie per tick** → zmiana w panelu działa **bez restartu** (YouTube nadal gated na interwał — quota). Panel: nowy [`LiveConfigForm`](dashboard/components/LiveConfigForm.tsx) na `/live` (4 kanały + status-pill) → [`/api/live-config`](dashboard/app/api/live-config/route.ts) (zod + audyt) → `live_config`. Podgląd statusu (`getLiveStatuses`) też używa configu — panel/board/bot = jedno źródło. i18n `ui.live.cfgHeading`/`cfgHint` ×14.
+  - **Testy:** `notifier.test.ts` +9 (`parseLiveCfg`: JSON/pusty/zły/nie-obiekt · `liveChannel`: panel>env/fallback/trim/izolacja) → **1004/1004**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.506.0] — 🎛️ Redesign „Dowództwo" (krok 4): globalny nagłówek + czystsze karty (widoczne wszędzie)
 

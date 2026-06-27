@@ -8,8 +8,6 @@ import { getTwitchLive } from './twitch.mts';
 import type { LiveStatus, Platform } from './types.mts';
 import { getYouTubeLive } from './youtube.mts';
 
-type Source = { name: Platform; intervalMs: number; check: () => Promise<LiveStatus> };
-
 const COLORS: Record<Platform, number> = {
   twitch: 0x9146ff,
   kick: 0x53fc18,
@@ -34,52 +32,91 @@ export function sec(v: string | undefined, def: number): number {
   return Number.isFinite(n) && n > 0 ? n : def;
 }
 
-export function startNotifier(client: Client): void {
-  const sources: Source[] = [];
-  if (process.env.TWITCH_CHANNEL)
-    sources.push({
-      name: 'twitch',
-      intervalMs: sec(process.env.NOTIFY_TWITCH_INTERVAL_SEC, 60) * 1000,
-      check: () => getTwitchLive(process.env.TWITCH_CHANNEL!),
-    });
-  if (process.env.KICK_CHANNEL)
-    sources.push({
-      name: 'kick',
-      intervalMs: sec(process.env.NOTIFY_KICK_INTERVAL_SEC, 60) * 1000,
-      check: () => getKickLive(process.env.KICK_CHANNEL!),
-    });
-  if (process.env.RUMBLE_LIVESTREAM_API_URL)
-    sources.push({
-      name: 'rumble',
-      intervalMs: sec(process.env.NOTIFY_RUMBLE_INTERVAL_SEC, 60) * 1000,
-      check: () => getRumbleLive(process.env.RUMBLE_LIVESTREAM_API_URL!),
-    });
-  const ytInt = sec(process.env.NOTIFY_YOUTUBE_INTERVAL_SEC, 0);
-  if (process.env.YOUTUBE_LIVE_CHANNEL_ID && ytInt > 0)
-    sources.push({
-      name: 'youtube',
-      intervalMs: ytInt * 1000,
-      check: () => getYouTubeLive(process.env.YOUTUBE_LIVE_CHANNEL_ID!),
-    });
+export type LiveCfg = Partial<Record<Platform, string>>;
 
-  if (!sources.length) {
-    log.info('[live] brak platform z danymi — pomijam.');
-    return;
+// Parsuje globalny `live_config` (JSON z panelu); brak/błąd → pusty obiekt (env zostaje fallbackiem).
+export function parseLiveCfg(raw: string | undefined): LiveCfg {
+  if (!raw) return {};
+  try {
+    const o = JSON.parse(raw) as LiveCfg;
+    return o && typeof o === 'object' ? o : {};
+  } catch {
+    return {};
   }
+}
+
+// Kanał źródłowy platformy: panel (`live_config`) WYGRYWA, env = fallback (wstecznie zgodne). Trim.
+export function liveChannel(cfg: LiveCfg, envVal: string | undefined, platform: Platform): string {
+  return (cfg[platform] || envVal || '').trim();
+}
+
+type PlatformDef = {
+  name: Platform;
+  envKey: string;
+  intervalEnv: string;
+  intervalDef: number;
+  check: (ch: string) => Promise<LiveStatus>;
+};
+const PLATFORMS: PlatformDef[] = [
+  {
+    name: 'twitch',
+    envKey: 'TWITCH_CHANNEL',
+    intervalEnv: 'NOTIFY_TWITCH_INTERVAL_SEC',
+    intervalDef: 60,
+    check: getTwitchLive,
+  },
+  {
+    name: 'kick',
+    envKey: 'KICK_CHANNEL',
+    intervalEnv: 'NOTIFY_KICK_INTERVAL_SEC',
+    intervalDef: 60,
+    check: getKickLive,
+  },
+  {
+    name: 'rumble',
+    envKey: 'RUMBLE_LIVESTREAM_API_URL',
+    intervalEnv: 'NOTIFY_RUMBLE_INTERVAL_SEC',
+    intervalDef: 60,
+    check: getRumbleLive,
+  },
+  {
+    name: 'youtube',
+    envKey: 'YOUTUBE_LIVE_CHANNEL_ID',
+    intervalEnv: 'NOTIFY_YOUTUBE_INTERVAL_SEC',
+    intervalDef: 0,
+    check: getYouTubeLive,
+  },
+];
+
+export function startNotifier(client: Client): void {
+  // Twitch/Kick/Rumble zawsze aktywne (kanał czytany dynamicznie per tick: panel `live_config` lub
+  // env) → zmiana kanału w panelu działa BEZ restartu. YouTube gated na NOTIFY_YOUTUBE_INTERVAL_SEC>0
+  // (quota). Brak kanału (panel i env puste) → tick po prostu pomija.
+  const sources = PLATFORMS.filter(
+    (p) => p.name !== 'youtube' || sec(process.env[p.intervalEnv], 0) > 0,
+  ).map((p) => ({
+    name: p.name,
+    envKey: p.envKey,
+    intervalMs: sec(process.env[p.intervalEnv], p.intervalDef || 120) * 1000,
+    check: p.check,
+  }));
+
   log.info(
-    `[live] monitoruję: ${sources.map((s) => s.name).join(', ')} (kanał/przełączniki z panelu lub .env)`,
+    `[live] monitoruję: ${sources.map((s) => s.name).join(', ')} (kanały z panelu lub .env)`,
   );
 
   const prev = new Map<Platform, boolean>();
 
-  const tick = async (s: Source): Promise<void> => {
+  const tick = async (s: (typeof sources)[number]): Promise<void> => {
     try {
-      const st = await s.check();
+      const cfg = getSettings();
+      const channel = liveChannel(parseLiveCfg(cfg.live_config), process.env[s.envKey], s.name);
+      if (!channel) return; // brak kanału (panel + env puste) → nic nie monitorujemy
+      const st = await s.check(channel);
       const was = prev.get(s.name);
       prev.set(s.name, st.live);
       if (was === undefined || was || !st.live) return; // tylko przejście offline -> online
 
-      const cfg = getSettings();
       const enabledRaw = cfg[`notify_enabled_${s.name}`];
       const enabled =
         enabledRaw === undefined
