@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-577-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.507.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-578-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.508.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.508.0] — 🎛️ Redesign „Dowództwo" (krok 5): Powitania · Ekonomia · Leveling (status-pille)
+
+- `[#578]` 🎛️ **Dowództwo na Powitaniach, Ekonomii i Levelingu** — `/welcome`, `/eco`, `/levels`: status-pille (nagłówek + sekcja konfiguracji) z realnego `config.enabled`, zamiast zielono/czerwonego tekstu — spójnie z resztą paneli (wspólny `StatusPill`). Bez nowych stringów (parytet i18n nietknięty).
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **1004/1004** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.507.0] — 📡 /live konfigurowalny z panelu (kanały per-instancja, koniec env-only) — luka z audytu
 

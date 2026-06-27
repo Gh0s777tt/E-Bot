@@ -2,6 +2,7 @@ import { Award, Crown, Trophy, Users } from 'lucide-react';
 import LevelingForm from '../../components/LevelingForm';
 import SeasonsForm from '../../components/SeasonsForm';
 import StatCard from '../../components/StatCard';
+import StatusPill from '../../components/StatusPill';
 import { getSeasonsConfig } from '../../lib/community';
 import { getHallOfFame, getLeaderboard, getLevelingConfig } from '../../lib/faza4';
 import { getGuildMeta } from '../../lib/guild';
@@ -24,14 +25,10 @@ export default async function LevelsPage() {
 
   return (
     <div className="space-y-6">
-      <p className="max-w-3xl text-sm text-muted">
-        {tp(lang, 'ui.levels.intro')}{' '}
-        {cfg.enabled ? (
-          <span className="font-semibold text-green-400">{tp(lang, 'ui.levels.statusOn')}</span>
-        ) : (
-          <span className="font-semibold text-accent">{tp(lang, 'ui.levels.statusOff')}</span>
-        )}
-      </p>
+      <header className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-2xl text-sm text-muted">{tp(lang, 'ui.levels.intro')}</p>
+        <StatusPill on={cfg.enabled} lang={lang} />
+      </header>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         <StatCard
@@ -55,6 +52,9 @@ export default async function LevelsPage() {
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
         <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
           <Trophy size={16} className="text-accent" /> {tp(lang, 'ui.levels.cfgHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={cfg.enabled} lang={lang} />
+          </span>
         </h2>
         <LevelingForm initial={cfg} guild={guild} />
       </section>
