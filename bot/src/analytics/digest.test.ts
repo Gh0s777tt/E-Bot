@@ -3,7 +3,7 @@
 // (jeden wiersz/dzień), wyłania lidera (sort MALEJĄCO), rozwiązuje nazwę (username z dowolnego wiersza
 // > fallback user_id). Regresja = digest chwali złą osobę albo pokazuje surowe id zamiast nicku.
 import { describe, expect, it } from 'vitest';
-import { coolingMembers, memberFunnel, topUserByMessages } from './digest.mts';
+import { coolingMembers, memberFunnel, topUserByMessages, trend, trendLabel } from './digest.mts';
 
 describe('topUserByMessages — lider aktywności tygodnia', () => {
   it('SUMUJE wiadomości tego samego usera z wielu dni', () => {
@@ -109,5 +109,37 @@ describe('memberFunnel — lejek nowych (dołączyli → napisali → zostali)',
       activated: 0,
       retained: 2,
     });
+  });
+});
+
+describe('trend — benchmark okres-do-okresu', () => {
+  it('wzrost → strzałka ▲ i dodatni %', () => {
+    expect(trend(120, 100)).toEqual({ delta: 20, pct: 20, arrow: '▲' });
+  });
+
+  it('spadek → ▼ i ujemny %', () => {
+    expect(trend(80, 100)).toEqual({ delta: -20, pct: -20, arrow: '▼' });
+  });
+
+  it('bez zmian → ▬ i 0%', () => {
+    expect(trend(100, 100)).toEqual({ delta: 0, pct: 0, arrow: '▬' });
+  });
+
+  it('brak bazy (poprzednio 0) → pct null (bez dzielenia przez 0)', () => {
+    expect(trend(50, 0)).toEqual({ delta: 50, pct: null, arrow: '▲' });
+    expect(trend(0, 0)).toEqual({ delta: 0, pct: null, arrow: '▬' });
+  });
+});
+
+describe('trendLabel — etykieta trendu do embeda', () => {
+  it('z bazą → strzałka + %', () => {
+    expect(trendLabel(trend(120, 100))).toBe('▲ +20%');
+    expect(trendLabel(trend(80, 100))).toBe('▼ -20%');
+    expect(trendLabel(trend(100, 100))).toBe('▬ 0%');
+  });
+
+  it('bez bazy: przyrost → 🆕 +N, oba zerowe → ▬', () => {
+    expect(trendLabel(trend(50, 0))).toBe('🆕 +50');
+    expect(trendLabel(trend(0, 0))).toBe('▬');
   });
 });

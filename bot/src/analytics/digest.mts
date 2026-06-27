@@ -76,6 +76,25 @@ export function memberFunnel(
   return { joined: joiners.length, activated, retained };
 }
 
+// 📈 Benchmark okres-do-okresu (czysta funkcja): porównuje bieżącą wartość z poprzednim oknem. Zwraca
+// Δ, % zmiany (null gdy poprzednio 0 — brak bazy do procentu) i strzałkę. Pozwala digestowi pokazać
+// TREND (rośnie/maleje serwer tydzień do tygodnia), nie tylko surową liczbę.
+export type Trend = { delta: number; pct: number | null; arrow: '▲' | '▼' | '▬' };
+
+export function trend(current: number, previous: number): Trend {
+  const delta = current - previous;
+  const pct = previous > 0 ? Math.round((delta / previous) * 100) : null;
+  const arrow: Trend['arrow'] = delta > 0 ? '▲' : delta < 0 ? '▼' : '▬';
+  return { delta, pct, arrow };
+}
+
+// Etykieta trendu do embeda: „▲ +15%" / „▼ -8%" / „▬ 0%". Bez bazy (poprzednio 0): „🆕 +N" przy
+// przyroście, „▬" gdy oba okna zerowe.
+export function trendLabel(t: Trend): string {
+  if (t.pct === null) return t.delta > 0 ? `🆕 +${t.delta.toLocaleString('pl-PL')}` : '▬';
+  return `${t.arrow} ${t.pct > 0 ? '+' : ''}${t.pct}%`;
+}
+
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const now = new Date();
@@ -117,6 +136,16 @@ async function maybePost(client: Client): Promise<void> {
       }),
       { m: 0, j: 0, l: 0, v: 0 },
     );
+    // 📈 Benchmark: poprzednie 7 dni (dzień ∈ [−14, −7)) do trendu tydzień-do-tygodnia.
+    const since14 = new Date(now.getTime() - 14 * 86_400_000).toISOString().slice(0, 10);
+    const prevRows = await cloudSelect<Row>(
+      'activity_daily',
+      `select=messages,voice_minutes&guild_id=eq.${guild.id}&day=gte.${since14}&day=lt.${since}`,
+    ).catch(() => [] as Row[]);
+    const p = prevRows.reduce(
+      (a, r) => ({ m: a.m + (r.messages ?? 0), v: a.v + (r.voice_minutes ?? 0) }),
+      { m: 0, v: 0 },
+    );
     // 🏆 Najaktywniejszy (per-user, 7 dni) danego serwera.
     const ua = await cloudSelect<UserActivityRow>(
       'user_activity',
@@ -141,8 +170,16 @@ async function maybePost(client: Client): Promise<void> {
         .setColor(0xe50914)
         .setTitle('📊 Tygodniowe podsumowanie serwera')
         .addFields(
-          { name: '💬 Wiadomości', value: s.m.toLocaleString('pl-PL'), inline: true },
-          { name: '🎙️ Minuty voice', value: s.v.toLocaleString('pl-PL'), inline: true },
+          {
+            name: '💬 Wiadomości',
+            value: `${s.m.toLocaleString('pl-PL')}  ${trendLabel(trend(s.m, p.m))}`,
+            inline: true,
+          },
+          {
+            name: '🎙️ Minuty voice',
+            value: `${s.v.toLocaleString('pl-PL')}  ${trendLabel(trend(s.v, p.v))}`,
+            inline: true,
+          },
           {
             name: '👥 Wzrost',
             value: `+${s.j} / -${s.l} (netto ${net >= 0 ? '+' : ''}${net})`,

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-594-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.524.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-595-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.525.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.525.0] — 📈 Analityka: benchmarking trendu tydzień-do-tygodnia w digescie
+
+- `[#595]` 📈 **Trend okres-do-okresu w digescie** — tygodniowe podsumowanie pokazuje teraz nie tylko surowe liczby, ale i **trend vs poprzedni tydzień**: digest dociąga drugie okno (`activity_daily`, dni −14…−7) i przy „💬 Wiadomości" oraz „🎙️ Minuty voice" dokleja etykietę trendu (▲ +15% / ▼ −8% / ▬ 0% / 🆕 +N bez bazy). Czyste, otestowane `trend` (Δ, % zmiany null-safe gdy poprzednio 0, strzałka) i `trendLabel` ([`digest.mts`](bot/src/analytics/digest.mts)). Widać od razu, czy serwer rośnie czy cichnie.
+  - **Testy:** `digest.test.ts` +6 (`trend`: wzrost / spadek / brak zmian / brak bazy bez dzielenia przez 0 · `trendLabel`: z bazą / bez bazy) → **1067/1067**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.524.0] — 🎭 Panel: konfigurator ról za tiery battle-passa (tier→rola)
 
