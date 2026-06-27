@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-574-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.504.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-575-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.505.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.505.0] — 🎛️ Redesign „Dowództwo" (krok 3): Auto-role + podgląd ról
+
+- `[#575]` 🎛️ **Dowództwo na panelu Auto-role** — [`/roles`](dashboard/app/roles/page.tsx): status-pill w nagłówku i przy sekcji „Reaction roles" (aktywne, gdy są mapowania) + karta **podglądu na Discordzie** (`cmd-embed`) z realnymi rolami — przyciski ról z nazwą i **kolorem roli z Discorda** (bez emoji, zgodnie z systemem; cap 10). Reużyte prymitywy + `StatusPill` + `ui.cmd.preview` (zero nowych stringów). Sekcje panel/menu ról bez zmian.
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **995/995** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.504.0] — 🎛️ Redesign „Dowództwo" (krok 2): Tickety + wspólny StatusPill
 
