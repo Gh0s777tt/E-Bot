@@ -11,6 +11,7 @@ import {
   MIN_CLAN_NAME,
   normalizeClanName,
   sortClansByBank,
+  transferError,
 } from './clans.mts';
 
 const clan = (o: Partial<Clan>): Clan => ({
@@ -94,5 +95,23 @@ describe('donationError', () => {
   it('przepuszcza poprawną dotację (≤ portfel)', () => {
     expect(donationError(1000, 1000)).toBeNull();
     expect(donationError(250, 1000)).toBeNull();
+  });
+});
+
+describe('transferError — przekazanie przywództwa', () => {
+  it('tylko lider może przekazać', () => {
+    expect(transferError('owner', 'ktos', 'cel', true)).toBe('notOwner');
+  });
+
+  it('nie można przekazać samemu sobie (cel = obecny lider)', () => {
+    expect(transferError('owner', 'owner', 'owner', true)).toBe('self');
+  });
+
+  it('cel musi należeć do klanu', () => {
+    expect(transferError('owner', 'owner', 'obcy', false)).toBe('notMember');
+  });
+
+  it('poprawne przekazanie liderowi → null', () => {
+    expect(transferError('owner', 'owner', 'czlonek', true)).toBeNull();
   });
 });

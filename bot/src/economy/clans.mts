@@ -63,6 +63,20 @@ export function donationError(amount: number, wallet: number): 'amount' | 'funds
   return null;
 }
 
+// Walidacja przekazania przywództwa: 'notOwner' = wykonawca nie jest liderem, 'self' = cel już jest
+// liderem, 'notMember' = cel nie należy do tego klanu. null = można przekazać.
+export function transferError(
+  ownerId: string,
+  actorId: string,
+  targetId: string,
+  targetIsMember: boolean,
+): 'notOwner' | 'self' | 'notMember' | null {
+  if (actorId !== ownerId) return 'notOwner';
+  if (targetId === ownerId) return 'self';
+  if (!targetIsMember) return 'notMember';
+  return null;
+}
+
 // ── IO (Supabase, graceful no-op bez chmury) ─────────────────────────────────────────────────────
 export async function getClan(guildId: string, id: string): Promise<Clan | null> {
   if (!hasCloud()) return null;

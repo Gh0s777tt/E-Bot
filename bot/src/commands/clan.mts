@@ -27,6 +27,7 @@ import {
   removeMember,
   saveClan,
   sortClansByBank,
+  transferError,
 } from '../economy/clans.mts';
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
@@ -82,7 +83,15 @@ export const data = new SlashCommandBuilder()
         o.setName('kwota').setDescription('Ile wpłacić').setRequired(true).setMinValue(1),
       ),
   )
-  .addSubcommand((s) => s.setName('disband').setDescription('Rozwiąż klan (tylko lider).'));
+  .addSubcommand((s) => s.setName('disband').setDescription('Rozwiąż klan (tylko lider).'))
+  .addSubcommand((s) =>
+    s
+      .setName('transfer')
+      .setDescription('Przekaż przywództwo klanu innemu członkowi (tylko lider).')
+      .addUserOption((o) =>
+        o.setName('uzytkownik').setDescription('Nowy lider (członek klanu)').setRequired(true),
+      ),
+  );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
@@ -210,6 +219,38 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     }
     await removeClan(gid, clan.id);
     await interaction.reply(t(locale, 'clan.disbanded', { name: clan.name }));
+    return;
+  }
+
+  if (sub === 'transfer') {
+    if (!membership) {
+      await interaction.reply(eph(t(locale, 'clan.notInClan')));
+      return;
+    }
+    const clan = await getClan(gid, membership.clan_id);
+    if (!clan) {
+      await interaction.reply(eph(t(locale, 'clan.notInClan')));
+      return;
+    }
+    const target = interaction.options.getUser('uzytkownik', true);
+    const targetMembership = await getMembership(gid, target.id);
+    const isMember = targetMembership?.clan_id === clan.id;
+    const err = transferError(clan.owner_id, uid, target.id, isMember);
+    if (err === 'notOwner') {
+      await interaction.reply(eph(t(locale, 'clan.notOwner')));
+      return;
+    }
+    if (err === 'self') {
+      await interaction.reply(eph(t(locale, 'clan.transferSelf')));
+      return;
+    }
+    if (err === 'notMember') {
+      await interaction.reply(eph(t(locale, 'clan.transferNotMember', { name: clan.name })));
+      return;
+    }
+    clan.owner_id = target.id;
+    await saveClan(clan);
+    await interaction.reply(t(locale, 'clan.transferred', { name: clan.name, owner: target.id }));
     return;
   }
 

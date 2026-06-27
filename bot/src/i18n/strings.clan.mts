@@ -31,6 +31,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Za mało środków — chcesz wpłacić {amount}, masz {wallet}.',
     'clan.donated': '🏦 Wpłacono {amount} do banku klanu **{name}**. Stan banku: {bank}.',
     'clan.disbanded': '💥 Rozwiązano klan **{name}**.',
+    'clan.transferred': '👑 Nowy lider klanu **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Już jesteś liderem tego klanu.',
+    'clan.transferNotMember': '❓ Ta osoba nie należy do klanu **{name}**.',
     'clan.notOwner': '🚫 Tylko lider klanu może to zrobić.',
   },
   en: {
@@ -61,6 +64,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
       '💸 Not enough funds — you want to donate {amount}, but you have {wallet}.',
     'clan.donated': '🏦 Donated {amount} to the **{name}** clan bank. Bank balance: {bank}.',
     'clan.disbanded': '💥 Clan **{name}** disbanded.',
+    'clan.transferred': '👑 New leader of clan **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 You are already the leader of this clan.',
+    'clan.transferNotMember': '❓ That person is not in the clan **{name}**.',
     'clan.notOwner': '🚫 Only the clan leader can do this.',
   },
   de: {
@@ -93,6 +99,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
       '💸 Nicht genug Guthaben — du willst {amount} spenden, hast aber {wallet}.',
     'clan.donated': '🏦 {amount} an die Clan-Bank von **{name}** gespendet. Bankstand: {bank}.',
     'clan.disbanded': '💥 Clan **{name}** aufgelöst.',
+    'clan.transferred': '👑 Neuer Anführer des Clans **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Du bist bereits der Anführer dieses Clans.',
+    'clan.transferNotMember': '❓ Diese Person ist nicht im Clan **{name}**.',
     'clan.notOwner': '🚫 Nur der Clan-Anführer kann das tun.',
   },
   es: {
@@ -121,6 +130,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Fondos insuficientes: quieres donar {amount}, pero tienes {wallet}.',
     'clan.donated': '🏦 Donaste {amount} al banco del clan **{name}**. Saldo del banco: {bank}.',
     'clan.disbanded': '💥 Clan **{name}** disuelto.',
+    'clan.transferred': '👑 Nuevo líder del clan **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Ya eres el líder de este clan.',
+    'clan.transferNotMember': '❓ Esa persona no pertenece al clan **{name}**.',
     'clan.notOwner': '🚫 Solo el líder del clan puede hacer esto.',
   },
   it: {
@@ -148,6 +160,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Fondi insufficienti: vuoi donare {amount}, ma hai {wallet}.',
     'clan.donated': '🏦 Hai donato {amount} alla banca del clan **{name}**. Saldo banca: {bank}.',
     'clan.disbanded': '💥 Clan **{name}** sciolto.',
+    'clan.transferred': '👑 Nuovo leader del clan **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Sei già il leader di questo clan.',
+    'clan.transferNotMember': '❓ Questa persona non fa parte del clan **{name}**.',
     'clan.notOwner': '🚫 Solo il leader del clan può farlo.',
   },
   fr: {
@@ -179,6 +194,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Fonds insuffisants : tu veux donner {amount}, mais tu as {wallet}.',
     'clan.donated': '🏦 Tu as donné {amount} à la banque du clan **{name}**. Solde : {bank}.',
     'clan.disbanded': '💥 Clan **{name}** dissous.',
+    'clan.transferred': '👑 Nouveau chef du clan **{name}** : <@{owner}>.',
+    'clan.transferSelf': '👑 Tu es déjà le chef de ce clan.',
+    'clan.transferNotMember': "❓ Cette personne n'est pas dans le clan **{name}**.",
     'clan.notOwner': '🚫 Seul le chef du clan peut faire cela.',
   },
   pt: {
@@ -207,6 +225,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Saldo insuficiente — você quer doar {amount}, mas tem {wallet}.',
     'clan.donated': '🏦 Você doou {amount} ao banco do clã **{name}**. Saldo do banco: {bank}.',
     'clan.disbanded': '💥 Clã **{name}** dissolvido.',
+    'clan.transferred': '👑 Novo líder do clã **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Você já é o líder deste clã.',
+    'clan.transferNotMember': '❓ Essa pessoa não está no clã **{name}**.',
     'clan.notOwner': '🚫 Apenas o líder do clã pode fazer isso.',
   },
   zh: {
@@ -233,6 +254,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 余额不足——你想捐赠 {amount}，但只有 {wallet}。',
     'clan.donated': '🏦 已向战队 **{name}** 金库捐赠 {amount}。当前金库：{bank}。',
     'clan.disbanded': '💥 已解散战队 **{name}**。',
+    'clan.transferred': '👑 战队 **{name}** 的新队长：<@{owner}>。',
+    'clan.transferSelf': '👑 你已经是这个战队的队长了。',
+    'clan.transferNotMember': '❓ 该成员不在战队 **{name}** 中。',
     'clan.notOwner': '🚫 只有队长才能这么做。',
   },
   ko: {
@@ -261,6 +285,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 잔액이 부족해요 — {amount} 기부를 원하지만 {wallet} 보유 중.',
     'clan.donated': '🏦 클랜 **{name}** 금고에 {amount} 기부했어요. 금고 잔액: {bank}.',
     'clan.disbanded': '💥 클랜 **{name}** 을(를) 해산했어요.',
+    'clan.transferred': '👑 클랜 **{name}** 의 새 리더: <@{owner}>.',
+    'clan.transferSelf': '👑 이미 이 클랜의 리더예요.',
+    'clan.transferNotMember': '❓ 그 사람은 클랜 **{name}** 소속이 아니에요.',
     'clan.notOwner': '🚫 클랜 리더만 할 수 있어요.',
   },
   ru: {
@@ -289,6 +316,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Недостаточно средств — хочешь внести {amount}, а есть {wallet}.',
     'clan.donated': '🏦 Внесено {amount} в банк клана **{name}**. Баланс банка: {bank}.',
     'clan.disbanded': '💥 Клан **{name}** распущен.',
+    'clan.transferred': '👑 Новый лидер клана **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Ты уже лидер этого клана.',
+    'clan.transferNotMember': '❓ Этот человек не состоит в клане **{name}**.',
     'clan.notOwner': '🚫 Только лидер клана может это сделать.',
   },
   uk: {
@@ -317,6 +347,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 Недостатньо коштів — хочеш внести {amount}, а маєш {wallet}.',
     'clan.donated': '🏦 Внесено {amount} до банку клану **{name}**. Баланс банку: {bank}.',
     'clan.disbanded': '💥 Клан **{name}** розпущено.',
+    'clan.transferred': '👑 Новий лідер клану **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Ти вже лідер цього клану.',
+    'clan.transferNotMember': '❓ Ця особа не належить до клану **{name}**.',
     'clan.notOwner': '🚫 Лише лідер клану може це зробити.',
   },
   ja: {
@@ -348,6 +381,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 残高不足 — {amount} を寄付したいですが {wallet} しかありません。',
     'clan.donated': '🏦 クラン **{name}** の金庫に {amount} を寄付しました。金庫残高: {bank}。',
     'clan.disbanded': '💥 クラン **{name}** を解散しました。',
+    'clan.transferred': '👑 クラン **{name}** の新リーダー: <@{owner}>。',
+    'clan.transferSelf': '👑 すでにこのクランのリーダーです。',
+    'clan.transferNotMember': '❓ その人はクラン **{name}** に所属していません。',
     'clan.notOwner': '🚫 クランリーダーのみ実行できます。',
   },
   ar: {
@@ -375,6 +411,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
     'clan.donateNoFunds': '💸 رصيد غير كافٍ — تريد التبرع بـ {amount}، لكن لديك {wallet}.',
     'clan.donated': '🏦 تبرعت بـ {amount} لخزينة العشيرة **{name}**. رصيد الخزينة: {bank}.',
     'clan.disbanded': '💥 تم حلّ العشيرة **{name}**.',
+    'clan.transferred': '👑 القائد الجديد للعشيرة **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 أنت بالفعل قائد هذه العشيرة.',
+    'clan.transferNotMember': '❓ هذا الشخص ليس في العشيرة **{name}**.',
     'clan.notOwner': '🚫 قائد العشيرة فقط يمكنه فعل ذلك.',
   },
   id: {
@@ -404,6 +443,9 @@ export const CLAN_STRINGS: Record<Locale, Dict> = {
       '💸 Saldo tidak cukup — kamu ingin donasi {amount}, tetapi punya {wallet}.',
     'clan.donated': '🏦 Kamu mendonasikan {amount} ke bank klan **{name}**. Saldo bank: {bank}.',
     'clan.disbanded': '💥 Klan **{name}** dibubarkan.',
+    'clan.transferred': '👑 Pemimpin baru klan **{name}**: <@{owner}>.',
+    'clan.transferSelf': '👑 Kamu sudah menjadi pemimpin klan ini.',
+    'clan.transferNotMember': '❓ Orang itu tidak tergabung di klan **{name}**.',
     'clan.notOwner': '🚫 Hanya pemimpin klan yang bisa melakukan ini.',
   },
 };

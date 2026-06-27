@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-590-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.520.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-591-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.521.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.521.0] — 🛡️ Klany: `/clan transfer` (przekazanie przywództwa)
+
+- `[#591]` 👑 **`/clan transfer @user`** — domyka cykl życia klanu: lider przekazuje przywództwo innemu **członkowi** (po czym może opuścić klan zamiast go rozwiązywać). Czysta, otestowana `transferError` ([`clans.mts`](bot/src/economy/clans.mts)) waliduje trzy warunki: wykonawca jest liderem, cel ≠ obecny lider, cel należy do klanu. i18n `clan.transferred`/`transferSelf`/`transferNotMember` ×14.
+  - **Testy:** `clans.test.ts` +4 (4 gałęzie `transferError`: notOwner / self / notMember / ok) → **1055/1055**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.520.0] — 🛡️ Klany/gildie: komenda `/clan` (create/join/leave/info/top/donate/disband)
 
