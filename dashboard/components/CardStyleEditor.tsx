@@ -2,7 +2,7 @@
 
 // Faza 7 / F2 — edytor stylu karty/banera: gradient + czcionka + kolor tekstu + live-preview.
 // Podgląd używa prawdziwych webfontów (Google Fonts) tych samych rodzin, co bot renderuje w obrazie.
-import { useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import { CARD_FONTS, type CardStyle } from '../lib/cardStyle';
 import { tp } from '../lib/panelI18n';
 import ColorField from './ColorField';
@@ -60,10 +60,13 @@ export default function CardStyleEditor({
   value,
   onChange,
   previewText = 'GH0ST EMPIRE',
+  preview,
 }: {
   value: CardStyle;
   onChange: (s: CardStyle) => void;
   previewText?: string;
+  // Opcjonalny bogatszy podgląd (np. pełna karta rangi) — zastępuje domyślny swatch gradientu.
+  preview?: ReactNode;
 }) {
   const { lang } = useLang();
   useEffect(() => {
@@ -77,17 +80,19 @@ export default function CardStyleEditor({
 
   return (
     <div className="space-y-4">
-      <div
-        className="flex h-28 items-center justify-center rounded-xl border border-line"
-        style={{ background: `linear-gradient(${value.angle}deg, ${value.from}, ${value.to})` }}
-      >
-        <span
-          className="text-3xl font-bold"
-          style={{ color: value.textColor, fontFamily: `'${value.font}', sans-serif` }}
+      {preview ?? (
+        <div
+          className="flex h-28 items-center justify-center rounded-xl border border-line"
+          style={{ background: `linear-gradient(${value.angle}deg, ${value.from}, ${value.to})` }}
         >
-          {previewText}
-        </span>
-      </div>
+          <span
+            className="text-3xl font-bold"
+            style={{ color: value.textColor, fontFamily: `'${value.font}', sans-serif` }}
+          >
+            {previewText}
+          </span>
+        </div>
+      )}
 
       <div className="space-y-1">
         <span className="text-xs text-muted">{tp(lang, 'ui.cardstyle.themesLabel')}</span>

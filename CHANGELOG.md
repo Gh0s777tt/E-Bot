@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-581-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.511.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-582-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.512.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.512.0] — 🖼️ /appearance: realistyczny live-preview KARTY rangi (avatar + poziom + pasek XP)
+
+- `[#582]` 🖼️ **Pełny podgląd karty rangi na żywo** — `/appearance` ([`RankCardForm`](dashboard/components/RankCardForm.tsx)) pokazuje teraz **realistyczną kartę rangi** (avatar + nick + poziom + pasek XP), a nie tylko swatch gradientu — aktualizuje się na żywo przy zmianie gradientu/czcionki/koloru/motywu. Współdzielony [`CardStyleEditor`](dashboard/components/CardStyleEditor.tsx) dostał opcjonalny prop `preview` (zastępuje domyślny swatch; powitania zostają na swatchu — bez regresji). Etykiety LVL/XP/# uniwersalne (zero nowych stringów). *(Audyt błędnie zgłaszał „brak live-preview" — swatch istniał; tu podniesiona wierność do pełnej karty.)*
+  - **Bramki:** dashboard `tsc` · Biome · pełny zestaw **1015/1015** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.511.0] — 🔌 „Testuj połączenia" — realne pingi integracji (Discord · Supabase · AI)
 
