@@ -2,10 +2,12 @@
 # Pre-commit: pilnuje synchronizacji dokumentacji ↔ CHANGELOG (scripts/check-docs-sync.mjs).
 # Aktywacja (raz na klon repo):  git config core.hooksPath scripts/hooks
 # Pominięcie awaryjne:           git commit --no-verify
-node scripts/check-docs-sync.mjs || {
+node scripts/check-docs-sync.mjs \
+  && node scripts/check-schema-sync.mjs \
+  && node scripts/check-env-sync.mjs || {
   echo "" >&2
-  echo "✗ pre-commit: dokumentacja nie jest zsynchronizowana z CHANGELOG (patrz wyżej)." >&2
-  echo "  → Zaktualizuj README.md, docs/PHASES.md, docs/ROADMAP.md + markery SYNC." >&2
+  echo "✗ pre-commit: rozjazd synchronizacji (docs↔CHANGELOG / _ALL.sql↔schematy / .env.example↔process.env)." >&2
+  echo "  → Napraw wg komunikatu wyżej (markery SYNC / scal tabelę do _ALL.sql / dodaj klucz do .env.example)." >&2
   echo "  → Albo pomiń awaryjnie: git commit --no-verify" >&2
   exit 1
 }

@@ -6,8 +6,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node scripts/check-docs-sync.mjs",
-            "statusMessage": "Sprawdzam synchronizację dokumentacji…",
+            "command": "node scripts/check-docs-sync.mjs && node scripts/check-schema-sync.mjs && node scripts/check-env-sync.mjs",
+            "statusMessage": "Sprawdzam synchronizację (docs · schemat · env)…",
             "timeout": 30
           }
         ]

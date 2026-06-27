@@ -19,13 +19,13 @@ jobs:
     name: Lint · Typecheck · Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node 26
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 26
           cache: pnpm
@@ -33,8 +33,18 @@ jobs:
       - name: Docs sync (PHASES/ROADMAP/README ↔ CHANGELOG)
         run: node scripts/check-docs-sync.mjs
 
+      - name: Schema sync (_ALL.sql ↔ pliki per-feature)
+        run: node scripts/check-schema-sync.mjs
+
+      - name: Env sync (.env.example ↔ process.env)
+        run: node scripts/check-env-sync.mjs
+
       - name: Install (frozen lockfile)
         run: pnpm install --frozen-lockfile
+
+      - name: Audyt zależności (pnpm audit — informacyjnie)
+        run: pnpm audit --audit-level moderate
+        continue-on-error: true
 
       - name: Lint (Biome)
         run: pnpm exec biome ci dashboard web bot

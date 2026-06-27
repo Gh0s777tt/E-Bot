@@ -29,7 +29,7 @@ Konwencja CHANGELOG: najnowsze na górze · `## [wersja] — tytuł` · punkty `
 
 ## ✅ Bramki jakości (zanim powiesz „gotowe")
 
-- `pnpm check` (Biome) · `pnpm typecheck` · **`pnpm docs:check`**
+- `pnpm check` (Biome) · `pnpm typecheck` · **`pnpm docs:check`** · **`pnpm schema:check`** (`_ALL.sql` ↔ pliki per‑feature) · **`pnpm env:check`** (`.env.example` ↔ `process.env`) — zbiorczo: **`pnpm sync:check`**
 - Panel: `dashboard` `tsc` exit 0.
 - i18n: zachowuj **parzystość kluczy × 14 języków** (PL bazowo, fallback → EN → PL); marki i tokeny (`/komendy`, `{placeholdery}`, nazwy usług) nietłumaczone.
 

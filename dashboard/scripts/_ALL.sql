@@ -538,5 +538,123 @@ alter table ai_usage add primary key (guild_id, user_id, day);
 create index if not exists ai_usage_guild_day on ai_usage (guild_id, day);
 
 -- ═══════════════════════════════════════════════════════════════════════════
+-- M1 Marketplace (multi-guild) + Etap-J ekonomia 2.0 — SCALONE do _ALL.sql (v0.464+).
+-- Wcześniej tylko w plikach per-feature → brak tu = ciche 404 z PostgREST (utrata funkcji).
+-- Definicje WIERNE źródłom; pilnowane przez scripts/check-schema-sync.mjs.
+-- ═══════════════════════════════════════════════════════════════════════════
+
+-- ── M1: marketplace + multi-guild (źródło: m1-marketplace-schema.sql) ──
+create table if not exists guilds (
+  guild_id           text primary key,
+  name               text,
+  tier               text not null default 'free',
+  stripe_customer_id text,
+  stripe_sub_id      text,
+  created_at         timestamptz not null default now()
+);
+
+create table if not exists guild_members (
+  guild_id   text not null references guilds(guild_id) on delete cascade,
+  discord_id text not null,
+  role       text not null default 'viewer',
+  created_at timestamptz not null default now(),
+  primary key (guild_id, discord_id)
+);
+create index if not exists guild_members_discord_idx on guild_members(discord_id);
+
+create table if not exists plugins (
+  key           text primary key,
+  title         text not null,
+  description   text,
+  source        text not null default 'first_party',
+  author_id     text,
+  tier_required text not null default 'free',
+  manifest      jsonb,
+  review_status text not null default 'approved',
+  created_at    timestamptz not null default now()
+);
+create index if not exists plugins_source_idx on plugins(source);
+
+create table if not exists guild_plugins (
+  guild_id   text not null references guilds(guild_id) on delete cascade,
+  plugin_key text not null references plugins(key) on delete cascade,
+  enabled    boolean not null default false,
+  enabled_at timestamptz,
+  primary key (guild_id, plugin_key)
+);
+
+create table if not exists plugin_config (
+  guild_id   text not null references guilds(guild_id) on delete cascade,
+  plugin_key text not null references plugins(key) on delete cascade,
+  config     jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now(),
+  primary key (guild_id, plugin_key)
+);
+
+-- ── Etap-J: log transakcji + giełda + karty + pety + role czasowe (źródło: economy-tx / etapj-*) ──
+create table if not exists economy_tx (
+  id          bigint generated always as identity primary key,
+  guild_id    text        not null,
+  user_id     text        not null,
+  delta       bigint      not null,
+  reason      text        not null,
+  created_at  timestamptz not null default now()
+);
+create index if not exists economy_tx_user_idx on economy_tx (user_id, created_at desc);
+alter table economy_tx enable row level security;
+
+create table if not exists economy_stocks (
+  guild_id text    not null,
+  user_id  text    not null,
+  symbol   text    not null,
+  shares   integer not null default 0,
+  invested bigint  not null default 0,
+  primary key (guild_id, user_id, symbol)
+);
+alter table economy_stocks enable row level security;
+
+create table if not exists economy_cards (
+  guild_id text    not null,
+  user_id  text    not null,
+  card_id  text    not null,
+  qty      integer not null default 0,
+  primary key (guild_id, user_id, card_id)
+);
+alter table economy_cards enable row level security;
+
+create table if not exists economy_card_daily (
+  guild_id  text        not null,
+  user_id   text        not null,
+  last_pull timestamptz not null,
+  primary key (guild_id, user_id)
+);
+alter table economy_card_daily enable row level security;
+
+create table if not exists economy_pets (
+  guild_id  text        not null,
+  user_id   text        not null,
+  species   text        not null,
+  name      text        not null,
+  xp        integer     not null default 0,
+  last_fed  timestamptz,
+  last_gift timestamptz,
+  primary key (guild_id, user_id)
+);
+alter table economy_pets enable row level security;
+
+-- role czasowe ze sklepu (+ kolumna duration_days na economy_shop)
+alter table economy_shop add column if not exists duration_days integer;
+create table if not exists temp_roles (
+  id         uuid        not null default gen_random_uuid(),
+  guild_id   text        not null,
+  user_id    text        not null,
+  role_id    text        not null,
+  expires_at timestamptz not null,
+  primary key (id)
+);
+create index if not exists temp_roles_expires_idx on temp_roles (expires_at);
+alter table temp_roles enable row level security;
+
+-- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

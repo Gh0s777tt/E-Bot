@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-533-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.463.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-534-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.464.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.464.0] — 🧱🛡️ Strażniki driftu (schema + env) + kompletny _ALL.sql i .env.example + CI
+
+- `[#534]` 🧱 **Dwa nowe strażniki „zero driftu" (lustro `check-docs-sync`)** — zamykają dwa najbardziej ryzykowne obszary repo, które dotąd nie miały automatu:
+  - **`check-schema-sync.mjs`** (`pnpm schema:check`) — pilnuje, by KAŻDA tabela z plików per-feature była w `_ALL.sql`. **Naprawiona luka:** scalono **11 brakujących tabel** (M1: `guilds`/`guild_members`/`plugins`/`guild_plugins`/`plugin_config` + Etap-J: `economy_tx`/`economy_stocks`/`economy_cards`/`economy_card_daily`/`economy_pets`/`temp_roles`) do [`_ALL.sql`](dashboard/scripts/_ALL.sql) — wcześniej operator dostawał ciche 404 z PostgREST (utrata funkcji bez crasha).
+  - **`check-env-sync.mjs`** (`pnpm env:check`) — pilnuje, by KAŻDA `process.env.X` z kodu była w `.env.example`. **Naprawiona luka:** dodano **24 nieudokumentowane zmienne** (m.in. `SUPABASE_*`, `AUTH_SECRET`, `DASHBOARD_OWNER_IDS` — bez nich panel/chmura nie startują) do [`.env.example`](.env.example).
+  - **Egzekwowane w 3 warstwach** (jak docs): CI · git pre-commit · Stop-hook Claude. Zbiorczo: `pnpm sync:check`.
+  - **CI:** akcje GHA → v6 (checkout / setup-node / pnpm-action-setup) + `pnpm audit` (informacyjnie). Zastępuje przestarzałą gałąź dependabota (cofnęłaby `workflow_dispatch` + krok docs-sync).
+  - **Bramki:** `pnpm sync:check` (docs+schema+env) · `pnpm lint` · `pnpm typecheck` (4 pakiety) · `pnpm test` **910/910** — exit 0 (Node 26.4.0).
 
 ## [0.463.0] — ⬆️ Aktualizacja zależności do najnowszych (Next 16.2.9 · Biome 2.5.1 · Supabase 2.108.2 · …)
 
