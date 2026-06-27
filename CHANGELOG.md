@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-568-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.498.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-569-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.499.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.499.0] — 🗂️ Dziennik zmian jako zwijana lista pogrupowana po dniach
+
+- `[#569]` 🗂️ **Zwijany audyt** — `/audit` ([`AuditLog`](dashboard/components/AuditLog.tsx)) zamiast płaskiej tabeli 100 wierszy pokazuje teraz **akordeon pogrupowany po dniach**: domyślnie otwarty tylko najnowszy dzień, reszta zwinięta (koniec przewijania w nieskończoność). Każdy dzień = nagłówek z lokalizowaną datą + licznikiem wpisów + chevronem; w środku godzina · autor · obszar · szczegóły. Grupowanie czystą, otestowaną [`groupAuditByDay`](dashboard/lib/auditGroup.ts) (klient-safe; brak `created_at` → koszyk 'unknown'; zero gubienia/duplikatów). Bez nowych kluczy i18n (reużyte `ui.audit.*`).
+  - **Testy:** nowy `auditGroup.test.ts` +5 (kolejność dni wg pierwszego wystąpienia / brak gubienia / dni nieprzylegające do tej samej grupy / 'unknown' / pusty) → **995/995** (133 pliki). Bramki: dashboard `tsc` · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.498.0] — 🛍️ Marketplace: klik w kafelek otwiera panel modułu (stretched-link)
 
