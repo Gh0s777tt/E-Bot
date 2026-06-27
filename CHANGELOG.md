@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-565-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.495.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-566-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.496.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.496.0] — 🔧 Asystent panelu: przycisk „Zastosuj" (UI egzekucji) + i18n ×14
+
+- `[#566]` 🔧 **Egzekucja z asystenta — UI** (domyka #565) — [`Assistant`](dashboard/components/Assistant.tsx) renderuje teraz proponowane akcje jako „✅/🚫 [moduł] · [Zastosuj]". Klik → POST do istniejącego, **autoryzowanego + audytowanego** `/api/modules` (ta sama ścieżka co ręczny toggle); stan per-akcja (busy/ok/err). **Nigdy auto-zapis** — zawsze świadomy klik. i18n ×14 (`applyHeader`/`apply`/`applied`), komplet wymuszony typem `AssistantContent`. Efekt: zapytaj „jak ustawić X" → włącz to jednym kliknięciem, bez opuszczania czatu.
+  - **Bramki:** dashboard `tsc` (egzekwuje parzystość ×14) · Biome · pełny zestaw **986/986** — exit 0 (Node 26.4.0). *(Live: pełny przepływ wymaga zalogowanego panelu + klucza AI — zweryfikowane typami + testami `parseActions`/`parseReply`.)*
 
 ## [0.495.0] — 🔐 Asystent panelu: bezpieczne akcje (backend) — propozycje toggle modułu
 

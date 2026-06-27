@@ -15,6 +15,9 @@ export type AssistantContent = {
   open: string; // prefiks linku „Otwórz <strona>"
   askAnother: string; // reset rozmowy
   placeholder: string; // placeholder pola tekstowego
+  applyHeader: string; // nagłówek sekcji proponowanych akcji
+  apply: string; // przycisk „Zastosuj"
+  applied: string; // potwierdzenie po zastosowaniu
 };
 
 export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
@@ -36,6 +39,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Otwórz',
     askAnother: '↺ Zapytaj o coś innego',
     placeholder: 'Opisz, czego chcesz…',
+    applyHeader: 'Proponowane zmiany — kliknij, aby zastosować',
+    apply: 'Zastosuj',
+    applied: '✓ Zastosowano',
   },
   en: {
     tooltip: 'Assistant — describe what you want',
@@ -55,6 +61,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Open',
     askAnother: '↺ Ask about something else',
     placeholder: 'Describe what you want…',
+    applyHeader: 'Proposed changes — click to apply',
+    apply: 'Apply',
+    applied: '✓ Applied',
   },
   de: {
     tooltip: 'Assistent — beschreibe, was du willst',
@@ -74,6 +83,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Öffnen',
     askAnother: '↺ Etwas anderes fragen',
     placeholder: 'Beschreibe, was du willst…',
+    applyHeader: 'Vorgeschlagene Änderungen — zum Anwenden klicken',
+    apply: 'Anwenden',
+    applied: '✓ Angewendet',
   },
   es: {
     tooltip: 'Asistente — describe lo que quieres',
@@ -93,6 +105,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Abrir',
     askAnother: '↺ Preguntar otra cosa',
     placeholder: 'Describe lo que quieres…',
+    applyHeader: 'Cambios propuestos — haz clic para aplicar',
+    apply: 'Aplicar',
+    applied: '✓ Aplicado',
   },
   it: {
     tooltip: 'Assistente — descrivi cosa vuoi',
@@ -112,6 +127,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Apri',
     askAnother: '↺ Chiedi qualcos’altro',
     placeholder: 'Descrivi cosa vuoi…',
+    applyHeader: 'Modifiche proposte — clicca per applicare',
+    apply: 'Applica',
+    applied: '✓ Applicato',
   },
   fr: {
     tooltip: 'Assistant — décris ce que tu veux',
@@ -131,6 +149,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Ouvrir',
     askAnother: '↺ Demander autre chose',
     placeholder: 'Décris ce que tu veux…',
+    applyHeader: 'Modifications proposées — clique pour appliquer',
+    apply: 'Appliquer',
+    applied: '✓ Appliqué',
   },
   pt: {
     tooltip: 'Assistente — descreva o que quer',
@@ -150,6 +171,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Abrir',
     askAnother: '↺ Perguntar outra coisa',
     placeholder: 'Descreva o que quer…',
+    applyHeader: 'Alterações propostas — clica para aplicar',
+    apply: 'Aplicar',
+    applied: '✓ Aplicado',
   },
   zh: {
     tooltip: '助手——描述你想要的',
@@ -168,6 +192,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: '打开',
     askAnother: '↺ 问点别的',
     placeholder: '描述你想要的……',
+    applyHeader: '建议的更改 — 点击应用',
+    apply: '应用',
+    applied: '✓ 已应用',
   },
   ko: {
     tooltip: '어시스턴트 — 원하는 것을 설명하세요',
@@ -187,6 +214,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: '열기',
     askAnother: '↺ 다른 것 물어보기',
     placeholder: '원하는 것을 설명하세요…',
+    applyHeader: '제안된 변경 — 클릭하여 적용',
+    apply: '적용',
+    applied: '✓ 적용됨',
   },
   ru: {
     tooltip: 'Ассистент — опишите, что хотите',
@@ -206,6 +236,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Открыть',
     askAnother: '↺ Спросить о другом',
     placeholder: 'Опишите, что хотите…',
+    applyHeader: 'Предлагаемые изменения — нажмите, чтобы применить',
+    apply: 'Применить',
+    applied: '✓ Применено',
   },
   uk: {
     tooltip: 'Асистент — опишіть, що хочете',
@@ -225,6 +258,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Відкрити',
     askAnother: '↺ Запитати про інше',
     placeholder: 'Опишіть, що хочете…',
+    applyHeader: 'Запропоновані зміни — натисніть, щоб застосувати',
+    apply: 'Застосувати',
+    applied: '✓ Застосовано',
   },
   ja: {
     tooltip: 'アシスタント — やりたいことを説明',
@@ -243,6 +279,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: '開く',
     askAnother: '↺ 別のことを聞く',
     placeholder: 'やりたいことを説明…',
+    applyHeader: '提案された変更 — クリックして適用',
+    apply: '適用',
+    applied: '✓ 適用済み',
   },
   ar: {
     tooltip: 'المساعد — صف ما تريد',
@@ -261,6 +300,9 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'فتح',
     askAnother: '↺ اسأل عن شيء آخر',
     placeholder: 'صف ما تريد…',
+    applyHeader: 'التغييرات المقترحة — انقر للتطبيق',
+    apply: 'تطبيق',
+    applied: '✓ تم التطبيق',
   },
   id: {
     tooltip: 'Asisten — jelaskan yang kamu mau',
@@ -280,5 +322,8 @@ export const ASSISTANT_I18N: Record<PanelLocale, AssistantContent> = {
     open: 'Buka',
     askAnother: '↺ Tanya hal lain',
     placeholder: 'Jelaskan yang kamu mau…',
+    applyHeader: 'Perubahan yang disarankan — klik untuk menerapkan',
+    apply: 'Terapkan',
+    applied: '✓ Diterapkan',
   },
 };

@@ -10,7 +10,8 @@ import { ASSISTANT_I18N } from '../lib/assistantI18n';
 import { useLang } from './LangContext';
 
 type Step = { title: string; detail: string; href: string | null };
-type Reply = { ok: boolean; summary: string; steps: Step[]; error?: string };
+type Action = { type: 'toggleModule'; key: string; enabled: boolean; label: string };
+type Reply = { ok: boolean; summary: string; steps: Step[]; actions?: Action[]; error?: string };
 
 export default function Assistant() {
   const { lang } = useLang();
@@ -19,6 +20,7 @@ export default function Assistant() {
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
   const [reply, setReply] = useState<Reply | null>(null);
+  const [applied, setApplied] = useState<Record<string, 'busy' | 'ok' | 'err'>>({});
   const fabRef = useRef<HTMLButtonElement>(null);
 
   // A11y: Escape zamyka panel (non-modal popover — bez focus-trapu) i przywraca focus na FAB.
@@ -39,6 +41,7 @@ export default function Assistant() {
     if (!prompt || busy) return;
     setBusy(true);
     setReply(null);
+    setApplied({});
     try {
       const r = await fetch('/api/assistant', {
         method: 'POST',
@@ -50,6 +53,22 @@ export default function Assistant() {
       setReply({ ok: false, summary: '', steps: [], error: 'network' });
     }
     setBusy(false);
+  }
+
+  // Egzekucja akcji = TEN SAM endpoint co ręczny toggle (/api/modules: autoryzacja + walidacja + audyt).
+  // Asystent tylko proponuje; tu użytkownik ŚWIADOMIE zatwierdza pojedynczą zmianę jednym kliknięciem.
+  async function applyAction(act: Action): Promise<void> {
+    setApplied((s) => ({ ...s, [act.key]: 'busy' }));
+    try {
+      const r = await fetch('/api/modules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: act.key, enabled: act.enabled }),
+      });
+      setApplied((s) => ({ ...s, [act.key]: r.ok ? 'ok' : 'err' }));
+    } catch {
+      setApplied((s) => ({ ...s, [act.key]: 'err' }));
+    }
   }
 
   return (
@@ -139,11 +158,38 @@ export default function Assistant() {
                     </li>
                   ))}
                 </ol>
+                {!!reply.actions?.length && (
+                  <div className="space-y-2 rounded-md border border-accent/30 bg-accent/5 p-3">
+                    <p className="text-xs font-semibold text-accent">{a.applyHeader}</p>
+                    {reply.actions.map((act) => (
+                      <div key={act.key} className="flex items-center justify-between gap-2">
+                        <span className="text-xs text-white/90">
+                          {act.enabled ? '✅' : '🚫'} <strong>{act.label}</strong>
+                        </span>
+                        <button
+                          type="button"
+                          disabled={applied[act.key] === 'busy' || applied[act.key] === 'ok'}
+                          onClick={() => void applyAction(act)}
+                          className="shrink-0 rounded-md bg-accent px-2.5 py-1 text-xs font-semibold text-white transition hover:bg-accent-hover disabled:opacity-50"
+                        >
+                          {applied[act.key] === 'ok'
+                            ? a.applied
+                            : applied[act.key] === 'err'
+                              ? '⚠'
+                              : applied[act.key] === 'busy'
+                                ? '…'
+                                : a.apply}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={() => {
                     setReply(null);
                     setQ('');
+                    setApplied({});
                   }}
                   className="text-xs text-muted hover:text-accent"
                 >
