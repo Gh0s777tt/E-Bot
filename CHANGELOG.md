@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-543-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.473.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-544-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.474.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.474.0] — 🛡️ Anti-scam: zwodniczy @ w URL, punycode i skracacze w scanScam
+
+- `[#544]` 🛡️ **Twardszy skaner linków (`scanScam`)** — [`bot/src/lib/contentScan.mts`](bot/src/lib/contentScan.mts) łapie teraz 3 klasyczne wektory phishingu, których wcześniej nie widział: **userinfo przed `@`** (`discord.com@evil.ru` — „widzisz markę, trafiasz gdzie indziej"), **domeny punycode `xn--`** podszywające się pod markę oraz **skracacze URL** (bit.ly, tinyurl, cutt.ly…) maskujące cel przekierowania. Reguły miękkie (punycode, skracacze) odpalają **tylko** w kontekście „odbioru" (free/odbierz/wygrałeś/nitro…) — zero false-positive w automodzie na zwykłych linkach. Zasila flagowy „pokój dowodzenia" anti-raid.
+  - **Testy:** `contentScan.test.ts` +7 (wektory + negatywne na precyzję) → **916/916**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw — exit 0 (Node 26.4.0).
 
 ## [0.473.0] — ⚡ topActive: agregacja po stronie DB (RPC top_active) z fallbackiem na skan
 

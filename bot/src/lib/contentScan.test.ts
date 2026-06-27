@@ -50,6 +50,18 @@ describe('scanScam', () => {
   it('własna lista domen', () =>
     expect(scanScam('wejdź na http://zly.example/a', ['zly.example'])).toBeTruthy());
   it('brak linku → null', () => expect(scanScam('zwykła wiadomość bez linków')).toBeNull());
+  it('zwodniczy URL z @ (userinfo przed domeną)', () =>
+    expect(scanScam('zaloguj się https://discord.com@evil.ru/login')).toBeTruthy());
+  it('przepuszcza zwykłe userinfo bez domeny', () =>
+    expect(scanScam('repo https://user@github.com/a/b')).toBeNull());
+  it('domena punycode w kontekście odbioru', () =>
+    expect(scanScam('odbierz darmowe nitro https://xn--80ak6aa92e.com/claim')).toBeTruthy());
+  it('punycode bez kontekstu → null (precyzja)', () =>
+    expect(scanScam('moja strona https://xn--80ak6aa92e.com')).toBeNull());
+  it('skrócony link + wezwanie do działania', () =>
+    expect(scanScam('Gratulacje, wygrałeś nagrodę! Odbierz: https://bit.ly/abc')).toBeTruthy());
+  it('skrócony link bez wezwania → null (precyzja)', () =>
+    expect(scanScam('mój blog https://bit.ly/myblog')).toBeNull());
 });
 
 describe('findPII', () => {

@@ -72,6 +72,29 @@ const LEGIT_DISCORD = [
   'discord.gift',
 ];
 
+// Znane skracacze URL — maskują cel przekierowania. Same w sobie bywają legalne, więc traktujemy je
+// jako sygnał scamu DOPIERO w kontekście „odbioru" (claimCtx), by nie kasować zwykłych linków w automodzie.
+const URL_SHORTENERS = new Set([
+  'bit.ly',
+  'tinyurl.com',
+  'goo.gl',
+  't.co',
+  'ow.ly',
+  'is.gd',
+  'buff.ly',
+  'cutt.ly',
+  'rb.gy',
+  'shorturl.at',
+  'rebrand.ly',
+  't.ly',
+  'tiny.cc',
+  'bl.ink',
+  's.id',
+  'soo.gd',
+  'clck.ru',
+  'v.gd',
+]);
+
 function hostOf(url: string): string {
   try {
     const u = url.startsWith('http') ? url : `http://${url}`;
@@ -89,13 +112,29 @@ export function scanScam(text: string, customDomains: string[] = []): string | n
   const lower = text.toLowerCase();
   const urls = text.match(/\b(?:https?:\/\/|www\.)[^\s<>"')]+/gi) ?? [];
   const custom = customDomains.map((d) => d.toLowerCase().trim()).filter(Boolean);
+  // Kontekst „odbioru/marki" — podnosi precyzję miękkich reguł (punycode, skracacze): same w sobie
+  // bywają legalne, ale w parze z wezwaniem do działania to klasyczny phishing.
+  const claimCtx =
+    /(free|darmow\w*|za darmo|gratis|odbierz|claim|airdrop|wygra\w*|nagrod\w*|bonus|prezent)/.test(
+      lower,
+    );
+  const brandCtx = /(nitro|discord|steam|gift|skin)/.test(lower);
 
   for (const raw of urls) {
+    // URL z osadzonym userinfo (host@) — „widzisz discord.com, trafiasz na evil.ru". Wysoka precyzja:
+    // legalne linki praktycznie nie wstawiają domenowego userinfo przed @.
+    const auth = /^(?:https?:\/\/)?([^/\s@]+)@/i.exec(raw);
+    if (auth && (/\.[a-z]{2,}/i.test(auth[1]) || /disc|nitro|steam|gift/i.test(auth[1])))
+      return 'scam: zwodniczy adres (znak @ przed domeną)';
+
     const host = hostOf(raw);
     if (!host) continue;
     if (custom.some((d) => host === d || host.endsWith(`.${d}`) || host.includes(d)))
       return 'scam: domena z listy blokad';
     if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) return 'scam: link na adres IP';
+    // domena punycode (xn--) podszywająca się pod markę — tylko w kontekście marki/odbioru (precyzja).
+    if (host.includes('xn--') && !isLegit(host, LEGIT_DISCORD) && (brandCtx || claimCtx))
+      return 'scam: domena punycode (podszywanie)';
     // podrabiany Discord (literówki/obce TLD przy słowie discord/nitro)
     if (/disc[o0]rd|dlscord|d[i1]sc[o0]rd|discrod/.test(host) && !isLegit(host, LEGIT_DISCORD))
       return 'scam: podrabiany Discord';
@@ -108,6 +147,8 @@ export function scanScam(text: string, customDomains: string[] = []): string | n
       !host.endsWith('steampowered.com')
     )
       return 'scam: podrabiany Steam';
+    // skrócony link maskujący cel przekierowania + wezwanie do działania (free/odbierz/wygrałeś…).
+    if (URL_SHORTENERS.has(host) && claimCtx) return 'scam: skrócony link + wezwanie do działania';
   }
 
   // oferty „za darmo nitro/gift/skiny" obok linku — klasyczny phishing
