@@ -5,11 +5,11 @@
 
 <div align="center">
 
-<img src="dashboard/public/ghost-skull.png" width="120" alt="GH0ST EMPIRE" />
+<img src="dashboard/public/ghost-skull.png" width="120" alt="E-Forge" />
 
-# 🎬 E‑BOT &nbsp;·&nbsp; GH0ST EMPIRE
+# 🎬 E‑BOT &nbsp;·&nbsp; E-Forge
 
-### ⟣ Discordowe ramię imperium · biblioteka gier „Netflix" · live · bezpieczeństwo ⟣
+### ⟣ Discordowe ramię E-Forge · biblioteka gier „Netflix" · live · bezpieczeństwo ⟣
 
 <br/>
 
@@ -42,7 +42,7 @@
 **E‑Bot** to wielomodułowy ekosystem twórcy: bot Discord (discord.js v14), agregator
 biblioteki gier w stylu **Netflix** (Steam · PlayStation · GOG → IGDB) oraz **panel
 sterowania** (Next.js, hostowany na Vercel, dane w Supabase). E‑Bot jest **Discordowym
-ramieniem GH0ST EMPIRE** — nalicza **Ghost Tokens (GT)** za aktywność i łączy konta z portalem.
+ramieniem E-Forge** — nalicza **Ghost Tokens (GT)** za aktywność i łączy konta z portalem.
 
 > Right‑sized z planu SaaS (`docs/ANALIZA.md`) → wąski, działający produkt zamiast 75 modułów.
 
@@ -53,11 +53,11 @@ ramieniem GH0ST EMPIRE** — nalicza **Ghost Tokens (GT)** za aktywność i łą
 | Moduł | Opis | Status |
 |:--|:--|:--:|
 | 🎮 **Biblioteka gier** | Steam (58) + PlayStation (121) = **179**, okładki/metadane z IGDB → SQLite/Supabase | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
-| 🖥️ **Dashboard** | Panel GH0ST (Przegląd, Biblioteka, Live, Bezpieczeństwo, Integracje, Komendy, Ekonomia, Profil, Ustawienia) | ![](https://img.shields.io/badge/-live-E50914?labelColor=0a0a0a) |
+| 🖥️ **Dashboard** | Panel E-Forge (Przegląd, Biblioteka, Live, Bezpieczeństwo, Integracje, Komendy, Ekonomia, Profil, Ustawienia) | ![](https://img.shields.io/badge/-live-E50914?labelColor=0a0a0a) |
 | 🤖 **Bot Discord** | 92 slash‑komendy (moderacja, ekonomia, leveling, tickety, AI, gry…), ~59 usług w tle, **i18n 14 języków** | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
 | 🛡️ **Anti‑Nuke** | Detekcja audit‑log, progi, kary, whitelist | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
 | 📡 **Powiadomienia live** | Twitch · Kick · YouTube · Rumble (polling) | ![](https://img.shields.io/badge/-stabilny-E50914?labelColor=0a0a0a) |
-| 💰 **Ekonomia GH0ST** | GT za czat/voice, `/link`, stawki z portalu | ![](https://img.shields.io/badge/-aktywny-E50914?labelColor=0a0a0a) |
+| 💰 **Ekonomia E-Forge** | GT za czat/voice, `/link`, stawki z portalu | ![](https://img.shields.io/badge/-aktywny-E50914?labelColor=0a0a0a) |
 
 <br/>
 
@@ -67,7 +67,7 @@ ramieniem GH0ST EMPIRE** — nalicza **Ghost Tokens (GT)** za aktywność i łą
 flowchart LR
   U([👥 Użytkownicy Discord]) --> EB
   EB["🤖 E-Bot<br/>discord.js v14"] -->|komendy · anti-nuke · powiadomienia| U
-  EB -->|GT award · link kont| GE[("🟥 GH0ST EMPIRE<br/>Portal · Postgres")]
+  EB -->|GT award · link kont| GE[("🟥 E-Forge<br/>Portal · Postgres")]
   EB -->|heartbeat · presence · config| SB[("🟢 Supabase")]
   ING["📥 ingest/<br/>kolektory"] -->|Steam · PSN · IGDB| ING2{{normalizacja}}
   ING2 --> SB
@@ -107,7 +107,7 @@ flowchart LR
 node ingest/sync.mts
 npm run sync:cloud          # ingest + wysyłka do Supabase
 
-# 2) Dashboard (panel GH0ST) — http://localhost:3001
+# 2) Dashboard (panel E-Forge) — http://localhost:3001
 cd dashboard && npm install && npm run dev
 
 # 3) Bot Discord
@@ -139,7 +139,7 @@ cd bot && npm start                       # bot online + powiadomienia
 </details>
 
 <details>
-<summary><b>📡 Powiadomienia live + 💰 Ekonomia GH0ST</b></summary>
+<summary><b>📡 Powiadomienia live + 💰 Ekonomia E-Forge</b></summary>
 
 - Live: Twitch · Kick · Rumble (polling 60 s), YouTube (opcjonalnie); embedy w kolorach platform
 - Ekonomia: GT za wiadomości i voice (stawki z `/api/bot/config`), `/link` łączy konto z portalem
@@ -147,7 +147,7 @@ cd bot && npm start                       # bot online + powiadomienia
 </details>
 
 <details>
-<summary><b>🖥️ Dashboard (GH0ST look)</b></summary>
+<summary><b>🖥️ Dashboard (E-Forge look)</b></summary>
 
 - Logowanie **Discord OAuth** (tylko właściciel), responsywny (mobilne menu)
 - **Personalizacja bota** (nazwa, avatar), **status/aktywność**, **motyw/kolor akcentu**
@@ -195,7 +195,7 @@ Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 E-Bot/
 ├─ ingest/        📥 kolektory: steam · psn · gog · igdb → data/bot.db (+ Supabase)
 ├─ bot/           🤖 discord.js v14 — komendy, powiadomienia, anti-nuke, ekonomia
-├─ dashboard/     🖥️ Next.js (panel GH0ST) → Vercel + Supabase
+├─ dashboard/     🖥️ Next.js (panel E-Forge) → Vercel + Supabase
 ├─ web/           🎞️ pierwsza wersja UI „Netflix dla gier" (lokalnie)
 ├─ docs/          📚 ANALIZA · DESIGN · ARCHITECTURE · ROADMAP · PHASES · SECRETS
 ├─ .github/       ⚙️ CI · CodeQL · Dependabot · CODEOWNERS · SECURITY
@@ -222,7 +222,7 @@ Szczegóły i zgłaszanie → [`.github/SECURITY.md`](.github/SECURITY.md).
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmapa + Gantt |
 | [docs/PHASES.md](docs/PHASES.md) | Fazy i status (na bieżąco) |
 | [docs/ANALIZA.md](docs/ANALIZA.md) | Analiza i right‑sizing |
-| [docs/DESIGN.md](docs/DESIGN.md) | System wizualny (GH0ST/Netflix) |
+| [docs/DESIGN.md](docs/DESIGN.md) | System wizualny (E-Forge/Netflix) |
 | [docs/SECRETS.md](docs/SECRETS.md) | Triage kluczy + rotacja |
 
 <br/>
@@ -233,7 +233,7 @@ Szczegóły i zgłaszanie → [`.github/SECURITY.md`](.github/SECURITY.md).
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**© 2026 GH0ST EMPIRE — wszelkie prawa zastrzeżone.**
+**© 2026 E-Forge — wszelkie prawa zastrzeżone.**
 Made with 🩸 & ☕ · `E-BOT`
 
 </div>
