@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-610-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.540.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-611-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.541.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.541.0] — 🔒 Ekonomia: atomowy debet w /market i /lottery (moduły bez withLock)
+
+- `[#611]` 🔒 **Atomowy debet kupna w `/market` i `/lottery`** — kontynuacja audytu (#610). Oba moduły NIE mają `withLock`, więc debet przez `saveUser({ wallet: getUser()-cost })` (overwrite) dopuszczał **double-spend przy spamie** (wiele zakupów/biletów za jeden ruch salda) ORAZ kasował równoległy atomowy credit innego usera. Debet przeniesiony na warunkowy **`spendWallet`** (RPC `economy_spend` — odejmuje atomowo TYLKO jeśli starcza) + `ensureUser` (materializacja „dziewiczego" konta jak w `pay`/#609) + **rollback** (`creditWallet`), gdy reszta operacji padnie: w `/market buy` zwrot kupującemu, gdy claim oferty (`cloudDelete`) zawiedzie; w `/lottery buy` zwrot, gdy wstawienie biletów padnie (wcześniej błąd był cicho połykany `.catch(()=>{})`). Domyka pełną atomowość salda obu modułów (credit zwycięzcy/sprzedawcy ✓ #610, debet ✓ #611). **Zero zmiany zachowania** bez współbieżności.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1105/1105** · `sync:check` — exit 0 (Node 26.4.0). Pozostały follow-up (MED): gry self pod `withLock` /eco (gamble/slots/blackjack/…) — niższy priorytet (lock chroni przed double-spend, zostaje tylko okno cudzego credit); `/cards`/`/skins`/`/stocks` (bez locka, jak market/lottery); `ecoSeason` podium.
 
 ## [0.540.0] — 🔒 Ekonomia: atomowy credit poza lockiem /eco (level-up · giveaway · market · lottery)
 

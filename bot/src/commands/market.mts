@@ -9,10 +9,10 @@ import {
   addInventory,
   creditWallet,
   ecoConfig,
+  ensureUser,
   fmt,
   getInventory,
-  getUser,
-  saveUser,
+  spendWallet,
 } from '../economy/store.mts';
 import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
 
@@ -149,20 +149,22 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await interaction.reply(eph('Nie kupisz własnej oferty — użyj `/market unlist`.'));
     return;
   }
-  const buyer = await getUser(gid, interaction.user.id);
-  if (buyer.wallet < listing.price) {
+  // Atomowy debet kupującego (warunkowy spendWallet) — market nie ma withLock, więc overwrite saldem
+  // dopuszczał double-spend przy spamie i kasował równoległy credit od innego usera. Sprzedawca też
+  // atomowo (creditWallet) — to CUDZE konto poza lockiem. Rollback debetu, jeśli reszta zakupu padnie.
+  await ensureUser(gid, interaction.user.id, interaction.user.username);
+  const newWallet = await spendWallet(gid, interaction.user.id, listing.price);
+  if (newWallet === null) {
     await interaction.reply(eph(`Masz za mało (cena ${fmt(listing.price, cur)}).`));
     return;
   }
-  await cloudDelete('market_listings', `id=eq.${listing.id}`);
-  await saveUser({
-    guild_id: gid,
-    user_id: interaction.user.id,
-    username: interaction.user.username,
-    wallet: buyer.wallet - listing.price,
-  });
-  // Atomowy credit sprzedawcy — to CUDZE konto (≠ kupujący) i nie jest pod żadnym lockiem;
-  // overwrite saldem zgubiłby równoległą zmianę sprzedawcy (np. inny zakup, pay, granie).
+  try {
+    await cloudDelete('market_listings', `id=eq.${listing.id}`); // claim oferty
+  } catch (e) {
+    await creditWallet(gid, interaction.user.id, interaction.user.username, listing.price); // zwrot
+    throw e;
+  }
+  // Kupno potwierdzone (oferta zdjęta) → wypłata sprzedawcy + przedmiot kupującemu (best-effort).
   await creditWallet(gid, listing.seller_id, listing.seller_name, listing.price);
   await addInventory(gid, interaction.user.id, listing.item_name, 1);
   await interaction.reply(

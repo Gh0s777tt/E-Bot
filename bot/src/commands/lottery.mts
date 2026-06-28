@@ -6,7 +6,14 @@ import {
   SlashCommandBuilder,
   type TextChannel,
 } from 'discord.js';
-import { creditWallet, ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import {
+  creditWallet,
+  ecoConfig,
+  ensureUser,
+  fmt,
+  getUser,
+  spendWallet,
+} from '../economy/store.mts';
 import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
 
 const TICKET_PRICE = 500;
@@ -44,21 +51,24 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   if (sub === 'buy') {
     const qty = interaction.options.getInteger('ile') ?? 1;
     const cost = qty * TICKET_PRICE;
-    const u = await getUser(gid, interaction.user.id);
-    if (u.wallet < cost) {
+    // Atomowy debet (warunkowy spendWallet) — lottery nie ma withLock, więc overwrite saldem
+    // dopuszczał kupno wielu biletów za jeden debet (spam) i kasował równoległy credit innego usera.
+    await ensureUser(gid, interaction.user.id, interaction.user.username);
+    const newWallet = await spendWallet(gid, interaction.user.id, cost);
+    if (newWallet === null) {
       await interaction.reply(eph(`Masz za mało — bilety kosztują ${fmt(cost, cur)}.`));
       return;
     }
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: u.wallet - cost,
-    });
-    await cloudInsert(
-      'lottery_tickets',
-      Array.from({ length: qty }, () => ({ guild_id: gid, user_id: interaction.user.id })),
-    ).catch(() => {});
+    try {
+      await cloudInsert(
+        'lottery_tickets',
+        Array.from({ length: qty }, () => ({ guild_id: gid, user_id: interaction.user.id })),
+      );
+    } catch {
+      await creditWallet(gid, interaction.user.id, interaction.user.username, cost); // zwrot przy błędzie
+      await interaction.reply(eph('Nie udało się kupić biletów — spróbuj ponownie.'));
+      return;
+    }
     const all = await cloudSelect<Ticket>('lottery_tickets', `select=user_id&guild_id=eq.${gid}`);
     await interaction.reply(
       eph(
