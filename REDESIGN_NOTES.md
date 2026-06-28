@@ -121,12 +121,23 @@ się bez `.content-pane`, więc **pozostają nietknięte** (zweryfikowane zrzute
   poświata akcentu, hover rozjaśnia + mocniejsza poświata. Jeden komponent → propaguje się na ~wszystkie
   formularze. Zweryfikowane zrzutem (przycisk „Zapisz" na /moderation).
 
-### E3+ — Plan per-ekran (do zrobienia)
-1. **Stany wspólne** — `EmptyState`/`Loading`/`Error` (spójne), inputy (focus akcent),
-   tabele (zebra+hover, reflow→karty na mobile).
-2. **Ekrany ustawień/formularze** — `/moderation` (automod), `/levels`, `/welcome`, `/roles`, `/scheduled`,
-   `/tickets`, `/economy`, `/notifications`, `/ai`, … — grupowanie pól, nagłówki sekcji, stany.
+### E3 — Pulpit (zrobione) ✅
+- **Hero CTA „Zaproś bota"** → gradientowy primary (spójny z `SaveButton`): `from-accent→to-accent-dark`,
+  rounded-lg, poświata akcentu, hover rozjaśnia.
+- **Typografia nagłówków sekcji** ujednolicona na całym Pulpicie: `font-display text-lg` sentence-case
+  zamiast `text-base uppercase` (diagnoza #3/#9 — mniej krzykliwego CAPS, lepszy kontrast/hierarchia).
+  Objęte: `page.tsx` (Rozkład platform / Integracje / Najczęściej grane) + 6 komponentów
+  (`LiveServerTiles`, `HealthScoreCard` ×2, `QuickActionsCard`, `ServerGrowthCard`, `AntiraidAlarm`,
+  `SetupChecklist`). Małe etykiety/pille (`text-[10px/11px/xs] uppercase`) — bez zmian (celowo).
+- Nagłówki sekcji na **innych ekranach** (Integrations/Clans/Automod-stats/Leaderboard) wciąż uppercase —
+  ujednolicę przy danym ekranie. Topbar `<h1>` (chrom, ma już `font-display`) — osobna decyzja.
+- Zweryfikowane zrzutem (pełny Pulpit).
+
+### E4+ — Plan per-ekran (do zrobienia)
+1. **Stany wspólne** — `EmptyState`/`Loading`/`Error`, inputy (focus akcent), tabele (zebra+hover, reflow→karty).
+2. **Ekrany ustawień/formularze** — `/moderation`, `/levels`, `/welcome`, `/roles`, `/scheduled`,
+   `/tickets`, `/economy`, `/notifications`, `/ai`, … (w tym ujednolicenie nagłówków sekcji per-ekran).
 3. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
 4. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
 
-> Status: E1 (fundament) + E2 (komponenty współdzielone) wdrożone i zweryfikowane. Kontynuuję per-ekran.
+> Status: E1 (fundament) + E2 (komponenty) + E3 (Pulpit) wdrożone i zweryfikowane. Kontynuuję per-ekran.

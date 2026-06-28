@@ -22,7 +22,7 @@ export default function AntiraidAlarm({
 
   return (
     <section className="panel-glow relative overflow-hidden rounded-2xl border border-line bg-card p-5">
-      <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+      <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
         🛡️ Anti-raid
         <span
           className={`ms-auto h-2.5 w-2.5 rounded-full ${recentRaid ? 'bg-accent pulse-dot' : 'bg-green-500'}`}

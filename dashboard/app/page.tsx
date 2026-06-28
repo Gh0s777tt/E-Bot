@@ -92,7 +92,7 @@ export default async function OverviewPage() {
                   href={inviteUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-accent px-4 py-2 text-sm font-semibold transition hover:bg-accent-hover"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-accent to-accent-dark px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_-12px_rgb(var(--accent-rgb)/0.7)] transition hover:from-accent-hover hover:to-accent hover:shadow-[0_10px_30px_-10px_rgb(var(--accent-rgb)/0.85)]"
                 >
                   <UserPlus size={15} /> {tp(lang, 'ui.home.inviteBtn')}
                 </a>
@@ -162,7 +162,7 @@ export default async function OverviewPage() {
       {/* ===== 2 KOLUMNY: PLATFORMY | INTEGRACJE ===== */}
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Layers size={16} className="text-accent" /> {tp(lang, 'ui.home.platformDist')}
           </h2>
           <div className="space-y-3">
@@ -185,7 +185,7 @@ export default async function OverviewPage() {
         </section>
 
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Plug size={16} className="text-accent" /> {tp(lang, 'ui.home.integrations')}
           </h2>
           <div className="grid grid-cols-2 gap-2">
@@ -205,7 +205,7 @@ export default async function OverviewPage() {
       {/* ===== NAJCZĘŚCIEJ GRANE ===== */}
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Gamepad2 size={16} className="text-accent" /> {tp(lang, 'ui.home.mostPlayed')}
           </h2>
           <a

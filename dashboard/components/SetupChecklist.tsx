@@ -16,7 +16,7 @@ export default function SetupChecklist({
   return (
     <section className="panel-glow rounded-2xl border border-line bg-card p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Rocket size={16} className="text-accent" /> {tp(lang, 'ui.home.scHeading')}
         </h2>
         <span className="text-sm text-muted">

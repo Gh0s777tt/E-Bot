@@ -65,7 +65,7 @@ export default function LiveServerTiles() {
         <span
           className={`h-2.5 w-2.5 rounded-full ${live ? 'bg-green-500 pulse-dot' : s.online === false ? 'bg-accent' : 'bg-muted'}`}
         />
-        <h2 className="text-base font-semibold uppercase tracking-wide">
+        <h2 className="font-display text-lg font-semibold tracking-wide">
           {tp(lang, 'ui.home.liveHeading')}
         </h2>
         <span className="text-xs text-muted">
