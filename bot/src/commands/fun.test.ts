@@ -3,7 +3,7 @@
 // zawsze zwraca element tablicy (nigdy undefined → pusty embed). Katalogi niepuste, by /fun nie pokazał
 // pustej odpowiedzi. Niezmienniki dla DOWOLNEGO Math.random → pętle wielu przebiegów.
 import { describe, expect, it } from 'vitest';
-import { DARES, EIGHTBALL, pick, rollDie, TRUTHS, WYR } from './fun.mts';
+import { DARES, EIGHTBALL, pick, rollDice, rollDie, TRUTHS, WYR } from './fun.mts';
 
 describe('pick — losowy element tablicy', () => {
   it('zawsze zwraca element tablicy (nigdy undefined)', () => {
@@ -38,6 +38,37 @@ describe('rollDie — rzut kością k-ściankową', () => {
     expect(seen.has(1)).toBe(true);
     expect(seen.has(6)).toBe(true);
     expect([...seen].every((v) => v >= 1 && v <= 6)).toBe(true);
+  });
+});
+
+describe('rollDice — rzut wieloma kośćmi (NdM)', () => {
+  it('zwraca dokładnie `count` wyników, każdy ∈ [1, sides]', () => {
+    for (const [count, sides] of [
+      [3, 6],
+      [5, 20],
+      [1, 100],
+    ] as const) {
+      const rolls = rollDice(count, sides);
+      expect(rolls).toHaveLength(count);
+      for (const r of rolls) {
+        expect(r).toBeGreaterThanOrEqual(1);
+        expect(r).toBeLessThanOrEqual(sides);
+      }
+    }
+  });
+
+  it('suma ∈ [count, count×sides]', () => {
+    for (let i = 0; i < 200; i++) {
+      const rolls = rollDice(4, 6);
+      const sum = rolls.reduce((a, b) => a + b, 0);
+      expect(sum).toBeGreaterThanOrEqual(4); // min: same 1
+      expect(sum).toBeLessThanOrEqual(24); // max: same 6
+    }
+  });
+
+  it('count < 1 clampowane do 1 (brak pustego rzutu)', () => {
+    expect(rollDice(0, 6)).toHaveLength(1);
+    expect(rollDice(-3, 6)).toHaveLength(1);
   });
 });
 

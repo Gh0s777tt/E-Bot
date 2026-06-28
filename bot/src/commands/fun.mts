@@ -61,6 +61,12 @@ export function rollDie(sides: number): number {
   return 1 + Math.floor(Math.random() * sides);
 }
 
+// Rzut wieloma kośćmi (NdM): `count` kości po `sides` ścianek. Każdy wynik w [1, sides];
+// suma ∈ [count, count×sides]. count clampowane do ≥ 1.
+export function rollDice(count: number, sides: number): number[] {
+  return Array.from({ length: Math.max(1, count) }, () => rollDie(sides));
+}
+
 export const data = new SlashCommandBuilder()
   .setName('fun')
   .setDescription('Zabawy: prawda/wyzwanie, wolałbyś, 8ball, kostka.')
@@ -78,13 +84,20 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((s) =>
     s
       .setName('kostka')
-      .setDescription('Rzut kostką')
+      .setDescription('Rzut kostką (lub wieloma — NdM)')
       .addIntegerOption((o) =>
         o
           .setName('scianki')
           .setDescription('Liczba ścianek (domyślnie 6)')
           .setMinValue(2)
           .setMaxValue(1000),
+      )
+      .addIntegerOption((o) =>
+        o
+          .setName('ile')
+          .setDescription('Ile kości naraz (domyślnie 1, maks. 20)')
+          .setMinValue(1)
+          .setMaxValue(20),
       ),
   );
 
@@ -106,8 +119,17 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     );
   } else if (sub === 'kostka') {
     const sides = interaction.options.getInteger('scianki') ?? 6;
-    const roll = rollDie(sides);
-    e.setTitle('🎲 Kostka').setDescription(`Rzut k${sides}: **${roll}**`);
+    const count = interaction.options.getInteger('ile') ?? 1;
+    const rolls = rollDice(count, sides);
+    e.setTitle('🎲 Kostka');
+    if (rolls.length === 1) {
+      e.setDescription(`Rzut k${sides}: **${rolls[0]}**`);
+    } else {
+      const sum = rolls.reduce((a, b) => a + b, 0);
+      e.setDescription(
+        `${rolls.length}× k${sides}: ${rolls.map((r) => `\`${r}\``).join(' ')}\n**Suma: ${sum}**`,
+      );
+    }
   }
 
   await interaction.reply({ embeds: [e] });

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-602-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.532.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-603-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.533.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.533.0] — 🎲 `/fun kostka` — rzut wieloma kośćmi (NdM)
+
+- `[#603]` 🎲 **Wiele kości naraz w `/fun kostka`** — nowa opcja `ile` (1–20): rzuć N kości po `scianki` ścianek (np. `3d6`, `2d20`). Pokazuje pojedyncze wyniki + **sumę** (dla 1 kości zachowanie bez zmian). Czysty, otestowany `rollDice` (`count`×`sides`; każdy wynik w zakresie; suma ∈ [count, count×sides]; `count<1` clampowany do 1). Klasyk tabletop/decyzji.
+  - **Testy:** `fun.test.ts` +3 (`rollDice`: count + zakres · suma · clamp) → **1087/1087**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.532.0] — 🛡️ Klany: większa widoczność (info pokazuje rolę/kanał + „Klan tygodnia" w digescie)
 
