@@ -11,18 +11,14 @@ import {
 } from 'discord.js';
 import { cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { mergeConfig } from '../lib/mergeConfig.mts';
 
 export type SuggestionsConfig = { enabled: boolean; channelId: string; anonymous: boolean };
 const DEFAULT: SuggestionsConfig = { enabled: false, channelId: '', anonymous: false };
 
 // Etap K — config per-serwer: czytany świeżo dla danego serwera (komenda = niska częstotliwość).
 export function suggestionsConfig(guildId: string): SuggestionsConfig {
-  const raw = getGuildSettings(guildId)['suggestions_config'];
-  try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<SuggestionsConfig>) } : DEFAULT;
-  } catch {
-    return DEFAULT;
-  }
+  return mergeConfig(getGuildSettings(guildId)['suggestions_config'], DEFAULT);
 }
 
 export const STATUS = {

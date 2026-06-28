@@ -12,18 +12,14 @@ import {
 } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
+import { mergeConfig } from '../lib/mergeConfig.mts';
 
 type Cfg = { enabled: boolean; channelId: string; top: number; reset: boolean };
 const DEFAULT: Cfg = { enabled: false, channelId: '', top: 10, reset: false };
 
 // Etap K — config per-serwer: świeży odczyt (poller miesięczny), fallback global.
 function cfg(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['seasons_config'];
-  try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
-  } catch {
-    return { ...DEFAULT };
-  }
+  return mergeConfig(getGuildSettings(guildId)['seasons_config'], DEFAULT);
 }
 
 type LevelRow = { user_id: string; username: string | null; xp: number; level: number };

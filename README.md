@@ -1,4 +1,4 @@
-<!-- SYNC: v0.536.0 · #606 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.537.0 · #607 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.536.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.537.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.536.0** — 🛡️ utwardzenie z audytu projektu (per-user `withLock` zamykający double-mint battle-passa + logowanie cichych zapisów chmury); **v0.535.0** — 🐛 audyt całości (poprawki: digest dedup tylko po udanej wysyłce, `/pet rename` empty-name); **v0.529–0.534** — 🛡️ **klany kompletne** (`/clan`: 10 podkomend + rola + prywatny kanał + transfer; panel `/clans` + publiczna `/p/clans` + „Klan tygodnia" w digescie) oraz 📊 **benchmarking cross-server** (percentyl) i „największy skok aktywności"; **v0.518–0.528** — ⚔️ **pety PvP** (`/pet battle` + ranking `/pet top`) i 🎭 **role battle-passa** (bot + panel). Suite **140 plików / 1094 testy**, wszystkie bramki zielone (Node 26.4.0).
+Najnowsze: **v0.537.0** — 🛡️ utwardzenie z audytu projektu (per-user `withLock` zamykający double-mint battle-passa + logowanie cichych zapisów chmury); **v0.535.0** — 🐛 audyt całości (poprawki: digest dedup tylko po udanej wysyłce, `/pet rename` empty-name); **v0.529–0.534** — 🛡️ **klany kompletne** (`/clan`: 10 podkomend + rola + prywatny kanał + transfer; panel `/clans` + publiczna `/p/clans` + „Klan tygodnia" w digescie) oraz 📊 **benchmarking cross-server** (percentyl) i „największy skok aktywności"; **v0.518–0.528** — ⚔️ **pety PvP** (`/pet battle` + ranking `/pet top`) i 🎭 **role battle-passa** (bot + panel). Suite **140 plików / 1094 testy**, wszystkie bramki zielone (Node 26.4.0).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-606-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.536.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-607-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.537.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.537.0] — ♻️ Refactor: helper `mergeConfig` (DRY config-load w 8 modułach)
+
+- `[#607]` ♻️ **`mergeConfig`** — nowy helper ([`mergeConfig.mts`](bot/src/lib/mergeConfig.mts), +4 testy) wycinający powtarzany wzorzec `raw ? { ...DEFAULT, ...JSON.parse } : DEFAULT` (pusty/zły JSON → kopia defaultów, nigdy nie rzuca). Zastosowany w **8 modułach return-based** (seasons, birthdays, counters, suggestions, freegames, patchnotes, pricetracker, verification) — funkcja configu z 6 linii do 1 (**−32 linie**). **Zero zmiany zachowania** (semantyka identyczna). Świadomie POMINIĘTO 9 modułów „assignment + zostaw poprzedni" (inna semantyka błędu — `cfg = raw ? …` zachowuje poprzedni config przy złym JSON, nie reset do default).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1098/1098** (`mergeConfig` +4) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.536.0] — 🛡️ Audyt: utwardzenie — lock anty-double-mint + logowanie cichych zapisów
 

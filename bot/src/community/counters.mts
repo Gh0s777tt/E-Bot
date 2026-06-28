@@ -5,6 +5,7 @@
 import type { Client, Guild } from 'discord.js';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
+import { mergeConfig } from '../lib/mergeConfig.mts';
 import { STREAMER_TYPES, type StreamerType, streamerCount } from './streamerStats.mts';
 
 type CounterType =
@@ -36,12 +37,7 @@ const YT_TYPES = new Set<CounterType>(['ytSubs', 'ytViews', 'ytVideos']);
 
 // Etap K — config per-serwer: czytany świeżo dla danego serwera (poll co 10 min = niska częstotliwość).
 function cfgFor(guildId: string): CountersConfig {
-  const raw = getGuildSettings(guildId).counters_config;
-  try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<CountersConfig>) } : { ...DEFAULT };
-  } catch {
-    return { ...DEFAULT };
-  }
+  return mergeConfig(getGuildSettings(guildId).counters_config, DEFAULT);
 }
 
 function countOf(guild: Guild, type: CounterType): number {

@@ -5,16 +5,12 @@ import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord
 import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
+import { mergeConfig } from '../lib/mergeConfig.mts';
 
 type Cfg = { enabled: boolean; channelId: string; multiStore?: boolean };
 const DEFAULT: Cfg = { enabled: false, channelId: '', multiStore: false };
 function cfgFor(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['freegames_config'];
-  try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
-  } catch {
-    return { ...DEFAULT };
-  }
+  return mergeConfig(getGuildSettings(guildId)['freegames_config'], DEFAULT);
 }
 
 const EPIC =

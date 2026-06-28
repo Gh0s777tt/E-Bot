@@ -5,6 +5,7 @@ import type { Client, TextChannel } from 'discord.js';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
+import { mergeConfig } from '../lib/mergeConfig.mts';
 
 type BirthdayConfig = { enabled: boolean; channelId: string; message: string; roleId: string };
 const DEFAULT: BirthdayConfig = {
@@ -15,12 +16,7 @@ const DEFAULT: BirthdayConfig = {
 };
 // Etap K — config per-serwer: czytany świeżo dla danego serwera (poller godzinny = niska częstotliwość).
 function cfgFor(guildId: string): BirthdayConfig {
-  const raw = getGuildSettings(guildId)['birthday_config'];
-  try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<BirthdayConfig>) } : { ...DEFAULT };
-  } catch {
-    return { ...DEFAULT };
-  }
+  return mergeConfig(getGuildSettings(guildId)['birthday_config'], DEFAULT);
 }
 
 async function tick(client: Client): Promise<void> {

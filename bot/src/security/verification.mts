@@ -14,6 +14,7 @@ import {
 } from 'discord.js';
 import { generateCaptchaCode, renderCaptcha } from '../lib/captcha.mts';
 import { getGuildSettings } from '../lib/db.mts';
+import { mergeConfig } from '../lib/mergeConfig.mts';
 
 export type VerificationConfig = {
   enabled: boolean;
@@ -37,12 +38,7 @@ const DEFAULT: VerificationConfig = {
 
 // Etap K — config per-serwer: czytamy świeżo (low-freq: klik/komenda), fallback global.
 export function verifyConfig(guildId: string): VerificationConfig {
-  const raw = getGuildSettings(guildId)['verification_config'];
-  try {
-    return raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<VerificationConfig>) } : DEFAULT;
-  } catch {
-    return DEFAULT;
-  }
+  return mergeConfig(getGuildSettings(guildId)['verification_config'], DEFAULT);
 }
 
 // Porównanie hasła weryfikacji (tryb 'phrase'): trim + nieczułość na wielkość liter PO OBU STRONACH.
