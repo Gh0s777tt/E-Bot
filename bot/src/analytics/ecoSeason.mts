@@ -91,7 +91,7 @@ async function snapshot(guild: Guild, endedMonth: string): Promise<void> {
   // Reset (opcjonalny) — najpierw zerujemy wszystkim, potem podium dostaje nagrodę (przeżywa reset).
   if (cfg.reset) {
     await cloudUpdate('economy_users', `guild_id=eq.${guild.id}`, { wallet: 0, bank: 0 }).catch(
-      () => {},
+      (e) => log.warn('[ecoSeason] reset sald', { err: e }),
     );
   }
   for (let i = 0; i < sorted.length && i < 3; i++) {
@@ -109,7 +109,7 @@ async function snapshot(guild: Guild, endedMonth: string): Promise<void> {
         },
       ],
       'guild_id,user_id',
-    ).catch(() => {});
+    ).catch((e) => log.warn('[ecoSeason] wypłata podium', { err: e }));
     logTx(guild.id, sorted[i].user_id, reward, 'sezon');
   }
 }
@@ -119,7 +119,9 @@ async function tick(client: Client): Promise<void> {
   const cur = new Date().toISOString().slice(0, 7); // YYYY-MM
   const last = await cloudGetSetting('eco_season_last').catch(() => null);
   if (!last) {
-    await cloudSetSetting('eco_season_last', cur).catch(() => {}); // baseline, bez wypłaty
+    await cloudSetSetting('eco_season_last', cur).catch((e) =>
+      log.warn('[ecoSeason] dedup write', { err: e }),
+    ); // baseline, bez wypłaty
     return;
   }
   if (last === cur) return;
@@ -130,7 +132,9 @@ async function tick(client: Client): Promise<void> {
       log.warn('[ecoSeason]', { err: e }),
     );
   }
-  await cloudSetSetting('eco_season_last', cur).catch(() => {});
+  await cloudSetSetting('eco_season_last', cur).catch((e) =>
+    log.warn('[ecoSeason] dedup write', { err: e }),
+  );
 }
 
 export function startEcoSeason(client: Client): void {

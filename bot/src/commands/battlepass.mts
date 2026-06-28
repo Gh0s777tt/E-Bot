@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
+import { withLock } from '../lib/userLock.mts';
 
 export type Tier = { tier: number; need: number; title: string; reward: number };
 
@@ -133,26 +134,32 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   let rewardLine = '';
   const eco = ecoConfig(interaction.guildId);
   if (eco.enabled && current > 0) {
-    const claimsKey = `g:${interaction.guildId}:bp_claims:${month}`;
-    let claims: Record<string, number> = {};
-    try {
-      claims = JSON.parse((await cloudGetSetting(claimsKey)) || '{}') as Record<string, number>;
-    } catch {
-      /* puste */
-    }
-    const { coins, newClaimed } = claimRewards(current, claims[interaction.user.id] ?? 0, TIERS);
-    if (coins > 0) {
-      const u = await getUser(interaction.guildId, interaction.user.id);
+    const gid = interaction.guildId;
+    const uid = interaction.user.id;
+    // Lock per (guild,user): serializuje współbieżne /battlepass tego samego usera, by uniknąć podwójnej
+    // wypłaty przy read-modify-write na współdzielonym kluczu bp_claims (audyt: double-mint). Drugi spam
+    // odczyta już zaktualizowany claimedTier → claimRewards zwróci 0.
+    rewardLine = await withLock(`bp:${gid}:${uid}`, async () => {
+      const claimsKey = `g:${gid}:bp_claims:${month}`;
+      let claims: Record<string, number> = {};
+      try {
+        claims = JSON.parse((await cloudGetSetting(claimsKey)) || '{}') as Record<string, number>;
+      } catch {
+        /* puste */
+      }
+      const { coins, newClaimed } = claimRewards(current, claims[uid] ?? 0, TIERS);
+      if (coins <= 0) return '';
+      const u = await getUser(gid, uid);
       await saveUser({
-        guild_id: interaction.guildId,
-        user_id: interaction.user.id,
+        guild_id: gid,
+        user_id: uid,
         username: interaction.user.username,
         wallet: u.wallet + coins,
       }).catch(() => {});
-      claims[interaction.user.id] = newClaimed;
+      claims[uid] = newClaimed;
       await cloudSetSetting(claimsKey, JSON.stringify(claims)).catch(() => {});
-      rewardLine = `\n🎁 Odebrano **+${fmt(coins, eco.currency)}** za nowe tiery!`;
-    }
+      return `\n🎁 Odebrano **+${fmt(coins, eco.currency)}** za nowe tiery!`;
+    });
   }
 
   // Role-nagrody za tiery (opcjonalne) — synchronizacja do bieżącego tieru (config `g:<gid>:bp_roles`

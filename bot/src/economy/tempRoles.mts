@@ -44,7 +44,9 @@ async function tick(client: Client): Promise<void> {
       await member?.roles.remove(r.role_id, 'Rola czasowa wygasła (sklep)').catch(() => {});
     }
     // Usuwamy wpis nawet gdy serwer/zdjęcie się nie powiodło — wpis jest „wykorzystany".
-    await cloudDelete('temp_roles', `id=eq.${r.id}`).catch(() => {});
+    await cloudDelete('temp_roles', `id=eq.${r.id}`).catch((e) =>
+      log.warn('[tempRoles] cleanup temp_roles', { err: e }),
+    );
   }
 }
 

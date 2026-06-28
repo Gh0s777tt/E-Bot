@@ -34,7 +34,9 @@ async function tick(client: Client): Promise<void> {
       ]).catch(() => {});
     }
     // Usuwamy wpis nawet gdy serwer/odbanowanie się nie powiodło — wpis i tak jest „wykorzystany".
-    await cloudDelete('temp_bans', `id=eq.${t.id}`).catch(() => {});
+    await cloudDelete('temp_bans', `id=eq.${t.id}`).catch((e) =>
+      log.warn('[moderation] cleanup temp_bans', { err: e }),
+    );
   }
 }
 

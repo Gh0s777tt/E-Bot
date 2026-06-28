@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-605-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.535.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-606-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.536.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.536.0] — 🛡️ Audyt: utwardzenie — lock anty-double-mint + logowanie cichych zapisów
+
+- `[#606]` 🛡️ **Utwardzenie z audytu** (współbieżność + widoczność błędów): (1) **`withLock`** — nowy per-klucz in-process mutex ([`userLock.mts`](bot/src/lib/userLock.mts), +4 testy) serializujący read-modify-write tego samego usera; wpięty w roszczenie nagrody `/battlepass` → zamyka **double-mint** (spam komendy w ~tej samej sekundzie czytał stary `claimedTier` i wypłacał 2×; drugi przebieg czyta już zaktualizowany → 0). (2) **Logowanie cichych zapisów chmury** — 6× `.catch(() => {})` na zapisach DB/pieniędzy zamienione na `log.warn` (zamiast bezgłośnego łyku): `moderation` (usuwanie tempbana), `antiraid` (threat-intel), `tempRoles` (usuwanie roli), `ecoSeason` (reset sald + wypłata podium + 2× dedup). Discord-API no-opy (graceful) zostawione celowo.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1094/1094** (`withLock` +4) · `sync:check` — exit 0 (Node 26.4.0). `withLock` jest in-process (komendy usera idą do jednego sharda → lock per-user wystarcza dla exploitu „spam tej samej komendy").
 
 ## [0.535.0] — 🐛 Audyt projektu: poprawki (digest dedup + pet rename)
 

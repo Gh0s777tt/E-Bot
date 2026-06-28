@@ -294,7 +294,9 @@ async function isKnownThreatNow(userId: string): Promise<boolean> {
 async function flushThreats(): Promise<void> {
   if (!threatDirty || !hasCloud()) return;
   threatDirty = false;
-  await cloudSetSetting(INTEL_KEY, JSON.stringify(threatList)).catch(() => {});
+  await cloudSetSetting(INTEL_KEY, JSON.stringify(threatList)).catch((e) =>
+    log.warn('[antiraid] persist threat-intel', { err: e }),
+  );
 }
 
 export function startAntiRaid(client: Client): void {
