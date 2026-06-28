@@ -159,13 +159,19 @@ Hover (`hover:bg-white/[0.03]`, `transition-colors`) na tabelach z danymi: /mode
 `/ai`, `/engagement`, `/tickets`, `/suggestions`, sklep (`ShopManager`). Wszystkie `<tbody><tr>` w panelu
 mają affordance hover. Biome (auto-wrap `<tr>`) + `tsc` exit 0.
 
+### E8 — Spójny stan pusty `EmptyState` (zrobione) ✅
+Nowy komponent `components/EmptyState.tsx` — wyśrodkowana karta z przerywaną ramką + chip-y na `<code>`.
+Owija istniejący tekst i18n jako children → **zero nowych kluczy** (parytet 14 języków bez zmian).
+Podłączony do 8 pustych stanów tabel: /moderation (sprawy + tempbany), /levels (ranking), /ai, /engagement,
+/tickets, /suggestions, sklep (`ShopManager`). Biome (sort importów + format) + `tsc` exit 0. Zweryfikowane zrzutem.
+
 ### Kolejne ekrany / dopracowanie (plan)
-Nagłówki sekcji (E6) + hover tabel (E7) — gotowe panel-wide. Zostaje:
-1. **Stany wspólne** — `EmptyState`/`Loading`/`Error` (spójne), inputy (focus akcent).
+Nagłówki (E6) + hover tabel (E7) + stan pusty (E8) — gotowe panel-wide. Zostaje:
+1. **Stany pozostałe** — `Loading`/skeleton + spójny `Error` (empty: zrobione E8), inputy (focus akcent).
 2. **Responsywność tabel** — reflow→karty na wąskim ekranie (`/logging`, `/leaderboard`, stats, sklep).
 3. **Listy nie-`<table>`** — np. role-nagrody (wiersze flex) — ewentualny hover osobno.
 4. **Formularze** — grupowanie pól / opisy na gęstych ekranach (np. `/ai`, `/moderation`).
 5. **Topbar `<h1>`** — decyzja o stylu tytułu strony (chrom).
 6. **Mapowanie stary→nowy** — uzupełniane (nic nie ginie).
 
-> Status: E1–E7 wdrożone i zweryfikowane. Kontynuuję dopracowanie.
+> Status: E1–E8 wdrożone i zweryfikowane. Kontynuuję dopracowanie.

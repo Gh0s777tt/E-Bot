@@ -1,5 +1,6 @@
 import { Award, Crown, Swords, Trophy, Users } from 'lucide-react';
 import BattlePassRolesForm from '../../components/BattlePassRolesForm';
+import EmptyState from '../../components/EmptyState';
 import LevelingForm from '../../components/LevelingForm';
 import SeasonsForm from '../../components/SeasonsForm';
 import StatCard from '../../components/StatCard';
@@ -99,7 +100,7 @@ export default async function LevelsPage() {
           <Users size={16} className="text-accent" /> {tp(lang, 'ui.levels.rankingHeading')}
         </h2>
         {board.length === 0 ? (
-          <p className="text-sm text-muted">{tp(lang, 'ui.levels.empty')}</p>
+          <EmptyState>{tp(lang, 'ui.levels.empty')}</EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

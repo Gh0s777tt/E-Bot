@@ -2,6 +2,7 @@ import { Bot, Gavel, Hourglass, ShieldCheck, Zap } from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
 import AutomodForm from '../../components/AutomodForm';
 import AutomodStats from '../../components/AutomodStats';
+import EmptyState from '../../components/EmptyState';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
 import StatusPill from '../../components/StatusPill';
@@ -104,12 +105,12 @@ export default async function ModerationPage() {
           <Gavel size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingCases')}
         </h2>
         {cases.length === 0 ? (
-          <p className="text-sm text-muted">
+          <EmptyState>
             {tp(lang, 'ui.mod.casesEmptyPre')}{' '}
             <code className="text-accent">/mod warn|timeout|clear</code>{' '}
             {tp(lang, 'ui.mod.casesEmptyMid')} <code>mod-cases-schema.sql</code>{' '}
             {tp(lang, 'ui.mod.casesEmptyPost')}
-          </p>
+          </EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start text-sm">
@@ -152,11 +153,11 @@ export default async function ModerationPage() {
           <Hourglass size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingTempbans')}
         </h2>
         {tempbans.length === 0 ? (
-          <p className="text-sm text-muted">
+          <EmptyState>
             {tp(lang, 'ui.mod.tbEmptyPre')} <code className="text-accent">/mod tempban</code>{' '}
             {tp(lang, 'ui.mod.tbEmptyMid')} <code>f6-moderation-schema.sql</code>{' '}
             {tp(lang, 'ui.mod.tbEmptyPost')}
-          </p>
+          </EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start text-sm">

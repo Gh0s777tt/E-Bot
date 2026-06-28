@@ -2,6 +2,7 @@ import { Coins, FileText, HelpCircle, MessageSquare, Sparkles, Users } from 'luc
 import AiConfigForm from '../../components/AiConfigForm';
 import AiDigestForm from '../../components/AiDigestForm';
 import AiHelpForm from '../../components/AiHelpForm';
+import EmptyState from '../../components/EmptyState';
 import StatCard from '../../components/StatCard';
 import StatusPill from '../../components/StatusPill';
 import { getAiDigestConfig, getAiHelpConfig } from '../../lib/community';
@@ -98,13 +99,13 @@ export default async function AiPage() {
           <Users size={16} className="text-accent" /> {tp(lang, 'ui.ai.usageHeading')}
         </h2>
         {usage.top.length === 0 ? (
-          <p className="text-sm text-muted">
+          <EmptyState>
             {tp(lang, 'ui.ai.usageEmptyPre')}
             <code className="text-accent">scripts/faza4-schema.sql</code>
             {tp(lang, 'ui.ai.usageEmptyMid')}
             <code className="text-accent">/ai</code>
             {tp(lang, 'ui.ai.usageEmptyPost')}
-          </p>
+          </EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

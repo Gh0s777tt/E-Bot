@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import type { ShopItem } from '../lib/serverEconomy';
+import EmptyState from './EmptyState';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 
@@ -142,7 +143,7 @@ export default function ShopManager({
       )}
 
       {items.length === 0 ? (
-        <p className="text-sm text-muted">{tp(lang, 'ui.eco.shopEmpty')}</p>
+        <EmptyState>{tp(lang, 'ui.eco.shopEmpty')}</EmptyState>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-start text-sm">

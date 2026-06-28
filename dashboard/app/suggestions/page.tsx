@@ -1,4 +1,5 @@
 import { Lightbulb, ListChecks } from 'lucide-react';
+import EmptyState from '../../components/EmptyState';
 import StatusPill from '../../components/StatusPill';
 import SuggestionsForm from '../../components/SuggestionsForm';
 import { getSuggestionsConfig } from '../../lib/community';
@@ -59,7 +60,7 @@ export default async function SuggestionsPage() {
           <ListChecks size={16} className="text-accent" /> {tp(lang, 'ui.suggestions.recentTitle')}
         </h2>
         {list.length === 0 ? (
-          <p className="text-sm text-muted">{tp(lang, 'ui.suggestions.empty')}</p>
+          <EmptyState>{tp(lang, 'ui.suggestions.empty')}</EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start text-sm">

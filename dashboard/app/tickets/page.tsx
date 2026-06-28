@@ -1,4 +1,5 @@
 import { CheckCircle2, Eye, Hand, Inbox, Plus, Ticket } from 'lucide-react';
+import EmptyState from '../../components/EmptyState';
 import StatCard from '../../components/StatCard';
 import StatusPill from '../../components/StatusPill';
 import TicketCloseButton from '../../components/TicketCloseButton';
@@ -86,7 +87,7 @@ export default async function TicketsPage() {
           <Inbox size={16} className="text-accent" /> {tp(lang, 'ui.tickets.listHeading')}
         </h2>
         {rows.length === 0 ? (
-          <p className="text-sm text-muted">{tp(lang, 'ui.tickets.empty')}</p>
+          <EmptyState>{tp(lang, 'ui.tickets.empty')}</EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

@@ -1,6 +1,7 @@
 import { Gift, Hash, MousePointerClick, Star, UserPlus, Volume2 } from 'lucide-react';
 import ButtonRolesForm from '../../components/ButtonRolesForm';
 import CountingForm from '../../components/CountingForm';
+import EmptyState from '../../components/EmptyState';
 import InvitesForm from '../../components/InvitesForm';
 import StarboardForm from '../../components/StarboardForm';
 import StatusPill from '../../components/StatusPill';
@@ -103,12 +104,12 @@ export default async function EngagementPage() {
           <Gift size={16} className="text-accent" /> {tp(lang, 'ui.engagement.giveawaysHeading')}
         </h2>
         {giveaways.length === 0 ? (
-          <p className="text-sm text-muted">
+          <EmptyState>
             {tp(lang, 'ui.engagement.giveawaysEmptyPre')}{' '}
             <code className="text-accent">/giveaway start</code>{' '}
             {tp(lang, 'ui.engagement.giveawaysEmptyMid')} <code>b5-schema.sql</code>{' '}
             {tp(lang, 'ui.engagement.giveawaysEmptyPost')}
-          </p>
+          </EmptyState>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start text-sm">
