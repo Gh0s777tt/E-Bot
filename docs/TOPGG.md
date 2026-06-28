@@ -16,7 +16,7 @@
 ## 🚀 Kroki (po kolei)
 
 1. **Zaloguj się** na [top.gg](https://top.gg) kontem Discord (tym, które ma dostęp do aplikacji bota).
-2. **Add Bot** → wklej **Client ID** = `859188204714442752`. top.gg zweryfikuje przez Discord, że jesteś właścicielem/teammem aplikacji.
+2. **Add Bot** → wklej **Client ID** = `1512758748761030677`. top.gg zweryfikuje przez Discord, że jesteś właścicielem/teammem aplikacji.
 3. **Wypełnij wpis** treścią z sekcji [„📋 Treść wpisu"](#-treść-wpisu-do-wklejenia) poniżej (krótki opis, długi opis, tagi, linki, prefix).
 4. **Wyślij do review** — moderacja top.gg akceptuje wpis (zwykle godziny–dni).
 5. **Pobierz token API**: wpis bota → zakładka **Webhooks / API** → skopiuj **token**.
@@ -34,12 +34,12 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 📋 Gotowy wpis (kopiuj‑wklej) — ID bota: `859188204714442752`
+## 📋 Gotowy wpis (kopiuj‑wklej) — ID bota: `1512758748761030677`
 
 **Linki (z Twoim ID):**
-- **Listing:** `https://top.gg/bot/859188204714442752`
-- **Invite:** `https://discord.com/oauth2/authorize?client_id=859188204714442752&permissions=8&scope=bot+applications.commands`
-- **Vote:** `https://top.gg/bot/859188204714442752/vote`
+- **Listing:** `https://top.gg/bot/1512758748761030677`
+- **Invite:** `https://discord.com/oauth2/authorize?client_id=1512758748761030677&permissions=8&scope=bot+applications.commands`
+- **Vote:** `https://top.gg/bot/1512758748761030677/vote`
 - **Webhook URL:** `https://e-bot-dc.vercel.app/api/topgg/webhook`
 - **Website / Dashboard:** `https://e-bot-dc.vercel.app`
 - **Support Server:** *(wklej zaproszenie na swój serwer wsparcia, jeśli masz)*
@@ -57,8 +57,9 @@
 **Headline (PL — jeśli wolisz polski wpis):**
 > Wielofunkcyjny bot Discord z panelem web: moderacja i anti-nuke, leveling, ekonomia, tickety, AI, powiadomienia live i biblioteka gier. 95+ komend, 14 języków.
 
-**Baner / tło (Background) — URL z repo (lub wgraj własny 1920×480, czerń/czerwień):**
-`https://raw.githubusercontent.com/Gh0s777tt/E-Bot/main/dashboard/public/ghost-banner.jpg`
+**Baner / tło (Background) — gotowy baner E‑Bot (1920×480, czerń/czerwień):**
+`https://raw.githubusercontent.com/Gh0s777tt/E-Bot/main/docs/topgg/banner.png`
+*(albo wgraj plik `docs/topgg/banner.png`; źródło edytowalne: `docs/topgg/banner.svg`)*
 
 **Długi opis (EN, Markdown — top.gg renderuje Markdown):**
 
@@ -124,7 +125,7 @@ Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg
 
 ## ✅ Checklist
 
-- [ ] Wpis utworzony na top.gg (Client ID = `859188204714442752`)
+- [ ] Wpis utworzony na top.gg (Client ID = `1512758748761030677`)
 - [ ] 🔁 **Token API zregenerowany** (poprzedni był wklejony na czacie → spalony)
 - [ ] Treść wklejona (krótki + długi opis, tagi, linki, prefix `/`)
 - [ ] Wpis zaakceptowany przez moderację
