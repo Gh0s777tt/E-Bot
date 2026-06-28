@@ -133,11 +133,18 @@ się bez `.content-pane`, więc **pozostają nietknięte** (zweryfikowane zrzute
   ujednolicę przy danym ekranie. Topbar `<h1>` (chrom, ma już `font-display`) — osobna decyzja.
 - Zweryfikowane zrzutem (pełny Pulpit).
 
-### E4+ — Plan per-ekran (do zrobienia)
-1. **Stany wspólne** — `EmptyState`/`Loading`/`Error`, inputy (focus akcent), tabele (zebra+hover, reflow→karty).
-2. **Ekrany ustawień/formularze** — `/moderation`, `/levels`, `/welcome`, `/roles`, `/scheduled`,
-   `/tickets`, `/economy`, `/notifications`, `/ai`, … (w tym ujednolicenie nagłówków sekcji per-ekran).
+### E4 — /moderation (zrobione) ✅
+- Nagłówki sekcji ujednolicone (`font-display text-lg`, sentence-case): 5× w `page.tsx`
+  (Automod / Discord AutoMod / Historia spraw / Aktywne tempbany / AI moderacja) + `AutomodStats` + `RegexTester`.
+- Tabele (Historia spraw, Aktywne tempbany): hover wierszy (`hover:bg-white/[0.03]`, transition) — diagnoza #4.
+  Nagłówki tabel (`text-xs uppercase`) — zostają (konwencja małych kapitalików w `th`).
+- SaveButton (gradient z E2) już aktywny w formularzach automoda. Zweryfikowane zrzutem (pełna strona).
+
+### Kolejne ekrany (plan)
+1. **Stany wspólne** — `EmptyState`/`Loading`/`Error`, inputy (focus akcent), reflow tabel→karty na mobile.
+2. **Ekrany ustawień/formularze** — `/levels`, `/welcome`, `/roles`, `/scheduled`, `/tickets`, `/economy`,
+   `/notifications`, `/ai`, … (nagłówki + grupowanie pól).
 3. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
 4. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
 
-> Status: E1 (fundament) + E2 (komponenty) + E3 (Pulpit) wdrożone i zweryfikowane. Kontynuuję per-ekran.
+> Status: E1–E4 (fundament + komponenty + Pulpit + /moderation) wdrożone i zweryfikowane. Kontynuuję per-ekran.

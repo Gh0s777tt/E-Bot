@@ -69,7 +69,7 @@ export default async function ModerationPage() {
         <StatusPill on={cfg.enabled} lang={lang} />
       </header>
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ShieldCheck size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAutomod')}
           <span className="ms-auto normal-case">
             <StatusPill on={cfg.enabled} lang={lang} />
@@ -79,7 +79,7 @@ export default async function ModerationPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Zap size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingNative')}
         </h2>
         <NativeAutomodForm initial={nativeRules} guild={guild} />
@@ -90,7 +90,7 @@ export default async function ModerationPage() {
       <RegexTester />
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Bot size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAiMod')}
           <span className="ms-auto normal-case">
             <StatusPill on={aimod.enabled} lang={lang} />
@@ -100,7 +100,7 @@ export default async function ModerationPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Gavel size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingCases')}
         </h2>
         {cases.length === 0 ? (
@@ -124,7 +124,10 @@ export default async function ModerationPage() {
               </thead>
               <tbody>
                 {cases.map((c) => (
-                  <tr key={c.id} className="border-b border-line/50">
+                  <tr
+                    key={c.id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="px-3 py-2">
                       <span
                         className={`rounded-md px-2 py-0.5 text-xs font-semibold uppercase ${ACTION_STYLE[c.action] ?? 'bg-line text-muted'}`}
@@ -145,7 +148,7 @@ export default async function ModerationPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Hourglass size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingTempbans')}
         </h2>
         {tempbans.length === 0 ? (
@@ -167,7 +170,10 @@ export default async function ModerationPage() {
               </thead>
               <tbody>
                 {tempbans.map((t) => (
-                  <tr key={t.id} className="border-b border-line/50">
+                  <tr
+                    key={t.id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="px-3 py-2">{t.username || t.user_id}</td>
                     <td className="px-3 py-2 text-muted">{t.reason || '—'}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-muted">{fmt(t.unban_at)}</td>
