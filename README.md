@@ -1,4 +1,4 @@
-<!-- SYNC: v0.539.0 · #609 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.540.0 · #610 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.539.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.540.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.539.0** — 🔒 **atomowość ekonomii domknięta** (pay/rob cross-user: `spendWallet`+`creditWallet` z rollbackiem + RPC `economy_ensure`); **v0.537–0.538** — 🔒 atomowość salda (RPC Postgres + per-user `withLock`) i ♻️ helper `mergeConfig`; **v0.535–0.536** — 🛡️ audyt projektu (poprawki + utwardzenie anty-double-mint); **v0.529–0.534** — 🛡️ **klany kompletne** (`/clan`: 10 podkomend + rola + prywatny kanał + transfer; panel `/clans` + publiczna `/p/clans`) oraz 📊 **benchmarking cross-server**; **v0.518–0.528** — ⚔️ **pety PvP** i 🎭 **role battle-passa**. Suite **141 plików / 1105 testów**, wszystkie bramki zielone (Node 26.4.0).
+Najnowsze: **v0.540.0** — 🔒 audyt współbieżności: atomowy credit poza lockiem `/eco` (level-up · giveaway · market · lottery); **v0.539.0** — 🔒 atomowość `pay`/`rob` cross-user (+ RPC `economy_ensure`); **v0.537–0.538** — 🔒 atomowość salda (RPC Postgres + per-user `withLock`) i ♻️ `mergeConfig`; **v0.535–0.536** — 🛡️ audyt projektu (poprawki + anty-double-mint); **v0.529–0.534** — 🛡️ **klany kompletne** + 📊 **benchmarking cross-server**; **v0.518–0.528** — ⚔️ **pety PvP** i 🎭 **role battle-passa**. Suite **141 plików / 1105 testów**, wszystkie bramki zielone (Node 26.4.0).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

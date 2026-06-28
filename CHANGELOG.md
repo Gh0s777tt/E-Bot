@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-609-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.539.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-610-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.540.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.540.0] — 🔒 Ekonomia: atomowy credit poza lockiem /eco (level-up · giveaway · market · lottery)
+
+- `[#610]` 🔒 **Domknięcie lost-update w ścieżkach kredytujących saldo** — audyt współbieżności (4 subagenty + ręczna weryfikacja) wykazał systemowy wzorzec POZA `/eco`: nagroda za level-up, wypłata giveaway, płatność sprzedawcy `/market` i wygrana `/lottery` kredytowały portfel przez `saveUser({ wallet: getUser()+delta })` (bezwarunkowy OVERWRITE). Ponieważ `cloudUpsert` (merge-duplicates) zapisuje podane kolumny stałą wartością, taki zapis **kasuje równoległy atomowy `economy_credit/spend`** od innego usera (`pay`/`rob`/`donate`) na tym samym koncie — a `withLock` tu nie chroni (ścieżki są poza lockiem `/eco`: handler wiadomości, poller w tle, cudze konto). Wszystkie 4 przeniesione na atomowy **`creditWallet`** (RPC `economy_credit` + fallback): [`leveling.mts`](bot/src/leveling.mts), [`giveaways.mts`](bot/src/engagement/giveaways.mts), [`market.mts`](bot/src/commands/market.mts), [`lottery.mts`](bot/src/commands/lottery.mts). **Zero zmiany zachowania** bez współbieżności; przy współbieżności — zero zgubionych kredytów. Audyt potwierdził CZYSTOŚĆ reszty toru #588–609 (pet battle kosmetyczny, clan bank = sink bez wypłat, battle-pass dedup+lock, brak IDOR/abuse).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1105/1105** · `sync:check` — exit 0 (Node 26.4.0). Świadomy follow-up (MED, niższy priorytet — nie kredytują cudzego konta): debety self bez locka (`/market buy`, zakup `/lottery`, gry `/eco`) wymagają `ensureUser`+warunkowego debetu jak `pay` (#609); `ecoSeason` podium (reset+wypłata w tle, raz/miesiąc).
 
 ## [0.539.0] — 🔒 Ekonomia: atomowość pay/rob (cross-user, domknięcie #608)
 

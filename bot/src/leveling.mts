@@ -4,12 +4,7 @@
 
 import { type Client, Events, type GuildMember, type Message } from 'discord.js';
 import { xpMultiplier } from './economy/effects.mts';
-import {
-  ecoConfig,
-  fmt,
-  getUser as getEcoUser,
-  saveUser as saveEcoUser,
-} from './economy/store.mts';
+import { creditWallet, ecoConfig, fmt, getUser as getEcoUser } from './economy/store.mts';
 import { logTx } from './economy/txlog.mts';
 import { resolveGuildLocale, t } from './i18n/index.mts';
 import { tierAtLevel } from './lib/achievements.mts';
@@ -243,13 +238,10 @@ async function onLevelUp(
   const eco = ecoConfig(guildId);
   if (eco.enabled && eco.levelUpMoney > 0) {
     try {
+      // Atomowy credit (RPC economy_credit) — awans pada poza withLock /eco (handler wiadomości),
+      // więc overwrite saldem zgubiłby równoległy pay/rob/donate na to konto (lost update).
       const u = await getEcoUser(guildId, userId);
-      await saveEcoUser({
-        guild_id: guildId,
-        user_id: userId,
-        username: u.username,
-        wallet: u.wallet + eco.levelUpMoney,
-      });
+      await creditWallet(guildId, userId, u.username, eco.levelUpMoney);
       logTx(guildId, userId, eco.levelUpMoney, 'level-up');
       moneyLine = t(resolveGuildLocale(), 'eco.levelReward', {
         user: `<@${userId}>`,

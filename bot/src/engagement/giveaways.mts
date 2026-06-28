@@ -3,7 +3,7 @@
 // (select=* + fallback upsert) → brak regresji, jeśli ALTER jeszcze nie odpalony.
 
 import { type ButtonInteraction, type Client, MessageFlags, type TextChannel } from 'discord.js';
-import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
+import { creditWallet, ecoConfig } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { levelForXp } from '../leveling.mts';
 import { cloudSelect, cloudUpdate, cloudUpsert, hasCloud } from '../lib/cloud.mts';
@@ -172,14 +172,10 @@ async function awardReward(
   if (reward.kind === 'money') {
     if (!ecoConfig(guildId).enabled) return;
     for (const uid of winners) {
-      const u = await getEcoUser(guildId, uid);
+      // Atomowy credit — wypłata w tle (poller), poza jakimkolwiek lockiem; overwrite saldem
+      // zgubiłby równoległą operację zwycięzcy (pay/rob/granie). creditWallet = atomowy add.
       const user = await client.users.fetch(uid).catch(() => null);
-      await saveEcoUser({
-        guild_id: guildId,
-        user_id: uid,
-        username: user?.username ?? uid,
-        wallet: u.wallet + amount,
-      });
+      await creditWallet(guildId, uid, user?.username ?? uid, amount);
       logTx(guildId, uid, amount, 'giveaway');
     }
     await ch.send(`💰 Każdy zwycięzca otrzymał **${amount}** monet!`).catch(() => {});

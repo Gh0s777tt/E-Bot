@@ -6,7 +6,7 @@ import {
   SlashCommandBuilder,
   type TextChannel,
 } from 'discord.js';
-import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import { creditWallet, ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
 
 const TICKET_PRICE = 500;
@@ -91,8 +91,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
   const winner = all[Math.floor(Math.random() * all.length)].user_id;
   const pool = all.length * TICKET_PRICE;
+  // Atomowy credit zwycięzcy (może być ktokolwiek, bez locka) — overwrite saldem zgubiłby
+  // jego równoległą operację. creditWallet = atomowy add (RPC economy_credit + fallback).
   const w = await getUser(gid, winner);
-  await saveUser({ guild_id: gid, user_id: winner, username: w.username, wallet: w.wallet + pool });
+  await creditWallet(gid, winner, w.username, pool);
   await cloudDelete('lottery_tickets', `guild_id=eq.${gid}`).catch(() => {});
   const ch = interaction.channel as TextChannel | null;
   if (ch && 'send' in ch) {

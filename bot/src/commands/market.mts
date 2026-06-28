@@ -7,6 +7,7 @@ import {
 } from 'discord.js';
 import {
   addInventory,
+  creditWallet,
   ecoConfig,
   fmt,
   getInventory,
@@ -160,13 +161,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     username: interaction.user.username,
     wallet: buyer.wallet - listing.price,
   });
-  const seller = await getUser(gid, listing.seller_id);
-  await saveUser({
-    guild_id: gid,
-    user_id: listing.seller_id,
-    username: listing.seller_name,
-    wallet: seller.wallet + listing.price,
-  });
+  // Atomowy credit sprzedawcy — to CUDZE konto (≠ kupujący) i nie jest pod żadnym lockiem;
+  // overwrite saldem zgubiłby równoległą zmianę sprzedawcy (np. inny zakup, pay, granie).
+  await creditWallet(gid, listing.seller_id, listing.seller_name, listing.price);
   await addInventory(gid, interaction.user.id, listing.item_name, 1);
   await interaction.reply(
     `✅ Kupiono **${listing.item_name}** za ${fmt(listing.price, cur)} od ${listing.seller_name}.`,
