@@ -53,7 +53,7 @@ export default async function LevelsPage() {
       </div>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Trophy size={16} className="text-accent" /> {tp(lang, 'ui.levels.cfgHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={cfg.enabled} lang={lang} />
@@ -63,7 +63,7 @@ export default async function LevelsPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Crown size={16} className="text-accent" /> {tp(lang, 'ui.levels.seasonsHeading')}
         </h2>
         <SeasonsForm initial={seasons} guild={guild} />
@@ -88,14 +88,14 @@ export default async function LevelsPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Swords size={16} className="text-accent" /> {tp(lang, 'ui.bp.heading')}
         </h2>
         <BattlePassRolesForm initial={bpRoles} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Users size={16} className="text-accent" /> {tp(lang, 'ui.levels.rankingHeading')}
         </h2>
         {board.length === 0 ? (
@@ -113,7 +113,10 @@ export default async function LevelsPage() {
               </thead>
               <tbody>
                 {board.map((r, i) => (
-                  <tr key={r.user_id} className="border-b border-line/50">
+                  <tr
+                    key={r.user_id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="py-2 pe-3 text-muted">{i + 1}</td>
                     <td className="py-2 pe-3">{r.username ?? r.user_id}</td>
                     <td className="py-2 pe-3 font-semibold text-accent">{r.level}</td>

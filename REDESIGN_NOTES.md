@@ -140,11 +140,16 @@ się bez `.content-pane`, więc **pozostają nietknięte** (zweryfikowane zrzute
   Nagłówki tabel (`text-xs uppercase`) — zostają (konwencja małych kapitalików w `th`).
 - SaveButton (gradient z E2) już aktywny w formularzach automoda. Zweryfikowane zrzutem (pełna strona).
 
+### E5 — /levels (zrobione) ✅
+- 4 nagłówki sekcji ujednolicone (Konfiguracja levelingu / Sezony / Role battle-passa / Ranking).
+- Tabela „Ranking (top 50)": hover wierszy. Formularze (Leveling/Seasons/BattlePassRoles) — etykiety pól, bez zmian.
+- Zweryfikowane zrzutem (pełna /levels).
+
 ### Kolejne ekrany (plan)
 1. **Stany wspólne** — `EmptyState`/`Loading`/`Error`, inputy (focus akcent), reflow tabel→karty na mobile.
-2. **Ekrany ustawień/formularze** — `/levels`, `/welcome`, `/roles`, `/scheduled`, `/tickets`, `/economy`,
+2. **Ekrany ustawień/formularze** — `/welcome`, `/roles`, `/scheduled`, `/tickets`, `/economy`,
    `/notifications`, `/ai`, … (nagłówki + grupowanie pól).
 3. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
 4. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
 
-> Status: E1–E4 (fundament + komponenty + Pulpit + /moderation) wdrożone i zweryfikowane. Kontynuuję per-ekran.
+> Status: E1–E5 (fundament + komponenty + Pulpit + /moderation + /levels) wdrożone i zweryfikowane. Kontynuuję per-ekran.
