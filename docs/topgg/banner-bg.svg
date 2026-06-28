@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600" viewBox="0 0 1600 600" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08080a"/>
+      <stop offset="1" stop-color="#100a0c"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0" cy="0" r="1" gradientTransform="translate(260 80) rotate(40) scale(820 640)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E50914" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#E50914" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0" cy="0" r="1" gradientTransform="translate(1400 560) rotate(-130) scale(760 600)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8b0000" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#8b0000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="600" fill="url(#bg)"/>
+  <rect width="1600" height="600" fill="url(#g1)"/>
+  <rect width="1600" height="600" fill="url(#g2)"/>
+  <!-- faint grid -->
+  <g stroke="#ffffff" stroke-opacity="0.03" stroke-width="1">
+    <path d="M200 0V600M400 0V600M600 0V600M800 0V600M1000 0V600M1200 0V600M1400 0V600"/>
+    <path d="M0 150H1600M0 300H1600M0 450H1600"/>
+  </g>
+  <!-- subtelne ukośne „slashe" (motyw marki), bardzo niska widoczność -->
+  <g fill="#E50914" fill-opacity="0.06">
+    <path d="M520 -40 L612 -40 L372 640 L280 640 Z"/>
+    <path d="M1120 -40 L1180 -40 L940 640 L880 640 Z"/>
+  </g>
+</svg>
