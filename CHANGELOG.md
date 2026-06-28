@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-614-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.544.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-615-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.545.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.545.0] — 🐛 Pety: pasek XP na maksymalnym poziomie (kosmetyka z audytu)
+
+- `[#615]` 🐛 **Pasek XP peta na max-levelu** — znalezisko z audytu (#610-tor). `xpIntoLevel` nie znało kapu poziomu (`MAX_LEVEL=50`), więc pet na maksie pokazywał pasek/„XP do poziomu 51" (mylące — np. `50/100` do nieistniejącego progu). Teraz na maksymalnym poziomie zwraca pasek pełny (`100/100`). Czysta funkcja ([`pets.mts`](bot/src/economy/pets.mts)) + 1 test (granice 49 / 50 / ponad). Bez wpływu na moc bojową/ekonomię (`petPower` i tak używał skapowanego `petLevel`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1106/1106** (`xpIntoLevel` +1) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.544.0] — 🔒 Ekonomia: atomowy blackjack (stawka + wypłata przez przyciski)
 

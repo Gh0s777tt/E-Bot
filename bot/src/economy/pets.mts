@@ -76,6 +76,8 @@ export function petLevel(xp: number): number {
   return Math.min(MAX_LEVEL, Math.floor(xp / 100) + 1);
 }
 export function xpIntoLevel(xp: number): { into: number; need: number } {
+  // Na maksymalnym poziomie nie ma kolejnego progu → pasek pełny (bez mylącego „do poziomu 51").
+  if (petLevel(xp) >= MAX_LEVEL) return { into: 100, need: 100 };
   return { into: xp % 100, need: 100 };
 }
 

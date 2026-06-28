@@ -43,6 +43,12 @@ describe('pets — progresja poziomu i sytość', () => {
     expect(xpIntoLevel(100)).toEqual({ into: 0, need: 100 });
   });
 
+  it('xpIntoLevel: na maksymalnym poziomie (50) pasek pełny, bez progu do 51', () => {
+    expect(xpIntoLevel(4899)).toEqual({ into: 99, need: 100 }); // poziom 49 — normalny próg
+    expect(xpIntoLevel(4900)).toEqual({ into: 100, need: 100 }); // poziom 50 (MAX) — pełny
+    expect(xpIntoLevel(9999)).toEqual({ into: 100, need: 100 }); // ponad MAX — wciąż pełny
+  });
+
   it('fullness: brak last_fed → 0 (głód maksymalny)', () => {
     expect(fullness({ last_fed: null } as never)).toBe(0);
   });
