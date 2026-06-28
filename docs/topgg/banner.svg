@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="480" viewBox="0 0 1920 480" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1920" y2="480" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#08080a"/>
-      <stop offset="1" stop-color="#140a0d"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(1520 40) rotate(135) scale(1050 820)" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E50914" stop-opacity="0.5"/>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientTransform="translate(640 240) rotate(20) scale(1400 900)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#141416"/>
+      <stop offset="1" stop-color="#060607"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(1620 40) rotate(135) scale(900 720)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E50914" stop-opacity="0.3"/>
       <stop offset="1" stop-color="#E50914" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="acc" x1="0" y1="0" x2="0" y2="480" gradientUnits="userSpaceOnUse">
@@ -13,16 +13,22 @@
       <stop offset="1" stop-color="#8b0000"/>
     </linearGradient>
     <linearGradient id="chip" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#1b1b21"/>
-      <stop offset="1" stop-color="#121217"/>
+      <stop stop-color="#161618"/>
+      <stop offset="1" stop-color="#0d0d0f"/>
     </linearGradient>
   </defs>
 
   <rect width="1920" height="480" fill="url(#bg)"/>
   <rect width="1920" height="480" fill="url(#glow)"/>
 
+  <!-- motyw slasha z logo (spójność), bardzo niska widoczność -->
+  <g fill="#E50914" fill-opacity="0.06">
+    <path d="M1500 -40 L1604 -40 L1364 520 L1260 520 Z"/>
+    <path d="M1660 -40 L1716 -40 L1476 520 L1420 520 Z"/>
+  </g>
+
   <!-- faint grid -->
-  <g stroke="#ffffff" stroke-opacity="0.035" stroke-width="1">
+  <g stroke="#ffffff" stroke-opacity="0.03" stroke-width="1">
     <path d="M120 0V480M360 0V480M600 0V480M840 0V480M1080 0V480M1320 0V480M1560 0V480M1800 0V480"/>
     <path d="M0 120H1920M0 240H1920M0 360H1920"/>
   </g>
@@ -31,7 +37,7 @@
   <rect x="0" y="0" width="12" height="480" fill="url(#acc)"/>
 
   <!-- wordmark -->
-  <text x="110" y="232" font-family="'Arial Narrow', Impact, Arial, sans-serif" font-size="168" font-weight="800" letter-spacing="3" fill="#f4f4f7">E&#8209;<tspan fill="#E50914">BOT</tspan></text>
+  <text x="110" y="232" font-family="'Arial Narrow', Impact, Arial, sans-serif" font-size="168" font-weight="800" letter-spacing="3" fill="#f5f5f7">E&#8209;<tspan fill="#E50914">BOT</tspan></text>
 
   <!-- subtitle -->
   <text x="116" y="300" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#d7d7de">All&#8209;in&#8209;one Discord bot <tspan fill="#E50914">+</tspan> web dashboard</text>
@@ -39,30 +45,30 @@
   <!-- feature chips -->
   <g font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#cfcfd6">
     <g>
-      <rect x="116" y="346" width="196" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.35"/>
+      <rect x="116" y="346" width="196" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.4"/>
       <text x="214" y="380" text-anchor="middle">Moderation</text>
     </g>
     <g>
-      <rect x="328" y="346" width="166" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.35"/>
+      <rect x="328" y="346" width="166" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.4"/>
       <text x="411" y="380" text-anchor="middle">Leveling</text>
     </g>
     <g>
-      <rect x="510" y="346" width="172" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.35"/>
+      <rect x="510" y="346" width="172" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.4"/>
       <text x="596" y="380" text-anchor="middle">Economy</text>
     </g>
     <g>
-      <rect x="698" y="346" width="190" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.35"/>
+      <rect x="698" y="346" width="190" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.4"/>
       <text x="793" y="380" text-anchor="middle">AI + Live</text>
     </g>
     <g>
-      <rect x="904" y="346" width="232" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.35"/>
+      <rect x="904" y="346" width="232" height="52" rx="26" fill="url(#chip)" stroke="#E50914" stroke-opacity="0.4"/>
       <text x="1020" y="380" text-anchor="middle">14 languages</text>
     </g>
   </g>
 
   <!-- right meta -->
   <g text-anchor="end" font-family="Arial, sans-serif">
-    <text x="1860" y="250" font-size="120" font-weight="800" fill="#E50914" fill-opacity="0.92">95+</text>
+    <text x="1860" y="250" font-size="120" font-weight="800" fill="#E50914" fill-opacity="0.95">95+</text>
     <text x="1860" y="300" font-size="34" font-weight="700" fill="#d7d7de">slash commands</text>
     <text x="1860" y="430" font-size="28" font-weight="600" fill="#8a8a93">e&#8209;bot&#8209;dc.vercel.app</text>
   </g>
