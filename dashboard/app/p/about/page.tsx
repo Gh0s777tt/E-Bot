@@ -28,9 +28,7 @@ export default async function AboutPage() {
           Plan <strong className="text-white">Premium</strong> odblokowuje dodatkowe pluginy i
           możliwości — szczegóły w oknie porównania planów na stronie Marketplace.
         </p>
-        <p className="text-xs">
-          Kontakt i wsparcie: skonfiguruj dane kontaktowe w tej sekcji (placeholder).
-        </p>
+        <p className="text-xs">Kontakt i wsparcie: Ghostt77@empire-forge.com</p>
       </div>
     </main>
   );

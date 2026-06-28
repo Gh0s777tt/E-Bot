@@ -3,36 +3,39 @@ import { getPanelLocale } from '../../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
-// Publiczna strona „Polityka prywatności" — SZABLON do uzupełnienia (nie jest poradą prawną).
-// Tytuł i18n; treść po polsku. Sekcje to rusztowanie — dostosuj do realnie przetwarzanych danych (RODO).
+// Publiczna strona „Polityka prywatności" (RODO). Treść po polsku. Administrator/kontakt w stałych.
+// UWAGA: dokument informacyjny — przed publicznym uruchomieniem warto zweryfikować prawnie.
+const ADMIN = 'Ghostt77';
+const EMAIL = 'Ghostt77@empire-forge.com';
+
 const SECTIONS: { h: string; p: string }[] = [
   {
     h: 'Administrator danych',
-    p: 'Wskaż, kto jest administratorem danych osobowych i jak się z nim skontaktować.',
+    p: `Administratorem danych osobowych jest ${ADMIN}. W sprawach prywatności: ${EMAIL}.`,
   },
   {
     h: 'Jakie dane przetwarzamy',
-    p: 'Np. identyfikatory Discord (ID użytkownika/serwera), dane aktywności, ustawienia, dane płatności (po stronie dostawcy).',
+    p: 'Identyfikatory Discord (ID użytkownika i serwera, nazwa), dane aktywności (liczniki wiadomości i czasu na kanałach głosowych na potrzeby levelingu/ekonomii), ustawienia serwerów oraz dane subskrypcji obsługiwane przez Stripe — Administrator nie przechowuje numerów kart.',
   },
   {
     h: 'Cel i podstawa przetwarzania',
-    p: 'Świadczenie usługi bota i panelu, rozliczenia, statystyki, bezpieczeństwo (anti-raid/automod).',
+    p: 'Świadczenie usługi bota i panelu (art. 6 ust. 1 lit. b RODO), bezpieczeństwo serwerów — anti-raid i automod (lit. f), rozliczenia subskrypcji (lit. c) oraz statystyki i rozwój usługi (lit. f).',
   },
   {
     h: 'Pliki cookie i pamięć lokalna',
-    p: 'Opisz cookie sesji/logowania oraz localStorage (język, motyw) używane przez panel.',
+    p: 'Cookie sesji logowania (niezbędne do działania panelu) oraz localStorage przechowujący preferencje języka i motywu.',
   },
   {
     h: 'Powierzenie i odbiorcy',
-    p: 'Podmioty przetwarzające: hosting (Vercel), baza (Supabase), płatności (Stripe), Discord.',
+    p: 'Dane mogą być powierzane podmiotom przetwarzającym: Discord, Vercel (hosting), Supabase (baza danych) oraz Stripe (płatności).',
   },
   {
     h: 'Prawa użytkownika',
-    p: 'Dostęp, sprostowanie, usunięcie, ograniczenie, sprzeciw oraz sposób realizacji żądań.',
+    p: `Prawo dostępu, sprostowania, usunięcia, ograniczenia, sprzeciwu oraz przenoszenia danych. Żądania: ${EMAIL}. Przysługuje również prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (PUODO).`,
   },
   {
     h: 'Okres przechowywania i kontakt',
-    p: 'Jak długo dane są przechowywane oraz adres do zgłoszeń dotyczących prywatności.',
+    p: `Dane są przechowywane przez czas korzystania z usługi oraz okres wymagany przepisami; po usunięciu serwera lub konta dane są usuwane lub anonimizowane. Kontakt: ${EMAIL}.`,
   },
 ];
 
@@ -43,9 +46,7 @@ export default async function PrivacyPage() {
       <h1 className="font-display text-3xl tracking-wide text-white">
         {tp(lang, 'ui.footer.privacy')}
       </h1>
-      <p className="mt-3 rounded-lg border border-accent/40 bg-accent/10 px-3 py-2 text-xs text-accent">
-        ⚠️ Szablon roboczy — uzupełnij treścią zgodną z RODO przed publicznym udostępnieniem.
-      </p>
+      <p className="mt-2 text-xs text-muted">Obowiązuje od: 28.06.2026</p>
       <div className="mt-6 space-y-5">
         {SECTIONS.map((s) => (
           <section key={s.h}>
@@ -54,6 +55,9 @@ export default async function PrivacyPage() {
           </section>
         ))}
       </div>
+      <p className="mt-8 border-t border-line/60 pt-4 text-xs text-muted">
+        Dokument ma charakter informacyjny. W razie pytań: {EMAIL}.
+      </p>
     </main>
   );
 }

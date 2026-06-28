@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-629-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.559.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-630-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.560.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.560.0] — 📄 Prawne: treść regulaminu i polityki prywatności + linki na /login
+
+- `[#630]` 📄 **Wypełnienie treści prawnej + dostęp** — strony `/p/regulamin` i `/p/polityka-prywatnosci` dostały realną treść (operator: **Ghostt77**, kontakt: `Ghostt77@empire-forge.com`, prawo polskie; polityka wg RODO z podstawami prawnymi, procesorami Discord/Vercel/Supabase/Stripe oraz prawem skargi do PUODO). „O projekcie" — uzupełniony kontakt. Linki „Regulamin · Polityka prywatności" dodane na ekranie logowania (`/login`) — dostępne przed zalogowaniem. Dokumenty mają charakter informacyjny (wskazana weryfikacja prawna przed produkcją).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1131** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.559.0] — 💳 Premium: plan miesięczny i roczny (przełącznik + oszczędność)
 

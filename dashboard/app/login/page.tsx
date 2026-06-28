@@ -75,8 +75,16 @@ export default async function LoginPage({
         </p>
       </div>
 
-      <div className="absolute bottom-5 text-[11px] uppercase tracking-[0.3em] text-muted">
-        E-BOT · GH0ST EMPIRE
+      <div className="absolute bottom-5 flex flex-col items-center gap-2.5 text-[11px] text-muted">
+        <div className="flex gap-4 normal-case tracking-normal">
+          <a href="/p/regulamin" className="transition hover:text-white">
+            {tp(lang, 'ui.footer.terms')}
+          </a>
+          <a href="/p/polityka-prywatnosci" className="transition hover:text-white">
+            {tp(lang, 'ui.footer.privacy')}
+          </a>
+        </div>
+        <span className="uppercase tracking-[0.3em]">E-BOT · GH0ST EMPIRE</span>
       </div>
     </div>
   );
