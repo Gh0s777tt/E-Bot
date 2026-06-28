@@ -292,9 +292,17 @@ async function maybePost(client: Client): Promise<void> {
           value: `Aktywniejszy niż **${percentileRank(s.m, benchSample)}%** serwerów obsługiwanych przez bota`,
           inline: false,
         });
-      await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});
+      // Dedup oznaczamy TYLKO po potwierdzonej wysyłce — transientny błąd send (rate-limit, chwilowy
+      // brak uprawnień) pozwala ponowić w kolejnym ticku, zamiast bezgłośnie spalić tydzień.
+      const sent = await (ch as TextChannel)
+        .send({ embeds: [embed] })
+        .then(() => true)
+        .catch(() => false);
+      if (sent) await cloudSetSetting(dedupKey, tag).catch(() => {});
+    } else {
+      // Kanał trwale nieużywalny (usunięty / zły typ / inny serwer) — oznacz dedup, by nie ponawiać co 6 h.
+      await cloudSetSetting(dedupKey, tag).catch(() => {});
     }
-    await cloudSetSetting(dedupKey, tag).catch(() => {});
   }
 }
 

@@ -1,4 +1,4 @@
-<!-- SYNC: v0.534.0 · #604 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.535.0 · #605 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.534.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.535.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)

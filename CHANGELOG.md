@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-604-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.534.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-605-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.535.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.535.0] — 🐛 Audyt projektu: poprawki (digest dedup + pet rename)
+
+- `[#605]` 🐛 **Poprawki z pełnego audytu** (2 realne bugi): (1) **digest dedup** ([`digest.mts`](bot/src/analytics/digest.mts)) — tydzień był oznaczany jako wysłany NAWET gdy `send()` zawiódł (transientny rate-limit / brak uprawnień) lub kanał był nieużywalny → tygodniowy digest bezgłośnie przepadał na cały tydzień. Teraz dedup zapisywany TYLKO po potwierdzonej wysyłce; trwały misconfig (kanał usunięty / zły typ / inny serwer) też oznacza dedup (zero zbędnych ponowień co 6 h). (2) **`/pet rename`** ([`pet.mts`](bot/src/commands/pet.mts)) — nazwa ze samych spacji dawała pusty string; teraz fallback na nazwę gatunku (jak w `adopt`). Audyt (4 subagenty + ręczna weryfikacja): zero krytycznych luk bezpieczeństwa; **2 false-positives odrzucone** (weekKey rok-graniczny — dedup poprawny, bo tag zawiera rok; `/economy`=ekonomia GT ≠ `/eco`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1090/1090** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.534.0] — 📊 Digest: benchmarking cross-server (percentyl aktywności)
 

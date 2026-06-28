@@ -254,7 +254,9 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
 
   if (sub === 'rename') {
-    pet.name = interaction.options.getString('imie', true).trim();
+    // Pusta nazwa (same spacje) → fallback na nazwę gatunku (jak w adopt), nigdy pusty string.
+    pet.name =
+      interaction.options.getString('imie', true).trim() || t(locale, `pet.kind.${pet.species}`);
     await savePet(pet);
     await interaction.reply(t(locale, 'pet.renamed', { name: pet.name }));
     return;
