@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-613-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.543.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-614-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.544.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.544.0] — 🔒 Ekonomia: atomowy blackjack (stawka + wypłata przez przyciski)
+
+- `[#614]` 🔒 **Atomowe saldo w `/eco blackjack`** — ostatnia interaktywna gra. Stawka pobierana przy starcie, wypłata przy rozliczeniu (przyciski Dobierz/Pas) — handler przycisków działa **POZA** `withLock` /eco (osobna interakcja), więc `getUser`+`saveUser` (overwrite) mógł zgubić równoległy credit innego usera. Przeniesione na `spendWallet` (stawka, + `ensureUser`) i `creditWallet` (wypłata: natychmiastowy BJ = zwrot + bonus 1.5×, wygrana = 2×, remis = zwrot stawki). **Matematyka wypłat zachowana 1:1.** Domyka atomowość WSZYSTKICH gier i operacji ekonomii.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1105/1105** · `sync:check` — exit 0 (Node 26.4.0). Pozostaje wyłącznie `ecoSeason` podium (reset + wypłata w tle, raz/miesiąc — intencjonalny masowy wipe, inny charakter; LOW).
 
 ## [0.543.0] — 🔒 Ekonomia: atomowe gry /eco (gamble · slots · roulette · highlow · crime · sklep)
 

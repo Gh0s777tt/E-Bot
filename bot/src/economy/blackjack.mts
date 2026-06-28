@@ -12,7 +12,7 @@ import {
 } from 'discord.js';
 import { bumpQuest } from '../community/quests.mts';
 import { type Locale, resolveLocale, t } from '../i18n/index.mts';
-import { ecoConfig, fmt, getUser, saveUser } from './store.mts';
+import { creditWallet, ecoConfig, ensureUser, fmt, getUser, spendWallet } from './store.mts';
 
 const ACCENT = 0xe50914;
 const SUITS = ['♠', '♥', '♦', '♣'];
@@ -95,21 +95,18 @@ export async function startBlackjack(
 ): Promise<void> {
   const locale = resolveLocale(interaction);
   const cur = ecoConfig(gid).currency;
-  const u = await getUser(gid, interaction.user.id);
-  if (u.wallet < bet) {
+  // pobierz stawkę z góry — atomowo (spendWallet). Start jest pod withLock /eco, ale przyciski
+  // (hit/stand) już NIE, więc całe saldo przez atomowe spend/credit (anty lost-update cudzego creditu).
+  await ensureUser(gid, interaction.user.id, interaction.user.username);
+  const afterBet = await spendWallet(gid, interaction.user.id, bet);
+  if (afterBet === null) {
+    const u = await getUser(gid, interaction.user.id);
     await interaction.reply({
       content: t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) }),
       flags: MessageFlags.Ephemeral,
     });
     return;
   }
-  // pobierz stawkę z góry
-  await saveUser({
-    guild_id: gid,
-    user_id: interaction.user.id,
-    username: interaction.user.username,
-    wallet: u.wallet - bet,
-  });
   bumpQuest(gid, interaction.user.id, 'games');
 
   const deck = freshDeck();
@@ -124,13 +121,8 @@ export async function startBlackjack(
   // natychmiastowy blackjack
   if (val(g.player) === 21) {
     const winBonus = Math.floor(bet * 1.5);
-    const nu = await getUser(gid, interaction.user.id);
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: nu.wallet + bet + winBonus,
-    });
+    // Zwrot stawki + bonus (1.5×) atomowo.
+    await creditWallet(gid, interaction.user.id, interaction.user.username, bet + winBonus);
     bumpQuest(gid, interaction.user.id, 'gamesWon');
     await interaction.reply({
       embeds: [view(g, true, t(locale, 'bj.blackjack', { amount: fmt(winBonus, cur) }), locale)],
@@ -194,13 +186,8 @@ export async function handleBlackjackButton(interaction: ButtonInteraction): Pro
     result = t(locale, 'bj.lose', { amount: fmt(g.bet, cur) });
   }
   if (payout > 0) {
-    const nu = await getUser(gid, interaction.user.id);
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: nu.wallet + payout,
-    });
+    // Wypłata (wygrana 2× lub remis = zwrot stawki) atomowo — handler przycisku jest poza withLock.
+    await creditWallet(gid, interaction.user.id, interaction.user.username, payout);
   }
   await interaction.update({
     embeds: [view(g, true, result, locale)],
