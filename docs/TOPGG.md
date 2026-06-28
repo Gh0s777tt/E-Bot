@@ -16,7 +16,7 @@
 ## 🚀 Kroki (po kolei)
 
 1. **Zaloguj się** na [top.gg](https://top.gg) kontem Discord (tym, które ma dostęp do aplikacji bota).
-2. **Add Bot** → wklej **Client ID** bota (to samo `DISCORD_CLIENT_ID`). top.gg zweryfikuje, że jesteś właścicielem/teammem aplikacji w Discord Developer Portal.
+2. **Add Bot** → wklej **Client ID** = `859188204714442752`. top.gg zweryfikuje przez Discord, że jesteś właścicielem/teammem aplikacji.
 3. **Wypełnij wpis** treścią z sekcji [„📋 Treść wpisu"](#-treść-wpisu-do-wklejenia) poniżej (krótki opis, długi opis, tagi, linki, prefix).
 4. **Wyślij do review** — moderacja top.gg akceptuje wpis (zwykle godziny–dni).
 5. **Pobierz token API**: wpis bota → zakładka **Webhooks / API** → skopiuj **token**.
@@ -34,50 +34,72 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 📋 Treść wpisu (do wklejenia)
+## 📋 Gotowy wpis (kopiuj‑wklej) — ID bota: `859188204714442752`
 
-**Krótki opis (PL):**
-> Wielomodułowy bot Discord: moderacja, anti‑nuke, leveling, ekonomia, tickety, AI, biblioteka gier i powiadomienia live — z panelem web.
-
-**Short description (EN):**
-> Multi‑module Discord bot: moderation, anti‑nuke, leveling, economy, tickets, AI, game library and live alerts — all with a web dashboard.
-
-**Prefix:** `/` (slash commands)
-
-**Tagi (max 5):** `Moderation` · `Leveling` · `Economy` · `Utility` · `Fun`
-
-**Linki:**
-- **Invite:** `https://discord.com/oauth2/authorize?client_id=<DISCORD_CLIENT_ID>&permissions=8&scope=bot%20applications.commands`
+**Linki (z Twoim ID):**
+- **Listing:** `https://top.gg/bot/859188204714442752`
+- **Invite:** `https://discord.com/oauth2/authorize?client_id=859188204714442752&permissions=8&scope=bot+applications.commands`
+- **Vote:** `https://top.gg/bot/859188204714442752/vote`
+- **Webhook URL:** `https://e-bot-dc.vercel.app/api/topgg/webhook`
 - **Website / Dashboard:** `https://e-bot-dc.vercel.app`
 - **Support Server:** *(wklej zaproszenie na swój serwer wsparcia, jeśli masz)*
 
-**Długi opis (EN, markdown — top.gg renderuje Markdown):**
+**Avatar:** top.gg pobiera **automatycznie** awatar bota z Discorda — nic nie wgrywasz (zmień w Discord Developer Portal, jeśli chcesz inny).
+
+**Prefix:** `/` (slash commands) · **Język wpisu (Library):** `English` (główny).
+
+**Tagi / kategorie (wybierz z listy top.gg, do 5):** `Moderation` · `Leveling` · `Economy` · `Utility` · `Fun`
+*(uzupełniająco, jeśli dostępne: `Social`, `Gaming`)*
+
+**Headline / krótki opis (≤200 znaków) — EN:**
+> All-in-one Discord bot with a full web dashboard: moderation & anti-nuke, leveling, economy, tickets, AI, live alerts and a Steam game library. 95+ commands, 14 languages.
+
+**Headline (PL — jeśli wolisz polski wpis):**
+> Wielofunkcyjny bot Discord z panelem web: moderacja i anti-nuke, leveling, ekonomia, tickety, AI, powiadomienia live i biblioteka gier. 95+ komend, 14 języków.
+
+**Baner / tło (Background) — URL z repo (lub wgraj własny 1920×480, czerń/czerwień):**
+`https://raw.githubusercontent.com/Gh0s777tt/E-Bot/main/dashboard/public/ghost-banner.jpg`
+
+**Długi opis (EN, Markdown — top.gg renderuje Markdown):**
 
 ```markdown
-# E-Bot — your all-in-one Discord companion ⚙️🔥
+# ⚙️🔥 E-Bot — all-in-one Discord bot + web dashboard
 
-A multi-module bot with a full **web dashboard** (configure everything in the browser).
-**95+ slash commands**, background services, and **14 languages**.
+Run your whole server from one bot — and configure **everything in the browser**.
+**95+ slash commands**, ~59 background services, **14 languages**, full per-server settings.
 
-## ✨ Highlights
-- 🛡️ **Security** — Anti-Nuke (audit-log detection), Anti-Raid, automod, verification, modmail, mod-logs
-- 📈 **Leveling** — XP, role rewards, seasons & Hall of Fame, battle-pass
-- 💰 **Economy** — currency, shop, jobs, gambling, market, stocks, pets, cards
-- 🎫 **Tickets** — support panels with claiming & transcripts
-- 🤖 **AI** — chat with memory, image description, AI moderation, `/imagine`
-- 📡 **Live alerts** — Twitch · Kick · YouTube · Rumble
-- 🎮 **Game library** — Steam + IGDB "Netflix"-style library
-- 🌍 **14 languages** + per-server configuration
+> 🖥️ **Dashboard:** https://e-bot-dc.vercel.app — log in with Discord and manage your server.
+
+## 🛡️ Security & Moderation
+Anti-Nuke (audit-log detection + punishments), Anti-Raid (join-flood, alt detection, auto-lockdown),
+AutoMod (spam, invites, links, banned words/regex, anti-caps, scam & PII), verification, modmail,
+full mod-logs, and tickets with transcripts.
+
+## 📈 Leveling & Economy
+XP with role rewards, multipliers, seasons & Hall of Fame, battle-pass. A full economy: currency,
+daily/work, shop, gambling, player market, stocks, lottery, pets and collectible cards.
+
+## 🤖 AI & Engagement
+AI chat with memory, one-shot `/ask`, image description, AI moderation, `/imagine` image generation,
+translate, TL;DR — plus giveaways, polls, suggestions, reaction/button roles, starboard, temp-voice,
+counting, birthdays and an invite tracker.
+
+## 📡 Live & Games
+Stream alerts for **Twitch · Kick · YouTube · Rumble**, free-games & patch-notes feeds, and a
+**Steam + IGDB** "Netflix"-style game library.
+
+## 🌍 14 languages
+PL · EN · DE · ES · IT · FR · PT · ZH · KO · RU · UK · JA · AR · ID — both commands and dashboard.
 
 ## 🚀 Get started
-1. Invite the bot, then open the **dashboard** to configure modules.
-2. Type `/help` in Discord to browse commands live.
-3. Like it? `/vote` to support the project on top.gg ⭐
+1. **Invite** E-Bot, then open the **dashboard** to set up modules in minutes.
+2. Type **/help** in Discord to search commands live.
+3. Enjoying it? **/vote** to support the project ⭐
 
 Dashboard: https://e-bot-dc.vercel.app
 ```
 
-> Polską wersję długiego opisu masz w README i na [`/wiki`](https://e-bot-dc.vercel.app/wiki) — możesz ją skrócić do top.gg, ale **publiczność top.gg jest głównie anglojęzyczna**, więc opis EN jest zalecany jako główny.
+> Polski długi opis masz w README i na [`/wiki`](https://e-bot-dc.vercel.app/wiki). **Publiczność top.gg jest głównie anglojęzyczna**, więc opis EN zalecany jako główny.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -102,7 +124,8 @@ Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg
 
 ## ✅ Checklist
 
-- [ ] Wpis utworzony na top.gg (Client ID = `DISCORD_CLIENT_ID`)
+- [ ] Wpis utworzony na top.gg (Client ID = `859188204714442752`)
+- [ ] 🔁 **Token API zregenerowany** (poprzedni był wklejony na czacie → spalony)
 - [ ] Treść wklejona (krótki + długi opis, tagi, linki, prefix `/`)
 - [ ] Wpis zaakceptowany przez moderację
 - [ ] `TOPGG_TOKEN` ustawiony w env **bota** (Railway) + redeploy
