@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      @page { size: A4; margin: 0; }
+      body { font-family: 'Segoe UI', system-ui, sans-serif; color: #ededf2; background: #0e0e12; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page { width: 210mm; min-height: 297mm; padding: 16mm 15mm; position: relative; page-break-after: always; background: #0e0e12; overflow: hidden; }
+      .page:last-child { page-break-after: auto; }
+      h1 { font-size: 30pt; letter-spacing: .01em; line-height: 1.1; }
+      h2 { font-size: 18pt; color: #fff; margin-bottom: 8pt; display: flex; align-items: center; gap: 8pt; border-bottom: 1.5px solid #232329; padding-bottom: 6pt; }
+      h3 { font-size: 12.5pt; color: #fff; margin: 0 0 3pt; }
+      p { font-size: 10.5pt; line-height: 1.55; color: #c7c7d1; }
+      .accent { color: #e50914; }
+      .muted { color: #9a9aa6; }
+      .tag { display: inline-block; font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #e50914; border: 1px solid rgba(229,9,20,.4); background: rgba(229,9,20,.1); padding: 3pt 8pt; border-radius: 99pt; }
+      .shot { width: 100%; border: 1px solid #232329; border-radius: 8pt; margin: 8pt 0; display: block; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+      .card { border: 1px solid #232329; border-radius: 10pt; padding: 11pt; background: #121217; }
+      .card h3 { color: #e50914; }
+      .feat { margin: 6pt 0; }
+      .feat li { font-size: 10pt; color: #d3d3da; list-style: none; padding: 3pt 0 3pt 16pt; position: relative; }
+      .feat li::before { content: '✦'; color: #e50914; position: absolute; left: 0; }
+      .step { display: flex; gap: 10pt; margin: 7pt 0; align-items: flex-start; }
+      .num { flex: 0 0 auto; width: 20pt; height: 20pt; border-radius: 6pt; background: #e50914; color: #fff; font-weight: 700; font-size: 11pt; display: flex; align-items: center; justify-content: center; }
+      .foot { position: absolute; bottom: 9mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; font-size: 8pt; color: #6b6b76; border-top: 1px solid #232329; padding-top: 6pt; }
+      .cover { display: flex; flex-direction: column; justify-content: center; min-height: 297mm; text-align: center; align-items: center; }
+      .glow { position: absolute; width: 120mm; height: 120mm; border-radius: 50%; background: radial-gradient(circle, rgba(229,9,20,.22), transparent 70%); top: -20mm; left: 50%; transform: translateX(-50%); }
+      .skull { width: 34mm; height: 34mm; border-radius: 12pt; object-fit: cover; border: 1px solid rgba(229,9,20,.4); margin-bottom: 12pt; }
+      .lead { font-size: 12pt; color: #c7c7d1; max-width: 150mm; margin: 10pt auto 0; line-height: 1.6; }
+      .pill-row { display: flex; gap: 8pt; justify-content: center; margin-top: 16pt; flex-wrap: wrap; }
+      .pill { border: 1px solid #232329; border-radius: 8pt; padding: 7pt 12pt; font-size: 9.5pt; background: #121217; }
+      .pill b { color: #e50914; font-size: 13pt; }
+    </style>
+  </head>
+  <body>
+    <!-- OKŁADKA -->
+    <section class="page cover">
+      <div class="glow"></div>
+      <img class="skull" src="../../dashboard/public/ghost-skull.png" />
+      <span class="tag">Przewodnik dla streamerów</span>
+      <h1 style="margin-top: 14pt">E-<span class="accent">BOT</span> dla streamerów</h1>
+      <p class="lead">Zbuduj aktywną społeczność wokół swoich transmisji — automatyczne powiadomienia live, role dla widzów, ekonomia, leveling i moderacja w jednym bocie z panelem w 14 językach.</p>
+      <div class="pill-row">
+        <div class="pill"><b>Twitch</b> · Kick · YouTube</div>
+        <div class="pill"><b>~95</b> komend</div>
+        <div class="pill"><b>14</b> języków</div>
+      </div>
+      <p class="muted" style="margin-top: 24pt; font-size: 9pt">GH0ST EMPIRE · e-bot-dc.vercel.app</p>
+    </section>
+
+    <!-- LIVE -->
+    <section class="page">
+      <span class="tag">Powiadomienia live</span>
+      <h2 style="margin-top: 10pt">Nigdy nie przegap startu transmisji</h2>
+      <p>Bot automatycznie ogłasza, gdy wchodzisz na żywo na <b>Twitchu, Kicku lub YouTube</b> — z pingiem wybranej roli i własną treścią. Widzowie dostają powiadomienie i jednym kliknięciem trafiają na stream.</p>
+      <img class="shot" src="../../dashboard/public/screens/live.png" />
+      <div class="grid2" style="margin-top: 4pt">
+        <div class="card">
+          <h3>Rola NA ŻYWO</h3>
+          <p class="muted" style="font-size: 9.5pt">Streamujący widzowie automatycznie dostają wyróżniającą rolę (komenda <b>/liverole</b>).</p>
+        </div>
+        <div class="card">
+          <h3>Rola za sub Twitch</h3>
+          <p class="muted" style="font-size: 9.5pt">Subskrybenci na Twitchu otrzymują rolę na Discordzie po połączeniu konta (<b>/linktwitch</b>).</p>
+        </div>
+      </div>
+      <ul class="feat" style="margin-top: 8pt">
+        <li>Liczniki kanałów na żywo: obserwujący, subskrypcje, widzowie</li>
+        <li>Harmonogram Twitch → wydarzenia Discord (/streamsync)</li>
+        <li>Feed darmowych gier i alerty cenowe dla społeczności graczy</li>
+      </ul>
+      <div class="foot"><span>E-BOT dla streamerów</span><span>GH0ST EMPIRE</span></div>
+    </section>
+
+    <!-- ZAANGAŻOWANIE -->
+    <section class="page">
+      <span class="tag">Zaangażowanie</span>
+      <h2 style="margin-top: 10pt">Zatrzymaj widzów między streamami</h2>
+      <p>Ekonomia, poziomy i nagrody sprawiają, że społeczność żyje także poza transmisją — widzowie wracają po codzienne nagrody, rywalizują w rankingach i zdobywają role.</p>
+      <div class="grid2">
+        <div>
+          <h3 style="margin-top: 6pt">Ekonomia serwera</h3>
+          <img class="shot" src="../../dashboard/public/screens/economy.png" />
+          <ul class="feat">
+            <li>Własna waluta, /daily, praca, sklep z rolami</li>
+            <li>Gry: blackjack, ruletka, sloty, loteria</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin-top: 6pt">Leveling i battle-pass</h3>
+          <img class="shot" src="../../dashboard/public/screens/leveling.png" />
+          <ul class="feat">
+            <li>XP za czat i głos, role-nagrody za poziom</li>
+            <li>Sezony, prestiż i misje battle-passa</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top: 6pt">Dodaj do tego <b>reaction-role</b>, <b>menu ról</b>, <b>powitania</b>, <b>urodziny</b>, <b>starboard</b> i <b>kanały tymczasowe</b> — wszystko klikasz w panelu.</p>
+      <div class="foot"><span>E-BOT dla streamerów</span><span>GH0ST EMPIRE</span></div>
+    </section>
+
+    <!-- MODERACJA + START -->
+    <section class="page">
+      <span class="tag">Bezpieczeństwo</span>
+      <h2 style="margin-top: 10pt">Spokój podczas transmisji</h2>
+      <p>Automoderacja, anti-raid i anti-nuke pilnują serwera, gdy Ty skupiasz się na streamie — filtrują spam i linki, wykrywają naloty i chronią przed wrogim adminem.</p>
+      <img class="shot" src="../../dashboard/public/screens/moderation.png" />
+
+      <h2 style="margin-top: 16pt">Start w 5 krokach</h2>
+      <div class="step"><div class="num">1</div><div><h3>Dodaj bota</h3><p class="muted" style="font-size: 9.5pt">Kliknij „Dodaj do Discorda" i wybierz serwer.</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>Zaloguj się do panelu</h3><p class="muted" style="font-size: 9.5pt">Wejdź na stronę i autoryzuj się przez Discord.</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>Włącz powiadomienia live</h3><p class="muted" style="font-size: 9.5pt">Podaj swoje kanały Twitch/Kick/YouTube i kanał ogłoszeń.</p></div></div>
+      <div class="step"><div class="num">4</div><div><h3>Uruchom ekonomię i leveling</h3><p class="muted" style="font-size: 9.5pt">Włącz moduły i ustaw nagrody dla widzów.</p></div></div>
+      <div class="step"><div class="num">5</div><div><h3>Zabezpiecz serwer</h3><p class="muted" style="font-size: 9.5pt">Włącz automod i anti-raid — gotowe.</p></div></div>
+      <p style="margin-top: 14pt; text-align: center" class="muted">Pełny przewodnik: <span class="accent">/wiki</span> · Kontakt: Ghostt77@empire-forge.com</p>
+      <div class="foot"><span>E-BOT dla streamerów</span><span>© 2026 GH0ST EMPIRE</span></div>
+    </section>
+  </body>
+</html>

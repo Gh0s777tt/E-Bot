@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      @page { size: A4; margin: 0; }
+      body { font-family: 'Segoe UI', system-ui, sans-serif; color: #ededf2; background: #0e0e12; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page { width: 210mm; min-height: 297mm; padding: 16mm 15mm; position: relative; page-break-after: always; background: #0e0e12; overflow: hidden; }
+      .page:last-child { page-break-after: auto; }
+      h1 { font-size: 30pt; line-height: 1.1; }
+      h2 { font-size: 18pt; color: #fff; margin-bottom: 8pt; border-bottom: 1.5px solid #232329; padding-bottom: 6pt; }
+      h3 { font-size: 12pt; color: #fff; margin: 0 0 3pt; }
+      p { font-size: 10.5pt; line-height: 1.55; color: #c7c7d1; }
+      .accent { color: #e50914; }
+      .muted { color: #9a9aa6; }
+      code { font-family: 'Consolas', 'Courier New', monospace; font-size: 9pt; color: #ff8a8a; background: #1b1b21; padding: 1pt 4pt; border-radius: 4pt; }
+      .tag { display: inline-block; font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: #e50914; border: 1px solid rgba(229,9,20,.4); background: rgba(229,9,20,.1); padding: 3pt 8pt; border-radius: 99pt; }
+      .shot { width: 100%; border: 1px solid #232329; border-radius: 8pt; margin: 8pt 0; display: block; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+      .card { border: 1px solid #232329; border-radius: 10pt; padding: 11pt; background: #121217; margin-bottom: 8pt; }
+      .card h3 { color: #e50914; }
+      table { width: 100%; border-collapse: collapse; margin: 8pt 0; font-size: 9.5pt; }
+      th, td { text-align: left; padding: 6pt 8pt; border-bottom: 1px solid #232329; vertical-align: top; }
+      th { color: #9a9aa6; text-transform: uppercase; font-size: 8pt; letter-spacing: .08em; }
+      td b { color: #fff; }
+      .feat li { font-size: 10pt; color: #d3d3da; list-style: none; padding: 3pt 0 3pt 16pt; position: relative; }
+      .feat li::before { content: '▹'; color: #e50914; position: absolute; left: 0; }
+      .foot { position: absolute; bottom: 9mm; left: 15mm; right: 15mm; display: flex; justify-content: space-between; font-size: 8pt; color: #6b6b76; border-top: 1px solid #232329; padding-top: 6pt; }
+      .cover { display: flex; flex-direction: column; justify-content: center; min-height: 297mm; text-align: center; align-items: center; }
+      .glow { position: absolute; width: 120mm; height: 120mm; border-radius: 50%; background: radial-gradient(circle, rgba(229,9,20,.22), transparent 70%); top: -20mm; left: 50%; transform: translateX(-50%); }
+      .skull { width: 34mm; height: 34mm; border-radius: 12pt; object-fit: cover; border: 1px solid rgba(229,9,20,.4); margin-bottom: 12pt; }
+      .lead { font-size: 12pt; color: #c7c7d1; max-width: 150mm; margin: 10pt auto 0; line-height: 1.6; }
+      .pill-row { display: flex; gap: 8pt; justify-content: center; margin-top: 16pt; flex-wrap: wrap; }
+      .pill { border: 1px solid #232329; border-radius: 8pt; padding: 7pt 12pt; font-size: 9.5pt; background: #121217; }
+      .pill b { color: #e50914; }
+    </style>
+  </head>
+  <body>
+    <!-- OKŁADKA -->
+    <section class="page cover">
+      <div class="glow"></div>
+      <img class="skull" src="../../dashboard/public/ghost-skull.png" />
+      <span class="tag">Dokumentacja techniczna</span>
+      <h1 style="margin-top: 14pt">E-<span class="accent">BOT</span> dla developerów</h1>
+      <p class="lead">Architektura, konfiguracja, bezpieczeństwo i wdrożenie wielomodułowego ekosystemu Discord: bot (discord.js v14), panel (Next.js), GameVault i kolektory danych — monorepo pnpm.</p>
+      <div class="pill-row">
+        <div class="pill"><b>monorepo</b> pnpm · 4 pakiety</div>
+        <div class="pill"><b>TypeScript</b> · Node 26</div>
+        <div class="pill"><b>1141</b> testów</div>
+      </div>
+      <p class="muted" style="margin-top: 24pt; font-size: 9pt">GH0ST EMPIRE · github.com/Gh0s777tt/E-Bot</p>
+    </section>
+
+    <!-- ARCHITEKTURA -->
+    <section class="page">
+      <span class="tag">Architektura</span>
+      <h2 style="margin-top: 10pt">Monorepo i pakiety</h2>
+      <p>Projekt to monorepo <b>pnpm</b> z czterema pakietami o jasno rozdzielonych odpowiedzialnościach. Wspólne bramki jakości i konwencje (dokumentacja zsynchronizowana z CHANGELOG).</p>
+      <table>
+        <tr><th>Pakiet</th><th>Stack</th><th>Rola</th></tr>
+        <tr><td><code>bot/</code></td><td>discord.js v14 · SQLite</td><td><b>Bot Discord</b> — ~95 komend, 59 usług w tle, i18n 14 jęz.</td></tr>
+        <tr><td><code>dashboard/</code></td><td>Next.js 16 · React 19 · Tailwind 4 · TS</td><td><b>Panel sterowania</b> — Vercel + Supabase</td></tr>
+        <tr><td><code>web/</code></td><td>Next.js</td><td><b>GameVault</b> — „Netflix dla gier"</td></tr>
+        <tr><td><code>ingest/</code></td><td>Node (node:sqlite, fetch)</td><td><b>Kolektory</b> — Steam · PSN · GOG · IGDB</td></tr>
+      </table>
+      <h3 style="margin-top: 10pt">Panel sterowania</h3>
+      <img class="shot" src="../../dashboard/public/screens/dashboard.png" />
+      <p class="muted" style="font-size: 9.5pt">Server Components (Next.js), dane z Supabase, motyw „Obsidian/Crimson" (CSS-first Tailwind 4), i18n 14 języków z RTL dla arabskiego.</p>
+      <div class="foot"><span>E-BOT — dokumentacja techniczna</span><span>GH0ST EMPIRE</span></div>
+    </section>
+
+    <!-- KONFIGURACJA -->
+    <section class="page">
+      <span class="tag">Konfiguracja</span>
+      <h2 style="margin-top: 10pt">Środowisko i uruchomienie</h2>
+      <p>Zmienne środowiskowe opisuje <code>.env.example</code> (strażnik <code>pnpm env:check</code> pilnuje parzystości z kodem). Lokalnie: skopiuj do <code>.env.local</code> i uzupełnij.</p>
+      <table>
+        <tr><th>Zmienna</th><th>Rola</th></tr>
+        <tr><td><code>DISCORD_BOT_TOKEN</code></td><td>token bota (wymagany)</td></tr>
+        <tr><td><code>DISCORD_CLIENT_ID/SECRET</code></td><td>OAuth logowania do panelu</td></tr>
+        <tr><td><code>AUTH_SECRET</code></td><td>podpis sesji HMAC (min. 16 znaków)</td></tr>
+        <tr><td><code>SUPABASE_URL</code> · <code>*_KEY</code></td><td>baza i klucze Supabase</td></tr>
+        <tr><td><code>STRIPE_SECRET_KEY</code></td><td>billing Premium (opcjonalny — bez niego brak paywalla)</td></tr>
+        <tr><td><code>LIMIT_&lt;FUNKCJA&gt;_&lt;PLAN&gt;</code></td><td>nadpisanie limitów planu (opcjonalne)</td></tr>
+      </table>
+      <div class="card">
+        <h3>Komendy startowe</h3>
+        <p class="muted" style="font-size: 9.5pt"><code>pnpm install</code> → <code>pnpm --filter bot-dc-dashboard dev</code> (panel, port 3001) · <code>pnpm --filter bot dev</code> (bot).</p>
+      </div>
+      <h3 style="margin-top: 6pt">Logowanie (OAuth Discord)</h3>
+      <img class="shot" src="../../dashboard/public/screens/login.png" />
+      <div class="foot"><span>E-BOT — dokumentacja techniczna</span><span>GH0ST EMPIRE</span></div>
+    </section>
+
+    <!-- BEZPIECZEŃSTWO + JAKOŚĆ -->
+    <section class="page">
+      <span class="tag">Bezpieczeństwo i jakość</span>
+      <h2 style="margin-top: 10pt">Warstwa bezpieczeństwa</h2>
+      <ul class="feat">
+        <li><b>Sesja</b>: podpisany cookie HMAC-SHA256 (Web Crypto, działa na Edge i w Node).</li>
+        <li><b>Proxy/middleware</b> (<code>proxy.ts</code>): gating tras, role (admin/editor/viewer), redirect na <code>/login</code>.</li>
+        <li><b>CSP per-request</b> z nonce (anty-XSS), <code>frame-ancestors 'none'</code>.</li>
+        <li><b>Anti-nuke / anti-raid / automod</b> po stronie bota; webhooki weryfikowane HMAC (Stripe, Twitch, Ko-fi).</li>
+        <li><b>Atomowa ekonomia</b>: RPC Postgres + per-user lock (brak wyścigów / dublowania salda).</li>
+      </ul>
+      <h2 style="margin-top: 16pt">Bramki jakości</h2>
+      <p>Przed każdym wydaniem (CI + git pre-commit) muszą przejść:</p>
+      <table>
+        <tr><th>Bramka</th><th>Zakres</th></tr>
+        <tr><td><code>pnpm typecheck</code></td><td>tsc w 4 pakietach</td></tr>
+        <tr><td><code>pnpm check</code></td><td>Biome (lint + format)</td></tr>
+        <tr><td><code>pnpm test</code></td><td>vitest — <b>1141</b> testów</td></tr>
+        <tr><td><code>pnpm sync:check</code></td><td>docs ↔ CHANGELOG · schemat SQL · env</td></tr>
+      </table>
+      <p class="muted" style="font-size: 9.5pt; margin-top: 4pt">i18n: parzystość kluczy ×14 języków (test parytetu). Dokumentacja i komunikaty po polsku.</p>
+      <div class="foot"><span>E-BOT — dokumentacja techniczna</span><span>GH0ST EMPIRE</span></div>
+    </section>
+
+    <!-- DEPLOY + WIKI -->
+    <section class="page">
+      <span class="tag">Wdrożenie</span>
+      <h2 style="margin-top: 10pt">Deploy i dane</h2>
+      <div class="grid2">
+        <div class="card"><h3>Panel → Vercel</h3><p class="muted" style="font-size: 9.5pt">Next.js na Vercel; zmienne w Project Settings → Environment Variables; redeploy po zmianie.</p></div>
+        <div class="card"><h3>Dane → Supabase</h3><p class="muted" style="font-size: 9.5pt">Schemat z <code>dashboard/scripts/*.sql</code> (strażnik <code>schema:check</code> pilnuje <code>_ALL.sql</code>).</p></div>
+        <div class="card"><h3>Bot → host 24/7</h3><p class="muted" style="font-size: 9.5pt">Proces Node (np. Railway); token + dostęp do tej samej bazy.</p></div>
+        <div class="card"><h3>Billing → Stripe</h3><p class="muted" style="font-size: 9.5pt">Env-gated; webhook <code>/api/billing/webhook</code> (HMAC) ustawia <code>guilds.tier</code>.</p></div>
+      </div>
+      <h2 style="margin-top: 14pt">Dokumentacja i komendy</h2>
+      <p>Pełna dokumentacja użytkownika i lista komend: strona <span class="accent">/wiki</span> oraz <code>docs/wiki/</code> (generowane z <code>dashboard/lib/wikiData.ts</code> przez <code>scripts/gen-wiki-md.mjs</code>).</p>
+      <img class="shot" src="../../dashboard/public/screens/wiki.png" />
+      <p style="margin-top: 8pt; text-align: center" class="muted">Repo: github.com/Gh0s777tt/E-Bot · Kontakt: Ghostt77@empire-forge.com</p>
+      <div class="foot"><span>E-BOT — dokumentacja techniczna</span><span>© 2026 GH0ST EMPIRE</span></div>
+    </section>
+  </body>
+</html>

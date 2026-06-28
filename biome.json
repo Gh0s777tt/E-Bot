@@ -16,7 +16,8 @@
       "!**/next-env.d.ts",
       "!docs/wiki",
       "!**/*.md",
-      "!**/*.css"
+      "!**/*.css",
+      "!**/*.html"
     ]
   },
   "formatter": {

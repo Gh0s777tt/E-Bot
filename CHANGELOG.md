@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-635-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.565.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-636-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.566.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.566.0] — 📄 PDF-y: przewodnik dla streamerów + dokumentacja dla developerów
+
+- `[#636]` 📄 **Dwa PDF-y ze zrzutami** — `docs/pdf/E-BOT-dla-streamerow.pdf` (powiadomienia live, zaangażowanie: ekonomia/leveling, moderacja, start w 5 krokach) oraz `docs/pdf/E-BOT-dla-developerow.pdf` (architektura monorepo, konfiguracja/env, warstwa bezpieczeństwa, bramki jakości, deploy Vercel/Supabase). Motyw marki (czerń/czerwień), realne zrzuty panelu. Źródła HTML w [`scripts/pdf/`](scripts/pdf) (render A4 przez headless Chromium — patrz `scripts/pdf/README.md`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.565.0] — 📖 Wiki projektu: strona /wiki + eksport Markdown (komendy, moduły, zrzuty)
 
