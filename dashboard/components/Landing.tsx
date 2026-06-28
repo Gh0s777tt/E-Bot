@@ -409,6 +409,21 @@ export default function Landing({ inviteUrl, lang }: { inviteUrl: string; lang: 
         >
           <Bot size={20} /> {t('cta.addBot')}
         </a>
+        <div className="mt-10 flex justify-center">
+          <a
+            href="https://top.gg/bot/1512758748761030677"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:opacity-90"
+          >
+            {/* Widget top.gg (statystyki na żywo — serwery/głosy) */}
+            <img
+              src="https://top.gg/api/widget/1512758748761030677.svg"
+              alt="E-Bot na top.gg"
+              className="h-auto w-[350px] max-w-full"
+            />
+          </a>
+        </div>
       </section>
 
       {/* ===== STOPKA ===== */}

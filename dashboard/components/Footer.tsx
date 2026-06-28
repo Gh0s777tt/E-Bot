@@ -26,6 +26,14 @@ export default function Footer() {
           <Link href="/p/polityka-prywatnosci" className={link}>
             {tp(lang, 'ui.footer.privacy')}
           </Link>
+          <a
+            href="https://top.gg/bot/1512758748761030677/vote"
+            target="_blank"
+            rel="noreferrer"
+            className={link}
+          >
+            ⭐ top.gg
+          </a>
         </nav>
       </div>
     </footer>
