@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-603-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.533.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-604-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.534.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.534.0] — 📊 Digest: benchmarking cross-server (percentyl aktywności)
+
+- `[#604]` 📊 **Benchmark cross-server w digescie** — tygodniowe podsumowanie pokazuje teraz „📊 Pozycja serwera: aktywniejszy niż X% serwerów obsługiwanych przez bota". Jedno zapytanie agreguje tygodniową aktywność WSZYSTKICH serwerów instancji (wzorem federacji threat-intel), a każdy serwer widzi tylko WŁASNĄ pozycję (anonimowo, bez danych innych). Pokazywane przy ≥ 3 serwerach (próg sensu). Czysta, otestowana `percentileRank` (% wartości mniejszych; zbiór ≤ 1 → 100). Domyka ostatnią dużą pozycję analityki z wizji.
+  - **Testy:** `digest.test.ts` +3 (`percentileRank`: percentyl / najwyższy / mała próbka) → **1090/1090**. Bramki: `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.533.0] — 🎲 `/fun kostka` — rzut wieloma kośćmi (NdM)
 

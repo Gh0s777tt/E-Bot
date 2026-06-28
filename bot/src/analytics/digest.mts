@@ -125,6 +125,15 @@ export function mostImproved(
   return best;
 }
 
+// 📊 Benchmark cross-server (czysta): percentyl wartości w zbiorze = % wartości MNIEJSZYCH niż `value`
+// (0–100). „Twój serwer aktywniejszy niż X% serwerów obsługiwanych przez bota". Zbiór ≤ 1 elementu →
+// 100 (brak próbki do porównania → szczyt własnej). Anonimowe: serwer widzi tylko WŁASNĄ pozycję.
+export function percentileRank(value: number, all: number[]): number {
+  if (all.length <= 1) return 100;
+  const below = all.filter((v) => v < value).length;
+  return Math.round((below / all.length) * 100);
+}
+
 async function maybePost(client: Client): Promise<void> {
   if (!hasCloud()) return;
   const now = new Date();
@@ -144,6 +153,17 @@ async function maybePost(client: Client): Promise<void> {
   } catch {
     /* brak repów */
   }
+
+  // 📊 Benchmark cross-server: tygodniowa suma wiadomości KAŻDEGO serwera (jedno zapytanie) → próbka do
+  // percentyla. Każdy serwer zobaczy tylko WŁASNĄ pozycję względem reszty (anonimowo, bez danych innych).
+  const benchRows = await cloudSelect<{ guild_id: string; messages?: number }>(
+    'activity_daily',
+    `select=guild_id,messages&day=gte.${since}`,
+  ).catch(() => [] as { guild_id: string; messages?: number }[]);
+  const benchTotals = new Map<string, number>();
+  for (const r of benchRows)
+    benchTotals.set(r.guild_id, (benchTotals.get(r.guild_id) ?? 0) + (r.messages ?? 0));
+  const benchSample = [...benchTotals.values()];
 
   // Etap K — digest PER-SERWER: iterujemy serwery, sumujemy activity_daily/user_activity danego
   // serwera (oba mają guild_id), dedup per-serwer (digest_last:<guildId>).
@@ -263,6 +283,13 @@ async function maybePost(client: Client): Promise<void> {
         embed.addFields({
           name: '🏆 Klan tygodnia',
           value: `🛡️ **${topClan.name}** — 🏦 ${topClan.bank.toLocaleString('pl-PL')}`,
+          inline: false,
+        });
+      // 📊 Benchmark: pozycja serwera względem innych obsługiwanych przez bota (≥ 3 serwery dla sensu).
+      if (benchSample.length >= 3)
+        embed.addFields({
+          name: '📊 Pozycja serwera',
+          value: `Aktywniejszy niż **${percentileRank(s.m, benchSample)}%** serwerów obsługiwanych przez bota`,
           inline: false,
         });
       await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});

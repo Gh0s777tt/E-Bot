@@ -7,6 +7,7 @@ import {
   coolingMembers,
   memberFunnel,
   mostImproved,
+  percentileRank,
   topUserByMessages,
   trend,
   trendLabel,
@@ -186,5 +187,23 @@ describe('mostImproved — największy skok aktywności (per-user, okno do okna)
 
   it('nowy aktywny (brak w poprzednim oknie) liczy się jako pełny przyrost', () => {
     expect(mostImproved([{ user_id: 'n', username: 'Nowy', messages: 60 }], [])?.delta).toBe(60);
+  });
+});
+
+describe('percentileRank — benchmark cross-server', () => {
+  it('% wartości MNIEJSZYCH niż value (0–100)', () => {
+    // 100 jest większe od 4 z 5 wartości {10,20,30,40,100} → 80%
+    expect(percentileRank(100, [10, 20, 30, 40, 100])).toBe(80);
+    // 10 jest najmniejsze → 0% (nic poniżej)
+    expect(percentileRank(10, [10, 20, 30, 40, 100])).toBe(0);
+  });
+
+  it('najwyższa wartość → blisko 100%', () => {
+    expect(percentileRank(500, [1, 2, 3, 500])).toBe(75); // 3 z 4 poniżej
+  });
+
+  it('zbiór ≤ 1 elementu → 100 (brak próbki do porównania)', () => {
+    expect(percentileRank(42, [42])).toBe(100);
+    expect(percentileRank(42, [])).toBe(100);
   });
 });
