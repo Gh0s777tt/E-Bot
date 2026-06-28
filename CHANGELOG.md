@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-642-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.572.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-643-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.573.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.573.0] — 🗳️ top.gg: webhook nagród za głos (GT)
+
+- `[#643]` 🗳️ **Webhook głosów top.gg + nagroda GT** — endpoint [`dashboard/app/api/topgg/webhook/route.ts`](dashboard/app/api/topgg/webhook/route.ts) przyjmuje webhook top.gg (auth nagłówkiem `Authorization` == `TOPGG_WEBHOOK_AUTH`, **fail-closed** bez sekretu), zapisuje głos do tabeli `topgg_votes` ([`dashboard/scripts/topgg-votes-schema.sql`](dashboard/scripts/topgg-votes-schema.sql) + `_ALL.sql`) i — best-effort — przyznaje **GT** głosującemu (głos nie jest per-serwer → nagroda GLOBALNA przez portal `/api/internal/award`, jak `/link`; wymaga `GHOST_BOT_SECRET` + powiązanego konta). Kwota z `TOPGG_VOTE_REWARD` (domyślnie 100, weekend ×2). Helper + rygiel: [`dashboard/lib/topgg.ts`](dashboard/lib/topgg.ts) (`voteRewardAmount`, `webhookAuthorized` — 5 testów). Konfiguracja w [`docs/TOPGG.md`](docs/TOPGG.md).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · vitest 1147 · `sync:check` (schema 49 tabel, env 74 zmiennych) — exit 0 (Node 26.4.0).
 
 ## [0.572.0] — ⭐ Wystawienie na top.gg: auto-raport serwerów + /vote
 

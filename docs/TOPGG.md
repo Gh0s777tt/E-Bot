@@ -83,15 +83,18 @@ Dashboard: https://e-bot-dc.vercel.app
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🗳️ (Opcjonalnie) Nagrody za głos — webhook
+## 🗳️ Nagrody za głos — webhook ✅ (wdrożone)
 
-top.gg może wysyłać **webhook przy każdym głosie** (POST z `user`, `bot`, `type`). Można to wykorzystać do nagród (np. GT/rola za głos). **Nie wdrożone** (wymaga publicznego endpointu + tabeli głosów + logiki nagród). Gdybyś chciał:
+Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg/webhook/route.ts) przyjmuje webhook top.gg, zapisuje głos (tabela `topgg_votes`) i — best‑effort — przyznaje **GT** głosującemu (głos nie jest per‑serwer → nagroda globalna przez portal, jak `/link`).
 
-1. Endpoint w panelu, np. `dashboard/app/api/topgg/webhook/route.ts` — weryfikuje nagłówek `Authorization` = `TOPGG_WEBHOOK_AUTH` (ustawiany w panelu webhooków top.gg).
-2. Tabela `topgg_votes` (kto, kiedy) — przez migrację (pamiętaj o `pnpm schema:check`).
-3. Reward: dopisać GT / nadać rolę (most do bota jak istniejące integracje).
-
-Powiedz, jeśli mam to dorobić — to osobny, większy zakres (DB + endpoint + bezpieczeństwo).
+**Konfiguracja:**
+1. **Sekret** — wymyśl losowy ciąg i ustaw go w DWÓCH miejscach o tej samej wartości:
+   - env panelu (Vercel): `TOPGG_WEBHOOK_AUTH=<sekret>`
+   - top.gg → wpis bota → **Webhooks** → *Webhook URL* = `https://e-bot-dc.vercel.app/api/topgg/webhook`, *Authorization* = `<sekret>`.
+   - Bez `TOPGG_WEBHOOK_AUTH` endpoint odrzuca wszystko (**401, fail‑closed**).
+2. **Schemat** — uruchom `dashboard/scripts/_ALL.sql` (zawiera już tabelę `topgg_votes`).
+3. **Nagroda GT (opcjonalna)** — `TOPGG_VOTE_REWARD` = ile GT za głos (domyślnie **100**, weekend **×2**). Wymaga skonfigurowanego portalu (`GHOST_API_URL` + `GHOST_BOT_SECRET` w env panelu) **oraz** powiązanego konta gracza (`/link`); inaczej głos jest tylko zapisywany (bez GT).
+4. **Test** — w panelu webhooków top.gg jest „Send test" (`type: "test"` → zapis bez nagrody).
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -105,6 +108,7 @@ Powiedz, jeśli mam to dorobić — to osobny, większy zakres (DB + endpoint + 
 - [ ] `TOPGG_TOKEN` ustawiony w env **bota** (Railway) + redeploy
 - [ ] `npm run deploy` (rejestracja `/vote`)
 - [ ] W logach bota: `[topgg] zaraportowano N serwerów.`
-- [ ] (opcjonalnie) baner/ikona wpisu, support server, webhook nagród
+- [ ] (opcjonalnie) nagrody za głos: `TOPGG_WEBHOOK_AUTH` (Vercel + top.gg Webhooks) + `_ALL.sql` + `TOPGG_VOTE_REWARD`
+- [ ] (opcjonalnie) baner/ikona wpisu, support server
 
 <div align="center"><sub>🛰️ E‑Bot · E‑Forge — powiązane: <a href="../CHANGELOG.md">CHANGELOG</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>
