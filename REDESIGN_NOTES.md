@@ -145,11 +145,22 @@ się bez `.content-pane`, więc **pozostają nietknięte** (zweryfikowane zrzute
 - Tabela „Ranking (top 50)": hover wierszy. Formularze (Leveling/Seasons/BattlePassRoles) — etykiety pól, bez zmian.
 - Zweryfikowane zrzutem (pełna /levels).
 
-### Kolejne ekrany (plan)
-1. **Stany wspólne** — `EmptyState`/`Loading`/`Error`, inputy (focus akcent), reflow tabel→karty na mobile.
-2. **Ekrany ustawień/formularze** — `/welcome`, `/roles`, `/scheduled`, `/tickets`, `/economy`,
-   `/notifications`, `/ai`, … (nagłówki + grupowanie pól).
-3. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
-4. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
+### E6 — Token nagłówka sekcji na CAŁYM panelu (zrobione) ✅
+Ujednolicony token `font-display text-lg` (sentence-case) zamiast `text-base uppercase` — **79 zamian w 34 plikach**:
+28 stron `app/**/page.tsx` (m.in. welcome, roles, scheduled, tickets, economy/eco, notifications, ai,
+security, stats, settings, suggestions, engagement, gaming, diagnostics, donations, creator, …) + 6 komponentów
+(`AntinukeForm`, `ClanBoard`, `IntegrationsManager`, `LeaderboardBoard`, `LiveConfigForm`, `WebhookRelayForm`).
+**Wykluczony** `Topbar.tsx <h1>` (chrom, ma już `font-display` — osobna decyzja). Substring trafiał wyłącznie
+w tytuły sekcji `<h2>` (małe etykiety/pille `text-[10/11px/xs] uppercase` — nietknięte). Zweryfikowane
+zrzutami (welcome, roles, stats, economy, ai) + `tsc` exit 0 + Biome.
 
-> Status: E1–E5 (fundament + komponenty + Pulpit + /moderation + /levels) wdrożone i zweryfikowane. Kontynuuję per-ekran.
+### Kolejne ekrany / dopracowanie (plan)
+Nagłówki sekcji — gotowe panel-wide (E6). Zostaje, per-ekran lub w kontrolowanych przebiegach:
+1. **Stany wspólne** — `EmptyState`/`Loading`/`Error` (spójne), inputy (focus akcent).
+2. **Tabele/listy** — hover wierszy + reflow→karty na mobile (`/logging`, `/leaderboard`, sklep, role-nagrody, stats).
+3. **Formularze** — grupowanie pól / opisy na gęstych ekranach (np. `/ai`, `/moderation`).
+4. **Topbar `<h1>`** — decyzja o stylu tytułu strony (chrom).
+5. **Mapowanie stary→nowy** — uzupełniane (nic nie ginie).
+
+> Status: E1–E6 wdrożone i zweryfikowane (fundament + komponenty + Pulpit + /moderation + /levels +
+> token nagłówków na całym panelu). Kontynuuję dopracowanie.

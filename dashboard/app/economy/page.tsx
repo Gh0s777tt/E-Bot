@@ -51,7 +51,7 @@ export default async function EconomyPage() {
       </div>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Coins size={16} className="text-accent" /> {tp(lang, 'ui.economy.rulesHeading')}
         </h2>
         <ul className="space-y-2 text-sm">

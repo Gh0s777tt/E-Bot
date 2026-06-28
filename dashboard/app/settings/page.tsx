@@ -73,28 +73,28 @@ export default async function SettingsPage() {
   return (
     <div className="max-w-2xl space-y-6">
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Bot size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingCustomize')}
         </h2>
         <BotCustomizeForm initial={botProfile} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Activity size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingPresence')}
         </h2>
         <BotPresenceForm initial={presence} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Languages size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingLanguage')}
         </h2>
         <BotLanguageForm initial={botLocale} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Palette size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingTheme')}
         </h2>
         <ThemeSwitcher />
@@ -102,7 +102,7 @@ export default async function SettingsPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Server size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingSystem')}
         </h2>
         <dl className="space-y-3 text-sm">
@@ -119,14 +119,14 @@ export default async function SettingsPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Archive size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingBackup')}
         </h2>
         <ConfigBackupForm />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <UserCheck size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingAccess')}
         </h2>
         <PanelAccessList entries={access} currentUid={session?.uid} lang={lang} />
@@ -134,7 +134,7 @@ export default async function SettingsPage() {
 
       {role === 'admin' && (
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Users size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingUsers')}
           </h2>
           <PanelUsersForm initial={staff} />
@@ -142,7 +142,7 @@ export default async function SettingsPage() {
       )}
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5 text-sm text-muted">
-        <h2 className="mb-3 flex items-center gap-2 text-base font-semibold uppercase tracking-wide text-white">
+        <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold tracking-wide text-white">
           <Cloud size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingDeploy')}
         </h2>
         <ol className="list-decimal space-y-1 ps-5">

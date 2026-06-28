@@ -101,7 +101,7 @@ export default async function DiagnosticsPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Połączenia */}
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Bot size={16} className="text-accent" /> {tp(lang, 'ui.diagnostics.connHeading')}
           </h2>
           <ul className="space-y-2.5 text-sm">
@@ -137,7 +137,7 @@ export default async function DiagnosticsPage() {
 
         {/* Integracje */}
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Plug size={16} className="text-accent" /> {tp(lang, 'ui.diagnostics.intHeading')} (
             {okInt}/{integrations.length})
           </h2>
@@ -162,7 +162,7 @@ export default async function DiagnosticsPage() {
 
       {/* Konfiguracja modułów */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Database size={16} className="text-accent" /> {tp(lang, 'ui.diagnostics.cfgHeading')} (
           {doneCfg}/{checklist.length})
         </h2>

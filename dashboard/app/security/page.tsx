@@ -56,7 +56,7 @@ export default async function SecurityPage() {
       </div>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ShieldAlert size={16} className="text-accent" /> Anti-Nuke
           <span className="ms-auto normal-case">
             <StatusPill on={config.enabled} lang={lang} />
@@ -66,7 +66,7 @@ export default async function SecurityPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <UserCheck size={16} className="text-accent" /> {tp(lang, 'ui.security.headingVerify')}
           <span className="ms-auto normal-case">
             <StatusPill on={verification.enabled} lang={lang} />
@@ -76,7 +76,7 @@ export default async function SecurityPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Siren size={16} className="text-accent" /> Anti-raid
           <span className="ms-auto normal-case">
             <StatusPill on={antiraid.enabled} lang={lang} />

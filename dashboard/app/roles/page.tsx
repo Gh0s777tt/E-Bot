@@ -29,7 +29,7 @@ export default async function RolesPage() {
       </header>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Tags size={16} className="text-accent" /> Reaction roles
           <span className="ms-auto normal-case">
             <StatusPill on={hasRoles} lang={lang} />
@@ -40,7 +40,7 @@ export default async function RolesPage() {
 
       {hasRoles && (
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Eye size={16} className="text-accent" /> {tp(lang, 'ui.cmd.preview')}
           </h2>
           <div className="max-w-md rounded-xl border border-line bg-bg/40 p-3">
@@ -77,14 +77,14 @@ export default async function RolesPage() {
       )}
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Wand2 size={16} className="text-accent" /> {tp(lang, 'ui.roles.heading2')}
         </h2>
         <ReactionRolePanelForm initial={panel} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ListChecks size={16} className="text-accent" /> {tp(lang, 'ui.roles.heading3')}
         </h2>
         <RoleMenuForm initial={rolemenu} guild={guild} />

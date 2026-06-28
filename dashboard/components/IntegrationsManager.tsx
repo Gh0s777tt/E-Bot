@@ -61,7 +61,7 @@ export default function IntegrationsManager({
 
       {groups.map((group) => (
         <section key={group} className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Plug size={16} className="text-accent" /> {group}
           </h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -103,7 +103,7 @@ export default function IntegrationsManager({
       ))}
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Plug size={16} className="text-accent" /> {tp(lang, 'ui.integrations.aiHeading')}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">

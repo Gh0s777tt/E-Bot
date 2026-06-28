@@ -66,7 +66,7 @@ export default async function CommandsPage() {
               key={g.label}
               className="panel-glow overflow-hidden rounded-2xl border border-line bg-card"
             >
-              <h2 className="flex items-center gap-2 border-b border-line px-5 py-4 text-base font-semibold uppercase tracking-wide">
+              <h2 className="flex items-center gap-2 border-b border-line px-5 py-4 font-display text-lg font-semibold tracking-wide">
                 <Icon size={16} className="text-accent" /> {g.label}
                 <span className="ms-auto rounded-md bg-elevated px-2 py-0.5 text-xs font-normal normal-case text-muted">
                   {g.commands.length}

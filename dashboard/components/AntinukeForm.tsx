@@ -176,7 +176,7 @@ export default function AntinukeForm({ initial }: { initial: Config }) {
 
       {/* ochrony */}
       <div>
-        <h2 className="mb-2 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-2 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ShieldAlert size={16} className="text-accent" /> {tp(lang, 'ui.security.protections')}
         </h2>
         <div className="space-y-2">

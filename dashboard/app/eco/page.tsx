@@ -35,7 +35,7 @@ export default async function EcoPage() {
       </header>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Banknote size={16} className="text-accent" /> {tp(lang, 'ui.eco.cfgHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={cfg.enabled} lang={lang} />
@@ -45,14 +45,14 @@ export default async function EcoPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Trophy size={16} className="text-accent" /> {tp(lang, 'ui.eco.seasonHeading')}
         </h2>
         <EcoSeasonForm initial={season} guild={guild} currency={cfg.currency} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ShoppingCart size={16} className="text-accent" /> {tp(lang, 'ui.eco.shopHeading')}
         </h2>
         <ShopManager initial={items} guild={guild} currency={cfg.currency} />

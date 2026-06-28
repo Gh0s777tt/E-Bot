@@ -63,7 +63,7 @@ export default async function ProfilePage() {
       )}
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-3 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-3 font-display text-lg font-semibold tracking-wide">
           {tp(lang, 'ui.profile.ghostAccountHeading')}
         </h2>
         {link?.linked ? (

@@ -64,7 +64,7 @@ export default async function AiPage() {
       </div>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Sparkles size={16} className="text-accent" /> {tp(lang, 'ui.ai.configHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={cfg.enabled} lang={lang} />
@@ -74,7 +74,7 @@ export default async function AiPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <HelpCircle size={16} className="text-accent" /> {tp(lang, 'ui.ai.helpHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={aihelp.enabled} lang={lang} />
@@ -84,7 +84,7 @@ export default async function AiPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <FileText size={16} className="text-accent" /> {tp(lang, 'ui.ai.digestHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={aidigest.enabled} lang={lang} />
@@ -94,7 +94,7 @@ export default async function AiPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Users size={16} className="text-accent" /> {tp(lang, 'ui.ai.usageHeading')}
         </h2>
         {usage.top.length === 0 ? (

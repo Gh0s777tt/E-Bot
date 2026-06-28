@@ -25,7 +25,7 @@ export default function ClanBoard({
           background: 'radial-gradient(circle, rgb(var(--accent-rgb) / 0.14), transparent 70%)',
         }}
       />
-      <h2 className="relative mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+      <h2 className="relative mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
         <span className="text-lg">🛡️</span>
         {title}
       </h2>

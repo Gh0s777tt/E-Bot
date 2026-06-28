@@ -151,7 +151,7 @@ export default async function StatsPage({
 
       {/* AI — 14 dni */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <BarChart3 size={16} className="text-accent" /> {tp(lang, 'ui.stats.aiHeading')}
         </h2>
         <AreaChart values={aiSeries.map((p) => p.requests)} height={150} />
@@ -166,7 +166,7 @@ export default async function StatsPage({
 
       {/* Aktywność serwera — 14 dni */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <BarChart3 size={16} className="text-accent" /> {tp(lang, 'ui.stats.activityHeading')}
         </h2>
         <AreaChart values={activity.map((p) => p.messages)} height={150} />
@@ -213,7 +213,7 @@ export default async function StatsPage({
 
       {/* Wzrost serwera — członkowie w czasie */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <TrendingUp size={16} className="text-accent" /> {tp(lang, 'ui.home.sgHeading')}
         </h2>
         {memEnough ? (
@@ -249,7 +249,7 @@ export default async function StatsPage({
 
       {/* Retencja kohortowa — ile osób zostaje po D1/D7/D30 */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-1 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-1 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Users size={16} className="text-accent" /> {tp(lang, 'ui.stats.retHeading')}
         </h2>
         <p className="mb-4 text-xs text-muted">{tp(lang, 'ui.stats.retIntro')}</p>
@@ -289,7 +289,7 @@ export default async function StatsPage({
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Mic size={16} className="text-accent" /> {tp(lang, 'ui.stats.digestHeading')}
         </h2>
         <DigestForm initial={digest} guild={guild} />
@@ -297,7 +297,7 @@ export default async function StatsPage({
 
       {/* Top XP */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Trophy size={16} className="text-accent" /> {tp(lang, 'ui.stats.topXpHeading')}
         </h2>
         {board.length === 0 ? (
@@ -325,7 +325,7 @@ export default async function StatsPage({
 
       {/* Top aktywni — 14 dni */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Users size={16} className="text-accent" /> {tp(lang, 'ui.stats.topActiveHeading')}
         </h2>
         {topUsers.length === 0 ? (
@@ -353,7 +353,7 @@ export default async function StatsPage({
 
       {/* Heatmapa godzinowa */}
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Flame size={16} className="text-accent" /> {tp(lang, 'ui.stats.hourlyHeading')}
         </h2>
         <div className="flex h-32 items-end gap-1">
@@ -380,7 +380,7 @@ export default async function StatsPage({
       {/* Tickety + biblioteka */}
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Ticket size={16} className="text-accent" /> {tp(lang, 'ui.stats.ticketsHeading')}
           </h2>
           <ul className="space-y-2 text-sm">
@@ -397,7 +397,7 @@ export default async function StatsPage({
         </section>
 
         <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
             <Gamepad2 size={16} className="text-accent" /> {tp(lang, 'ui.stats.libHeading')}
           </h2>
           <div className="space-y-2">

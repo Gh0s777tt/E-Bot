@@ -21,7 +21,7 @@ export default async function LoggingPage() {
         <StatusPill on={cfg.enabled} lang={lang} />
       </header>
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ScrollText size={16} className="text-accent" /> {tp(lang, 'ui.logging.heading')}
           <span className="ms-auto normal-case">
             <StatusPill on={cfg.enabled} lang={lang} />

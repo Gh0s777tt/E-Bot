@@ -48,7 +48,7 @@ export default async function EngagementPage() {
       </p>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <MousePointerClick size={16} className="text-accent" />{' '}
           {tp(lang, 'ui.engagement.buttonRolesHeading')}
           <span className="ms-auto normal-case">
@@ -59,7 +59,7 @@ export default async function EngagementPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Star size={16} className="text-accent" /> {tp(lang, 'ui.engagement.starboardHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={star.enabled} lang={lang} />
@@ -69,7 +69,7 @@ export default async function EngagementPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Volume2 size={16} className="text-accent" /> {tp(lang, 'ui.engagement.tempVoiceHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={tv.enabled} lang={lang} />
@@ -79,7 +79,7 @@ export default async function EngagementPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Hash size={16} className="text-accent" /> {tp(lang, 'ui.engagement.countingHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={counting.enabled} lang={lang} />
@@ -89,7 +89,7 @@ export default async function EngagementPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <UserPlus size={16} className="text-accent" /> {tp(lang, 'ui.engagement.invitesHeading')}
           <span className="ms-auto normal-case">
             <StatusPill on={invites.enabled} lang={lang} />
@@ -99,7 +99,7 @@ export default async function EngagementPage() {
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 text-base font-semibold uppercase tracking-wide">
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <Gift size={16} className="text-accent" /> {tp(lang, 'ui.engagement.giveawaysHeading')}
         </h2>
         {giveaways.length === 0 ? (
