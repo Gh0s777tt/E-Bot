@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-608-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.538.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-609-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.539.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.539.0] — 🔒 Ekonomia: atomowość pay/rob (cross-user, domknięcie #608)
+
+- `[#609]` 🔒 **Atomowość przelewu i rabunku (cross-user)** — domyka systemowy wyścig, którego `#608` nie objął (atomowe były tylko operacje **jedno-userowe**: deposit/withdraw/donate). `/eco pay` i `/eco rob` zapisywały saldo **drugiego** użytkownika (odbiorcy / ofiary) bezwarunkowym `saveUser({ wallet: … })` na bazie nieświeżego odczytu, a `withLock` serializuje tylko **wykonawcę** → równoległa zmiana konta drugiej strony (jej `/eco daily`, drugi `pay` do niej) ginęła (**lost update**). Teraz **obie strony idą przez atomowe helpery** ([`store.mts`](bot/src/economy/store.mts)): `spendWallet` (warunkowy debet) + `creditWallet` (atomowy add), z **rollbackiem** debetu gdy kredyt zawiedzie. Nowy RPC **`economy_ensure`** ([`economy-atomic-rpc.sql`](dashboard/scripts/economy-atomic-rpc.sql) + `_ALL.sql`, `insert … on conflict do nothing`) materializuje „dziewicze" konto ze startowym saldem PRZED debetem — `getUser` zwraca wirtualne `startBalance` bez wiersza, więc `economy_spend` (UPDATE … WHERE) nie trafiłby w nic → **zachowuje obecne zachowanie** (nowy user może od razu `pay`/zostać okradziony). Wydzielone czyste funkcje `payAmounts`/`robLoot`/`robFine` + testy. **Bez współbieżności zero zmiany zachowania**; przy współbieżności — zero lost-update. Po tym **CAŁA ekonomia (eco + pet + clan + battle-pass) jest atomowa**.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1105/1105** (`payAmounts`/`robLoot`/`robFine` +7) · `sync:check` (schemat 48 tab. + docs + env) — exit 0 (Node 26.4.0). RPC `economy_ensure` addytywny (operator wgrywa `_ALL.sql`); **nietestowalne e2e tutaj** (brak żywej bazy) — stąd fallback (read+insert) + materializacja jako gwarancja zachowania.
 
 ## [0.538.0] — 🔒 Ekonomia: atomowość salda (RPC Postgres + per-user lock, anty-wyścig)
 

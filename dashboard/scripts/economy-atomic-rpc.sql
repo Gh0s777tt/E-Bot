@@ -48,3 +48,15 @@ begin
   end if;
   return new_wallet;
 end; $$;
+
+-- Idempotentna materializacja konta ze startowym saldem: utwórz wiersz JEŚLI nie istnieje (nigdy nie
+-- nadpisuje istniejącego salda). Pozwala atomowym debetom (economy_spend) działać dla "dziewiczych"
+-- użytkowników, którzy mają wirtualne startBalance, lecz nie mają jeszcze wiersza (np. pierwszy
+-- /eco pay lub bycie ofiarą /eco rob przed /eco daily). Bez tego debet warunkowy nie trafiłby w nic.
+create or replace function economy_ensure(p_guild text, p_user text, p_username text, p_start integer)
+returns void language plpgsql as $$
+begin
+  insert into economy_users (guild_id, user_id, username, wallet, updated_at)
+  values (p_guild, p_user, p_username, p_start, now())
+  on conflict (guild_id, user_id) do nothing;
+end; $$;

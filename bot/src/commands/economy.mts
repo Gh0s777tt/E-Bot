@@ -12,14 +12,20 @@ import { startBlackjack } from '../economy/blackjack.mts';
 import { activateEffect, hasEffect } from '../economy/effects.mts';
 import {
   addInventory,
+  creditWallet,
   ecoConfig,
+  ensureUser,
   fmt,
   getInventory,
   getShop,
   getUser,
   minutesSince,
   moveBank,
+  payAmounts,
+  robFine,
+  robLoot,
   saveUser,
+  spendWallet,
   streakMilestoneBonus,
 } from '../economy/store.mts';
 import { grantTempRole } from '../economy/tempRoles.mts';
@@ -309,30 +315,50 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
     const success = Math.random() * 100 < cfg.robChance;
     const stamp = new Date().toISOString();
     if (success) {
-      const loot = Math.floor((vic.wallet * cfg.robMaxPercent) / 100);
+      // Łup płynie od ofiary do rabusia ATOMOWO (spend+credit). Ofiara NIE jest pod withLock rabusia,
+      // więc bezwarunkowy overwrite jej salda zgubiłby równoległą zmianę. Stempel last_rob zapisujemy
+      // osobno (partial saveUser — dotyka tylko kolumny czasu, nie wallet → bezpieczny pod lockiem).
+      const loot = robLoot(vic.wallet, cfg.robMaxPercent);
+      if (loot > 0) {
+        await ensureUser(gid, victim.id, victim.username);
+        const vicNew = await spendWallet(gid, victim.id, loot);
+        if (vicNew === null) {
+          // Ofiara w międzyczasie wydała poniżej łupu → rabunek bez zdobyczy; ustaw cooldown i wyjdź.
+          await saveUser({
+            guild_id: gid,
+            user_id: interaction.user.id,
+            username: interaction.user.username,
+            last_rob: stamp,
+          });
+          await interaction.reply(eph(t(locale, 'eco.robEmpty')));
+          return;
+        }
+        try {
+          await creditWallet(gid, interaction.user.id, interaction.user.username, loot);
+        } catch (e) {
+          await creditWallet(gid, victim.id, victim.username, loot); // rollback debetu ofiary
+          throw e;
+        }
+      }
       await saveUser({
         guild_id: gid,
         user_id: interaction.user.id,
         username: interaction.user.username,
-        wallet: me.wallet + loot,
         last_rob: stamp,
-      });
-      await saveUser({
-        guild_id: gid,
-        user_id: victim.id,
-        username: victim.username,
-        wallet: vic.wallet - loot,
       });
       logTx(gid, interaction.user.id, loot, 'rabunek');
       logTx(gid, victim.id, -loot, 'okradziono');
       await interaction.reply(t(locale, 'eco.robOk', { victim: victim.id, loot: fmt(loot, cur) }));
     } else {
-      const fine = Math.min(me.wallet, Math.floor(cfg.workMax / 2));
+      const fine = robFine(me.wallet, cfg.workMax);
+      if (fine > 0) {
+        await ensureUser(gid, interaction.user.id, interaction.user.username);
+        await spendWallet(gid, interaction.user.id, fine); // atomowy debet mandatu (spalany)
+      }
       await saveUser({
         guild_id: gid,
         user_id: interaction.user.id,
         username: interaction.user.username,
-        wallet: me.wallet - fine,
         last_rob: stamp,
       });
       logTx(gid, interaction.user.id, -fine, 'mandat');
@@ -349,27 +375,23 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       await interaction.reply(eph(t(locale, 'eco.payBad')));
       return;
     }
-    const me = await getUser(gid, interaction.user.id);
-    if (me.wallet < amount) {
+    // Przelew ATOMOWO: warunkowy debet nadawcy (spendWallet) + atomowy add odbiorcy (creditWallet).
+    // Odbiorca NIE jest pod withLock nadawcy → bezwarunkowy overwrite jego salda zgubiłby równoległą
+    // zmianę. ensureUser materializuje „dziewicze" konto nadawcy (wirtualne startBalance bez wiersza).
+    const { tax, received } = payAmounts(amount, cfg.payTaxPct);
+    await ensureUser(gid, interaction.user.id, interaction.user.username);
+    const newWallet = await spendWallet(gid, interaction.user.id, amount);
+    if (newWallet === null) {
+      const me = await getUser(gid, interaction.user.id);
       await interaction.reply(eph(t(locale, 'eco.payLow', { wallet: fmt(me.wallet, cur) })));
       return;
     }
-    const rec = await getUser(gid, to.id);
-    // Podatek od przelewu (panel: payTaxPct) — potrącany odbiorcy, "spalany".
-    const tax = Math.floor((amount * Math.max(0, cfg.payTaxPct)) / 100);
-    const received = amount - tax;
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: me.wallet - amount,
-    });
-    await saveUser({
-      guild_id: gid,
-      user_id: to.id,
-      username: to.username,
-      wallet: rec.wallet + received,
-    });
+    try {
+      await creditWallet(gid, to.id, to.username, received); // podatek „spalany" (received ≤ amount)
+    } catch (e) {
+      await creditWallet(gid, interaction.user.id, interaction.user.username, amount); // rollback debetu
+      throw e;
+    }
     logTx(gid, interaction.user.id, -amount, 'przelew');
     logTx(gid, to.id, received, 'przelew');
     const taxNote = tax > 0 ? `\n${t(locale, 'eco.payTax', { tax: fmt(tax, cur) })}` : '';

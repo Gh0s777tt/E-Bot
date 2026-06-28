@@ -716,6 +716,15 @@ begin
   end if;
   return new_wallet;
 end; $$;
+-- idempotentna materializacja konta ze startowym saldem (insert-or-nothing) — by atomowe debety
+-- (economy_spend) działały dla "dziewiczego" usera z wirtualnym startBalance, bez wiersza (pay/rob)
+create or replace function economy_ensure(p_guild text, p_user text, p_username text, p_start integer)
+returns void language plpgsql as $$
+begin
+  insert into economy_users (guild_id, user_id, username, wallet, updated_at)
+  values (p_guild, p_user, p_username, p_start, now())
+  on conflict (guild_id, user_id) do nothing;
+end; $$;
 
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.

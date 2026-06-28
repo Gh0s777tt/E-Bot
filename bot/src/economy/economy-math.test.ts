@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { bar, fullness, moodKey, petLevel, xpIntoLevel } from './pets.mts';
 import { changePct, priceAt, STOCKS } from './stocks.mts';
-import { fmt } from './store.mts';
+import { fmt, payAmounts, robFine, robLoot } from './store.mts';
 
 const GHOST = STOCKS[0]; // base 100, vol 1.0 → mult ∈ [1-0.38, 1+0.38] = [0.62, 1.38]
 const PEPE = STOCKS[5];
@@ -74,5 +74,41 @@ describe('store — formatowanie waluty (fmt)', () => {
 
   it('separator tysięcy (pl-PL) dla liczb ≥ 1000', () => {
     expect(fmt(1234, 'x')).toMatch(/^\*\*1\D?234\*\* x$/); // \D? = separator (NBSP/spacja) lub brak
+  });
+});
+
+describe('store — arytmetyka transferów /eco (pay/rob)', () => {
+  it('payAmounts: bez podatku → cała kwota dla odbiorcy', () => {
+    expect(payAmounts(100, 0)).toEqual({ tax: 0, received: 100 });
+  });
+
+  it('payAmounts: podatek % zaokrąglony w dół (spalany)', () => {
+    expect(payAmounts(100, 10)).toEqual({ tax: 10, received: 90 });
+    expect(payAmounts(99, 10)).toEqual({ tax: 9, received: 90 }); // floor(9.9)=9
+  });
+
+  it('payAmounts: 100% podatku → odbiorca dostaje 0', () => {
+    expect(payAmounts(50, 100)).toEqual({ tax: 50, received: 0 });
+  });
+
+  it('payAmounts: ujemny taxPct klamrowany do 0', () => {
+    expect(payAmounts(100, -5)).toEqual({ tax: 0, received: 100 });
+  });
+
+  it('robLoot: maxPercent% portfela ofiary, w dół', () => {
+    expect(robLoot(1000, 30)).toBe(300);
+    expect(robLoot(99, 30)).toBe(29); // floor(29.7)
+  });
+
+  it('robLoot: 0% lub puste konto → brak łupu', () => {
+    expect(robLoot(1000, 0)).toBe(0);
+    expect(robLoot(0, 30)).toBe(0);
+    expect(robLoot(-100, 30)).toBe(0); // nigdy ujemny
+  });
+
+  it('robFine: połowa workMax, lecz nie więcej niż saldo rabusia', () => {
+    expect(robFine(1000, 300)).toBe(150); // floor(300/2)
+    expect(robFine(50, 300)).toBe(50); // klamra do salda
+    expect(robFine(0, 300)).toBe(0);
   });
 });

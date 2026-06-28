@@ -197,6 +197,48 @@ export async function moveBank(
   }
 }
 
+// Idempotentnie materializuje konto ze startowym saldem (utwórz wiersz tylko jeśli go nie ma — NIGDY nie
+// nadpisuje istniejącego salda). Potrzebne przed atomowym debetem (spendWallet) dla „dziewiczego" usera:
+// getUser zwraca wirtualne startBalance bez wiersza, ale economy_spend (UPDATE … WHERE) nie trafiłby w nic
+// → fałszywe „za mało". Używane w /eco pay (nadawca) i /eco rob (ofiara, rabuś-mandat).
+export async function ensureUser(guildId: string, userId: string, username: string): Promise<void> {
+  if (!hasCloud()) return;
+  const start = ecoConfig(guildId).startBalance;
+  try {
+    await cloudRpc('economy_ensure', {
+      p_guild: guildId,
+      p_user: userId,
+      p_username: username,
+      p_start: start,
+    });
+  } catch {
+    // Fallback (RPC niewgrane): utwórz wiersz tylko gdy go brak (nie nadpisuj istniejącego salda).
+    const rows = await cloudSelect<{ user_id: string }>(
+      'economy_users',
+      `select=user_id&guild_id=eq.${guildId}&user_id=eq.${userId}`,
+    );
+    if (!rows[0]) await saveUser({ guild_id: guildId, user_id: userId, username, wallet: start });
+  }
+}
+
+// ── Czysta arytmetyka transferów (pay/rob) — testowalna jednostkowo, używana przez handler /eco ──
+
+// /eco pay: podatek (payTaxPct% kwoty, zaokrąglony w dół, „spalany") i kwota netto dla odbiorcy.
+export function payAmounts(amount: number, taxPct: number): { tax: number; received: number } {
+  const tax = Math.floor((Math.max(0, amount) * Math.max(0, taxPct)) / 100);
+  return { tax, received: Math.max(0, amount - tax) };
+}
+
+// /eco rob: łup = robMaxPercent% portfela ofiary (w dół, nigdy ujemny).
+export function robLoot(victimWallet: number, maxPercent: number): number {
+  return Math.max(0, Math.floor((Math.max(0, victimWallet) * Math.max(0, maxPercent)) / 100));
+}
+
+// /eco rob (porażka): mandat = połowa workMax, lecz nie więcej niż saldo rabusia (nigdy ujemny).
+export function robFine(robberWallet: number, workMax: number): number {
+  return Math.min(Math.max(0, robberWallet), Math.floor(Math.max(0, workMax) / 2));
+}
+
 export type ShopItem = {
   id: string;
   guild_id: string;
