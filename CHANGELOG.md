@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-607-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.537.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-608-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.538.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.538.0] — 🔒 Ekonomia: atomowość salda (RPC Postgres + per-user lock, anty-wyścig)
+
+- `[#608]` 🔒 **Pełna atomowość ekonomii** — zamyka systemowy wyścig read-modify-write na saldach (dwie komendy czytały to samo saldo → ostatni zapis wygrywał = podwójne wydanie). **Dwie warstwy:** (1) **RPC Postgres** ([`economy-atomic-rpc.sql`](dashboard/scripts/economy-atomic-rpc.sql) + `_ALL.sql`): `economy_spend` (warunkowy debet `wallet>=amount`), `economy_credit` (upsert add), `economy_move` (atomowy portfel↔bank) — UPDATE robiony ATOMOWO w bazie; bot woła przez nowy `cloudRpc`. (2) **`withLock` per-user** ([`userLock.mts`](bot/src/lib/userLock.mts)) — WSZYSTKIE komendy dotykające portfela (`/eco`, `/pet`, `/clan`, `/battlepass`) serializują się pod jednym kluczem `eco:<gid>:<uid>` (komendy usera idą do jednego sharda → in-process lock wystarcza). Helpery `spendWallet`/`creditWallet`/`moveBank` ([`store.mts`](bot/src/economy/store.mts)) preferują RPC z **fallbackiem do read-modify-write** gdy RPC niewgrane → **zmiana addytywna, zero ryzyka** (działa przed wgraniem SQL, atomowo po). `/eco deposit·withdraw` (`moveBank`) i `/clan donate` (`spendWallet`) używają atomowych helperów.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1098/1098** · `sync:check` (schemat 48 tab.) — exit 0 (Node 26.4.0). UWAGA: funkcje SQL są addytywne (operator wgrywa `_ALL.sql`); **nietestowalne e2e tutaj** (brak żywej bazy) — stąd fallback + per-user lock jako gwarancja in-process.
 
 ## [0.537.0] — ♻️ Refactor: helper `mergeConfig` (DRY config-load w 8 modułach)
 

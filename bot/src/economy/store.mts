@@ -1,5 +1,5 @@
 // Faza 7 / F3 — warstwa danych ekonomii serwera (Supabase economy_users + economy_shop).
-import { cloudDelete, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { cloudDelete, cloudRpc, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 
 export type EcoConfig = {
@@ -117,6 +117,84 @@ export async function saveUser(
     [{ ...u, updated_at: new Date().toISOString() }],
     'guild_id,user_id',
   );
+}
+
+// ── Atomowe operacje salda (anty-wyścig). Preferują RPC Postgres (economy_spend/credit/move) — debet/ruch
+// robiony ATOMOWO w bazie (UPDATE ... WHERE wallet>=amount). Fallback do read-modify-write gdy RPC
+// niewgrane/niedostępne; wtedy serializację per-user zapewnia withLock w handlerze. ──
+
+// Odejmij `amount` z portfela JEŚLI wystarcza. Zwraca nowe saldo lub null (za mało / brak środków).
+export async function spendWallet(
+  guildId: string,
+  userId: string,
+  amount: number,
+): Promise<number | null> {
+  if (!Number.isInteger(amount) || amount <= 0) return null;
+  try {
+    const w = await cloudRpc<number | null>('economy_spend', {
+      p_guild: guildId,
+      p_user: userId,
+      p_amount: amount,
+    });
+    return typeof w === 'number' ? w : null; // null = za mało (RPC zadziałało); number = nowe saldo
+  } catch {
+    const u = await getUser(guildId, userId);
+    if (u.wallet < amount) return null;
+    await saveUser({ guild_id: guildId, user_id: userId, wallet: u.wallet - amount });
+    return u.wallet - amount;
+  }
+}
+
+// Dodaj `amount` do portfela (upsert). Zwraca nowe saldo. `username` aktualizuje tylko gdy niepusty.
+export async function creditWallet(
+  guildId: string,
+  userId: string,
+  username: string,
+  amount: number,
+): Promise<number> {
+  if (!Number.isInteger(amount) || amount <= 0) return (await getUser(guildId, userId)).wallet;
+  try {
+    const w = await cloudRpc<number | null>('economy_credit', {
+      p_guild: guildId,
+      p_user: userId,
+      p_username: username,
+      p_amount: amount,
+    });
+    if (typeof w === 'number') return w;
+    throw new Error('rpc null');
+  } catch {
+    const u = await getUser(guildId, userId);
+    await saveUser({ guild_id: guildId, user_id: userId, username, wallet: u.wallet + amount });
+    return u.wallet + amount;
+  }
+}
+
+// Ruch portfel↔bank: amount>0 = wpłata (portfel→bank), <0 = wypłata (bank→portfel). Zwraca nowe saldo
+// portfela lub null (za mało po stronie źródła).
+export async function moveBank(
+  guildId: string,
+  userId: string,
+  amount: number,
+): Promise<number | null> {
+  if (!Number.isInteger(amount) || amount === 0) return null;
+  try {
+    const w = await cloudRpc<number | null>('economy_move', {
+      p_guild: guildId,
+      p_user: userId,
+      p_amount: amount,
+    });
+    return typeof w === 'number' ? w : null;
+  } catch {
+    const u = await getUser(guildId, userId);
+    if (amount > 0 ? u.wallet < amount : u.bank < -amount) return null;
+    await saveUser({
+      guild_id: guildId,
+      user_id: userId,
+      wallet: u.wallet - amount,
+      bank: u.bank + amount,
+    });
+    return u.wallet - amount;
+  }
 }
 
 export type ShopItem = {

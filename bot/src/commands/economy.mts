@@ -18,6 +18,7 @@ import {
   getShop,
   getUser,
   minutesSince,
+  moveBank,
   saveUser,
   streakMilestoneBonus,
 } from '../economy/store.mts';
@@ -25,6 +26,7 @@ import { grantTempRole } from '../economy/tempRoles.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { hasCloud } from '../lib/cloud.mts';
+import { withLock } from '../lib/userLock.mts';
 
 const ACCENT = 0xe50914;
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
@@ -153,6 +155,15 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((s) => s.setName('top').setDescription('Ranking najbogatszych'));
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  // Serializuj komendy /eco per-user (anty-wyścig read-modify-write na saldzie) — komendy jednego usera
+  // trafiają do jednego sharda, więc lock in-process wystarcza. Operacje deposit/withdraw są dodatkowo
+  // atomowe przez RPC (moveBank). Read-only podkomendy też się serializują (per-user, znikoma latencja).
+  await withLock(`eco:${interaction.guildId ?? 'dm'}:${interaction.user.id}`, () =>
+    runEco(interaction),
+  );
+}
+
+async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
   if (!interaction.guildId) {
     await interaction.reply(eph(t(locale, 'error.guildOnly')));
@@ -368,37 +379,31 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
 
-  // ── deposit / withdraw ──
+  // ── deposit / withdraw ── (atomowo przez moveBank: portfel↔bank bez wyścigu)
   if (sub === 'deposit' || sub === 'withdraw') {
     const amount = interaction.options.getInteger('amount', true);
-    const u = await getUser(gid, interaction.user.id);
-    if (sub === 'deposit') {
-      if (u.wallet < amount) {
-        await interaction.reply(eph(t(locale, 'eco.depLow', { wallet: fmt(u.wallet, cur) })));
-        return;
-      }
-      await saveUser({
-        guild_id: gid,
-        user_id: interaction.user.id,
-        username: interaction.user.username,
-        wallet: u.wallet - amount,
-        bank: u.bank + amount,
-      });
-      await interaction.reply(t(locale, 'eco.depOk', { amount: fmt(amount, cur) }));
-    } else {
-      if (u.bank < amount) {
-        await interaction.reply(eph(t(locale, 'eco.wdLow', { bank: fmt(u.bank, cur) })));
-        return;
-      }
-      await saveUser({
-        guild_id: gid,
-        user_id: interaction.user.id,
-        username: interaction.user.username,
-        wallet: u.wallet + amount,
-        bank: u.bank - amount,
-      });
-      await interaction.reply(t(locale, 'eco.wdOk', { amount: fmt(amount, cur) }));
+    const delta = sub === 'deposit' ? amount : -amount; // >0 = wpłata, <0 = wypłata
+    const newWallet = await moveBank(gid, interaction.user.id, delta);
+    if (newWallet === null) {
+      const u = await getUser(gid, interaction.user.id);
+      await interaction.reply(
+        eph(
+          sub === 'deposit'
+            ? t(locale, 'eco.depLow', { wallet: fmt(u.wallet, cur) })
+            : t(locale, 'eco.wdLow', { bank: fmt(u.bank, cur) }),
+        ),
+      );
+      return;
     }
+    // Odśwież username (moveBank go nie dotyka) — best-effort, jak w pozostałych komendach.
+    await saveUser({
+      guild_id: gid,
+      user_id: interaction.user.id,
+      username: interaction.user.username,
+    });
+    await interaction.reply(
+      t(locale, sub === 'deposit' ? 'eco.depOk' : 'eco.wdOk', { amount: fmt(amount, cur) }),
+    );
     return;
   }
 

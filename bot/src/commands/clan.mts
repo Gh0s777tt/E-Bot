@@ -16,7 +16,6 @@ import {
   channelLinkError,
   clanKey,
   clanRankByBank,
-  donationError,
   getClan,
   getMembership,
   listClans,
@@ -32,10 +31,11 @@ import {
   sortClansByBank,
   transferError,
 } from '../economy/clans.mts';
-import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import { ecoConfig, fmt, getUser, saveUser, spendWallet } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { hasCloud } from '../lib/cloud.mts';
+import { withLock } from '../lib/userLock.mts';
 
 const ACCENT = 0xe50914;
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
@@ -123,6 +123,14 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  // Serializuj /clan per-user TYM SAMYM kluczem co /eco i /pet — create/donate dotykają portfela, więc
+  // muszą nie ścigać się z resztą ekonomii (inaczej read-modify-write economy nadpisałby atomowy debet).
+  await withLock(`eco:${interaction.guildId ?? 'dm'}:${interaction.user.id}`, () =>
+    runClan(interaction),
+  );
+}
+
+async function runClan(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
   if (!interaction.guild) {
     await interaction.reply(eph(t(locale, 'sticky.guildOnly')));
@@ -413,18 +421,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       return;
     }
     const amount = interaction.options.getInteger('kwota', true);
-    const u = await getUser(gid, uid);
-    const err = donationError(amount, u.wallet);
-    if (err === 'amount') {
+    if (!Number.isInteger(amount) || amount <= 0) {
       await interaction.reply(eph(t(locale, 'clan.donateBadAmount')));
-      return;
-    }
-    if (err === 'funds') {
-      await interaction.reply(
-        eph(
-          t(locale, 'clan.donateNoFunds', { amount: fmt(amount, cur), wallet: fmt(u.wallet, cur) }),
-        ),
-      );
       return;
     }
     const clan = await getClan(gid, membership.clan_id);
@@ -432,15 +430,20 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       await interaction.reply(eph(t(locale, 'clan.notInClan')));
       return;
     }
-    u.wallet -= amount;
+    // Atomowy debet portfela (anty-wyścig: brak podwójnej wpłaty przy spamie); null = za mało środków.
+    const newWallet = await spendWallet(gid, uid, amount);
+    if (newWallet === null) {
+      const u = await getUser(gid, uid);
+      await interaction.reply(
+        eph(
+          t(locale, 'clan.donateNoFunds', { amount: fmt(amount, cur), wallet: fmt(u.wallet, cur) }),
+        ),
+      );
+      return;
+    }
     clan.bank += amount;
-    await saveUser({
-      guild_id: gid,
-      user_id: uid,
-      username: interaction.user.username,
-      wallet: u.wallet,
-    });
     await saveClan(clan);
+    await saveUser({ guild_id: gid, user_id: uid, username: interaction.user.username });
     logTx(gid, uid, -amount, `clan:donate:${clan.id}`);
     await interaction.reply(
       t(locale, 'clan.donated', {

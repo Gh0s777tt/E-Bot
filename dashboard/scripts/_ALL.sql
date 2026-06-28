@@ -678,6 +678,45 @@ create table if not exists clan_members (
 alter table clan_members enable row level security;
 create index if not exists clan_members_clan_idx on clan_members (guild_id, clan_id);
 
+-- atomowe operacje ekonomii (anty-wyścig na saldach; bot woła przez /rpc, ma fallback gdy niewgrane)
+create or replace function economy_spend(p_guild text, p_user text, p_amount integer)
+returns integer language plpgsql as $$
+declare new_wallet integer;
+begin
+  update economy_users set wallet = wallet - p_amount, updated_at = now()
+  where guild_id = p_guild and user_id = p_user and wallet >= p_amount
+  returning wallet into new_wallet;
+  return new_wallet;
+end; $$;
+create or replace function economy_credit(p_guild text, p_user text, p_username text, p_amount integer)
+returns integer language plpgsql as $$
+declare new_wallet integer;
+begin
+  insert into economy_users (guild_id, user_id, username, wallet, updated_at)
+  values (p_guild, p_user, p_username, p_amount, now())
+  on conflict (guild_id, user_id) do update
+    set wallet = economy_users.wallet + p_amount,
+        username = coalesce(nullif(excluded.username, ''), economy_users.username),
+        updated_at = now()
+  returning wallet into new_wallet;
+  return new_wallet;
+end; $$;
+create or replace function economy_move(p_guild text, p_user text, p_amount integer)
+returns integer language plpgsql as $$
+declare new_wallet integer;
+begin
+  if p_amount > 0 then
+    update economy_users set wallet = wallet - p_amount, bank = bank + p_amount, updated_at = now()
+    where guild_id = p_guild and user_id = p_user and wallet >= p_amount
+    returning wallet into new_wallet;
+  else
+    update economy_users set wallet = wallet - p_amount, bank = bank + p_amount, updated_at = now()
+    where guild_id = p_guild and user_id = p_user and bank >= -p_amount
+    returning wallet into new_wallet;
+  end if;
+  return new_wallet;
+end; $$;
+
 -- ═══════════════════════════════════════════════════════════════════════════
 -- KONIEC. Po uruchomieniu wszystkie funkcje F3–F10 zapisują dane.
 -- ═══════════════════════════════════════════════════════════════════════════

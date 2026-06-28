@@ -139,7 +139,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     // Lock per (guild,user): serializuje współbieżne /battlepass tego samego usera, by uniknąć podwójnej
     // wypłaty przy read-modify-write na współdzielonym kluczu bp_claims (audyt: double-mint). Drugi spam
     // odczyta już zaktualizowany claimedTier → claimRewards zwróci 0.
-    rewardLine = await withLock(`bp:${gid}:${uid}`, async () => {
+    rewardLine = await withLock(`eco:${gid}:${uid}`, async () => {
       const claimsKey = `g:${gid}:bp_claims:${month}`;
       let claims: Record<string, number> = {};
       try {

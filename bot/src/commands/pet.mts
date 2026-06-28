@@ -34,6 +34,7 @@ import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import type { Locale } from '../i18n/locales.mts';
 import { hasCloud } from '../lib/cloud.mts';
+import { withLock } from '../lib/userLock.mts';
 
 const ACCENT = 0xe50914;
 const MEDALS = ['🥇', '🥈', '🥉'];
@@ -114,6 +115,14 @@ function statusEmbed(locale: Locale, pet: Pet, cur: string): EmbedBuilder {
 }
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  // Serializuj /pet per-user (anty-wyścig na saldzie: adopt/feed/gift to spend/credit) — komendy usera
+  // idą do jednego sharda, lock in-process wystarcza.
+  await withLock(`eco:${interaction.guildId ?? 'dm'}:${interaction.user.id}`, () =>
+    runPet(interaction),
+  );
+}
+
+async function runPet(interaction: ChatInputCommandInteraction): Promise<void> {
   const locale = resolveLocale(interaction);
   if (!interaction.guild) {
     await interaction.reply(eph(t(locale, 'sticky.guildOnly')));

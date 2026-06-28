@@ -154,3 +154,22 @@ export async function cloudDelete(table: string, filterQs: string): Promise<void
   });
   if (!r.ok) throw new Error(`${table} DELETE ${r.status}: ${await r.text().catch(() => '')}`);
 }
+
+/** Wywołanie funkcji Postgres (PostgREST `/rpc/<fn>`). Zwraca sparsowany wynik (skalar/obiekt/null).
+ *  RZUCA przy braku chmury lub błędzie HTTP — by wołający mógł zrobić fallback (np. RPC niewgrane → 404).
+ *  Używane do atomowych operacji ekonomii (economy_spend/credit/move) — anty-wyścig na saldach. */
+export async function cloudRpc<T = unknown>(
+  fn: string,
+  params: Record<string, unknown>,
+): Promise<T> {
+  if (!hasCloud()) throw new Error('rpc: brak chmury');
+  const r = await fetch(`${creds().url}/rest/v1/rpc/${fn}`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(params),
+    signal: timeout(),
+  });
+  if (!r.ok) throw new Error(`rpc ${fn} ${r.status}: ${await r.text().catch(() => '')}`);
+  const text = await r.text();
+  return (text ? JSON.parse(text) : null) as T;
+}
