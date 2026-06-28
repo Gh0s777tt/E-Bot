@@ -22,7 +22,14 @@ import {
   rarityRank,
   setCardDaily,
 } from '../economy/cards.mts';
-import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import {
+  creditWallet,
+  ecoConfig,
+  ensureUser,
+  fmt,
+  getUser,
+  spendWallet,
+} from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import type { Locale } from '../i18n/locales.mts';
@@ -104,8 +111,12 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const sub = interaction.options.getSubcommand();
 
   if (sub === 'pull') {
-    const u = await getUser(gid, uid);
-    if (u.wallet < PULL_COST) {
+    // Atomowy debet (cards bez withLock) — overwrite saldem dopuszczał double-spend przy spamie
+    // i kasował równoległy credit innego usera. spendWallet odejmuje atomowo tylko jeśli starcza.
+    await ensureUser(gid, uid, interaction.user.username);
+    const newWallet = await spendWallet(gid, uid, PULL_COST);
+    if (newWallet === null) {
+      const u = await getUser(gid, uid);
       await interaction.reply(
         eph(
           t(locale, 'cards.notEnough', { cost: fmt(PULL_COST, cur), wallet: fmt(u.wallet, cur) }),
@@ -113,13 +124,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
       return;
     }
-    u.wallet -= PULL_COST;
-    await saveUser({
-      guild_id: gid,
-      user_id: uid,
-      username: interaction.user.username,
-      wallet: u.wallet,
-    });
     logTx(gid, uid, -PULL_COST, 'cards:pull');
     const card = drawCard();
     const qty = await addCard(gid, uid, card.id, 1);
@@ -222,14 +226,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const sellQty = Math.min(want, dupes);
   const amount = RARITY[card.rarity].sell * sellQty;
   await addCard(gid, uid, card.id, -sellQty);
-  const u = await getUser(gid, uid);
-  u.wallet += amount;
-  await saveUser({
-    guild_id: gid,
-    user_id: uid,
-    username: interaction.user.username,
-    wallet: u.wallet,
-  });
+  // Atomowy credit (cards bez withLock) — overwrite saldem zgubiłby równoległy credit/debet.
+  const newWallet = await creditWallet(gid, uid, interaction.user.username, amount);
   logTx(gid, uid, amount, `cards:sell:${card.id}`);
   await interaction.reply(
     t(locale, 'cards.sold', {
@@ -237,7 +235,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       emoji: card.emoji,
       name: card.name,
       amount: fmt(amount, cur),
-      wallet: fmt(u.wallet, cur),
+      wallet: fmt(newWallet, cur),
     }),
   );
 }

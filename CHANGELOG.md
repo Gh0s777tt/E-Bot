@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-611-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.541.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-612-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.542.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.542.0] — 🔒 Ekonomia: atomowe saldo w /cards, /skins, /stocks (moduły bez withLock)
+
+- `[#612]` 🔒 **Atomowe saldo w `/cards`, `/skins`, `/stocks`** — kontynuacja toru atomowości (#610/#611). Te 3 moduły (bez `withLock`) debetowały/kredytowały portfel przez `saveUser({ wallet: getUser()±delta })` (overwrite) → double-spend przy spamie + kasowanie równoległego atomowego credit/spend innego usera. Debety (`/cards pull`, `/skins buy`, `/stocks buy`) przeniesione na warunkowy **`spendWallet`** + `ensureUser`; kredyty (`/cards sell`, `/stocks sell`) na atomowy **`creditWallet`**. Komunikaty pokazują saldo ze zwrotu helpera (zamiast nieświeżego `u.wallet`). **Zero zmiany zachowania** bez współbieżności. Domyka atomowość WSZYSTKICH modułów ekonomii bez locka (market/lottery ✓ #611, cards/skins/stocks ✓ #612).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1105/1105** · `sync:check` — exit 0 (Node 26.4.0). Pozostały follow-up (LOW): gry self pod `withLock` /eco (gamble/slots/blackjack/roulette/highlow/crime/buy/use) — lock chroni przed double-spend, zostaje wyłącznie wąskie okno równoległego credit od innego usera; `ecoSeason` podium (tło, raz/miesiąc).
 
 ## [0.541.0] — 🔒 Ekonomia: atomowy debet w /market i /lottery (moduły bez withLock)
 

@@ -1,7 +1,7 @@
 // Tor I — /skins: sklep skórek kart rang/profilu (kup/załóż za walutę).
 import { type ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { equipSkin, getOwnedSkins, ownSkin, SKINS, skinById } from '../economy/skins.mts';
-import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import { ecoConfig, ensureUser, fmt, spendWallet } from '../economy/store.mts';
 import { hasCloud } from '../lib/cloud.mts';
 
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
@@ -79,17 +79,14 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       await interaction.reply(eph('Masz już tę skórkę — użyj `/skins equip`.'));
       return;
     }
-    const u = await getUser(gid, uid);
-    if (u.wallet < skin.price) {
+    // Atomowy debet (skins bez withLock) — overwrite saldem dopuszczał double-spend i kasował
+    // równoległy credit innego usera. ensureUser materializuje „dziewicze" konto przed debetem.
+    await ensureUser(gid, uid, interaction.user.username);
+    const newWallet = await spendWallet(gid, uid, skin.price);
+    if (newWallet === null) {
       await interaction.reply(eph(`Masz za mało (cena ${fmt(skin.price, cur)}).`));
       return;
     }
-    await saveUser({
-      guild_id: gid,
-      user_id: uid,
-      username: interaction.user.username,
-      wallet: u.wallet - skin.price,
-    });
     await ownSkin(gid, uid, id);
     await interaction.reply(eph(`✅ Kupiono skórkę **${skin.name}**! Załóż ją: \`/skins equip\`.`));
     return;

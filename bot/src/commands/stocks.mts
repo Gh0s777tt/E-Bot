@@ -15,7 +15,14 @@ import {
   priceAt,
   STOCKS,
 } from '../economy/stocks.mts';
-import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
+import {
+  creditWallet,
+  ecoConfig,
+  ensureUser,
+  fmt,
+  getUser,
+  spendWallet,
+} from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { resolveLocale, t } from '../i18n/index.mts';
 import { hasCloud } from '../lib/cloud.mts';
@@ -151,23 +158,20 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
   const price = priceAt(stock);
-  const u = await getUser(gid, uid);
 
   if (sub === 'buy') {
     const cost = price * shares;
-    if (u.wallet < cost) {
+    // Atomowy debet (stocks bez withLock) — overwrite saldem dopuszczał double-spend i kasował
+    // równoległy credit innego usera. spendWallet odejmuje atomowo tylko jeśli starcza.
+    await ensureUser(gid, uid, interaction.user.username);
+    const newWallet = await spendWallet(gid, uid, cost);
+    if (newWallet === null) {
+      const u = await getUser(gid, uid);
       await interaction.reply(
         eph(t(locale, 'stocks.notEnough', { cost: fmt(cost, cur), wallet: fmt(u.wallet, cur) })),
       );
       return;
     }
-    u.wallet -= cost;
-    await saveUser({
-      guild_id: gid,
-      user_id: uid,
-      username: interaction.user.username,
-      wallet: u.wallet,
-    });
     await adjustHolding(gid, uid, stock.symbol, shares, cost);
     logTx(gid, uid, -cost, `stock:buy:${stock.symbol}`);
     await interaction.reply(
@@ -177,7 +181,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
         symbol: stock.symbol,
         price: fmt(price, cur),
         cost: fmt(cost, cur),
-        wallet: fmt(u.wallet, cur),
+        wallet: fmt(newWallet, cur),
       }),
     );
     return;
@@ -200,13 +204,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const proceeds = price * shares;
   // Proporcjonalne zmniejszenie zainwestowanego (dla liczenia zysku przy częściowej sprzedaży).
   const investedBack = Math.round((held.invested * shares) / held.shares);
-  u.wallet += proceeds;
-  await saveUser({
-    guild_id: gid,
-    user_id: uid,
-    username: interaction.user.username,
-    wallet: u.wallet,
-  });
+  // Atomowy credit (stocks bez withLock) — overwrite saldem zgubiłby równoległy credit/debet.
+  const newWallet = await creditWallet(gid, uid, interaction.user.username, proceeds);
   await adjustHolding(gid, uid, stock.symbol, -shares, -investedBack);
   logTx(gid, uid, proceeds, `stock:sell:${stock.symbol}`);
   const profit = proceeds - investedBack;
@@ -218,7 +217,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       price: fmt(price, cur),
       proceeds: fmt(proceeds, cur),
       profit: `${profit >= 0 ? '+' : ''}${fmt(profit, cur)}`,
-      wallet: fmt(u.wallet, cur),
+      wallet: fmt(newWallet, cur),
     }),
   );
 }
