@@ -21,27 +21,34 @@
 
 ## 🔧 Kroki aktywacji
 
-1. **Produkt + cena** — Stripe Dashboard → Products → utwórz produkt „Premium", dodaj cenę **recurring** (np. miesięczną). Skopiuj `price_...` → `STRIPE_PRICE_ID`.
-2. **Klucz sekretny** — Developers → API keys → `sk_...` → `STRIPE_SECRET_KEY`.
+1. **Produkt + 2 ceny** — Stripe Dashboard → Products → utwórz produkt „Premium", dodaj **dwie ceny recurring**:
+   - **miesięczną** (np. 19,99 zł / mc) → `STRIPE_PRICE_ID`,
+   - **roczną** (np. 199 zł / rok) → `STRIPE_PRICE_ID_YEAR` *(opcjonalna — bez niej plan roczny użyje ceny miesięcznej)*.
+2. **Klucz sekretny** — Developers → API keys → `sk_...` → `STRIPE_SECRET_KEY` *(bezpieczniejszy: klucz restricted `rk_...` z uprawnieniem Checkout)*.
 3. **Webhook** — Developers → Webhooks → Add endpoint:
    - URL: `https://<twój-panel>/api/billing/webhook`
    - Eventy: **`checkout.session.completed`** + **`customer.subscription.deleted`**
    - Skopiuj **Signing secret** (`whsec_...`) → `STRIPE_WEBHOOK_SECRET`.
-4. **Env w Vercel** — Project → Settings → Environment Variables: `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`. Redeploy.
+4. **Env w Vercel** — Project → Settings → Environment Variables, następnie Redeploy:
+   - **Wymagane:** `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`.
+   - **Plan roczny:** `STRIPE_PRICE_ID_YEAR`.
+   - **Ceny wyświetlane** (opcjonalne; domyślnie `19,99 zł` / `199 zł`): `NEXT_PUBLIC_PREMIUM_PRICE`, `NEXT_PUBLIC_PREMIUM_PRICE_YEAR`.
 5. **Schemat** — upewnij się, że uruchomiony jest [`m1-marketplace-schema.sql`](../dashboard/scripts/m1-marketplace-schema.sql) (tabela `guilds` z kolumnami `tier`/`stripe_customer_id`/`stripe_sub_id`).
 
 ## 🔄 Jak to działa
 
 ```mermaid
 flowchart LR
-  U[Admin serwera] -->|„Premium"| C[POST /api/billing/checkout]
-  C -->|chokepoint guild_id| S[Stripe Checkout]
+  U[Admin serwera] -->|„Przejdź na Premium"| D[Okno porównania Free vs Premium<br/>przełącznik mc / rok]
+  D -->|„Subskrybuj"| C[POST /api/billing/checkout<br/>plan: month / year]
+  C -->|chokepoint guild_id + wybór price| S[Stripe Checkout]
   S -->|płatność| W[POST /api/billing/webhook]
   W -->|HMAC verify| DB[(guilds.tier = premium)]
   DB -->|gating| M[Marketplace odblokowuje premium]
 ```
 
-- **Checkout** scope'owany przez `getPrimaryGuildId` → admin kupuje premium tylko dla **swojego** serwera.
+- **Okno porównania** (`PremiumDialog`) — przycisk „Przejdź na Premium" w Marketplace (gdy billing włączony i serwer Free) otwiera porównanie planów z przełącznikiem **miesięczny/roczny**; dopiero „Subskrybuj" startuje Checkout. Cechy: edytowalna stała `PLAN_FEATURES` w [`dashboard/lib/premiumPlan.ts`](../dashboard/lib/premiumPlan.ts).
+- **Checkout** scope'owany przez `getPrimaryGuildId` → admin kupuje premium tylko dla **swojego** serwera; `plan` w body wybiera `STRIPE_PRICE_ID` (mc) lub `STRIPE_PRICE_ID_YEAR` (rok).
 - **Webhook** weryfikuje podpis `Stripe-Signature` (HMAC-SHA256, tolerancja 5 min) zanim ruszy `guilds.tier`.
 - `checkout.session.completed` → `premium` (+ zapis `stripe_customer_id`/`stripe_sub_id`); `customer.subscription.deleted` → `free`.
 
