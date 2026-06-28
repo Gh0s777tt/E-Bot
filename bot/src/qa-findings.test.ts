@@ -61,18 +61,21 @@ describe('QA#3 buildEmbed — całkowity limit 6000 znaków (regresja #620)', ()
   });
 });
 
-// ── DEFEKT #4 (Średni): normalizeText neutralizuje leet/diakrytyki/zero-width, ale NIE separatory
-// (spacja/kropka/myślnik). Dopasowanie zakazanych słów to includes(normalizeText(word)), więc
-// "s p a m" / "s.p.a.m" omijają filtr — klasyczny bypass. (Naprawa wymaga ostrożności: ryzyko FP.)
-describe('QA#4 normalizeText — separatory między literami', () => {
+// ── DEFEKT #4 (Średni) — NAPRAWIONY (#625): normalizeText scala sekwencje ≥3 POJEDYNCZYCH liter
+// rozdzielonych separatorami (anty-bypass „rozstrzelony"), BEZ false-positive na normalnych słowach.
+describe('QA#4 normalizeText — separatory między literami (regresja #625)', () => {
   it('kontrola: leet nadal neutralizowany', () => {
     expect(normalizeText('5p4m')).toBe('spam');
   });
-  it.fails('DEFEKT: litery rozdzielone spacją powinny zostać scalone', () => {
+  it('litery rozdzielone spacją/kropką/myślnikiem zostają scalone', () => {
     expect(normalizeText('s p a m')).toBe('spam');
-  });
-  it.fails('DEFEKT: litery rozdzielone kropką powinny zostać scalone', () => {
     expect(normalizeText('s.p.a.m')).toBe('spam');
+    expect(normalizeText('s-p-a-m')).toBe('spam');
+  });
+  it('KLUCZOWE: normalne słowa NIE są sklejane (brak FP „the rapist" → „therapist")', () => {
+    expect(normalizeText('the rapist')).not.toContain('therapist');
+    expect(normalizeText('a cat')).not.toBe('acat'); // pojedyncze „a" + wielolit. słowo → bez scalenia
+    expect(normalizeText('hello world')).toBe('hello world');
   });
 });
 

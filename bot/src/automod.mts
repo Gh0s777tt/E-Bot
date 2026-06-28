@@ -125,13 +125,19 @@ const LEET: Record<string, string> = {
   '7': 't',
 };
 export function normalizeText(s: string): string {
-  return s
+  const base = s
     .toLowerCase()
     .normalize('NFKD')
     .replace(/\p{M}/gu, '')
     .replace(/\p{Cf}/gu, '')
     .replace(/[0@1!|345$7]/g, (c) => LEET[c] ?? c)
     .replace(/(.)\1{2,}/g, '$1$1');
+  // Anty-bypass „rozstrzelony": scal sekwencje ≥3 POJEDYNCZYCH liter rozdzielonych separatorami
+  // („s p a m", „s.p.a.m" → „spam"). Wzorzec wymaga, by KAŻDA litera w ciągu była pojedyncza (lookbehind/
+  // lookahead: brak liter wokół), więc normalne słowa zostają nietknięte — „the rapist" NIE → „therapist".
+  return base.replace(/(?<!\p{L})(?:\p{L}[\s._\-*]+){2,}\p{L}(?!\p{L})/gu, (m) =>
+    m.replace(/[\s._\-*]+/g, ''),
+  );
 }
 function safeParse(s: string): Partial<AutomodConfig> | null {
   try {

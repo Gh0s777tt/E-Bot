@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-624-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.554.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-625-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.555.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.555.0] — 🛡️ Automod: anty-bypass „rozstrzelony" (s p a m) bez false-positive (QA #4)
+
+- `[#625]` 🛡️ **Domknięcie ostatniego defektu z QA (#4)** — `normalizeText` ([`automod.mts`](bot/src/automod.mts)) neutralizował leet/diakrytyki/zero-width, ale NIE separatory, więc „s p a m" / „s.p.a.m" / „s-p-a-m" omijały filtr zakazanych słów. Naprawione **bez false-positive**: scalane są TYLKO sekwencje ≥3 **pojedynczych** liter rozdzielonych separatorami (lookbehind/lookahead pilnują, że każda litera jest osobna) → „the rapist" NIE staje się „therapist", „a cat"/„hello world" nietknięte. +testy (scalanie spacja/kropka/myślnik + KLUCZOWE asercje braku FP). **Wszystkie 6 defektów z `qa-findings.test.ts` naprawione — 0 xfail.**
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1128 passed (0 xfail)** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.554.0] — 🛡️ Anti-raid: nameSkeleton odporny na homoglify (cyrylica/greka) (QA follow-up)
 

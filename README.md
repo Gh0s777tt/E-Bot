@@ -1,4 +1,4 @@
-<!-- SYNC: v0.554.0 · #624 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
+<!-- SYNC: v0.555.0 · #625 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (badge wersji + blurb „Najnowsze") -->
 <!-- ╔══════════════════════════════════════════════════════════════════╗ -->
 <!-- ║                            E - B O T                              ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -13,7 +13,7 @@
 
 <br/>
 
-![Wersja](https://img.shields.io/badge/wersja-0.554.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.555.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Status](https://img.shields.io/badge/status-aktywny-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Licencja](https://img.shields.io/badge/licencja-PROPRIETARY-E50914?style=for-the-badge&labelColor=0a0a0a)
 ![Repo](https://img.shields.io/badge/repo-prywatne-E50914?style=for-the-badge&labelColor=0a0a0a)
@@ -184,7 +184,7 @@ pie showData title Biblioteka gier (179)
 
 ## 📜 Changelog
 
-Najnowsze: **v0.548–0.554** — 🔒 przegląd QA + 8 fixów (`scanScam` phishing przy `HTTP://` · `percentileRank` poprawny percentyl · `buildEmbed` limit 6000 · `duration` ujemne · ReDoS-guard automoda · `levelInfo` pasek na kapie · anti-raid homoglify); **v0.547.0** — 🔒 atomowa wypłata podium sezonu (`ecoSeason` — domyka atomowość WSZYSTKICH ścieżek salda); **v0.545–0.546** — 🐛 drobiazgi z audytu (pasek XP peta na max-levelu, walidacja przydzielności ról battle-passa); **v0.539–0.544** — 🔒 **pełna atomowość ekonomii** (audyt współbieżności: `pay`/`rob` cross-user + RPC `economy_ensure`, atomowe saldo we wszystkich ścieżkach — level-up · giveaway · market · lottery · cards · skins · stocks · gry/sklep/blackjack `/eco`); **v0.537–0.538** — 🔒 atomowość salda (RPC Postgres + per-user `withLock`) i ♻️ `mergeConfig`; **v0.529–0.534** — 🛡️ **klany kompletne** + 📊 **benchmarking cross-server**; **v0.518–0.528** — ⚔️ **pety PvP** i 🎭 **role battle-passa**. Suite **142 pliki / 1126 testów** (+2 znane xfail — defekt QA #4 śledzony w `TEST_REPORT.md`), bramki zielone (Node 26.4.0).
+Najnowsze: **v0.548–0.555** — 🔒 przegląd QA + 9 fixów (`scanScam` phishing przy `HTTP://` · `percentileRank` poprawny percentyl · `buildEmbed` limit 6000 · `duration` ujemne · ReDoS-guard automoda · `levelInfo` pasek na kapie · anti-raid homoglify · automod anty-bypass „rozstrzelony"); **v0.547.0** — 🔒 atomowa wypłata podium sezonu (`ecoSeason` — domyka atomowość WSZYSTKICH ścieżek salda); **v0.545–0.546** — 🐛 drobiazgi z audytu (pasek XP peta na max-levelu, walidacja przydzielności ról battle-passa); **v0.539–0.544** — 🔒 **pełna atomowość ekonomii** (audyt współbieżności: `pay`/`rob` cross-user + RPC `economy_ensure`, atomowe saldo we wszystkich ścieżkach — level-up · giveaway · market · lottery · cards · skins · stocks · gry/sklep/blackjack `/eco`); **v0.537–0.538** — 🔒 atomowość salda (RPC Postgres + per-user `withLock`) i ♻️ `mergeConfig`; **v0.529–0.534** — 🛡️ **klany kompletne** + 📊 **benchmarking cross-server**; **v0.518–0.528** — ⚔️ **pety PvP** i 🎭 **role battle-passa**. Suite **142 pliki / 1128 testów** (0 xfail — wszystkie defekty QA naprawione), bramki zielone (Node 26.4.0).
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 
 <br/>

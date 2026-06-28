@@ -10,10 +10,10 @@ Przeprowadzono ukierunkowane polowanie na defekty w **czystej logice domenowej**
 
 - **Przetestowano:** scanScam/contentScan, automod, antiraid, percentileRank/digest, buildEmbed/richMessage, duration, leveling, blackjack, pets, stocks, interest i inne (4 równoległe przeglądy + ręczna weryfikacja każdego znaleziska przez uruchomiony test).
 - **Defektów potwierdzonych testem:** **6** (1× Wysoki, 3× Średni, 2× Niski).
-- **NAPRAWIONO: 5/6** w commitach `#618–#621` (defekt #4 świadomie otwarty — patrz niżej). Każdy `it.fails` zamieniono po naprawie na zwykły test regresyjny.
+- **NAPRAWIONO: 6/6** w commitach `#618–#621`, `#625` (defekt #4 domknięty bez FP — scala tylko ciągi pojedynczych liter). Każdy `it.fails` zamieniono po naprawie na zwykły test regresyjny → **0 xfail**.
 - **Dodatkowe znaleziska bez testu** (opt‑in / niedeterministyczne / degradacja sygnału): **5** (sekcja 6) — udokumentowane jako follow‑up.
 - **Dodano testów:** docelowo 17 (regresje + kontrole pozytywne); plik [`bot/src/qa-findings.test.ts`](bot/src/qa-findings.test.ts).
-- **Stan zestawu po naprawach:** `1119 passed | 2 expected fail (1121)` — **zielony**. Pozostałe 2 xfail to defekt #4 (otwarty).
+- **Stan zestawu po naprawach:** `1128 passed (0 xfail)` — **zielony**. Wszystkie defekty z `qa-findings.test.ts` naprawione i potwierdzone testami regresyjnymi.
 
 ### 🔧 Status napraw
 | Defekt | Status | Commit |
@@ -21,7 +21,7 @@ Przeprowadzono ukierunkowane polowanie na defekty w **czystej logice domenowej**
 | #1 scanScam HTTP:// | ✅ Naprawiony | `#618` |
 | #2 percentileRank | ✅ Naprawiony | `#619` |
 | #3 buildEmbed 6000 | ✅ Naprawiony | `#620` |
-| #4 normalizeText separatory | ⏳ **Otwarty** — naiwny strip wprowadza FP („therapist"⊃„rapist"); wymaga dopasowania na granice słów | — |
+| #4 normalizeText separatory | ✅ Naprawiony — scala tylko ciągi ≥3 **pojedynczych** liter (lookbehind/lookahead), bez FP („therapist" nietknięte) | `#625` |
 | #5 formatDuration ujemne | ✅ Naprawiony | `#621` |
 | #6 parseDuration „-5m" | ✅ Naprawiony | `#621` |
 
