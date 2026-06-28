@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import Assistant from './Assistant';
 import CommandPalette from './CommandPalette';
+import Footer from './Footer';
 import GlobalPageHeader from './GlobalPageHeader';
 import HowItWorks from './HowItWorks';
 import { LangProvider } from './LangContext';
@@ -43,6 +44,7 @@ export default function Shell({
               <ModuleBar />
               <PageTransition>{children}</PageTransition>
             </main>
+            <Footer />
           </div>
         </div>
       </ViewModeProvider>

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-627-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.557.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-628-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.558.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.558.0] — 🦶 Panel: globalna stopka + strony About / Regulamin / Polityka prywatności
+
+- `[#628]` 🦶 **Stopka panelu + strony prawne** — nowy `Footer` ([`Footer.tsx`](dashboard/components/Footer.tsx)) pod treścią każdej strony panelu (w `Shell`): nota o prawach + linki do **publicznych** (bez logowania) stron `/p/about`, `/p/regulamin`, `/p/polityka-prywatnosci`. „O projekcie" zawiera opis produktu; „Regulamin" i „Polityka prywatności" to **szablony** (rusztowanie sekcji + widoczna nota „uzupełnij treść prawną przed publikacją"). i18n ×14 (4 klucze `ui.footer.*`); treść stron po polsku (do uzupełnienia/tłumaczenia — jak `howItWorks`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1131** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.557.0] — 💳 Panel: porównanie planów Free vs Premium (okno + cena z env)
 
