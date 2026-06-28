@@ -36,23 +36,28 @@ describe('QA#2 percentileRank — serwer w średniej / lider w próbce (regresja
   });
 });
 
-// ── DEFEKT #3 (Średni): buildEmbed pilnuje limitów per-pole, ale NIE całkowitego limitu 6000 znaków
-// embeda. Embed z maksymalnymi polami (256+4096+2048+25×(256+1024)=38400) przechodzi bez zmian →
-// Discord odrzuca CAŁĄ wiadomość (HTTP 400). Komentarz w richMessage.limits.test.ts wymienia 6000.
-describe('QA#3 buildEmbed — całkowity limit 6000 znaków', () => {
+// ── DEFEKT #3 (Średni) — NAPRAWIONY (#620): buildEmbed wymusza całkowity limit 6000 (skraca description,
+// potem usuwa pola od końca). Wcześniej embed z maks. polami = 38400 znaków → Discord 400.
+describe('QA#3 buildEmbed — całkowity limit 6000 znaków (regresja #620)', () => {
   const long = (n: number) => 'A'.repeat(n);
-  it.fails('DEFEKT: suma title+description+footer+25 pól nie powinna przekroczyć 6000', () => {
+  const total = (e: ReturnType<typeof buildEmbed>) =>
+    (e.title?.length ?? 0) +
+    (e.description?.length ?? 0) +
+    (e.author?.name.length ?? 0) +
+    (e.footer?.text.length ?? 0) +
+    (e.fields ?? []).reduce((s, f) => s + f.name.length + f.value.length, 0);
+  it('suma maksymalnego embeda jest schodzona do ≤ 6000', () => {
     const fields = Array.from({ length: 25 }, () => ({ name: long(256), value: long(1024) }));
     const e = buildEmbed(
       { title: long(256), description: long(4096), footerText: long(2048), fields },
       {},
     );
-    const total =
-      (e.title?.length ?? 0) +
-      (e.description?.length ?? 0) +
-      (e.footer?.text.length ?? 0) +
-      (e.fields ?? []).reduce((s, f) => s + f.name.length + f.value.length, 0);
-    expect(total).toBeLessThanOrEqual(6000);
+    expect(total(e)).toBeLessThanOrEqual(6000);
+  });
+  it('kontrola: mały embed pozostaje nietknięty', () => {
+    const e = buildEmbed({ title: 'Hej', description: 'krótki opis' }, {});
+    expect(e.title).toBe('Hej');
+    expect(e.description).toBe('krótki opis');
   });
 });
 

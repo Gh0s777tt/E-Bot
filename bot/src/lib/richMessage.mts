@@ -110,7 +110,37 @@ export function buildEmbed(e: RichEmbed, vars: Record<string, string>): APIEmbed
       inline: !!f.inline,
     }));
   if (fields.length) api.fields = fields;
+  enforceEmbedTotal(api);
   return api;
+}
+
+// Discord odrzuca CAŁY embed, gdy suma znaków (title+description+author+footer+pola) przekracza 6000 —
+// limity per-pole tego nie pilnują. Schodzimy do ≤6000 nieinwazyjnie: najpierw skracamy description
+// (największy bufor), potem usuwamy pola od końca. Tytuł/autor/footer (krótkie, nośne) zostają.
+const EMBED_TOTAL_MAX = 6000;
+function embedTotal(api: APIEmbed): number {
+  return (
+    (api.title?.length ?? 0) +
+    (api.description?.length ?? 0) +
+    (api.author?.name.length ?? 0) +
+    (api.footer?.text.length ?? 0) +
+    (api.fields ?? []).reduce((s, f) => s + f.name.length + f.value.length, 0)
+  );
+}
+function enforceEmbedTotal(api: APIEmbed): void {
+  let over = embedTotal(api) - EMBED_TOTAL_MAX;
+  if (over <= 0) return;
+  if (api.description) {
+    const cut = Math.min(over, api.description.length);
+    api.description = api.description.slice(0, api.description.length - cut);
+    over -= cut;
+    if (!api.description) api.description = undefined;
+  }
+  while (over > 0 && api.fields?.length) {
+    const f = api.fields.pop();
+    if (f) over -= f.name.length + f.value.length;
+  }
+  if (api.fields && api.fields.length === 0) api.fields = undefined;
 }
 
 // Treść + (opcjonalnie) embed. Caller dokłada files/ping wedle potrzeby.

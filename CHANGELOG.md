@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-619-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.549.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-620-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.550.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.550.0] — 🛡️ richMessage: wymuszony całkowity limit 6000 znaków embeda (QA #3)
+
+- `[#620]` 🛡️ **Egzekwowanie limitu 6000** (defekt #3 z przeglądu QA). `buildEmbed` ([`richMessage.mts`](bot/src/lib/richMessage.mts)) pilnował limitów per-pole, ale NIE sumy 6000 — embed z maks. polami (256+4096+2048+25×(256+1024)=38 400 znaków) przechodził → Discord odrzucał całą wiadomość (HTTP 400, padały custom-command/welcome/embed). Nowy `enforceEmbedTotal` schodzi do ≤6000 nieinwazyjnie: skraca `description` (największy bufor), potem usuwa pola od końca; tytuł/autor/footer (krótkie, nośne) zostają. +2 testy regresyjne (suma ≤6000 + kontrola, że mały embed nietknięty).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1117 passed + 4 xfail** (otwarte defekty QA #4–6) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.549.0] — 📊 Analityka: poprawny percentyl benchmarku cross-server (QA #2)
 
