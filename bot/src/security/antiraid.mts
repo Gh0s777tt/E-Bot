@@ -163,6 +163,38 @@ export function detectWave<T extends { at: number }>(
   return { kept, isWave: joinCount > 0 && kept.length >= joinCount };
 }
 
+// Homoglify (Unicode confusables) cyrylica/greka → łacina: armia botów z jednym podmienionym znakiem
+// na nick (`usеr` z cyrylickim „е") inaczej dawałaby inny szkielet i rozbijała klaster. Tylko PEWNE
+// odpowiedniki wizualne (1:1), by nie wprowadzać fałszywych scaleń.
+const CONFUSABLES: Record<string, string> = {
+  а: 'a',
+  в: 'b',
+  е: 'e',
+  к: 'k',
+  м: 'm',
+  н: 'h',
+  о: 'o',
+  р: 'p',
+  с: 'c',
+  т: 't',
+  у: 'y',
+  х: 'x',
+  і: 'i',
+  ѕ: 's',
+  ј: 'j', // cyrylica
+  α: 'a',
+  ε: 'e',
+  ι: 'i',
+  κ: 'k',
+  μ: 'm',
+  ν: 'v',
+  ο: 'o',
+  ρ: 'p',
+  τ: 't',
+  υ: 'u',
+  χ: 'x', // greka
+};
+
 // Klastrowanie podobnych nazw (czysta funkcja, testowalna): armie botów dołączają jako
 // `user_47120`, `user_88213`, … — różnią się tylko ciągiem cyfr/sufiksem. Sprowadzamy nick do
 // „szkieletu" (litery + marker `#` w miejscu ciągów cyfr) i grupujemy. Duży klaster w fali wejść =
@@ -173,6 +205,7 @@ export function nameSkeleton(name: string): string {
     .normalize('NFKD')
     .replace(/\p{M}/gu, '')
     .replace(/\p{Cf}/gu, '')
+    .replace(/[Ѐ-ӿͰ-Ͽ]/g, (c) => CONFUSABLES[c] ?? c) // homoglify → łacina
     .replace(/\d+/g, '#')
     .replace(/[^a-z#]+/g, '')
     .replace(/#+/g, '#');

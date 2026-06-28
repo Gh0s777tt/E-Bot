@@ -55,6 +55,13 @@ describe('clusterSimilarNames — armie botów po podobnych nazwach', () => {
     expect(nameSkeleton('ShadowKnight')).toBe('shadowknight');
   });
 
+  it('homoglify cyrylica/greka → łacina (armia z podmianą znaku klastruje się z ASCII)', () => {
+    expect(nameSkeleton('usеr_1')).toBe('user#'); // „е" = cyrylica U+0435
+    expect(nameSkeleton('аdmіn')).toBe('admin'); // „а",„і" cyrylickie
+    // 2× wariant z homoglifem + 1× czysty ASCII → jeden klaster rozmiaru 3
+    expect(largestNameCluster(['usеr_1', 'usеr_2', 'user_3'])).toBe(3);
+  });
+
   it('grupuje numerowaną armię, pomija zwykłe nicki', () => {
     const names = ['user_47120', 'user_88213', 'user_5', 'ShadowKnight', 'AlicePL'];
     const top = clusterSimilarNames(names)[0];
