@@ -129,7 +129,7 @@ Na top.gg → **Commands** kliknij **Import** — zaciągnie komendy **automatyc
 - [`commands.md`](topgg/commands.md) — tabela do podglądu / ręcznego wklejenia,
 - [`commands.json`](topgg/commands.json) — `name → description` (EN).
 
-Źródło: `bot/src/i18n/commandDescriptions.mts` (ten sam tekst, który widzi Discord/top.gg).
+Źródło: `bot/src/i18n/commandDescriptions.mts` + `dashboard/lib/wikiData.ts` (grupy) · regeneracja: `node scripts/gen-topgg-commands.mjs`.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
