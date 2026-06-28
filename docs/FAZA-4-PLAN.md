@@ -1,3 +1,5 @@
+> ⚠️ **DOKUMENT ARCHIWALNY** — to plan sprzed implementacji Fazy 4 (ukończonej dawno temu). Zachowany jako artefakt historyczny; **nie odzwierciedla bieżącego stanu**. Aktualny status: [`PHASES.md`](PHASES.md) · [`ROADMAP.md`](ROADMAP.md) · [`../CHANGELOG.md`](../CHANGELOG.md).
+
 <div align="center">
 
 # 🧭 PLAN FAZY 4 &nbsp;·&nbsp; E‑BOT — Wzrost

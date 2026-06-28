@@ -1,3 +1,7 @@
+<!-- Uwaga: diagramy nie obejmują jeszcze warstwy Marketplace pluginów (M1–M6: plugin-bridge,
+     sandbox, auto-trigger). Architektura pluginów: docs/PLAN-MARKETPLACE.md · docs/PLAN-M6-SANDBOX.md ·
+     docs/SECURITY-REVIEW-MARKETPLACE.md. -->
+
 <div align="center">
 
 # 🧠 ARCHITEKTURA &nbsp;·&nbsp; E‑BOT
