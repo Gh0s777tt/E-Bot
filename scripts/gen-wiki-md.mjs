@@ -34,7 +34,7 @@ for (const g of COMMAND_GROUPS) {
     commands += `| \`${c.n}\` | ${c.d} | ${c.s ? c.s.replace(/\|/g, '\\|') : '—'} |\n`;
   }
 }
-commands += `\n${DIV}\n<div align="center"><sub>[[Home]] · [[Modules]] · ${COMMAND_COUNT}+ komend · GH0ST EMPIRE</sub></div>\n`;
+commands += `\n${DIV}\n<div align="center"><sub>[[Home]] · [[Modules]] · ${COMMAND_COUNT}+ komend · E-Forge</sub></div>\n`;
 
 // ── Modules.md ──
 let modules = `# 🧩 Moduły — konfiguracja krok po kroku
@@ -55,7 +55,7 @@ for (const g of MODULE_GROUPS) {
     if (m.c) modules += `\n**Powiązane komendy:** \`${m.c}\`\n`;
   }
 }
-modules += `\n${DIV}\n<div align="center"><sub>[[Home]] · [[Commands]] · ${MODULE_COUNT}+ modułów · GH0ST EMPIRE</sub></div>\n`;
+modules += `\n${DIV}\n<div align="center"><sub>[[Home]] · [[Commands]] · ${MODULE_COUNT}+ modułów · E-Forge</sub></div>\n`;
 
 writeFileSync(join(OUT, 'Commands.md'), commands);
 writeFileSync(join(OUT, 'Modules.md'), modules);

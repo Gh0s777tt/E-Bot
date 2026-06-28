@@ -30,4 +30,4 @@ Nie otwieraj publicznego issue. Użyj **GitHub → Security → Report a vulnera
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<div align="center"><sub>🛡️ GH0ST EMPIRE — bezpieczeństwo best‑effort, projekt prywatny.</sub></div>
+<div align="center"><sub>🛡️ E-Forge — bezpieczeństwo best‑effort, projekt prywatny.</sub></div>

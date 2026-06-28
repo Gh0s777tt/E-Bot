@@ -19,7 +19,7 @@ Ustaw je w panelu hostingu (NIE commituj `.env`):
 | `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | puls + presence + sync ustawień z panelu |
 | `TWITCH_CLIENT_ID` / `TWITCH_CLIENT_SECRET` / `TWITCH_CHANNEL` | live Twitch |
 | `KICK_CHANNEL`, `RUMBLE_LIVESTREAM_API_URL`, `YOUTUBE_LIVE_CHANNEL_ID` | pozostałe live |
-| `GHOST_ECONOMY=1` + `GHOST_BOT_SECRET` + `GHOST_API_URL` | ekonomia GH0ST + `/link` (opcjonalnie) |
+| `GHOST_ECONOMY=1` + `GHOST_BOT_SECRET` + `GHOST_API_URL` | ekonomia E-Forge + `/link` (opcjonalnie) |
 
 > Włączone privileged intents (Message Content + Server Members) w Discord Dev Portal są potrzebne tylko gdy `GHOST_ECONOMY=1`.
 
@@ -66,4 +66,4 @@ docker run --env-file .env --restart unless-stopped e-bot
 - Zmiana presence/anti‑nuke w panelu → bot podchwytuje w ≤ 60 s (settings‑sync).
 - Restart/crash: hosting z `restart: always` (Railway/Fly mają domyślnie; pm2 — `--restart`).
 
-<div align="center"><sub>🛰️ E‑BOT · GH0ST EMPIRE — powiązane: <a href="../CHANGELOG.md">CHANGELOG</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>
+<div align="center"><sub>🛰️ E‑BOT · E-Forge — powiązane: <a href="../CHANGELOG.md">CHANGELOG</a> · <a href="ROADMAP.md">ROADMAP</a></sub></div>

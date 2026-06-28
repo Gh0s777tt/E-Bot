@@ -28,7 +28,7 @@ flowchart TB
   subgraph CLOUD["☁️ Chmura"]
     SB[("🟢 Supabase<br/>games · settings")]
     DASH["🖥️ Dashboard<br/>Next.js · Vercel"]
-    GE[("🟥 GH0ST Portal<br/>Postgres · API")]
+    GE[("🟥 E-Forge Portal<br/>Postgres · API")]
   end
   EXT{{📡 Twitch · Kick · YouTube · Rumble}}
   GAMES{{🎮 Steam · PSN · IGDB}}
@@ -76,18 +76,18 @@ sequenceDiagram
   D-->>U: cookie sesji + redirect / (middleware przepuszcza)
 ```
 
-## 🔗 Sekwencja — łączenie konta GH0ST (`/link`)
+## 🔗 Sekwencja — łączenie konta E-Forge (`/link`)
 
 ```mermaid
 sequenceDiagram
   actor U as Użytkownik
-  participant P as Portal GH0ST
+  participant P as Portal E-Forge
   participant B as E-Bot
   U->>P: generuj kod (6 znaków, 10 min)
   U->>B: /link <kod>
   B->>P: POST /api/internal/link-discord (Bearer BOT_SECRET, {code, discordId})
   P-->>B: { ok, userId }
-  B-->>U: „Połączono z GH0ST EMPIRE ✅"
+  B-->>U: „Połączono z E-Forge ✅"
 ```
 
 ## 🧩 Mapa modułów

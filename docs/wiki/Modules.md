@@ -398,4 +398,4 @@ Włączanie/wyłączanie modułów oraz pluginy społeczności; plan Premium zde
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<div align="center"><sub>[[Home]] · [[Commands]] · 32+ modułów · GH0ST EMPIRE</sub></div>
+<div align="center"><sub>[[Home]] · [[Commands]] · 32+ modułów · E-Forge</sub></div>

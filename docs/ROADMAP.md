@@ -69,7 +69,7 @@ flowchart LR
   B -->|dane: levele / tickety / AI / eko| SB
   SB -->|ranking / listy / staty| P
   B -->|akcje + i18n 14 jęz.| DC[Discord]
-  P -->|link-status| GH[GH0ST EMPIRE]
+  P -->|link-status| GH[E-Forge]
 ```
 
 ## 🏁 Ukończone — i18n UI panelu

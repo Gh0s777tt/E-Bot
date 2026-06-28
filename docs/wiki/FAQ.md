@@ -21,7 +21,7 @@ Nie. Sekrety trzymamy w `.env*` (gitignored) i w Vercel env. W repo jest tylko `
 Katalog `bot/` rozwijany jest równolegle w drugiej sesji. Aby uniknąć konfliktów, ta sesja commituje **tylko** wybrane ścieżki (`dashboard/`, `docs/`, `.github/`…), nigdy `git add -A`.
 
 ### 🔗 Dlaczego `/link` jeszcze nie działa w pełni?
-Wymaga `GHOST_BOT_SECRET` (wspólny sekret z GH0ST EMPIRE) — do uzupełnienia. Patrz `docs/ROADMAP.md`.
+Wymaga `GHOST_BOT_SECRET` (wspólny sekret z E-Forge) — do uzupełnienia. Patrz `docs/ROADMAP.md`.
 
 ### 📈 Gdzie śledzić postęp?
 - Plan i fazy: `docs/ROADMAP.md`, `docs/PHASES.md`

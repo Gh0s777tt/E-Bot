@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="ghost-skull.png" width="100" alt="GH0ST EMPIRE" />
+<img src="ghost-skull.png" width="100" alt="E-Forge" />
 
 # 🎬 E‑BOT — Wiki
 
-### _GH0ST EMPIRE · Discord bot · biblioteka gier w stylu Netflix · dashboard_
+### _E-Forge · Discord bot · biblioteka gier w stylu Netflix · dashboard_
 
 [![Repo](https://img.shields.io/badge/GitHub-E--Bot-E50914?style=for-the-badge&logo=github&labelColor=0a0a0a)](https://github.com/Gh0s777tt/E-Bot)
 [![Dashboard](https://img.shields.io/badge/Dashboard-LIVE-E50914?style=for-the-badge&logo=vercel&labelColor=0a0a0a)](https://e-bot-dc.vercel.app)
@@ -43,4 +43,4 @@ agregująca tytuły z PlayStation / Steam / GOG (wzbogacane przez **IGDB**), ora
 | `bot/` | discord.js v14 · **95+ komend** · i18n 14 jęz. | ✅ live |
 | `web/` | pierwszy UI Netflix | ✅ |
 
-<div align="center"><sub>🛡️ Projekt prywatny GH0ST EMPIRE · © 2026 Gh0s777tt</sub></div>
+<div align="center"><sub>🛡️ Projekt prywatny E-Forge · © 2026 Gh0s777tt</sub></div>

@@ -1,4 +1,4 @@
-# CLAUDE.md — E‑BOT (GH0ST EMPIRE)
+# CLAUDE.md — E‑BOT (E-Forge)
 
 Monorepo **pnpm**. Pakiety:
 - `bot/` — Discord (discord.js v14), ~95 slash‑komend, 59 usług w tle, **i18n 14 języków**, SQLite.

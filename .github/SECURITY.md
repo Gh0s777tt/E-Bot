@@ -26,4 +26,4 @@ To repozytorium jest **prywatne i proprietarne** (patrz [`LICENSE`](../LICENSE))
 Nie otwieraj publicznego issue dla podatności. Skorzystaj z **GitHub → Security → Report a vulnerability**
 (Private Vulnerability Reporting) albo skontaktuj się bezpośrednio z właścicielem.
 
-> Czas reakcji: best‑effort. To projekt prywatny GH0ST EMPIRE.
+> Czas reakcji: best‑effort. To projekt prywatny E-Forge.

@@ -150,12 +150,12 @@ W Discordzie wpisz `/help`, aby przeszukać je na żywo. Konfiguracja modułów:
 | `/help` | Pomoc — wszystkie komendy pogrupowane. | szukaj |
 | `/search` | Szukaj w Wikipedii, grach (IGDB) lub YouTube. | zapytanie · zrodlo |
 | `/poll` | Utwórz ankietę (z timerem). | pytanie · opcje · czas · wielokrotny · reakcje |
-| `/link` | Połącz konto Discord z profilem GH0ST EMPIRE. | kod |
-| `/portal` | Portal GH0ST EMPIRE + jak zarabiać Ghost Tokens. | — |
+| `/link` | Połącz konto Discord z profilem E-Forge. | kod |
+| `/portal` | Portal E-Forge + jak zarabiać Ghost Tokens. | — |
 | `/vanityrole` | Rola za frazę/link w statusie. | stan · rola · fraza |
 | `/xpevent` | Event podwójnego XP (admin). | start · stop · status |
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<div align="center"><sub>[[Home]] · [[Modules]] · 95+ komend · GH0ST EMPIRE</sub></div>
+<div align="center"><sub>[[Home]] · [[Modules]] · 95+ komend · E-Forge</sub></div>

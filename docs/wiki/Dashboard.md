@@ -16,7 +16,7 @@ Dostęp tylko dla właściciela — allowlista `DASHBOARD_OWNER_IDS`.
 |:--|:--|
 | 🎮 **Biblioteka** | Półki z okładkami (PSN/Steam/GOG), filtry, dane z `getGames()` |
 | 🔴 **Live** | Status Twitch / Kick / Rumble / YouTube, auto‑odświeżanie 30 s + sygnał dźwiękowy |
-| 💰 **Ekonomia** | Konfiguracja nagród z GH0ST EMPIRE (`/api/bot/config`: `messageReward`, `voiceRewardPerMinute`…) |
+| 💰 **Ekonomia** | Konfiguracja nagród z E-Forge (`/api/bot/config`: `messageReward`, `voiceRewardPerMinute`…) |
 | ⚙️ **Ustawienia** | Ustawienia bota, presence, anti‑nuke, akcent motywu |
 | 👤 **Profil bota** | Zmiana **nazwy** i **avatara** (Discord `PATCH /users/@me`, owner‑gated) |
 | 🛰️ **Status bota** | Heartbeat z Supabase (`bot_status`: online, guilds, tag, ts — świeży < 2 min) |
@@ -32,7 +32,7 @@ Dostęp tylko dla właściciela — allowlista `DASHBOARD_OWNER_IDS`.
 ## 🎨 Design
 
 - Fonty: `next/font/google` — Oswald (display) + Montserrat (body), subsety `latin` + `latin-ext` (polskie znaki).
-- Paleta: czerń + czerwień Netflix `#E50914`, półki z okładkami, minimalistyczny sidebar (dopasowany do GH0ST EMPIRE).
+- Paleta: czerń + czerwień Netflix `#E50914`, półki z okładkami, minimalistyczny sidebar (dopasowany do E-Forge).
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
