@@ -92,14 +92,14 @@ export async function fetchDiscordUser(
   };
 }
 
-// ── M4 — self-serve multi-tenant (env-gated) ────────────────────────────────
-// Gdy włączone, admini serwerów (MANAGE_GUILD) mogą logować się do panelu i zarządzać
-// SWOIM serwerem (izolacja przez guild_members + chokepoint getPrimaryGuildId). Domyślnie
-// WYŁĄCZONE — panel pozostaje jednowłaścicielski (owner/staff). Aktywacja: env
-// MARKETPLACE_SELF_SERVE=1 (wtedy OAuth prosi dodatkowo o scope `guilds`).
+// ── M4 — self-serve multi-tenant ─────────────────────────────────────────────
+// Admini serwerów (MANAGE_GUILD) mogą logować się do panelu i zarządzać SWOIM serwerem
+// (izolacja przez guild_members + chokepoint getPrimaryGuildId). DOMYŚLNIE WŁĄCZONE — panel
+// jest otwarty dla adminów serwerów, na których jest bot (OAuth prosi dodatkowo o scope `guilds`).
+// Powrót do trybu jednowłaścicielskiego (tylko owner/staff): env MARKETPLACE_SELF_SERVE=0.
 export function selfServeEnabled(): boolean {
-  const v = process.env.MARKETPLACE_SELF_SERVE;
-  return v === '1' || v === 'true';
+  const v = (process.env.MARKETPLACE_SELF_SERVE || '').trim().toLowerCase();
+  return v !== '0' && v !== 'false' && v !== 'off';
 }
 
 export const MANAGE_GUILD = 0x20n; // bit uprawnienia „Zarządzanie serwerem" (Manage Guild)

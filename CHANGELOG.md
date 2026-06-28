@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-640-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.570.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-641-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.571.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.571.0] — 🔓 Panel otwarty dla adminów serwerów (self-serve domyślnie)
+
+- `[#641]` 🔓 **Self-serve multi-tenant DOMYŚLNIE WŁĄCZONE** — każdy admin serwera (uprawnienie „Zarządzanie serwerem"), na którym jest bot, może zalogować się do panelu i zarządzać **swoim** serwerem (izolacja per-guild przez `guild_members` + chokepoint `getPrimaryGuildId`; właściciel z `DASHBOARD_OWNER_IDS` ma nadal pełny dostęp do wszystkich serwerów). Wcześniej panel był jednowłaścicielski (komunikat „tylko właściciel"). Zmieniona domyślna wartość [`selfServeEnabled()`](dashboard/lib/auth.ts) (opt-out: `MARKETPLACE_SELF_SERVE=0` przywraca tryb jednowłaścicielski). Login OAuth prosi dodatkowo o scope `guilds`; enrollment ([`enrollFromDiscord`](dashboard/lib/enroll.ts)) zapisuje serwery admina do `guild_members`. Komunikaty ekranu logowania zaktualizowane ×14 („tylko właściciel" → „Zaloguj się przez Discord, aby zarządzać swoim serwerem").
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · vitest (`authorizeUrl` scope + parytet i18n ×14) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.570.0] — 🎨 Redesign panelu „Crimson Aurora" + rebranding E‑Forge
 

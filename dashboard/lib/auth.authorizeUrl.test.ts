@@ -45,13 +45,19 @@ describe('authorizeUrl — struktura i parametry', () => {
 });
 
 describe('authorizeUrl — RYGIEL scope wg self-serve', () => {
-  it('self-serve WYŁĄCZONE → tylko `identify` (minimalnie, bez guilds)', () => {
+  it('self-serve DOMYŚLNIE WŁĄCZONE (brak env) → `identify guilds`', () => {
     delete process.env[SS];
+    expect(selfServeEnabled()).toBe(true);
+    expect(parse().searchParams.get('scope')).toBe('identify guilds');
+  });
+
+  it('self-serve wyłączone jawnie (=0) → tylko `identify` (minimalnie, bez guilds)', () => {
+    process.env[SS] = '0';
     expect(selfServeEnabled()).toBe(false);
     expect(parse().searchParams.get('scope')).toBe('identify');
   });
 
-  it('self-serve WŁĄCZONE → `identify guilds`', () => {
+  it('self-serve WŁĄCZONE jawnie (=1) → `identify guilds`', () => {
     process.env[SS] = '1';
     expect(selfServeEnabled()).toBe(true);
     expect(parse().searchParams.get('scope')).toBe('identify guilds');
