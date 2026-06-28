@@ -3,14 +3,13 @@
 // Config 'eco_season_config'. Dedup miesiąca przez 'eco_season_last'.
 
 import { type Client, EmbedBuilder, type Guild, type TextChannel } from 'discord.js';
-import { ecoConfig } from '../economy/store.mts';
+import { creditWallet, ecoConfig } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import {
   cloudGetSetting,
   cloudSelect,
   cloudSetSetting,
   cloudUpdate,
-  cloudUpsert,
   hasCloud,
 } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
@@ -97,19 +96,12 @@ async function snapshot(guild: Guild, endedMonth: string): Promise<void> {
   for (let i = 0; i < sorted.length && i < 3; i++) {
     const reward = rewards[i] || 0;
     if (reward <= 0) continue;
-    const base = cfg.reset ? 0 : sorted[i].wallet || 0;
-    await cloudUpsert(
-      'economy_users',
-      [
-        {
-          guild_id: guild.id,
-          user_id: sorted[i].user_id,
-          wallet: base + reward,
-          updated_at: new Date().toISOString(),
-        },
-      ],
-      'guild_id,user_id',
-    ).catch((e) => log.warn('[ecoSeason] wypłata podium', { err: e }));
+    // Atomowy credit nagrody (po ewentualnym resecie) — wcześniejszy upsert `wallet: base+reward` był
+    // ABSOLUTNYM overwrite: bez resetu kasował zarobek zwycięzcy zdobyty między snapshotem a wypłatą
+    // (lost-update). creditWallet = atomowy add → poprawnie i po resecie (0+reward), i bez (saldo+reward).
+    await creditWallet(guild.id, sorted[i].user_id, sorted[i].username ?? '', reward).catch((e) =>
+      log.warn('[ecoSeason] wypłata podium', { err: e }),
+    );
     logTx(guild.id, sorted[i].user_id, reward, 'sezon');
   }
 }

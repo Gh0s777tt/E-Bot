@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-616-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.546.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-617-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.547.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.547.0] — 🔒 Ekonomia: atomowa wypłata podium sezonu (ecoSeason) — ostatnia ścieżka salda
+
+- `[#617]` 🔒 **Atomowa wypłata podium `ecoSeason`** — ostatnia ścieżka salda z lost-update (audyt #610). Comiesięczna nagroda podium zapisywała `cloudUpsert(wallet: base + reward)` = ABSOLUTNY overwrite: bez resetu sezonu `base` to snapshot rankingu sprzed sekund, więc zarobek zwycięzcy zdobyty między snapshotem a wypłatą (poller w tle) był kasowany (lost-update). Przeniesione na atomowy `creditWallet(reward)` — poprawnie po resecie (0+reward) i bez (saldo+reward), bez kasowania równoległych zmian. Reset salda (batch `cloudUpdate {wallet:0, bank:0}`) zostaje bez zmian (intencjonalny atomowy wipe sezonu). **Atomowość WSZYSTKICH ścieżek salda ekonomii — kompletna (#608–617).**
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1106/1106** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.546.0] — 🛡️ Battle-pass: walidacja przydzielności ról (spójnie z /clan role)
 
