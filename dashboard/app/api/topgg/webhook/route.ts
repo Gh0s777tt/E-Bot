@@ -1,44 +1,43 @@
-import { z } from 'zod';
-import { parseBody } from '../../../../lib/schemas';
 import { hasSupabase, supabase } from '../../../../lib/supabase';
-import { awardVoteTokens, voteRewardAmount, webhookAuthorized } from '../../../../lib/topgg';
+import {
+  awardVoteTokens,
+  normalizeVote,
+  verifyWebhook,
+  voteRewardAmount,
+} from '../../../../lib/topgg';
 
 export const dynamic = 'force-dynamic';
 
-// Payload webhooka top.gg: { user, type ('upvote'|'test'), isWeekend, bot, query }.
-const voteSchema = z.object({
-  user: z.string().min(1).max(40),
-  bot: z.string().max(40).optional(),
-  type: z.string().max(20).optional(),
-  isWeekend: z.boolean().optional(),
-  query: z.string().max(2000).optional(),
-});
-
-// Webhook top.gg (głos użytkownika). Uwierzytelnienie sekretem z panelu webhooków top.gg
-// (nagłówek Authorization == TOPGG_WEBHOOK_AUTH); fail-closed bez sekretu (401). Zapisuje głos
-// (Supabase, best-effort) i — gdy skonfigurowany portal — przyznaje GT GLOBALNIE (głos nie jest
-// per-serwer). Przy poprawnym sekrecie zawsze 200, by top.gg nie ponawiał dostarczenia.
+// Webhook top.gg (głos użytkownika). Czytamy SUROWE body (potrzebne do weryfikacji podpisu HMAC v1),
+// weryfikujemy autentyczność (v1 HMAC `x-topgg-signature` lub legacy `Authorization`; fail-closed bez
+// sekretu → 401), normalizujemy payload (v1 vote.create / legacy) i — best-effort — przyznajemy GT
+// GLOBALNIE (głos nie jest per-serwer). Przy poprawnym podpisie zawsze 200, by top.gg nie ponawiał.
 export async function POST(request: Request): Promise<Response> {
-  if (!webhookAuthorized(request)) {
+  const raw = await request.text();
+  if (!verifyWebhook(raw, request.headers)) {
     return Response.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
-  const parsed = await parseBody(request, voteSchema);
-  if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
 
-  const { user, type, isWeekend } = parsed.data;
-  const isTest = type === 'test';
-  const weekend = Boolean(isWeekend);
-  const amount = isTest ? 0 : voteRewardAmount(weekend);
-  const award = amount > 0 ? await awardVoteTokens(user, amount) : { ok: false };
+  let body: unknown;
+  try {
+    body = JSON.parse(raw);
+  } catch {
+    return Response.json({ ok: false, error: 'invalid json' }, { status: 400 });
+  }
+  const vote = normalizeVote(body);
+  if (!vote) return Response.json({ ok: false, error: 'unrecognized payload' }, { status: 400 });
+
+  const amount = vote.isTest ? 0 : voteRewardAmount(vote.isWeekend);
+  const award = amount > 0 ? await awardVoteTokens(vote.userId, amount) : { ok: false };
 
   if (hasSupabase) {
     try {
       await supabase()
         .from('topgg_votes')
         .insert({
-          discord_id: user,
-          type: type ?? 'upvote',
-          is_weekend: weekend,
+          discord_id: vote.userId,
+          type: vote.isTest ? 'test' : 'vote',
+          is_weekend: vote.isWeekend,
           rewarded: award.ok,
           reward: award.ok ? amount : 0,
         });
@@ -49,7 +48,7 @@ export async function POST(request: Request): Promise<Response> {
 
   return Response.json({
     ok: true,
-    test: isTest,
+    test: vote.isTest,
     rewarded: award.ok,
     amount: award.ok ? amount : 0,
   });

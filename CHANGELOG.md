@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-643-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.573.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-644-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.574.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.574.0] — 🔐 top.gg webhook v1: podpis HMAC + payload vote.create
+
+- `[#644]` 🔐 **Zgodność webhooka top.gg z v1** (wg [docs.top.gg/authentication](https://docs.top.gg/authentication)) — weryfikacja podpisu **HMAC SHA‑256** z nagłówka `x-topgg-signature` (`t=<ts>,v1=<hex>`, podpisywane `{t}.{rawBody}`, `timingSafeEqual`) oraz obsługa payloadu **v1** `vote.create` (`data.user.platform_id` = Discord ID, `data.weight` = 2 w weekend) — przy zachowaniu wstecznej zgodności z modelem **legacy** (`Authorization` == sekret, payload `{user,type,isWeekend}`). Wspólny normalizator [`normalizeVote`](dashboard/lib/topgg.ts) + `verifyWebhook` (fail-closed bez sekretu). Stats-poster bez zmian — endpoint v0 `/api/bots/:id/stats`, `Authorization` **bez** „Bearer" (zgodny z dokumentacją; Bearer dotyczy tylko `/api/v1/*`). Rygiel: 9 testów.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · vitest 1151 · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.573.0] — 🗳️ top.gg: webhook nagród za głos (GT)
 

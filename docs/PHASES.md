@@ -1,4 +1,4 @@
-<!-- SYNC: v0.573.0 · #643 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.574.0 · #644 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.573.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.574.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,9 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.573.0)
+## 🔭 Bieżący tor (v0.574.0)
 
-**⭐ Wystawienie na top.gg (v0.572–0.573.0)** — auto-raport liczby serwerów do API top.gg (env `TOPGG_TOKEN`, co 30 min, shard-aware) + komenda `/vote` (opis ×14) + **webhook nagród za głos** (`/api/topgg/webhook` → tabela `topgg_votes` + GT przez portal; `TOPGG_WEBHOOK_AUTH` / `TOPGG_VOTE_REWARD`) + przewodnik ([`TOPGG.md`](TOPGG.md)). Założenie wpisu i token = po stronie top.gg.
+**⭐ Wystawienie na top.gg (v0.572–0.574.0)** — auto-raport liczby serwerów do API top.gg (env `TOPGG_TOKEN`, co 30 min, shard-aware) + komenda `/vote` (opis ×14) + **webhook nagród za głos** (`/api/topgg/webhook`, zgodny z top.gg **v1**: podpis HMAC `x-topgg-signature` + payload `vote.create`, plus legacy; zapis `topgg_votes` + GT przez portal) + przewodnik ([`TOPGG.md`](TOPGG.md)). Założenie wpisu i token = po stronie top.gg.
 
 **🔓 Panel otwarty dla adminów serwerów (v0.571.0)** — self-serve multi-tenant DOMYŚLNIE WŁĄCZONE: każdy admin serwera (MANAGE_GUILD), na którym jest bot, loguje się i zarządza SWOIM serwerem (izolacja per-guild; właściciel = pełny dostęp do wszystkich). Wcześniej „tylko właściciel". Opt-out: `MARKETPLACE_SELF_SERVE=0`. Komunikaty logowania zaktualizowane ×14.
 

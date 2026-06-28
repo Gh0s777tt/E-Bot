@@ -85,12 +85,12 @@ Dashboard: https://e-bot-dc.vercel.app
 
 ## 🗳️ Nagrody za głos — webhook ✅ (wdrożone)
 
-Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg/webhook/route.ts) przyjmuje webhook top.gg, zapisuje głos (tabela `topgg_votes`) i — best‑effort — przyznaje **GT** głosującemu (głos nie jest per‑serwer → nagroda globalna przez portal, jak `/link`).
+Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg/webhook/route.ts) przyjmuje webhook top.gg (obsługuje **oba modele**: **v1** — podpis HMAC SHA‑256 w nagłówku `x-topgg-signature`, payload `vote.create` z `data.user.platform_id` + `data.weight`; oraz **legacy** — nagłówek `Authorization`, payload `{ user, type, isWeekend }`), zapisuje głos (tabela `topgg_votes`) i — best‑effort — przyznaje **GT** głosującemu (głos nie jest per‑serwer → nagroda globalna przez portal, jak `/link`).
 
 **Konfiguracja:**
 1. **Sekret** — wymyśl losowy ciąg i ustaw go w DWÓCH miejscach o tej samej wartości:
-   - env panelu (Vercel): `TOPGG_WEBHOOK_AUTH=<sekret>`
-   - top.gg → wpis bota → **Webhooks** → *Webhook URL* = `https://e-bot-dc.vercel.app/api/topgg/webhook`, *Authorization* = `<sekret>`.
+   - env panelu (Vercel): `TOPGG_WEBHOOK_AUTH=<sekret>` (dla v1 to klucz podpisu HMAC, dla legacy — wartość nagłówka `Authorization`).
+   - top.gg → wpis bota → **Webhooks** → *Webhook URL* = `https://e-bot-dc.vercel.app/api/topgg/webhook`, sekret/`Authorization` = `<sekret>`.
    - Bez `TOPGG_WEBHOOK_AUTH` endpoint odrzuca wszystko (**401, fail‑closed**).
 2. **Schemat** — uruchom `dashboard/scripts/_ALL.sql` (zawiera już tabelę `topgg_votes`).
 3. **Nagroda GT (opcjonalna)** — `TOPGG_VOTE_REWARD` = ile GT za głos (domyślnie **100**, weekend **×2**). Wymaga skonfigurowanego portalu (`GHOST_API_URL` + `GHOST_BOT_SECRET` w env panelu) **oraz** powiązanego konta gracza (`/link`); inaczej głos jest tylko zapisywany (bez GT).
