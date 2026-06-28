@@ -1,3 +1,4 @@
+import { guardLimit } from '../../../../lib/planLimits';
 import { parseBody, shopItemSchema } from '../../../../lib/schemas';
 import { addShopItem, getShopItems, removeShopItem } from '../../../../lib/serverEconomy';
 
@@ -10,6 +11,9 @@ export async function GET(): Promise<Response> {
 export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, shopItemSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const current = (await getShopItems()).length;
+  const gate = await guardLimit('shopItems', current + 1, current);
+  if (!gate.ok) return Response.json({ ok: false, error: gate.error }, { status: 403 });
   const res = await addShopItem(parsed.data);
   if (!res.ok) return Response.json(res, { status: 500 });
   return Response.json({ ok: true, items: await getShopItems() });

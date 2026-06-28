@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-630-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.560.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-631-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.561.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.561.0] — 🔒 Limity Free/Premium: egzekwowanie server-side (konfigurowalne, anty-hardcode)
+
+- `[#631]` 🔒 **Egzekwowanie limitów planów per serwer** — panel pilnuje liczby obiektów wg tieru billingu (`guilds.tier`) zamiast pozwalać na nieograniczone tworzenie. Bramka `guardLimit` ([`planLimits.ts`](dashboard/lib/planLimits.ts)) wpięta **server-side** w 7 endpointów API: **komendy własne · auto-respondery · liczniki · menu ról · reakcje-role · zaplanowane posty · przedmioty sklepu**. Liczby w **JEDNYM, edytowalnym miejscu** — `PLAN_LIMITS` ([`premiumPlan.ts`](dashboard/lib/premiumPlan.ts), obok cen i cech) — z opcjonalnym nadpisaniem env `LIMIT_<FEATURE>_<TIER>` (anty-hardcode: zmiana bez polowania po handlerach). Progi dobrane do twardych granic Discord/Zod — Free **10 / 10 / 3 / 5 / 10 / 5 / 15** ↔ Premium **50 / 100 / 20 / 25 / 100 / 50 / 150**.
+  - **Spójność z billingiem** — bez `STRIPE_SECRET_KEY` (billing uśpiony) limity **nie obowiązują**: brak paywalla, dokładnie jak `canUsePlugin` (zero regresji dla instalacji bez Stripe). Tier czytany dla aktualnego serwera (`getGuildTier`), `billing`/`guild` importowane lazy (guild ciągnie `next/headers`).
+  - **Grandfathering** — serwery już ponad limit nie są łamane: istniejące obiekty zostają, blokowane jest tylko **zwiększanie** ponad próg (`limitAllows` — zapis OK, gdy nie rośnie względem stanu obecnego). Przekroczenie → **HTTP 403** + komunikat PL z liczbą i zachętą do Premium. Bramka **fail-open** (błąd sesji/billingu nie blokuje zapisu).
+  - Cap Zod komend własnych 25→**50** (wciąż < 100 = limit guild-komend Discorda), by plan Premium był osiągalny. +10 testów ([`premiumPlan.test.ts`](dashboard/lib/premiumPlan.test.ts): progi, env override, grandfathering, komunikat).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.560.0] — 📄 Prawne: treść regulaminu i polityki prywatności + linki na /login
 

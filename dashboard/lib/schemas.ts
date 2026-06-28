@@ -196,7 +196,9 @@ export const customCommandSchema = z.object({
     .default([]),
 });
 export const customCommandsSchema = z.object({
-  commands: z.array(customCommandSchema).max(25),
+  // Górny cap techniczny (< 100 = limit guild-komend Discorda); plan Free/Premium egzekwowany niżej
+  // przez guardLimit (premiumPlan.PLAN_LIMITS.customCommands).
+  commands: z.array(customCommandSchema).max(50),
 });
 export type CustomCommandsInput = z.infer<typeof customCommandsSchema>;
 

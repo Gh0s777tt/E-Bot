@@ -57,7 +57,11 @@ for (const d of SRC_DIRS) {
 const example = readFileSync(join(ROOT, '.env.example'), 'utf8');
 const documented = new Set([...example.matchAll(/^\s*([A-Z][A-Z0-9_]+)\s*=/gm)].map((m) => m[1]));
 
-const missing = [...used.keys()].filter((n) => !documented.has(n) && !ALLOW.has(n)).sort();
+// LIMIT_<FEATURE>_<TIER> — opcjonalne nadpisanie limitów planu (dashboard/lib/premiumPlan.ts);
+// fallback do stałej PLAN_LIMITS, więc niewymagane do uruchomienia → bez wpisu w .env.example.
+const missing = [...used.keys()]
+  .filter((n) => !documented.has(n) && !ALLOW.has(n) && !n.startsWith('LIMIT_'))
+  .sort();
 if (missing.length > 0) {
   console.error(`✗ ${missing.length} zmiennych process.env BEZ wpisu w .env.example:`);
   for (const n of missing) console.error(`   • ${n}`);
