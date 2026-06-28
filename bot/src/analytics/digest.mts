@@ -125,13 +125,18 @@ export function mostImproved(
   return best;
 }
 
-// 📊 Benchmark cross-server (czysta): percentyl wartości w zbiorze = % wartości MNIEJSZYCH niż `value`
-// (0–100). „Twój serwer aktywniejszy niż X% serwerów obsługiwanych przez bota". Zbiór ≤ 1 elementu →
-// 100 (brak próbki do porównania → szczyt własnej). Anonimowe: serwer widzi tylko WŁASNĄ pozycję.
+// 📊 Benchmark cross-server (czysta): pozycja percentylowa serwera względem POZOSTAŁYCH serwerów (0–100).
+// `all` zawiera wartość bieżącego serwera → wykluczamy jedno jej wystąpienie (siebie), inaczej lider
+// nigdy nie osiąga 100% (zaniżenie o 1/N), a remis daje 0%. Midrank: remis liczony w połowie
+// (poniżej + 0.5×równych) → serwer równy wszystkim ma ~50%, lider 100%, najsłabszy 0%. Zbiór bez innych
+// (≤1 elementu / brak próbki) → 100. Anonimowe: serwer widzi tylko WŁASNĄ pozycję.
 export function percentileRank(value: number, all: number[]): number {
-  if (all.length <= 1) return 100;
-  const below = all.filter((v) => v < value).length;
-  return Math.round((below / all.length) * 100);
+  const idx = all.indexOf(value);
+  const others = idx >= 0 ? [...all.slice(0, idx), ...all.slice(idx + 1)] : all;
+  if (others.length === 0) return 100;
+  const below = others.filter((v) => v < value).length;
+  const equal = others.filter((v) => v === value).length;
+  return Math.round(((below + 0.5 * equal) / others.length) * 100);
 }
 
 async function maybePost(client: Client): Promise<void> {

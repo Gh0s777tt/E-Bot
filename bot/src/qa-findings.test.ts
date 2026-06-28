@@ -25,19 +25,14 @@ describe('QA#1 scanScam — schemat URL wielkimi literami (regresja #618)', () =
   });
 });
 
-// ── DEFEKT #2 (Średni, analityka): percentileRank zaniża pozycję serwera. benchSample zawiera WŁASNY
-// serwer (digest.mts:166), a porównanie to ostre `<` → serwer równy wszystkim dostaje 0% ("aktywniejszy
-// niż 0%"), lider w próbce nigdy nie osiąga 100%. Komunikat dla użytkownika jest systematycznie mylący.
-describe('QA#2 percentileRank — serwer w średniej / lider w próbce', () => {
-  it('kontrola: serwer powyżej części próbki ma sensowny percentyl', () => {
-    expect(percentileRank(100, [10, 20, 30, 40, 100])).toBe(80);
+// ── DEFEKT #2 (Średni, analityka) — NAPRAWIONY (#619): percentileRank wyklucza własny serwer z próbki
+// i używa midrank. Wcześniej self-in-sample + ostre `<` → lider nigdy 100%, remis 0%.
+describe('QA#2 percentileRank — serwer w średniej / lider w próbce (regresja #619)', () => {
+  it('serwer równy wszystkim dostaje ~50% (midrank), nie 0%', () => {
+    expect(percentileRank(100, [100, 100, 100])).toBeGreaterThanOrEqual(50);
   });
-  it.fails('DEFEKT: serwer równy wszystkim nie powinien dostać 0%', () => {
-    // 3 identyczne serwery (każdy 100 wiad.); każdy widziałby „aktywniejszy niż 0%" — sprzeczność.
-    expect(percentileRank(100, [100, 100, 100])).toBeGreaterThan(0);
-  });
-  it.fails('DEFEKT: najaktywniejszy serwer (w próbce) powinien móc osiągnąć ~100%', () => {
-    expect(percentileRank(500, [10, 20, 30, 500])).toBeGreaterThanOrEqual(99);
+  it('najaktywniejszy serwer (w próbce) osiąga 100%', () => {
+    expect(percentileRank(500, [10, 20, 30, 500])).toBe(100);
   });
 });
 

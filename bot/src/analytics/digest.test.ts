@@ -190,19 +190,23 @@ describe('mostImproved — największy skok aktywności (per-user, okno do okna)
   });
 });
 
-describe('percentileRank — benchmark cross-server', () => {
-  it('% wartości MNIEJSZYCH niż value (0–100)', () => {
-    // 100 jest większe od 4 z 5 wartości {10,20,30,40,100} → 80%
-    expect(percentileRank(100, [10, 20, 30, 40, 100])).toBe(80);
-    // 10 jest najmniejsze → 0% (nic poniżej)
+describe('percentileRank — benchmark cross-server (midrank, własny serwer wykluczony)', () => {
+  it('pozycja względem POZOSTAŁYCH serwerów (własny wpis wykluczony)', () => {
+    // value=100 jest w próbce (self); wykluczamy je → wszystkie 4 inne {10,20,30,40} poniżej → 100%
+    expect(percentileRank(100, [10, 20, 30, 40, 100])).toBe(100);
+    // value=10 najmniejsze; inne {20,30,40,100} wszystkie wyżej → 0%
     expect(percentileRank(10, [10, 20, 30, 40, 100])).toBe(0);
   });
 
-  it('najwyższa wartość → blisko 100%', () => {
-    expect(percentileRank(500, [1, 2, 3, 500])).toBe(75); // 3 z 4 poniżej
+  it('najaktywniejszy serwer (w próbce) → 100%', () => {
+    expect(percentileRank(500, [1, 2, 3, 500])).toBe(100); // wszystkie 3 inne poniżej
   });
 
-  it('zbiór ≤ 1 elementu → 100 (brak próbki do porównania)', () => {
+  it('serwer równy wszystkim (midrank) → 50%, nie 0%', () => {
+    expect(percentileRank(100, [100, 100, 100])).toBe(50);
+  });
+
+  it('zbiór bez innych serwerów (≤1 / pusty) → 100', () => {
     expect(percentileRank(42, [42])).toBe(100);
     expect(percentileRank(42, [])).toBe(100);
   });

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-618-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.548.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-619-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.549.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.549.0] — 📊 Analityka: poprawny percentyl benchmarku cross-server (QA #2)
+
+- `[#619]` 📊 **Fix percentyla benchmarku** (defekt #2 z przeglądu QA). `percentileRank` ([`digest.mts`](bot/src/analytics/digest.mts)) liczył pozycję ostrym `<`, a próbka `benchSample` zawiera WŁASNY serwer → lider nigdy nie osiągał 100% (zaniżenie o 1/N), a serwer równy wszystkim dostawał 0% („aktywniejszy niż 0%" — mylące). Teraz: **wykluczenie własnego wpisu** + **midrank** (poniżej + 0,5×równych) → lider 100%, serwer równy wszystkim ~50%, najsłabszy 0%. Zaktualizowano `digest.test.ts` (utrwalał zaniżone 80/75) + regresja w `qa-findings.test.ts`.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1115 passed + 5 xfail** (otwarte defekty QA #3–6) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.548.0] — 🔒 Bezpieczeństwo: scanScam łapie phishing przy schemacie URL wielkimi literami (QA #1)
 
