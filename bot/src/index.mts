@@ -21,6 +21,7 @@ import { startPresenceSync } from './cloud/presence.mts';
 import { startRealtimeSync } from './cloud/realtime.mts';
 import { startSettingsSync } from './cloud/settings-sync.mts';
 import { startTicketSync } from './cloud/ticket-sync.mts';
+import { startTopgg } from './cloud/topgg.mts';
 import { handleAiServerButton } from './commands/aiserver.mts';
 import { handleContextMenu } from './commands/contextmenu.mts';
 import { handleCustomCommand } from './commands/customCommands.mts';
@@ -192,6 +193,7 @@ client.once(Events.ClientReady, (c) => {
   startPriceTracker(c); // Faza 7 / F9.3 — śledzenie cen ITAD z listy życzeń (poll 12h)
   startActivity(c); // Faza 7 / F10.1 — analityka aktywności (flush co 5 min → activity_daily)
   startServerHistory(c); // snapshot rozmiaru serwera co 30 min → server_history (wykres wzrostu)
+  startTopgg(c); // top.gg — raport liczby serwerów (jeśli TOPGG_TOKEN; co 30 min)
   startCohorts(c); // tor retencji — tracking join/leave per-członka → member_cohorts (D1/D7/D30)
   startEcoInterest(c); // pasywny dochód — dzienne odsetki bankowe (jeśli włączone w configu eko)
   startSeasons(c); // Faza 7 / F10.2 — sezonowe rankingi (miesięczny hall of fame, sprawdza co 6h)

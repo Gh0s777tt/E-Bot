@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-641-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.571.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-642-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.572.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.572.0] — ⭐ Wystawienie na top.gg: auto-raport serwerów + /vote
+
+- `[#642]` ⭐ **Integracja top.gg (Discord Bot List)** — przygotowanie pod wpis: auto-raport liczby serwerów do API top.gg ([`bot/src/cloud/topgg.mts`](bot/src/cloud/topgg.mts) — `POST /bots/{id}/stats` co 30 min, shard-aware, raportuje tylko shard 0; aktywne gdy ustawiony `TOPGG_TOKEN`, inaczej no-op) + komenda **`/vote`** ([`bot/src/commands/vote.mts`](bot/src/commands/vote.mts) — link do głosowania, opis zlokalizowany ×14) + zmienna `TOPGG_TOKEN` w `.env.example` + **przewodnik z gotową treścią wpisu** ([`docs/TOPGG.md`](docs/TOPGG.md): kroki, krótki/długi opis PL+EN, tagi, linki, checklist; webhook nagród za głos opisany jako opcjonalny zakres). Założenie wpisu + pobranie tokenu = po stronie top.gg (instrukcja w przewodniku).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · vitest 1142 · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.571.0] — 🔓 Panel otwarty dla adminów serwerów (self-serve domyślnie)
 

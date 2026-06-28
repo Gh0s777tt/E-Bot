@@ -9,6 +9,7 @@ const DISCORD_DESC_MAX = 100; // twardy limit Discorda na długość opisu (per 
 
 export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   pl: {
+    vote: 'Zagłosuj na bota na top.gg (wsparcie projektu).',
     ping: 'Sprawdza, czy bot żyje (latencja).',
     library: 'Twoja biblioteka gier (Steam + IGDB).',
     antinuke: 'Ochrona serwera przed nukowaniem.',
@@ -65,6 +66,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Awaryjna blokada/odblokowanie pisania na serwerze (admin).',
   },
   en: {
+    vote: 'Vote for the bot on top.gg (support the project).',
     ping: 'Check if the bot is alive (latency).',
     library: 'Your game library (Steam + IGDB).',
     antinuke: 'Protect the server against nuking.',
@@ -121,6 +123,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Emergency lock/unlock of server chat (admin).',
   },
   de: {
+    vote: 'Stimme für den Bot auf top.gg (unterstütze das Projekt).',
     ping: 'Prüfen, ob der Bot lebt (Latenz).',
     library: 'Deine Spielebibliothek (Steam + IGDB).',
     antinuke: 'Schütze den Server vor Nuking.',
@@ -178,6 +181,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Chat des Servers im Notfall sperren/entsperren (Admin).',
   },
   es: {
+    vote: 'Vota por el bot en top.gg (apoya el proyecto).',
     ping: 'Comprueba si el bot está activo (latencia).',
     library: 'Tu biblioteca de juegos (Steam + IGDB).',
     antinuke: 'Protege el servidor contra el nuking.',
@@ -234,6 +238,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Bloqueo/desbloqueo de emergencia del chat (admin).',
   },
   it: {
+    vote: 'Vota il bot su top.gg (sostieni il progetto).',
     ping: 'Controlla se il bot è attivo (latenza).',
     library: 'La tua libreria di giochi (Steam + IGDB).',
     antinuke: 'Proteggi il server dal nuking.',
@@ -290,6 +295,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: "Blocco/sblocco d'emergenza della chat del server (admin).",
   },
   fr: {
+    vote: 'Vote pour le bot sur top.gg (soutiens le projet).',
     ping: 'Vérifie si le bot est en ligne (latence).',
     library: 'Ta bibliothèque de jeux (Steam + IGDB).',
     antinuke: 'Protège le serveur contre le nuking.',
@@ -346,6 +352,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: "Verrouillage/déverrouillage d'urgence du chat (admin).",
   },
   pt: {
+    vote: 'Vote no bot no top.gg (apoie o projeto).',
     ping: 'Verifica se o bot está ativo (latência).',
     library: 'Sua biblioteca de jogos (Steam + IGDB).',
     antinuke: 'Proteja o servidor contra o nuking.',
@@ -402,6 +409,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Bloqueio/desbloqueio de emergência do chat (admin).',
   },
   zh: {
+    vote: '在 top.gg 为机器人投票（支持项目）。',
     ping: '检测机器人是否在线（延迟）。',
     library: '你的游戏库（Steam + IGDB）。',
     antinuke: '保护服务器免遭炸服攻击。',
@@ -458,6 +466,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: '紧急锁定／解锁服务器发言（管理员）。',
   },
   ko: {
+    vote: 'top.gg에서 봇에 투표하세요 (프로젝트 응원).',
     ping: '봇이 작동 중인지 확인합니다(지연 시간).',
     library: '내 게임 라이브러리(Steam + IGDB).',
     antinuke: '서버를 폭파(nuke) 공격으로부터 보호합니다.',
@@ -514,6 +523,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: '서버 채팅 긴급 잠금/해제(관리자).',
   },
   ru: {
+    vote: 'Голосуйте за бота на top.gg (поддержка проекта).',
     ping: 'Проверить, жив ли бот (задержка).',
     library: 'Твоя библиотека игр (Steam + IGDB).',
     antinuke: 'Защита сервера от нюка.',
@@ -570,6 +580,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Экстренная блокировка/разблокировка чата сервера (админ).',
   },
   uk: {
+    vote: 'Проголосуйте за бота на top.gg (підтримка проєкту).',
     ping: 'Перевірити, чи бот живий (затримка).',
     library: 'Твоя бібліотека ігор (Steam + IGDB).',
     antinuke: 'Захист сервера від нюка.',
@@ -626,6 +637,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'Екстрене блокування/розблокування чату сервера (адмін).',
   },
   ja: {
+    vote: 'top.gg でボットに投票（プロジェクト応援）。',
     ping: 'Bot が稼働中か確認（レイテンシ）。',
     library: 'あなたのゲームライブラリ（Steam + IGDB）。',
     antinuke: 'サーバーを荒らし（nuke）から保護。',
@@ -682,6 +694,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'サーバーの発言を緊急ロック／解除（管理者）。',
   },
   ar: {
+    vote: 'صوّت للبوت على top.gg (ادعم المشروع).',
     ping: 'تحقق من أن البوت يعمل (زمن الاستجابة).',
     library: 'مكتبة ألعابك (Steam + IGDB).',
     antinuke: 'حماية السيرفر من التخريب.',
@@ -738,6 +751,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
     lockdown: 'قفل/فتح طارئ لدردشة السيرفر (للمشرف).',
   },
   id: {
+    vote: 'Vote bot di top.gg (dukung proyek).',
     ping: 'Cek apakah bot aktif (latensi).',
     library: 'Pustaka game kamu (Steam + IGDB).',
     antinuke: 'Lindungi server dari nuking.',

@@ -93,6 +93,7 @@ import * as unlock from './unlock.mts';
 import * as userinfo from './userinfo.mts';
 import * as vanityrole from './vanityrole.mts';
 import * as verifypanel from './verifypanel.mts';
+import * as vote from './vote.mts';
 import * as wishlist from './wishlist.mts';
 import * as xp from './xp.mts';
 import * as xpevent from './xpevent.mts';
@@ -118,6 +119,7 @@ export const commands: Command[] = [
   caseCmd,
   describe,
   donate,
+  vote,
   remind,
   rolemenu,
   reactionpanel,
