@@ -12,10 +12,12 @@ export default function SaveButton({
   st,
   onClick,
   label,
+  errorText,
 }: {
   st: SaveState;
   onClick: () => void;
   label?: string; // opcjonalne nadpisanie etykiety (np. „Zapisz role")
+  errorText?: string; // konkretny komunikat błędu (np. limit planu); brak → generyczny ui.saveError
 }) {
   const { lang } = useLang();
   return (
@@ -29,7 +31,9 @@ export default function SaveButton({
         {st === 'saving' ? tp(lang, 'ui.saving') : (label ?? tp(lang, 'ui.save'))}
       </button>
       {st === 'ok' && <span className="text-sm text-green-400">{tp(lang, 'ui.saved')}</span>}
-      {st === 'err' && <span className="text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
+      {st === 'err' && (
+        <span className="text-sm text-accent">{errorText || tp(lang, 'ui.saveError')}</span>
+      )}
     </div>
   );
 }

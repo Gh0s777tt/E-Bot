@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-631-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.561.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-632-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.562.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.562.0] — 🔔 Limity planów: czytelny komunikat przy przekroczeniu (zamiast „Błąd zapisu")
+
+- `[#632]` 🔔 **Konkretny komunikat limitu w panelu** — gdy zapis przekracza próg planu (HTTP 403 z #631), formularz pokazuje teraz **czytelny komunikat z API** (PL: maks. liczba + zachęta do Premium) zamiast generycznego „Błąd zapisu". `SaveButton` ([`SaveButton.tsx`](dashboard/components/SaveButton.tsx)) dostał opcjonalny `errorText`; 6 formularzy odczytuje `error` z odpowiedzi i przekazuje go dalej: **liczniki, auto-respondery, menu ról, reakcje-role, zaplanowane posty, sklep** ([`ShopManager.tsx`](dashboard/components/ShopManager.tsx)). Komendy własne pokazywały już szczegół błędu — bez zmian. **Zero nowych kluczy i18n** (komunikat pochodzi z serwera, po polsku jak inne błędy API).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.561.0] — 🔒 Limity Free/Premium: egzekwowanie server-side (konfigurowalne, anty-hardcode)
 

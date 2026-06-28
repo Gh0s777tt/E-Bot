@@ -30,6 +30,7 @@ export default function RoleMenuForm({
     initial.options.map((o) => ({ ...o, k: `o${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   const setRow = (k: string, patch: Partial<Opt>) =>
     setRows(rows.map((r) => (r.k === k ? { ...r, ...patch } : r)));
@@ -53,7 +54,12 @@ export default function RoleMenuForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      setSt(r.ok ? 'ok' : 'err');
+      if (r.ok) setSt('ok');
+      else {
+        const j = (await r.json().catch(() => ({}))) as { error?: string };
+        setErrMsg(j.error || '');
+        setSt('err');
+      }
     } catch {
       setSt('err');
     }
@@ -133,7 +139,7 @@ export default function RoleMenuForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.roles.menuHelpPre')}
         <code className="text-accent">/rolemenu</code>

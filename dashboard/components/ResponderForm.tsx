@@ -31,6 +31,7 @@ export default function ResponderForm({ initial }: { initial: ResponderConfig })
     autoresponders.map((a) => ({ ...a, k: `a${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
@@ -45,7 +46,12 @@ export default function ResponderForm({ initial }: { initial: ResponderConfig })
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      setSt(r.ok ? 'ok' : 'err');
+      if (r.ok) setSt('ok');
+      else {
+        const j = (await r.json().catch(() => ({}))) as { error?: string };
+        setErrMsg(j.error || '');
+        setSt('err');
+      }
     } catch {
       setSt('err');
     }
@@ -189,7 +195,7 @@ export default function ResponderForm({ initial }: { initial: ResponderConfig })
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.responder.footNote').replace('{prefix}', b.prefix)}
       </p>

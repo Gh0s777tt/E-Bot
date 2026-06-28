@@ -65,6 +65,7 @@ export default function CountersForm({
     initial.items.map((i) => ({ ...i, k: `n${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   const argPlaceholder = (t: CounterType) =>
     t.startsWith('yt')
@@ -75,6 +76,7 @@ export default function CountersForm({
 
   async function save() {
     setSt('saving');
+    setErrMsg('');
     try {
       const payload: CountersConfig = {
         enabled,
@@ -85,7 +87,12 @@ export default function CountersForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      setSt(r.ok ? 'ok' : 'err');
+      if (r.ok) setSt('ok');
+      else {
+        const j = (await r.json().catch(() => ({}))) as { error?: string };
+        setErrMsg(j.error || '');
+        setSt('err');
+      }
     } catch {
       setSt('err');
     }
@@ -187,7 +194,7 @@ export default function CountersForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.counters.footMain')}</p>
       <p className="text-xs text-muted">{tp(lang, 'ui.counters.footYouTube')}</p>
       <p className="text-xs text-muted">{tp(lang, 'ui.counters.footTwitchKick')}</p>

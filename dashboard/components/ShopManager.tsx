@@ -29,10 +29,12 @@ export default function ShopManager({
   const [effect, setEffect] = useState('');
   const [durationDays, setDurationDays] = useState(0);
   const [st, setSt] = useState<'idle' | 'saving' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function add() {
     if (!name.trim()) return;
     setSt('saving');
+    setErrMsg('');
     try {
       const r = await fetch('/api/economy/shop', {
         method: 'POST',
@@ -46,7 +48,7 @@ export default function ShopManager({
           duration_days: roleId ? durationDays : 0,
         }),
       });
-      const j = (await r.json()) as { ok?: boolean; items?: ShopItem[] };
+      const j = (await r.json()) as { ok?: boolean; items?: ShopItem[]; error?: string };
       if (r.ok && j.items) {
         setItems(j.items);
         setName('');
@@ -57,6 +59,7 @@ export default function ShopManager({
         setPrice(1000);
         setSt('idle');
       } else {
+        setErrMsg(j.error || '');
         setSt('err');
       }
     } catch {
@@ -134,7 +137,9 @@ export default function ShopManager({
       >
         {st === 'saving' ? tp(lang, 'ui.eco.addingBtn') : tp(lang, 'ui.eco.addBtn')}
       </button>
-      {st === 'err' && <span className="ms-3 text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
+      {st === 'err' && (
+        <span className="ms-3 text-sm text-accent">{errMsg || tp(lang, 'ui.saveError')}</span>
+      )}
 
       {items.length === 0 ? (
         <p className="text-sm text-muted">{tp(lang, 'ui.eco.shopEmpty')}</p>

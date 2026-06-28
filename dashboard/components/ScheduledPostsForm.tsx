@@ -68,6 +68,7 @@ export default function ScheduledPostsForm({
   const [posts, setPosts] = useState<ScheduledPost[]>(initial);
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   function toggleOpen(id: string) {
     setOpen((s) => {
@@ -97,8 +98,12 @@ export default function ScheduledPostsForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ posts }),
       });
-      const j = (await r.json()) as { ok?: boolean };
-      setSt(r.ok && j.ok ? 'ok' : 'err');
+      const j = (await r.json()) as { ok?: boolean; error?: string };
+      if (r.ok && j.ok) setSt('ok');
+      else {
+        setErrMsg(j.error || '');
+        setSt('err');
+      }
     } catch {
       setSt('err');
     }
@@ -281,7 +286,9 @@ export default function ScheduledPostsForm({
           {st === 'saving' ? tp(lang, 'ui.saving') : tp(lang, 'ui.scheduled.saveAll')}
         </button>
         {st === 'ok' && <span className="text-sm text-green-400">{tp(lang, 'ui.saved')}</span>}
-        {st === 'err' && <span className="text-sm text-accent">{tp(lang, 'ui.saveError')}</span>}
+        {st === 'err' && (
+          <span className="text-sm text-accent">{errMsg || tp(lang, 'ui.saveError')}</span>
+        )}
       </div>
 
       <p className="text-xs text-muted">{tp(lang, 'ui.scheduled.footNote')}</p>

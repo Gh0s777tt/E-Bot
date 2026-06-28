@@ -21,6 +21,7 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
     initial.map((r) => ({ ...r, k: `r${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
@@ -30,7 +31,12 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: rows.map(({ k, ...rest }) => rest) }),
       });
-      setSt(r.ok ? 'ok' : 'err');
+      if (r.ok) setSt('ok');
+      else {
+        const j = (await r.json().catch(() => ({}))) as { error?: string };
+        setErrMsg(j.error || '');
+        setSt('err');
+      }
     } catch {
       setSt('err');
     }
@@ -91,7 +97,7 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
       ))}
 
       <div className="pt-1">
-        <SaveButton st={st} onClick={save} />
+        <SaveButton st={st} onClick={save} errorText={errMsg} />
       </div>
       <p className="text-xs text-muted">{tp(lang, 'ui.roles.rrHelp')}</p>
     </div>
