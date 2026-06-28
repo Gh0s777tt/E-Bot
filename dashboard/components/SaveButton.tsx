@@ -26,7 +26,7 @@ export default function SaveButton({
         type="button"
         onClick={onClick}
         disabled={st === 'saving'}
-        className="rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
+        className="rounded-lg bg-gradient-to-r from-accent to-accent-dark px-6 py-2.5 font-semibold text-white shadow-[0_8px_24px_-10px_rgb(var(--accent-rgb)/0.7)] transition hover:from-accent-hover hover:to-accent hover:shadow-[0_10px_30px_-8px_rgb(var(--accent-rgb)/0.85)] disabled:opacity-50 disabled:shadow-none"
       >
         {st === 'saving' ? tp(lang, 'ui.saving') : (label ?? tp(lang, 'ui.save'))}
       </button>

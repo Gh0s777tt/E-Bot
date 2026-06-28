@@ -16,7 +16,7 @@ export default function StatCard({
 }) {
   return (
     <div
-      className={`group rounded-xl border p-3.5 transition-all hover:-translate-y-0.5 ${accent ? 'border-accent/40 bg-accent/10 shadow-glow-sm hover:shadow-glow' : 'border-line bg-card hover:border-accent/40'}`}
+      className={`group rounded-xl border p-3.5 transition-all hover:-translate-y-0.5 ${accent ? 'border-accent/40 bg-accent/10 shadow-glow-sm hover:shadow-glow' : 'panel-glow border-line bg-card hover:border-accent/40'}`}
     >
       <div className="flex items-center justify-between text-[11px] uppercase tracking-wide text-muted">
         <span>{label}</span>

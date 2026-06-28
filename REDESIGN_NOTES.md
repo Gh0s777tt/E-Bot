@@ -113,13 +113,20 @@ się bez `.content-pane`, więc **pozostają nietknięte** (zweryfikowane zrzute
   akcentu + ostrzejsza krawędź). Propaguje się na wszystkie panele dashboardu (Serwer na żywo, Health-check,
   Szybkie akcje, Wzrost, Anti-raid, sekcje paneli). Landing/login/wiki bez zmian (weryfikacja: zrzut).
 
-### E2+ — Plan per-ekran (do zrobienia)
-1. **Pulpit** — hierarchia (hero + statystyki jako szkło przez `panel-glow` w `StatCard`), oddech między sekcjami.
-2. **Komponenty współdzielone** — `SaveButton` (gradient primary), `EmptyState`/`Loading`/`Error` (spójne),
-   `pickers`/inputy (focus akcent), tabele (zebra+hover, reflow→karty na mobile).
-3. **Ekrany ustawień/formularze** — `/moderation` (automod), `/levels`, `/welcome`, `/roles`, `/scheduled`,
-   `/tickets`, `/economy`, `/notifications`, `/ai`, … — grupowanie pól, nagłówki sekcji, stany.
-4. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
-5. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
+### E2 — Komponenty współdzielone (zrobione) ✅
+- **`StatCard`** → szkło: dodany `panel-glow` (wariant zwykły), więc kafelki statystyk na Pulpicie
+  (Serwery / Członkowie / Boosty / Bany …) dziedziczą elewację `.content-pane`. Wariant `accent`
+  zachowuje krwisty tint (bez nadpisania). Zweryfikowane zrzutem (Pulpit).
+- **`SaveButton`** → gradientowy primary: `from-accent → to-accent-dark`, `rounded-lg`, biały bold,
+  poświata akcentu, hover rozjaśnia + mocniejsza poświata. Jeden komponent → propaguje się na ~wszystkie
+  formularze. Zweryfikowane zrzutem (przycisk „Zapisz" na /moderation).
 
-> Status: fundament wdrożony i zweryfikowany. Kontynuuję per-ekran (każdy = osobny commit + weryfikacja).
+### E3+ — Plan per-ekran (do zrobienia)
+1. **Stany wspólne** — `EmptyState`/`Loading`/`Error` (spójne), inputy (focus akcent),
+   tabele (zebra+hover, reflow→karty na mobile).
+2. **Ekrany ustawień/formularze** — `/moderation` (automod), `/levels`, `/welcome`, `/roles`, `/scheduled`,
+   `/tickets`, `/economy`, `/notifications`, `/ai`, … — grupowanie pól, nagłówki sekcji, stany.
+3. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
+4. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
+
+> Status: E1 (fundament) + E2 (komponenty współdzielone) wdrożone i zweryfikowane. Kontynuuję per-ekran.
