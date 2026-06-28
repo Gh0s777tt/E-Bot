@@ -97,7 +97,9 @@ const URL_SHORTENERS = new Set([
 
 function hostOf(url: string): string {
   try {
-    const u = url.startsWith('http') ? url : `http://${url}`;
+    // Schemat URL jest case-insensitive (RFC 3986) — `startsWith` musi być na lowercase, inaczej
+    // "HTTP://evil" dostaje doklejone http:// → hostname "http" i reguły hostowe pudłują (bypass).
+    const u = url.toLowerCase().startsWith('http') ? url : `http://${url}`;
     return new URL(u).hostname.toLowerCase().replace(/^www\./, '');
   } catch {
     return '';

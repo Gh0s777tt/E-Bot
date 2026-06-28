@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-617-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.547.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-618-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.548.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.548.0] — 🔒 Bezpieczeństwo: scanScam łapie phishing przy schemacie URL wielkimi literami (QA #1)
+
+- `[#618]` 🔒 **Fix false-negative anty-phishing** (defekt #1 z przeglądu QA, [`TEST_REPORT.md`](TEST_REPORT.md)). `hostOf` w [`contentScan.mts`](bot/src/lib/contentScan.mts) używał case-sensitive `url.startsWith('http')` → adres `HTTP://` / `HtTp://` (schemat URL jest case-insensitive wg RFC 3986) dostawał doklejone `http://` i hostname `"http"`, omijając WSZYSTKIE reguły hostowe `scanScam` (podrabiany Discord/Steam, IP, punycode, lista blokad). Poprawka jednoliniowa: `url.toLowerCase().startsWith('http')`. Test regresyjny ([`qa-findings.test.ts`](bot/src/qa-findings.test.ts)) — `HTTP://`/`HtTp://` wykrywane jak `http://`.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1113 passed + 7 xfail** (otwarte defekty QA #2–6, śledzone w TEST_REPORT) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.547.0] — 🔒 Ekonomia: atomowa wypłata podium sezonu (ecoSeason) — ostatnia ścieżka salda
 
