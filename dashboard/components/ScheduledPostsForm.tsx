@@ -253,7 +253,7 @@ export default function ScheduledPostsForm({
                       {
                         token: '{server}',
                         label: tp(lang, 'ui.scheduled.varServer'),
-                        sample: 'GH0ST EMPIRE',
+                        sample: 'E-Forge',
                       },
                       {
                         token: '{memberCount}',

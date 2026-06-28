@@ -59,7 +59,7 @@ const THEMES: { nameKey: string; emoji: string; style: CardStyle }[] = [
 export default function CardStyleEditor({
   value,
   onChange,
-  previewText = 'GH0ST EMPIRE',
+  previewText = 'E-Forge',
   preview,
 }: {
   value: CardStyle;

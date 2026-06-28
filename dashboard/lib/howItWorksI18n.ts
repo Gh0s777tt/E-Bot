@@ -188,9 +188,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Integration with the GH0ST Tokens system — earning for Discord activity in an external system.',
+      does: 'Integration with the E-Forge Tokens system — earning for Discord activity in an external system.',
       why: 'Links server activity with a broader token ecosystem (if you use one).',
-      needs: ['GH0ST API configured (keys in Integrations)'],
+      needs: ['E-Forge API configured (keys in Integrations)'],
     },
     '/library': {
       does: 'Your game collection (Steam + IGDB) in a “Netflix for games” style — cover art, descriptions, a library.',
@@ -471,9 +471,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Integration mit dem GH0ST Tokens-System — Verdienen für Discord-Aktivität in einem externen System.',
+      does: 'Integration mit dem E-Forge Tokens-System — Verdienen für Discord-Aktivität in einem externen System.',
       why: 'Verbindet die Serveraktivität mit einem umfassenderen Token-Ökosystem (falls du eines nutzt).',
-      needs: ['Konfigurierte GH0ST-API (Schlüssel in den Integrationen)'],
+      needs: ['Konfigurierte E-Forge-API (Schlüssel in den Integrationen)'],
     },
     '/library': {
       does: 'Deine Spielesammlung (Steam + IGDB) im Stil von „Netflix für Spiele“ — Cover, Beschreibungen, eine Bibliothek.',
@@ -790,9 +790,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Integración con el sistema GH0ST Tokens — ganar por la actividad en Discord en un sistema externo.',
+      does: 'Integración con el sistema E-Forge Tokens — ganar por la actividad en Discord en un sistema externo.',
       why: 'Conecta la actividad del servidor con un ecosistema de tokens más amplio (si usas uno).',
-      needs: ['API de GH0ST configurada (claves en las Integraciones)'],
+      needs: ['API de E-Forge configurada (claves en las Integraciones)'],
     },
     '/library': {
       does: 'Tu colección de juegos (Steam + IGDB) al estilo «Netflix para juegos» — portadas, descripciones, una biblioteca.',
@@ -1098,9 +1098,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Integrazione con il sistema GH0ST Tokens — guadagnare per l’attività su Discord in un sistema esterno.',
+      does: 'Integrazione con il sistema E-Forge Tokens — guadagnare per l’attività su Discord in un sistema esterno.',
       why: 'Collega l’attività del server con un ecosistema di token più ampio (se ne usi uno).',
-      needs: ['API GH0ST configurata (chiavi nelle Integrazioni)'],
+      needs: ['API E-Forge configurata (chiavi nelle Integrazioni)'],
     },
     '/library': {
       does: 'La tua collezione di giochi (Steam + IGDB) in stile «Netflix per i giochi» — copertine, descrizioni, una libreria.',
@@ -1416,9 +1416,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Intégration avec le système GH0ST Tokens — gagner pour ton activité sur Discord dans un système externe.',
+      does: 'Intégration avec le système E-Forge Tokens — gagner pour ton activité sur Discord dans un système externe.',
       why: 'Relie l’activité sur le serveur à un écosystème de tokens plus large (si tu en utilises un).',
-      needs: ['API GH0ST configurée (clés dans les Intégrations)'],
+      needs: ['API E-Forge configurée (clés dans les Intégrations)'],
     },
     '/library': {
       does: 'Ta collection de jeux (Steam + IGDB) dans un style « Netflix pour les jeux » — jaquettes, descriptions, une bibliothèque.',
@@ -1736,9 +1736,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Integração com o sistema GH0ST Tokens — ganhar pela tua atividade no Discord num sistema externo.',
+      does: 'Integração com o sistema E-Forge Tokens — ganhar pela tua atividade no Discord num sistema externo.',
       why: 'Liga a atividade no servidor a um ecossistema de tokens mais amplo (se usares um).',
-      needs: ['API GH0ST configurada (chaves nas Integrações)'],
+      needs: ['API E-Forge configurada (chaves nas Integrações)'],
     },
     '/library': {
       does: 'A tua coleção de jogos (Steam + IGDB) ao estilo “Netflix para jogos” — capas, descrições, uma biblioteca.',
@@ -2032,9 +2032,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: '与 GH0ST Tokens 系统的集成——在外部系统中通过 Discord 活跃度赚取收益。',
+      does: '与 E-Forge Tokens 系统的集成——在外部系统中通过 Discord 活跃度赚取收益。',
       why: '将服务器活跃度与更广阔的代币生态（如果你在使用的话）连接起来。',
-      needs: ['已配置 GH0ST API（密钥填写在集成中）'],
+      needs: ['已配置 E-Forge API（密钥填写在集成中）'],
     },
     '/library': {
       does: '你的游戏收藏（Steam + IGDB），采用「游戏界的 Netflix」风格——封面图、简介、游戏库。',
@@ -2282,9 +2282,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'GH0ST Tokens 시스템과의 통합——외부 시스템에서 Discord 활동으로 수익을 얻습니다.',
+      does: 'E-Forge Tokens 시스템과의 통합——외부 시스템에서 Discord 활동으로 수익을 얻습니다.',
       why: '서버 활동을 더 넓은 토큰 생태계（사용하는 경우）와 연결합니다.',
-      needs: ['GH0ST API 구성 완료（키는 통합에 입력）'],
+      needs: ['E-Forge API 구성 완료（키는 통합에 입력）'],
     },
     '/library': {
       does: '당신의 게임 컬렉션（Steam + IGDB）을 「게임을 위한 Netflix」 스타일로——커버 아트, 설명, 라이브러리.',
@@ -2547,9 +2547,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Интеграция с системой GH0ST Tokens — заработок за активность в Discord во внешней системе.',
+      does: 'Интеграция с системой E-Forge Tokens — заработок за активность в Discord во внешней системе.',
       why: 'Связывает активность на сервере с более широкой экосистемой токенов (если вы её используете).',
-      needs: ['Настроенный API GH0ST (ключи в Интеграциях)'],
+      needs: ['Настроенный API E-Forge (ключи в Интеграциях)'],
     },
     '/library': {
       does: 'Ваша коллекция игр (Steam + IGDB) в стиле «Netflix для игр» — обложки, описания, библиотека.',
@@ -2844,9 +2844,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Інтеграція із системою GH0ST Tokens — заробіток за активність у Discord у зовнішній системі.',
+      does: 'Інтеграція із системою E-Forge Tokens — заробіток за активність у Discord у зовнішній системі.',
       why: 'Поєднує активність на сервері з ширшою екосистемою токенів (якщо ви її використовуєте).',
-      needs: ['Налаштований API GH0ST (ключі в Інтеграціях)'],
+      needs: ['Налаштований API E-Forge (ключі в Інтеграціях)'],
     },
     '/library': {
       does: 'Ваша колекція ігор (Steam + IGDB) у стилі «Netflix для ігор» — обкладинки, описи, бібліотека.',
@@ -3139,9 +3139,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'GH0ST Tokens システムとの連携——外部システムで Discord の活動に応じて報酬を得ます。',
+      does: 'E-Forge Tokens システムとの連携——外部システムで Discord の活動に応じて報酬を得ます。',
       why: 'サーバーの活動を、より広いトークンのエコシステム（利用している場合）とつなげます。',
-      needs: ['GH0ST API を設定済み（キーは連携に入力）'],
+      needs: ['E-Forge API を設定済み（キーは連携に入力）'],
     },
     '/library': {
       does: 'あなたのゲームコレクション（Steam + IGDB）を「ゲームのための Netflix」スタイルで——カバーアート、説明、ライブラリ。',
@@ -3410,9 +3410,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'التكامل مع نظام GH0ST Tokens — الكسب مقابل النشاط على Discord في نظام خارجي.',
+      does: 'التكامل مع نظام E-Forge Tokens — الكسب مقابل النشاط على Discord في نظام خارجي.',
       why: 'يربط النشاط على الخادم بنظام بيئي أوسع للرموز (إذا كنت تستخدمه).',
-      needs: ['واجهة برمجة GH0ST مُهيَّأة (المفاتيح في التكاملات)'],
+      needs: ['واجهة برمجة E-Forge مُهيَّأة (المفاتيح في التكاملات)'],
     },
     '/library': {
       does: 'مجموعتك من الألعاب (Steam + IGDB) بأسلوب «Netflix للألعاب» — صور الأغلفة والأوصاف والمكتبة.',
@@ -3675,9 +3675,9 @@ export const HOW_CONTENT_I18N: Partial<Record<PanelLocale, Record<string, HowEnt
       ],
     },
     '/economy': {
-      does: 'Integrasi dengan sistem GH0ST Tokens — mendapatkan imbalan atas aktivitas di Discord lewat sistem eksternal.',
+      does: 'Integrasi dengan sistem E-Forge Tokens — mendapatkan imbalan atas aktivitas di Discord lewat sistem eksternal.',
       why: 'Menghubungkan aktivitas di server dengan ekosistem token yang lebih luas (jika kamu menggunakannya).',
-      needs: ['API GH0ST dikonfigurasi (kunci di Integrasi)'],
+      needs: ['API E-Forge dikonfigurasi (kunci di Integrasi)'],
     },
     '/library': {
       does: 'Koleksi game-mu (Steam + IGDB) bergaya “Netflix untuk game” — sampul, deskripsi, sebuah pustaka.',

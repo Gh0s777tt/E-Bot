@@ -110,7 +110,7 @@ export default function WelcomeForm({
           emojis={guild.emojis}
           variables={[
             { token: '{user}', label: tp(lang, 'ui.welcome.varUser'), sample: '@NowyGracz' },
-            { token: '{server}', label: tp(lang, 'ui.welcome.varServer'), sample: 'GH0ST EMPIRE' },
+            { token: '{server}', label: tp(lang, 'ui.welcome.varServer'), sample: 'E-Forge' },
             {
               token: '{memberCount}',
               label: tp(lang, 'ui.welcome.varMemberCount'),

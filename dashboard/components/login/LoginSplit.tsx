@@ -23,7 +23,7 @@ export default function LoginSplit({ err, lang }: { err: string | null; lang: La
         <div className="relative flex items-center gap-3">
           <img
             src="/ghost-skull.png"
-            alt="GH0ST"
+            alt="E-Forge"
             className="h-11 w-11 rounded-xl object-cover ring-1 ring-accent/40"
           />
           <span className="font-display text-2xl tracking-wide">
@@ -46,7 +46,7 @@ export default function LoginSplit({ err, lang }: { err: string | null; lang: La
             ))}
           </ul>
         </div>
-        <div className="relative text-xs uppercase tracking-[0.3em] text-muted">GH0ST EMPIRE</div>
+        <div className="relative text-xs uppercase tracking-[0.3em] text-muted">E-Forge</div>
       </div>
 
       <div className="relative flex items-center justify-center p-8">
@@ -54,7 +54,7 @@ export default function LoginSplit({ err, lang }: { err: string | null; lang: La
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img
               src="/ghost-skull.png"
-              alt="GH0ST"
+              alt="E-Forge"
               className="h-10 w-10 rounded-xl object-cover ring-1 ring-accent/40"
             />
             <span className="font-display text-xl tracking-wide">

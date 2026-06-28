@@ -63,7 +63,7 @@ export default function Sidebar({ isAdmin }: { isAdmin: boolean }) {
       <div className="flex h-14 shrink-0 items-center gap-2 border-b border-line px-4">
         <img
           src="/ghost-skull.png"
-          alt="GH0ST"
+          alt="E-Forge"
           className="h-7 w-7 rounded-md object-cover shadow-glow-sm ring-1 ring-accent/30"
         />
         <span className="font-display text-xl tracking-wide text-glow">

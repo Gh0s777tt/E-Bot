@@ -17,7 +17,7 @@ export type WelcomeConfig = {
 export const WELCOME_DEFAULT: WelcomeConfig = {
   enabled: false,
   channelId: '',
-  message: 'Witaj {user} na serwerze GH0ST EMPIRE! 💀 Miłej zabawy!',
+  message: 'Witaj {user} na serwerze E-Forge! 💀 Miłej zabawy!',
   autoroleId: '',
   cardEnabled: false,
   card: { ...RANKCARD_DEFAULT },

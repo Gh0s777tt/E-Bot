@@ -9,7 +9,7 @@ import { getAuthSecret, verifySession } from '../../lib/session';
 
 export const dynamic = 'force-dynamic';
 
-// URL portalu GH0ST z env (bez zaszytej domeny instancji); puste → link „otwórz portal" ukryty.
+// URL portalu E-Forge z env (bez zaszytej domeny instancji); puste → link „otwórz portal" ukryty.
 const GHOST_URL = (process.env.GHOST_API_URL || '').replace(/\/+$/, '');
 
 export default async function ProfilePage() {

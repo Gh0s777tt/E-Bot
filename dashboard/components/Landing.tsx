@@ -132,7 +132,7 @@ export default function Landing({ inviteUrl, lang }: { inviteUrl: string; lang: 
           <a href="#top" className="flex items-center gap-2.5">
             <img
               src="/ghost-skull.png"
-              alt="GH0ST"
+              alt="E-Forge"
               className="h-9 w-9 rounded-lg object-cover ring-1 ring-accent/40"
             />
             <span className="font-display text-xl tracking-wide">
@@ -418,7 +418,7 @@ export default function Landing({ inviteUrl, lang }: { inviteUrl: string; lang: 
             <div className="flex items-center gap-2.5">
               <img
                 src="/ghost-skull.png"
-                alt="GH0ST"
+                alt="E-Forge"
                 className="h-9 w-9 rounded-lg object-cover ring-1 ring-accent/40"
               />
               <span className="font-display text-xl tracking-wide">
@@ -502,7 +502,7 @@ export default function Landing({ inviteUrl, lang }: { inviteUrl: string; lang: 
         </div>
         <div className="border-t border-line/60 px-5 py-5">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 text-xs text-muted sm:flex-row">
-            <span>© 2026 E-BOT · GH0ST EMPIRE</span>
+            <span>© 2026 E-BOT · E-Forge</span>
             <span className="inline-flex items-center gap-1.5">{t('foot.built')}</span>
           </div>
         </div>

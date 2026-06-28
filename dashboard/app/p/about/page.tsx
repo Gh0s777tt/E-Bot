@@ -14,10 +14,9 @@ export default async function AboutPage() {
       </h1>
       <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <p>
-          <strong className="text-white">E-BOT (GH0ST EMPIRE)</strong> to wielomodułowy ekosystem
-          dla społeczności Discord: bot (discord.js v14) z ~95 komendami i kilkudziesięcioma
-          usługami w tle, panel sterowania (Next.js) oraz „GameVault" — biblioteka gier w stylu
-          Netflix.
+          <strong className="text-white">E-BOT (E-Forge)</strong> to wielomodułowy ekosystem dla
+          społeczności Discord: bot (discord.js v14) z ~95 komendami i kilkudziesięcioma usługami w
+          tle, panel sterowania (Next.js) oraz „GameVault" — biblioteka gier w stylu Netflix.
         </p>
         <p>
           Moduły obejmują m.in. moderację i automod, anti-raid, ekonomię serwera, leveling, tickety,

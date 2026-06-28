@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className="mt-10 border-t border-line/60 px-1 py-6 text-xs text-muted">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 sm:flex-row">
-        <span>© 2026 E-BOT · GH0ST EMPIRE — {tp(lang, 'ui.footer.rights')}</span>
+        <span>© 2026 E-BOT · E-Forge — {tp(lang, 'ui.footer.rights')}</span>
         <nav className="flex flex-wrap items-center gap-4">
           <a href="/wiki" className={link}>
             {tp(lang, 'ui.footer.wiki')}

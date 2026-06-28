@@ -11,7 +11,7 @@ const EMAIL = 'Ghostt77@empire-forge.com';
 const SECTIONS: { h: string; p: string }[] = [
   {
     h: '§1. Postanowienia ogólne',
-    p: `Usługę E-BOT (GH0ST EMPIRE) — bota Discord oraz panel sterowania — świadczy ${OPERATOR} („Operator"). Niniejszy regulamin określa zasady korzystania z usługi. Kontakt: ${EMAIL}.`,
+    p: `Usługę E-BOT (E-Forge) — bota Discord oraz panel sterowania — świadczy ${OPERATOR} („Operator"). Niniejszy regulamin określa zasady korzystania z usługi. Kontakt: ${EMAIL}.`,
   },
   {
     h: '§2. Zakres usługi',

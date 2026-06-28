@@ -69,7 +69,7 @@ export default async function OverviewPage() {
             <div className="relative grid h-20 w-20 shrink-0 place-items-center rounded-xl border-2 border-accent bg-bg shadow-glow">
               <img
                 src="/ghost-skull.png"
-                alt="GH0ST"
+                alt="E-Forge"
                 className="h-14 w-14 rounded-lg object-cover"
               />
               <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 rounded bg-accent px-2 py-0.5 text-[10px] font-bold text-white">

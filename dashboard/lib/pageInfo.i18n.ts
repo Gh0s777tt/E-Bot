@@ -48,7 +48,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
     '/eco':
       'Server economy — currency, work, shop, gambling, market and lottery. Gamification for your community.',
     '/economy':
-      'GH0ST economy — integration with the Ghost Tokens system (earning for Discord activity).',
+      'E-Forge economy — integration with the Ghost Tokens system (earning for Discord activity).',
     '/live': 'Live — real-time view of stream status and notification channels.',
     '/creator':
       'Creator — notifications about new posts (RSS / social media) from you and your favorite creators.',
@@ -113,7 +113,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
     '/eco':
       'Server-Ökonomie — Währung, Arbeit, Shop, Glücksspiel, Markt und Lotterie. Gamification für die Community.',
     '/economy':
-      'GH0ST-Ökonomie — Integration mit Ghost Tokens (Verdienen durch Discord-Aktivität).',
+      'E-Forge-Ökonomie — Integration mit Ghost Tokens (Verdienen durch Discord-Aktivität).',
     '/live': 'Live — Stream-Status und Benachrichtigungskanäle in Echtzeit.',
     '/creator':
       'Creator — Benachrichtigungen über neue Posts (RSS / Social Media) deiner Lieblings-Creator.',
@@ -176,7 +176,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
     '/automations':
       'Automatizaciones — reglas «si pasa X, haz Y» que reaccionan a eventos del servidor.',
     '/eco': 'Economía del servidor — moneda, trabajo, tienda, apuestas, mercado y lotería.',
-    '/economy': 'Economía GH0ST — integración con Ghost Tokens (ganar por actividad en Discord).',
+    '/economy': 'Economía E-Forge — integración con Ghost Tokens (ganar por actividad en Discord).',
     '/live': 'En vivo — estado de los streams y canales de avisos en tiempo real.',
     '/creator':
       'Creador — avisos de nuevas publicaciones (RSS / redes) tuyas y de tus creadores favoritos.',
@@ -241,7 +241,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'Automazioni — regole «se accade X, fai Y» che reagiscono agli eventi del server.',
     '/eco': 'Economia del server — valuta, lavoro, negozio, gioco d’azzardo, mercato e lotteria.',
     '/economy':
-      'Economia GH0ST — integrazione con Ghost Tokens (guadagni per l’attività su Discord).',
+      'Economia E-Forge — integrazione con Ghost Tokens (guadagni per l’attività su Discord).',
     '/live': 'Live — stato degli stream e canali di notifica in tempo reale.',
     '/creator':
       'Creator — notifiche sui nuovi post (RSS / social) tuoi e dei tuoi creator preferiti.',
@@ -305,7 +305,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
     '/automations':
       'Automatisations — règles « si X arrive, fais Y » réagissant aux événements du serveur.',
     '/eco': 'Économie du serveur — monnaie, travail, boutique, jeux d’argent, marché et loterie.',
-    '/economy': 'Économie GH0ST — intégration avec Ghost Tokens (gains pour l’activité Discord).',
+    '/economy': 'Économie E-Forge — intégration avec Ghost Tokens (gains pour l’activité Discord).',
     '/live': 'En direct — état des streams et salons de notification en temps réel.',
     '/creator':
       'Créateur — notifications des nouveaux posts (RSS / réseaux) de vos créateurs préférés.',
@@ -368,7 +368,8 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'Contadores — estatísticas (membros, boosts, seguidores YouTube/Twitch/Kick) nos nomes dos canais.',
     '/automations': 'Automações — regras “se X acontecer, faça Y” reagindo a eventos do servidor.',
     '/eco': 'Economia do servidor — moeda, trabalho, loja, apostas, mercado e loteria.',
-    '/economy': 'Economia GH0ST — integração com Ghost Tokens (ganhos pela atividade no Discord).',
+    '/economy':
+      'Economia E-Forge — integração com Ghost Tokens (ganhos pela atividade no Discord).',
     '/live': 'Ao vivo — status das streams e canais de aviso em tempo real.',
     '/creator':
       'Criador — avisos de novos posts (RSS / redes sociais) seus e dos seus criadores favoritos.',
@@ -414,7 +415,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
     '/counters': '频道计数器 — 把统计（成员、助力、YouTube/Twitch/Kick 粉丝）显示在频道名里。',
     '/automations': '自动化 — “若发生 X 则执行 Y”的事件规则。',
     '/eco': '服务器经济 — 货币、打工、商店、博弈、市场与彩票。',
-    '/economy': 'GH0ST 经济 — 对接 Ghost Tokens（按 Discord 活跃赚取）。',
+    '/economy': 'E-Forge 经济 — 对接 Ghost Tokens（按 Discord 活跃赚取）。',
     '/live': '直播 — 实时查看直播状态与通知频道。',
     '/creator': '创作者 — 你和喜爱创作者的新帖（RSS / 社交媒体）通知。',
     '/notifications': '直播通知 — 开播提醒（Twitch / Kick / YouTube / Rumble）发到指定频道。',
@@ -456,7 +457,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
     '/counters': '카운터 — 통계(멤버, 부스트, YouTube/Twitch/Kick 팔로워)를 채널 이름에 표시.',
     '/automations': '자동화 — “X가 일어나면 Y 실행” 규칙.',
     '/eco': '서버 경제 — 화폐, 일, 상점, 도박, 마켓, 복권.',
-    '/economy': 'GH0ST 경제 — Ghost Tokens 연동(디스코드 활동으로 적립).',
+    '/economy': 'E-Forge 경제 — Ghost Tokens 연동(디스코드 활동으로 적립).',
     '/live': '라이브 — 방송 상태와 알림 채널을 실시간으로 확인.',
     '/creator': '크리에이터 — 새 게시물(RSS/소셜) 알림.',
     '/notifications': '라이브 알림 — 방송 시작 알림(Twitch / Kick / YouTube / Rumble).',
@@ -507,7 +508,8 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'Счётчики — статистика (участники, бусты, подписчики YouTube/Twitch/Kick) в названиях каналов.',
     '/automations': 'Автоматизации — правила «если случилось X — сделай Y».',
     '/eco': 'Экономика сервера — валюта, работа, магазин, азартные игры, рынок и лотерея.',
-    '/economy': 'Экономика GH0ST — интеграция с Ghost Tokens (заработок за активность в Discord).',
+    '/economy':
+      'Экономика E-Forge — интеграция с Ghost Tokens (заработок за активность в Discord).',
     '/live': 'Эфир — статус стримов и каналы уведомлений в реальном времени.',
     '/creator': 'Автор — уведомления о новых постах (RSS / соцсети) любимых авторов.',
     '/notifications':
@@ -563,7 +565,8 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'Лічильники — статистика (учасники, бусти, підписники YouTube/Twitch/Kick) у назвах каналів.',
     '/automations': 'Автоматизації — правила «якщо станеться X — зроби Y».',
     '/eco': 'Економіка сервера — валюта, робота, крамниця, азартні ігри, ринок і лотерея.',
-    '/economy': 'Економіка GH0ST — інтеграція з Ghost Tokens (заробіток за активність у Discord).',
+    '/economy':
+      'Економіка E-Forge — інтеграція з Ghost Tokens (заробіток за активність у Discord).',
     '/live': 'Наживо — статус стримів і канали сповіщень у реальному часі.',
     '/creator': 'Творець — сповіщення про нові пости (RSS / соцмережі) улюблених авторів.',
     '/notifications':
@@ -613,7 +616,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'カウンター — 統計（メンバー、ブースト、YouTube/Twitch/Kick フォロワー）をチャンネル名に表示。',
     '/automations': '自動化 — 「Xが起きたらYを実行」ルール。',
     '/eco': 'サーバー経済 — 通貨、仕事、ショップ、ギャンブル、マーケット、宝くじ。',
-    '/economy': 'GH0ST経済 — Ghost Tokens 連携（Discord 活動で獲得）。',
+    '/economy': 'E-Forge経済 — Ghost Tokens 連携（Discord 活動で獲得）。',
     '/live': 'ライブ — 配信状況と通知チャンネルをリアルタイム表示。',
     '/creator': 'クリエイター — 新着投稿（RSS / SNS）の通知。',
     '/notifications': 'ライブ通知 — 配信開始アラート（Twitch / Kick / YouTube / Rumble）。',
@@ -659,7 +662,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'العدادات — إحصائيات (الأعضاء، التعزيزات، متابعو YouTube/Twitch/Kick) في أسماء القنوات.',
     '/automations': 'الأتمتة — قواعد «إذا حدث X فافعل Y».',
     '/eco': 'اقتصاد الخادم — عملة وعمل ومتجر ومقامرة وسوق ويانصيب.',
-    '/economy': 'اقتصاد GH0ST — تكامل مع Ghost Tokens (كسب مقابل النشاط في ديسكورد).',
+    '/economy': 'اقتصاد E-Forge — تكامل مع Ghost Tokens (كسب مقابل النشاط في ديسكورد).',
     '/live': 'البث المباشر — حالة البثوث وقنوات الإشعارات لحظيًا.',
     '/creator': 'المنشئ — إشعارات بالمنشورات الجديدة (RSS / الشبكات الاجتماعية).',
     '/notifications':
@@ -709,7 +712,7 @@ const PAGE_INFO_I18N: Partial<Record<PanelLocale, Dict>> = {
       'Penghitung — statistik (member, boost, pengikut YouTube/Twitch/Kick) di nama kanal.',
     '/automations': 'Otomatisasi — aturan “jika X terjadi, lakukan Y”.',
     '/eco': 'Ekonomi server — mata uang, kerja, toko, judi, pasar, dan lotre.',
-    '/economy': 'Ekonomi GH0ST — integrasi Ghost Tokens (penghasilan dari aktivitas Discord).',
+    '/economy': 'Ekonomi E-Forge — integrasi Ghost Tokens (penghasilan dari aktivitas Discord).',
     '/live': 'Live — status siaran dan kanal notifikasi secara real-time.',
     '/creator': 'Kreator — notifikasi postingan baru (RSS / media sosial).',
     '/notifications':

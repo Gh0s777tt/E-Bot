@@ -203,9 +203,9 @@ export const HOW_IT_WORKS: Record<string, HowEntry> = {
     ],
   },
   '/economy': {
-    does: 'Integracja z systemem GH0ST Tokens — zarabianie za aktywność na Discordzie w zewnętrznym systemie.',
+    does: 'Integracja z systemem E-Forge Tokens — zarabianie za aktywność na Discordzie w zewnętrznym systemie.',
     why: 'Łączy aktywność na serwerze z szerszym ekosystemem tokenów (jeśli go używasz).',
-    needs: ['Skonfigurowane API GH0ST (klucze w Integracjach)'],
+    needs: ['Skonfigurowane API E-Forge (klucze w Integracjach)'],
   },
 
   '/notifications': {

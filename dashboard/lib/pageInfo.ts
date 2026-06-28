@@ -49,7 +49,7 @@ export const PAGE_INFO: Record<string, string> = {
   '/eco':
     'Ekonomia serwera — waluta, praca, sklep, hazard, targowisko i loteria. Gamifikacja i zaangażowanie społeczności.',
   '/economy':
-    'Ekonomia GH0ST — integracja z systemem Ghost Tokens (zarabianie za aktywność na Discordzie).',
+    'Ekonomia E-Forge — integracja z systemem Ghost Tokens (zarabianie za aktywność na Discordzie).',
 
   '/live': 'Na żywo — podgląd statusu streamów i kanałów powiadomień w czasie rzeczywistym.',
   '/creator':

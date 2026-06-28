@@ -408,7 +408,7 @@ export default function CustomCommandsForm({
                         {
                           token: '{server}',
                           label: tp(lang, 'ui.cc.varServerName'),
-                          sample: 'GH0ST EMPIRE',
+                          sample: 'E-Forge',
                         },
                         {
                           token: '{memberCount}',

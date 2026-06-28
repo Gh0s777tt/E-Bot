@@ -1,4 +1,4 @@
-// /portal — link to the GH0ST EMPIRE site + how to earn Ghost Tokens on Discord.
+// /portal — link to the E-Forge site + how to earn Ghost Tokens on Discord.
 import {
   type ChatInputCommandInteraction,
   EmbedBuilder,
@@ -10,12 +10,12 @@ const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.
 
 export const data = new SlashCommandBuilder()
   .setName('portal')
-  .setDescription('Portal GH0ST EMPIRE + jak zarabiać Ghost Tokens na Discordzie.');
+  .setDescription('Portal E-Forge + jak zarabiać Ghost Tokens na Discordzie.');
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
-    .setTitle('🌐 GH0ST EMPIRE')
+    .setTitle('🌐 E-Forge')
     .setURL(GHOST_URL)
     .setDescription(
       [

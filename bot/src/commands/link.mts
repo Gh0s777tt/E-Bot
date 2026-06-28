@@ -1,5 +1,5 @@
-// Integracja z GH0ST EMPIRE — łączenie konta Discord z profilem na stronie.
-// Flow: użytkownik bierze 6-znakowy kod na stronie GH0ST, podaje go w /link,
+// Integracja z E-Forge — łączenie konta Discord z profilem na stronie.
+// Flow: użytkownik bierze 6-znakowy kod na stronie E-Forge, podaje go w /link,
 // bot woła POST /api/internal/link-discord (Authorization: Bearer BOT_SECRET).
 import {
   type ChatInputCommandInteraction,
@@ -12,11 +12,11 @@ const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.
 
 export const data = new SlashCommandBuilder()
   .setName('link')
-  .setDescription('Połącz konto Discord z profilem GH0ST EMPIRE.')
+  .setDescription('Połącz konto Discord z profilem E-Forge.')
   .addStringOption((o) =>
     o
       .setName('kod')
-      .setDescription('6-znakowy kod ze strony GH0ST EMPIRE')
+      .setDescription('6-znakowy kod ze strony E-Forge')
       .setRequired(true)
       .setMinLength(6)
       .setMaxLength(6),
@@ -26,7 +26,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const secret = process.env.GHOST_BOT_SECRET;
   if (!secret) {
     await interaction.reply({
-      content: '⚠️ Integracja GH0ST EMPIRE nie jest skonfigurowana (brak `GHOST_BOT_SECRET`).',
+      content: '⚠️ Integracja E-Forge nie jest skonfigurowana (brak `GHOST_BOT_SECRET`).',
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -50,10 +50,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     if (r.ok && data.ok) {
       const embed = new EmbedBuilder()
         .setColor(0xe50914)
-        .setTitle('✅ Połączono z GH0ST EMPIRE')
-        .setDescription(
-          'Twoje konto Discord jest teraz powiązane z profilem na stronie GH0ST EMPIRE.',
-        );
+        .setTitle('✅ Połączono z E-Forge')
+        .setDescription('Twoje konto Discord jest teraz powiązane z profilem na stronie E-Forge.');
       await interaction.editReply({ embeds: [embed] });
     } else {
       await interaction.editReply(
@@ -61,6 +59,6 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
       );
     }
   } catch (e) {
-    await interaction.editReply(`❌ Błąd połączenia z GH0ST: ${(e as Error).message}`);
+    await interaction.editReply(`❌ Błąd połączenia z E-Forge: ${(e as Error).message}`);
   }
 }

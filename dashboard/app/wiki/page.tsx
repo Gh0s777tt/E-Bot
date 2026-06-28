@@ -66,7 +66,7 @@ export default async function WikiPage() {
           <a href="/" className="flex items-center gap-2.5">
             <img
               src="/ghost-skull.png"
-              alt="GH0ST"
+              alt="E-Forge"
               className="h-9 w-9 rounded-lg object-cover ring-1 ring-accent/40"
             />
             <span className="font-display text-xl tracking-wide">
@@ -343,7 +343,7 @@ export default async function WikiPage() {
       {/* STOPKA */}
       <footer className="border-t border-line/60 bg-surface/40">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-sm text-muted sm:flex-row">
-          <span>© 2026 E-BOT · GH0ST EMPIRE</span>
+          <span>© 2026 E-BOT · E-Forge</span>
           <nav className="flex flex-wrap items-center gap-4">
             <a href="/" className="transition hover:text-white">
               {t('wiki.back')}
