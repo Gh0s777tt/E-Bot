@@ -409,20 +409,33 @@ export default function Landing({ inviteUrl, lang }: { inviteUrl: string; lang: 
         >
           <Bot size={20} /> {t('cta.addBot')}
         </a>
-        <div className="mt-10 flex justify-center">
-          <a
-            href="https://top.gg/bot/1512758748761030677"
-            target="_blank"
-            rel="noreferrer"
-            className="transition hover:opacity-90"
-          >
-            {/* Widget top.gg (statystyki na żywo — serwery/głosy) */}
-            <img
-              src="https://top.gg/api/widget/1512758748761030677.svg"
-              alt="E-Bot na top.gg"
-              className="h-auto w-[350px] max-w-full"
-            />
-          </a>
+        <div className="mt-12 flex justify-center">
+          <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-2xl border border-accent/30 bg-[#0e0e12]/70 px-8 py-7 text-center shadow-[0_24px_60px_-32px_#000] backdrop-blur">
+            <p className="font-display text-lg font-semibold tracking-wide text-white">
+              ⭐ Jesteśmy na top.gg
+            </p>
+            {/* Widget top.gg (statystyki na żywo) — oprawiony w kartę w barwach projektu */}
+            <a
+              href="https://top.gg/bot/1512758748761030677"
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:opacity-90"
+            >
+              <img
+                src="https://top.gg/api/widget/1512758748761030677.svg"
+                alt="E-Bot na top.gg"
+                className="h-auto w-[300px] max-w-full rounded-lg"
+              />
+            </a>
+            <a
+              href="https://top.gg/bot/1512758748761030677/vote"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent to-accent-dark px-6 py-2.5 text-sm font-semibold text-white shadow-[0_8px_24px_-10px_rgb(var(--accent-rgb)/0.7)] transition hover:from-accent-hover hover:to-accent"
+            >
+              ⭐ Zagłosuj na top.gg
+            </a>
+          </div>
         </div>
       </section>
 
