@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-636-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.566.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-637-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.567.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.567.0] — 🌍 Landing ×14: pełne tłumaczenia strony powitalnej
+
+- `[#637]` 🌍 **Landing w 14 językach** — strona powitalna przetłumaczona na `pl en de es it fr pt zh ko ru uk ja ar id` (arabski w RTL). Izolowana warstwa [`landingI18n.ts`](dashboard/lib/landingI18n.ts) (~100 kluczy/język, własny fallback do PL, poza testem parytetu — języki dorzucane przyrostowo bez ryzyka regresji). `Landing.tsx` i `page.tsx` czytają język z cookie `panel_lang` (`getPanelLocale`); RTL dla `ar` z `layout.tsx`.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.566.0] — 📄 PDF-y: przewodnik dla streamerów + dokumentacja dla developerów
 

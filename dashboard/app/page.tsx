@@ -29,7 +29,7 @@ const PLATFORM_LABEL: Record<string, string> = {
 export default async function OverviewPage() {
   // Gość (brak sesji) → publiczny landing zamiast panelu (Shell renderuje root bez chromu).
   const session = await currentSession();
-  if (!session) return <Landing inviteUrl={botInviteUrl()} />;
+  if (!session) return <Landing inviteUrl={botInviteUrl()} lang={await getPanelLocale()} />;
 
   const [stats, games, src, integrations, checklist, history, antiraid, health, lang] =
     await Promise.all([
