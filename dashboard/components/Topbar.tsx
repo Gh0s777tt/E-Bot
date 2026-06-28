@@ -112,9 +112,7 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
       }`}
     >
       <MobileNav />
-      <h1 className="hidden font-display text-base font-semibold uppercase tracking-wide sm:block">
-        {title}
-      </h1>
+      <h1 className="hidden font-display text-lg font-semibold tracking-wide sm:block">{title}</h1>
       <GuildSwitcher />
       <div className="ms-auto flex items-center gap-2 text-xs">
         <span className="hidden items-center gap-1.5 rounded-md border border-line px-3 py-1 sm:flex">

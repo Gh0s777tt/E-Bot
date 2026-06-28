@@ -23,7 +23,7 @@ export default function ErrorPage({
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
-      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-accent font-display text-2xl shadow-glow">
+      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-accent to-accent-dark font-display text-2xl text-white shadow-glow">
         !
       </div>
       <h2 className="font-display text-2xl uppercase tracking-wide">
@@ -34,7 +34,7 @@ export default function ErrorPage({
       </p>
       <button
         onClick={reset}
-        className="rounded-md bg-accent px-5 py-2 text-sm font-semibold uppercase tracking-wide transition hover:bg-accent-hover"
+        className="rounded-lg bg-gradient-to-r from-accent to-accent-dark px-6 py-2.5 text-sm font-semibold text-white shadow-[0_8px_24px_-10px_rgb(var(--accent-rgb)/0.7)] transition hover:from-accent-hover hover:to-accent"
       >
         {tp(lang, 'ui.sys.errRetry')}
       </button>

@@ -165,13 +165,20 @@ Owija istniejący tekst i18n jako children → **zero nowych kluczy** (parytet 1
 Podłączony do 8 pustych stanów tabel: /moderation (sprawy + tempbany), /levels (ranking), /ai, /engagement,
 /tickets, /suggestions, sklep (`ShopManager`). Biome (sort importów + format) + `tsc` exit 0. Zweryfikowane zrzutem.
 
-### Kolejne ekrany / dopracowanie (plan)
-Nagłówki (E6) + hover tabel (E7) + stan pusty (E8) — gotowe panel-wide. Zostaje:
-1. **Stany pozostałe** — `Loading`/skeleton + spójny `Error` (empty: zrobione E8), inputy (focus akcent).
-2. **Responsywność tabel** — reflow→karty na wąskim ekranie (`/logging`, `/leaderboard`, stats, sklep).
-3. **Listy nie-`<table>`** — np. role-nagrody (wiersze flex) — ewentualny hover osobno.
-4. **Formularze** — grupowanie pól / opisy na gęstych ekranach (np. `/ai`, `/moderation`).
-5. **Topbar `<h1>`** — decyzja o stylu tytułu strony (chrom).
-6. **Mapowanie stary→nowy** — uzupełniane (nic nie ginie).
+### E9 — Stany systemowe + chrom Topbara (zrobione) ✅
+- **Loading**: skeletony już istniały (`components/Skeleton` — `PageSkeleton`/`StatCardSkeleton`/`RowsSkeleton`,
+  `app/loading.tsx` + per-route stats/leaderboard/clans) — bez zmian, są na brandzie.
+- **Error** (`app/error.tsx`): przycisk „spróbuj ponownie" → gradientowy primary; ikona błędu → gradient
+  `from-accent→to-accent-dark` (spójne z avatarem Topbara). Treść/logika Sentry bez zmian.
+- **Topbar `<h1>`**: tytuł strony `font-display text-lg` sentence-case zamiast `text-base uppercase`
+  (token E6). Małe etykiety kontrolek (KOMPAKT/Aa/Ctrl K) zostają uppercase. Zweryfikowane zrzutem („Statystyki").
 
-> Status: E1–E8 wdrożone i zweryfikowane. Kontynuuję dopracowanie.
+### Dopracowanie — opcjonalne (plan)
+Nagłówki (E6) + hover tabel (E7) + stan pusty (E8) + stany/chrom (E9) — gotowe panel-wide. Opcjonalnie zostaje:
+1. **Responsywność tabel** — reflow→karty na wąskim ekranie (`/logging`, `/leaderboard`, stats, sklep).
+2. **Listy nie-`<table>`** — np. role-nagrody (wiersze flex) — ewentualny hover osobno.
+3. **Formularze** — grupowanie pól / opisy na gęstych ekranach (np. `/ai`, `/moderation`).
+4. **Inputy** — ewentualny spójny focus akcentu (część kontrolek już ma `focus:border-accent`).
+5. **Mapowanie stary→nowy** — uzupełniane (nic nie ginie).
+
+> Status: E1–E9 wdrożone i zweryfikowane. Rdzeń redesignu Crimson Aurora gotowy; reszta to opcjonalne dopracowanie.
