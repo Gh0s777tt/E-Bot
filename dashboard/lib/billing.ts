@@ -67,13 +67,18 @@ export async function downgradeBySubscription(subId: string): Promise<boolean> {
 }
 
 // Tworzy sesję Stripe Checkout (subskrypcja premium serwera). URL lub null. Surowy POST do API
-// Stripe (form-encoded, bez zależności). Wymaga STRIPE_SECRET_KEY + STRIPE_PRICE_ID.
+// Stripe (form-encoded, bez zależności). Wymaga STRIPE_SECRET_KEY + STRIPE_PRICE_ID. Plan 'year'
+// używa STRIPE_PRICE_ID_YEAR (fallback do miesięcznego, gdy roczny price nieustawiony).
 export async function createCheckoutSession(
   guildId: string,
   origin: string,
+  plan: 'month' | 'year' = 'month',
 ): Promise<string | null> {
   const key = process.env.STRIPE_SECRET_KEY;
-  const price = process.env.STRIPE_PRICE_ID;
+  const price =
+    plan === 'year'
+      ? process.env.STRIPE_PRICE_ID_YEAR || process.env.STRIPE_PRICE_ID
+      : process.env.STRIPE_PRICE_ID;
   if (!key || !price || !guildId) return null;
   try {
     const body = new URLSearchParams({

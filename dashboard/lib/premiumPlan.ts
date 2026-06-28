@@ -1,8 +1,9 @@
-// Plan Premium — dane do strony/okna porównania (Free vs Premium). Cena z env
-// NEXT_PUBLIC_PREMIUM_PRICE (np. "19 zł / mc"), by zmienić ją BEZ edycji kodu; gdy nieustawiona →
-// placeholder "—". Cechy: etykiety przez i18n (klucze ui.premium.feat.*), kolumny free/pro jako
-// boolean (✓/✗). EDYTUJ PLAN_FEATURES, aby zmienić zawartość porównania.
-export const PREMIUM_PRICE = process.env.NEXT_PUBLIC_PREMIUM_PRICE || '—';
+// Plan Premium — dane do okna porównania (Free vs Premium). Ceny z env (sama prezentacja; realne kwoty
+// w STRIPE_PRICE_ID / STRIPE_PRICE_ID_YEAR), by zmieniać je BEZ edycji kodu; nieustawione → "—".
+// Cechy: etykiety przez i18n (ui.premium.feat.*), kolumny free/pro jako boolean (✓/✗). EDYTUJ
+// PLAN_FEATURES, aby zmienić zawartość porównania.
+export const PREMIUM_PRICE_MONTH = process.env.NEXT_PUBLIC_PREMIUM_PRICE || '19,99 zł';
+export const PREMIUM_PRICE_YEAR = process.env.NEXT_PUBLIC_PREMIUM_PRICE_YEAR || '199 zł';
 
 export type PlanFeature = { key: string; free: boolean; pro: boolean };
 

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-628-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.558.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-629-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.559.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.559.0] — 💳 Premium: plan miesięczny i roczny (przełącznik + oszczędność)
+
+- `[#629]` 💳 **Wybór planu w oknie Premium** — okno porównania dostało przełącznik **miesięczny/roczny** (roczny domyślny, polecany, z plakietką „2 miesiące gratis"); cena i przycisk „Subskrybuj" reagują na wybór. Endpoint `/api/billing/checkout` przyjmuje `plan` w body → `createCheckoutSession` wybiera `STRIPE_PRICE_ID` (mc) albo `STRIPE_PRICE_ID_YEAR` (rok, z fallbackiem do mc). Domyślne ceny (rekomendacja rynkowa, poniżej Dyno/MEE6): **19,99 zł / mc**, **199 zł / rok** (~17% taniej) — nadpisywalne przez `NEXT_PUBLIC_PREMIUM_PRICE(_YEAR)`. i18n ×14 (`monthly`/`yearly`/`perYear`/`yearSave`) + 2 zmienne env.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1131** · `sync:check` (env 68) — exit 0 (Node 26.4.0).
 
 ## [0.558.0] — 🦶 Panel: globalna stopka + strony About / Regulamin / Polityka prywatności
 

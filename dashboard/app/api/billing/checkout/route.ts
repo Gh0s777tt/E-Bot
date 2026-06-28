@@ -16,7 +16,16 @@ export async function POST(request: Request): Promise<Response> {
   const guildId = await getPrimaryGuildId();
   if (!guildId) return Response.json({ ok: false, error: 'brak serwera' }, { status: 400 });
 
-  const url = await createCheckoutSession(guildId, getOrigin(request));
+  // Plan z body (domyślnie miesięczny); 'year' → roczny price w Stripe.
+  let plan: 'month' | 'year' = 'month';
+  try {
+    const body = (await request.json()) as { plan?: string };
+    if (body?.plan === 'year') plan = 'year';
+  } catch {
+    /* brak/zły body → miesięczny */
+  }
+
+  const url = await createCheckoutSession(guildId, getOrigin(request), plan);
   if (!url)
     return Response.json({ ok: false, error: 'billing nieskonfigurowany' }, { status: 400 });
   return Response.json({ ok: true, url });
