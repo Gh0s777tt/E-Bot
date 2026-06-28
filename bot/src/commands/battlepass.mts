@@ -7,6 +7,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { roleAssignableError } from '../economy/clans.mts';
 import { ecoConfig, fmt, getUser, saveUser } from '../economy/store.mts';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { withLock } from '../lib/userLock.mts';
@@ -172,10 +173,28 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     const member = await interaction.guild?.members.fetch(interaction.user.id).catch(() => null);
     if (member) {
       const { add, remove } = syncTierRoles(current, tierRoles, new Set(member.roles.cache.keys()));
-      for (const id of add) await member.roles.add(id).catch(() => {});
+      // Nadawaj tylko role przydzielne przez bota (pomiń @everyone / zarządzane / wyżej niż rola bota) —
+      // spójnie z /clan role; Discord i tak by odrzucił, ale unikamy nieudanych prób i mylącego komunikatu.
+      const botHighest = member.guild.members.me?.roles.highest.position ?? 0;
+      const everyoneId = member.guild.id;
+      const added: string[] = [];
+      for (const id of add) {
+        const role = member.guild.roles.cache.get(id);
+        if (
+          !role ||
+          roleAssignableError(
+            { id: role.id, managed: role.managed, position: role.position },
+            botHighest,
+            everyoneId,
+          )
+        )
+          continue;
+        await member.roles.add(id).catch(() => {});
+        added.push(id);
+      }
       for (const id of remove) await member.roles.remove(id).catch(() => {});
-      if (add.length)
-        roleLine = `\n🎭 Odblokowano role tierów: ${add.map((id) => `<@&${id}>`).join(' ')}`;
+      if (added.length)
+        roleLine = `\n🎭 Odblokowano role tierów: ${added.map((id) => `<@&${id}>`).join(' ')}`;
     }
   }
 

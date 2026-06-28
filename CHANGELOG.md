@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-615-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.545.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-616-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.546.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.546.0] — 🛡️ Battle-pass: walidacja przydzielności ról (spójnie z /clan role)
+
+- `[#616]` 🛡️ **Pre-filtr ról battle-passa** — znalezisko z audytu autoryzacji. Synchronizacja ról za tiery (`/battlepass`) nadawała role bez sprawdzenia przydzielności (`parseTierRoles` waliduje tylko kształt JSON). Teraz przed nadaniem każda rola przechodzi przez `roleAssignableError` (reużyte z `/clan role`, [`clans.mts`](bot/src/economy/clans.mts)): pomija `@everyone`, role zarządzane (integracje) i role wyżej niż rola bota. Komunikat „Odblokowano role" pokazuje tylko faktycznie nadane. Discord i tak odrzucał nieprzydzielne (`.catch`), ale unikamy nieudanych prób API i mylącego komunikatu — spójność z walidacją ról klanu.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1106/1106** · `sync:check` — exit 0 (Node 26.4.0). `roleAssignableError` już pokryte testami (`clans.test`).
 
 ## [0.545.0] — 🐛 Pety: pasek XP na maksymalnym poziomie (kosmetyka z audytu)
 
