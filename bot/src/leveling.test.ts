@@ -61,4 +61,10 @@ describe('levelInfo — rozbicie poziomu (level + xpInto + xpFor), wspólne źr�
       expect(xpInto).toBeLessThan(xpFor);
     }
   });
+
+  it('na maksymalnym poziomie (kap 1000) pasek pełny — xpInto == xpFor, nie rośnie w nieskończoność', () => {
+    const big = levelInfo(3_000_000_000); // ponad sumę XP do poziomu 1000
+    expect(big.level).toBe(1000);
+    expect(big.xpInto).toBe(big.xpFor); // 100%, nie > xpFor (pasek /rank ≤ 100%)
+  });
 });

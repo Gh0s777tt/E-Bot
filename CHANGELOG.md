@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-622-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.552.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-623-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.553.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.553.0] — 🐛 Leveling: pasek XP na maksymalnym poziomie (kap 1000) (QA follow-up)
+
+- `[#623]` 🐛 **Fix niezmiennika `xpInto < xpFor` na kapie poziomu** (follow-up z przeglądu QA). `levelInfo` ([`leveling.mts`](bot/src/leveling.mts)) przy poziomie maksymalnym (1000) zwracał `xpInto = xp − acc` rosnące bez ograniczeń → `/rank`/`/profile` pokazywałyby pasek > 100% (osiągalne przy nadużyciu addytywnego `/xp give` bez kapu sumy). Teraz na kapie `xpInto = xpFor` (pasek pełny, 100%). +1 test (kap przy `xp = 3e9`). Sweep niezmiennika < 20 000 XP nietknięty.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1125 passed + 2 xfail** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.552.0] — 🛡️ Automod: utwardzony ReDoS-guard (alternatywy + {n,}) (QA follow-up)
 

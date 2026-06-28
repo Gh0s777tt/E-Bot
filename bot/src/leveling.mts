@@ -112,7 +112,10 @@ export function levelInfo(xp: number): { level: number; xpInto: number; xpFor: n
     acc += xpToNext(lvl);
     lvl++;
   }
-  return { level: lvl, xpInto: xp - acc, xpFor: xpToNext(lvl) };
+  const xpFor = xpToNext(lvl);
+  // Na kapie poziomu (1000) nie ma kolejnego progu → pasek pełny (xpInto = xpFor), inaczej `xp - acc`
+  // rośnie bez ograniczeń i /rank pokazałby pasek > 100% (przy nadużyciu addytywnego /xp give).
+  return { level: lvl, xpInto: lvl >= 1000 ? xpFor : xp - acc, xpFor };
 }
 
 // ── Double-XP event (czasowy mnożnik globalny) — stan w pamięci + cloud key 'xp_event' ──
