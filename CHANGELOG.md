@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-620-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.550.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-621-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.551.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.551.0] — 🐛 duration: poprawna obsługa wartości ujemnych (QA #5, #6)
+
+- `[#621]` 🐛 **Fix `duration` na wartościach ujemnych** (defekty #5/#6 z przeglądu QA, [`duration.mts`](bot/src/lib/duration.mts)). (1) `formatDuration` dla `ms` < minuty (w tym ujemnych, np. przeterminowane „deadline − now") zwraca „<1m" zamiast śmieci „-1d -1h" (`Math.floor` + reszta modulo dawały każdy człon ujemny). (2) `parseDuration` regex łapie teraz znak minus (`-?\d+`) → „-5m" daje sumę ≤ 0 → `null` (wcześniej minus ignorowany → +5 min, ryzyko dla `timeout`/`mute`). +2 testy regresyjne.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1119 passed + 2 xfail** · `sync:check` — exit 0 (Node 26.4.0). Pozostaje otwarty defekt QA #4 (`normalizeText` separatory) — naprawa świadomie wstrzymana (naiwny strip wprowadza false-positive, np. „therapist"; wymaga przeprojektowania dopasowania na granice słów).
 
 ## [0.550.0] — 🛡️ richMessage: wymuszony całkowity limit 6000 znaków embeda (QA #3)
 

@@ -76,25 +76,23 @@ describe('QA#4 normalizeText — separatory między literami', () => {
   });
 });
 
-// ── DEFEKT #5 (Niski): formatDuration dla wartości ujemnej produkuje śmieciowy tekst ("-1d -1h"),
-// bo Math.floor + reszta modulo w JS dają każdy człon ujemny. Ekspozycja zależy od callerów podających
-// (deadline - now) po terminie.
-describe('QA#5 formatDuration — wartości ujemne', () => {
+// ── DEFEKT #5 (Niski) — NAPRAWIONY (#621): formatDuration zwraca "<1m" dla wartości < minuty (w tym
+// ujemnych). Wcześniej Math.floor + reszta modulo dawały śmieci "-1d -1h".
+describe('QA#5 formatDuration — wartości ujemne (regresja #621)', () => {
   it('kontrola: dodatni czas formatuje się poprawnie', () => {
     expect(formatDuration(5_400_000)).toBe('1h 30m');
   });
-  it.fails('DEFEKT: ujemny czas nie powinien dać "-1d -1h ..."', () => {
-    expect(formatDuration(-3_600_000)).not.toMatch(/-\d+d\s+-\d+h/);
+  it('ujemny czas → "<1m" (nie śmieci)', () => {
+    expect(formatDuration(-3_600_000)).toBe('<1m');
   });
 });
 
-// ── DEFEKT #6 (Niski): parseDuration ignoruje znak minus (regex \d+ nie łapie "-"), więc "-5m" → 5 min
-// dodatnie zamiast null. Dla komend moderacyjnych (timeout/mute) ujemne wejście powinno być odrzucone.
-describe('QA#6 parseDuration — wartość ujemna', () => {
+// ── DEFEKT #6 (Niski) — NAPRAWIONY (#621): regex łapie znak minus → "-5m" daje sumę ≤ 0 → null.
+describe('QA#6 parseDuration — wartość ujemna (regresja #621)', () => {
   it('kontrola: poprawny dodatni czas parsuje się', () => {
     expect(parseDuration('5m')).toBe(300_000);
   });
-  it.fails('DEFEKT: "-5m" nie powinno dać dodatnich 5 minut', () => {
-    expect(parseDuration('-5m')).not.toBe(300_000);
+  it('"-5m" jest odrzucone (null), nie traktowane jak +5 min', () => {
+    expect(parseDuration('-5m')).toBeNull();
   });
 });
