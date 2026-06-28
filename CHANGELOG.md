@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-633-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.563.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-634-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.564.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.564.0] — 🔐 Nowy ekran logowania „Split" (czerń/czerwień)
+
+- `[#634]` 🔐 **Redesign logowania** — `/login` zastąpiony dopracowanym układem dwukolumnowym „Split" ([`LoginSplit.tsx`](dashboard/components/login/LoginSplit.tsx)): lewy panel brandowy (skull, hasło „Centrum dowodzenia", cechy) + prawa kolumna z logowaniem przez Discord. Wybrany przez właściciela spośród **3 wariantów** (Split / Spotlight / Showcase) pokazanych jako realne zrzuty. Współdzielone elementy (przycisk Discord, błąd, linki prawne) w [`parts.tsx`](dashboard/components/login/parts.tsx) — reużywają istniejących kluczy i18n `ui.pub.*` / `ui.footer.*` (zero nowych tłumaczeń). `Shell` renderuje teraz `/login` bez panelowego chromu (wcześniej działało to tylko dzięki overlayowi `fixed inset-0`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.563.0] — 🚀 Landing page (root dla gości) w stylu mee6, motyw czerń/czerwień
 

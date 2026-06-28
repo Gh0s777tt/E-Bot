@@ -29,9 +29,13 @@ export default function Shell({
   loggedIn: boolean;
 }) {
   const pathname = usePathname();
-  // Strony publiczne bez panelowego chromu: profile /p/*, wiki projektu oraz landing (gość na root).
+  // Strony publiczne bez panelowego chromu: logowanie, profile /p/*, wiki projektu oraz landing
+  // (gość na root). Login renderuje własny pełnoekranowy layout — bez sidebara/topbara/toura.
   const bare =
-    pathname.startsWith('/p/') || pathname.startsWith('/wiki') || (pathname === '/' && !loggedIn);
+    pathname === '/login' ||
+    pathname.startsWith('/p/') ||
+    pathname.startsWith('/wiki') ||
+    (pathname === '/' && !loggedIn);
   if (bare) return <main className="min-h-screen">{children}</main>;
   return (
     <LangProvider>
