@@ -1,0 +1,390 @@
+[
+  {
+    "name": "vote",
+    "description": "Vote for the bot on top.gg (support the project)."
+  },
+  {
+    "name": "ping",
+    "description": "Check if the bot is alive (latency)."
+  },
+  {
+    "name": "library",
+    "description": "Your game library (Steam + IGDB)."
+  },
+  {
+    "name": "antinuke",
+    "description": "Protect the server against nuking."
+  },
+  {
+    "name": "applypanel",
+    "description": "Publish an applications/recruitment panel."
+  },
+  {
+    "name": "link",
+    "description": "Link your Discord account with your E-Forge profile."
+  },
+  {
+    "name": "portal",
+    "description": "E-Forge portal + how to earn Ghost Tokens on Discord."
+  },
+  {
+    "name": "ticket",
+    "description": "Support ticket system."
+  },
+  {
+    "name": "ai",
+    "description": "Ask the AI (remembers conversation context, with a daily limit)."
+  },
+  {
+    "name": "mod",
+    "description": "Moderation commands."
+  },
+  {
+    "name": "case",
+    "description": "Moderation case history."
+  },
+  {
+    "name": "describe",
+    "description": "Let the AI describe an attached image."
+  },
+  {
+    "name": "donate",
+    "description": "Show ways to support (donations)."
+  },
+  {
+    "name": "remind",
+    "description": "Set a reminder after a given time."
+  },
+  {
+    "name": "rolemenu",
+    "description": "Publish a role selection menu (dropdown)."
+  },
+  {
+    "name": "reactionpanel",
+    "description": "Publish a reaction-role panel (embed from the dashboard) + auto-reactions."
+  },
+  {
+    "name": "schedule",
+    "description": "Scheduled / recurring announcements."
+  },
+  {
+    "name": "skins",
+    "description": "Skins for rank/profile cards."
+  },
+  {
+    "name": "giveaway",
+    "description": "Giveaways."
+  },
+  {
+    "name": "buttonpanel",
+    "description": "Send a button role panel (configured from the web dashboard)."
+  },
+  {
+    "name": "modai",
+    "description": "AI moderation co-pilot (summary + suggested action)."
+  },
+  {
+    "name": "wishlist",
+    "description": "Game wishlist (from the dashboard)."
+  },
+  {
+    "name": "battlepass",
+    "description": "Your seasonal battle pass (activity progress)."
+  },
+  {
+    "name": "pricealert",
+    "description": "Personal game price alerts (DM on price drop)."
+  },
+  {
+    "name": "rank",
+    "description": "Your rank card (XP / level)."
+  },
+  {
+    "name": "eco",
+    "description": "Server economy (currency, work, shop, gambling)."
+  },
+  {
+    "name": "prestige",
+    "description": "Advance to a higher prestige (reset XP for a badge)."
+  },
+  {
+    "name": "profile",
+    "description": "Your profile: level, balance, invites and badges."
+  },
+  {
+    "name": "quests",
+    "description": "Your daily and weekly quests + claim rewards."
+  },
+  {
+    "name": "ticketpanel",
+    "description": "Send a ticket-opening panel to the current channel."
+  },
+  {
+    "name": "verifypanel",
+    "description": "Send a verification panel to the current channel."
+  },
+  {
+    "name": "suggest",
+    "description": "Submit a suggestion for the server."
+  },
+  {
+    "name": "poll",
+    "description": "Create a poll — native Discord poll with a timer."
+  },
+  {
+    "name": "birthday",
+    "description": "Your birthday on the server."
+  },
+  {
+    "name": "afk",
+    "description": "Set your AFK status."
+  },
+  {
+    "name": "highlight",
+    "description": "DM alerts for keywords in chat."
+  },
+  {
+    "name": "tldr",
+    "description": "Summarize recent messages in this channel (AI)."
+  },
+  {
+    "name": "translate",
+    "description": "Translate text into a chosen language (AI)."
+  },
+  {
+    "name": "imagine",
+    "description": "Generate an image from a prompt (AI / OpenAI)."
+  },
+  {
+    "name": "backlog",
+    "description": "Your backlog of games to play."
+  },
+  {
+    "name": "hof",
+    "description": "Hall of Fame of leveling seasons."
+  },
+  {
+    "name": "fun",
+    "description": "Fun: truth or dare, would you rather, 8ball, dice."
+  },
+  {
+    "name": "invites",
+    "description": "Server invite statistics."
+  },
+  {
+    "name": "linktwitch",
+    "description": "Link your Twitch login (role for subscription)."
+  },
+  {
+    "name": "lottery",
+    "description": "Server lottery — the pot grows with tickets."
+  },
+  {
+    "name": "market",
+    "description": "Player-to-player market (inventory items for currency)."
+  },
+  {
+    "name": "xp",
+    "description": "Manage a user's XP (admin)."
+  },
+  {
+    "name": "ask",
+    "description": "Ask the AI a one-off question (no memory)."
+  },
+  {
+    "name": "rewrite",
+    "description": "Rewrite text in a chosen style (AI)."
+  },
+  {
+    "name": "trivia",
+    "description": "Knowledge quiz — first correct answer wins the reward!"
+  },
+  {
+    "name": "rep",
+    "description": "Reputation — appreciate helpful people."
+  },
+  {
+    "name": "confess",
+    "description": "Send an anonymous confession in this channel."
+  },
+  {
+    "name": "xpevent",
+    "description": "Double-XP event (admin only)."
+  },
+  {
+    "name": "event",
+    "description": "Announce an event with sign-ups (RSVP)."
+  },
+  {
+    "name": "lockdown",
+    "description": "Emergency lock/unlock of server chat (admin)."
+  },
+  {
+    "name": "rps",
+    "description": "Rock, paper, scissors against the bot."
+  },
+  {
+    "name": "flip",
+    "description": "Flip a coin — heads or tails."
+  },
+  {
+    "name": "dadjoke",
+    "description": "A random dad joke (in English)."
+  },
+  {
+    "name": "cat",
+    "description": "A random cat photo. 🐱"
+  },
+  {
+    "name": "dog",
+    "description": "A random dog photo. 🐶"
+  },
+  {
+    "name": "sticky",
+    "description": "Pin a message that sticks to the bottom of the channel."
+  },
+  {
+    "name": "farewell",
+    "description": "Goodbye messages and server boost thank-yous."
+  },
+  {
+    "name": "search",
+    "description": "Search Wikipedia, games (IGDB) or YouTube."
+  },
+  {
+    "name": "persona",
+    "description": "AI bot personality — the reply style for /ai and /ask."
+  },
+  {
+    "name": "avatar",
+    "description": "Show a user avatar."
+  },
+  {
+    "name": "userinfo",
+    "description": "User info (account, roles, boost)."
+  },
+  {
+    "name": "serverinfo",
+    "description": "Server info (members, channels, boosts)."
+  },
+  {
+    "name": "slowmode",
+    "description": "Set channel slowmode."
+  },
+  {
+    "name": "lock",
+    "description": "Lock a channel (no sending)."
+  },
+  {
+    "name": "unlock",
+    "description": "Unlock a channel."
+  },
+  {
+    "name": "healthcheck",
+    "description": "Audit your server security and setup."
+  },
+  {
+    "name": "roleperms",
+    "description": "Set role permissions from a preset."
+  },
+  {
+    "name": "rolecopy",
+    "description": "Copy one role settings to another."
+  },
+  {
+    "name": "blueprint",
+    "description": "Create a ready set of channels from a template."
+  },
+  {
+    "name": "aiserver",
+    "description": "AI designs and builds your server layout from a description."
+  },
+  {
+    "name": "undo",
+    "description": "Undo the last channels/roles created (Architect)."
+  },
+  {
+    "name": "achievements",
+    "description": "Achievements — level-based tier badges."
+  },
+  {
+    "name": "ship",
+    "description": "Check how well two people match. 💘"
+  },
+  {
+    "name": "hug",
+    "description": "Hug someone! 🤗"
+  },
+  {
+    "name": "kiss",
+    "description": "Kiss someone! 😘"
+  },
+  {
+    "name": "slap",
+    "description": "Slap someone! 👋"
+  },
+  {
+    "name": "pat",
+    "description": "Pat someone on the head! 🫳"
+  },
+  {
+    "name": "marry",
+    "description": "Marriages: propose, status, divorce. 💍"
+  },
+  {
+    "name": "ttt",
+    "description": "Tic-tac-toe with another player. ⭕❌"
+  },
+  {
+    "name": "math",
+    "description": "Calculator — evaluate an expression."
+  },
+  {
+    "name": "raidmode",
+    "description": "Emergency block for new joins (raid)."
+  },
+  {
+    "name": "backup",
+    "description": "Server structure backup + safe restore."
+  },
+  {
+    "name": "heat",
+    "description": "Adaptive anti-spam (heat) — scoring with punishment."
+  },
+  {
+    "name": "panic",
+    "description": "PANIC MODE — server lockdown + join block."
+  },
+  {
+    "name": "imageonly",
+    "description": "Image-only channels (text gets deleted)."
+  },
+  {
+    "name": "streamsync",
+    "description": "Twitch schedule → Discord events."
+  },
+  {
+    "name": "liverole",
+    "description": "LIVE role for streamers."
+  },
+  {
+    "name": "vanityrole",
+    "description": "Role for a phrase/link in the status."
+  },
+  {
+    "name": "stocks",
+    "description": "Stock market — buy and sell virtual shares."
+  },
+  {
+    "name": "pet",
+    "description": "Pet — adopt, feed and collect gifts."
+  },
+  {
+    "name": "cards",
+    "description": "Collectible cards — pull and collect."
+  },
+  {
+    "name": "meme",
+    "description": "Generate a meme — text on a template."
+  }
+]

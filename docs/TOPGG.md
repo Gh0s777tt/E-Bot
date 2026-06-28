@@ -123,6 +123,18 @@ Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+## 🤖 Komendy (Commands)
+
+Na top.gg → **Commands** kliknij **Import** — zaciągnie komendy **automatycznie z Discorda** (warunek: globalna rejestracja `npm run deploy`, bez `DISCORD_DEV_GUILD_ID`; propagacja do ~1 h). Gdyby Import nie zadziałał, masz **gotową listę 1:1 z botem** (97 komend, EN+PL):
+- [`commands.md`](topgg/commands.md) — tabela do podglądu / ręcznego wklejenia,
+- [`commands.json`](topgg/commands.json) — `name → description` (EN).
+
+Źródło: `bot/src/i18n/commandDescriptions.mts` (ten sam tekst, który widzi Discord/top.gg).
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
 ## ✅ Checklist
 
 - [ ] Wpis utworzony na top.gg (Client ID = `1512758748761030677`)
