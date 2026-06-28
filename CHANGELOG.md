@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-601-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.531.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-602-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.532.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.532.0] — 🛡️ Klany: większa widoczność (info pokazuje rolę/kanał + „Klan tygodnia" w digescie)
+
+- `[#602]` 🛡️ **Widoczność klanów** — dwie powierzchnie pełniej pokazują klany: (1) `/clan info` wyświetla **rolę** (🎭) i **kanał** (📌) klanu, jeśli lider je ustawił (#598/#599) — emoji jako uniwersalna etykieta, wzmianki bez i18n; (2) tygodniowy **digest** dostał pole „🏆 Klan tygodnia" — najbogatszy klan serwera wg wspólnego banku (kosmetyczne wyróżnienie, **bez nagród coin → brak abuse'u**; reużywa otestowanej `sortClansByBank`). Domyka ostatni klan follow-up (recognition) bezpiecznie.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1084/1084** · `sync:check` — exit 0 (Node 26.4.0). Bez zmian schematu/i18n (info: emoji + wzmianki; digest: mono-PL jak reszta modułu).
 
 ## [0.531.0] — 🏆 Pety: ranking serwera (`/pet top`) — najsilniejsze pety
 

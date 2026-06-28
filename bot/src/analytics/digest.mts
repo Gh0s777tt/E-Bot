@@ -2,6 +2,7 @@
 // i wysyła embed na wybrany kanał. Dedup przez setting 'digest_last' (tag tygodnia).
 
 import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
+import { listClans, sortClansByBank } from '../economy/clans.mts';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
@@ -196,6 +197,9 @@ async function maybePost(client: Client): Promise<void> {
       `select=user_id,left_at&guild_id=eq.${guild.id}&joined_at=gte.${since}`,
     ).catch(() => [] as { user_id: string; left_at?: string | null }[]);
     const funnel = memberFunnel(joiners, new Set(ua.map((r) => r.user_id)));
+    // 🏆 Klan tygodnia: najbogatszy klan serwera wg wspólnego banku (kosmetyczne wyróżnienie, bez nagród
+    // → brak abuse'u). Reużywa otestowanej `sortClansByBank`.
+    const topClan = sortClansByBank(await listClans(guild.id))[0];
 
     const ch = await client.channels.fetch(c.channelId).catch(() => null);
     // Kanał musi należeć do TEGO serwera (config mógł zostać po przeniesieniu/zmianie).
@@ -253,6 +257,12 @@ async function maybePost(client: Client): Promise<void> {
         embed.addFields({
           name: '⭐ Najwyższa reputacja',
           value: `${topRep.name} — ${topRep.points} ⭐`,
+          inline: false,
+        });
+      if (topClan && topClan.bank > 0)
+        embed.addFields({
+          name: '🏆 Klan tygodnia',
+          value: `🛡️ **${topClan.name}** — 🏦 ${topClan.bank.toLocaleString('pl-PL')}`,
           inline: false,
         });
       await (ch as TextChannel).send({ embeds: [embed] }).catch(() => {});

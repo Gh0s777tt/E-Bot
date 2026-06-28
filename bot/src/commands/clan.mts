@@ -512,12 +512,20 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     rank: String(clanRankByBank(all, clan.id)),
     total: String(all.length),
   });
+  // Opcjonalne odznaki: rola (🎭) i kanał (📌) klanu, jeśli lider je ustawił (#598/#599). Emoji = etykieta
+  // uniwersalna (bez i18n); wzmianki renderują się w każdym języku.
+  const extra = [
+    clan.role_id ? `🎭 <@&${clan.role_id}>` : '',
+    clan.channel_id ? `📌 <#${clan.channel_id}>` : '',
+  ]
+    .filter(Boolean)
+    .join('   ');
   await interaction.reply({
     embeds: [
       new EmbedBuilder()
         .setColor(ACCENT)
         .setTitle(t(locale, 'clan.infoTitle', { name: clan.name }))
-        .setDescription(body),
+        .setDescription(extra ? `${body}\n${extra}` : body),
     ],
   });
 }
