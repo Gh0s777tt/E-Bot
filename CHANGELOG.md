@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-638-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.568.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-639-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.569.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.569.0] — 🌍 Wiki ×14: tłumaczenie interfejsu strony /wiki
+
+- `[#639]` 🌍 **Wiki (chrome) w 14 językach** — interfejs strony [`/wiki`](dashboard/app/wiki/page.tsx) (hero, spis treści, wprowadzenie, szybki start, panel, premium, FAQ, nagłówki tabel) przez `lt()` ×14 (klucze `wiki.*` w `landingI18n.ts`). **Katalog komend i modułów** (95 komend + 32 moduły) pozostaje po polsku jako kanon — nazwy komend są uniwersalne, a pełne tłumaczenie opisów/kroków ×14 to ~4000 ciągów (osobny duży zakres). `/wiki` jest teraz `async` i czyta język z `panel_lang`. Domyka tor tłumaczeń: landing + logowanie + wiki (chrome) ×14.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.568.0] — 🌍 Logowanie ×14: tłumaczenia ekranu logowania
 

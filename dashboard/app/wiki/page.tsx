@@ -1,5 +1,6 @@
 // Publiczne Wiki projektu (/wiki) — pełny przewodnik: funkcje, moduły (krok po kroku) i wszystkie
-// komendy, ze zrzutami. Renderowane bez panelowego chromu (Shell baruje /wiki). Treść z lib/wikiData.
+// komendy, ze zrzutami. Bez panelowego chromu (Shell baruje /wiki). Chrome i18n ×14 (lt), katalog
+// komend/modułów (lib/wikiData) pozostaje po polsku jako kanon.
 import {
   ArrowLeft,
   BookOpen,
@@ -24,6 +25,8 @@ import {
   Users,
 } from 'lucide-react';
 import { botInviteUrl } from '../../lib/invite';
+import { lt } from '../../lib/landingI18n';
+import { getPanelLocale } from '../../lib/serverPanelLocale';
 import { COMMAND_COUNT, COMMAND_GROUPS, MODULE_COUNT, MODULE_GROUPS } from '../../lib/wikiData';
 
 export const dynamic = 'force-dynamic';
@@ -44,8 +47,17 @@ const ICONS: Record<string, typeof Bot> = {
   Ticket,
 };
 
-export default function WikiPage() {
+export default async function WikiPage() {
   const invite = botInviteUrl();
+  const lang = await getPanelLocale();
+  const t = (k: string) => lt(lang, k);
+  const quick = ['q1', 'q2', 'q3', 'q4', 'q5'];
+  const cards: [string, string][] = [
+    ['wiki.c1t', 'wiki.c1d'],
+    ['wiki.c2t', 'wiki.c2d'],
+    ['wiki.c3t', 'wiki.c3d'],
+  ];
+  const faqs = ['faq1', 'faq2', 'faq3', 'faq4'];
   return (
     <div className="relative z-10 min-h-screen">
       {/* NAV */}
@@ -61,7 +73,7 @@ export default function WikiPage() {
               E-<span className="text-accent">BOT</span>
             </span>
             <span className="ms-1 rounded-md border border-line px-2 py-0.5 text-xs text-muted">
-              Wiki
+              {t('nav.wiki')}
             </span>
           </a>
           <div className="flex items-center gap-2.5">
@@ -69,7 +81,7 @@ export default function WikiPage() {
               href="/"
               className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-sm text-muted transition hover:text-white"
             >
-              <ArrowLeft size={15} /> Strona główna
+              <ArrowLeft size={15} /> {t('wiki.back')}
             </a>
             <a
               href={invite}
@@ -77,7 +89,7 @@ export default function WikiPage() {
               rel="noreferrer"
               className="hidden rounded-lg bg-accent px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-accent-hover sm:inline-block"
             >
-              Dodaj do Discorda
+              {t('cta.addBot')}
             </a>
           </div>
         </nav>
@@ -86,24 +98,21 @@ export default function WikiPage() {
       {/* HERO */}
       <section className="mx-auto max-w-6xl px-5 pb-6 pt-12">
         <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
-          <BookOpen size={13} /> Dokumentacja
+          <BookOpen size={13} /> {t('wiki.tag')}
         </span>
         <h1 className="mt-4 font-display text-5xl tracking-wide text-white">
-          Wiki <span className="text-accent text-glow">E-BOT</span>
+          {t('nav.wiki')} <span className="text-accent text-glow">E-BOT</span>
         </h1>
-        <p className="mt-3 max-w-2xl text-lg text-muted">
-          Kompletny przewodnik po bocie i panelu — od pierwszego uruchomienia, przez konfigurację
-          każdego modułu krok po kroku, po pełną listę komend.
-        </p>
+        <p className="mt-3 max-w-2xl text-lg text-muted">{t('wiki.heroSub')}</p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
           <span className="rounded-lg border border-line bg-card px-3 py-1.5">
-            <b className="text-accent">{COMMAND_COUNT}+</b> komend
+            <b className="text-accent">{COMMAND_COUNT}+</b> {t('wiki.sCmds')}
           </span>
           <span className="rounded-lg border border-line bg-card px-3 py-1.5">
-            <b className="text-accent">{MODULE_COUNT}+</b> modułów
+            <b className="text-accent">{MODULE_COUNT}+</b> {t('wiki.sModules')}
           </span>
           <span className="rounded-lg border border-line bg-card px-3 py-1.5">
-            <b className="text-accent">14</b> języków panelu
+            <b className="text-accent">14</b> {t('wiki.sLang')}
           </span>
         </div>
       </section>
@@ -112,21 +121,21 @@ export default function WikiPage() {
         {/* SPIS TREŚCI */}
         <aside className="hidden lg:block">
           <nav className="sticky top-20 space-y-1 text-sm">
-            <TocLink href="#wprowadzenie" icon={<Info size={14} />} label="Wprowadzenie" />
-            <TocLink href="#start" icon={<Rocket size={14} />} label="Szybki start" />
-            <TocLink href="#panel" icon={<LayoutDashboard size={14} />} label="Panel i logowanie" />
+            <TocLink href="#wprowadzenie" icon={<Info size={14} />} label={t('wiki.intro')} />
+            <TocLink href="#start" icon={<Rocket size={14} />} label={t('wiki.start')} />
+            <TocLink href="#panel" icon={<LayoutDashboard size={14} />} label={t('wiki.panel')} />
             <div className="px-3 pt-3 text-[11px] uppercase tracking-wider text-muted/60">
-              Moduły
+              {t('wiki.modules')}
             </div>
             {MODULE_GROUPS.map((g) => (
               <TocLink key={g.id} href={`#m-${g.id}`} label={g.title} />
             ))}
             <div className="px-3 pt-3 text-[11px] uppercase tracking-wider text-muted/60">
-              Reszta
+              {t('wiki.rest')}
             </div>
-            <TocLink href="#komendy" icon={<Terminal size={14} />} label="Wszystkie komendy" />
-            <TocLink href="#premium" icon={<Sparkles size={14} />} label="Premium i limity" />
-            <TocLink href="#faq" icon={<BookOpen size={14} />} label="FAQ" />
+            <TocLink href="#komendy" icon={<Terminal size={14} />} label={t('wiki.commands')} />
+            <TocLink href="#premium" icon={<Sparkles size={14} />} label={t('wiki.premium')} />
+            <TocLink href="#faq" icon={<BookOpen size={14} />} label={t('wiki.faq')} />
           </nav>
         </aside>
 
@@ -134,22 +143,13 @@ export default function WikiPage() {
         <main className="min-w-0 space-y-14">
           {/* Wprowadzenie */}
           <section id="wprowadzenie" className="scroll-mt-20">
-            <H2 icon={<Info size={20} />}>Wprowadzenie</H2>
-            <p className="mt-3 text-muted">
-              <b className="text-white">E-BOT (GH0ST EMPIRE)</b> to wielomodułowy bot Discord z
-              panelem sterowania w 14 językach. Łączy moderację i bezpieczeństwo, ekonomię i
-              leveling, powiadomienia live, AI oraz bibliotekę gier „GameVault" — wszystko
-              konfigurowane bez kodu, z poziomu przeglądarki.
-            </p>
+            <H2 icon={<Info size={20} />}>{t('wiki.intro')}</H2>
+            <p className="mt-3 text-muted">{t('wiki.introP')}</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {[
-                ['Bez kodu', 'Konfiguracja w panelu, z podglądem na żywo.'],
-                ['Modułowo', 'Włączasz tylko to, czego używasz.'],
-                ['14 języków', 'Panel i bot mówią w języku Twojej społeczności.'],
-              ].map(([t, d]) => (
-                <div key={t} className="rounded-xl border border-line bg-card p-4">
-                  <div className="font-semibold text-white">{t}</div>
-                  <div className="mt-1 text-sm text-muted">{d}</div>
+              {cards.map(([tk, dk]) => (
+                <div key={tk} className="rounded-xl border border-line bg-card p-4">
+                  <div className="font-semibold text-white">{t(tk)}</div>
+                  <div className="mt-1 text-sm text-muted">{t(dk)}</div>
                 </div>
               ))}
             </div>
@@ -157,37 +157,16 @@ export default function WikiPage() {
 
           {/* Szybki start */}
           <section id="start" className="scroll-mt-20">
-            <H2 icon={<Rocket size={20} />}>Szybki start</H2>
+            <H2 icon={<Rocket size={20} />}>{t('wiki.start')}</H2>
             <ol className="mt-4 space-y-3">
-              {[
-                [
-                  'Dodaj bota do serwera',
-                  'Kliknij „Dodaj do Discorda" i wybierz serwer (potrzebne uprawnienia administratora).',
-                ],
-                [
-                  'Zaloguj się do panelu',
-                  'Wejdź na /login i autoryzuj się przez Discord — zobaczysz tylko swoje serwery.',
-                ],
-                [
-                  'Uruchom Architekta serwera',
-                  'W /setup wybierz preset (streamer / gaming / community) albo opisz serwer dla AI.',
-                ],
-                [
-                  'Włącz moduły',
-                  'W panelu włączaj kolejne moduły (moderacja, leveling, powitania…) i zapisuj zmiany.',
-                ],
-                [
-                  'Opublikuj panele',
-                  'Komendami /ticketpanel, /rolemenu, /verifypanel itd. wystaw panele na kanałach.',
-                ],
-              ].map(([t, d], i) => (
-                <li key={t} className="flex gap-4 rounded-xl border border-line bg-card p-4">
+              {quick.map((q, i) => (
+                <li key={q} className="flex gap-4 rounded-xl border border-line bg-card p-4">
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent text-sm font-bold text-white">
                     {i + 1}
                   </span>
                   <div>
-                    <div className="font-semibold text-white">{t}</div>
-                    <div className="mt-0.5 text-sm text-muted">{d}</div>
+                    <div className="font-semibold text-white">{t(`wiki.${q}t`)}</div>
+                    <div className="mt-0.5 text-sm text-muted">{t(`wiki.${q}d`)}</div>
                   </div>
                 </li>
               ))}
@@ -196,27 +175,23 @@ export default function WikiPage() {
 
           {/* Panel i logowanie */}
           <section id="panel" className="scroll-mt-20">
-            <H2 icon={<LayoutDashboard size={20} />}>Panel i logowanie</H2>
-            <p className="mt-3 text-muted">
-              Logowanie odbywa się przez Discord (OAuth). Po zalogowaniu trafiasz na Pulpit ze
-              statystykami serwera, zdrowiem konfiguracji i szybkimi akcjami. Z lewej nawigacja do
-              wszystkich modułów.
-            </p>
+            <H2 icon={<LayoutDashboard size={20} />}>{t('wiki.panel')}</H2>
+            <p className="mt-3 text-muted">{t('wiki.panelP')}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <Figure
                 src="/screens/login.png"
-                alt="Ekran logowania"
-                caption="Logowanie przez Discord"
+                alt={t('wiki.capLogin')}
+                caption={t('wiki.capLogin')}
               />
               <Figure
                 src="/screens/dashboard.png"
-                alt="Pulpit panelu"
-                caption="Pulpit dowodzenia"
+                alt={t('wiki.capDash')}
+                caption={t('wiki.capDash')}
               />
             </div>
           </section>
 
-          {/* Moduły */}
+          {/* Moduły (katalog — PL) */}
           {MODULE_GROUPS.map((g) => {
             const Icon = ICONS[g.icon] ?? Info;
             return (
@@ -262,14 +237,10 @@ export default function WikiPage() {
             );
           })}
 
-          {/* Komendy */}
+          {/* Komendy (katalog — PL) */}
           <section id="komendy" className="scroll-mt-20">
-            <H2 icon={<Terminal size={20} />}>Wszystkie komendy</H2>
-            <p className="mt-3 text-muted">
-              Ponad {COMMAND_COUNT} komend slash pogrupowanych tematycznie. Subkomendy podane po
-              kropce. W Discordzie wpisz <code className="text-accent">/help</code>, aby przeszukać
-              je na żywo.
-            </p>
+            <H2 icon={<Terminal size={20} />}>{t('wiki.commands')}</H2>
+            <p className="mt-3 text-muted">{t('wiki.cmdsP')}</p>
             <div className="mt-5 space-y-8">
               {COMMAND_GROUPS.map((g) => {
                 const Icon = ICONS[g.icon] ?? Info;
@@ -282,10 +253,10 @@ export default function WikiPage() {
                       <table className="w-full text-start text-sm">
                         <thead className="bg-surface/60 text-xs uppercase tracking-wide text-muted">
                           <tr>
-                            <th className="px-3 py-2 text-start">Komenda</th>
-                            <th className="px-3 py-2 text-start">Opis</th>
+                            <th className="px-3 py-2 text-start">{t('wiki.thCmd')}</th>
+                            <th className="px-3 py-2 text-start">{t('wiki.thDesc')}</th>
                             <th className="hidden px-3 py-2 text-start md:table-cell">
-                              Subkomendy
+                              {t('wiki.thSub')}
                             </th>
                           </tr>
                         </thead>
@@ -312,28 +283,33 @@ export default function WikiPage() {
 
           {/* Premium i limity */}
           <section id="premium" className="scroll-mt-20">
-            <H2 icon={<Sparkles size={20} />}>Premium i limity</H2>
-            <p className="mt-3 text-muted">
-              Wersja darmowa jest w pełni użyteczna. Plan Premium podnosi limity liczby obiektów i
-              odblokowuje dodatkowe pluginy. Limity obowiązują tylko przy włączonym billingu.
-            </p>
+            <H2 icon={<Sparkles size={20} />}>{t('wiki.premium')}</H2>
+            <p className="mt-3 text-muted">{t('wiki.premP')}</p>
             <div className="mt-4 overflow-hidden rounded-xl border border-line">
               <table className="w-full text-start text-sm">
                 <thead className="bg-surface/60 text-xs uppercase tracking-wide text-muted">
                   <tr>
-                    <th className="px-3 py-2 text-start">Funkcja</th>
-                    <th className="px-3 py-2 text-start">Free</th>
-                    <th className="px-3 py-2 text-start">Premium</th>
+                    <th className="px-3 py-2 text-start">{t('wiki.thFeat')}</th>
+                    <th className="px-3 py-2 text-start">{t('wiki.thFree')}</th>
+                    <th className="px-3 py-2 text-start">{t('wiki.thPro')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
+                    ['mod.counters', '3', '20'],
+                    ['mod.scheduled', '5', '50'],
+                    ['mod.reactionRoles', '10', '100'],
+                  ].map(([fk, free, pro]) => (
+                    <tr key={fk} className="border-t border-line/60">
+                      <td className="px-3 py-2 text-white/85">{t(fk)}</td>
+                      <td className="px-3 py-2 text-muted">{free}</td>
+                      <td className="px-3 py-2 font-semibold text-accent">{pro}</td>
+                    </tr>
+                  ))}
+                  {[
                     ['Komendy własne', '10', '50'],
                     ['Auto-respondery', '10', '100'],
-                    ['Liczniki kanałów', '3', '20'],
                     ['Opcje menu ról', '5', '25'],
-                    ['Reakcje-role', '10', '100'],
-                    ['Zaplanowane posty', '5', '50'],
                     ['Przedmioty w sklepie', '15', '150'],
                   ].map(([f, free, pro]) => (
                     <tr key={f} className="border-t border-line/60">
@@ -349,29 +325,14 @@ export default function WikiPage() {
 
           {/* FAQ */}
           <section id="faq" className="scroll-mt-20">
-            <H2 icon={<BookOpen size={20} />}>FAQ</H2>
+            <H2 icon={<BookOpen size={20} />}>{t('wiki.faq')}</H2>
             <div className="mt-4 space-y-3">
-              {[
-                [
-                  'Czy bot jest darmowy?',
-                  'Tak — pełny zestaw modułów działa za darmo. Premium tylko podnosi limity i odblokowuje dodatki.',
-                ],
-                [
-                  'W jakich językach działa panel?',
-                  '14 języków (PL, EN, DE, ES, IT, FR, PT, ZH, KO, RU, UK, JA, AR z RTL, ID).',
-                ],
-                [
-                  'Czy potrzebuję uprawnień administratora?',
-                  'Do dodania bota i konfiguracji tak — panel pokazuje tylko serwery, którymi zarządzasz.',
-                ],
-                [
-                  'Gdzie zgłosić problem?',
-                  'Napisz na Ghostt77@empire-forge.com lub użyj modmaila na serwerze.',
-                ],
-              ].map(([q, a]) => (
-                <details key={q} className="rounded-xl border border-line bg-card p-4">
-                  <summary className="cursor-pointer font-semibold text-white">{q}</summary>
-                  <p className="mt-2 text-sm text-muted">{a}</p>
+              {faqs.map((f) => (
+                <details key={f} className="rounded-xl border border-line bg-card p-4">
+                  <summary className="cursor-pointer font-semibold text-white">
+                    {t(`wiki.${f}q`)}
+                  </summary>
+                  <p className="mt-2 text-sm text-muted">{t(`wiki.${f}a`)}</p>
                 </details>
               ))}
             </div>
@@ -385,13 +346,13 @@ export default function WikiPage() {
           <span>© 2026 E-BOT · GH0ST EMPIRE</span>
           <nav className="flex flex-wrap items-center gap-4">
             <a href="/" className="transition hover:text-white">
-              Strona główna
+              {t('wiki.back')}
             </a>
             <a href="/p/regulamin" className="transition hover:text-white">
-              Regulamin
+              {t('foot.terms')}
             </a>
             <a href="/p/polityka-prywatnosci" className="transition hover:text-white">
-              Polityka prywatności
+              {t('foot.privacy')}
             </a>
           </nav>
         </div>
