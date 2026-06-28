@@ -21,13 +21,18 @@ export default function Shell({
   children,
   inviteUrl,
   isAdmin,
+  loggedIn,
 }: {
   children: ReactNode;
   inviteUrl: string;
   isAdmin: boolean;
+  loggedIn: boolean;
 }) {
   const pathname = usePathname();
-  if (pathname.startsWith('/p/')) return <main className="min-h-screen">{children}</main>;
+  // Strony publiczne bez panelowego chromu: profile /p/*, wiki projektu oraz landing (gość na root).
+  const bare =
+    pathname.startsWith('/p/') || pathname.startsWith('/wiki') || (pathname === '/' && !loggedIn);
+  if (bare) return <main className="min-h-screen">{children}</main>;
   return (
     <LangProvider>
       <ViewModeProvider>

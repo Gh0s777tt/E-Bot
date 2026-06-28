@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-632-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.562.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-633-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.563.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.563.0] — 🚀 Landing page (root dla gości) w stylu mee6, motyw czerń/czerwień
+
+- `[#633]` 🚀 **Publiczny landing na root** — niezalogowani goście widzą dopracowaną stronę powitalną zamiast od razu ekranu logowania; zalogowani → panel bez zmian. Komponent [`Landing.tsx`](dashboard/components/Landing.tsx): sticky-nav, hero z CTA „Dodaj do Discorda" + „Otwórz panel", pasek statystyk (~95 komend · 59 usług · 14 języków · 8 faz), 6 naprzemiennych sekcji funkcji (moderacja · ekonomia · leveling · live · AI · GameVault), siatka 16 modułów, sekcja panelu i18n, CTA Premium oraz rozbudowana stopka z linkiem do `/wiki`. Motyw Obsidian/Crimson, responsywny, treść PL (i18n później — jak `/p/about`).
+  - **Routing:** `proxy.ts` wpuszcza gościa na `/` i `/wiki` (bez redirectu na `/login`); `page.tsx` rozgałęzia (sesja → Pulpit, gość → Landing); `Shell` renderuje root-gościa i `/wiki` bez panelowego chromu (nowa flaga `loggedIn` z `layout.tsx`).
+  - **Realne zrzuty:** 8 zrzutów panelu ([`public/screens/*.png`](dashboard/public/screens)) wpiętych w hero i sekcje funkcji.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.562.0] — 🔔 Limity planów: czytelny komunikat przy przekroczeniu (zamiast „Błąd zapisu")
 

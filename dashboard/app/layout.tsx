@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 import Shell from '../components/Shell';
 import { botInviteUrl } from '../lib/invite';
 import { tp } from '../lib/panelI18n';
-import { isInstanceAdmin } from '../lib/panelRoles';
+import { currentSession, isInstanceAdmin } from '../lib/panelRoles';
 import { getPanelLocale } from '../lib/serverPanelLocale';
 
 const display = Oswald({
@@ -34,6 +34,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   // Czy bieżący użytkownik to admin instancji — decyduje o widoczności linków „dev"
   // (audyt/diagnostyka/integracje) w nawigacji i palecie komend (server-side, anty-podejrzenie).
   const isAdmin = await isInstanceAdmin();
+  // Gość (brak sesji) widzi landing na root bez panelowego chromu — Shell decyduje po tej fladze.
+  const loggedIn = !!(await currentSession());
   return (
     <html
       lang={lang}
@@ -53,7 +55,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         />
       </head>
       <body className="bg-bg font-sans text-text antialiased">
-        <Shell inviteUrl={botInviteUrl()} isAdmin={isAdmin}>
+        <Shell inviteUrl={botInviteUrl()} isAdmin={isAdmin} loggedIn={loggedIn}>
           {children}
         </Shell>
       </body>

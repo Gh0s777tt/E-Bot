@@ -2,6 +2,7 @@ import { Clock, Gamepad2, Layers, Plug, UserPlus } from 'lucide-react';
 import AntiraidAlarm from '../components/AntiraidAlarm';
 import GameCard from '../components/GameCard';
 import HealthScoreCard from '../components/HealthScoreCard';
+import Landing from '../components/Landing';
 import LiveServerTiles from '../components/LiveServerTiles';
 import QuickActionsCard from '../components/QuickActionsCard';
 import ServerGrowthCard from '../components/ServerGrowthCard';
@@ -13,6 +14,7 @@ import { getAntiraidState, getServerHistory } from '../lib/insights';
 import { getIntegrations } from '../lib/integrations';
 import { botInviteUrl } from '../lib/invite';
 import { tp } from '../lib/panelI18n';
+import { currentSession } from '../lib/panelRoles';
 import { getPanelLocale } from '../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
@@ -25,6 +27,10 @@ const PLATFORM_LABEL: Record<string, string> = {
 };
 
 export default async function OverviewPage() {
+  // Gość (brak sesji) → publiczny landing zamiast panelu (Shell renderuje root bez chromu).
+  const session = await currentSession();
+  if (!session) return <Landing inviteUrl={botInviteUrl()} />;
+
   const [stats, games, src, integrations, checklist, history, antiraid, health, lang] =
     await Promise.all([
       getStats(),

@@ -7,6 +7,8 @@ const SESSION_COOKIE = 'ebot_session';
 function isOpen(pathname: string): boolean {
   return (
     pathname === '/login' ||
+    pathname === '/' || // root: gość → landing (page.tsx rozgałęzia), zalogowany → panel
+    pathname.startsWith('/wiki') || // publiczne wiki projektu (z linkiem w stopce)
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/img') ||
     pathname.startsWith('/api/twitch') || // webhook EventSub — Twitch woła bez sesji (auth = HMAC)
