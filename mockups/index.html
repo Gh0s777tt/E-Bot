@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Forge — kierunki redesignu</title>
+    <style>
+      :root { --accent: #e50914; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Segoe UI', system-ui, sans-serif; background: #08080a; color: #ededf2;
+        background-image: radial-gradient(50vw 40vh at 50% -10%, rgba(229,9,20,.14), transparent 70%);
+        min-height: 100vh; padding: 56px 24px; }
+      .wrap { max-width: 920px; margin: 0 auto; }
+      h1 { font-size: 34px; letter-spacing: .02em; }
+      h1 span { color: var(--accent); }
+      .lead { color: #9a9aa6; margin-top: 8px; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+      a.card { display: block; text-decoration: none; color: inherit; background: #121217; border: 1px solid #232329; border-radius: 16px; padding: 22px; transition: .15s; }
+      a.card:hover { transform: translateY(-3px); border-color: rgba(229,9,20,.5); box-shadow: 0 18px 40px -24px #000; }
+      .num { width: 34px; height: 34px; border-radius: 9px; background: rgba(229,9,20,.12); color: var(--accent); display: grid; place-items: center; font-weight: 800; }
+      .card h2 { font-size: 18px; margin: 14px 0 6px; }
+      .card p { color: #9a9aa6; font-size: 13.5px; line-height: 1.55; }
+      .card .go { color: var(--accent); font-weight: 700; font-size: 13px; margin-top: 14px; display: inline-block; }
+      .foot { color: #6b6b76; font-size: 12px; margin-top: 28px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>E-<span>Forge</span> — kierunki redesignu</h1>
+      <p class="lead">3 wyraźnie różne kierunki na tych samych ekranach (pulpit · automod · leveling · stany). Wybierz jeden — wtedy wdrożę go na cały panel.</p>
+      <div class="grid">
+        <a class="card" href="kierunek-1-obsidian-console.html">
+          <div class="num">1</div>
+          <h2>Obsidian Console</h2>
+          <p>Gęsty, profesjonalny, „dla operatora". Hairline'owe ramki, kompakt, tabele z zebrą, czerwień jako akcent danych.</p>
+          <span class="go">Otwórz →</span>
+        </a>
+        <a class="card" href="kierunek-2-crimson-aurora.html">
+          <div class="num">2</div>
+          <h2>Crimson Aurora</h2>
+          <p>Przestronny, premium, szkło + poświata. Duże karty, gradienty, najbliższy klimatowi landing/login/wiki.</p>
+          <span class="go">Otwórz →</span>
+        </a>
+        <a class="card" href="kierunek-3-forge-slate.html">
+          <div class="num">3</div>
+          <h2>Forge Slate</h2>
+          <p>Dwutonowy, edytorialny, płaski. Uniesione szare panele, lewe paski-akcenty, czerwień oszczędnie, dużo oddechu.</p>
+          <span class="go">Otwórz →</span>
+        </a>
+      </div>
+      <p class="foot">Statyczne mockupy · realne etykiety z panelu E-Forge · stany pusty/ładowanie/błąd w każdym. Funkcjonalność bez zmian — to tylko prezentacja.</p>
+    </div>
+  </body>
+</html>

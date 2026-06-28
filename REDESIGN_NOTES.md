@@ -42,7 +42,64 @@ pozostałe `GH0ST`→`E-Forge`, na **kuratorowanej** liście plików (poniżej).
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## B–E. Diagnoza / System / Mockupy / Wdrożenie
+**Zakres (ustalony):** modernizuję NASZ panel E‑Forge (realny kod). Zrzuty z folderu = referencja
+jakości/UX + checklista ekranów. Kolorystyka czerń/czerwień jak landing/login/wiki. 100% funkcji zostaje.
 
-> ⏸️ Oczekuje na ustalenie zakresu (zrzuty pokazują INNY dashboard niż nasz panel — patrz pytanie w czacie),
-> a następnie na wybór kierunku z mockupów (Część D). Sekcje uzupełnię po decyzji.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## B. Diagnoza obecnego UI (nasz panel)
+
+**Mocne strony (zostają):** spójny dark + krwista czerwień, karty `panel-glow`, sidebar z grupami,
+focus‑visible w `globals.css`, tryb kompaktowy.
+
+**Problemy do naprawienia:**
+1. **Hierarchia** — Pulpit upakowany sekcjami o równej wadze (statystyki + live + health + szybkie akcje
+   + wzrost + anti‑raid + checklista + platformy + integracje + gry). Brak „najważniejsze najpierw".
+2. **Gęstość / oddech** — sekcje ciasno; nagłówki sekcji małe, uppercase, słaba separacja.
+3. **Typografia** — mała różnica skali nagłówek↔treść; nadużycie `uppercase tracking` (męczy, czyt. < AA).
+4. **Tabele/listy** — gęste, bez zebra/hover; na wąskim ekranie chowają kolumny (`md:table-cell`) zamiast reflow.
+5. **Stany** — brak spójnych stanów pustych/ładowania/błędu (puste = krótki tekst, brak skeletonów, błąd generyczny).
+6. **Formularze** — „ściana pól", słabe grupowanie i opisy, brak wizualnej walidacji inline.
+7. **Kolor bez pełnego systemu** — akcent + zielone/pomarańczowe statusy ad‑hoc; brak tokenów semantycznych.
+8. **Nawigacja** — długi sidebar; aktywny stan słabo zaznaczony; topbar gęsty (KOMPAKT/AA/język).
+9. **Dostępność** — `muted` na ciemnym bywa < WCAG AA; teksty `[11px]` uppercase nisko‑kontrastowe.
+
+**Inwentarz ekranów (z folderu = checklista; mapowanie na nasze trasy):** Kokpit→`/` ·
+Ogólne/levels/Karta poziomu/Role za poziom/Boostery XP/XP {Głos,Reakcja,Wiadomości}→`/levels` ·
+zasady automodu/Lista Ignorowanych→`/moderation` · Logi Moderacji→`/logging` · weryfikacja→`/security` ·
+Welcom/Wiadomość powitalna/pożegnalna/Role autonadawane/Powiadomienie o wzmocnieniu→`/welcome` ·
+Reaction roles→`/roles` · temp voice→`/engagement` · Reminders/giveaways/Ankiety/confession/FAQ/
+Przypięte/Annoucment→`/scheduled`,`/responder`,`/engagement` · Kreator Embedów/Message Builder→Message Studio ·
+Powiadomienia {YT,darmowe gry}→`/notifications`,`/gaming` · AI Roleplay→`/ai`.
+Nasze dodatkowo (zostają): GameVault/`/library`, ekonomia/`/economy`, klany, marketplace, statystyki.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## C. System (tokeny i zasady)
+
+**Kolory (bazowo z `globals.css`, sformalizowane + semantyczne):**
+`--bg #08080a` · `--surface #0e0e12` · `--card #121217` · `--elevated #1b1b21` · `--line #232329` ·
+`--text #ededf2` · `--muted #9a9aa6` (podbity kontrast do AA). Akcent **crimson** `229 9 20`
+(hover `244 6 18`, dark `139 0 0`). **Semantyka (nowe tokeny):** success `#3fb950`, warn `#f0a500`,
+danger = accent, info `#5aa2ff`.
+
+**Typografia:** display = Oswald (h1/h2), body = Montserrat. Skala 30/24/20/16/14/12; hierarchia przez
+rozmiar+wagę, mniej `uppercase`. **Odstępy:** 4·8·12·16·20·24·32·48 (gęściej w danych, luźniej między sekcjami).
+**Promienie:** 8/12/16/24/pill. **Cienie:** `glow` (accent), `depth`. **Stany:** hover (lift ‑2px / border accent),
+focus (ring accent), disabled (opacity .5).
+
+**Komponenty (jeden język):** przyciski (primary crimson / secondary outline / ghost / danger),
+pola (bg elevated, focus accent), karty (`panel-glow`), tabele (zebra+hover, sticky header, reflow→karty na mobile),
+nawigacja (sidebar z grupami + aktywny „rail"), modal, toast, oraz spójne **stany pusty/ładowanie/błąd**.
+**Układ:** sidebar (zwijalny) + treść max‑width, siatka, dane grupowane w karty z czytelnym nagłówkiem sekcji.
+**Cel estetyczny:** „Obsidian / Crimson command console" — premium, ciemny, krwiste akcenty, szkło + subtelna siatka.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## D. Mockupy — ⏸️ DO WYBORU (czekam na decyzję)
+
+3 wyraźnie różne kierunki w `./mockups/` (samodzielne HTML, otwórz w przeglądarce). Każdy: pulpit,
+gęsty widok (automod), formularz (leveling) + stany pusty/ładowanie/błąd. Realne etykiety z naszego panelu.
+**Nie wdrażam nic na całość przed Twoim wyborem.**
+
+## E. Wdrożenie — po akceptacji kierunku.

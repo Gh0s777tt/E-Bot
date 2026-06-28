@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Forge — Kierunek 3: Forge Slate</title>
+    <style>
+      /* ── Kierunek 3: „Forge Slate" — dwutonowy (uniesione szare panele), edytorialny, płaski. ── */
+      :root {
+        --bg: #0a0b0d; --slate: #16181d; --slate2: #1c1f26; --line: #2a2e37;
+        --text: #eceef2; --muted: #969aa6; --accent: #e50914; --soft: rgba(229,9,20,.1);
+        --success: #46c46a; --warn: #e8a93b; --r: 14px;
+        --font: 'Segoe UI', system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14.5px; line-height: 1.5; }
+      .app { display: grid; grid-template-columns: 238px 1fr; min-height: 100vh; }
+      .side { background: var(--slate); border-right: 1px solid var(--line); padding: 16px 12px; position: sticky; top: 0; height: 100vh; overflow: auto; }
+      .brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 16px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+      .logo { width: 34px; height: 34px; border-radius: 9px; background: var(--accent); display: grid; place-items: center; font-weight: 800; color: #fff; }
+      .brand b { font-size: 18px; letter-spacing: .03em; }
+      .grp { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: #6b6f7a; padding: 14px 10px 5px; }
+      .nav a { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 9px; color: var(--muted); text-decoration: none; font-size: 14px; }
+      .nav a:hover { background: var(--slate2); color: var(--text); }
+      .nav a.on { color: #fff; background: var(--slate2); box-shadow: inset 3px 0 0 var(--accent); }
+      .ico { width: 16px; height: 16px; border-radius: 4px; background: currentColor; opacity: .5; }
+      .top { display: flex; align-items: center; gap: 12px; padding: 13px 28px; background: var(--bg); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+      .srv { display: flex; align-items: center; gap: 8px; background: var(--slate); border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; font-weight: 600; }
+      .srv .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+      .search { flex: 1; max-width: 400px; background: var(--slate); border: 1px solid var(--line); border-radius: 9px; padding: 9px 13px; color: var(--muted); }
+      .sp { flex: 1; }
+      .chip { background: var(--slate); border: 1px solid var(--line); border-radius: 9px; padding: 7px 11px; color: var(--muted); font-size: 13px; }
+      .av { width: 34px; height: 34px; border-radius: 9px; background: var(--slate2); border: 1px solid var(--line); }
+      main { padding: 24px 28px 70px; max-width: 1180px; }
+      .kicker { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+      .h1 { font-size: 28px; font-weight: 800; margin-top: 4px; }
+      .sub { color: var(--muted); margin-top: 4px; }
+      .row { display: grid; gap: 16px; }
+      .cards4 { grid-template-columns: repeat(4, 1fr); }
+      .c2 { grid-template-columns: 1.4fr 1fr; }
+      .card { background: var(--slate); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; }
+      .card.rail { box-shadow: inset 3px 0 0 var(--accent); }
+      .stat .k { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+      .stat .v { font-size: 30px; font-weight: 800; margin-top: 6px; }
+      .stat .d { font-size: 12px; color: var(--success); margin-top: 4px; }
+      .sech { margin: 32px 0 14px; }
+      .sech .kicker { display: block; margin-bottom: 3px; }
+      .sech .hr { display: flex; align-items: center; justify-content: space-between; }
+      .sech h2 { font-size: 19px; font-weight: 800; }
+      .btn { border: 0; border-radius: 10px; padding: 9px 16px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+      .btn.p { background: var(--accent); color: #fff; }
+      .btn.s { background: var(--slate2); color: var(--text); border: 1px solid var(--line); }
+      .ring { display: flex; align-items: center; gap: 20px; }
+      .ring .n { font-size: 44px; font-weight: 800; }
+      .ring .n small { font-size: 15px; color: var(--muted); font-weight: 600; }
+      .bars { flex: 1; display: grid; gap: 10px; }
+      .bar { font-size: 13px; color: var(--muted); }
+      .bar .lbl { display: flex; justify-content: space-between; margin-bottom: 4px; }
+      .track { height: 7px; background: var(--slate2); border-radius: 5px; overflow: hidden; }
+      .fill { height: 100%; background: var(--accent); border-radius: 5px; }
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .tog { background: var(--slate); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; }
+      .tog .th { display: flex; align-items: center; justify-content: space-between; }
+      .tog h3 { font-size: 15px; }
+      .tog p { color: var(--muted); font-size: 13px; margin: 8px 0 14px; flex: 1; }
+      .sw { width: 40px; height: 23px; border-radius: 99px; background: var(--slate2); border: 1px solid var(--line); position: relative; }
+      .sw.on { background: var(--accent); border-color: var(--accent); }
+      .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: #fff; transition: .15s; }
+      .sw.on::after { left: 19px; }
+      .lk { color: var(--accent); font-weight: 700; font-size: 13px; align-self: flex-start; }
+      .field { margin-bottom: 16px; }
+      .field label { display: block; font-weight: 700; margin-bottom: 4px; }
+      .field .hint { color: var(--muted); font-size: 12.5px; margin-bottom: 7px; }
+      .inp { width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; color: var(--text); }
+      .inp:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px var(--soft); }
+      table { width: 100%; border-collapse: collapse; }
+      th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--line); }
+      td { padding: 12px; border-bottom: 1px solid var(--line); }
+      .tag { font-size: 12px; padding: 3px 10px; border-radius: 7px; background: var(--slate2); border: 1px solid var(--line); color: var(--muted); }
+      .states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .state { background: var(--slate); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; text-align: center; color: var(--muted); }
+      .sk { height: 13px; border-radius: 7px; background: linear-gradient(90deg, var(--slate2), #2f333d, var(--slate2)); background-size: 200% 100%; animation: sh 1.4s infinite; margin: 9px 0; }
+      @keyframes sh { to { background-position: -200% 0; } }
+      .state.err { box-shadow: inset 3px 0 0 var(--accent); }
+      .note { margin: 0 28px 16px; padding: 11px 15px; background: var(--soft); border: 1px solid rgba(229,9,20,.35); border-radius: 11px; font-size: 13px; color: #ffb9bd; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">E</div><b>E-Forge</b></div>
+        <div class="grp">Pulpit</div>
+        <nav class="nav"><a class="on"><span class="ico"></span> Przegląd</a><a><span class="ico"></span> Statystyki</a><a><span class="ico"></span> Marketplace</a></nav>
+        <div class="grp">Moderacja</div>
+        <nav class="nav"><a><span class="ico"></span> Automod</a><a><span class="ico"></span> Anti-raid</a><a><span class="ico"></span> Logi moderacji</a><a><span class="ico"></span> Weryfikacja</a></nav>
+        <div class="grp">Społeczność</div>
+        <nav class="nav"><a><span class="ico"></span> Powitania</a><a><span class="ico"></span> Reaction-role</a><a><span class="ico"></span> Tickety</a></nav>
+        <div class="grp">Progresja</div>
+        <nav class="nav"><a><span class="ico"></span> Leveling</a><a><span class="ico"></span> Ekonomia</a></nav>
+        <div class="grp">Live &amp; AI</div>
+        <nav class="nav"><a><span class="ico"></span> Powiadomienia</a><a><span class="ico"></span> AI</a><a><span class="ico"></span> Biblioteka gier</a></nav>
+      </aside>
+
+      <div>
+        <div class="top">
+          <div class="srv"><span class="dot"></span> WiterDevelopment ▾</div>
+          <div class="search">Szukaj ustawień, komend…  ⌘K</div>
+          <div class="sp"></div>
+          <div class="chip">Kompakt</div>
+          <div class="chip">PL ▾</div>
+          <div class="av"></div>
+        </div>
+        <div class="note">Mockup — Kierunek 3 „Forge Slate". Statyczny podgląd, realne etykiety z panelu E-Forge.</div>
+
+        <main>
+          <span class="kicker">Pulpit</span>
+          <div class="h1">Przegląd serwera</div>
+          <div class="sub">Discord · centrum dowodzenia E-Forge</div>
+
+          <div class="row cards4" style="margin-top:18px">
+            <div class="card rail stat"><span class="k">Członkowie</span><span class="v">61</span><span class="d">+4 w tym tygodniu</span></div>
+            <div class="card stat"><span class="k">Kanały</span><span class="v">82</span></div>
+            <div class="card stat"><span class="k">Boosty</span><span class="v">14</span></div>
+            <div class="card stat"><span class="k">Integracje</span><span class="v">12/12</span></div>
+          </div>
+
+          <div class="row c2" style="margin-top:16px">
+            <div class="card">
+              <div class="sech" style="margin:0 0 14px"><span class="kicker">Bezpieczeństwo</span><div class="hr"><h2>Health-check serwera</h2></div></div>
+              <div class="ring">
+                <div class="n">80<small>/100</small></div>
+                <div class="bars">
+                  <div class="bar"><div class="lbl"><span>Poziom weryfikacji</span><span>Niski</span></div><div class="track"><div class="fill" style="width:45%"></div></div></div>
+                  <div class="bar"><div class="lbl"><span>Filtr treści (media)</span><span>ON</span></div><div class="track"><div class="fill" style="width:90%"></div></div></div>
+                  <div class="bar"><div class="lbl"><span>2FA dla moderacji</span><span>ON</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="sech" style="margin:0 0 12px"><span class="kicker">Operacje</span><div class="hr"><h2>Szybkie akcje</h2></div></div>
+              <p style="color:var(--muted);margin-bottom:14px">Raidmode wyrzuca każde nowe wejście — przełączysz w 30 sekund.</p>
+              <div style="display:flex;gap:9px;flex-wrap:wrap"><button class="btn p">Włącz raidmode</button><button class="btn s">Moderacja</button></div>
+            </div>
+          </div>
+
+          <div class="sech"><span class="kicker">Moderacja</span><div class="hr"><h2>Zasady Automodu</h2><button class="btn s">Opcje globalne</button></div></div>
+          <div class="grid3">
+            <div class="tog"><div class="th"><h3>Zabronione słowa</h3><div class="sw on"></div></div><p>Blokuj wiadomości zawierające określone słowa lub frazy.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anty-spam</h3><div class="sw on"></div></div><p>Zapobiegaj zbyt wielu wiadomościom w krótkim czasie.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anty-zaproszenia</h3><div class="sw"></div></div><p>Zabroń wysyłania zaproszeń Discorda.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anty-linki</h3><div class="sw"></div></div><p>Zabroń linków (z białą listą domen).</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Spam wielkich liter</h3><div class="sw on"></div></div><p>Blokuj nadmiar WIELKICH LITER.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anti-scam</h3><div class="sw on"></div></div><p>Wykrywaj i blokuj wzorce oszustw / phishingu.</p><span class="lk">Edytuj regułę →</span></div>
+          </div>
+
+          <div class="sech"><span class="kicker">Progresja</span><div class="hr"><h2>Leveling — konfiguracja</h2><button class="btn p">Zapisz</button></div></div>
+          <div class="row c2">
+            <div class="card">
+              <div class="field"><label>XP za wiadomość</label><div class="hint">Ile punktów za jedną wiadomość (z cooldownem).</div><input class="inp" value="15" /></div>
+              <div class="field"><label>Cooldown (s)</label><input class="inp" value="60" /></div>
+              <div class="field"><label>Kanał ogłoszeń awansu</label><input class="inp" value="#awanse" /></div>
+            </div>
+            <div class="card">
+              <div class="sech" style="margin:0 0 6px"><div class="hr"><h2 style="font-size:15px">Role-nagrody</h2><button class="btn s" style="padding:6px 11px">+ Dodaj</button></div></div>
+              <table>
+                <thead><tr><th>Poziom</th><th>Rola</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td>5</td><td>@Aktywny</td><td><span class="tag">usuń</span></td></tr>
+                  <tr><td>15</td><td>@Bywalec</td><td><span class="tag">usuń</span></td></tr>
+                  <tr><td>30</td><td>@Weteran</td><td><span class="tag">usuń</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="sech"><span class="kicker">Wzorce</span><div class="hr"><h2>Stany widoków</h2></div></div>
+          <div class="states">
+            <div class="state"><div style="font-size:28px">∅</div><b style="color:var(--text)">Pusto</b><p style="margin-top:7px">Brak reguł. Dodaj pierwszą regułę automoda.</p><button class="btn p" style="margin-top:11px">+ Nowa reguła</button></div>
+            <div class="state" style="text-align:left"><b style="color:var(--text)">Ładowanie…</b><div class="sk" style="width:70%"></div><div class="sk"></div><div class="sk" style="width:85%"></div></div>
+            <div class="state err"><div style="font-size:24px">⚠</div><b style="color:#ffd3d6">Błąd</b><p style="margin-top:7px;color:#ffb9bd">Nie udało się zapisać. Spróbuj ponownie.</p><button class="btn p" style="margin-top:11px">Ponów</button></div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

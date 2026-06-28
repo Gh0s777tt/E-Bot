@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Forge — Kierunek 1: Obsidian Console</title>
+    <style>
+      /* ── Kierunek 1: „Obsidian Console" — gęsty, profesjonalny, data-first. ── */
+      :root {
+        --bg: #08080a; --surface: #0e0e12; --card: #121217; --elevated: #1b1b21;
+        --line: #232329; --text: #ededf2; --muted: #9a9aa6;
+        --accent: #e50914; --accent-soft: rgba(229, 9, 20, .12); --accent-line: rgba(229, 9, 20, .4);
+        --success: #3fb950; --warn: #f0a500; --info: #5aa2ff;
+        --r: 12px; --font: 'Segoe UI', system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px;
+        background-image: radial-gradient(50vw 30vh at 92% -8%, rgba(229,9,20,.10), transparent 70%),
+          linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+        background-size: auto, 44px 44px, 44px 44px; }
+      .app { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
+      /* sidebar */
+      .side { background: #0b0b0f; border-right: 1px solid var(--line); padding: 14px 10px; position: sticky; top: 0; height: 100vh; overflow: auto; }
+      .brand { display: flex; align-items: center; gap: 9px; padding: 6px 8px 14px; }
+      .logo { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), #7a0610); display: grid; place-items: center; font-weight: 800; color: #fff; }
+      .brand b { font-size: 17px; letter-spacing: .04em; }
+      .brand b span { color: var(--accent); }
+      .grp { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6b6b76; padding: 14px 10px 5px; }
+      .nav a { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 13.5px; position: relative; }
+      .nav a:hover { background: var(--elevated); color: var(--text); }
+      .nav a.on { color: #fff; background: var(--accent-soft); }
+      .nav a.on::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; border-radius: 3px; background: var(--accent); }
+      .ico { width: 16px; height: 16px; border-radius: 4px; background: currentColor; opacity: .5; }
+      /* topbar */
+      .top { display: flex; align-items: center; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: rgba(8,8,10,.82); backdrop-filter: blur(8px); z-index: 5; }
+      .srv { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; font-weight: 600; }
+      .srv .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+      .search { flex: 1; max-width: 360px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 7px 11px; color: var(--muted); font-size: 13px; }
+      .top .sp { flex: 1; }
+      .chip { border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; color: var(--muted); font-size: 12px; }
+      .av { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg,#333,#111); border: 1px solid var(--line); }
+      /* content */
+      main { padding: 22px 26px 60px; max-width: 1180px; }
+      .h1 { font-size: 24px; font-weight: 700; letter-spacing: .01em; }
+      .sub { color: var(--muted); margin-top: 3px; font-size: 13px; }
+      .row { display: grid; gap: 14px; }
+      .cards4 { grid-template-columns: repeat(4, 1fr); }
+      .c2 { grid-template-columns: 1.4fr 1fr; }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
+      .stat { display: flex; flex-direction: column; gap: 4px; }
+      .stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+      .stat .v { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .stat.acc .v { color: var(--accent); }
+      .sech { display: flex; align-items: center; justify-content: space-between; margin: 26px 0 12px; }
+      .sech h2 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+      .sech h2 b { color: var(--accent); }
+      .btn { border: 0; border-radius: 9px; padding: 8px 14px; font-weight: 600; font-size: 13px; cursor: pointer; }
+      .btn.p { background: var(--accent); color: #fff; }
+      .btn.s { background: transparent; color: var(--text); border: 1px solid var(--line); }
+      .btn.g { background: transparent; color: var(--muted); }
+      /* health ring */
+      .ring { display: flex; align-items: center; gap: 16px; }
+      .ring .n { font-size: 40px; font-weight: 800; }
+      .bars { flex: 1; display: grid; gap: 7px; }
+      .bar { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; font-size: 12px; color: var(--muted); }
+      .track { grid-column: 1 / -1; height: 6px; background: var(--elevated); border-radius: 4px; overflow: hidden; }
+      .fill { height: 100%; background: var(--accent); }
+      /* toggles grid (automod) */
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .tog { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+      .tog .th { display: flex; align-items: center; justify-content: space-between; }
+      .tog h3 { font-size: 14px; }
+      .tog p { color: var(--muted); font-size: 12px; margin: 6px 0 12px; line-height: 1.5; }
+      .sw { width: 38px; height: 22px; border-radius: 99px; background: var(--elevated); position: relative; border: 1px solid var(--line); }
+      .sw.on { background: var(--accent); border-color: var(--accent); }
+      .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .15s; }
+      .sw.on::after { left: 18px; }
+      .lk { color: var(--accent); font-size: 12px; font-weight: 600; }
+      /* form */
+      .field { margin-bottom: 14px; }
+      .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+      .field .hint { color: var(--muted); font-size: 12px; margin-bottom: 7px; }
+      .inp { width: 100%; background: var(--elevated); border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px; color: var(--text); font-size: 13px; }
+      .inp:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+      table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 9px 10px; border-bottom: 1px solid var(--line); }
+      td { padding: 9px 10px; border-bottom: 1px solid var(--line); }
+      tbody tr:nth-child(odd) { background: rgba(255,255,255,.015); }
+      tbody tr:hover { background: var(--accent-soft); }
+      .tag { font-size: 11px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+      .tag.on { color: var(--success); border-color: rgba(63,185,80,.4); background: rgba(63,185,80,.1); }
+      /* states */
+      .states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .state { border: 1px dashed var(--line); border-radius: var(--r); padding: 22px; text-align: center; color: var(--muted); }
+      .sk { height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--elevated), #26262e, var(--elevated)); background-size: 200% 100%; animation: sh 1.4s infinite; margin: 8px 0; }
+      @keyframes sh { to { background-position: -200% 0; } }
+      .err { border-color: var(--accent-line); background: var(--accent-soft); color: #ffb3b8; }
+      .note { margin: 0 26px 18px; padding: 10px 14px; border: 1px solid var(--accent-line); background: var(--accent-soft); border-radius: 10px; font-size: 12px; color: #ffb3b8; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside class="side">
+        <div class="brand"><div class="logo">E</div><b>E-<span>FORGE</span></b></div>
+        <div class="grp">Pulpit</div>
+        <nav class="nav">
+          <a class="on"><span class="ico"></span> Przegląd</a>
+          <a><span class="ico"></span> Statystyki</a>
+          <a><span class="ico"></span> Marketplace</a>
+        </nav>
+        <div class="grp">Moderacja</div>
+        <nav class="nav">
+          <a><span class="ico"></span> Automod</a>
+          <a><span class="ico"></span> Anti-raid</a>
+          <a><span class="ico"></span> Logi moderacji</a>
+          <a><span class="ico"></span> Weryfikacja</a>
+        </nav>
+        <div class="grp">Społeczność</div>
+        <nav class="nav">
+          <a><span class="ico"></span> Powitania</a>
+          <a><span class="ico"></span> Reaction-role</a>
+          <a><span class="ico"></span> Liczniki</a>
+          <a><span class="ico"></span> Tickety</a>
+        </nav>
+        <div class="grp">Progresja</div>
+        <nav class="nav">
+          <a><span class="ico"></span> Leveling</a>
+          <a><span class="ico"></span> Ekonomia</a>
+        </nav>
+        <div class="grp">Live &amp; AI</div>
+        <nav class="nav">
+          <a><span class="ico"></span> Powiadomienia</a>
+          <a><span class="ico"></span> AI</a>
+          <a><span class="ico"></span> Biblioteka gier</a>
+        </nav>
+      </aside>
+
+      <!-- MAIN -->
+      <div>
+        <div class="top">
+          <div class="srv"><span class="dot"></span> WiterDevelopment ▾</div>
+          <div class="search">Szukaj ustawień, komend…  ⌘K</div>
+          <div class="sp"></div>
+          <div class="chip">Kompakt</div>
+          <div class="chip">PL ▾</div>
+          <div class="av"></div>
+        </div>
+
+        <div class="note">Mockup — Kierunek 1 „Obsidian Console". Statyczny podgląd, realne etykiety z panelu E-Forge.</div>
+
+        <main>
+          <!-- PULPIT -->
+          <div class="h1">Przegląd</div>
+          <div class="sub">Discord · centrum dowodzenia serwera</div>
+
+          <div class="row cards4" style="margin-top:16px">
+            <div class="card stat acc"><span class="k">Członkowie</span><span class="v">61</span></div>
+            <div class="card stat"><span class="k">Kanały</span><span class="v">82</span></div>
+            <div class="card stat"><span class="k">Boosty</span><span class="v">14</span></div>
+            <div class="card stat"><span class="k">Integracje</span><span class="v">12/12</span></div>
+          </div>
+
+          <div class="row c2" style="margin-top:14px">
+            <div class="card">
+              <div class="sech" style="margin:0 0 12px"><h2>Health-check <b>serwera</b></h2><span class="tag on">Dobry</span></div>
+              <div class="ring">
+                <div class="n">80<span style="font-size:16px;color:var(--muted)">/100</span></div>
+                <div class="bars">
+                  <div class="bar"><span>Poziom weryfikacji</span><span>Niski</span><div class="track"><div class="fill" style="width:45%"></div></div></div>
+                  <div class="bar"><span>Filtr treści (media)</span><span>ON</span><div class="track"><div class="fill" style="width:90%"></div></div></div>
+                  <div class="bar"><span>2FA dla moderacji</span><span>ON</span><div class="track"><div class="fill" style="width:100%"></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="sech" style="margin:0 0 12px"><h2>Szybkie <b>akcje</b></h2></div>
+              <p style="color:var(--muted);font-size:12.5px;margin-bottom:12px;line-height:1.6">Raidmode: wyrzuca każde nowe wejście; przełącza się w 30 s.</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn p">Włącz raidmode</button>
+                <button class="btn s">Bezpieczeństwo</button>
+                <button class="btn s">Moderacja</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- AUTOMOD (gęsty) -->
+          <div class="sech"><h2>Zasady <b>Automodu</b></h2><button class="btn g">Opcje globalne</button></div>
+          <div class="grid3">
+            <div class="tog"><div class="th"><h3>Zabronione słowa</h3><div class="sw on"></div></div><p>Blokuj wiadomości zawierające określone słowa lub frazy.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anty-spam</h3><div class="sw on"></div></div><p>Zapobiegaj wysyłaniu zbyt wielu wiadomości w krótkim czasie.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anty-zaproszenia</h3><div class="sw"></div></div><p>Zabroń wysyłania zaproszeń Discorda.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anty-linki</h3><div class="sw"></div></div><p>Zabroń wysyłania linków (z białą listą domen).</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Spam wielkich liter</h3><div class="sw on"></div></div><p>Blokuj nadmiar WIELKICH LITER.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="tog"><div class="th"><h3>Anti-scam</h3><div class="sw on"></div></div><p>Wykrywaj i blokuj typowe wzorce oszustw / phishingu.</p><span class="lk">Edytuj regułę →</span></div>
+          </div>
+
+          <!-- LEVELING (formularz) -->
+          <div class="sech"><h2>Leveling — <b>konfiguracja</b></h2><button class="btn p">Zapisz</button></div>
+          <div class="row c2">
+            <div class="card">
+              <div class="field"><label>XP za wiadomość</label><div class="hint">Ile punktów za jedną wiadomość (cooldown niżej).</div><input class="inp" value="15" /></div>
+              <div class="field"><label>Cooldown (s)</label><input class="inp" value="60" /></div>
+              <div class="field"><label>Kanał ogłoszeń awansu</label><input class="inp" value="#awanse" /></div>
+            </div>
+            <div class="card">
+              <div class="sech" style="margin:0 0 10px"><h2 style="font-size:13px">Role-nagrody</h2><button class="btn s" style="padding:5px 10px">+ Dodaj</button></div>
+              <table>
+                <thead><tr><th>Poziom</th><th>Rola</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td>5</td><td>@Aktywny</td><td><span class="tag">usuń</span></td></tr>
+                  <tr><td>15</td><td>@Bywalec</td><td><span class="tag">usuń</span></td></tr>
+                  <tr><td>30</td><td>@Weteran</td><td><span class="tag">usuń</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- STANY -->
+          <div class="sech"><h2>Stany <b>widoków</b></h2></div>
+          <div class="states">
+            <div class="state"><div style="font-size:26px">∅</div><b style="color:var(--text)">Pusto</b><p style="margin-top:6px">Brak reguł. Dodaj pierwszą regułę automoda.</p><button class="btn p" style="margin-top:10px">+ Nowa reguła</button></div>
+            <div class="state" style="text-align:left"><b style="color:var(--text)">Ładowanie</b><div class="sk" style="width:70%"></div><div class="sk"></div><div class="sk" style="width:85%"></div></div>
+            <div class="state err"><div style="font-size:22px">⚠</div><b style="color:#ffd3d6">Błąd</b><p style="margin-top:6px;color:#ffb3b8">Nie udało się zapisać. Spróbuj ponownie.</p><button class="btn p" style="margin-top:10px">Ponów</button></div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Forge — Kierunek 2: Crimson Aurora</title>
+    <style>
+      /* ── Kierunek 2: „Crimson Aurora" — przestronny, szkło + poświata, premium (jak landing). ── */
+      :root {
+        --bg: #08080a; --card: rgba(20, 20, 26, .72); --elevated: #1b1b21; --line: rgba(255,255,255,.08);
+        --text: #f2f2f6; --muted: #a2a2ae; --accent: #e50914; --accent2: #ff3b44;
+        --soft: rgba(229, 9, 20, .14); --success: #45d164; --r: 20px;
+        --font: 'Segoe UI', system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14.5px; position: relative; overflow-x: hidden; }
+      body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        background: radial-gradient(60vw 50vh at 85% -10%, rgba(229,9,20,.22), transparent 65%),
+          radial-gradient(50vw 40vh at -8% 110%, rgba(139,0,0,.20), transparent 70%); }
+      .app { position: relative; z-index: 1; display: grid; grid-template-columns: 256px 1fr; min-height: 100vh; }
+      .side { padding: 20px 14px; position: sticky; top: 0; height: 100vh; overflow: auto; }
+      .brand { display: flex; align-items: center; gap: 11px; padding: 8px 10px 18px; }
+      .logo { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, var(--accent2), #7a0610); display: grid; place-items: center; font-weight: 800; color: #fff; box-shadow: 0 0 22px rgba(229,9,20,.5); }
+      .brand b { font-size: 19px; letter-spacing: .03em; }
+      .brand b span { color: var(--accent2); }
+      .grp { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #6f6f7a; padding: 16px 12px 6px; }
+      .nav a { display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: 13px; color: var(--muted); text-decoration: none; font-size: 14px; margin-bottom: 2px; }
+      .nav a:hover { background: rgba(255,255,255,.05); color: var(--text); }
+      .nav a.on { color: #fff; background: linear-gradient(100deg, var(--accent), #b00610); box-shadow: 0 8px 22px -8px rgba(229,9,20,.7); }
+      .ico { width: 17px; height: 17px; border-radius: 5px; background: currentColor; opacity: .55; }
+      .top { display: flex; align-items: center; gap: 14px; padding: 16px 30px; }
+      .srv { display: flex; align-items: center; gap: 9px; background: var(--card); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 13px; padding: 9px 14px; font-weight: 600; }
+      .srv .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); }
+      .search { flex: 1; max-width: 420px; background: var(--card); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 13px; padding: 10px 14px; color: var(--muted); }
+      .sp { flex: 1; }
+      .chip { background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 8px 12px; color: var(--muted); font-size: 13px; }
+      .av { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg,#444,#111); border: 1px solid var(--line); }
+      main { padding: 14px 30px 70px; max-width: 1200px; }
+      .glass { background: var(--card); backdrop-filter: blur(14px); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 20px 50px -30px #000; }
+      .h1 { font-size: 34px; font-weight: 800; letter-spacing: .01em; }
+      .h1 span { color: var(--accent2); }
+      .sub { color: var(--muted); margin-top: 6px; }
+      .row { display: grid; gap: 18px; }
+      .cards4 { grid-template-columns: repeat(4, 1fr); }
+      .c2 { grid-template-columns: 1.4fr 1fr; }
+      .stat { padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+      .stat .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); }
+      .stat .v { font-size: 32px; font-weight: 800; }
+      .stat .k { font-size: 13px; color: var(--muted); }
+      .stat.acc .v { color: var(--accent2); text-shadow: 0 0 16px rgba(229,9,20,.5); }
+      .sech { display: flex; align-items: center; justify-content: space-between; margin: 34px 0 16px; }
+      .sech h2 { font-size: 22px; font-weight: 800; }
+      .sech h2 span { color: var(--accent2); }
+      .btn { border: 0; border-radius: 13px; padding: 11px 18px; font-weight: 700; font-size: 14px; cursor: pointer; }
+      .btn.p { background: linear-gradient(100deg, var(--accent), #b00610); color: #fff; box-shadow: 0 10px 26px -10px rgba(229,9,20,.8); }
+      .btn.s { background: rgba(255,255,255,.04); color: var(--text); border: 1px solid var(--line); }
+      .pad { padding: 22px; }
+      .ring { display: flex; align-items: center; gap: 22px; }
+      .ring .n { font-size: 52px; font-weight: 900; background: linear-gradient(135deg,#fff,var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .bars { flex: 1; display: grid; gap: 11px; }
+      .bar small { color: var(--muted); font-size: 12.5px; }
+      .track { height: 8px; background: rgba(255,255,255,.06); border-radius: 6px; overflow: hidden; margin-top: 5px; }
+      .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 6px; }
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .tog { padding: 20px; }
+      .tog .th { display: flex; align-items: center; justify-content: space-between; }
+      .tog h3 { font-size: 16px; }
+      .tog p { color: var(--muted); font-size: 13px; margin: 9px 0 14px; line-height: 1.55; }
+      .sw { width: 44px; height: 25px; border-radius: 99px; background: rgba(255,255,255,.08); position: relative; }
+      .sw.on { background: linear-gradient(100deg, var(--accent), var(--accent2)); box-shadow: 0 0 14px rgba(229,9,20,.5); }
+      .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 19px; height: 19px; border-radius: 50%; background: #fff; transition: .15s; }
+      .sw.on::after { left: 22px; }
+      .lk { color: var(--accent2); font-weight: 700; font-size: 13px; }
+      .field { margin-bottom: 18px; }
+      .field label { display: block; font-weight: 700; margin-bottom: 6px; }
+      .field .hint { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+      .inp { width: 100%; background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 13px; padding: 12px 14px; color: var(--text); }
+      .inp:focus { outline: 0; border-color: var(--accent2); box-shadow: 0 0 0 4px var(--soft); }
+      table { width: 100%; border-collapse: collapse; }
+      th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); padding: 12px; }
+      td { padding: 13px 12px; border-top: 1px solid var(--line); }
+      .tag { font-size: 12px; padding: 4px 11px; border-radius: 99px; background: rgba(255,255,255,.05); border: 1px solid var(--line); color: var(--muted); }
+      .states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .state { padding: 30px; text-align: center; color: var(--muted); border-radius: var(--r); border: 1px solid var(--line); }
+      .state.empty { background: rgba(255,255,255,.02); }
+      .sk { height: 14px; border-radius: 8px; background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.12), rgba(255,255,255,.05)); background-size: 200% 100%; animation: sh 1.4s infinite; margin: 10px 0; }
+      @keyframes sh { to { background-position: -200% 0; } }
+      .state.err { background: var(--soft); border-color: rgba(229,9,20,.4); color: #ffb9bd; }
+      .note { margin: 0 30px 12px; padding: 12px 16px; border: 1px solid rgba(229,9,20,.4); background: var(--soft); border-radius: 14px; font-size: 13px; color: #ffb9bd; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><div class="logo">E</div><b>E-<span>FORGE</span></b></div>
+        <div class="grp">Pulpit</div>
+        <nav class="nav"><a class="on"><span class="ico"></span> Przegląd</a><a><span class="ico"></span> Statystyki</a><a><span class="ico"></span> Marketplace</a></nav>
+        <div class="grp">Moderacja</div>
+        <nav class="nav"><a><span class="ico"></span> Automod</a><a><span class="ico"></span> Anti-raid</a><a><span class="ico"></span> Logi moderacji</a><a><span class="ico"></span> Weryfikacja</a></nav>
+        <div class="grp">Społeczność</div>
+        <nav class="nav"><a><span class="ico"></span> Powitania</a><a><span class="ico"></span> Reaction-role</a><a><span class="ico"></span> Tickety</a></nav>
+        <div class="grp">Progresja</div>
+        <nav class="nav"><a><span class="ico"></span> Leveling</a><a><span class="ico"></span> Ekonomia</a></nav>
+        <div class="grp">Live &amp; AI</div>
+        <nav class="nav"><a><span class="ico"></span> Powiadomienia</a><a><span class="ico"></span> AI</a><a><span class="ico"></span> Biblioteka gier</a></nav>
+      </aside>
+
+      <div>
+        <div class="top">
+          <div class="srv"><span class="dot"></span> WiterDevelopment ▾</div>
+          <div class="search">Szukaj ustawień, komend…  ⌘K</div>
+          <div class="sp"></div>
+          <div class="chip">PL ▾</div>
+          <div class="av"></div>
+        </div>
+        <div class="note">Mockup — Kierunek 2 „Crimson Aurora". Statyczny podgląd, realne etykiety z panelu E-Forge.</div>
+
+        <main>
+          <div class="h1">Przegląd <span>serwera</span></div>
+          <div class="sub">Discord · centrum dowodzenia E-Forge</div>
+
+          <div class="row cards4" style="margin-top:20px">
+            <div class="glass stat acc"><div class="ic"></div><span class="v">61</span><span class="k">Członkowie</span></div>
+            <div class="glass stat"><div class="ic"></div><span class="v">82</span><span class="k">Kanały</span></div>
+            <div class="glass stat"><div class="ic"></div><span class="v">14</span><span class="k">Boosty</span></div>
+            <div class="glass stat"><div class="ic"></div><span class="v">12/12</span><span class="k">Integracje</span></div>
+          </div>
+
+          <div class="row c2" style="margin-top:18px">
+            <div class="glass pad">
+              <div class="sech" style="margin:0 0 16px"><h2>Health-check <span>serwera</span></h2></div>
+              <div class="ring">
+                <div class="n">80</div>
+                <div class="bars">
+                  <div class="bar"><small>Poziom weryfikacji — niski</small><div class="track"><div class="fill" style="width:45%"></div></div></div>
+                  <div class="bar"><small>Filtr treści (media) — ON</small><div class="track"><div class="fill" style="width:90%"></div></div></div>
+                  <div class="bar"><small>2FA dla moderacji — ON</small><div class="track"><div class="fill" style="width:100%"></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="glass pad">
+              <div class="sech" style="margin:0 0 14px"><h2>Szybkie <span>akcje</span></h2></div>
+              <p style="color:var(--muted);margin-bottom:16px;line-height:1.6">Raidmode wyrzuca każde nowe wejście — przełączysz w 30 sekund.</p>
+              <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn p">Włącz raidmode</button><button class="btn s">Moderacja</button></div>
+            </div>
+          </div>
+
+          <div class="sech"><h2>Zasady <span>Automodu</span></h2><button class="btn s">Opcje globalne</button></div>
+          <div class="grid3">
+            <div class="glass tog"><div class="th"><h3>Zabronione słowa</h3><div class="sw on"></div></div><p>Blokuj wiadomości zawierające określone słowa lub frazy.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="glass tog"><div class="th"><h3>Anty-spam</h3><div class="sw on"></div></div><p>Zapobiegaj zbyt wielu wiadomościom w krótkim czasie.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="glass tog"><div class="th"><h3>Anty-zaproszenia</h3><div class="sw"></div></div><p>Zabroń wysyłania zaproszeń Discorda.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="glass tog"><div class="th"><h3>Anty-linki</h3><div class="sw"></div></div><p>Zabroń linków (z białą listą domen).</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="glass tog"><div class="th"><h3>Spam wielkich liter</h3><div class="sw on"></div></div><p>Blokuj nadmiar WIELKICH LITER.</p><span class="lk">Edytuj regułę →</span></div>
+            <div class="glass tog"><div class="th"><h3>Anti-scam</h3><div class="sw on"></div></div><p>Wykrywaj i blokuj wzorce oszustw / phishingu.</p><span class="lk">Edytuj regułę →</span></div>
+          </div>
+
+          <div class="sech"><h2>Leveling — <span>konfiguracja</span></h2><button class="btn p">Zapisz</button></div>
+          <div class="row c2">
+            <div class="glass pad">
+              <div class="field"><label>XP za wiadomość</label><div class="hint">Ile punktów za jedną wiadomość (z cooldownem).</div><input class="inp" value="15" /></div>
+              <div class="field"><label>Cooldown (s)</label><input class="inp" value="60" /></div>
+              <div class="field"><label>Kanał ogłoszeń awansu</label><input class="inp" value="#awanse" /></div>
+            </div>
+            <div class="glass pad">
+              <div class="sech" style="margin:0 0 8px"><h2 style="font-size:15px">Role-nagrody</h2><button class="btn s" style="padding:7px 12px">+ Dodaj</button></div>
+              <table>
+                <thead><tr><th>Poziom</th><th>Rola</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td>5</td><td>@Aktywny</td><td><span class="tag">usuń</span></td></tr>
+                  <tr><td>15</td><td>@Bywalec</td><td><span class="tag">usuń</span></td></tr>
+                  <tr><td>30</td><td>@Weteran</td><td><span class="tag">usuń</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="sech"><h2>Stany <span>widoków</span></h2></div>
+          <div class="states">
+            <div class="state empty"><div style="font-size:30px">∅</div><b style="color:var(--text)">Pusto</b><p style="margin-top:8px">Brak reguł. Dodaj pierwszą regułę automoda.</p><button class="btn p" style="margin-top:12px">+ Nowa reguła</button></div>
+            <div class="state" style="text-align:left"><b style="color:var(--text)">Ładowanie…</b><div class="sk" style="width:70%"></div><div class="sk"></div><div class="sk" style="width:85%"></div></div>
+            <div class="state err"><div style="font-size:26px">⚠</div><b style="color:#ffd3d6">Błąd</b><p style="margin-top:8px;color:#ffb9bd">Nie udało się zapisać. Spróbuj ponownie.</p><button class="btn p" style="margin-top:12px">Ponów</button></div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
