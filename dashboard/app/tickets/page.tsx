@@ -102,7 +102,10 @@ export default async function TicketsPage() {
               </thead>
               <tbody>
                 {rows.map((t) => (
-                  <tr key={t.id} className="border-b border-line/50">
+                  <tr
+                    key={t.id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="py-2 pe-3">
                       <span
                         className={`rounded-md px-2 py-0.5 text-xs font-semibold ${

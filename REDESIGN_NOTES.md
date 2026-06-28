@@ -154,13 +154,18 @@ security, stats, settings, suggestions, engagement, gaming, diagnostics, donatio
 w tytuły sekcji `<h2>` (małe etykiety/pille `text-[10/11px/xs] uppercase` — nietknięte). Zweryfikowane
 zrzutami (welcome, roles, stats, economy, ai) + `tsc` exit 0 + Biome.
 
-### Kolejne ekrany / dopracowanie (plan)
-Nagłówki sekcji — gotowe panel-wide (E6). Zostaje, per-ekran lub w kontrolowanych przebiegach:
-1. **Stany wspólne** — `EmptyState`/`Loading`/`Error` (spójne), inputy (focus akcent).
-2. **Tabele/listy** — hover wierszy + reflow→karty na mobile (`/logging`, `/leaderboard`, sklep, role-nagrody, stats).
-3. **Formularze** — grupowanie pól / opisy na gęstych ekranach (np. `/ai`, `/moderation`).
-4. **Topbar `<h1>`** — decyzja o stylu tytułu strony (chrom).
-5. **Mapowanie stary→nowy** — uzupełniane (nic nie ginie).
+### E7 — Hover wierszy tabel (zrobione) ✅
+Hover (`hover:bg-white/[0.03]`, `transition-colors`) na tabelach z danymi: /moderation, /levels (E4/E5) +
+`/ai`, `/engagement`, `/tickets`, `/suggestions`, sklep (`ShopManager`). Wszystkie `<tbody><tr>` w panelu
+mają affordance hover. Biome (auto-wrap `<tr>`) + `tsc` exit 0.
 
-> Status: E1–E6 wdrożone i zweryfikowane (fundament + komponenty + Pulpit + /moderation + /levels +
-> token nagłówków na całym panelu). Kontynuuję dopracowanie.
+### Kolejne ekrany / dopracowanie (plan)
+Nagłówki sekcji (E6) + hover tabel (E7) — gotowe panel-wide. Zostaje:
+1. **Stany wspólne** — `EmptyState`/`Loading`/`Error` (spójne), inputy (focus akcent).
+2. **Responsywność tabel** — reflow→karty na wąskim ekranie (`/logging`, `/leaderboard`, stats, sklep).
+3. **Listy nie-`<table>`** — np. role-nagrody (wiersze flex) — ewentualny hover osobno.
+4. **Formularze** — grupowanie pól / opisy na gęstych ekranach (np. `/ai`, `/moderation`).
+5. **Topbar `<h1>`** — decyzja o stylu tytułu strony (chrom).
+6. **Mapowanie stary→nowy** — uzupełniane (nic nie ginie).
+
+> Status: E1–E7 wdrożone i zweryfikowane. Kontynuuję dopracowanie.

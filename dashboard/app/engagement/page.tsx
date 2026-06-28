@@ -122,7 +122,10 @@ export default async function EngagementPage() {
               </thead>
               <tbody>
                 {giveaways.map((g) => (
-                  <tr key={g.id} className="border-b border-line/50">
+                  <tr
+                    key={g.id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="px-3 py-2">{g.prize}</td>
                     <td className="px-3 py-2 text-muted">{g.winners}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-muted">{fmt(g.ends_at)}</td>

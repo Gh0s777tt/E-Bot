@@ -73,7 +73,10 @@ export default async function SuggestionsPage() {
               </thead>
               <tbody>
                 {list.map((s) => (
-                  <tr key={s.id} className="border-b border-line/50">
+                  <tr
+                    key={s.id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="px-3 py-2">
                       <span
                         className={`rounded-md px-2 py-0.5 text-xs font-semibold ${SUG_STYLE[s.status] ?? 'bg-line text-muted'}`}

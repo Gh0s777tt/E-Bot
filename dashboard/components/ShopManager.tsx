@@ -156,7 +156,10 @@ export default function ShopManager({
             </thead>
             <tbody>
               {items.map((i) => (
-                <tr key={i.id} className="border-b border-line/50">
+                <tr
+                  key={i.id}
+                  className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                >
                   <td className="px-3 py-2">
                     {i.name}
                     {i.effect ? (

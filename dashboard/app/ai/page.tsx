@@ -117,7 +117,10 @@ export default async function AiPage() {
               </thead>
               <tbody>
                 {usage.top.map((u) => (
-                  <tr key={u.user_id} className="border-b border-line/50">
+                  <tr
+                    key={u.user_id}
+                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                  >
                     <td className="py-2 pe-3 font-mono text-xs">{u.user_id}</td>
                     <td className="py-2 pe-3">{u.requests}</td>
                     <td className="py-2">{u.tokens_used.toLocaleString('pl-PL')}</td>
