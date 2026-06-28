@@ -14,6 +14,9 @@ export default function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 sm:flex-row">
         <span>© 2026 E-BOT · GH0ST EMPIRE — {tp(lang, 'ui.footer.rights')}</span>
         <nav className="flex flex-wrap items-center gap-4">
+          <a href="/wiki" className={link}>
+            {tp(lang, 'ui.footer.wiki')}
+          </a>
           <Link href="/p/about" className={link}>
             {tp(lang, 'ui.footer.about')}
           </Link>

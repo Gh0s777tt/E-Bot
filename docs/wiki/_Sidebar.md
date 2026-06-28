@@ -4,6 +4,7 @@
 - 🚀 [[Getting Started]]
 - 🖥️ [[Dashboard]]
 - 🤖 [[Commands]]
+- 🧩 [[Modules]]
 - 🔐 [[Security]]
 - ❓ [[FAQ]]
 

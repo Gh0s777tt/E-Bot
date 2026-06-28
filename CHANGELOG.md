@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-634-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.564.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-635-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.565.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.565.0] — 📖 Wiki projektu: strona /wiki + eksport Markdown (komendy, moduły, zrzuty)
+
+- `[#635]` 📖 **Zaawansowane Wiki** — nowa publiczna strona [`/wiki`](dashboard/app/wiki/page.tsx) (motyw czerń/czerwień, spis treści, realne zrzuty): wprowadzenie, szybki start, panel, **wszystkie moduły krok po kroku** i **pełna lista 95+ komend** w tabelach. Źródło treści: [`wikiData.ts`](dashboard/lib/wikiData.ts) — 95 komend w 11 grupach + 32 moduły z konfiguracją. Link „Wiki" w globalnej stopce (klucz i18n `ui.footer.wiki` ×14) oraz w nawigacji/stopce landingu. `Shell` renderuje `/wiki` bez panelowego chromu.
+  - **Eksport Markdown (oba formaty):** generator [`scripts/gen-wiki-md.mjs`](scripts/gen-wiki-md.mjs) (Node 26 czyta `.ts` natywnie) tworzy `docs/wiki/Commands.md` + `Modules.md` z tego samego źródła; zrzuty przez raw-URL GitHub. Odświeżono `Home.md` / `_Sidebar.md` (dodane `[[Modules]]`, aktualny status bota 95+ komend).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** + parytet i18n ×14 · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.564.0] — 🔐 Nowy ekran logowania „Split" (czerń/czerwień)
 

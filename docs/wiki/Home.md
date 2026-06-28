@@ -19,7 +19,8 @@
 |:--|:--|
 | 🚀 [[Getting Started]] | Instalacja, env, seed biblioteki, uruchomienie |
 | 🖥️ [[Dashboard]] | Przewodnik po panelu (Biblioteka, Live, Ekonomia, Ustawienia) |
-| 🤖 [[Commands]] | Komendy bota (`/portal`, `/link`, ekonomia) |
+| 🤖 [[Commands]] | Pełna lista komend slash (**95+**) pogrupowana tematycznie |
+| 🧩 [[Modules]] | Konfiguracja każdego modułu **krok po kroku** (ze zrzutami) |
 | 🔐 [[Security]] | Bezpieczeństwo repo i sekretów |
 | ❓ [[FAQ]] | Najczęstsze pytania |
 
@@ -39,7 +40,7 @@ agregująca tytuły z PlayStation / Steam / GOG (wzbogacane przez **IGDB**), ora
 |:--|:--|:--|
 | `ingest/` | Node 26 (`node:sqlite`, `fetch`) | ✅ działa |
 | `dashboard/` | Next.js · Tailwind · Supabase | ✅ live |
-| `bot/` | discord.js v14 | 🚧 sesja 2 |
+| `bot/` | discord.js v14 · **95+ komend** · i18n 14 jęz. | ✅ live |
 | `web/` | pierwszy UI Netflix | ✅ |
 
 <div align="center"><sub>🛡️ Projekt prywatny GH0ST EMPIRE · © 2026 Gh0s777tt</sub></div>
