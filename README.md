@@ -29,6 +29,10 @@
 **[ 🧠 Architektura »](docs/ARCHITECTURE.md)** &nbsp;·&nbsp;
 **[ 🔐 Bezpieczeństwo »](.github/SECURITY.md)**
 
+<br/>
+
+[![E-Bot na top.gg](https://top.gg/api/widget/1512758748761030677.svg)](https://top.gg/bot/1512758748761030677)
+
 </div>
 
 <br/>
