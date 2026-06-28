@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-626-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.556.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-627-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.557.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.557.0] — 💳 Panel: porównanie planów Free vs Premium (okno + cena z env)
+
+- `[#627]` 💳 **Okno wyboru planu Premium** — zamiast natychmiastowego skoku do Stripe, przycisk „Przejdź na Premium" (Marketplace, gdy billing włączony i serwer Free) otwiera modal z porównaniem **Free vs Premium**: dwie karty z listą cech (✓/✗) i ceną; dopiero „Subskrybuj" startuje Stripe Checkout. Cena z env `NEXT_PUBLIC_PREMIUM_PRICE` (placeholder „—" gdy brak — zmiana bez deployu kodu). Cechy w edytowalnej stałej `PLAN_FEATURES` ([`premiumPlan.ts`](dashboard/lib/premiumPlan.ts)). Nowy `PremiumDialog` ([`PremiumDialog.tsx`](dashboard/components/PremiumDialog.tsx)) — a11y: tło-przycisk + `Esc` + `✕`. i18n ×14 (17 kluczy `ui.premium.*`). Gdy serwer już Premium → „Twój aktualny plan".
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1131** · `sync:check` (docs + schemat + env, + `NEXT_PUBLIC_PREMIUM_PRICE`) — exit 0 (Node 26.4.0).
 
 ## [0.556.0] — 🛡️ QA: redukcja false-positive (findPII telefon + isSuspiciousName przeplot)
 
