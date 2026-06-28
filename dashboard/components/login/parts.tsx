@@ -1,5 +1,6 @@
 // Współdzielone elementy ekranów logowania (warianty A/B/C). Server-component-safe (tp działa na
 // serwerze). Reużywa istniejących kluczy i18n ui.pub.* + ui.footer.* — zero nowych tłumaczeń.
+import { lt } from '../../lib/landingI18n';
 import { tp } from '../../lib/panelI18n';
 
 type Lang = Parameters<typeof tp>[0];
@@ -42,7 +43,7 @@ export function LegalLinks({ lang }: { lang: Lang }) {
       </a>
       <span aria-hidden>·</span>
       <a href="/" className="transition hover:text-white">
-        ← Strona główna
+        {lt(lang, 'login.home')}
       </a>
     </div>
   );

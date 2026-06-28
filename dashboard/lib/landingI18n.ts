@@ -1653,6 +1653,138 @@ export const LANDING: Record<string, LandingDict> = {
 };
 
 // Tłumaczenie landingu: język → PL → sam klucz.
+// Dodatkowe ciągi ekranu logowania (scalane z LANDING; nagłówek „Zaloguj" korzysta z cta.login).
+const loginExtra: Record<string, LandingDict> = {
+  pl: {
+    'login.brandTitle': 'Centrum dowodzenia Twojego serwera',
+    'login.brandDesc':
+      'Moderacja, ekonomia, leveling, powiadomienia live i AI — wszystko z jednego panelu w 14 językach.',
+    'login.b1': 'Pełna moderacja i anti-raid',
+    'login.b2': 'Ekonomia, gry i sklep',
+    'login.b3': 'Powiadomienia live i AI',
+    'login.home': '← Strona główna',
+  },
+  en: {
+    'login.brandTitle': 'The command center of your server',
+    'login.brandDesc':
+      'Moderation, economy, leveling, live alerts and AI — all from one dashboard in 14 languages.',
+    'login.b1': 'Full moderation and anti-raid',
+    'login.b2': 'Economy, games and shop',
+    'login.b3': 'Live alerts and AI',
+    'login.home': '← Home',
+  },
+  de: {
+    'login.brandTitle': 'Die Kommandozentrale deines Servers',
+    'login.brandDesc':
+      'Moderation, Wirtschaft, Leveling, Live-Benachrichtigungen und KI — alles aus einem Dashboard in 14 Sprachen.',
+    'login.b1': 'Vollständige Moderation und Anti-Raid',
+    'login.b2': 'Wirtschaft, Spiele und Shop',
+    'login.b3': 'Live-Benachrichtigungen und KI',
+    'login.home': '← Startseite',
+  },
+  es: {
+    'login.brandTitle': 'El centro de mando de tu servidor',
+    'login.brandDesc':
+      'Moderación, economía, niveles, alertas en directo e IA — todo desde un panel en 14 idiomas.',
+    'login.b1': 'Moderación completa y anti-raid',
+    'login.b2': 'Economía, juegos y tienda',
+    'login.b3': 'Alertas en directo e IA',
+    'login.home': '← Inicio',
+  },
+  it: {
+    'login.brandTitle': 'Il centro di comando del tuo server',
+    'login.brandDesc':
+      'Moderazione, economia, livelli, avvisi live e IA — tutto da un pannello in 14 lingue.',
+    'login.b1': 'Moderazione completa e anti-raid',
+    'login.b2': 'Economia, giochi e negozio',
+    'login.b3': 'Avvisi live e IA',
+    'login.home': '← Home',
+  },
+  fr: {
+    'login.brandTitle': 'Le centre de commande de ton serveur',
+    'login.brandDesc':
+      'Modération, économie, niveaux, alertes live et IA — le tout depuis un panneau en 14 langues.',
+    'login.b1': 'Modération complète et anti-raid',
+    'login.b2': 'Économie, jeux et boutique',
+    'login.b3': 'Alertes live et IA',
+    'login.home': '← Accueil',
+  },
+  pt: {
+    'login.brandTitle': 'O centro de comando do teu servidor',
+    'login.brandDesc':
+      'Moderação, economia, níveis, alertas ao vivo e IA — tudo a partir de um painel em 14 idiomas.',
+    'login.b1': 'Moderação completa e anti-raid',
+    'login.b2': 'Economia, jogos e loja',
+    'login.b3': 'Alertas ao vivo e IA',
+    'login.home': '← Início',
+  },
+  zh: {
+    'login.brandTitle': '你服务器的指挥中心',
+    'login.brandDesc': '审核、经济、等级、直播提醒和 AI——全部来自一个 14 种语言的面板。',
+    'login.b1': '完整审核与反突袭',
+    'login.b2': '经济、游戏与商店',
+    'login.b3': '直播提醒与 AI',
+    'login.home': '← 首页',
+  },
+  ko: {
+    'login.brandTitle': '당신 서버의 지휘 본부',
+    'login.brandDesc': '모더레이션, 경제, 레벨링, 라이브 알림, AI — 모두 14개 언어 패널에서.',
+    'login.b1': '완전한 모더레이션과 안티레이드',
+    'login.b2': '경제, 게임, 상점',
+    'login.b3': '라이브 알림과 AI',
+    'login.home': '← 홈',
+  },
+  ru: {
+    'login.brandTitle': 'Командный центр вашего сервера',
+    'login.brandDesc':
+      'Модерация, экономика, уровни, оповещения о стримах и ИИ — всё из одной панели на 14 языках.',
+    'login.b1': 'Полная модерация и anti-raid',
+    'login.b2': 'Экономика, игры и магазин',
+    'login.b3': 'Оповещения о стримах и ИИ',
+    'login.home': '← Главная',
+  },
+  uk: {
+    'login.brandTitle': 'Командний центр вашого сервера',
+    'login.brandDesc':
+      'Модерація, економіка, рівні, сповіщення про стріми та ШІ — усе з однієї панелі 14 мовами.',
+    'login.b1': 'Повна модерація та anti-raid',
+    'login.b2': 'Економіка, ігри та магазин',
+    'login.b3': 'Сповіщення про стріми та ШІ',
+    'login.home': '← Головна',
+  },
+  ja: {
+    'login.brandTitle': 'あなたのサーバーの指揮センター',
+    'login.brandDesc':
+      'モデレーション、経済、レベリング、ライブ通知、AI — すべてを14言語のパネルから。',
+    'login.b1': '完全なモデレーションとアンチレイド',
+    'login.b2': '経済、ゲーム、ショップ',
+    'login.b3': 'ライブ通知と AI',
+    'login.home': '← ホーム',
+  },
+  ar: {
+    'login.brandTitle': 'مركز قيادة خادمك',
+    'login.brandDesc':
+      'الإشراف والاقتصاد والمستويات وتنبيهات البث والذكاء الاصطناعي — كلها من لوحة واحدة بـ14 لغة.',
+    'login.b1': 'إشراف كامل ومكافحة الغارات',
+    'login.b2': 'اقتصاد وألعاب ومتجر',
+    'login.b3': 'تنبيهات البث والذكاء الاصطناعي',
+    'login.home': '→ الرئيسية',
+  },
+  id: {
+    'login.brandTitle': 'Pusat komando servermu',
+    'login.brandDesc':
+      'Moderasi, ekonomi, leveling, notifikasi live, dan AI — semua dari satu panel dalam 14 bahasa.',
+    'login.b1': 'Moderasi penuh dan anti-raid',
+    'login.b2': 'Ekonomi, game, dan toko',
+    'login.b3': 'Notifikasi live dan AI',
+    'login.home': '← Beranda',
+  },
+};
+for (const k of Object.keys(loginExtra)) {
+  LANDING[k] = { ...(LANDING[k] ?? {}), ...loginExtra[k] };
+}
+
+// Tłumaczenie landingu / stron publicznych: język → PL (scalony) → sam klucz.
 export function lt(lang: string, key: string): string {
-  return LANDING[lang]?.[key] ?? pl[key] ?? key;
+  return LANDING[lang]?.[key] ?? LANDING.pl?.[key] ?? key;
 }

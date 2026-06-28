@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-637-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.567.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-638-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.568.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.568.0] — 🌍 Logowanie ×14: tłumaczenia ekranu logowania
+
+- `[#638]` 🌍 **Ekran logowania w 14 językach** — panel brandowy wariantu „Split" (tytuł, opis, cechy) oraz link „Strona główna" tłumaczone przez `lt()` z [`landingI18n.ts`](dashboard/lib/landingI18n.ts) (klucze `login.*` ×14, scalane z `LANDING`; nagłówek korzysta z `cta.login`). Przycisk Discord, nota „tylko właściciel" i błędy OAuth nadal z `ui.pub.*` (panelI18n). Fallback i18n poprawiony na scalony PL (`LANDING.pl`).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · pełny zestaw **1141** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.567.0] — 🌍 Landing ×14: pełne tłumaczenia strony powitalnej
 

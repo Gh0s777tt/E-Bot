@@ -1,5 +1,6 @@
 // Wariant A — „Split": lewy panel brandowy (skull + cechy) + prawa kolumna z logowaniem.
 import { Check } from 'lucide-react';
+import { lt } from '../../lib/landingI18n';
 import { tp } from '../../lib/panelI18n';
 import { DiscordLogin, ErrorBox, type Lang, LegalLinks } from './parts';
 
@@ -31,20 +32,11 @@ export default function LoginSplit({ err, lang }: { err: string | null; lang: La
         </div>
         <div className="relative">
           <h2 className="font-display text-4xl leading-tight tracking-wide text-white">
-            Centrum dowodzenia
-            <br />
-            Twojego serwera
+            {lt(lang, 'login.brandTitle')}
           </h2>
-          <p className="mt-4 max-w-md text-muted">
-            Moderacja, ekonomia, leveling, powiadomienia live i AI — wszystko z jednego panelu w 14
-            językach.
-          </p>
+          <p className="mt-4 max-w-md text-muted">{lt(lang, 'login.brandDesc')}</p>
           <ul className="mt-7 space-y-3">
-            {[
-              'Pełna moderacja i anti-raid',
-              'Ekonomia, gry i sklep',
-              'Powiadomienia live i AI',
-            ].map((t) => (
+            {[lt(lang, 'login.b1'), lt(lang, 'login.b2'), lt(lang, 'login.b3')].map((t) => (
               <li key={t} className="flex items-center gap-2.5 text-white/85">
                 <span className="grid h-6 w-6 place-items-center rounded-md bg-accent/15 text-accent">
                   <Check size={14} />
@@ -69,7 +61,9 @@ export default function LoginSplit({ err, lang }: { err: string | null; lang: La
               E-<span className="text-accent">BOT</span>
             </span>
           </div>
-          <h1 className="font-display text-3xl tracking-wide text-white">Zaloguj się</h1>
+          <h1 className="font-display text-3xl tracking-wide text-white">
+            {lt(lang, 'cta.login')}
+          </h1>
           <p className="mt-2 text-sm text-muted">{tp(lang, 'ui.pub.loginSubtitle')}</p>
           <div className="mt-7 space-y-4">
             <ErrorBox err={err} />
