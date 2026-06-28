@@ -102,4 +102,24 @@ nawigacja (sidebar z grupami + aktywny „rail"), modal, toast, oraz spójne **s
 gęsty widok (automod), formularz (leveling) + stany pusty/ładowanie/błąd. Realne etykiety z naszego panelu.
 **Nie wdrażam nic na całość przed Twoim wyborem.**
 
-## E. Wdrożenie — po akceptacji kierunku.
+## E. Wdrożenie — kierunek **2 „Crimson Aurora"** (wybrany)
+
+Wdrażam ekran po ekranie, małymi commitami, każdy zbudowany + zweryfikowany. **Kluczowa zasada scopingu:**
+wszystkie elewacje panelu są pod selektorem `.content-pane` (chrom panelu) — landing/login/wiki renderują
+się bez `.content-pane`, więc **pozostają nietknięte** (zweryfikowane zrzutem).
+
+### E1 — Fundament (zrobione) ✅
+- `globals.css`: `.content-pane .panel-glow` → szkło (backdrop-blur + półprzezroczyste tło + poświata
+  akcentu + ostrzejsza krawędź). Propaguje się na wszystkie panele dashboardu (Serwer na żywo, Health-check,
+  Szybkie akcje, Wzrost, Anti-raid, sekcje paneli). Landing/login/wiki bez zmian (weryfikacja: zrzut).
+
+### E2+ — Plan per-ekran (do zrobienia)
+1. **Pulpit** — hierarchia (hero + statystyki jako szkło przez `panel-glow` w `StatCard`), oddech między sekcjami.
+2. **Komponenty współdzielone** — `SaveButton` (gradient primary), `EmptyState`/`Loading`/`Error` (spójne),
+   `pickers`/inputy (focus akcent), tabele (zebra+hover, reflow→karty na mobile).
+3. **Ekrany ustawień/formularze** — `/moderation` (automod), `/levels`, `/welcome`, `/roles`, `/scheduled`,
+   `/tickets`, `/economy`, `/notifications`, `/ai`, … — grupowanie pól, nagłówki sekcji, stany.
+4. **Tabele/listy** — `/logging`, `/leaderboard`, sklep, role-nagrody — czytelność + responsywność.
+5. **Mapowanie stary→nowy** uzupełniane przy każdym ekranie (nic nie ginie).
+
+> Status: fundament wdrożony i zweryfikowany. Kontynuuję per-ekran (każdy = osobny commit + weryfikacja).
