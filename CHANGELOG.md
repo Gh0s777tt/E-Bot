@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-612-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.542.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-613-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.543.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.543.0] — 🔒 Ekonomia: atomowe gry /eco (gamble · slots · roulette · highlow · crime · sklep)
+
+- `[#613]` 🔒 **Atomowe saldo w grach `/eco`** — domknięcie toru atomowości. Gry i sklep (`gamble`, `slots`, `roulette`, `highlow`, `crime`, `buy`, `use`/lootbox) — choć pod `withLock` (brak double-spend) — zapisywały wynik przez `saveUser({ wallet: getUser()+delta })` (overwrite), co w wąskim oknie mogło skasować równoległy atomowy credit innego usera (`pay`/`rob`/`donate` na grającego). Przepisane na model **„postaw stawkę"**: `spendWallet` (debet stawki) → losowanie → `creditWallet` (wypłata brutto przy wygranej); remis w `highlow` = zwrot stawki; `crime` = credit/spend wg wyniku + stempel cooldownu; `buy` = atomowy debet z **rollbackiem** (zwrot, gdy nadanie roli padnie); lootbox = atomowy credit. `ensureUser` przed debetem (jak `pay`/#609). **Matematyka wypłat zachowana 1:1** (zweryfikowana per gra); saldo w komunikatach ze zwrotu helpera.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1105/1105** · `sync:check` — exit 0 (Node 26.4.0). Zostaje `/eco blackjack` (osobny moduł z przyciskami — kolejny przyrost) i `ecoSeason` podium (tło, raz/miesiąc).
 
 ## [0.542.0] — 🔒 Ekonomia: atomowe saldo w /cards, /skins, /stocks (moduły bez withLock)
 

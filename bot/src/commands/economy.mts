@@ -451,15 +451,21 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
     const base =
       cfg.workMin + Math.floor(Math.random() * Math.max(1, cfg.workMax - cfg.workMin + 1));
     const success = Math.random() < 0.55;
-    const delta = success ? base * 2 : -Math.min(u.wallet, base); // grzywna nie zejdzie poniżej zera
+    const fine = Math.min(u.wallet, base); // grzywna nie zejdzie poniżej zera
+    // Nagroda/grzywna atomowo (credit/spend); stempel cooldown osobno (partial saveUser, nie tyka wallet).
+    if (success) {
+      await creditWallet(gid, interaction.user.id, interaction.user.username, base * 2);
+    } else if (fine > 0) {
+      await ensureUser(gid, interaction.user.id, interaction.user.username);
+      await spendWallet(gid, interaction.user.id, fine);
+    }
     await saveUser({
       guild_id: gid,
       user_id: interaction.user.id,
       username: interaction.user.username,
-      wallet: u.wallet + delta,
       last_rob: new Date().toISOString(),
     });
-    logTx(gid, interaction.user.id, delta, 'crime');
+    logTx(gid, interaction.user.id, success ? base * 2 : -fine, 'crime');
     bumpQuest(gid, interaction.user.id, 'games');
     if (success) bumpQuest(gid, interaction.user.id, 'gamesWon');
     await interaction.reply(
@@ -481,8 +487,11 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       await interaction.reply(eph(t(locale, 'eco.maxBet', { max: fmt(cfg.gambleMax, cur) })));
       return;
     }
-    const u = await getUser(gid, interaction.user.id);
-    if (u.wallet < amount) {
+    // Postaw stawkę atomowo; remis = zwrot, wygrana = 2× stawkę, przegrana = stawka pobrana.
+    await ensureUser(gid, interaction.user.id, interaction.user.username);
+    const afterBet = await spendWallet(gid, interaction.user.id, amount);
+    if (afterBet === null) {
+      const u = await getUser(gid, interaction.user.id);
       await interaction.reply(eph(t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) })));
       return;
     }
@@ -491,19 +500,16 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
     const second = 1 + Math.floor(Math.random() * 100);
     bumpQuest(gid, interaction.user.id, 'games');
     if (second === first) {
+      await creditWallet(gid, interaction.user.id, interaction.user.username, amount); // zwrot stawki
       await interaction.reply(t(locale, 'eco.hlPush', { first: String(first) }));
       return;
     }
     const win = second > first === (guess === 'high');
-    const delta = win ? amount : -amount;
-    if (win) bumpQuest(gid, interaction.user.id, 'gamesWon');
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: u.wallet + delta,
-    });
-    logTx(gid, interaction.user.id, delta, 'highlow');
+    if (win) {
+      bumpQuest(gid, interaction.user.id, 'gamesWon');
+      await creditWallet(gid, interaction.user.id, interaction.user.username, amount * 2);
+    }
+    logTx(gid, interaction.user.id, win ? amount : -amount, 'highlow');
     await interaction.reply(
       t(locale, win ? 'eco.hlWin' : 'eco.hlLose', {
         first: String(first),
@@ -526,30 +532,28 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       await interaction.reply(eph(t(locale, 'eco.maxBet', { max: fmt(cfg.gambleMax, cur) })));
       return;
     }
-    const u = await getUser(gid, interaction.user.id);
-    if (u.wallet < amount) {
+    // Postaw stawkę atomowo (spendWallet) — debet/credit przez RPC chronią przed równoległym
+    // creditem innego usera (pay/rob/donate) w oknie gry. ensureUser materializuje konto startowe.
+    await ensureUser(gid, interaction.user.id, interaction.user.username);
+    const afterBet = await spendWallet(gid, interaction.user.id, amount);
+    if (afterBet === null) {
+      const u = await getUser(gid, interaction.user.id);
       await interaction.reply(eph(t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) })));
       return;
     }
     if (sub === 'gamble') {
       const win = Math.random() < 0.5;
-      const delta = win ? amount : -amount;
       bumpQuest(gid, interaction.user.id, 'games');
       if (win) bumpQuest(gid, interaction.user.id, 'gamesWon');
-      await saveUser({
-        guild_id: gid,
-        user_id: interaction.user.id,
-        username: interaction.user.username,
-        wallet: u.wallet + delta,
-      });
-      logTx(gid, interaction.user.id, delta, 'gamble');
+      // Wygrana = zwrot stawki + zysk (2× stawkę); przegrana = stawka już pobrana (afterBet).
+      const balance = win
+        ? await creditWallet(gid, interaction.user.id, interaction.user.username, amount * 2)
+        : afterBet;
+      logTx(gid, interaction.user.id, win ? amount : -amount, 'gamble');
       await interaction.reply(
         win
-          ? t(locale, 'eco.gWin', { amount: fmt(amount, cur), balance: fmt(u.wallet + delta, cur) })
-          : t(locale, 'eco.gLose', {
-              amount: fmt(amount, cur),
-              balance: fmt(u.wallet + delta, cur),
-            }),
+          ? t(locale, 'eco.gWin', { amount: fmt(amount, cur), balance: fmt(balance, cur) })
+          : t(locale, 'eco.gLose', { amount: fmt(amount, cur), balance: fmt(balance, cur) }),
       );
     } else {
       const reels = ['🍒', '🍋', '🔔', '💎', '7️⃣'];
@@ -557,26 +561,20 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       let mult = 0;
       if (r[0] === r[1] && r[1] === r[2]) mult = 5;
       else if (r[0] === r[1] || r[1] === r[2] || r[0] === r[2]) mult = 2;
-      const delta = mult > 0 ? amount * (mult - 1) : -amount;
       bumpQuest(gid, interaction.user.id, 'games');
       if (mult > 0) bumpQuest(gid, interaction.user.id, 'gamesWon');
-      await saveUser({
-        guild_id: gid,
-        user_id: interaction.user.id,
-        username: interaction.user.username,
-        wallet: u.wallet + delta,
-      });
-      logTx(gid, interaction.user.id, delta, 'slots');
+      // Wygrana = stawka × mult (zwrot stawki wliczony); przegrana = stawka pobrana (afterBet).
+      const balance =
+        mult > 0
+          ? await creditWallet(gid, interaction.user.id, interaction.user.username, amount * mult)
+          : afterBet;
+      logTx(gid, interaction.user.id, mult > 0 ? amount * (mult - 1) : -amount, 'slots');
       const outcome =
         mult > 0
           ? t(locale, 'eco.win', { mult, amount: fmt(amount * (mult - 1), cur) })
           : t(locale, 'eco.lose', { amount: fmt(amount, cur) });
       await interaction.reply(
-        t(locale, 'eco.slots', {
-          reels: r.join(' | '),
-          outcome,
-          balance: fmt(u.wallet + delta, cur),
-        }),
+        t(locale, 'eco.slots', { reels: r.join(' | '), outcome, balance: fmt(balance, cur) }),
       );
     }
     return;
@@ -617,24 +615,29 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       await interaction.reply(eph(t(locale, 'eco.buyNF')));
       return;
     }
-    const u = await getUser(gid, interaction.user.id);
-    if (u.wallet < item.price) {
+    const tempDays = item.role_id ? (item.duration_days ?? 0) : 0;
+    const member = interaction.member as GuildMember | null;
+    // Rola czasowa: pozwól na ponowny zakup (= przedłużenie). Stała: blokuj, gdy już ją ma (przed opłatą).
+    if (item.role_id && tempDays <= 0 && member?.roles.cache.has(item.role_id)) {
+      await interaction.reply(eph(t(locale, 'eco.buyHasRole')));
+      return;
+    }
+    // Atomowy debet (pod withLock; spend/credit chronią przed równoległym creditem innego usera).
+    await ensureUser(gid, interaction.user.id, interaction.user.username);
+    const afterBuy = await spendWallet(gid, interaction.user.id, item.price);
+    if (afterBuy === null) {
+      const u = await getUser(gid, interaction.user.id);
       await interaction.reply(
         eph(t(locale, 'eco.buyLow', { price: fmt(item.price, cur), wallet: fmt(u.wallet, cur) })),
       );
       return;
     }
-    const tempDays = item.role_id ? (item.duration_days ?? 0) : 0;
     if (item.role_id) {
-      const member = interaction.member as GuildMember | null;
-      // Rola czasowa: pozwól na ponowny zakup (= przedłużenie). Stała: blokuj, gdy już ją ma.
-      if (tempDays <= 0 && member?.roles.cache.has(item.role_id)) {
-        await interaction.reply(eph(t(locale, 'eco.buyHasRole')));
-        return;
-      }
       try {
         await member?.roles.add(item.role_id);
       } catch {
+        // Nie udało się nadać roli → zwróć opłatę.
+        await creditWallet(gid, interaction.user.id, interaction.user.username, item.price);
         await interaction.reply(eph(t(locale, 'eco.buyRoleFail')));
         return;
       }
@@ -645,12 +648,6 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       // przedmiot bez roli → trafia do ekwipunku
       await addInventory(gid, interaction.user.id, item.name, 1);
     }
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: u.wallet - item.price,
-    });
     logTx(gid, interaction.user.id, -item.price, 'sklep');
     const okMsg =
       tempDays > 0
@@ -724,13 +721,7 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       extra = ` ${t(locale, 'eco.useShield')}`;
     } else if (effect === 'lootbox') {
       const loot = 100 + Math.floor(Math.random() * 1900);
-      const u = await getUser(gid, interaction.user.id);
-      await saveUser({
-        guild_id: gid,
-        user_id: interaction.user.id,
-        username: interaction.user.username,
-        wallet: u.wallet + loot,
-      });
+      await creditWallet(gid, interaction.user.id, interaction.user.username, loot); // atomowy credit
       logTx(gid, interaction.user.id, loot, 'lootbox');
       extra = ` ${t(locale, 'eco.useLoot', { loot: fmt(loot, cur) })}`;
     }
@@ -753,8 +744,11 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
       return;
     }
     const choice = interaction.options.getString('kolor', true);
-    const u = await getUser(gid, interaction.user.id);
-    if (u.wallet < amount) {
+    // Postaw stawkę atomowo; wygrana = stawka × mult, przegrana = stawka pobrana (afterBet).
+    await ensureUser(gid, interaction.user.id, interaction.user.username);
+    const afterBet = await spendWallet(gid, interaction.user.id, amount);
+    if (afterBet === null) {
+      const u = await getUser(gid, interaction.user.id);
       await interaction.reply(eph(t(locale, 'eco.low', { wallet: fmt(u.wallet, cur) })));
       return;
     }
@@ -763,22 +757,18 @@ async function runEco(interaction: ChatInputCommandInteraction): Promise<void> {
     const color = n === 0 ? 'green' : RED.has(n) ? 'red' : 'black';
     const won = choice === color;
     const mult = choice === 'green' ? 14 : 2;
-    const delta = won ? amount * (mult - 1) : -amount;
     bumpQuest(gid, interaction.user.id, 'games');
     if (won) bumpQuest(gid, interaction.user.id, 'gamesWon');
-    await saveUser({
-      guild_id: gid,
-      user_id: interaction.user.id,
-      username: interaction.user.username,
-      wallet: u.wallet + delta,
-    });
-    logTx(gid, interaction.user.id, delta, 'ruletka');
+    const balance = won
+      ? await creditWallet(gid, interaction.user.id, interaction.user.username, amount * mult)
+      : afterBet;
+    logTx(gid, interaction.user.id, won ? amount * (mult - 1) : -amount, 'ruletka');
     const emoji = color === 'green' ? '🟢' : color === 'red' ? '🔴' : '⚫';
     const outcome = won
       ? t(locale, 'eco.win', { mult, amount: fmt(amount * (mult - 1), cur) })
       : t(locale, 'eco.lose', { amount: fmt(amount, cur) });
     await interaction.reply(
-      t(locale, 'eco.roulette', { n, emoji, outcome, balance: fmt(u.wallet + delta, cur) }),
+      t(locale, 'eco.roulette', { n, emoji, outcome, balance: fmt(balance, cur) }),
     );
     return;
   }
