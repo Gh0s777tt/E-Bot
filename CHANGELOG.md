@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-625-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.555.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-626-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.556.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.556.0] — 🛡️ QA: redukcja false-positive (findPII telefon + isSuspiciousName przeplot)
+
+- `[#626]` 🛡️ **Dwa ostatnie follow-upy z przeglądu QA** (precyzja detekcji):
+  - **`findPII` telefon** ([`contentScan.mts`](bot/src/lib/contentScan.mts)) flagował dowolne `\d{3}[\s-]\d{3}[\s-]\d{3}` → „100-200-300" (nr zamówienia/kwota) był usuwany przy włączonym `pii.phone`. Teraz gołe 9 cyfr wykrywane TYLKO w kontekście telefonicznym (`tel`/`telefon`/`nr`/`kom`/`zadzwoń`/☎); `+48` nadal bez kontekstu. Precyzja > zasięg (auto-kasowanie nie może mylić legalnych treści). Świadomy trade-off: gołe numery bez kontekstu nie są wykrywane.
+  - **`isSuspiciousName`** ([`antiraid.mts`](bot/src/security/antiraid.mts)) — wzorzec **przeplotu** litera-cyfra ≥3 pary („a1b2c3", „1a2b3c") teraz podejrzany; NIE łapie „john2024" (bloki, nie naprzemiennie) ani „h2o" (1 para) → bez false-positive.
+  - +testy (kontekst/FP telefonu, przeplot/FP nicku). **Wszystkie defekty + follow-upy z przeglądu QA domknięte (0 xfail).**
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1131 passed (0 xfail)** · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.555.0] — 🛡️ Automod: anty-bypass „rozstrzelony" (s p a m) bez false-positive (QA #4)
 

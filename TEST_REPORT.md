@@ -11,7 +11,7 @@ Przeprowadzono ukierunkowane polowanie na defekty w **czystej logice domenowej**
 - **Przetestowano:** scanScam/contentScan, automod, antiraid, percentileRank/digest, buildEmbed/richMessage, duration, leveling, blackjack, pets, stocks, interest i inne (4 równoległe przeglądy + ręczna weryfikacja każdego znaleziska przez uruchomiony test).
 - **Defektów potwierdzonych testem:** **6** (1× Wysoki, 3× Średni, 2× Niski).
 - **NAPRAWIONO: 6/6** w commitach `#618–#621`, `#625` (defekt #4 domknięty bez FP — scala tylko ciągi pojedynczych liter). Każdy `it.fails` zamieniono po naprawie na zwykły test regresyjny → **0 xfail**.
-- **Dodatkowe znaleziska bez testu** (opt‑in / niedeterministyczne / degradacja sygnału): **5** (sekcja 6) — udokumentowane jako follow‑up.
+- **Dodatkowe znaleziska bez testu** (opt‑in / niedeterministyczne / degradacja sygnału): **5** (sekcja 6) — **WSZYSTKIE naprawione** (`#622`–`#626`) z testami deterministycznymi.
 - **Dodano testów:** docelowo 17 (regresje + kontrole pozytywne); plik [`bot/src/qa-findings.test.ts`](bot/src/qa-findings.test.ts).
 - **Stan zestawu po naprawach:** `1128 passed (0 xfail)` — **zielony**. Wszystkie defekty z `qa-findings.test.ts` naprawione i potwierdzone testami regresyjnymi.
 
@@ -88,9 +88,9 @@ Znaleziska potwierdzone analizą kodu, ale **bez testu** — z konkretnego powod
 | Znalezisko | Obszar | Dlaczego bez testu | Klasyfikacja |
 |---|---|---|---|
 | ~~**ReDoS‑guard nie łapie alternatyw**~~ ✅ **NAPRAWIONY (#622)** | `automod.mts` | Guard wydzielony do czystej `isUnsafeRegexPattern` i rozszerzony o alternatywę w grupie kwantyfikowanej (`(a\|aa)+`) i `{n,}` w grupie (`(a{2,})+`). Przetestowany **deterministycznie** (rozpoznanie wzorca, bez pomiaru czasu → bez flaky). | ~~Średni‑Wysoki~~ → rozwiązany |
-| **`findPII` telefon 3‑3‑3 — false positive** | `lib/contentScan.mts:226` | Regex `\d{3}[\s-]\d{3}[\s-]\d{3}` łapie `"100-200-300"` (numer zamówienia/kwota) jako telefon → kasowanie legalnych treści. Aktywne tylko gdy admin włączy `pii.phone` (domyślnie `false`). Test do dodania (API `findPII` warte osobnego pokrycia FP). | Defekt **Niski** (opt‑in) |
+| ~~`findPII` telefon 3‑3‑3 FP~~ ✅ **NAPRAWIONY (#626)** | `lib/contentScan.mts` | Gołe 9 cyfr wykrywane TYLKO w kontekście telefonicznym (tel/telefon/nr/kom/☎); `+48` bez kontekstu. „100-200-300" już nie flagowane. +testy (kontekst + brak FP). | ~~Niski~~ → rozwiązany |
 | ~~`nameSkeleton` homoglify~~ ✅ **NAPRAWIONY (#624)** | `security/antiraid.mts` | Mapa pewnych confusables (cyrylica/greka → łacina, 1:1) przed filtrem ASCII; `usеr`/`аdmіn` mapują się na łaciński szkielet i klastrują z ASCII. +1 test. | ~~Średni~~ → rozwiązany |
-| **`isSuspiciousName` — cyfry == litery** | `security/antiraid.mts:217` | `digits > letters` (ostre) → `a1b2c3` nie jest podejrzane. Wąsko celowane, by nie łapać `john2024`; to 1 z 3 składników `scoreMember`. | Uwaga / Defekt **Niski** |
+| ~~`isSuspiciousName` cyfry == litery~~ ✅ **NAPRAWIONY (#626)** | `security/antiraid.mts` | Dodany sygnał przeplotu litera-cyfra ≥3 pary („a1b2c3"); zachowane `>` → „john2024"/„h2o" bez FP. +testy. | ~~Niski~~ → rozwiązany |
 | ~~`levelInfo` — kap poziomu 1000~~ ✅ **NAPRAWIONY (#623)** | `leveling.mts` | Na kapie `xpInto = xpFor` (pasek 100%), nie rośnie bez ograniczeń. +1 test (kap przy `xp=3e9`). | ~~Niski~~ → rozwiązany |
 
 **Środowiskowe (poza zasięgiem):**

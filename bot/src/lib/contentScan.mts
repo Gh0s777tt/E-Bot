@@ -226,11 +226,15 @@ export function findPII(text: string, opts: PiiOpts): PiiType[] {
   }
 
   if (opts.phone) {
-    if (
-      /\+48[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}\b/.test(text) ||
-      /(?<!\d)\d{3}[\s-]\d{3}[\s-]\d{3}(?!\d)/.test(text)
-    )
-      found.add('phone');
+    // Z prefiksem +48 — jednoznaczny numer. Gołe 9 cyfr (3-3-3) WYŁĄCZNIE w kontekście telefonicznym
+    // (tel/telefon/nr/kom/zadzwoń/☎); bez kontekstu „100-200-300" (nr zamówienia/kwota) dawało
+    // false-positive i kasowało legalne wiadomości. Precyzja > zasięg — auto-kasowanie nie może mylić.
+    const withPrefix = /\+48[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}\b/.test(text);
+    const withContext =
+      /(?:tel\.?|telefon|nr\.?|kom\.?|zadzwo\w*|phone|call|☎|📞)[\s.:#-]*\d{3}[\s-]?\d{3}[\s-]?\d{3}\b/i.test(
+        text,
+      );
+    if (withPrefix || withContext) found.add('phone');
   }
 
   return [...found];

@@ -72,6 +72,12 @@ describe('findPII', () => {
   it('IBAN', () => expect(findPII('konto PL61109010140000071219812874', all)).toContain('iban'));
   it('e-mail', () => expect(findPII('pisz na a@b.com', all)).toContain('email'));
   it('telefon PL', () => expect(findPII('tel +48 600 700 800', all)).toContain('phone'));
+  it('telefon PL — gołe 9 cyfr w kontekście telefonicznym', () =>
+    expect(findPII('telefon: 600 700 800', all)).toContain('phone'));
+  it('NIE telefon — gołe 3-3-3 bez kontekstu (nr zamówienia/kwota, brak FP)', () => {
+    expect(findPII('zamówienie 100-200-300', all)).not.toContain('phone');
+    expect(findPII('kod 123 456 789', all)).not.toContain('phone');
+  });
   it('respektuje wyłączone typy', () => expect(findPII('a@b.com', { email: false })).toEqual([]));
   it('czysty tekst → []', () => expect(findPII('po prostu cześć wszystkim 2024', all)).toEqual([]));
 });

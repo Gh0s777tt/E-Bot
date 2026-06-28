@@ -249,6 +249,9 @@ export function isHoneypotHit(
 // wyraźna przewaga cyfr nad literami. Trzymane wąsko, by nie łapać zwykłych „imię+rok" (np. john2024).
 export function isSuspiciousName(name: string): boolean {
   if (/\d{5,}$/.test(name)) return true;
+  // Przeplot litera-cyfra ≥3 pary („a1b2c3", „1a2b3c") — wzorzec auto-generowany; NIE łapie „john2024"
+  // (litery i cyfry w blokach, nie naprzemiennie), więc bez false-positive na zwykłych nickach.
+  if (/(?:\p{L}\d){3,}/u.test(name) || /(?:\d\p{L}){3,}/u.test(name)) return true;
   const letters = (name.match(/\p{L}/gu) ?? []).length;
   const digits = (name.match(/\d/g) ?? []).length;
   return digits > letters && digits >= 3;

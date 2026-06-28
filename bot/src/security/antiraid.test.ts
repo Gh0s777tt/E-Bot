@@ -99,9 +99,14 @@ describe('isSuspiciousName — auto-generowane nicki', () => {
   });
   it('przewaga cyfr nad literami → podejrzany', () =>
     expect(isSuspiciousName('a12345')).toBe(true));
-  it('zwykłe imię+rok → NIE podejrzany (precyzja)', () => {
+  it('przeplot litera-cyfra (a1b2c3 / 1a2b3c) → podejrzany', () => {
+    expect(isSuspiciousName('a1b2c3')).toBe(true);
+    expect(isSuspiciousName('1a2b3c')).toBe(true);
+  });
+  it('zwykłe imię+rok → NIE podejrzany (precyzja, bez FP)', () => {
     expect(isSuspiciousName('john2024')).toBe(false);
     expect(isSuspiciousName('AlicePL')).toBe(false);
+    expect(isSuspiciousName('h2o')).toBe(false); // 1 para, nie przeplot
   });
 });
 
