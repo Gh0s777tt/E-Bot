@@ -3,12 +3,38 @@
 // normalizeText to anty-bypass zakazanych słów (leet/diakrytyki/zero-width); capsViolation = próg
 // wielkich liter; linkNotAllowed = whitelist domen. Czyste → 0 zmian zachowania (3× export).
 import { describe, expect, it } from 'vitest';
-import { capsViolation, linkNotAllowed, normalizeText } from './automod.mts';
+import { capsViolation, isUnsafeRegexPattern, linkNotAllowed, normalizeText } from './automod.mts';
 
 const caps = (percent: number, minLength: number) =>
   ({ enabled: true, percent, minLength }) as Parameters<typeof capsViolation>[1];
 const cfg = (allowedLinks: string[]) =>
   ({ allowedLinks }) as unknown as Parameters<typeof linkNotAllowed>[1];
+
+describe('isUnsafeRegexPattern — ReDoS-guard bannedRegex', () => {
+  it('odrzuca kwantyfikator w grupie + na grupie (klasyczna katastrofa)', () => {
+    expect(isUnsafeRegexPattern('(a+)+')).toBe(true);
+    expect(isUnsafeRegexPattern('(.*)*')).toBe(true);
+    expect(isUnsafeRegexPattern('([a-z]+)*')).toBe(true);
+  });
+  it('odrzuca alternatywę w grupie kwantyfikowanej', () => {
+    expect(isUnsafeRegexPattern('(a|aa)+')).toBe(true);
+    expect(isUnsafeRegexPattern('(a|b)*')).toBe(true);
+  });
+  it('odrzuca {n,} w grupie kwantyfikowanej', () => {
+    expect(isUnsafeRegexPattern('(a{2,})+')).toBe(true);
+  });
+  it('odrzuca absurdalnie długie wzorce i nie-stringi', () => {
+    expect(isUnsafeRegexPattern('a'.repeat(201))).toBe(true);
+    expect(isUnsafeRegexPattern(null)).toBe(true);
+    expect(isUnsafeRegexPattern(123)).toBe(true);
+  });
+  it('przepuszcza bezpieczne wzorce (listy słów, grupy bez kwantyfikatora)', () => {
+    expect(isUnsafeRegexPattern('spam')).toBe(false);
+    expect(isUnsafeRegexPattern('spam|hejt|ban')).toBe(false);
+    expect(isUnsafeRegexPattern('(spam|hejt)')).toBe(false);
+    expect(isUnsafeRegexPattern('\\bword\\b')).toBe(false);
+  });
+});
 
 describe('normalizeText — anty-bypass zakazanych słów', () => {
   it('lowercase + leet (3→e, 5→s, 0→o, @→o, 1→i, 4→a)', () => {

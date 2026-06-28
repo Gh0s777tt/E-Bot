@@ -87,7 +87,7 @@ Znaleziska potwierdzone analizą kodu, ale **bez testu** — z konkretnego powod
 
 | Znalezisko | Obszar | Dlaczego bez testu | Klasyfikacja |
 |---|---|---|---|
-| **ReDoS‑guard nie łapie alternatyw** `(a\|aa)+`, `(a{2,})+` | `automod.mts:77` | Test wymagałby pomiaru czasu wykonania (wykładniczy backtracking) → **niedeterministyczny/flaky**, a flaky test = defekt. Guard ma chronić przed katastrofą, lecz przepuszcza ją. Wymaga wzorca w configu (admin). | Defekt **Średni‑Wysoki** (opt‑in przez config) |
+| ~~**ReDoS‑guard nie łapie alternatyw**~~ ✅ **NAPRAWIONY (#622)** | `automod.mts` | Guard wydzielony do czystej `isUnsafeRegexPattern` i rozszerzony o alternatywę w grupie kwantyfikowanej (`(a\|aa)+`) i `{n,}` w grupie (`(a{2,})+`). Przetestowany **deterministycznie** (rozpoznanie wzorca, bez pomiaru czasu → bez flaky). | ~~Średni‑Wysoki~~ → rozwiązany |
 | **`findPII` telefon 3‑3‑3 — false positive** | `lib/contentScan.mts:226` | Regex `\d{3}[\s-]\d{3}[\s-]\d{3}` łapie `"100-200-300"` (numer zamówienia/kwota) jako telefon → kasowanie legalnych treści. Aktywne tylko gdy admin włączy `pii.phone` (domyślnie `false`). Test do dodania (API `findPII` warte osobnego pokrycia FP). | Defekt **Niski** (opt‑in) |
 | **`nameSkeleton` — homoglify (cyrylica) rozbijają klaster** | `security/antiraid.mts:170` | Różne homoglify per‑nick rozjeżdżają szkielet → armia botów słabiej klastrowana. Degraduje **sygnał wzmacniający**, nie wyłącza detekcji fali (`detectWave` działa niezależnie). | Uwaga / Defekt **Średni** (degradacja) |
 | **`isSuspiciousName` — cyfry == litery** | `security/antiraid.mts:217` | `digits > letters` (ostre) → `a1b2c3` nie jest podejrzane. Wąsko celowane, by nie łapać `john2024`; to 1 z 3 składników `scoreMember`. | Uwaga / Defekt **Niski** |

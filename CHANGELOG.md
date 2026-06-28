@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-621-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.551.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-622-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.552.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.552.0] — 🛡️ Automod: utwardzony ReDoS-guard (alternatywy + {n,}) (QA follow-up)
+
+- `[#622]` 🛡️ **Rozszerzony ReDoS-guard** (follow-up z przeglądu QA — sekcja „Luki" w [`TEST_REPORT.md`](TEST_REPORT.md)). Guard `bannedRegex` (kompilowany z panelu, chodzi na KAŻDEJ wiadomości) łapał tylko kwantyfikator-w-grupie + na-grupie (`(a+)+`, `(.*)*`), a przepuszczał katastroficzne `(a|aa)+` i `(a{2,})+` → spreparowana wiadomość mogła zawiesić pętlę automoda (DoS detekcji treści). Guard wydzielony do czystej, testowalnej **`isUnsafeRegexPattern`** ([`automod.mts`](bot/src/automod.mts)) i rozszerzony o **alternatywę w grupie kwantyfikowanej** i **`{n,}` w grupie**. Best-effort (woli odrzucić podejrzany wzorzec niż dopuścić katastrofę); legalne listy słów (`spam|hejt`, grupy bez kwantyfikatora) przechodzą. +5 testów **deterministycznych** (rozpoznanie wzorca, BEZ pomiaru czasu → bez flaky).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · pełny zestaw **1124 passed + 2 xfail** (otwarty defekt QA #4) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.551.0] — 🐛 duration: poprawna obsługa wartości ujemnych (QA #5, #6)
 

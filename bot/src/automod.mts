@@ -61,6 +61,19 @@ const DEFAULT: AutomodConfig = {
 // Cache trzyma cfg + skompilowane regexy. getGuildSettings = override serwera z fallbackiem global.
 type AutomodCached = { cfg: AutomodConfig; compiled: RegExp[]; at: number };
 const cfgCache = new Map<string, AutomodCached>();
+// ReDoS-guard (dep-free, best-effort): rozpoznaje wzorce podatne na katastroficzny backtracking. Regex
+// `bannedRegex` jest konfigurowalny z panelu i chodzi na KAŻDEJ wiadomości, więc zły wzorzec = DoS bota.
+// Łapane wektory: kwantyfikator-w-grupie + kwantyfikator-na-grupie (`(a+)+`, `(.*)*`), alternatywa
+// w grupie kwantyfikowanej (`(a|aa)+`) oraz `{n,}` w grupie kwantyfikowanej (`(a{2,})+`). Best-effort:
+// woli odrzucić podejrzany wzorzec niż dopuścić katastrofę (legalne listy słów `spam|hejt` przechodzą).
+export function isUnsafeRegexPattern(p: unknown): boolean {
+  if (typeof p !== 'string' || p.length > 200) return true;
+  if (/\([^)]*[+*][^)]*\)[+*]/.test(p)) return true; // (a+)+, (.*)*
+  if (/\([^)]*\|[^)]*\)[+*]/.test(p)) return true; // (a|aa)+, (a|b)*
+  if (/\([^)]*\{\d+,\}[^)]*\)[+*]/.test(p)) return true; // (a{2,})+
+  return false;
+}
+
 function cfgFor(guildId: string): AutomodCached {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit;
@@ -69,12 +82,7 @@ function cfgFor(guildId: string): AutomodCached {
   const compiled = (cfg.bannedRegex ?? [])
     .map((p) => {
       try {
-        // ReDoS-guard (dep-free, best-effort): odrzuć absurdalnie długie wzorce ORAZ klasyczny wektor
-        // katastroficznego backtrackingu — kwantyfikator wewnątrz grupy + kwantyfikator NA grupie
-        // (np. `(a+)+`, `(.*)*`). Legalne słowo-wzorce automoda tego nie potrzebują; regex chodzi na
-        // każdej wiadomości, więc katastroficzny wzorzec = DoS bota.
-        if (typeof p !== 'string' || p.length > 200) return null;
-        if (/\([^)]*[+*][^)]*\)[+*]/.test(p)) return null;
+        if (isUnsafeRegexPattern(p)) return null; // ReDoS-guard (patrz funkcja wyżej)
         return new RegExp(p, 'i');
       } catch {
         return null;
