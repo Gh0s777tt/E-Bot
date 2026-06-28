@@ -1,4 +1,4 @@
-<!-- SYNC: v0.569.0 · #639 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.570.0 · #640 · 2026-06-28 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.569.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.570.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.569.0)
+## 🔭 Bieżący tor (v0.570.0)
+
+**🎨 Redesign panelu „Crimson Aurora" — UKOŃCZONY (v0.570.0)** — spójny język wizualny na całym dashboardzie (szkło na panelach, gradientowe primary, sentence-case nagłówki sekcji, hover wierszy tabel, spójny `EmptyState`) + rebranding „GH0ST EMPIRE" → „E‑Forge" w tekstach widocznych. **Tylko prezentacja** — 0 zmian logiki/danych/API/env, landing/login/wiki nietknięte, 100% funkcji zachowane. Diagnoza + system + mapowanie: [`REDESIGN_NOTES.md`](../REDESIGN_NOTES.md).
 
 **🧪🏁 Kampania testów (Rygiel) — TOR BIEŻĄCY** — produkt jest **funkcjonalnie kompletny** (fazy 0–8 · etapy A–K · i18n 14 jęz. · Marketplace M1–M6 + auto-trigger); obecny tor to **systematyczne ryglowanie czystej logiki testami jednostkowymi**: **132 pliki / 986 testów** (`pnpm test` zielone). Wzorzec „jeden rygiel na update" — testy **mutation-proof** (dowód, że gryzą: po wstrzyknięciu mutacji czerwone, po cofnięciu zielone), zmiany produkcyjne minimalne (ekstrakcja czystej funkcji + `export`, **0 zmian zachowania**). Kamienie: 500+ (v0.393) · 600+ (v0.407) · 700+ (v0.422) · 100 plików (v0.432) · 900+ (v0.459). Pokryty rdzeń bota (bezpieczeństwo · ekonomia · leveling · live · i18n), warstwa danych panelu i silnik Architekta; **pakiet `ingest` dopiero wszedł w pokrycie** (pierwszy test `igdb.chunk`, v0.460) → naturalny kolejny target: kolektory **Steam · PSN · GOG · IGDB**.
 

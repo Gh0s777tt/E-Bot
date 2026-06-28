@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-639-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.569.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-640-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.570.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.570.0] — 🎨 Redesign panelu „Crimson Aurora" + rebranding E‑Forge
+
+- `[#640]` 🎨 **Redesign UI panelu („Crimson Aurora")** — spójny język wizualny na całym dashboardzie (gałąź `redesign/ui`, scalona do `main`): szkło na panelach (scoped pod `.content-pane`), gradientowe przyciski primary ([`SaveButton`](dashboard/components/SaveButton.tsx) + CTA hero), kafelki [`StatCard`](dashboard/components/StatCard.tsx) na szkle, **ujednolicona typografia nagłówków sekcji** (`font-display`, sentence-case zamiast UPPERCASE — 79 zamian / 34 pliki), **hover wierszy** we wszystkich tabelach z danymi, spójny komponent [`EmptyState`](dashboard/components/EmptyState.tsx) (8 pustych stanów), dopracowane stany [`error`](dashboard/app/error.tsx) + tytuł Topbara. **Rebranding** „GH0ST EMPIRE" → **„E‑Forge"** w tekstach widocznych dla użytkownika (256 zamian; identyfikatory/env/domeny/klucze danych świadomie nietknięte). **Tylko prezentacja** — zero zmian logiki/danych/API/env; landing/login/wiki bez zmian; brak nowych zależności; 100% funkcji zachowane. Diagnoza + system + mapowanie: [`REDESIGN_NOTES.md`](REDESIGN_NOTES.md).
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · dashboard `tsc` · Biome · `sync:check` — exit 0 (Node 26.4.0). Zweryfikowane zrzutami 16 ekranów (zalogowany panel).
 
 ## [0.569.0] — 🌍 Wiki ×14: tłumaczenie interfejsu strony /wiki
 
