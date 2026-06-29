@@ -339,6 +339,14 @@ export const autoslowSchema = z.object({
 });
 export type AutoslowInput = z.infer<typeof autoslowSchema>;
 
+// ── Trwałe role (POST /api/stickyroles) ────────────────────
+export const stickyrolesSchema = z.object({
+  enabled: z.boolean(),
+  all: z.boolean(),
+  roles: z.array(z.string().max(40)).max(25),
+});
+export type StickyrolesInput = z.infer<typeof stickyrolesSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

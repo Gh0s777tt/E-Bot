@@ -322,6 +322,22 @@ export async function saveAutoslowConfig(cfg: AutoslowConfig): Promise<void> {
   await setConfigSetting('autoslow_config', JSON.stringify(cfg));
 }
 
+// ── Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (anty-ucieczka od wyciszenia) ──
+export type StickyrolesConfig = { enabled: boolean; all: boolean; roles: string[] };
+export const STICKYROLES_DEFAULT: StickyrolesConfig = { enabled: false, all: false, roles: [] };
+export async function getStickyrolesConfig(): Promise<StickyrolesConfig> {
+  const raw = await getConfigSetting('stickyroles_config');
+  if (!raw) return structuredClone(STICKYROLES_DEFAULT);
+  try {
+    return { ...STICKYROLES_DEFAULT, ...(JSON.parse(raw) as Partial<StickyrolesConfig>) };
+  } catch {
+    return structuredClone(STICKYROLES_DEFAULT);
+  }
+}
+export async function saveStickyrolesConfig(cfg: StickyrolesConfig): Promise<void> {
+  await setConfigSetting('stickyroles_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

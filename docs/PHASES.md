@@ -1,4 +1,4 @@
-<!-- SYNC: v0.582.0 · #652 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.583.0 · #653 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.582.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.583.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.582.0)
+## 🔭 Bieżący tor (v0.583.0)
+
+**🔒 Trwałe role (v0.583.0)** — bot zapamiętuje role wychodzącego członka i przywraca je przy powrocie (anty-ucieczka od wyciszenia + zachowanie zdobytych ról). Bot: `security/stickyroles.mts`; panel: sekcja na `/moderation`.
 
 **⏱️ Adaptacyjny slowmode (v0.582.0)** — bot mierzy tempo wiadomości na wybranych kanałach i sam podnosi/zdejmuje slowmode (bez kar, bez moderatora; kanał zwalnia w szczycie, wraca do normy po wyciszeniu). Bot: `security/autoslow.mts`; panel: sekcja na `/moderation`.
 

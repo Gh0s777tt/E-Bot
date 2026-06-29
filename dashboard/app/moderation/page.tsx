@@ -1,4 +1,4 @@
-import { Bot, Gauge, Gavel, Hourglass, Inbox, ShieldCheck, Zap } from 'lucide-react';
+import { Bot, Gauge, Gavel, Hourglass, Inbox, ShieldCheck, UserCog, Zap } from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
 import AppealsForm from '../../components/AppealsForm';
 import AutomodForm from '../../components/AutomodForm';
@@ -8,12 +8,14 @@ import EmptyState from '../../components/EmptyState';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
 import StatusPill from '../../components/StatusPill';
+import StickyRolesForm from '../../components/StickyRolesForm';
 import {
   getAiModConfig,
   getAppealsConfig,
   getAutomodConfig,
   getAutomodStats,
   getAutoslowConfig,
+  getStickyrolesConfig,
 } from '../../lib/community';
 import { getNativeRules } from '../../lib/discordAutomod';
 import { getModCases, getTempBans } from '../../lib/faza4';
@@ -56,20 +58,33 @@ function remaining(iso: string, lang: PanelLocale): string {
 }
 
 export default async function ModerationPage() {
-  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules, appeals, autoslow, guildId, lang] =
-    await Promise.all([
-      getAutomodConfig(),
-      getAiModConfig(),
-      getModCases(30),
-      getTempBans(50),
-      getGuildMeta(),
-      getAutomodStats(),
-      getNativeRules(),
-      getAppealsConfig(),
-      getAutoslowConfig(),
-      getPrimaryGuildId(),
-      getPanelLocale(),
-    ]);
+  const [
+    cfg,
+    aimod,
+    cases,
+    tempbans,
+    guild,
+    stats,
+    nativeRules,
+    appeals,
+    autoslow,
+    sticky,
+    guildId,
+    lang,
+  ] = await Promise.all([
+    getAutomodConfig(),
+    getAiModConfig(),
+    getModCases(30),
+    getTempBans(50),
+    getGuildMeta(),
+    getAutomodStats(),
+    getNativeRules(),
+    getAppealsConfig(),
+    getAutoslowConfig(),
+    getStickyrolesConfig(),
+    getPrimaryGuildId(),
+    getPanelLocale(),
+  ]);
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-3">
@@ -130,6 +145,16 @@ export default async function ModerationPage() {
           </span>
         </h2>
         <AutoslowForm initial={autoslow} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <UserCog size={16} className="text-accent" /> {tp(lang, 'ui.sticky.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={sticky.enabled} lang={lang} />
+          </span>
+        </h2>
+        <StickyRolesForm initial={sticky} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

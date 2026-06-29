@@ -94,6 +94,7 @@ import { startAutoSlowmode } from './security/autoslow.mts';
 import { startHeat } from './security/heat.mts';
 import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
+import { startStickyRoles } from './security/stickyroles.mts';
 import { handleVerifyButton, handleVerifyModal } from './security/verification.mts';
 import { startProvision } from './setup/provision.mts';
 import { startSticky } from './sticky.mts';
@@ -226,6 +227,7 @@ client.once(Events.ClientReady, (c) => {
   startOnboarding(c); // Onboarding — DM powitalny do właściciela przy dodaniu bota do serwera
   startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
   startWelcome(c); // Faza 6 — powitania + autorole
+  startStickyRoles(c); // Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (config z panelu)
   startAutomod(c); // Faza 6 — automoderacja
   startClipRelay(c); // Faza 6 — relay klipów Twitch (config z panelu /creator)
   startSocialFeeds(c); // Faza 8 — powiadomienia o nowych postach social (RSS), config /creator

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-652-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.582.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-653-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.583.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.583.0] — 🔒 Trwałe role (sticky roles — przywracanie ról po powrocie)
+
+- `[#653]` 🔒 **Trwałe role** — gdy członek WYCHODZI z serwera, bot zapamiętuje jego role, a gdy WRACA — przywraca je. Dwa zastosowania: **anty-ucieczka od wyciszenia** (leave→rejoin nie zdejmie już roli „Muted/Wyciszony") oraz **zachowanie zdobytych ról** (poziomy, kolory, członkostwo). Tryb: tylko z listy ról albo wszystkie przydzielalne (`all`). Snapshoty w `g:<id>:sticky_snapshots` (settings JSON, dedup po userze, cap 1000), bez nowej tabeli.
+  - Bot: [`bot/src/security/stickyroles.mts`](bot/src/security/stickyroles.mts) — `guildMemberRemove` zapisuje, `guildMemberAdd` przywraca i konsumuje snapshot; czysta, testowalna `pickPersistable` (pomija `@everyone`, role zarządzane — boost/integracje — i powyżej roli bota). Wymaga `ManageRoles` + chmury. Panel: sekcja na `/moderation` (przełącznik „wszystkie" + lista ról).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 843 +`pickPersistable`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+6 kluczy).
 
 ## [0.582.0] — ⏱️ Adaptacyjny slowmode (auto-throttling kanałów wg tempa)
 
