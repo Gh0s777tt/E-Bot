@@ -1,4 +1,4 @@
-<!-- SYNC: v0.575.0 · #645 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.576.0 · #646 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.575.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.576.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.575.0)
+## 🔭 Bieżący tor (v0.576.0)
+
+**📕 Pełna dokumentacja A→Z (v0.576.0)** — PDF `docs/pdf/E-BOT-funkcje-A-Z.pdf` (wszystkie komendy + moduły, A4, motyw marki) generowany ze źródła (`scripts/pdf/gen-full-pdf.mjs` ← `wikiData.ts`).
 
 **🧨 Reset bazy — narzędzie developera (v0.575.0)** — w Diagnostyce (tylko właściciel `DASHBOARD_OWNER_IDS`): reset całej bazy lub danego serwera. RPC `dev_reset_*` (auto-wykrywanie tabel, `security definer`, tylko `service_role`) + twarde potwierdzenie. Wymaga uruchomienia `dashboard/scripts/_ALL.sql`.
 

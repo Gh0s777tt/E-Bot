@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8" /><title>E-Bot — pełna dokumentacja funkcji (A→Z)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @page { size: A4; margin: 0; }
+  html, body { background: #0e0e12; color: #d3d3da; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .doc { padding: 14mm 14mm 16mm; }
+  .accent { color: #e50914; }
+  .muted { color: #9a9aa6; }
+  h1 { font-size: 30pt; color: #fff; line-height: 1.1; letter-spacing: .01em; }
+  .secTitle { font-size: 21pt; color: #fff; margin: 6mm 0 4mm; padding-bottom: 5pt; border-bottom: 2px solid #e50914; break-after: avoid; }
+  h2 { font-size: 13.5pt; color: #fff; margin: 7mm 0 2.5mm; padding-bottom: 4pt; border-bottom: 1px solid #232329; break-after: avoid; display: flex; align-items: baseline; gap: 8pt; }
+  .cnt { font-size: 8.5pt; color: #e50914; font-weight: 700; }
+  .cmds { display: block; }
+  .cmd { display: grid; grid-template-columns: 36mm 1fr; gap: 8pt; padding: 3.2pt 0; border-bottom: 1px solid #191920; break-inside: avoid; }
+  .cn { color: #ff5860; font-family: 'Consolas', monospace; font-size: 9.5pt; font-weight: 700; }
+  .cd { font-size: 9.5pt; color: #cfcfd6; line-height: 1.4; }
+  .cs { font-size: 8pt; color: #7a7a85; margin-top: 1pt; }
+  .mod { break-inside: avoid; border: 1px solid #232329; border-radius: 8pt; background: #121217; padding: 9pt 11pt; margin: 6pt 0; }
+  .mod h3 { font-size: 12pt; color: #fff; margin-bottom: 3pt; }
+  .mc { font-family: 'Consolas', monospace; font-size: 9pt; color: #e50914; font-weight: 600; }
+  .md { font-size: 9.5pt; color: #c2c2cb; line-height: 1.5; }
+  .steps { margin: 5pt 0 0 0; padding-left: 16pt; }
+  .steps li { font-size: 9pt; color: #cfcfd6; line-height: 1.5; margin: 1.5pt 0; }
+  .rel { font-size: 8.5pt; color: #9a9aa6; margin-top: 5pt; }
+  .rel code, .md code { font-family: 'Consolas', monospace; color: #e50914; }
+  .cover { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20mm; position: relative; page-break-after: always; }
+  .glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150mm; height: 150mm; border-radius: 50%; background: radial-gradient(circle, rgba(229,9,20,.22), transparent 70%); }
+  .logo { width: 32mm; height: 32mm; border-radius: 10pt; object-fit: cover; border: 1px solid rgba(229,9,20,.4); margin-bottom: 12pt; position: relative; }
+  .tag { display: inline-block; font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: #e50914; border: 1px solid rgba(229,9,20,.4); background: rgba(229,9,20,.1); padding: 4pt 10pt; border-radius: 99pt; position: relative; }
+  .lead { font-size: 11.5pt; color: #c7c7d1; max-width: 150mm; margin: 12pt auto 0; line-height: 1.6; position: relative; }
+  .pill-row { display: flex; gap: 8pt; justify-content: center; margin-top: 16pt; flex-wrap: wrap; position: relative; }
+  .pill { border: 1px solid #232329; border-radius: 8pt; padding: 7pt 13pt; font-size: 9.5pt; background: #121217; }
+  .pill b { color: #e50914; font-size: 13pt; }
+  .toc { display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; margin: 4mm 0 2mm; }
+  .toc-h { font-size: 11pt; color: #e50914; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4pt; }
+  .toc-i { font-size: 9pt; color: #c2c2cb; padding: 1.5pt 0; display: flex; justify-content: space-between; border-bottom: 1px solid #191920; }
+  .toc-i span { color: #7a7a85; }
+</style></head>
+<body>
+  <section class="cover">
+    <div class="glow"></div>
+    <img class="logo" src="../../dashboard/public/ghost-skull.png" alt="E-Bot" />
+    <span class="tag">Pełna dokumentacja · A → Z</span>
+    <h1 style="margin-top: 14pt">E-<span class="accent">BOT</span> — wszystkie funkcje</h1>
+    <p class="lead">Kompletny przewodnik po wszystkich komendach i modułach E-Bota: 95+ komend slash w 11 kategoriach oraz 32+ modułów panelu z konfiguracją krok po kroku. Wszystko sterowane z panelu web w 14 językach.</p>
+    <div class="pill-row">
+      <div class="pill"><b>95+</b> komend</div>
+      <div class="pill"><b>32+</b> modułów</div>
+      <div class="pill"><b>14</b> języków</div>
+    </div>
+    <p class="muted" style="margin-top: 22pt; font-size: 9pt; position: relative">E-Forge · e-bot-dc.vercel.app</p>
+  </section>
+
+  <div class="doc">
+    <div class="secTitle">Spis treści</div>
+    <div class="toc"><div class="toc-col"><div class="toc-h">Komendy</div>
+<div class="toc-i">Profil i kariera <span>7</span></div>
+<div class="toc-i">Ekonomia i hazard <span>8</span></div>
+<div class="toc-i">Leveling i gamifikacja <span>10</span></div>
+<div class="toc-i">AI i treści <span>9</span></div>
+<div class="toc-i">Zabawa i gierki <span>13</span></div>
+<div class="toc-i">Moderacja i bezpieczeństwo <span>14</span></div>
+<div class="toc-i">Konfiguracja i panele <span>13</span></div>
+<div class="toc-i">Live i streaming <span>3</span></div>
+<div class="toc-i">Biblioteka i gaming <span>4</span></div>
+<div class="toc-i">Planowanie i przypomnienia <span>3</span></div>
+<div class="toc-i">Informacje i narzędzia <span>11</span></div>
+</div><div class="toc-col"><div class="toc-h">Moduły</div>
+<div class="toc-i">Bezpieczeństwo</div>
+<div class="toc-i">Ekonomia i progresja</div>
+<div class="toc-i">Zaangażowanie społeczności</div>
+<div class="toc-i">Live i powiadomienia</div>
+<div class="toc-i">Wsparcie i rekrutacja</div>
+<div class="toc-i">AI i narzędzia</div>
+</div></div>
+
+    <div class="secTitle">🤖 Komendy (95+)</div>
+    <h2>Profil i kariera <span class="cnt">7</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/profile</code><div><div class="cd">Twój profil: poziom, saldo, zaproszenia i odznaki.</div><div class="cs">↳ user</div></div></div>
+<div class="cmd"><code class="cn">/rank</code><div><div class="cd">Karta rangi (XP / poziom).</div><div class="cs">↳ user</div></div></div>
+<div class="cmd"><code class="cn">/xp</code><div><div class="cd">Zarządzanie XP użytkownika (admin).</div><div class="cs">↳ give · remove · set · reset</div></div></div>
+<div class="cmd"><code class="cn">/prestige</code><div><div class="cd">Przejście na wyższy prestiż (reset XP za odznakę).</div></div></div>
+<div class="cmd"><code class="cn">/achievements</code><div><div class="cd">Osiągnięcia (tiery za poziom).</div><div class="cs">↳ uzytkownik</div></div></div>
+<div class="cmd"><code class="cn">/battlepass</code><div><div class="cd">Sezonowy battle-pass — postęp tierów wg aktywności.</div></div></div>
+<div class="cmd"><code class="cn">/tutorial</code><div><div class="cd">Interaktywny samouczek — poznaj bota krok po kroku.</div></div></div></div>
+<h2>Ekonomia i hazard <span class="cnt">8</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/eco</code><div><div class="cd">Ekonomia serwera: waluta, praca, sklep, hazard.</div><div class="cs">↳ balance · daily · work · rob · pay · deposit · withdraw · gamble · slots · blackjack · roulette · crime · highlow · shop · buy · inventory · use · top</div></div></div>
+<div class="cmd"><code class="cn">/clan</code><div><div class="cd">System klanów — zakładanie, zarządzanie i rywalizacja.</div><div class="cs">↳ create · join · leave · info · top · donate · disband · transfer · role · channel</div></div></div>
+<div class="cmd"><code class="cn">/cards</code><div><div class="cd">Kolekcjonerskie karty — losuj, zbieraj, sprzedawaj duplikaty.</div><div class="cs">↳ pull · daily · collection · sell · info</div></div></div>
+<div class="cmd"><code class="cn">/stocks</code><div><div class="cd">Giełda — kupuj i sprzedawaj wirtualne akcje.</div><div class="cs">↳ list · buy · sell · portfolio</div></div></div>
+<div class="cmd"><code class="cn">/lottery</code><div><div class="cd">Loteria serwerowa — pula rośnie z biletów.</div><div class="cs">↳ buy · pool · draw</div></div></div>
+<div class="cmd"><code class="cn">/market</code><div><div class="cd">Targowisko gracz↔gracz (przedmioty za walutę).</div><div class="cs">↳ list · browse · buy · unlist</div></div></div>
+<div class="cmd"><code class="cn">/pet</code><div><div class="cd">Pet — adoptuj zwierzaka, karm i odbieraj prezenty.</div><div class="cs">↳ adopt · status · feed · gift · rename · release · battle · top</div></div></div>
+<div class="cmd"><code class="cn">/donate</code><div><div class="cd">Pokaż sposoby wsparcia (donejty).</div></div></div></div>
+<h2>Leveling i gamifikacja <span class="cnt">10</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/quests</code><div><div class="cd">Questy dzienne i tygodniowe + odbiór nagród.</div></div></div>
+<div class="cmd"><code class="cn">/hof</code><div><div class="cd">Hall of Fame sezonów levelingu.</div><div class="cs">↳ miesiac</div></div></div>
+<div class="cmd"><code class="cn">/rep</code><div><div class="cd">Reputacja — doceniaj pomocnych.</div><div class="cs">↳ daj · profil · ranking</div></div></div>
+<div class="cmd"><code class="cn">/invites</code><div><div class="cd">Statystyki zaproszeń.</div><div class="cs">↳ stats · top</div></div></div>
+<div class="cmd"><code class="cn">/marry</code><div><div class="cd">Małżeństwa na serwerze.</div><div class="cs">↳ oswiadczyny · status · rozwod</div></div></div>
+<div class="cmd"><code class="cn">/skins</code><div><div class="cd">Skórki kart rang/profilu.</div><div class="cs">↳ list · buy · equip</div></div></div>
+<div class="cmd"><code class="cn">/birthday</code><div><div class="cd">Twoje urodziny na serwerze.</div><div class="cs">↳ set · clear</div></div></div>
+<div class="cmd"><code class="cn">/afk</code><div><div class="cd">Ustaw status AFK.</div><div class="cs">↳ powod</div></div></div>
+<div class="cmd"><code class="cn">/highlight</code><div><div class="cd">Powiadomienia DM o słowach-kluczach.</div><div class="cs">↳ add · remove · list</div></div></div>
+<div class="cmd"><code class="cn">/ship</code><div><div class="cd">Sprawdź dopasowanie dwóch osób.</div><div class="cs">↳ osoba1 · osoba2</div></div></div></div>
+<h2>AI i treści <span class="cnt">9</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/ai</code><div><div class="cd">Zapytaj AI (pamięta kontekst, dzienny limit).</div><div class="cs">↳ prompt · nowa</div></div></div>
+<div class="cmd"><code class="cn">/ask</code><div><div class="cd">Jednorazowe pytanie AI (bez pamięci).</div><div class="cs">↳ pytanie</div></div></div>
+<div class="cmd"><code class="cn">/aiserver</code><div><div class="cd">AI zaprojektuje i utworzy strukturę serwera z opisu.</div><div class="cs">↳ opis</div></div></div>
+<div class="cmd"><code class="cn">/imagine</code><div><div class="cd">Wygeneruj obraz z opisu (AI).</div><div class="cs">↳ opis</div></div></div>
+<div class="cmd"><code class="cn">/describe</code><div><div class="cd">AI opisze załączony obraz.</div><div class="cs">↳ obraz · pytanie</div></div></div>
+<div class="cmd"><code class="cn">/persona</code><div><div class="cd">Osobowość bota AI (styl /ai, /ask).</div><div class="cs">↳ set · custom · off · show</div></div></div>
+<div class="cmd"><code class="cn">/rewrite</code><div><div class="cd">Przepisz tekst w wybranym stylu (AI).</div><div class="cs">↳ tekst · styl</div></div></div>
+<div class="cmd"><code class="cn">/translate</code><div><div class="cd">Przetłumacz tekst (AI).</div><div class="cs">↳ tekst · jezyk</div></div></div>
+<div class="cmd"><code class="cn">/tldr</code><div><div class="cd">Podsumuj ostatnie wiadomości kanału (AI).</div><div class="cs">↳ ile</div></div></div></div>
+<h2>Zabawa i gierki <span class="cnt">13</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/fun</code><div><div class="cd">Zabawy: prawda/wyzwanie, wolałbyś, 8ball, kostka.</div><div class="cs">↳ prawda · wyzwanie · wolalbys · 8ball · kostka</div></div></div>
+<div class="cmd"><code class="cn">/flip</code><div><div class="cd">Rzut monetą.</div></div></div>
+<div class="cmd"><code class="cn">/rps</code><div><div class="cd">Kamień, papier, nożyce z botem.</div><div class="cs">↳ wybor</div></div></div>
+<div class="cmd"><code class="cn">/ttt</code><div><div class="cd">Kółko i krzyżyk z graczem.</div><div class="cs">↳ przeciwnik</div></div></div>
+<div class="cmd"><code class="cn">/trivia</code><div><div class="cd">Quiz wiedzy — pierwszy poprawny zgarnia nagrodę.</div><div class="cs">↳ kategoria</div></div></div>
+<div class="cmd"><code class="cn">/meme</code><div><div class="cd">Wygeneruj mema na popularnym szablonie.</div><div class="cs">↳ szablon · gora · dol</div></div></div>
+<div class="cmd"><code class="cn">/math</code><div><div class="cd">Kalkulator wyrażeń.</div><div class="cs">↳ wyrazenie</div></div></div>
+<div class="cmd"><code class="cn">/dadjoke</code><div><div class="cd">Losowy suchar.</div></div></div>
+<div class="cmd"><code class="cn">/cat</code><div><div class="cd">Losowe zdjęcie kota.</div></div></div>
+<div class="cmd"><code class="cn">/dog</code><div><div class="cd">Losowe zdjęcie psa.</div></div></div>
+<div class="cmd"><code class="cn">/confess</code><div><div class="cd">Anonimowe wyznanie na kanale.</div><div class="cs">↳ tresc</div></div></div>
+<div class="cmd"><code class="cn">/event</code><div><div class="cd">Ogłoś wydarzenie z zapisami (RSVP).</div><div class="cs">↳ tytul · kiedy · opis</div></div></div>
+<div class="cmd"><code class="cn">/suggest</code><div><div class="cd">Zgłoś sugestię dla serwera.</div><div class="cs">↳ tresc</div></div></div></div>
+<h2>Moderacja i bezpieczeństwo <span class="cnt">14</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/mod</code><div><div class="cd">Komendy moderacji.</div><div class="cs">↳ warn · timeout · kick · ban · tempban · unban · note · clear · warnings</div></div></div>
+<div class="cmd"><code class="cn">/case</code><div><div class="cd">Historia spraw moderacyjnych.</div><div class="cs">↳ user · recent</div></div></div>
+<div class="cmd"><code class="cn">/modai</code><div><div class="cd">AI co-pilot moderacji: analiza użytkownika lub kolejki.</div><div class="cs">↳ user · queue</div></div></div>
+<div class="cmd"><code class="cn">/antinuke</code><div><div class="cd">Ochrona przed nukowaniem serwera.</div><div class="cs">↳ status · toggle · setlog · punishment · protection · whitelist</div></div></div>
+<div class="cmd"><code class="cn">/heat</code><div><div class="cd">Adaptacyjny anty-spam (scoring z karą).</div><div class="cs">↳ on · off · status</div></div></div>
+<div class="cmd"><code class="cn">/raidmode</code><div><div class="cd">Awaryjna blokada nowych wejść.</div><div class="cs">↳ stan</div></div></div>
+<div class="cmd"><code class="cn">/panic</code><div><div class="cd">PANIC MODE — lockdown serwera jednym ruchem.</div><div class="cs">↳ stan</div></div></div>
+<div class="cmd"><code class="cn">/lock</code><div><div class="cd">Zablokuj pisanie na kanale.</div><div class="cs">↳ kanal</div></div></div>
+<div class="cmd"><code class="cn">/unlock</code><div><div class="cd">Odblokuj pisanie na kanale.</div><div class="cs">↳ kanal</div></div></div>
+<div class="cmd"><code class="cn">/lockdown</code><div><div class="cd">Blokada/odblokowanie pisania na serwerze.</div><div class="cs">↳ on · off</div></div></div>
+<div class="cmd"><code class="cn">/slowmode</code><div><div class="cd">Ustaw tryb wolny na kanale.</div><div class="cs">↳ sekundy</div></div></div>
+<div class="cmd"><code class="cn">/imageonly</code><div><div class="cd">Kanały tylko-obrazki.</div><div class="cs">↳ add · remove · list</div></div></div>
+<div class="cmd"><code class="cn">/healthcheck</code><div><div class="cd">Audyt bezpieczeństwa i konfiguracji serwera.</div></div></div>
+<div class="cmd"><code class="cn">/ticket</code><div><div class="cd">System zgłoszeń (tickety).</div><div class="cs">↳ otworz · zamknij</div></div></div></div>
+<h2>Konfiguracja i panele <span class="cnt">13</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/rolemenu</code><div><div class="cd">Opublikuj menu wyboru ról (dropdown).</div></div></div>
+<div class="cmd"><code class="cn">/buttonpanel</code><div><div class="cd">Wyślij panel ról z przyciskami.</div></div></div>
+<div class="cmd"><code class="cn">/reactionpanel</code><div><div class="cd">Opublikuj panel reaction-role + auto-reakcje.</div></div></div>
+<div class="cmd"><code class="cn">/ticketpanel</code><div><div class="cd">Wyślij panel otwierania ticketów.</div></div></div>
+<div class="cmd"><code class="cn">/verifypanel</code><div><div class="cd">Wyślij panel weryfikacji.</div></div></div>
+<div class="cmd"><code class="cn">/applypanel</code><div><div class="cd">Opublikuj panel aplikacji/rekrutacji.</div></div></div>
+<div class="cmd"><code class="cn">/backup</code><div><div class="cd">Backup struktury serwera (role, kanały, uprawnienia).</div><div class="cs">↳ create · info · restore</div></div></div>
+<div class="cmd"><code class="cn">/sticky</code><div><div class="cd">Przypnij wiadomość trzymającą się dołu kanału.</div><div class="cs">↳ set · clear · list</div></div></div>
+<div class="cmd"><code class="cn">/blueprint</code><div><div class="cd">Utwórz zestaw kanałów z szablonu (Architekt).</div><div class="cs">↳ szablon</div></div></div>
+<div class="cmd"><code class="cn">/roleperms</code><div><div class="cd">Ustaw uprawnienia roli z presetu (Architekt).</div><div class="cs">↳ preset</div></div></div>
+<div class="cmd"><code class="cn">/rolecopy</code><div><div class="cd">Skopiuj ustawienia roli na inną.</div><div class="cs">↳ zrodlo · cel</div></div></div>
+<div class="cmd"><code class="cn">/undo</code><div><div class="cd">Cofnij ostatnio utworzone kanały/role (Architekt).</div></div></div>
+<div class="cmd"><code class="cn">/farewell</code><div><div class="cd">Pożegnania i podziękowania za boost.</div><div class="cs">↳ goodbye(set/off/test) · booster(set/off/test)</div></div></div></div>
+<h2>Live i streaming <span class="cnt">3</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/liverole</code><div><div class="cd">Rola NA ŻYWO dla streamujących.</div><div class="cs">↳ stan · rola · tylko-z-rola</div></div></div>
+<div class="cmd"><code class="cn">/linktwitch</code><div><div class="cd">Połącz login Twitch (rola za subskrypcję).</div><div class="cs">↳ login</div></div></div>
+<div class="cmd"><code class="cn">/streamsync</code><div><div class="cd">Harmonogram Twitch → wydarzenia Discord.</div><div class="cs">↳ stan · login</div></div></div></div>
+<h2>Biblioteka i gaming <span class="cnt">4</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/library</code><div><div class="cd">Twoja biblioteka gier (Steam + IGDB).</div><div class="cs">↳ szukaj</div></div></div>
+<div class="cmd"><code class="cn">/backlog</code><div><div class="cd">Lista gier do ogrania.</div><div class="cs">↳ add · list · set · remove</div></div></div>
+<div class="cmd"><code class="cn">/wishlist</code><div><div class="cd">Lista życzeń gier.</div></div></div>
+<div class="cmd"><code class="cn">/pricealert</code><div><div class="cd">Alerty cenowe gier (DM przy spadku ceny).</div><div class="cs">↳ add · list · remove</div></div></div></div>
+<h2>Planowanie i przypomnienia <span class="cnt">3</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/remind</code><div><div class="cd">Przypomnienie po zadanym czasie.</div><div class="cs">↳ kiedy · tresc</div></div></div>
+<div class="cmd"><code class="cn">/schedule</code><div><div class="cd">Zaplanowane / cykliczne ogłoszenia.</div><div class="cs">↳ add · list · remove</div></div></div>
+<div class="cmd"><code class="cn">/giveaway</code><div><div class="cd">Konkursy (giveaway).</div><div class="cs">↳ start · reroll</div></div></div></div>
+<h2>Informacje i narzędzia <span class="cnt">11</span></h2>
+<div class="cmds"><div class="cmd"><code class="cn">/userinfo</code><div><div class="cd">Informacje o użytkowniku.</div><div class="cs">↳ uzytkownik</div></div></div>
+<div class="cmd"><code class="cn">/avatar</code><div><div class="cd">Pokaż awatar użytkownika.</div><div class="cs">↳ uzytkownik</div></div></div>
+<div class="cmd"><code class="cn">/serverinfo</code><div><div class="cd">Informacje o serwerze.</div></div></div>
+<div class="cmd"><code class="cn">/ping</code><div><div class="cd">Sprawdź latencję bota.</div></div></div>
+<div class="cmd"><code class="cn">/help</code><div><div class="cd">Pomoc — wszystkie komendy pogrupowane.</div><div class="cs">↳ szukaj</div></div></div>
+<div class="cmd"><code class="cn">/search</code><div><div class="cd">Szukaj w Wikipedii, grach (IGDB) lub YouTube.</div><div class="cs">↳ zapytanie · zrodlo</div></div></div>
+<div class="cmd"><code class="cn">/poll</code><div><div class="cd">Utwórz ankietę (z timerem).</div><div class="cs">↳ pytanie · opcje · czas · wielokrotny · reakcje</div></div></div>
+<div class="cmd"><code class="cn">/link</code><div><div class="cd">Połącz konto Discord z profilem E-Forge.</div><div class="cs">↳ kod</div></div></div>
+<div class="cmd"><code class="cn">/portal</code><div><div class="cd">Portal E-Forge + jak zarabiać Ghost Tokens.</div></div></div>
+<div class="cmd"><code class="cn">/vanityrole</code><div><div class="cd">Rola za frazę/link w statusie.</div><div class="cs">↳ stan · rola · fraza</div></div></div>
+<div class="cmd"><code class="cn">/xpevent</code><div><div class="cd">Event podwójnego XP (admin).</div><div class="cs">↳ start · stop · status</div></div></div></div>
+
+    <div class="secTitle">🧩 Moduły — konfiguracja krok po kroku (32+)</div>
+    <h2>Bezpieczeństwo</h2>
+<div class="mod"><h3>Automod <span class="mc">/moderation</span></h3><p class="md">Automatyczny filtr treści: zakazane słowa, linki, zaproszenia, spam, CAPS, anty-scam i wykrywanie danych osobowych (PII), z eskalacją kar.</p><ol class="steps"><li>Włącz moduł i wybierz akcję domyślną (usuń / timeout / kick / ban).</li><li>Zaznacz filtry: zaproszenia, linki (z listą dozwolonych), anty-scam, anty-CAPS, anty-spoiler.</li><li>Ustaw anty-spam: liczba wiadomości w oknie czasu (np. 5 / 10 s) + maks. wzmianek.</li><li>Dodaj zakazane słowa i ewentualne wyrażenia regularne.</li><li>Włącz ochronę PII (karta, PESEL, dowód, IBAN, e-mail, telefon).</li><li>Ustaw eskalację (próg naruszeń → twardsza kara) oraz rolę-wyjątek i kanał logów.</li></ol><p class="rel">Powiązane komendy: <code>/mod warn · /case · /healthcheck</code></p></div>
+<div class="mod"><h3>Anti-Raid <span class="mc">/security</span></h3><p class="md">Wykrywa fale wejść (raid), konta-alty i homoglify; alarmuje, może auto-lockdown i honeypot.</p><ol class="steps"><li>Włącz i ustaw próg: liczba wejść w oknie czasu (np. 10 / 30 s) oraz akcję (kick/ban/timeout).</li><li>Wskaż kanał alertów i minimalny wiek konta.</li><li>Włącz alt-detect (wiek konta, brak awatara → akcja).</li><li>Opcjonalnie: auto-lockdown przy raidzie + honeypot (tajny kanał-pułapka).</li></ol><p class="rel">Powiązane komendy: <code>/raidmode · /panic · /lockdown</code></p></div>
+<div class="mod"><h3>Anti-Nuke <span class="mc">/security</span></h3><p class="md">Chroni przed wrogim adminem: limity masowych akcji (usuwanie kanałów/ról, bany, webhooki, dodawanie botów) z karą i białą listą.</p><ol class="steps"><li>Włącz i wybierz karę (ban/kick/timeout/strip/kwarantanna) + kanał logów.</li><li>Dla każdej ochrony ustaw limit i okno czasu (np. 5 usunięć / 60 s).</li><li>Dodaj zaufanych ludzi/role do białej listy.</li></ol><p class="rel">Powiązane komendy: <code>/antinuke</code></p></div>
+<div class="mod"><h3>Weryfikacja <span class="mc">/security</span></h3><p class="md">Nowi członkowie muszą się zweryfikować (przycisk / captcha / fraza) zanim zobaczą serwer.</p><ol class="steps"><li>Włącz, wybierz tryb (przycisk / captcha / fraza) i rolę nadawaną po weryfikacji.</li><li>Ustaw treść i etykietę przycisku oraz minimalny wiek konta.</li><li>Opublikuj panel komendą /verifypanel na wybranym kanale.</li></ol><p class="rel">Powiązane komendy: <code>/verifypanel</code></p></div>
+<div class="mod"><h3>AI-moderacja <span class="mc">/moderation</span></h3><p class="md">AI wykrywa toksyczność i treści niedozwolone (opcjonalnie obrazy) — usuwa, ostrzega lub loguje.</p><ol class="steps"><li>Włącz i wybierz akcję (usuń / ostrzeż / loguj) oraz kanał logów.</li><li>Wskaż rolę zwolnioną (mod/admin) i ewentualnie włącz skanowanie obrazów.</li></ol></div>
+<div class="mod"><h3>Logi serwera <span class="mc">/logging</span></h3><p class="md">Rejestruje zdarzenia: wiadomości, członkowie, moderacja, serwer, głos — pełny ślad audytowy.</p><ol class="steps"><li>Włącz i wskaż kanał logów.</li><li>Zaznacz grupy zdarzeń do logowania i ewentualne kanały ignorowane.</li></ol><p class="rel">Powiązane komendy: <code>/case</code></p></div>
+<h2>Ekonomia i progresja</h2>
+<div class="mod"><h3>Ekonomia serwera <span class="mc">/economy</span></h3><p class="md">Własna waluta: codzienna wypłata, praca, napady, hazard, bank z odsetkami i podatek od przelewów.</p><ol class="steps"><li>Włącz i nazwij walutę oraz ustaw saldo startowe.</li><li>Skonfiguruj /daily (kwota + bonus za streak) i /work (min–max, cooldown).</li><li>Włącz napady (szansa %, cooldown, maks. % portfela ofiary) i hazard (maks. zakład).</li><li>Ustaw odsetki banku, podatek od przelewów i nagrodę za level-up.</li></ol><p class="rel">Powiązane komendy: <code>/eco</code></p></div>
+<div class="mod"><h3>Sklep ekonomii <span class="mc">/economy</span></h3><p class="md">Przedmioty do kupienia za walutę: role (także czasowe) i efekty (×2 XP, tarcza, skrzynka).</p><ol class="steps"><li>Dodaj przedmiot: nazwa, opis, cena.</li><li>Opcjonalnie przypisz rolę (i czas trwania) lub efekt.</li><li>Limit liczby przedmiotów zależy od planu (Free/Premium).</li></ol><p class="rel">Powiązane komendy: <code>/eco shop · /eco buy</code></p></div>
+<div class="mod"><h3>Leveling <span class="mc">/levels</span></h3><p class="md">XP za aktywność (tekst i głos), poziomy, role-nagrody, mnożniki, weekend-bonus, prestiż.</p><ol class="steps"><li>Włącz i ustaw XP za wiadomość / minutę głosu + cooldown.</li><li>Dodaj role-nagrody za poziomy oraz mnożniki dla wybranych ról.</li><li>Ustaw kanał i treść ogłoszeń level-up (opcjonalnie DM).</li><li>Wyklucz kanały/role z XP; włącz prestiż jeśli chcesz reset z odznaką.</li></ol><p class="rel">Powiązane komendy: <code>/rank · /xp · /prestige · /xpevent</code></p></div>
+<div class="mod"><h3>Battle-Pass <span class="mc">/levels</span></h3><p class="md">Sezonowa progresja: tiery za aktywność z misjami i rolami za osiągnięte tiery.</p><ol class="steps"><li>W sekcji Battle-Pass przypisz role do tierów (T1–T50).</li><li>Bot synchronizuje role automatycznie.</li></ol><p class="rel">Powiązane komendy: <code>/battlepass · /quests</code></p></div>
+<div class="mod"><h3>Sezony i Hall of Fame <span class="mc">/levels</span></h3><p class="md">Cykliczny reset rankingu z nagrodami dla najlepszych i historią w Hall of Fame.</p><ol class="steps"><li>Włącz sezon, wskaż kanał ogłoszeń i nagrody za miejsca 1–3.</li><li>Reset wykonuje się na koniec sezonu.</li></ol><p class="rel">Powiązane komendy: <code>/hof</code></p></div>
+<h2>Zaangażowanie społeczności</h2>
+<div class="mod"><h3>Powitania <span class="mc">/welcome</span></h3><p class="md">Wiadomość powitalna dla nowych + automatyczna rola i opcjonalna karta graficzna.</p><ol class="steps"><li>Włącz, wskaż kanał i treść powitania (zmienne {user}, {server}).</li><li>Ustaw auto-rolę i opcjonalne opóźnienie jej nadania.</li><li>Włącz kartę powitalną i dobierz styl (gradient, czcionka, kolor).</li></ol></div>
+<div class="mod"><h3>Role: reaction-role, menu i przyciski <span class="mc">/roles</span></h3><p class="md">Samodzielny wybór ról: reakcją (emoji), z rozwijanego menu lub przyciskami.</p><ol class="steps"><li>Reaction-role: dodaj pary wiadomość → emoji → rola.</li><li>Menu ról: ustaw treść, placeholder i opcje (etykieta, rola, opis, emoji).</li><li>Opublikuj: /rolemenu, /reactionpanel lub /buttonpanel.</li></ol><p class="rel">Powiązane komendy: <code>/rolemenu · /reactionpanel · /buttonpanel</code></p></div>
+<div class="mod"><h3>Starboard <span class="mc">/engagement</span></h3><p class="md">Wiadomości z progiem ⭐ trafiają na tablicę najlepszych treści.</p><ol class="steps"><li>Włącz, wskaż kanał starboard, ustaw próg gwiazd i emoji.</li></ol></div>
+<div class="mod"><h3>Kanały tymczasowe (temp-voice) <span class="mc">/engagement</span></h3><p class="md">Wejście na kanał-hub tworzy prywatny kanał głosowy, znikający po opuszczeniu.</p><ol class="steps"><li>Włącz, wskaż kanał-hub i kategorię, ustaw szablon nazwy ({user}).</li></ol></div>
+<div class="mod"><h3>Liczenie (counting) <span class="mc">/engagement</span></h3><p class="md">Gra w liczenie po kolei; błąd resetuje licznik, rekord jest zapisywany.</p><ol class="steps"><li>Włącz, wskaż kanał, ustaw zasady (ten sam autor / reset przy błędzie).</li></ol></div>
+<div class="mod"><h3>Śledzenie zaproszeń <span class="mc">/engagement</span></h3><p class="md">Liczy kto kogo zaprosił; nagrody (role) za progi zaproszeń.</p><ol class="steps"><li>Włącz, wskaż kanał logów, ustaw minimalny wiek konta i progi nagród.</li></ol><p class="rel">Powiązane komendy: <code>/invites</code></p></div>
+<div class="mod"><h3>Komendy własne i auto-respondery <span class="mc">/responder</span></h3><p class="md">Własne komendy z prefiksem oraz automatyczne odpowiedzi na wyzwalacze tekstowe.</p><ol class="steps"><li>Włącz i ustaw prefiks (np. !).</li><li>Dodaj komendy własne (nazwa → odpowiedź).</li><li>Dodaj auto-respondery (wyzwalacz + tryb: zawiera / dokładnie / zaczyna się).</li></ol></div>
+<div class="mod"><h3>Liczniki kanałów <span class="mc">/counters</span></h3><p class="md">Nazwy kanałów aktualizowane na żywo: członkowie, boosty, subskrypcje, widzowie.</p><ol class="steps"><li>Włącz i dodaj licznik: kanał + typ statystyki + szablon ({value}).</li><li>Dla YouTube/Twitch/Kick podaj identyfikator w polu argumentu.</li></ol></div>
+<div class="mod"><h3>Zaplanowane posty <span class="mc">/scheduled</span></h3><p class="md">Wiadomości wysyłane jednorazowo lub cyklicznie (dziennie/tygodniowo).</p><ol class="steps"><li>Dodaj post: etykieta, kanał, treść (Message Studio).</li><li>Wybierz tryb (raz / dziennie / tygodniowo) i godzinę (oraz dzień dla tygodniowego).</li></ol><p class="rel">Powiązane komendy: <code>/schedule</code></p></div>
+<div class="mod"><h3>Sugestie i urodziny <span class="mc">/suggestions · /birthdays</span></h3><p class="md">Skrzynka sugestii (opcjonalnie anonimowa) oraz życzenia urodzinowe z rolą na dzień.</p><ol class="steps"><li>Sugestie: włącz, wskaż kanał, ustaw anonimowość.</li><li>Urodziny: włącz, wskaż kanał i treść, opcjonalnie rolę urodzinową.</li></ol><p class="rel">Powiązane komendy: <code>/suggest · /birthday</code></p></div>
+<h2>Live i powiadomienia</h2>
+<div class="mod"><h3>Powiadomienia live (Twitch / Kick / YouTube) <span class="mc">/live · /notifications</span></h3><p class="md">Ogłoszenia, gdy obserwowany twórca rozpocznie transmisję lub wrzuci film.</p><ol class="steps"><li>Włącz daną platformę, wskaż kanał i opcjonalnie rolę do pingu.</li><li>Dodaj obserwowane kanały twórców.</li><li>Ustaw treść powiadomienia (zmienne {channel}, {game}, {url}).</li></ol><p class="rel">Powiązane komendy: <code>/liverole · /linktwitch · /streamsync</code></p></div>
+<div class="mod"><h3>Gry za darmo i patch-notes <span class="mc">/gaming</span></h3><p class="md">Codzienny feed darmowych gier (Epic/Steam/GOG) oraz notki patchy wybranych gier.</p><ol class="steps"><li>Gry za darmo: włącz, wskaż kanał (opcjonalnie multi-store).</li><li>Patch-notes: włącz, wskaż kanał i dodaj gry (AppID + nazwa).</li></ol><p class="rel">Powiązane komendy: <code>/pricealert</code></p></div>
+<div class="mod"><h3>Social RSS i narzędzia twórcy <span class="mc">/creator</span></h3><p class="md">Posty z RSS (YouTube/X/itd.) na kanał oraz auto-eventy i relay klipów dla twórców.</p><ol class="steps"><li>Social RSS: włącz, wskaż kanał, dodaj adresy feedów.</li><li>Twórca: włącz auto-eventy / relay klipów / ankiety wg potrzeb.</li></ol></div>
+<h2>Wsparcie i rekrutacja</h2>
+<div class="mod"><h3>Tickety <span class="mc">/tickets</span></h3><p class="md">Prywatne kanały zgłoszeń z kategoriami, pytaniami na start, oceną i SLA.</p><ol class="steps"><li>Włącz, wskaż kategorię kanałów, rolę supportu i kanał transkryptów.</li><li>Ustaw treść panelu i (opcjonalnie) kategorie ticketów oraz pytania.</li><li>Opublikuj panel komendą /ticketpanel.</li></ol><p class="rel">Powiązane komendy: <code>/ticketpanel · /ticket</code></p></div>
+<div class="mod"><h3>Modmail <span class="mc">/modmail</span></h3><p class="md">DM do bota trafia na kanał modmail; moderatorzy odpowiadają, bot relayuje do użytkownika.</p><ol class="steps"><li>Włącz, wskaż kanał modmail i ustaw powitanie wysyłane w DM.</li></ol></div>
+<div class="mod"><h3>Aplikacje / rekrutacja <span class="mc">/applications</span></h3><p class="md">Formularze aplikacyjne (np. moderator) z pytaniami, kanałem oceny i rolą po akceptacji.</p><ol class="steps"><li>Włącz, wskaż kanał oceny i rolę nadawaną po akceptacji.</li><li>Dodaj pytania i (opcjonalnie) wiele typów aplikacji.</li><li>Opublikuj panel komendą /applypanel.</li></ol><p class="rel">Powiązane komendy: <code>/applypanel</code></p></div>
+<h2>AI i narzędzia</h2>
+<div class="mod"><h3>AI: asystent, pomoc i digest <span class="mc">/ai</span></h3><p class="md">Asystent AI (z limitami), AI-pomoc na bazie Twojej wiedzy (RAG-lite) i dzienny digest rozmów.</p><ol class="steps"><li>Włącz AI, wybierz model i ustaw dzienne limity oraz personę.</li><li>AI-pomoc: wskaż kanał i wklej bazę wiedzy (regulamin/FAQ).</li><li>AI-digest: wskaż kanał źródłowy i docelowy oraz godzinę wysyłki.</li></ol><p class="rel">Powiązane komendy: <code>/ai · /ask · /tldr · /aiserver</code></p></div>
+<div class="mod"><h3>Architekt serwera (kreator) <span class="mc">/setup</span></h3><p class="md">Kreator tworzący kanały, role i włączający moduły z gotowego presetu lub z opisu AI.</p><ol class="steps"><li>Wybierz preset (streamer / gaming / community) lub opisz serwer dla AI.</li><li>Zatwierdź — bot utworzy strukturę; /undo cofa ostatnie zmiany.</li></ol><p class="rel">Powiązane komendy: <code>/blueprint · /roleperms · /undo · /aiserver</code></p></div>
+<div class="mod"><h3>Donejty <span class="mc">/donations</span></h3><p class="md">Powiadomienia o wpłatach Ko-fi oraz embed z linkami wsparcia (PayPal, BMC, Patreon…).</p><ol class="steps"><li>Ko-fi: włącz, wskaż kanał i wklej token weryfikacyjny webhooka.</li><li>Linki wsparcia: ustaw tytuł/opis i dodaj dostawców (etykieta + URL).</li></ol><p class="rel">Powiązane komendy: <code>/donate</code></p></div>
+<div class="mod"><h3>GameVault / Biblioteka <span class="mc">/library</span></h3><p class="md">„Netflix dla gier": import ze Steam/PSN/GOG/IGDB, okładki, statystyki, lista życzeń.</p><ol class="steps"><li>Przeglądaj bibliotekę i sortuj po tytule/platformie.</li><li>Dodawaj gry ręcznie lub przez import kolektorów.</li></ol><p class="rel">Powiązane komendy: <code>/library · /backlog · /wishlist</code></p></div>
+<div class="mod"><h3>Marketplace pluginów <span class="mc">/marketplace</span></h3><p class="md">Włączanie/wyłączanie modułów oraz pluginy społeczności; plan Premium zdejmuje limity.</p><ol class="steps"><li>Przeglądaj moduły i włączaj je przełącznikiem.</li><li>Premium: „Przejdź na Premium" odblokowuje pluginy i wyższe limity.</li></ol></div>
+
+    <p class="muted" style="margin-top: 12mm; text-align: center; font-size: 8.5pt; border-top: 1px solid #232329; padding-top: 6pt;">E-Bot · E-Forge — e-bot-dc.vercel.app · pełna dokumentacja wygenerowana z wikiData.ts</p>
+  </div>
+</body></html>

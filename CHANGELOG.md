@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-645-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.575.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-646-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.576.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.576.0] — 📕 Pełna dokumentacja A→Z (PDF: wszystkie komendy + moduły)
+
+- `[#646]` 📕 **Pełny PDF z wszystkimi funkcjami** — [`E-BOT-funkcje-A-Z.pdf`](docs/pdf/E-BOT-funkcje-A-Z.pdf) (motyw marki, A4, czerń/czerwień): **95+ komend** pogrupowanych w kategorie (z subkomendami) + **32+ modułów** z konfiguracją krok po kroku + spis treści. **Generowany** ze źródła prawdy: [`scripts/pdf/gen-full-pdf.mjs`](scripts/pdf/gen-full-pdf.mjs) → `scripts/pdf/full.html` (z `dashboard/lib/wikiData.ts`; render headless Chromium). Uzupełnia PDF-y dla streamerów/developerów (#636).
+  - **Bramki:** Biome · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.575.0] — 🧨 Reset bazy (narzędzie developera: cała / per-serwer)
 

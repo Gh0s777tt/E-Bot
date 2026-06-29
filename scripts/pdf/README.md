@@ -4,6 +4,7 @@
 
 - [`streamers.html`](streamers.html) → `docs/pdf/E-BOT-dla-streamerow.pdf`
 - [`developers.html`](developers.html) → `docs/pdf/E-BOT-dla-developerow.pdf`
+- [`full.html`](full.html) → `docs/pdf/E-BOT-funkcje-A-Z.pdf` — **pełna dokumentacja A→Z** (wszystkie komendy + moduły). **Generowana** ze źródła: `node scripts/pdf/gen-full-pdf.mjs` (z `dashboard/lib/wikiData.ts`) — nie edytuj `full.html` ręcznie.
 
 ## Render do PDF
 
