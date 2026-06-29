@@ -12,6 +12,9 @@
     "shard": "node src/shard.mts",
     "smoke": "node src/index.mts --smoke",
     "deploy": "node src/deploy-commands.mts",
+    "setup:hub": "node src/setup/empire-hub.mts",
+    "setup:secure": "node src/setup/empire-secure.mts",
+    "setup:engage": "node src/setup/empire-engage.mts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
