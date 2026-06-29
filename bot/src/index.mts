@@ -59,6 +59,7 @@ import { handleButton } from './engagement/buttons.mts';
 import { startGiveaways } from './engagement/giveaways.mts';
 import { startReminders } from './engagement/reminders.mts';
 import { handleRoleMenu } from './engagement/rolemenu.mts';
+import { handleRoleSelect } from './engagement/roleselect.mts';
 import { startScheduledPosts } from './engagement/scheduledPosts.mts';
 import { startScheduler } from './engagement/scheduler.mts';
 import { startStarboard } from './engagement/starboard.mts';
@@ -277,9 +278,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
     return;
   }
   if (interaction.isStringSelectMenu()) {
-    const h = interaction.customId.startsWith('help:')
-      ? handleHelpSelect(interaction)
-      : handleRoleMenu(interaction);
+    const h = interaction.customId.startsWith('rsel')
+      ? handleRoleSelect(interaction)
+      : interaction.customId.startsWith('help:')
+        ? handleHelpSelect(interaction)
+        : handleRoleMenu(interaction);
     await h.catch((err) => log.error('select', { err }));
     return;
   }
