@@ -8,9 +8,11 @@ import {
   SmilePlus,
   Star,
   Target,
+  Trash2,
   UserPlus,
   Volume2,
 } from 'lucide-react';
+import AutoDeleteForm from '../../components/AutoDeleteForm';
 import AutopublishForm from '../../components/AutopublishForm';
 import AutoReactForm from '../../components/AutoReactForm';
 import AutothreadForm from '../../components/AutothreadForm';
@@ -24,6 +26,7 @@ import StarboardForm from '../../components/StarboardForm';
 import StatusPill from '../../components/StatusPill';
 import TempVoiceForm from '../../components/TempVoiceForm';
 import {
+  getAutodeleteConfig,
   getAutopublishConfig,
   getAutoreactConfig,
   getAutothreadConfig,
@@ -61,6 +64,7 @@ export default async function EngagementPage() {
     invites,
     autothread,
     autoreact,
+    autodelete,
     milestones,
     goals,
     autopub,
@@ -75,6 +79,7 @@ export default async function EngagementPage() {
     getInvitesConfig(),
     getAutothreadConfig(),
     getAutoreactConfig(),
+    getAutodeleteConfig(),
     getMilestonesConfig(),
     getGoalsConfig(),
     getAutopublishConfig(),
@@ -162,6 +167,16 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <AutoReactForm initial={autoreact} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Trash2 size={16} className="text-accent" /> {tp(lang, 'ui.engagement.autodeleteHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={autodelete.rules.length > 0} lang={lang} />
+          </span>
+        </h2>
+        <AutoDeleteForm initial={autodelete} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

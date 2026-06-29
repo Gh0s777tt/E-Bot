@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-655-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.585.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-656-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.586.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.586.0] — 🧹 Auto-czyszczenie kanałów (kasowanie wiadomości po czasie)
+
+- `[#656]` 🧹 **Auto-czyszczenie kanałów** — na wybranych kanałach bot co minutę kasuje wiadomości starsze niż ustawiony czas (np. 60 min na kanale `bot-komendy`, 1 dzień na `spam`/`tymczasowym`). Pomija przypięte; per-kanał własny TTL (1 min – 7 dni). Idealne, by kanały komendowe i tymczasowe same się sprzątały. Bez nowej tabeli.
+  - Bot: [`bot/src/community/autodelete.mts`](bot/src/community/autodelete.mts) — poller 60 s, `bulkDelete` (Discord kasuje hurtem tylko < 14 dni); czysta, testowalna `expiredMessageIds` (pomija przypięte i wiadomości > 14 dni). Wymaga `ManageMessages`. Panel: sekcja na `/engagement` (kanał + minuty).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 855 +`expiredMessageIds`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+4 klucze).
 
 ## [0.585.0] — 🔤 Dehoisting (auto-porządkowanie nazw windujących listę członków)
 

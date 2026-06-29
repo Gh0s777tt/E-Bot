@@ -363,6 +363,14 @@ export const dehoistSchema = z.object({
 });
 export type DehoistInput = z.infer<typeof dehoistSchema>;
 
+// ── Auto-czyszczenie kanałów (POST /api/autodelete) ────────
+export const autodeleteSchema = z.object({
+  rules: z
+    .array(z.object({ channelId: z.string().max(40), minutes: z.number().int().min(1).max(10080) }))
+    .max(25),
+});
+export type AutodeleteInput = z.infer<typeof autodeleteSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

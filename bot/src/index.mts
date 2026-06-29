@@ -37,6 +37,7 @@ import { startAiHelp } from './community/aihelp.mts';
 import { startAiMod } from './community/aimod.mts';
 import { handleAppealButton, startAppeals } from './community/appeals.mts';
 import { handleApplicationButton, handleApplicationModal } from './community/applications.mts';
+import { startAutoDelete } from './community/autodelete.mts';
 import { startAutomations } from './community/automations.mts';
 import { startAutoPublish } from './community/autopublish.mts';
 import { startAutoReact } from './community/autoreact.mts';
@@ -199,6 +200,7 @@ client.once(Events.ClientReady, (c) => {
   startAppeals(c); // Odwołania od bana — poller publikuje pending na kanał recenzji (przyciski)
   startAutoThreads(c); // Fala 1 — auto-wątki na wybranych kanałach (config z panelu)
   startAutoReact(c); // Auto-reakcje — bot dodaje skonfigurowane reakcje na wybranych kanałach (config z panelu)
+  startAutoDelete(c); // Auto-czyszczenie — kasuje wiadomości starsze niż TTL na wybranych kanałach (config z panelu)
   startAutoSlowmode(c); // Adaptacyjny slowmode — podnosi/zdejmuje slowmode wg tempa wiadomości (config z panelu)
   startMilestones(c); // Fala 1 — kamienie milowe serwera (Nty członek, config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)

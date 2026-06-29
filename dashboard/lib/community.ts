@@ -371,6 +371,23 @@ export async function saveDehoistConfig(cfg: DehoistConfig): Promise<void> {
   await setConfigSetting('dehoist_config', JSON.stringify(cfg));
 }
 
+// ── Auto-czyszczenie kanałów — kasowanie wiadomości starszych niż TTL na wybranych kanałach ──
+export type AutodeleteRule = { channelId: string; minutes: number };
+export type AutodeleteConfig = { rules: AutodeleteRule[] };
+export const AUTODELETE_DEFAULT: AutodeleteConfig = { rules: [] };
+export async function getAutodeleteConfig(): Promise<AutodeleteConfig> {
+  const raw = await getConfigSetting('autodelete_config');
+  if (!raw) return structuredClone(AUTODELETE_DEFAULT);
+  try {
+    return { ...AUTODELETE_DEFAULT, ...(JSON.parse(raw) as Partial<AutodeleteConfig>) };
+  } catch {
+    return structuredClone(AUTODELETE_DEFAULT);
+  }
+}
+export async function saveAutodeleteConfig(cfg: AutodeleteConfig): Promise<void> {
+  await setConfigSetting('autodelete_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

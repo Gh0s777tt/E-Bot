@@ -1,4 +1,4 @@
-<!-- SYNC: v0.585.0 · #655 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.586.0 · #656 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.585.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.586.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.585.0)
+## 🔭 Bieżący tor (v0.586.0)
+
+**🧹 Auto-czyszczenie kanałów (v0.586.0)** — na wybranych kanałach bot kasuje wiadomości starsze niż ustawiony czas (kanały-komendy, spam, tymczasowe; pomija przypięte). Bot: `community/autodelete.mts`; panel: sekcja na `/engagement`.
 
 **🔤 Dehoisting (v0.585.0)** — bot usuwa wiodące znaki interpunkcyjne z pseudonimów, którymi trolle windują się na górę listy członków (na wejściu i przy zmianie nicku). Bot: `security/dehoist.mts`; panel: sekcja na `/moderation`.
 
