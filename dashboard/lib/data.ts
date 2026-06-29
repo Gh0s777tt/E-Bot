@@ -365,6 +365,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'pinreact_config',
   'reports_config',
   'voicerole_config',
+  'lockschedule_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-662-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.592.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-663-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.593.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.593.0] — 🌙 Harmonogram blokad kanałów (ciche godziny / tryb nocny)
+
+- `[#663]` 🌙 **Harmonogram blokad** — na wybranych kanałach bot blokuje pisanie w zadanym oknie godzin (np. 23 → 7 = tryb nocny) i odblokowuje poza nim. Blokada to `@everyone` bez „Wysyłania wiadomości"; odblokowanie czyści **tylko** ten bit (nie rusza innych nadpisań). Strefa czasowa jako offset UTC; okno może przechodzić przez północ. Bez nowej tabeli.
+  - Bot: [`bot/src/community/lockschedule.mts`](bot/src/community/lockschedule.mts) — poller 60 s, idempotentny (edytuje tylko gdy stan ≠ pożądany); czysta, testowalna `isQuietHour` (z zawijaniem przez północ). Wymaga `ManageChannels`. Panel: sekcja na `/moderation` (godziny + strefa + kanały).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 881 +`isQuietHour`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+7 kluczy).
 
 ## [0.592.0] — 🎙️ Rola „w rozmowie głosowej" (auto-rola na czas pobytu w głosie)
 

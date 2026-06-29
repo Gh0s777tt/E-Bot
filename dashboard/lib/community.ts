@@ -484,6 +484,34 @@ export async function saveVoiceroleConfig(cfg: VoiceroleConfig): Promise<void> {
   await setConfigSetting('voicerole_config', JSON.stringify(cfg));
 }
 
+// ── Harmonogram blokad kanałów — ciche godziny: blokuje/odblokowuje pisanie wg zegara ──
+export type LockscheduleConfig = {
+  enabled: boolean;
+  channels: string[];
+  lockHour: number;
+  unlockHour: number;
+  tz: number;
+};
+export const LOCKSCHEDULE_DEFAULT: LockscheduleConfig = {
+  enabled: false,
+  channels: [],
+  lockHour: 23,
+  unlockHour: 7,
+  tz: 0,
+};
+export async function getLockscheduleConfig(): Promise<LockscheduleConfig> {
+  const raw = await getConfigSetting('lockschedule_config');
+  if (!raw) return structuredClone(LOCKSCHEDULE_DEFAULT);
+  try {
+    return { ...LOCKSCHEDULE_DEFAULT, ...(JSON.parse(raw) as Partial<LockscheduleConfig>) };
+  } catch {
+    return structuredClone(LOCKSCHEDULE_DEFAULT);
+  }
+}
+export async function saveLockscheduleConfig(cfg: LockscheduleConfig): Promise<void> {
+  await setConfigSetting('lockschedule_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

@@ -408,6 +408,16 @@ export const voiceroleSchema = z.object({
 });
 export type VoiceroleInput = z.infer<typeof voiceroleSchema>;
 
+// ── Harmonogram blokad kanałów (POST /api/lockschedule) ────
+export const lockscheduleSchema = z.object({
+  enabled: z.boolean(),
+  channels: z.array(z.string().max(40)).max(25),
+  lockHour: z.number().int().min(0).max(23),
+  unlockHour: z.number().int().min(0).max(23),
+  tz: z.number().int().min(-12).max(14),
+});
+export type LockscheduleInput = z.infer<typeof lockscheduleSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

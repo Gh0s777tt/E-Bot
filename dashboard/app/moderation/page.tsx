@@ -6,6 +6,7 @@ import {
   Gavel,
   Hourglass,
   Inbox,
+  Lock,
   ShieldCheck,
   UserCog,
   Zap,
@@ -17,6 +18,7 @@ import AutomodStats from '../../components/AutomodStats';
 import AutoslowForm from '../../components/AutoslowForm';
 import DehoistForm from '../../components/DehoistForm';
 import EmptyState from '../../components/EmptyState';
+import LockScheduleForm from '../../components/LockScheduleForm';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
 import ReportsForm from '../../components/ReportsForm';
@@ -29,6 +31,7 @@ import {
   getAutomodStats,
   getAutoslowConfig,
   getDehoistConfig,
+  getLockscheduleConfig,
   getReportsConfig,
   getStickyrolesConfig,
 } from '../../lib/community';
@@ -86,6 +89,7 @@ export default async function ModerationPage() {
     sticky,
     dehoist,
     reports,
+    lockschedule,
     guildId,
     lang,
   ] = await Promise.all([
@@ -101,6 +105,7 @@ export default async function ModerationPage() {
     getStickyrolesConfig(),
     getDehoistConfig(),
     getReportsConfig(),
+    getLockscheduleConfig(),
     getPrimaryGuildId(),
     getPanelLocale(),
   ]);
@@ -194,6 +199,16 @@ export default async function ModerationPage() {
           </span>
         </h2>
         <ReportsForm initial={reports} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Lock size={16} className="text-accent" /> {tp(lang, 'ui.lockschedule.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={lockschedule.enabled} lang={lang} />
+          </span>
+        </h2>
+        <LockScheduleForm initial={lockschedule} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
