@@ -56,6 +56,16 @@ export default function DigestForm({
         />
       </label>
 
+      <label className="flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={!!c.aiRecap}
+          onChange={(e) => setC({ ...c, aiRecap: e.target.checked })}
+          className="h-4 w-4 accent-accent"
+        />
+        <span className="text-white/90">{tp(lang, 'ui.stats.digestAiRecap')}</span>
+      </label>
+
       <SaveButton st={st} onClick={save} />
       <p className="text-xs text-muted">{tp(lang, 'ui.stats.digestHelp')}</p>
     </div>

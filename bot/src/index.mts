@@ -28,6 +28,7 @@ import { handleCustomCommand } from './commands/customCommands.mts';
 import { handleHelpSelect } from './commands/help.mts';
 import { type Command, commands } from './commands/index.mts';
 import { handleMarryButton } from './commands/marry.mts';
+import { startSnipe } from './commands/snipe.mts';
 import { handleTttButton } from './commands/ttt.mts';
 import { handleTutorialButton } from './commands/tutorial.mts';
 import { startAfk } from './community/afk.mts';
@@ -36,12 +37,14 @@ import { startAiHelp } from './community/aihelp.mts';
 import { startAiMod } from './community/aimod.mts';
 import { handleApplicationButton, handleApplicationModal } from './community/applications.mts';
 import { startAutomations } from './community/automations.mts';
+import { startAutoThreads } from './community/autothread.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
 import { startCounting } from './community/counting.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startImageOnly } from './community/imageonly.mts';
 import { startInvites } from './community/invites.mts';
+import { startMilestones } from './community/milestones.mts';
 import { startPresenceRoles } from './community/presenceRoles.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startResponder } from './community/responder.mts';
@@ -183,6 +186,9 @@ client.once(Events.ClientReady, (c) => {
   startHighlights(c); // Faza 7 / F7.3 — highlighty (DM na słowo-klucz)
   startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
   startCounting(c); // Tor 3 — gra w liczenie (config z panelu)
+  startSnipe(c); // Fala 1 — /snipe (podgląd usuniętej/edytowanej wiadomości, in-memory)
+  startAutoThreads(c); // Fala 1 — auto-wątki na wybranych kanałach (config z panelu)
+  startMilestones(c); // Fala 1 — kamienie milowe serwera (Nty członek, config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)
   startQuests(c); // Tor A2 — questy dzienne/tygodniowe (postęp w pamięci)
   startAiMod(c); // Faza 7 / F8.3 — AI-moderacja (OpenAI moderation → usuń/ostrzeż/loguj)

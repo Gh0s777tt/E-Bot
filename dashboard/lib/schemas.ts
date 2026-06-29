@@ -317,8 +317,26 @@ export type AutomationsInput = z.infer<typeof automationsSchema>;
 export const digestSchema = z.object({
   enabled: z.boolean(),
   channelId: z.string().max(40),
+  aiRecap: z.boolean().optional().default(false),
 });
 export type DigestInput = z.infer<typeof digestSchema>;
+
+// ── Auto-wątki (POST /api/autothread) ──────────────────────
+export const autothreadSchema = z.object({
+  enabled: z.boolean(),
+  channels: z.array(z.string().max(40)).max(25),
+  nameTemplate: z.string().max(100),
+});
+export type AutothreadInput = z.infer<typeof autothreadSchema>;
+
+// ── Kamienie milowe serwera (POST /api/milestones) ─────────
+export const milestonesSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  every: z.number().int().min(2).max(1_000_000),
+  message: z.string().max(2000),
+});
+export type MilestonesInput = z.infer<typeof milestonesSchema>;
 
 // ── Reaction roles (POST /api/reaction-roles) ──────────────
 export const reactionRolesSchema = z.object({

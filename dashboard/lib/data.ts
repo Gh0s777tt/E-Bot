@@ -349,6 +349,8 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'scheduled_posts',
   'creator_config',
   'bp_roles',
+  'autothread_config',
+  'milestones_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

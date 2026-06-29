@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-648-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.578.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-649-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.579.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.579.0] — 🧰 Fala funkcji: /snipe, auto-wątki, kamienie milowe, AI-recap
+
+- `[#649]` 🧰 **Fala 1 nowych funkcji (samowystarczalne, per-serwer):**
+  - **`/snipe`** — podgląd ostatniej usuniętej lub edytowanej (opcja `edytowana`) wiadomości na kanale (in-memory, TTL 30 min, tylko moderacja `ManageMessages`). [`bot/src/commands/snipe.mts`](bot/src/commands/snipe.mts)
+  - **Auto-wątki** — na wskazanych kanałach każda wiadomość dostaje własny wątek (szablon nazwy `{user}`/`{date}`). [`bot/src/community/autothread.mts`](bot/src/community/autothread.mts) + sekcja w panelu `/engagement`.
+  - **Kamienie milowe serwera** — co N-tego członka świętowanie na wybranym kanale (`{count}`, `{user}`). [`bot/src/community/milestones.mts`](bot/src/community/milestones.mts) + panel.
+  - **AI tygodniowy recap** — opcjonalna narracja AI (2–3 zdania) w cotygodniowym digescie; warstwa AI bota (DeepSeek/OpenAI/**Claude**). Toggle w panelu digestu.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 831 + dashboard 318) · `sync:check` — exit 0. i18n ×14 (+12 kluczy: 11 panel + opis `/snipe`).
 
 ## [0.578.0] — 🧰 Patch-notes 2.0: anty-spam, test feedu, własny RSS, Claude, status
 

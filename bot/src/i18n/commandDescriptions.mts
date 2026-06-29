@@ -11,6 +11,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   pl: {
     vote: 'Zagłosuj na bota na top.gg (wsparcie projektu).',
     ping: 'Sprawdza, czy bot żyje (latencja).',
+    snipe: 'Pokaż ostatnią usuniętą lub edytowaną wiadomość (moderacja).',
     library: 'Twoja biblioteka gier (Steam + IGDB).',
     antinuke: 'Ochrona serwera przed nukowaniem.',
     applypanel: 'Opublikuj panel aplikacji/rekrutacji.',
@@ -68,6 +69,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   en: {
     vote: 'Vote for the bot on top.gg (support the project).',
     ping: 'Check if the bot is alive (latency).',
+    snipe: 'Show the last deleted or edited message (moderation).',
     library: 'Your game library (Steam + IGDB).',
     antinuke: 'Protect the server against nuking.',
     applypanel: 'Publish an applications/recruitment panel.',
@@ -125,6 +127,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   de: {
     vote: 'Stimme für den Bot auf top.gg (unterstütze das Projekt).',
     ping: 'Prüfen, ob der Bot lebt (Latenz).',
+    snipe: 'Zeige die letzte gelöschte/bearbeitete Nachricht (Moderation).',
     library: 'Deine Spielebibliothek (Steam + IGDB).',
     antinuke: 'Schütze den Server vor Nuking.',
     applypanel: 'Veröffentliche ein Bewerbungs-/Rekrutierungs-Panel.',
@@ -183,6 +186,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   es: {
     vote: 'Vota por el bot en top.gg (apoya el proyecto).',
     ping: 'Comprueba si el bot está activo (latencia).',
+    snipe: 'Muestra el último mensaje borrado o editado (moderación).',
     library: 'Tu biblioteca de juegos (Steam + IGDB).',
     antinuke: 'Protege el servidor contra el nuking.',
     applypanel: 'Publica un panel de solicitudes/reclutamiento.',
@@ -240,6 +244,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   it: {
     vote: 'Vota il bot su top.gg (sostieni il progetto).',
     ping: 'Controlla se il bot è attivo (latenza).',
+    snipe: 'Mostra l’ultimo messaggio eliminato o modificato (moderazione).',
     library: 'La tua libreria di giochi (Steam + IGDB).',
     antinuke: 'Proteggi il server dal nuking.',
     applypanel: 'Pubblica un pannello candidature/reclutamento.',
@@ -297,6 +302,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   fr: {
     vote: 'Vote pour le bot sur top.gg (soutiens le projet).',
     ping: 'Vérifie si le bot est en ligne (latence).',
+    snipe: 'Affiche le dernier message supprimé ou édité (modération).',
     library: 'Ta bibliothèque de jeux (Steam + IGDB).',
     antinuke: 'Protège le serveur contre le nuking.',
     applypanel: 'Publie un panneau de candidatures/recrutement.',
@@ -354,6 +360,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   pt: {
     vote: 'Vote no bot no top.gg (apoie o projeto).',
     ping: 'Verifica se o bot está ativo (latência).',
+    snipe: 'Mostra a última mensagem apagada ou editada (moderação).',
     library: 'Sua biblioteca de jogos (Steam + IGDB).',
     antinuke: 'Proteja o servidor contra o nuking.',
     applypanel: 'Publique um painel de inscrições/recrutamento.',
@@ -411,6 +418,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   zh: {
     vote: '在 top.gg 为机器人投票（支持项目）。',
     ping: '检测机器人是否在线（延迟）。',
+    snipe: '显示最近删除或编辑的消息（管理）。',
     library: '你的游戏库（Steam + IGDB）。',
     antinuke: '保护服务器免遭炸服攻击。',
     applypanel: '发布申请／招募面板。',
@@ -468,6 +476,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   ko: {
     vote: 'top.gg에서 봇에 투표하세요 (프로젝트 응원).',
     ping: '봇이 작동 중인지 확인합니다(지연 시간).',
+    snipe: '마지막으로 삭제되거나 수정된 메시지 표시 (모더레이션).',
     library: '내 게임 라이브러리(Steam + IGDB).',
     antinuke: '서버를 폭파(nuke) 공격으로부터 보호합니다.',
     applypanel: '지원/모집 패널을 게시합니다.',
@@ -525,6 +534,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   ru: {
     vote: 'Голосуйте за бота на top.gg (поддержка проекта).',
     ping: 'Проверить, жив ли бот (задержка).',
+    snipe: 'Показать последнее удалённое или изменённое сообщение (модерация).',
     library: 'Твоя библиотека игр (Steam + IGDB).',
     antinuke: 'Защита сервера от нюка.',
     applypanel: 'Опубликовать панель заявок/набора.',
@@ -582,6 +592,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   uk: {
     vote: 'Проголосуйте за бота на top.gg (підтримка проєкту).',
     ping: 'Перевірити, чи бот живий (затримка).',
+    snipe: 'Показати останнє видалене або змінене повідомлення (модерація).',
     library: 'Твоя бібліотека ігор (Steam + IGDB).',
     antinuke: 'Захист сервера від нюка.',
     applypanel: 'Опублікувати панель заявок/набору.',
@@ -639,6 +650,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   ja: {
     vote: 'top.gg でボットに投票（プロジェクト応援）。',
     ping: 'Bot が稼働中か確認（レイテンシ）。',
+    snipe: '直近に削除・編集されたメッセージを表示（モデレーション）。',
     library: 'あなたのゲームライブラリ（Steam + IGDB）。',
     antinuke: 'サーバーを荒らし（nuke）から保護。',
     applypanel: '応募／募集パネルを公開。',
@@ -696,6 +708,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   ar: {
     vote: 'صوّت للبوت على top.gg (ادعم المشروع).',
     ping: 'تحقق من أن البوت يعمل (زمن الاستجابة).',
+    snipe: 'إظهار آخر رسالة محذوفة أو معدّلة (إشراف).',
     library: 'مكتبة ألعابك (Steam + IGDB).',
     antinuke: 'حماية السيرفر من التخريب.',
     applypanel: 'انشر لوحة التقديم والتجنيد.',
@@ -753,6 +766,7 @@ export const COMMAND_DESC: Record<Locale, Record<string, string>> = {
   id: {
     vote: 'Vote bot di top.gg (dukung proyek).',
     ping: 'Cek apakah bot aktif (latensi).',
+    snipe: 'Tampilkan pesan terakhir yang dihapus atau diedit (moderasi).',
     library: 'Pustaka game kamu (Steam + IGDB).',
     antinuke: 'Lindungi server dari nuking.',
     applypanel: 'Terbitkan panel aplikasi/rekrutmen.',

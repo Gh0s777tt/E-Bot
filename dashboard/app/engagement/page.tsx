@@ -1,11 +1,23 @@
-import { Gift, Hash, MousePointerClick, Star, UserPlus, Volume2 } from 'lucide-react';
+import {
+  Gift,
+  Hash,
+  MessageSquare,
+  MousePointerClick,
+  PartyPopper,
+  Star,
+  UserPlus,
+  Volume2,
+} from 'lucide-react';
+import AutothreadForm from '../../components/AutothreadForm';
 import ButtonRolesForm from '../../components/ButtonRolesForm';
 import CountingForm from '../../components/CountingForm';
 import EmptyState from '../../components/EmptyState';
 import InvitesForm from '../../components/InvitesForm';
+import MilestonesForm from '../../components/MilestonesForm';
 import StarboardForm from '../../components/StarboardForm';
 import StatusPill from '../../components/StatusPill';
 import TempVoiceForm from '../../components/TempVoiceForm';
+import { getAutothreadConfig, getMilestonesConfig } from '../../lib/community';
 import {
   getButtonRoles,
   getCounting,
@@ -29,16 +41,19 @@ function fmt(d: string): string {
 }
 
 export default async function EngagementPage() {
-  const [btn, star, tv, counting, invites, giveaways, guild, lang] = await Promise.all([
-    getButtonRoles(),
-    getStarboard(),
-    getTempVoice(),
-    getCounting(),
-    getInvitesConfig(),
-    getGiveaways(20),
-    getGuildMeta(),
-    getPanelLocale(),
-  ]);
+  const [btn, star, tv, counting, invites, autothread, milestones, giveaways, guild, lang] =
+    await Promise.all([
+      getButtonRoles(),
+      getStarboard(),
+      getTempVoice(),
+      getCounting(),
+      getInvitesConfig(),
+      getAutothreadConfig(),
+      getMilestonesConfig(),
+      getGiveaways(20),
+      getGuildMeta(),
+      getPanelLocale(),
+    ]);
 
   return (
     <div className="space-y-6">
@@ -97,6 +112,28 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <InvitesForm initial={invites} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <MessageSquare size={16} className="text-accent" />{' '}
+          {tp(lang, 'ui.engagement.autothreadHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={autothread.enabled} lang={lang} />
+          </span>
+        </h2>
+        <AutothreadForm initial={autothread} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <PartyPopper size={16} className="text-accent" />{' '}
+          {tp(lang, 'ui.engagement.milestonesHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={milestones.enabled} lang={lang} />
+          </span>
+        </h2>
+        <MilestonesForm initial={milestones} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

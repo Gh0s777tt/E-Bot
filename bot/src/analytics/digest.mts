@@ -3,20 +3,54 @@
 
 import { type Client, EmbedBuilder, type TextChannel } from 'discord.js';
 import { listClans, sortClansByBank } from '../economy/clans.mts';
+import { aiConfig, callModel } from '../lib/ai.mts';
 import { cloudGetSetting, cloudSelect, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 import { weekKey } from '../lib/weekKey.mts';
 
-type Cfg = { on: boolean; channelId: string };
+type Cfg = { on: boolean; channelId: string; aiRecap: boolean };
 // Etap K — config per-serwer: świeży odczyt (poller tygodniowy), fallback global.
 function cfg(guildId: string): Cfg {
   const raw = getGuildSettings(guildId)['digest_config'];
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
-    return { on: !!c.enabled, channelId: String(c.channelId || '') };
+    return { on: !!c.enabled, channelId: String(c.channelId || ''), aiRecap: !!c.aiRecap };
   } catch {
-    return { on: false, channelId: '' };
+    return { on: false, channelId: '', aiRecap: false };
+  }
+}
+
+// 🤖 Opcjonalny AI-recap: narratorska wstawka (2–3 zdania) z liczb tygodnia. Brak AI / błąd → undefined.
+async function buildAiRecap(a: {
+  m: number;
+  v: number;
+  net: number;
+  top?: string;
+  improved?: string;
+  joined: number;
+}): Promise<string | undefined> {
+  const ai = aiConfig();
+  if (!ai.enabled) return undefined;
+  try {
+    const { text } = await callModel(
+      ai.model,
+      [
+        {
+          role: 'system',
+          content:
+            'Jesteś narratorem cotygodniowego podsumowania serwera Discord. Napisz 2–3 zdania po polsku, żywo i pozytywnie, na podstawie liczb. Bez nagłówków i list.',
+        },
+        {
+          role: 'user',
+          content: `Wiadomości: ${a.m}, minuty voice: ${a.v}, wzrost netto: ${a.net}, najaktywniejszy: ${a.top ?? '—'}, największy skok: ${a.improved ?? '—'}, nowi: ${a.joined}.`,
+        },
+      ],
+      160,
+    );
+    return text.trim().slice(0, 600) || undefined;
+  } catch {
+    return undefined;
   }
 }
 
@@ -297,6 +331,18 @@ async function maybePost(client: Client): Promise<void> {
           value: `Aktywniejszy niż **${percentileRank(s.m, benchSample)}%** serwerów obsługiwanych przez bota`,
           inline: false,
         });
+      // 🤖 AI-recap (opcjonalny) jako narratorska wstawka na górze embeda.
+      if (c.aiRecap) {
+        const narration = await buildAiRecap({
+          m: s.m,
+          v: s.v,
+          net,
+          top: topUser?.name,
+          improved: improved?.name,
+          joined: funnel.joined,
+        });
+        if (narration) embed.setDescription(narration);
+      }
       // Dedup oznaczamy TYLKO po potwierdzonej wysyłce — transientny błąd send (rate-limit, chwilowy
       // brak uprawnień) pozwala ponowić w kolejnym ticku, zamiast bezgłośnie spalić tydzień.
       const sent = await (ch as TextChannel)

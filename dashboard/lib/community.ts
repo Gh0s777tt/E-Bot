@@ -259,8 +259,8 @@ export async function saveAiHelpConfig(cfg: AiHelpConfig): Promise<void> {
 }
 
 // ── Tygodniowy digest serwera (Tor E) ──
-export type DigestConfig = { enabled: boolean; channelId: string };
-export const DIGEST_DEFAULT: DigestConfig = { enabled: false, channelId: '' };
+export type DigestConfig = { enabled: boolean; channelId: string; aiRecap?: boolean };
+export const DIGEST_DEFAULT: DigestConfig = { enabled: false, channelId: '', aiRecap: false };
 export async function getDigestConfig(): Promise<DigestConfig> {
   const raw = await getConfigSetting('digest_config');
   if (!raw) return structuredClone(DIGEST_DEFAULT);
@@ -272,6 +272,52 @@ export async function getDigestConfig(): Promise<DigestConfig> {
 }
 export async function saveDigestConfig(cfg: DigestConfig): Promise<void> {
   await setConfigSetting('digest_config', JSON.stringify(cfg));
+}
+
+// ── Auto-wątki (Fala 1) — wybrane kanały auto-tworzą wątek na każdą wiadomość ──
+export type AutothreadConfig = { enabled: boolean; channels: string[]; nameTemplate: string };
+export const AUTOTHREAD_DEFAULT: AutothreadConfig = {
+  enabled: false,
+  channels: [],
+  nameTemplate: '{user} — {date}',
+};
+export async function getAutothreadConfig(): Promise<AutothreadConfig> {
+  const raw = await getConfigSetting('autothread_config');
+  if (!raw) return structuredClone(AUTOTHREAD_DEFAULT);
+  try {
+    return { ...AUTOTHREAD_DEFAULT, ...(JSON.parse(raw) as Partial<AutothreadConfig>) };
+  } catch {
+    return structuredClone(AUTOTHREAD_DEFAULT);
+  }
+}
+export async function saveAutothreadConfig(cfg: AutothreadConfig): Promise<void> {
+  await setConfigSetting('autothread_config', JSON.stringify(cfg));
+}
+
+// ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
+export type MilestonesConfig = {
+  enabled: boolean;
+  channelId: string;
+  every: number;
+  message: string;
+};
+export const MILESTONES_DEFAULT: MilestonesConfig = {
+  enabled: false,
+  channelId: '',
+  every: 100,
+  message: '🎉 Osiągnęliśmy **{count}** członków! Witaj {user} 🎊',
+};
+export async function getMilestonesConfig(): Promise<MilestonesConfig> {
+  const raw = await getConfigSetting('milestones_config');
+  if (!raw) return structuredClone(MILESTONES_DEFAULT);
+  try {
+    return { ...MILESTONES_DEFAULT, ...(JSON.parse(raw) as Partial<MilestonesConfig>) };
+  } catch {
+    return structuredClone(MILESTONES_DEFAULT);
+  }
+}
+export async function saveMilestonesConfig(cfg: MilestonesConfig): Promise<void> {
+  await setConfigSetting('milestones_config', JSON.stringify(cfg));
 }
 
 // ── Dzienny AI-digest (Tor J) ──

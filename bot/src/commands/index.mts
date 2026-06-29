@@ -77,6 +77,7 @@ import * as serverinfo from './serverinfo.mts';
 import * as ship from './ship.mts';
 import * as skins from './skins.mts';
 import * as slowmode from './slowmode.mts';
+import * as snipe from './snipe.mts';
 import * as sticky from './sticky.mts';
 import * as stocks from './stocks.mts';
 import * as streamsync from './streamsync.mts';
@@ -107,6 +108,7 @@ export type Command = {
 
 export const commands: Command[] = [
   ping,
+  snipe,
   library,
   antinuke,
   applypanel,
