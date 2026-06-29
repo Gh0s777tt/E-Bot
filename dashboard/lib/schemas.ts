@@ -338,6 +338,23 @@ export const milestonesSchema = z.object({
 });
 export type MilestonesInput = z.infer<typeof milestonesSchema>;
 
+// ── Cele społeczności (POST /api/goals) ────────────────────
+export const goalsSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+  target: z.number().int().min(0).max(100_000_000),
+  title: z.string().max(100),
+  reward: z.string().max(500),
+});
+export type GoalsInput = z.infer<typeof goalsSchema>;
+
+// ── Auto-publikacja ogłoszeń (POST /api/autopublish) ───────
+export const autopublishSchema = z.object({
+  enabled: z.boolean(),
+  channels: z.array(z.string().max(40)).max(25),
+});
+export type AutopublishInput = z.infer<typeof autopublishSchema>;
+
 // ── Reaction roles (POST /api/reaction-roles) ──────────────
 export const reactionRolesSchema = z.object({
   items: z

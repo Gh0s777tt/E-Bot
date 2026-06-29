@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-649-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.579.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-650-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.580.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.580.0] — 🤝 Fala 2: cele społeczności + auto-publikacja ogłoszeń
+
+- `[#650]` 🤝 **Fala 2 nowych funkcji (samowystarczalne, per-serwer):**
+  - **Cele społeczności (server challenge)** — zbiorowy target wiadomości w bieżącym miesiącu; po osiągnięciu bot świętuje na kanale (tytuł + opcjonalna nagroda), reset co miesiąc. Sumuje `activity_daily`. [`bot/src/community/goals.mts`](bot/src/community/goals.mts) + panel `/engagement` + test czystej `goalReached`.
+  - **Auto-publikacja ogłoszeń** — na kanałach typu „Announcement" z listy każda wiadomość jest automatycznie publikowana (crosspost) do obserwujących serwerów. [`bot/src/community/autopublish.mts`](bot/src/community/autopublish.mts) + panel.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 834 + dashboard 318) · `sync:check` — exit 0. i18n ×14 (+10 kluczy).
 
 ## [0.579.0] — 🧰 Fala funkcji: /snipe, auto-wątki, kamienie milowe, AI-recap
 

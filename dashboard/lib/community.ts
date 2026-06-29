@@ -320,6 +320,50 @@ export async function saveMilestonesConfig(cfg: MilestonesConfig): Promise<void>
   await setConfigSetting('milestones_config', JSON.stringify(cfg));
 }
 
+// ── Cele społeczności (Fala 2) — zbiorowy target wiadomości w miesiącu ──
+export type GoalsConfig = {
+  enabled: boolean;
+  channelId: string;
+  target: number;
+  title: string;
+  reward: string;
+};
+export const GOALS_DEFAULT: GoalsConfig = {
+  enabled: false,
+  channelId: '',
+  target: 0,
+  title: 'Wspólny cel miesiąca',
+  reward: '',
+};
+export async function getGoalsConfig(): Promise<GoalsConfig> {
+  const raw = await getConfigSetting('goals_config');
+  if (!raw) return structuredClone(GOALS_DEFAULT);
+  try {
+    return { ...GOALS_DEFAULT, ...(JSON.parse(raw) as Partial<GoalsConfig>) };
+  } catch {
+    return structuredClone(GOALS_DEFAULT);
+  }
+}
+export async function saveGoalsConfig(cfg: GoalsConfig): Promise<void> {
+  await setConfigSetting('goals_config', JSON.stringify(cfg));
+}
+
+// ── Auto-publikacja ogłoszeń (Fala 2) — crosspost na kanałach ogłoszeń ──
+export type AutopublishConfig = { enabled: boolean; channels: string[] };
+export const AUTOPUBLISH_DEFAULT: AutopublishConfig = { enabled: false, channels: [] };
+export async function getAutopublishConfig(): Promise<AutopublishConfig> {
+  const raw = await getConfigSetting('autopublish_config');
+  if (!raw) return structuredClone(AUTOPUBLISH_DEFAULT);
+  try {
+    return { ...AUTOPUBLISH_DEFAULT, ...(JSON.parse(raw) as Partial<AutopublishConfig>) };
+  } catch {
+    return structuredClone(AUTOPUBLISH_DEFAULT);
+  }
+}
+export async function saveAutopublishConfig(cfg: AutopublishConfig): Promise<void> {
+  await setConfigSetting('autopublish_config', JSON.stringify(cfg));
+}
+
 // ── Dzienny AI-digest (Tor J) ──
 export type AiDigestConfig = {
   enabled: boolean;

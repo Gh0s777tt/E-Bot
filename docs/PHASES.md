@@ -1,4 +1,4 @@
-<!-- SYNC: v0.579.0 · #649 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.580.0 · #650 · 2026-06-29 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.579.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.580.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.579.0)
+## 🔭 Bieżący tor (v0.580.0)
+
+**🤝 Fala 2 (v0.580.0)** — cele społeczności (zbiorowy target wiadomości w miesiącu → świętowanie) oraz auto-publikacja ogłoszeń (crosspost na kanałach „Announcement"). Bot: `community/goals.mts`, `community/autopublish.mts`; panel: `/engagement`.
 
 **🧰 Fala funkcji (v0.579.0)** — `/snipe` (podgląd usuniętej/edytowanej), auto-wątki na wybranych kanałach, kamienie milowe serwera (Nty członek) oraz AI-recap w tygodniowym digescie. Bot: `commands/snipe.mts`, `community/autothread.mts`, `community/milestones.mts`; panel: `/engagement`.
 

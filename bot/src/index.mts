@@ -37,10 +37,12 @@ import { startAiHelp } from './community/aihelp.mts';
 import { startAiMod } from './community/aimod.mts';
 import { handleApplicationButton, handleApplicationModal } from './community/applications.mts';
 import { startAutomations } from './community/automations.mts';
+import { startAutoPublish } from './community/autopublish.mts';
 import { startAutoThreads } from './community/autothread.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
 import { startCounting } from './community/counting.mts';
+import { startGoals } from './community/goals.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startImageOnly } from './community/imageonly.mts';
 import { startInvites } from './community/invites.mts';
@@ -187,6 +189,8 @@ client.once(Events.ClientReady, (c) => {
   startCounters(c); // Faza 7 / F7.4 — liczniki kanałów (statystyki w nazwach, poll 10 min)
   startCounting(c); // Tor 3 — gra w liczenie (config z panelu)
   startSnipe(c); // Fala 1 — /snipe (podgląd usuniętej/edytowanej wiadomości, in-memory)
+  startGoals(c); // Fala 2 — cele społeczności (zbiorowy target wiadomości/miesiąc, poll 30 min)
+  startAutoPublish(c); // Fala 2 — auto-publikacja ogłoszeń (crosspost na kanałach typu 5)
   startAutoThreads(c); // Fala 1 — auto-wątki na wybranych kanałach (config z panelu)
   startMilestones(c); // Fala 1 — kamienie milowe serwera (Nty członek, config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)
