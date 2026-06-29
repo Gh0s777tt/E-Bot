@@ -202,7 +202,7 @@ export async function closeTicket(id: string): Promise<boolean> {
 // ───────────────────────── 🤖 Komendy AI ─────────────────────────
 export type AiConfig = {
   enabled: boolean;
-  model: 'deepseek' | 'openai';
+  model: 'deepseek' | 'openai' | 'claude';
   dailyRequestLimit: number;
   dailyTokenLimit: number;
   persona: string;

@@ -243,7 +243,7 @@ export type TicketsConfigInput = z.infer<typeof ticketsConfigSchema>;
 // ── Komendy AI (POST /api/ai-config) ───────────────────────
 export const aiConfigSchema = z.object({
   enabled: z.boolean(),
-  model: z.enum(['deepseek', 'openai']),
+  model: z.enum(['deepseek', 'openai', 'claude']),
   dailyRequestLimit: z.number().int().min(0).max(10_000),
   dailyTokenLimit: z.number().int().min(0).max(10_000_000),
   persona: z.string().max(1000).optional().default(''),
@@ -710,6 +710,9 @@ export const patchnotesSchema = z.object({
     .default([]),
 });
 export type PatchNotesInput = z.infer<typeof patchnotesSchema>;
+
+// „Testuj feed" (POST /api/patchnotes/test) — samo źródło; URL RSS dodatkowo strzeżony SSRF-em w route.
+export const patchTestSchema = z.object({ source: patchSourceSchema });
 
 // ── Donejty Ko-fi (POST /api/kofi-config) ──────────────────
 export const kofiSchema = z.object({

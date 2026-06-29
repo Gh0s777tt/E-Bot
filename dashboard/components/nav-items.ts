@@ -119,7 +119,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/library', label: 'Biblioteka', icon: Gamepad2, tier: 'adv' },
       { href: '/wishlist', label: 'Lista życzeń', icon: Heart, tier: 'adv' },
-      { href: '/gaming', label: 'Gaming feed', icon: Rss, tier: 'adv' },
+      { href: '/gaming', label: 'Gaming feed', icon: Rss },
     ],
   },
   {

@@ -7,7 +7,7 @@ import SaveButton from './SaveButton';
 
 type Cfg = {
   enabled: boolean;
-  model: 'deepseek' | 'openai';
+  model: 'deepseek' | 'openai' | 'claude';
   dailyRequestLimit: number;
   dailyTokenLimit: number;
   persona: string;
@@ -59,6 +59,7 @@ export default function AiConfigForm({ initial }: { initial: Cfg }) {
           >
             <option value="deepseek">{tp(lang, 'ui.ai.modelDeepseek')}</option>
             <option value="openai">OpenAI</option>
+            <option value="claude">Claude (Anthropic)</option>
           </select>
         </label>
         <label className="space-y-1 text-sm">

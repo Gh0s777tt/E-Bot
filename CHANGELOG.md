@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-647-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.577.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-648-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.578.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,19 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.578.0] — 🧰 Patch-notes 2.0: anty-spam, test feedu, własny RSS, Claude, status
+
+- `[#648]` 🧰 **Hardening + usprawnienia (po wdrożeniu trybu PatchBot):**
+  - **Anty-spam przy 1. włączeniu** — przy pierwszym zobaczeniu źródła publikujemy tylko NAJNOWSZY wpis, starsze zasiewamy cicho (`g:<id>:patchnotes_init`) — koniec wysypu 3–10 pozycji na dodaniu gry.
+  - **„Testuj feed"** w panelu — przycisk per-wpis pokazuje 3 ostatnie tytuły ze źródła (`POST /api/patchnotes/test`; wymaga sesji + twarda blokada **SSRF** dla URLi RSS).
+  - **Własne źródło RSS** — wklej dowolny adres feedu (np. blog dewelopera) prosto w panelu.
+  - **Wykrywanie martwych feedów** — licznik nieudanych pobrań + `log.warn` po 3 próbach (bez spamu na kanał).
+  - **Cache AI-streszczeń** (TTL 6 h) — ta sama treść patcha = zero dodatkowych zapytań do modelu.
+  - **Claude (Anthropic) jako dostawca AI** — obok DeepSeek/OpenAI; `ANTHROPIC_API_KEY`, wybór w panelu `/ai` (Haiku 4.5). [`bot/src/lib/ai.mts`](bot/src/lib/ai.mts)
+  - **Odkrywalność** — „Gaming feed" widoczny też w trybie **Prosty** (zdjęty `tier:'adv'`; również w Ctrl+K).
+  - **Publiczna strona statusu** [`/p/status`](dashboard/app/p/status/page.tsx) — online/offline + ostatni heartbeat. (Backoff rate-limit Discord obsługuje już discord.js; pełna strona zdrowia pollerów — świadomie odłożona.)
+  - **Bramki:** typecheck ×4 · Biome · test (bot 831 + dashboard 318) · `sync:check` — exit 0. i18n ×14 (+7 kluczy).
 
 ## [0.577.0] — 🎮 Tryb PatchBot: katalog gier po nazwie + GPU + per-gra routing + AI
 

@@ -4,6 +4,8 @@
 // Config 'patchnotes_config' (PER-SERWER). Dedup PER-SERWER 'g:<id>:patchnotes_seen'.
 // Per-wpis: własny kanał (fallback domyślny) + ping roli + auto-pin; kanały tekstowe, głosowe i forum.
 // Tryb dostarczania: instant (od razu) lub daily (digest o danej godzinie UTC). Opcjonalne AI-streszczenie.
+// ANTY-SPAM: przy PIERWSZYM zobaczeniu źródła na serwerze (g:<id>:patchnotes_init) publikujemy tylko
+// NAJNOWSZY wpis, a starsze zasiewamy cicho do „seen" — bez wysypu ostatnich 3–10 pozycji przy dodaniu.
 // Apps różnią się per-serwer → fetch per-guild (z cache w obrębie jednego ticka). Poll 1h.
 import {
   ChannelType,
@@ -24,6 +26,7 @@ import { parseFeed } from '../lib/rss.mts';
 
 // ── Źródło wpisu: Steam (po AppID) lub RSS/Atom (po URL). Kształt współdzielony z katalogiem panelu. ──
 export type Source = { kind: 'steam'; appId: number } | { kind: 'rss'; url: string };
+const sourceKey = (s: Source): string => (s.kind === 'steam' ? `steam:${s.appId}` : `rss:${s.url}`);
 
 // Nowy kształt wpisu (per-gra): nazwa + źródło + opcjonalne nadpisania routingu.
 type Item = {
@@ -100,11 +103,12 @@ export function strip(s: string): string {
     .slice(0, 400);
 }
 
+// `null` = błąd pobrania (do wykrywania martwych feedów); `[]` = OK, brak wpisów.
 type SteamNews = { gid: string; title: string; url: string; contents: string; date: number };
-async function fetchSteam(appId: number): Promise<FetchedItem[]> {
+async function fetchSteam(appId: number): Promise<FetchedItem[] | null> {
   const url = `https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=${appId}&count=3&maxlength=600`;
   const r = await fetch(url, { signal: AbortSignal.timeout(15_000) }).catch(() => null);
-  if (!r?.ok) return [];
+  if (!r?.ok) return null;
   const d = (await r.json().catch(() => ({}))) as { appnews?: { newsitems?: SteamNews[] } };
   return (d.appnews?.newsitems ?? []).map((n) => ({
     id: n.gid,
@@ -121,12 +125,12 @@ const RSS_HEADERS = {
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
   accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
 };
-async function fetchRss(url: string): Promise<FetchedItem[]> {
+async function fetchRss(url: string): Promise<FetchedItem[] | null> {
   const r = await fetch(url, {
     headers: RSS_HEADERS,
     signal: AbortSignal.timeout(15_000),
   }).catch(() => null);
-  if (!r?.ok) return [];
+  if (!r?.ok) return null;
   const xml = await r.text().catch(() => '');
   // Prefiks `r:` żeby ID z RSS nie kolidowały z numerycznymi gid-ami Steama w jednej liście „seen".
   return parseFeed(xml).map((f) => ({ id: `r:${f.id}`, title: f.title, url: f.link }));
@@ -134,26 +138,44 @@ async function fetchRss(url: string): Promise<FetchedItem[]> {
 
 async function fetchFeed(
   source: Source,
-  cache: Map<string, FetchedItem[]>,
-): Promise<FetchedItem[]> {
-  const key = source.kind === 'steam' ? `steam:${source.appId}` : `rss:${source.url}`;
-  const cached = cache.get(key);
-  if (cached) return cached;
-  let items: FetchedItem[] = [];
+  cache: Map<string, FetchedItem[] | null>,
+): Promise<FetchedItem[] | null> {
+  const key = sourceKey(source);
+  if (cache.has(key)) return cache.get(key) ?? null;
+  let items: FetchedItem[] | null = null;
   try {
     items = source.kind === 'steam' ? await fetchSteam(source.appId) : await fetchRss(source.url);
   } catch {
-    items = [];
+    items = null;
   }
   cache.set(key, items);
   return items;
 }
+
+// ── Wykrywanie martwych feedów (A3): licznik nieudanych prób w pamięci procesu (bez zapisów do chmury). ──
+const failCounts = new Map<string, number>();
+function noteFailure(key: string): void {
+  const n = (failCounts.get(key) ?? 0) + 1;
+  failCounts.set(key, n);
+  // Log raz, przy przekroczeniu progu (widoczne w logach/Sentry — bez spamu na kanał użytkownika).
+  if (n === 3) log.warn(`[patchnotes] źródło ${key} nie odpowiada (3 nieudane próby z rzędu)`);
+}
+function noteSuccess(key: string): void {
+  if (failCounts.has(key)) failCounts.delete(key);
+}
+
+// ── Cache streszczeń AI (D): ta sama treść patcha → ten sam wynik (oszczędność kosztów). TTL 6 h. ──
+const summaryCache = new Map<string, { at: number; text: string }>();
+const SUMMARY_TTL = 6 * 3_600_000;
 
 // Opcjonalne AI-streszczenie treści patcha. Bez flagi / bez infry AI / błąd → undefined (fallback do strip).
 async function summarize(contents: string | undefined, c: Cfg): Promise<string | undefined> {
   if (!c.aiSummary || !contents) return undefined;
   const ai = aiConfig();
   if (!ai.enabled) return undefined;
+  const cacheKey = `${ai.model}:${contents.length}:${contents.slice(0, 120)}`;
+  const hit = summaryCache.get(cacheKey);
+  if (hit && Date.now() - hit.at < SUMMARY_TTL) return hit.text;
   try {
     const { text } = await callModel(
       ai.model,
@@ -167,8 +189,11 @@ async function summarize(contents: string | undefined, c: Cfg): Promise<string |
       ],
       200,
     );
-    const out = text.trim();
-    return out ? out.slice(0, 1000) : undefined;
+    const out = text.trim().slice(0, 1000);
+    if (!out) return undefined;
+    summaryCache.set(cacheKey, { at: Date.now(), text: out });
+    if (summaryCache.size > 200) summaryCache.delete(summaryCache.keys().next().value as string);
+    return out;
   } catch {
     return undefined;
   }
@@ -223,23 +248,46 @@ async function loadJson<T>(key: string, fallback: T): Promise<T> {
 type DigestEntry = { name: string; title: string; url: string };
 
 // Patch-notes dla JEDNEGO serwera (feeds + dedup per-serwer; `guild.channels.fetch` = izolacja kanału).
-async function tickForGuild(guild: Guild, cache: Map<string, FetchedItem[]>): Promise<void> {
+async function tickForGuild(guild: Guild, cache: Map<string, FetchedItem[] | null>): Promise<void> {
   const c = cfgFor(guild.id);
   if (!c.enabled) return;
   const feeds = feedsOf(c);
   if (!feeds.length) return;
 
   const seenKey = `g:${guild.id}:patchnotes_seen`;
+  const initKey = `g:${guild.id}:patchnotes_init`;
   const digestKey = `g:${guild.id}:patchnotes_digest`;
   const seen = await loadJson<string[]>(seenKey, []);
+  const init = await loadJson<string[]>(initKey, []);
   let buffer = c.digest === 'daily' ? await loadJson<DigestEntry[]>(digestKey, []) : [];
   let seenChanged = false;
+  let initChanged = false;
   let bufChanged = false;
 
   for (const f of feeds) {
-    const items = (await fetchFeed(f.source, cache)).slice().reverse(); // od najstarszej
-    for (const it of items) {
+    const sk = sourceKey(f.source);
+    const fetched = await fetchFeed(f.source, cache);
+    if (fetched === null) {
+      noteFailure(sk); // martwy/niedostępny feed — nie oznaczamy jako init, spróbujemy ponownie
+      continue;
+    }
+    noteSuccess(sk);
+    const items = fetched.slice().reverse(); // od najstarszej do najnowszej
+    // Pierwsze zobaczenie źródła na tym serwerze → publikujemy tylko najnowszy, resztę zasiewamy cicho.
+    const firstSight = !init.includes(sk);
+    if (firstSight) {
+      init.push(sk);
+      initChanged = true;
+    }
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
       if (!it.id || seen.includes(it.id)) continue;
+      const isNewest = i === items.length - 1;
+      if (firstSight && !isNewest) {
+        seen.push(it.id); // anty-spam: starsze przy 1. dodaniu = ciche zasianie, bez publikacji
+        seenChanged = true;
+        continue;
+      }
       if (c.digest === 'daily') {
         buffer.push({ name: f.name, title: it.title, url: it.url });
         seen.push(it.id);
@@ -290,6 +338,7 @@ async function tickForGuild(guild: Guild, cache: Map<string, FetchedItem[]>): Pr
   }
 
   if (seenChanged) await cloudSetSetting(seenKey, JSON.stringify(seen.slice(-150))).catch(() => {});
+  if (initChanged) await cloudSetSetting(initKey, JSON.stringify(init.slice(-100))).catch(() => {});
   if (bufChanged)
     await cloudSetSetting(digestKey, JSON.stringify(buffer.slice(-100))).catch(() => {});
 }
@@ -297,7 +346,7 @@ async function tickForGuild(guild: Guild, cache: Map<string, FetchedItem[]>): Pr
 // Eksport dla testów izolacji (patchnotes.isolation.test.ts): jeden cykl pollera.
 export async function tick(client: Client): Promise<void> {
   if (!hasCloud()) return;
-  const cache = new Map<string, FetchedItem[]>();
+  const cache = new Map<string, FetchedItem[] | null>();
   for (const guild of client.guilds.cache.values()) {
     await tickForGuild(guild, cache).catch(() => {});
   }

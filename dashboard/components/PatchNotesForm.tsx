@@ -11,6 +11,7 @@ import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
 
 type Row = PatchItem & { k: string };
+type TestState = { loading?: boolean; err?: boolean; items?: { title: string; url: string }[] };
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -41,6 +42,9 @@ export default function PatchNotesForm({
     })),
   ]);
   const [query, setQuery] = useState('');
+  const [customName, setCustomName] = useState('');
+  const [customUrl, setCustomUrl] = useState('');
+  const [tests, setTests] = useState<Record<string, TestState>>({});
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
 
   const addedSlugs = useMemo(
@@ -59,8 +63,31 @@ export default function PatchNotesForm({
     ]);
     setQuery('');
   }
+  function addCustom() {
+    const url = customUrl.trim();
+    if (!/^https?:\/\//i.test(url)) return;
+    const name = customName.trim() || url;
+    setRows((r) => [...r, { name, source: { kind: 'rss', url }, k: `p${idRef.current++}` }]);
+    setCustomName('');
+    setCustomUrl('');
+  }
   const patch = (k: string, p: Partial<Row>) =>
     setRows((r) => r.map((x) => (x.k === k ? { ...x, ...p } : x)));
+
+  async function testRow(r: Row) {
+    setTests((t) => ({ ...t, [r.k]: { loading: true } }));
+    try {
+      const res = await fetch('/api/patchnotes/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source: r.source }),
+      });
+      const d = (await res.json()) as { ok?: boolean; items?: { title: string; url: string }[] };
+      setTests((t) => ({ ...t, [r.k]: { items: d.ok ? (d.items ?? []) : [], err: !d.ok } }));
+    } catch {
+      setTests((t) => ({ ...t, [r.k]: { err: true } }));
+    }
+  }
 
   async function save() {
     setSt('saving');
@@ -177,6 +204,29 @@ export default function PatchNotesForm({
             ))}
           </div>
         )}
+        {/* Własne źródło RSS (A4) */}
+        <div className="flex gap-2">
+          <input
+            value={customName}
+            onChange={(e) => setCustomName(e.target.value)}
+            placeholder={tp(lang, 'ui.gaming.namePh')}
+            className={`${inputCls} w-36 shrink-0`}
+          />
+          <input
+            value={customUrl}
+            onChange={(e) => setCustomUrl(e.target.value)}
+            placeholder={tp(lang, 'ui.gaming.customUrlPh')}
+            className={inputCls}
+          />
+          <button
+            type="button"
+            onClick={addCustom}
+            className="inline-flex shrink-0 items-center gap-1 rounded-md border border-line px-2.5 text-xs transition hover:bg-elevated"
+          >
+            <Plus size={12} /> {tp(lang, 'ui.gaming.addBtn')}
+          </button>
+        </div>
+        <p className="text-[11px] text-muted">{tp(lang, 'ui.gaming.customLabel')}</p>
       </div>
 
       {/* Lista śledzonych */}
@@ -184,49 +234,87 @@ export default function PatchNotesForm({
         <span className="text-sm font-semibold text-white/90">
           {tp(lang, 'ui.gaming.trackedLabel')}
         </span>
-        {rows.map((r) => (
-          <div key={r.k} className="space-y-2 rounded-md border border-line bg-elevated/40 p-2.5">
-            <div className="flex items-center gap-2">
-              <span>{rowEmoji(r)}</span>
-              <span className="flex-1 truncate text-sm font-medium text-white/90">{r.name}</span>
-              <label className="flex items-center gap-1 text-xs text-muted">
-                <input
-                  type="checkbox"
-                  checked={!!r.pin}
-                  onChange={(e) => patch(r.k, { pin: e.target.checked })}
-                  className="h-3.5 w-3.5 accent-accent"
+        {rows.map((r) => {
+          const t = tests[r.k];
+          return (
+            <div key={r.k} className="space-y-2 rounded-md border border-line bg-elevated/40 p-2.5">
+              <div className="flex items-center gap-2">
+                <span>{rowEmoji(r)}</span>
+                <span className="flex-1 truncate text-sm font-medium text-white/90">{r.name}</span>
+                <button
+                  type="button"
+                  onClick={() => testRow(r)}
+                  className="rounded-md border border-line px-2 py-1 text-muted text-xs transition hover:border-accent hover:text-accent"
+                >
+                  {tp(lang, 'ui.gaming.testBtn')}
+                </button>
+                <label className="flex items-center gap-1 text-muted text-xs">
+                  <input
+                    type="checkbox"
+                    checked={!!r.pin}
+                    onChange={(e) => patch(r.k, { pin: e.target.checked })}
+                    className="h-3.5 w-3.5 accent-accent"
+                  />
+                  <Pin size={12} /> {tp(lang, 'ui.gaming.pin')}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setRows((rs) => rs.filter((x) => x.k !== r.k))}
+                  className="rounded-md border border-line p-1.5 text-muted transition hover:border-accent hover:text-accent"
+                  aria-label={tp(lang, 'ui.gaming.delAria')}
+                >
+                  <Trash2 size={13} />
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <ChannelSelect
+                  value={r.channelId ?? ''}
+                  onChange={(v) => patch(r.k, { channelId: v })}
+                  channels={guild.channels}
+                  placeholder={tp(lang, 'ui.gaming.channelPh')}
                 />
-                <Pin size={12} /> {tp(lang, 'ui.gaming.pin')}
-              </label>
-              <button
-                type="button"
-                onClick={() => setRows((rs) => rs.filter((x) => x.k !== r.k))}
-                className="rounded-md border border-line p-1.5 text-muted transition hover:border-accent hover:text-accent"
-                aria-label={tp(lang, 'ui.gaming.delAria')}
-              >
-                <Trash2 size={13} />
-              </button>
+                <RoleSelect
+                  value={r.roleId ?? ''}
+                  onChange={(v) => patch(r.k, { roleId: v })}
+                  roles={guild.roles}
+                  placeholder={tp(lang, 'ui.gaming.rolePing')}
+                />
+              </div>
+              {t && (
+                <div className="text-muted text-xs">
+                  {t.loading ? (
+                    '…'
+                  ) : t.err || !t.items?.length ? (
+                    tp(lang, 'ui.gaming.testEmpty')
+                  ) : (
+                    <ul className="list-disc ps-4">
+                      {t.items.slice(0, 3).map((it) => (
+                        <li key={`${it.url}|${it.title}`} className="truncate">
+                          {it.url ? (
+                            <a
+                              href={it.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="hover:text-accent"
+                            >
+                              {it.title}
+                            </a>
+                          ) : (
+                            it.title
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <ChannelSelect
-                value={r.channelId ?? ''}
-                onChange={(v) => patch(r.k, { channelId: v })}
-                channels={guild.channels}
-                placeholder={tp(lang, 'ui.gaming.channelPh')}
-              />
-              <RoleSelect
-                value={r.roleId ?? ''}
-                onChange={(v) => patch(r.k, { roleId: v })}
-                roles={guild.roles}
-                placeholder={tp(lang, 'ui.gaming.rolePing')}
-              />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <SaveButton st={st} onClick={save} />
-      <p className="text-xs text-muted">{tp(lang, 'ui.gaming.patchHelpV2')}</p>
+      <p className="text-muted text-xs">{tp(lang, 'ui.gaming.patchHelpV2')}</p>
     </div>
   );
 }

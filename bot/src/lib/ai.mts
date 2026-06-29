@@ -5,7 +5,7 @@ import { cloudSelect, cloudUpsert, hasCloud } from './cloud.mts';
 import { getSettings } from './db.mts';
 import { log } from './log.mts';
 
-export type AiModel = 'deepseek' | 'openai';
+export type AiModel = 'deepseek' | 'openai' | 'claude';
 export type AiConfig = {
   enabled: boolean;
   model: AiModel;
@@ -33,11 +33,51 @@ export function aiConfig(): AiConfig {
 
 export type ChatMsg = { role: 'system' | 'user' | 'assistant'; content: string };
 
+// Claude (Anthropic Messages API): `system` to OSOBNE pole (nie rola) — wydzielamy je z messages.
+async function callClaude(
+  messages: ChatMsg[],
+  maxTokens: number,
+): Promise<{ text: string; tokens: number }> {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error('brak klucza API (ANTHROPIC_API_KEY)');
+  const system = messages
+    .filter((m) => m.role === 'system')
+    .map((m) => m.content)
+    .join('\n\n');
+  const msgs = messages
+    .filter((m) => m.role !== 'system')
+    .map((m) => ({ role: m.role, content: m.content }));
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens,
+      ...(system ? { system } : {}),
+      messages: msgs,
+    }),
+    signal: AbortSignal.timeout(30_000),
+  });
+  const d = (await r.json().catch(() => ({}))) as {
+    content?: { text?: string }[];
+    usage?: { input_tokens?: number; output_tokens?: number };
+    error?: { message?: string };
+  };
+  if (!r.ok) throw new Error(d.error?.message || `HTTP ${r.status}`);
+  const text = (d.content ?? []).map((c) => c.text ?? '').join('');
+  return { text, tokens: (d.usage?.input_tokens ?? 0) + (d.usage?.output_tokens ?? 0) };
+}
+
 export async function callModel(
   model: AiModel,
   messages: ChatMsg[],
   maxTokens = 800,
 ): Promise<{ text: string; tokens: number }> {
+  if (model === 'claude') return callClaude(messages, maxTokens);
   const isOpenai = model === 'openai';
   const key = isOpenai ? process.env.OPENAI_API_KEY : process.env.DEEPSEEK_API_KEY;
   if (!key)
