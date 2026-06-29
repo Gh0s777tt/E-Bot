@@ -1,8 +1,9 @@
-import { Bot, Gavel, Hourglass, Inbox, ShieldCheck, Zap } from 'lucide-react';
+import { Bot, Gauge, Gavel, Hourglass, Inbox, ShieldCheck, Zap } from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
 import AppealsForm from '../../components/AppealsForm';
 import AutomodForm from '../../components/AutomodForm';
 import AutomodStats from '../../components/AutomodStats';
+import AutoslowForm from '../../components/AutoslowForm';
 import EmptyState from '../../components/EmptyState';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
@@ -12,6 +13,7 @@ import {
   getAppealsConfig,
   getAutomodConfig,
   getAutomodStats,
+  getAutoslowConfig,
 } from '../../lib/community';
 import { getNativeRules } from '../../lib/discordAutomod';
 import { getModCases, getTempBans } from '../../lib/faza4';
@@ -54,7 +56,7 @@ function remaining(iso: string, lang: PanelLocale): string {
 }
 
 export default async function ModerationPage() {
-  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules, appeals, guildId, lang] =
+  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules, appeals, autoslow, guildId, lang] =
     await Promise.all([
       getAutomodConfig(),
       getAiModConfig(),
@@ -64,6 +66,7 @@ export default async function ModerationPage() {
       getAutomodStats(),
       getNativeRules(),
       getAppealsConfig(),
+      getAutoslowConfig(),
       getPrimaryGuildId(),
       getPanelLocale(),
     ]);
@@ -117,6 +120,16 @@ export default async function ModerationPage() {
           </span>
         </h2>
         <AppealsForm initial={appeals} guild={guild} guildId={guildId} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Gauge size={16} className="text-accent" /> {tp(lang, 'ui.autoslow.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={autoslow.enabled} lang={lang} />
+          </span>
+        </h2>
+        <AutoslowForm initial={autoslow} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

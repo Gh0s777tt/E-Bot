@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-651-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.581.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-652-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.582.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.582.0] — ⏱️ Adaptacyjny slowmode (auto-throttling kanałów wg tempa)
+
+- `[#652]` ⏱️ **Adaptacyjny slowmode** — na wybranych kanałach bot mierzy tempo wiadomości w oknie i sam reguluje slowmode: gdy robi się tłoczno, stopniowo go PODNOSI (25→50→75→100% limitu wg krotności progu), a po wyciszeniu ZDEJMUJE. Zero akcji moderatora, zero kar — kanał zwalnia w szczycie i wraca do normy. Config per-serwer (włącz, kanały, próg, okno, maks. slowmode), bez nowej tabeli.
+  - Bot: [`bot/src/security/autoslow.mts`](bot/src/security/autoslow.mts) — fast-path PODNOSI na `messageCreate`, poller (15 s) ZDEJMUJE na wyciszonych kanałach; czysta, testowalna `computeSlowmode` (4 progi). Wymaga uprawnienia `ManageChannels`. Panel: sekcja na `/moderation` (próg/okno/maks. + multi-kanał).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 840 +`computeSlowmode`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+7 kluczy).
 
 ## [0.581.0] — ⚖️ System odwołań od bana (publiczny formularz → recenzja moderatora)
 

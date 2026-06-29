@@ -294,6 +294,34 @@ export async function saveAutothreadConfig(cfg: AutothreadConfig): Promise<void>
   await setConfigSetting('autothread_config', JSON.stringify(cfg));
 }
 
+// ── Adaptacyjny slowmode — bot sam podnosi/zdejmuje slowmode wg tempa wiadomości na wybranych kanałach ──
+export type AutoslowConfig = {
+  enabled: boolean;
+  channels: string[];
+  threshold: number;
+  window: number;
+  maxSlow: number;
+};
+export const AUTOSLOW_DEFAULT: AutoslowConfig = {
+  enabled: false,
+  channels: [],
+  threshold: 8,
+  window: 10,
+  maxSlow: 30,
+};
+export async function getAutoslowConfig(): Promise<AutoslowConfig> {
+  const raw = await getConfigSetting('autoslow_config');
+  if (!raw) return structuredClone(AUTOSLOW_DEFAULT);
+  try {
+    return { ...AUTOSLOW_DEFAULT, ...(JSON.parse(raw) as Partial<AutoslowConfig>) };
+  } catch {
+    return structuredClone(AUTOSLOW_DEFAULT);
+  }
+}
+export async function saveAutoslowConfig(cfg: AutoslowConfig): Promise<void> {
+  await setConfigSetting('autoslow_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

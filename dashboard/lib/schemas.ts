@@ -329,6 +329,16 @@ export const autothreadSchema = z.object({
 });
 export type AutothreadInput = z.infer<typeof autothreadSchema>;
 
+// ── Adaptacyjny slowmode (POST /api/autoslow) ──────────────
+export const autoslowSchema = z.object({
+  enabled: z.boolean(),
+  channels: z.array(z.string().max(40)).max(25),
+  threshold: z.number().int().min(1).max(100),
+  window: z.number().int().min(3).max(60),
+  maxSlow: z.number().int().min(0).max(600),
+});
+export type AutoslowInput = z.infer<typeof autoslowSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),
