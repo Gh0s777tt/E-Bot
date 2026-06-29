@@ -1,6 +1,7 @@
 import {
   Gift,
   Hash,
+  Link2,
   Megaphone,
   MessageSquare,
   MousePointerClick,
@@ -22,6 +23,7 @@ import EmptyState from '../../components/EmptyState';
 import GoalsForm from '../../components/GoalsForm';
 import InvitesForm from '../../components/InvitesForm';
 import MilestonesForm from '../../components/MilestonesForm';
+import QuoteLinkForm from '../../components/QuoteLinkForm';
 import StarboardForm from '../../components/StarboardForm';
 import StatusPill from '../../components/StatusPill';
 import TempVoiceForm from '../../components/TempVoiceForm';
@@ -32,6 +34,7 @@ import {
   getAutothreadConfig,
   getGoalsConfig,
   getMilestonesConfig,
+  getQuotelinkConfig,
 } from '../../lib/community';
 import {
   getButtonRoles,
@@ -65,6 +68,7 @@ export default async function EngagementPage() {
     autothread,
     autoreact,
     autodelete,
+    quotelink,
     milestones,
     goals,
     autopub,
@@ -80,6 +84,7 @@ export default async function EngagementPage() {
     getAutothreadConfig(),
     getAutoreactConfig(),
     getAutodeleteConfig(),
+    getQuotelinkConfig(),
     getMilestonesConfig(),
     getGoalsConfig(),
     getAutopublishConfig(),
@@ -177,6 +182,16 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <AutoDeleteForm initial={autodelete} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Link2 size={16} className="text-accent" /> {tp(lang, 'ui.engagement.quotelinkHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={quotelink.enabled} lang={lang} />
+          </span>
+        </h2>
+        <QuoteLinkForm initial={quotelink} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

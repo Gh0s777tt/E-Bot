@@ -52,6 +52,7 @@ import { startInvites } from './community/invites.mts';
 import { startMilestones } from './community/milestones.mts';
 import { startPresenceRoles } from './community/presenceRoles.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
+import { startQuoteLinks } from './community/quotelink.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
@@ -201,6 +202,7 @@ client.once(Events.ClientReady, (c) => {
   startAutoThreads(c); // Fala 1 — auto-wątki na wybranych kanałach (config z panelu)
   startAutoReact(c); // Auto-reakcje — bot dodaje skonfigurowane reakcje na wybranych kanałach (config z panelu)
   startAutoDelete(c); // Auto-czyszczenie — kasuje wiadomości starsze niż TTL na wybranych kanałach (config z panelu)
+  startQuoteLinks(c); // Podgląd linków do wiadomości — embed + „Skocz" gdy ktoś wklei link (config z panelu)
   startAutoSlowmode(c); // Adaptacyjny slowmode — podnosi/zdejmuje slowmode wg tempa wiadomości (config z panelu)
   startMilestones(c); // Fala 1 — kamienie milowe serwera (Nty członek, config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-656-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.586.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-657-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.587.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.587.0] — 🔗 Podgląd linków do wiadomości (auto-cytowanie wklejonych linków)
+
+- `[#657]` 🔗 **Podgląd linków do wiadomości** — gdy ktoś wklei link do wiadomości z tego serwera, bot odpowiada zwięzłym embedem (autor, treść, miniatura obrazka) z przyciskiem **„Skocz do wiadomości"**. Wygodne cytowanie między kanałami bez kopiuj-wklej. Bez nowej tabeli.
+  - Bot: [`bot/src/community/quotelink.mts`](bot/src/community/quotelink.mts) — `messageCreate`; czysta, testowalna `parseMessageLinks` (snowflake 17–20 cyfr, warianty `canary`/`discordapp`, dedup, max 3, pomija `<…>`). **Anty-wyciek:** tylko ten sam serwer i tylko gdy wklejający ma `ViewChannel` na kanale źródłowym. Wymaga, by bot też widział kanał. Panel: sekcja na `/engagement`.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 860 +`parseMessageLinks`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+3 klucze).
 
 ## [0.586.0] — 🧹 Auto-czyszczenie kanałów (kasowanie wiadomości po czasie)
 

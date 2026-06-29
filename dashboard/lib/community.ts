@@ -388,6 +388,22 @@ export async function saveAutodeleteConfig(cfg: AutodeleteConfig): Promise<void>
   await setConfigSetting('autodelete_config', JSON.stringify(cfg));
 }
 
+// ── Podgląd linków do wiadomości — bot rozwija wklejony link w embed z treścią + „Skocz" ──
+export type QuotelinkConfig = { enabled: boolean };
+export const QUOTELINK_DEFAULT: QuotelinkConfig = { enabled: false };
+export async function getQuotelinkConfig(): Promise<QuotelinkConfig> {
+  const raw = await getConfigSetting('quotelink_config');
+  if (!raw) return structuredClone(QUOTELINK_DEFAULT);
+  try {
+    return { ...QUOTELINK_DEFAULT, ...(JSON.parse(raw) as Partial<QuotelinkConfig>) };
+  } catch {
+    return structuredClone(QUOTELINK_DEFAULT);
+  }
+}
+export async function saveQuotelinkConfig(cfg: QuotelinkConfig): Promise<void> {
+  await setConfigSetting('quotelink_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

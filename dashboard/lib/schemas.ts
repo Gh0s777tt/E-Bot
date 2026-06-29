@@ -371,6 +371,10 @@ export const autodeleteSchema = z.object({
 });
 export type AutodeleteInput = z.infer<typeof autodeleteSchema>;
 
+// ── Podgląd linków do wiadomości (POST /api/quotelink) ─────
+export const quotelinkSchema = z.object({ enabled: z.boolean() });
+export type QuotelinkInput = z.infer<typeof quotelinkSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),
