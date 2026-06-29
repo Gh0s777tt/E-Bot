@@ -1,4 +1,4 @@
-<!-- SYNC: v0.587.0 · #657 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.588.0 · #658 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.587.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.588.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.587.0)
+## 🔭 Bieżący tor (v0.588.0)
+
+**✉️ Powitalny DM (v0.588.0)** — przy dołączeniu bot wysyła nowemu członkowi prywatną wiadomość z konfigurowalną treścią (regulamin, pierwsze kroki). Bot: `community/joindm.mts`; panel: sekcja na `/welcome`.
 
 **🔗 Podgląd linków do wiadomości (v0.587.0)** — wklejony link do wiadomości z serwera bot rozwija w embed z treścią + „Skocz" (anty-wyciek: ten sam serwer + dostęp wklejającego). Bot: `community/quotelink.mts`; panel: sekcja na `/engagement`.
 

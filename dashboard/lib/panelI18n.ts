@@ -1621,6 +1621,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Streszczaj patche przez AI',
     'ui.gaming.rolePing': 'Ping roli (opcjonalnie)',
     'ui.gaming.pin': 'Przypnij',
+    'ui.joindm.heading': 'Powitalny DM',
+    'ui.joindm.enabled': 'Powitalny DM włączony',
+    'ui.joindm.message': 'Treść wiadomości',
+    'ui.joindm.messagePh': 'Cześć {user}! Witaj na {server} 🎉 Zajrzyj do #regulamin i #role.',
+    'ui.joindm.help':
+      'Gdy ktoś dołączy, bot wyśle mu prywatną wiadomość. Placeholdery: {user}, {username}, {server}, {memberCount}. Jeśli użytkownik ma zamknięte DM, wiadomość jest po cichu pomijana. Uzupełnia powitania na kanale.',
     'ui.engagement.quotelinkHeading': 'Podgląd linków do wiadomości',
     'ui.quotelink.enabled': 'Auto-podgląd linków włączony',
     'ui.quotelink.help':
@@ -3347,6 +3353,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Summarize patches with AI',
     'ui.gaming.rolePing': 'Role ping (optional)',
     'ui.gaming.pin': 'Pin',
+    'ui.joindm.heading': 'Welcome DM',
+    'ui.joindm.enabled': 'Welcome DM enabled',
+    'ui.joindm.message': 'Message content',
+    'ui.joindm.messagePh': 'Hi {user}! Welcome to {server} 🎉 Check out #rules and #roles.',
+    'ui.joindm.help':
+      'When someone joins, the bot sends them a private message. Placeholders: {user}, {username}, {server}, {memberCount}. If the user has DMs closed, the message is silently skipped. Complements the channel welcome.',
     'ui.engagement.quotelinkHeading': 'Message link preview',
     'ui.quotelink.enabled': 'Auto link preview enabled',
     'ui.quotelink.help':
@@ -5091,6 +5103,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Patches per KI zusammenfassen',
     'ui.gaming.rolePing': 'Rollen-Ping (optional)',
     'ui.gaming.pin': 'Anpinnen',
+    'ui.joindm.heading': 'Willkommens-DM',
+    'ui.joindm.enabled': 'Willkommens-DM aktiviert',
+    'ui.joindm.message': 'Nachrichtentext',
+    'ui.joindm.messagePh':
+      'Hi {user}! Willkommen auf {server} 🎉 Schau dir #regeln und #rollen an.',
+    'ui.joindm.help':
+      'Wenn jemand beitritt, sendet der Bot ihm eine private Nachricht. Platzhalter: {user}, {username}, {server}, {memberCount}. Hat der Nutzer DMs deaktiviert, wird die Nachricht stillschweigend übersprungen. Ergänzt die Begrüßung im Kanal.',
     'ui.engagement.quotelinkHeading': 'Nachrichtenlink-Vorschau',
     'ui.quotelink.enabled': 'Auto-Link-Vorschau aktiviert',
     'ui.quotelink.help':
@@ -6834,6 +6853,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Resumir parches con IA',
     'ui.gaming.rolePing': 'Mención de rol (opcional)',
     'ui.gaming.pin': 'Fijar',
+    'ui.joindm.heading': 'DM de bienvenida',
+    'ui.joindm.enabled': 'DM de bienvenida activado',
+    'ui.joindm.message': 'Contenido del mensaje',
+    'ui.joindm.messagePh':
+      '¡Hola {user}! Bienvenido a {server} 🎉 Echa un vistazo a #reglas y #roles.',
+    'ui.joindm.help':
+      'Cuando alguien entra, el bot le envía un mensaje privado. Marcadores: {user}, {username}, {server}, {memberCount}. Si el usuario tiene los MD cerrados, el mensaje se omite en silencio. Complementa la bienvenida del canal.',
     'ui.engagement.quotelinkHeading': 'Vista previa de enlaces a mensajes',
     'ui.quotelink.enabled': 'Vista previa de enlaces activada',
     'ui.quotelink.help':
@@ -8585,6 +8611,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Riassumi le patch con l’IA',
     'ui.gaming.rolePing': 'Ping ruolo (opzionale)',
     'ui.gaming.pin': 'Fissa',
+    'ui.joindm.heading': 'DM di benvenuto',
+    'ui.joindm.enabled': 'DM di benvenuto attivo',
+    'ui.joindm.message': 'Contenuto del messaggio',
+    'ui.joindm.messagePh':
+      "Ciao {user}! Benvenuto su {server} 🎉 Dai un'occhiata a #regole e #ruoli.",
+    'ui.joindm.help':
+      "Quando qualcuno entra, il bot gli invia un messaggio privato. Segnaposto: {user}, {username}, {server}, {memberCount}. Se l'utente ha i MP chiusi, il messaggio viene ignorato in silenzio. Completa il benvenuto nel canale.",
     'ui.engagement.quotelinkHeading': 'Anteprima dei link ai messaggi',
     'ui.quotelink.enabled': 'Anteprima link attiva',
     'ui.quotelink.help':
@@ -10334,6 +10367,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Résumer les patchs avec l’IA',
     'ui.gaming.rolePing': 'Mention de rôle (option.)',
     'ui.gaming.pin': 'Épingler',
+    'ui.joindm.heading': 'DM de bienvenue',
+    'ui.joindm.enabled': 'DM de bienvenue activé',
+    'ui.joindm.message': 'Contenu du message',
+    'ui.joindm.messagePh': 'Salut {user} ! Bienvenue sur {server} 🎉 Va voir #règles et #rôles.',
+    'ui.joindm.help':
+      "Quand quelqu'un rejoint, le bot lui envoie un message privé. Variables : {user}, {username}, {server}, {memberCount}. Si l'utilisateur a fermé ses MP, le message est ignoré silencieusement. Complète le message de bienvenue du salon.",
     'ui.engagement.quotelinkHeading': 'Aperçu des liens vers les messages',
     'ui.quotelink.enabled': 'Aperçu des liens activé',
     'ui.quotelink.help':
@@ -12078,6 +12117,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Resumir patches com IA',
     'ui.gaming.rolePing': 'Menção de cargo (opcional)',
     'ui.gaming.pin': 'Fixar',
+    'ui.joindm.heading': 'DM de boas-vindas',
+    'ui.joindm.enabled': 'DM de boas-vindas ativada',
+    'ui.joindm.message': 'Conteúdo da mensagem',
+    'ui.joindm.messagePh': 'Olá {user}! Bem-vindo a {server} 🎉 Confere o #regras e o #cargos.',
+    'ui.joindm.help':
+      'Quando alguém entra, o bot envia-lhe uma mensagem privada. Marcadores: {user}, {username}, {server}, {memberCount}. Se o utilizador tiver as MD fechadas, a mensagem é ignorada silenciosamente. Complementa as boas-vindas no canal.',
     'ui.engagement.quotelinkHeading': 'Pré-visualização de links de mensagens',
     'ui.quotelink.enabled': 'Pré-visualização de links ativada',
     'ui.quotelink.help':
@@ -13782,6 +13827,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': '用 AI 总结补丁',
     'ui.gaming.rolePing': '身份组提及（可选）',
     'ui.gaming.pin': '置顶',
+    'ui.joindm.heading': '欢迎私信',
+    'ui.joindm.enabled': '已启用欢迎私信',
+    'ui.joindm.message': '消息内容',
+    'ui.joindm.messagePh': '你好 {user}！欢迎来到 {server} 🎉 看看 #规则 和 #身份组 吧。',
+    'ui.joindm.help':
+      '当有人加入时，机器人会向其发送一条私信。占位符：{user}、{username}、{server}、{memberCount}。如果用户关闭了私信，消息会被静默跳过。作为频道欢迎的补充。',
     'ui.engagement.quotelinkHeading': '消息链接预览',
     'ui.quotelink.enabled': '已启用链接自动预览',
     'ui.quotelink.help':
@@ -15470,6 +15521,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'AI로 패치 요약',
     'ui.gaming.rolePing': '역할 멘션 (선택)',
     'ui.gaming.pin': '고정',
+    'ui.joindm.heading': '환영 DM',
+    'ui.joindm.enabled': '환영 DM 활성화',
+    'ui.joindm.message': '메시지 내용',
+    'ui.joindm.messagePh':
+      '안녕하세요 {user}님! {server}에 오신 것을 환영합니다 🎉 #규칙 과 #역할 을 확인하세요.',
+    'ui.joindm.help':
+      '누군가 입장하면 봇이 개인 메시지를 보냅니다. 자리표시자: {user}, {username}, {server}, {memberCount}. 사용자가 DM을 닫아두면 메시지는 조용히 건너뜁니다. 채널 환영 메시지를 보완합니다.',
     'ui.engagement.quotelinkHeading': '메시지 링크 미리보기',
     'ui.quotelink.enabled': '링크 자동 미리보기 활성화',
     'ui.quotelink.help':
@@ -17188,6 +17246,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Суммировать патчи через ИИ',
     'ui.gaming.rolePing': 'Пинг роли (необязательно)',
     'ui.gaming.pin': 'Закрепить',
+    'ui.joindm.heading': 'Приветственный ЛС',
+    'ui.joindm.enabled': 'Приветственный ЛС включён',
+    'ui.joindm.message': 'Текст сообщения',
+    'ui.joindm.messagePh':
+      'Привет, {user}! Добро пожаловать на {server} 🎉 Загляни в #правила и #роли.',
+    'ui.joindm.help':
+      'Когда кто-то заходит, бот отправляет ему личное сообщение. Подстановки: {user}, {username}, {server}, {memberCount}. Если у пользователя закрыты ЛС, сообщение тихо пропускается. Дополняет приветствие в канале.',
     'ui.engagement.quotelinkHeading': 'Предпросмотр ссылок на сообщения',
     'ui.quotelink.enabled': 'Авто-предпросмотр ссылок включён',
     'ui.quotelink.help':
@@ -18919,6 +18984,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Підсумовувати патчі через ШІ',
     'ui.gaming.rolePing': 'Пінг ролі (необов’язково)',
     'ui.gaming.pin': 'Закріпити',
+    'ui.joindm.heading': 'Привітальний ОП',
+    'ui.joindm.enabled': 'Привітальний ОП увімкнено',
+    'ui.joindm.message': 'Текст повідомлення',
+    'ui.joindm.messagePh':
+      'Привіт, {user}! Ласкаво просимо на {server} 🎉 Зазирни до #правила та #ролі.',
+    'ui.joindm.help':
+      'Коли хтось заходить, бот надсилає йому особисте повідомлення. Підстановки: {user}, {username}, {server}, {memberCount}. Якщо в користувача закриті ОП, повідомлення тихо пропускається. Доповнює привітання в каналі.',
     'ui.engagement.quotelinkHeading': 'Попередній перегляд посилань на повідомлення',
     'ui.quotelink.enabled': 'Авто-перегляд посилань увімкнено',
     'ui.quotelink.help':
@@ -20658,6 +20730,13 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'AIでパッチを要約',
     'ui.gaming.rolePing': 'ロールメンション（任意）',
     'ui.gaming.pin': 'ピン留め',
+    'ui.joindm.heading': 'ようこそDM',
+    'ui.joindm.enabled': 'ようこそDMを有効化',
+    'ui.joindm.message': 'メッセージ内容',
+    'ui.joindm.messagePh':
+      'こんにちは {user} さん！{server} へようこそ 🎉 #ルール と #ロール を見てみてね。',
+    'ui.joindm.help':
+      '誰かが参加すると、ボットがDMを送ります。プレースホルダー：{user}、{username}、{server}、{memberCount}。ユーザーがDMを閉じている場合、メッセージは静かにスキップされます。チャンネルの歓迎を補完します。',
     'ui.engagement.quotelinkHeading': 'メッセージリンクのプレビュー',
     'ui.quotelink.enabled': 'リンク自動プレビューを有効化',
     'ui.quotelink.help':
@@ -22376,6 +22455,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'تلخيص التحديثات بالذكاء الاصطناعي',
     'ui.gaming.rolePing': 'منشن الرتبة (اختياري)',
     'ui.gaming.pin': 'تثبيت',
+    'ui.joindm.heading': 'رسالة ترحيب خاصة',
+    'ui.joindm.enabled': 'رسالة الترحيب الخاصة مفعّلة',
+    'ui.joindm.message': 'محتوى الرسالة',
+    'ui.joindm.messagePh': 'مرحبًا {user}! أهلاً بك في {server} 🎉 ألقِ نظرة على #القواعد و #الأدوار.',
+    'ui.joindm.help':
+      'عندما ينضم أحدهم، يرسل له البوت رسالة خاصة. العناصر النائبة: {user}، {username}، {server}، {memberCount}. إذا كان المستخدم يُغلق الرسائل الخاصة، تُتجاهَل الرسالة بصمت. تكمّل ترحيب القناة.',
     'ui.engagement.quotelinkHeading': 'معاينة روابط الرسائل',
     'ui.quotelink.enabled': 'معاينة الروابط التلقائية مفعّلة',
     'ui.quotelink.help':
@@ -24094,6 +24179,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Ringkas patch dengan AI',
     'ui.gaming.rolePing': 'Ping peran (opsional)',
     'ui.gaming.pin': 'Sematkan',
+    'ui.joindm.heading': 'DM selamat datang',
+    'ui.joindm.enabled': 'DM selamat datang diaktifkan',
+    'ui.joindm.message': 'Isi pesan',
+    'ui.joindm.messagePh': 'Hai {user}! Selamat datang di {server} 🎉 Lihat #aturan dan #role ya.',
+    'ui.joindm.help':
+      'Saat seseorang bergabung, bot mengirimkan pesan pribadi. Placeholder: {user}, {username}, {server}, {memberCount}. Jika pengguna menutup DM, pesan dilewati diam-diam. Melengkapi sambutan di channel.',
     'ui.engagement.quotelinkHeading': 'Pratinjau tautan pesan',
     'ui.quotelink.enabled': 'Pratinjau tautan otomatis diaktifkan',
     'ui.quotelink.help':

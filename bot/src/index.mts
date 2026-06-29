@@ -49,6 +49,7 @@ import { startGoals } from './community/goals.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startImageOnly } from './community/imageonly.mts';
 import { startInvites } from './community/invites.mts';
+import { startJoinDm } from './community/joindm.mts';
 import { startMilestones } from './community/milestones.mts';
 import { startPresenceRoles } from './community/presenceRoles.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
@@ -234,6 +235,7 @@ client.once(Events.ClientReady, (c) => {
   startOnboarding(c); // Onboarding — DM powitalny do właściciela przy dodaniu bota do serwera
   startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
   startWelcome(c); // Faza 6 — powitania + autorole
+  startJoinDm(c); // Powitalny DM — prywatna wiadomość do nowych członków (config z panelu)
   startStickyRoles(c); // Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (config z panelu)
   startDehoist(c); // Dehoisting — auto-czyszczenie nazw windujących na górę listy członków (config z panelu)
   startAutomod(c); // Faza 6 — automoderacja

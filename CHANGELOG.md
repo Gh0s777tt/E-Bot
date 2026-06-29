@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-657-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.587.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-658-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.588.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.588.0] — ✉️ Powitalny DM (prywatna wiadomość do nowych członków)
+
+- `[#658]` ✉️ **Powitalny DM** — gdy ktoś dołączy do serwera, bot wysyła mu **prywatną wiadomość** z konfigurowalną treścią (regulamin, pierwsze kroki, ważne kanały). Placeholdery `{user}` `{username}` `{server}` `{memberCount}`. Uzupełnia powitania na kanale (osobno od `welcome`); jeśli ktoś ma zamknięte DM — po cichu pomijane. Bez nowej tabeli.
+  - Bot: [`bot/src/community/joindm.mts`](bot/src/community/joindm.mts) — `guildMemberAdd`; czysta, testowalna `renderJoinDm` (podstawienia + limit 2000 znaków). Panel: sekcja na `/welcome` (przełącznik + treść).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 864 +`renderJoinDm`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+5 kluczy).
 
 ## [0.587.0] — 🔗 Podgląd linków do wiadomości (auto-cytowanie wklejonych linków)
 

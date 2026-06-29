@@ -375,6 +375,13 @@ export type AutodeleteInput = z.infer<typeof autodeleteSchema>;
 export const quotelinkSchema = z.object({ enabled: z.boolean() });
 export type QuotelinkInput = z.infer<typeof quotelinkSchema>;
 
+// ── Powitalny DM (POST /api/joindm) ────────────────────────
+export const joindmSchema = z.object({
+  enabled: z.boolean(),
+  message: z.string().max(2000),
+});
+export type JoindmInput = z.infer<typeof joindmSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

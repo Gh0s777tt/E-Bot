@@ -1,7 +1,8 @@
-import { DoorOpen } from 'lucide-react';
+import { DoorOpen, MailOpen } from 'lucide-react';
+import JoinDmForm from '../../components/JoinDmForm';
 import StatusPill from '../../components/StatusPill';
 import WelcomeForm from '../../components/WelcomeForm';
-import { getWelcomeConfig } from '../../lib/community';
+import { getJoindmConfig, getWelcomeConfig } from '../../lib/community';
 import { getGuildMeta } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
@@ -9,8 +10,9 @@ import { getPanelLocale } from '../../lib/serverPanelLocale';
 export const dynamic = 'force-dynamic';
 
 export default async function WelcomePage() {
-  const [cfg, guild, lang] = await Promise.all([
+  const [cfg, joindm, guild, lang] = await Promise.all([
     getWelcomeConfig(),
+    getJoindmConfig(),
     getGuildMeta(),
     getPanelLocale(),
   ]);
@@ -28,6 +30,16 @@ export default async function WelcomePage() {
           </span>
         </h2>
         <WelcomeForm initial={cfg} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <MailOpen size={16} className="text-accent" /> {tp(lang, 'ui.joindm.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={joindm.enabled} lang={lang} />
+          </span>
+        </h2>
+        <JoinDmForm initial={joindm} />
       </section>
     </div>
   );

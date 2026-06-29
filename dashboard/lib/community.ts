@@ -404,6 +404,22 @@ export async function saveQuotelinkConfig(cfg: QuotelinkConfig): Promise<void> {
   await setConfigSetting('quotelink_config', JSON.stringify(cfg));
 }
 
+// ── Powitalny DM — prywatna wiadomość do nowych członków (regulamin / pierwsze kroki) ──
+export type JoindmConfig = { enabled: boolean; message: string };
+export const JOINDM_DEFAULT: JoindmConfig = { enabled: false, message: '' };
+export async function getJoindmConfig(): Promise<JoindmConfig> {
+  const raw = await getConfigSetting('joindm_config');
+  if (!raw) return structuredClone(JOINDM_DEFAULT);
+  try {
+    return { ...JOINDM_DEFAULT, ...(JSON.parse(raw) as Partial<JoindmConfig>) };
+  } catch {
+    return structuredClone(JOINDM_DEFAULT);
+  }
+}
+export async function saveJoindmConfig(cfg: JoindmConfig): Promise<void> {
+  await setConfigSetting('joindm_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;
