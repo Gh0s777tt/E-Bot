@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-644-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.574.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-645-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.575.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.575.0] — 🧨 Reset bazy (narzędzie developera: cała / per-serwer)
+
+- `[#645]` 🧨 **Reset bazy dla właściciela instancji** — w Diagnostyce („Strefa zagrożenia", widoczna TYLKO dla `DASHBOARD_OWNER_IDS` — nie staff/tenant-admin): **reset całej bazy** (pełny wipe → stan świeżej instalacji) lub **danego serwera** (dane + config `g:<gid>:`). Wykonanie przez RPC Postgres [`dev_reset_all()` / `dev_reset_guild(gid)`](dashboard/scripts/dev-reset-rpc.sql) — auto-wykrywanie tabel (`pg_tables` / kolumna `guild_id`, zero utrzymania listy), `security definer`, EXECUTE odebrany `anon`/`authenticated` (tylko `service_role`). API [`/api/dev/reset`](dashboard/app/api/dev/reset/route.ts): twarda bramka właściciela (`isOwner`) + potwierdzenie (wpisz `RESET-ALL` lub ID serwera). Schemat scalony w `_ALL.sql`.
+  - **Bramki:** `pnpm typecheck` (4 pakiety) · Biome · vitest 1151 · `sync:check` (schema 49, env 74) — exit 0 (Node 26.4.0).
 
 ## [0.574.0] — 🔐 top.gg webhook v1: podpis HMAC + payload vote.create
 

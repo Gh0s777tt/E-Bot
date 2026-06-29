@@ -2,11 +2,14 @@ import { AlertTriangle, Bot, CheckCircle2, Database, Plug, XCircle } from 'lucid
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import ConnectionTest from '../../components/ConnectionTest';
+import DevReset from '../../components/DevReset';
 import { activeSource, getRawSetting, getSetupChecklist } from '../../lib/data';
+import { getPrimaryGuildId } from '../../lib/guild';
 import { getIntegrations } from '../../lib/integrations';
 import { tp } from '../../lib/panelI18n';
-import { isInstanceAdmin } from '../../lib/panelRoles';
+import { currentSession, isInstanceAdmin } from '../../lib/panelRoles';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
+import { isOwner } from '../../lib/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +31,11 @@ export default async function DiagnosticsPage() {
     getRawSetting('bot_status'),
     getPanelLocale(),
   ]);
+
+  // Strefa zagrożenia (reset bazy) — TYLKO właściciel instancji (env), nie staff/tenant-admin.
+  const sess = await currentSession();
+  const isDev = !!sess?.uid && isOwner(sess.uid);
+  const devGuildId = isDev ? await getPrimaryGuildId() : '';
 
   let botOnline = false;
   try {
@@ -189,6 +197,21 @@ export default async function DiagnosticsPage() {
           ))}
         </div>
       </section>
+
+      {/* ===== STREFA ZAGROŻENIA — reset bazy (tylko właściciel instancji) ===== */}
+      {isDev && (
+        <section className="rounded-2xl border border-accent/40 bg-accent/5 p-5">
+          <h2 className="mb-1 flex items-center gap-2 font-display text-lg font-semibold tracking-wide text-accent">
+            <AlertTriangle size={16} /> Strefa zagrożenia — reset bazy (developer)
+          </h2>
+          <p className="mb-4 text-sm text-muted">
+            Widoczne tylko dla właściciela instancji. Operacje są <strong>nieodwracalne</strong>.
+            Wymaga uruchomienia <code className="text-accent">dashboard/scripts/_ALL.sql</code>{' '}
+            (funkcje <code className="text-accent">dev_reset_*</code>).
+          </p>
+          <DevReset currentGuildId={devGuildId} />
+        </section>
+      )}
     </div>
   );
 }
