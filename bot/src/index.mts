@@ -39,6 +39,7 @@ import { handleAppealButton, startAppeals } from './community/appeals.mts';
 import { handleApplicationButton, handleApplicationModal } from './community/applications.mts';
 import { startAutomations } from './community/automations.mts';
 import { startAutoPublish } from './community/autopublish.mts';
+import { startAutoReact } from './community/autoreact.mts';
 import { startAutoThreads } from './community/autothread.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
@@ -196,6 +197,7 @@ client.once(Events.ClientReady, (c) => {
   startAutoPublish(c); // Fala 2 — auto-publikacja ogłoszeń (crosspost na kanałach typu 5)
   startAppeals(c); // Odwołania od bana — poller publikuje pending na kanał recenzji (przyciski)
   startAutoThreads(c); // Fala 1 — auto-wątki na wybranych kanałach (config z panelu)
+  startAutoReact(c); // Auto-reakcje — bot dodaje skonfigurowane reakcje na wybranych kanałach (config z panelu)
   startAutoSlowmode(c); // Adaptacyjny slowmode — podnosi/zdejmuje slowmode wg tempa wiadomości (config z panelu)
   startMilestones(c); // Fala 1 — kamienie milowe serwera (Nty członek, config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)

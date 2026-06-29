@@ -338,6 +338,23 @@ export async function saveStickyrolesConfig(cfg: StickyrolesConfig): Promise<voi
   await setConfigSetting('stickyroles_config', JSON.stringify(cfg));
 }
 
+// ── Auto-reakcje — bot dodaje skonfigurowane reakcje do wiadomości na wybranych kanałach ──
+export type AutoreactRule = { channelId: string; emojis: string[] };
+export type AutoreactConfig = { enabled: boolean; rules: AutoreactRule[] };
+export const AUTOREACT_DEFAULT: AutoreactConfig = { enabled: false, rules: [] };
+export async function getAutoreactConfig(): Promise<AutoreactConfig> {
+  const raw = await getConfigSetting('autoreact_config');
+  if (!raw) return structuredClone(AUTOREACT_DEFAULT);
+  try {
+    return { ...AUTOREACT_DEFAULT, ...(JSON.parse(raw) as Partial<AutoreactConfig>) };
+  } catch {
+    return structuredClone(AUTOREACT_DEFAULT);
+  }
+}
+export async function saveAutoreactConfig(cfg: AutoreactConfig): Promise<void> {
+  await setConfigSetting('autoreact_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

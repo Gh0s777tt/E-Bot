@@ -5,12 +5,14 @@ import {
   MessageSquare,
   MousePointerClick,
   PartyPopper,
+  SmilePlus,
   Star,
   Target,
   UserPlus,
   Volume2,
 } from 'lucide-react';
 import AutopublishForm from '../../components/AutopublishForm';
+import AutoReactForm from '../../components/AutoReactForm';
 import AutothreadForm from '../../components/AutothreadForm';
 import ButtonRolesForm from '../../components/ButtonRolesForm';
 import CountingForm from '../../components/CountingForm';
@@ -23,6 +25,7 @@ import StatusPill from '../../components/StatusPill';
 import TempVoiceForm from '../../components/TempVoiceForm';
 import {
   getAutopublishConfig,
+  getAutoreactConfig,
   getAutothreadConfig,
   getGoalsConfig,
   getMilestonesConfig,
@@ -57,6 +60,7 @@ export default async function EngagementPage() {
     counting,
     invites,
     autothread,
+    autoreact,
     milestones,
     goals,
     autopub,
@@ -70,6 +74,7 @@ export default async function EngagementPage() {
     getCounting(),
     getInvitesConfig(),
     getAutothreadConfig(),
+    getAutoreactConfig(),
     getMilestonesConfig(),
     getGoalsConfig(),
     getAutopublishConfig(),
@@ -146,6 +151,17 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <AutothreadForm initial={autothread} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <SmilePlus size={16} className="text-accent" />{' '}
+          {tp(lang, 'ui.engagement.autoreactHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={autoreact.enabled} lang={lang} />
+          </span>
+        </h2>
+        <AutoReactForm initial={autoreact} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

@@ -347,6 +347,15 @@ export const stickyrolesSchema = z.object({
 });
 export type StickyrolesInput = z.infer<typeof stickyrolesSchema>;
 
+// ── Auto-reakcje (POST /api/autoreact) ─────────────────────
+export const autoreactSchema = z.object({
+  enabled: z.boolean(),
+  rules: z
+    .array(z.object({ channelId: z.string().max(40), emojis: z.array(z.string().max(64)).max(6) }))
+    .max(25),
+});
+export type AutoreactInput = z.infer<typeof autoreactSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

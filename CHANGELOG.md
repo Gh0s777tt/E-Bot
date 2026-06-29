@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-653-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.583.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-654-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.584.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.584.0] — 👍 Auto-reakcje (bot reaguje na wybranych kanałach)
+
+- `[#654]` 👍 **Auto-reakcje** — na wybranych kanałach bot automatycznie dodaje skonfigurowane reakcje do każdej nowej wiadomości. Idealne na kanały-prezentacje (👍/❤️), propozycje (⬆️/⬇️) czy przedstawienia (👋) — głosowanie bez moderatora. Per-kanał własny zestaw emoji (max 6), zwykłe i własne (`<:nazwa:id>`); config bez nowej tabeli.
+  - Bot: [`bot/src/community/autoreact.mts`](bot/src/community/autoreact.mts) — `messageCreate` reaguje sekwencyjnie; czysta, testowalna `reactionsFor` (dobór per-kanał, przycięcie do 6). Wymaga uprawnienia `AddReactions`. Panel: sekcja na `/engagement` (kanał + emoji w wierszu).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 846 +`reactionsFor`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+5 kluczy).
 
 ## [0.583.0] — 🔒 Trwałe role (sticky roles — przywracanie ról po powrocie)
 

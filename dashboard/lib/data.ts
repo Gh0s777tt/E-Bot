@@ -356,6 +356,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'appeals_config',
   'autoslow_config',
   'stickyroles_config',
+  'autoreact_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {
