@@ -52,6 +52,7 @@ import { startImageOnly } from './community/imageonly.mts';
 import { startInvites } from './community/invites.mts';
 import { startJoinDm } from './community/joindm.mts';
 import { startMilestones } from './community/milestones.mts';
+import { startPinReact } from './community/pinreact.mts';
 import { startPresenceRoles } from './community/presenceRoles.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startQuoteLinks } from './community/quotelink.mts';
@@ -238,6 +239,7 @@ client.once(Events.ClientReady, (c) => {
   startWelcome(c); // Faza 6 — powitania + autorole
   startJoinDm(c); // Powitalny DM — prywatna wiadomość do nowych członków (config z panelu)
   startFlagTranslate(c); // Tłumaczenie flagą — reakcja z flagą kraju → AI tłumaczy wiadomość (config z panelu)
+  startPinReact(c); // Przypinanie reakcją — 📌 od uprawnionej osoby przypina wiadomość (config z panelu)
   startStickyRoles(c); // Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (config z panelu)
   startDehoist(c); // Dehoisting — auto-czyszczenie nazw windujących na górę listy członków (config z panelu)
   startAutomod(c); // Faza 6 — automoderacja

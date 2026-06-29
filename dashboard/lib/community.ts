@@ -436,6 +436,22 @@ export async function saveFlagtransConfig(cfg: FlagtransConfig): Promise<void> {
   await setConfigSetting('flagtranslate_config', JSON.stringify(cfg));
 }
 
+// ── Przypinanie reakcją — reakcja 📌 od uprawnionej roli przypina wiadomość (bez nadawania ManageMessages) ──
+export type PinreactConfig = { enabled: boolean; emoji: string; roleId: string };
+export const PINREACT_DEFAULT: PinreactConfig = { enabled: false, emoji: '📌', roleId: '' };
+export async function getPinreactConfig(): Promise<PinreactConfig> {
+  const raw = await getConfigSetting('pinreact_config');
+  if (!raw) return structuredClone(PINREACT_DEFAULT);
+  try {
+    return { ...PINREACT_DEFAULT, ...(JSON.parse(raw) as Partial<PinreactConfig>) };
+  } catch {
+    return structuredClone(PINREACT_DEFAULT);
+  }
+}
+export async function savePinreactConfig(cfg: PinreactConfig): Promise<void> {
+  await setConfigSetting('pinreact_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

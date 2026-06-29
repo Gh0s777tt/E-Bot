@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-659-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.589.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-660-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.590.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.590.0] — 📌 Przypinanie reakcją (delegacja przypinania zaufanym rolom)
+
+- `[#660]` 📌 **Przypinanie reakcją** — gdy uprawniona osoba doda do wiadomości reakcję 📌 (konfigurowalne emoji), bot ją przypina. Pozwala delegować przypinanie **zaufanej roli** bez nadawania jej pełnego „Zarządzania wiadomościami". Bez nowej tabeli.
+  - Bot: [`bot/src/community/pinreact.mts`](bot/src/community/pinreact.mts) — `messageReactionAdd` (pre-filtr po emoji przed fetchem); czysta, testowalna `canPin` (rola LUB `ManageMessages`). Bot potrzebuje `ManageMessages`; pomija już przypięte. Panel: sekcja na `/engagement` (emoji + rola).
+  - **Bramki:** typecheck ×4 · Biome · test (bot 870 +`canPin`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+5 kluczy).
 
 ## [0.589.0] — 🌐 Tłumaczenie flagą (reakcja flagą kraju → AI tłumaczy wiadomość)
 

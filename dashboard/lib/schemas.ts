@@ -386,6 +386,14 @@ export type JoindmInput = z.infer<typeof joindmSchema>;
 export const flagtransSchema = z.object({ enabled: z.boolean() });
 export type FlagtransInput = z.infer<typeof flagtransSchema>;
 
+// ── Przypinanie reakcją (POST /api/pinreact) ───────────────
+export const pinreactSchema = z.object({
+  enabled: z.boolean(),
+  emoji: z.string().max(64),
+  roleId: z.string().max(40),
+});
+export type PinreactInput = z.infer<typeof pinreactSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

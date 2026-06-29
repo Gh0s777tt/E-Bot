@@ -183,6 +183,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'quotelink_config',
   'joindm_config',
   'flagtranslate_config',
+  'pinreact_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

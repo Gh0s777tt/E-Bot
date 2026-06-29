@@ -1621,6 +1621,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Streszczaj patche przez AI',
     'ui.gaming.rolePing': 'Ping roli (opcjonalnie)',
     'ui.gaming.pin': 'Przypnij',
+    'ui.engagement.pinreactHeading': 'Przypinanie reakcją',
+    'ui.pinreact.enabled': 'Przypinanie reakcją włączone',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Rola uprawniona (puste = Zarządzanie wiadomościami)',
+    'ui.pinreact.help':
+      'Gdy uprawniona osoba doda do wiadomości reakcję z tym emoji, bot ją przypnie. Pozwala delegować przypinanie zaufanym rolom bez nadawania „Zarządzania wiadomościami". Bot potrzebuje tego uprawnienia. Pamiętaj o limicie 50 przypiętych na kanał.',
     'ui.engagement.flagtransHeading': 'Tłumaczenie flagą (reakcja)',
     'ui.flagtrans.enabled': 'Tłumaczenie flagą włączone',
     'ui.flagtrans.help':
@@ -3357,6 +3363,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Summarize patches with AI',
     'ui.gaming.rolePing': 'Role ping (optional)',
     'ui.gaming.pin': 'Pin',
+    'ui.engagement.pinreactHeading': 'Pin by reaction',
+    'ui.pinreact.enabled': 'Pin by reaction enabled',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Allowed role (empty = Manage Messages)',
+    'ui.pinreact.help':
+      'When an allowed person reacts to a message with this emoji, the bot pins it. Lets you delegate pinning to trusted roles without granting “Manage Messages”. The bot needs that permission. Note the 50-pins-per-channel limit.',
     'ui.engagement.flagtransHeading': 'Flag translate (reaction)',
     'ui.flagtrans.enabled': 'Flag translate enabled',
     'ui.flagtrans.help':
@@ -5111,6 +5123,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Patches per KI zusammenfassen',
     'ui.gaming.rolePing': 'Rollen-Ping (optional)',
     'ui.gaming.pin': 'Anpinnen',
+    'ui.engagement.pinreactHeading': 'Anpinnen per Reaktion',
+    'ui.pinreact.enabled': 'Anpinnen per Reaktion aktiviert',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Berechtigte Rolle (leer = Nachrichten verwalten)',
+    'ui.pinreact.help':
+      'Wenn eine berechtigte Person mit diesem Emoji auf eine Nachricht reagiert, pinnt der Bot sie an. So kannst du das Anpinnen an vertrauenswürdige Rollen delegieren, ohne „Nachrichten verwalten“ zu vergeben. Der Bot braucht diese Berechtigung. Beachte das Limit von 50 angepinnten pro Kanal.',
     'ui.engagement.flagtransHeading': 'Flaggen-Übersetzung (Reaktion)',
     'ui.flagtrans.enabled': 'Flaggen-Übersetzung aktiviert',
     'ui.flagtrans.help':
@@ -6865,6 +6883,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Resumir parches con IA',
     'ui.gaming.rolePing': 'Mención de rol (opcional)',
     'ui.gaming.pin': 'Fijar',
+    'ui.engagement.pinreactHeading': 'Fijar por reacción',
+    'ui.pinreact.enabled': 'Fijar por reacción activado',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Rol autorizado (vacío = Gestionar mensajes)',
+    'ui.pinreact.help':
+      'Cuando una persona autorizada reacciona a un mensaje con este emoji, el bot lo fija. Permite delegar la fijación a roles de confianza sin conceder «Gestionar mensajes». El bot necesita ese permiso. Recuerda el límite de 50 fijados por canal.',
     'ui.engagement.flagtransHeading': 'Traducción por bandera (reacción)',
     'ui.flagtrans.enabled': 'Traducción por bandera activada',
     'ui.flagtrans.help':
@@ -8627,6 +8651,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Riassumi le patch con l’IA',
     'ui.gaming.rolePing': 'Ping ruolo (opzionale)',
     'ui.gaming.pin': 'Fissa',
+    'ui.engagement.pinreactHeading': 'Fissa con reazione',
+    'ui.pinreact.enabled': 'Fissa con reazione attivo',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Ruolo autorizzato (vuoto = Gestisci messaggi)',
+    'ui.pinreact.help':
+      'Quando una persona autorizzata reagisce a un messaggio con questo emoji, il bot lo fissa. Consente di delegare il fissaggio a ruoli fidati senza concedere «Gestisci messaggi». Il bot necessita di questo permesso. Ricorda il limite di 50 messaggi fissati per canale.',
     'ui.engagement.flagtransHeading': 'Traduzione con bandiera (reazione)',
     'ui.flagtrans.enabled': 'Traduzione con bandiera attiva',
     'ui.flagtrans.help':
@@ -10387,6 +10417,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Résumer les patchs avec l’IA',
     'ui.gaming.rolePing': 'Mention de rôle (option.)',
     'ui.gaming.pin': 'Épingler',
+    'ui.engagement.pinreactHeading': 'Épingler par réaction',
+    'ui.pinreact.enabled': 'Épingler par réaction activé',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Rôle autorisé (vide = Gérer les messages)',
+    'ui.pinreact.help':
+      "Quand une personne autorisée réagit à un message avec cet emoji, le bot l'épingle. Permet de déléguer l'épinglage à des rôles de confiance sans accorder « Gérer les messages ». Le bot a besoin de cette permission. Notez la limite de 50 épinglés par salon.",
     'ui.engagement.flagtransHeading': 'Traduction par drapeau (réaction)',
     'ui.flagtrans.enabled': 'Traduction par drapeau activée',
     'ui.flagtrans.help':
@@ -12141,6 +12177,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Resumir patches com IA',
     'ui.gaming.rolePing': 'Menção de cargo (opcional)',
     'ui.gaming.pin': 'Fixar',
+    'ui.engagement.pinreactHeading': 'Fixar por reação',
+    'ui.pinreact.enabled': 'Fixar por reação ativado',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Cargo autorizado (vazio = Gerir mensagens)',
+    'ui.pinreact.help':
+      'Quando uma pessoa autorizada reage a uma mensagem com este emoji, o bot fixa-a. Permite delegar a fixação a cargos de confiança sem conceder «Gerir mensagens». O bot precisa dessa permissão. Lembre-se do limite de 50 fixadas por canal.',
     'ui.engagement.flagtransHeading': 'Tradução por bandeira (reação)',
     'ui.flagtrans.enabled': 'Tradução por bandeira ativada',
     'ui.flagtrans.help':
@@ -13855,6 +13897,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': '用 AI 总结补丁',
     'ui.gaming.rolePing': '身份组提及（可选）',
     'ui.gaming.pin': '置顶',
+    'ui.engagement.pinreactHeading': '反应置顶',
+    'ui.pinreact.enabled': '已启用反应置顶',
+    'ui.pinreact.emoji': '表情',
+    'ui.pinreact.role': '允许的身份组（留空 = 管理消息）',
+    'ui.pinreact.help':
+      '当有权限的人用此表情对消息做出反应时，机器人会将其置顶。可在不授予“管理消息”的情况下，把置顶权限委派给受信任的身份组。机器人需要该权限。注意每个频道最多 50 条置顶。',
     'ui.engagement.flagtransHeading': '旗帜翻译（反应）',
     'ui.flagtrans.enabled': '已启用旗帜翻译',
     'ui.flagtrans.help':
@@ -15553,6 +15601,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'AI로 패치 요약',
     'ui.gaming.rolePing': '역할 멘션 (선택)',
     'ui.gaming.pin': '고정',
+    'ui.engagement.pinreactHeading': '반응으로 고정',
+    'ui.pinreact.enabled': '반응으로 고정 활성화',
+    'ui.pinreact.emoji': '이모지',
+    'ui.pinreact.role': '허용 역할(비우면 = 메시지 관리)',
+    'ui.pinreact.help':
+      '권한 있는 사람이 이 이모지로 메시지에 반응하면 봇이 고정합니다. “메시지 관리” 권한을 주지 않고도 신뢰하는 역할에 고정을 위임할 수 있습니다. 봇에 해당 권한이 필요합니다. 채널당 고정 50개 제한에 유의하세요.',
     'ui.engagement.flagtransHeading': '깃발 번역(반응)',
     'ui.flagtrans.enabled': '깃발 번역 활성화',
     'ui.flagtrans.help':
@@ -17282,6 +17336,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Суммировать патчи через ИИ',
     'ui.gaming.rolePing': 'Пинг роли (необязательно)',
     'ui.gaming.pin': 'Закрепить',
+    'ui.engagement.pinreactHeading': 'Закрепление реакцией',
+    'ui.pinreact.enabled': 'Закрепление реакцией включено',
+    'ui.pinreact.emoji': 'Эмодзи',
+    'ui.pinreact.role': 'Разрешённая роль (пусто = Управление сообщениями)',
+    'ui.pinreact.help':
+      'Когда уполномоченный участник реагирует на сообщение этим эмодзи, бот закрепляет его. Позволяет делегировать закрепление доверенным ролям без выдачи «Управление сообщениями». Боту нужно это право. Помните о лимите в 50 закреплённых на канал.',
     'ui.engagement.flagtransHeading': 'Перевод по флагу (реакция)',
     'ui.flagtrans.enabled': 'Перевод по флагу включён',
     'ui.flagtrans.help':
@@ -19024,6 +19084,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Підсумовувати патчі через ШІ',
     'ui.gaming.rolePing': 'Пінг ролі (необов’язково)',
     'ui.gaming.pin': 'Закріпити',
+    'ui.engagement.pinreactHeading': 'Закріплення реакцією',
+    'ui.pinreact.enabled': 'Закріплення реакцією увімкнено',
+    'ui.pinreact.emoji': 'Емодзі',
+    'ui.pinreact.role': 'Дозволена роль (порожньо = Керування повідомленнями)',
+    'ui.pinreact.help':
+      'Коли уповноважена особа реагує на повідомлення цим емодзі, бот закріплює його. Дозволяє делегувати закріплення довіреним ролям без надання «Керування повідомленнями». Боту потрібен цей дозвіл. Памʼятайте про ліміт 50 закріплених на канал.',
     'ui.engagement.flagtransHeading': 'Переклад за прапором (реакція)',
     'ui.flagtrans.enabled': 'Переклад за прапором увімкнено',
     'ui.flagtrans.help':
@@ -20774,6 +20840,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'AIでパッチを要約',
     'ui.gaming.rolePing': 'ロールメンション（任意）',
     'ui.gaming.pin': 'ピン留め',
+    'ui.engagement.pinreactHeading': 'リアクションでピン留め',
+    'ui.pinreact.enabled': 'リアクションでピン留めを有効化',
+    'ui.pinreact.emoji': '絵文字',
+    'ui.pinreact.role': '許可ロール（空欄 = メッセージの管理）',
+    'ui.pinreact.help':
+      '権限のある人がこの絵文字でメッセージにリアクションすると、ボットがピン留めします。「メッセージの管理」を付与せずに、信頼するロールにピン留めを委任できます。ボットにこの権限が必要です。チャンネルあたりピン留め50件の上限に注意してください。',
     'ui.engagement.flagtransHeading': '国旗で翻訳（リアクション）',
     'ui.flagtrans.enabled': '国旗で翻訳を有効化',
     'ui.flagtrans.help':
@@ -22503,6 +22575,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'تلخيص التحديثات بالذكاء الاصطناعي',
     'ui.gaming.rolePing': 'منشن الرتبة (اختياري)',
     'ui.gaming.pin': 'تثبيت',
+    'ui.engagement.pinreactHeading': 'التثبيت بالتفاعل',
+    'ui.pinreact.enabled': 'التثبيت بالتفاعل مفعّل',
+    'ui.pinreact.emoji': 'إيموجي',
+    'ui.pinreact.role': 'الدور المسموح (فارغ = إدارة الرسائل)',
+    'ui.pinreact.help':
+      'عندما يتفاعل شخص مخوّل مع رسالة بهذا الإيموجي، يثبّتها البوت. يتيح تفويض التثبيت لأدوار موثوقة دون منح «إدارة الرسائل». يحتاج البوت إلى هذه الصلاحية. تذكّر حد 50 رسالة مثبّتة لكل قناة.',
     'ui.engagement.flagtransHeading': 'الترجمة بالعلم (تفاعل)',
     'ui.flagtrans.enabled': 'الترجمة بالعلم مفعّلة',
     'ui.flagtrans.help':
@@ -24231,6 +24309,12 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.aiSummary': 'Ringkas patch dengan AI',
     'ui.gaming.rolePing': 'Ping peran (opsional)',
     'ui.gaming.pin': 'Sematkan',
+    'ui.engagement.pinreactHeading': 'Sematkan via reaksi',
+    'ui.pinreact.enabled': 'Sematkan via reaksi diaktifkan',
+    'ui.pinreact.emoji': 'Emoji',
+    'ui.pinreact.role': 'Role yang diizinkan (kosong = Kelola Pesan)',
+    'ui.pinreact.help':
+      'Saat orang yang berwenang bereaksi pada pesan dengan emoji ini, bot menyematkannya. Memungkinkan mendelegasikan penyematan ke role tepercaya tanpa memberi “Kelola Pesan”. Bot memerlukan izin tersebut. Ingat batas 50 pesan tersemat per channel.',
     'ui.engagement.flagtransHeading': 'Terjemahan bendera (reaksi)',
     'ui.flagtrans.enabled': 'Terjemahan bendera diaktifkan',
     'ui.flagtrans.help':

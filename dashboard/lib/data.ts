@@ -362,6 +362,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'quotelink_config',
   'joindm_config',
   'flagtranslate_config',
+  'pinreact_config',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

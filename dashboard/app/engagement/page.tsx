@@ -7,6 +7,7 @@ import {
   MessageSquare,
   MousePointerClick,
   PartyPopper,
+  Pin,
   SmilePlus,
   Star,
   Target,
@@ -25,6 +26,7 @@ import FlagTranslateForm from '../../components/FlagTranslateForm';
 import GoalsForm from '../../components/GoalsForm';
 import InvitesForm from '../../components/InvitesForm';
 import MilestonesForm from '../../components/MilestonesForm';
+import PinReactForm from '../../components/PinReactForm';
 import QuoteLinkForm from '../../components/QuoteLinkForm';
 import StarboardForm from '../../components/StarboardForm';
 import StatusPill from '../../components/StatusPill';
@@ -37,6 +39,7 @@ import {
   getFlagtransConfig,
   getGoalsConfig,
   getMilestonesConfig,
+  getPinreactConfig,
   getQuotelinkConfig,
 } from '../../lib/community';
 import {
@@ -73,6 +76,7 @@ export default async function EngagementPage() {
     autodelete,
     quotelink,
     flagtrans,
+    pinreact,
     milestones,
     goals,
     autopub,
@@ -90,6 +94,7 @@ export default async function EngagementPage() {
     getAutodeleteConfig(),
     getQuotelinkConfig(),
     getFlagtransConfig(),
+    getPinreactConfig(),
     getMilestonesConfig(),
     getGoalsConfig(),
     getAutopublishConfig(),
@@ -208,6 +213,16 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <FlagTranslateForm initial={flagtrans} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Pin size={16} className="text-accent" /> {tp(lang, 'ui.engagement.pinreactHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={pinreact.enabled} lang={lang} />
+          </span>
+        </h2>
+        <PinReactForm initial={pinreact} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
