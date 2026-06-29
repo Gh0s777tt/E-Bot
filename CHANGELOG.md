@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-661-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.591.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-662-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.592.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.592.0] — 🎙️ Rola „w rozmowie głosowej" (auto-rola na czas pobytu w głosie)
+
+- `[#662]` 🎙️ **Rola głosowa** — dopóki ktoś jest na dowolnym kanale głosowym, bot przydziela mu wybraną rolę; rola znika po opuszczeniu głosu. Przydatne do pingowania aktywnych w głosie lub odblokowania kanału-tekstowego rozmowy. Bez nowej tabeli.
+  - Bot: [`bot/src/community/voicerole.mts`](bot/src/community/voicerole.mts) — `voiceStateUpdate`; czysta, testowalna `voiceRoleAction` (wejście→add, wyjście→remove, zmiana kanału→none). Wymaga `ManageRoles` + roli poniżej bota. Panel: sekcja na `/engagement`.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 877 +`voiceRoleAction`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+4 klucze).
 
 ## [0.591.0] — 🚩 Zgłaszanie wiadomości (context-menu → kanał recenzji moderacji)
 

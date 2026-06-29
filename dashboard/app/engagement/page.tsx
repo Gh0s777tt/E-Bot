@@ -5,6 +5,7 @@ import {
   Link2,
   Megaphone,
   MessageSquare,
+  Mic,
   MousePointerClick,
   PartyPopper,
   Pin,
@@ -31,6 +32,7 @@ import QuoteLinkForm from '../../components/QuoteLinkForm';
 import StarboardForm from '../../components/StarboardForm';
 import StatusPill from '../../components/StatusPill';
 import TempVoiceForm from '../../components/TempVoiceForm';
+import VoiceRoleForm from '../../components/VoiceRoleForm';
 import {
   getAutodeleteConfig,
   getAutopublishConfig,
@@ -41,6 +43,7 @@ import {
   getMilestonesConfig,
   getPinreactConfig,
   getQuotelinkConfig,
+  getVoiceroleConfig,
 } from '../../lib/community';
 import {
   getButtonRoles,
@@ -77,6 +80,7 @@ export default async function EngagementPage() {
     quotelink,
     flagtrans,
     pinreact,
+    voicerole,
     milestones,
     goals,
     autopub,
@@ -95,6 +99,7 @@ export default async function EngagementPage() {
     getQuotelinkConfig(),
     getFlagtransConfig(),
     getPinreactConfig(),
+    getVoiceroleConfig(),
     getMilestonesConfig(),
     getGoalsConfig(),
     getAutopublishConfig(),
@@ -223,6 +228,16 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <PinReactForm initial={pinreact} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Mic size={16} className="text-accent" /> {tp(lang, 'ui.engagement.voiceroleHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={voicerole.enabled} lang={lang} />
+          </span>
+        </h2>
+        <VoiceRoleForm initial={voicerole} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

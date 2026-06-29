@@ -468,6 +468,22 @@ export async function saveReportsConfig(cfg: ReportsConfig): Promise<void> {
   await setConfigSetting('reports_config', JSON.stringify(cfg));
 }
 
+// ── Rola „w rozmowie głosowej" — przydzielana na czas pobytu na dowolnym kanale głosowym ──
+export type VoiceroleConfig = { enabled: boolean; roleId: string };
+export const VOICEROLE_DEFAULT: VoiceroleConfig = { enabled: false, roleId: '' };
+export async function getVoiceroleConfig(): Promise<VoiceroleConfig> {
+  const raw = await getConfigSetting('voicerole_config');
+  if (!raw) return structuredClone(VOICEROLE_DEFAULT);
+  try {
+    return { ...VOICEROLE_DEFAULT, ...(JSON.parse(raw) as Partial<VoiceroleConfig>) };
+  } catch {
+    return structuredClone(VOICEROLE_DEFAULT);
+  }
+}
+export async function saveVoiceroleConfig(cfg: VoiceroleConfig): Promise<void> {
+  await setConfigSetting('voicerole_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

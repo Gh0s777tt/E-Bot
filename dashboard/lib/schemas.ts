@@ -401,6 +401,13 @@ export const reportsSchema = z.object({
 });
 export type ReportsInput = z.infer<typeof reportsSchema>;
 
+// ── Rola „w rozmowie głosowej" (POST /api/voicerole) ───────
+export const voiceroleSchema = z.object({
+  enabled: z.boolean(),
+  roleId: z.string().max(40),
+});
+export type VoiceroleInput = z.infer<typeof voiceroleSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

@@ -59,6 +59,7 @@ import { startQuoteLinks } from './community/quotelink.mts';
 import { handleReportButton, handleReportMenu } from './community/reports.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
+import { startVoiceRole } from './community/voicerole.mts';
 import { startClipRelay } from './creator/clips.mts';
 import { startScheduleSync } from './creator/scheduleSync.mts';
 import { startSocialFeeds } from './creator/social.mts';
@@ -241,6 +242,7 @@ client.once(Events.ClientReady, (c) => {
   startJoinDm(c); // Powitalny DM — prywatna wiadomość do nowych członków (config z panelu)
   startFlagTranslate(c); // Tłumaczenie flagą — reakcja z flagą kraju → AI tłumaczy wiadomość (config z panelu)
   startPinReact(c); // Przypinanie reakcją — 📌 od uprawnionej osoby przypina wiadomość (config z panelu)
+  startVoiceRole(c); // Rola „w rozmowie głosowej" — przydzielana na czas pobytu na kanale głosowym (config z panelu)
   startStickyRoles(c); // Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (config z panelu)
   startDehoist(c); // Dehoisting — auto-czyszczenie nazw windujących na górę listy członków (config z panelu)
   startAutomod(c); // Faza 6 — automoderacja

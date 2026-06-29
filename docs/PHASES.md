@@ -1,4 +1,4 @@
-<!-- SYNC: v0.591.0 · #661 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.592.0 · #662 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.591.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.592.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.591.0)
+## 🔭 Bieżący tor (v0.592.0)
+
+**🎙️ Rola głosowa (v0.592.0)** — bot przydziela rolę osobom obecnym na kanale głosowym i zdejmuje ją po wyjściu (ping aktywnych / dostęp do kanału-tekstowego głosu). Bot: `community/voicerole.mts`; panel: sekcja na `/engagement`.
 
 **🚩 Zgłaszanie wiadomości (v0.591.0)** — context-menu „Zgłoś wiadomość" → kanał recenzji moderacji z przyciskami „Usuń" / „Oddal". Bot: `community/reports.mts`; panel: sekcja na `/moderation`.
 
