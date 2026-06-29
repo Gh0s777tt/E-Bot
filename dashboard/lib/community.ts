@@ -574,8 +574,35 @@ export async function saveFreeGamesConfig(cfg: FreeGamesConfig): Promise<void> {
 
 // ── Patch-notes (Faza 7 / F9.1) ──
 export type PatchApp = { appId: number; name: string };
-export type PatchNotesConfig = { enabled: boolean; channelId: string; apps: PatchApp[] };
-export const PATCHNOTES_DEFAULT: PatchNotesConfig = { enabled: false, channelId: '', apps: [] };
+// Źródło per-wpis — kształt IDENTYCZNY z bot/src/gaming/patchnotes.mts (Source) i gameCatalog.ts.
+export type PatchSource = { kind: 'steam'; appId: number } | { kind: 'rss'; url: string };
+export type PatchItem = {
+  slug?: string;
+  name: string;
+  source: PatchSource;
+  channelId?: string; // własny kanał (fallback: domyślny)
+  roleId?: string; // ping roli
+  pin?: boolean; // auto-pin
+  image?: string; // miniatura/okładka
+};
+export type PatchNotesConfig = {
+  enabled: boolean;
+  channelId: string; // kanał domyślny
+  digest: 'instant' | 'daily';
+  digestHour: number; // 0–23 (UTC)
+  aiSummary: boolean;
+  items: PatchItem[]; // nowy kształt (po nazwie z katalogu)
+  apps: PatchApp[]; // STARY kształt (wstecznie; migrowany do items przy zapisie)
+};
+export const PATCHNOTES_DEFAULT: PatchNotesConfig = {
+  enabled: false,
+  channelId: '',
+  digest: 'instant',
+  digestHour: 12,
+  aiSummary: false,
+  items: [],
+  apps: [],
+};
 
 export async function getPatchNotesConfig(): Promise<PatchNotesConfig> {
   const raw = await getConfigSetting('patchnotes_config');

@@ -506,10 +506,12 @@ export const MODULE_GROUPS: ModuleGroup[] = [
       {
         t: 'Gry za darmo i patch-notes',
         p: '/gaming',
-        d: 'Codzienny feed darmowych gier (Epic/Steam/GOG) oraz notki patchy wybranych gier.',
+        d: 'Darmowe gry (Epic/Steam/GOG) oraz patch-notes gier, sterowniki/GPU i newsy — z kuratorowanego katalogu wybieranego PO NAZWIE (Steam + feedy RSS), nie po AppID.',
         steps: [
           'Gry za darmo: włącz, wskaż kanał (opcjonalnie multi-store).',
-          'Patch-notes: włącz, wskaż kanał i dodaj gry (AppID + nazwa).',
+          'Patch-notes: włącz i wyszukaj w katalogu gry, GPU/sprzęt lub źródła newsów (po nazwie).',
+          'Per-wpis ustaw własny kanał, ping roli i auto-pin; wybierz tryb (natychmiast / dzienny digest).',
+          'Opcjonalnie włącz AI-streszczenia patchy oraz publikację na kanałach forum/głosowych.',
         ],
         c: '/pricealert',
       },

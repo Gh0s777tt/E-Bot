@@ -1612,6 +1612,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Bot co ~1 h sprawdza aktualności Steam dla podanych gier i ogłasza nowe wpisy. AppID znajdziesz w adresie sklepu Steam (np. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Dodaj z katalogu (gry · GPU · newsy)',
+    'ui.gaming.catalogSearchPh': 'Szukaj po nazwie: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Tryb dostarczania',
+    'ui.gaming.deliveryInstant': 'Natychmiast',
+    'ui.gaming.deliveryDaily': 'Codzienny digest',
+    'ui.gaming.digestHour': 'Godzina digestu (UTC)',
+    'ui.gaming.aiSummary': 'Streszczaj patche przez AI',
+    'ui.gaming.rolePing': 'Ping roli (opcjonalnie)',
+    'ui.gaming.pin': 'Przypnij',
+    'ui.gaming.patchHelpV2':
+      'Wybierz gry, GPU/sprzęt lub newsy z katalogu (po nazwie). Każdy wpis może mieć własny kanał, ping roli i auto-pin. Tryb „digest” wysyła zbiorczo raz dziennie.',
     'ui.gaming.priceEnabled': 'Śledzenie cen (ITAD) włączone',
     'ui.gaming.priceChannelLabel': 'Kanał alertów o promocjach',
     'ui.gaming.priceHelp':
@@ -3245,6 +3256,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Every ~1 h the bot checks Steam news for the listed games and announces new entries. You’ll find the appID in the Steam store URL (e.g. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Add from catalog (games · GPU · news)',
+    'ui.gaming.catalogSearchPh': 'Search by name: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Delivery mode',
+    'ui.gaming.deliveryInstant': 'Instant',
+    'ui.gaming.deliveryDaily': 'Daily digest',
+    'ui.gaming.digestHour': 'Digest hour (UTC)',
+    'ui.gaming.aiSummary': 'Summarize patches with AI',
+    'ui.gaming.rolePing': 'Role ping (optional)',
+    'ui.gaming.pin': 'Pin',
+    'ui.gaming.patchHelpV2':
+      'Pick games, GPU/hardware or news from the catalog (by name). Each entry can have its own channel, role ping and auto-pin. “Digest” mode batches updates once a day.',
     'ui.gaming.priceEnabled': 'Price tracking (ITAD) enabled',
     'ui.gaming.priceChannelLabel': 'Deal alerts channel',
     'ui.gaming.priceHelp':
@@ -4895,6 +4917,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Alle ~1 Std. prüft der Bot Steam-News für die gelisteten Spiele und kündigt neue Einträge an. Die appID findest du in der Steam-Store-URL (z. B. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Aus Katalog hinzufügen (Spiele · GPU · News)',
+    'ui.gaming.catalogSearchPh': 'Nach Namen suchen: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Zustellmodus',
+    'ui.gaming.deliveryInstant': 'Sofort',
+    'ui.gaming.deliveryDaily': 'Täglicher Digest',
+    'ui.gaming.digestHour': 'Digest-Stunde (UTC)',
+    'ui.gaming.aiSummary': 'Patches per KI zusammenfassen',
+    'ui.gaming.rolePing': 'Rollen-Ping (optional)',
+    'ui.gaming.pin': 'Anpinnen',
+    'ui.gaming.patchHelpV2':
+      'Wähle Spiele, GPU/Hardware oder News aus dem Katalog (nach Namen). Jeder Eintrag kann eigenen Kanal, Rollen-Ping und Auto-Pin haben. Der „Digest“-Modus bündelt Updates einmal täglich.',
     'ui.gaming.priceEnabled': 'Preis-Tracking (ITAD) aktiviert',
     'ui.gaming.priceChannelLabel': 'Kanal für Deal-Benachrichtigungen',
     'ui.gaming.priceHelp':
@@ -6544,6 +6577,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Cada ~1 h el bot revisa las novedades de Steam de los juegos indicados y anuncia las nuevas entradas. El appID está en la URL de la tienda de Steam (p. ej. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Añadir del catálogo (juegos · GPU · noticias)',
+    'ui.gaming.catalogSearchPh': 'Buscar por nombre: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Modo de entrega',
+    'ui.gaming.deliveryInstant': 'Inmediato',
+    'ui.gaming.deliveryDaily': 'Resumen diario',
+    'ui.gaming.digestHour': 'Hora del resumen (UTC)',
+    'ui.gaming.aiSummary': 'Resumir parches con IA',
+    'ui.gaming.rolePing': 'Mención de rol (opcional)',
+    'ui.gaming.pin': 'Fijar',
+    'ui.gaming.patchHelpV2':
+      'Elige juegos, GPU/hardware o noticias del catálogo (por nombre). Cada entrada puede tener su propio canal, mención de rol y autofijado. El modo «resumen» agrupa las novedades una vez al día.',
     'ui.gaming.priceEnabled': 'Seguimiento de precios (ITAD) activado',
     'ui.gaming.priceChannelLabel': 'Canal de alertas de ofertas',
     'ui.gaming.priceHelp':
@@ -8201,6 +8245,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Ogni ~1 h il bot controlla le novità Steam per i giochi indicati e annuncia le nuove voci. Trovi l’appID nell’URL dello store Steam (es. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Aggiungi dal catalogo (giochi · GPU · notizie)',
+    'ui.gaming.catalogSearchPh': 'Cerca per nome: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Modalità di consegna',
+    'ui.gaming.deliveryInstant': 'Immediato',
+    'ui.gaming.deliveryDaily': 'Riepilogo giornaliero',
+    'ui.gaming.digestHour': 'Ora del riepilogo (UTC)',
+    'ui.gaming.aiSummary': 'Riassumi le patch con l’IA',
+    'ui.gaming.rolePing': 'Ping ruolo (opzionale)',
+    'ui.gaming.pin': 'Fissa',
+    'ui.gaming.patchHelpV2':
+      'Scegli giochi, GPU/hardware o notizie dal catalogo (per nome). Ogni voce può avere canale, ping ruolo e auto-pin propri. La modalità «riepilogo» raggruppa gli aggiornamenti una volta al giorno.',
     'ui.gaming.priceEnabled': 'Monitoraggio prezzi (ITAD) attivo',
     'ui.gaming.priceChannelLabel': 'Canale avvisi offerte',
     'ui.gaming.priceHelp':
@@ -9856,6 +9911,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Toutes les ~1 h, le bot vérifie les actus Steam des jeux listés et annonce les nouvelles entrées. Tu trouves l’appID dans l’URL de la boutique Steam (p. ex. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Ajouter depuis le catalogue (jeux · GPU · actus)',
+    'ui.gaming.catalogSearchPh': 'Rechercher par nom : CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Mode de diffusion',
+    'ui.gaming.deliveryInstant': 'Immédiat',
+    'ui.gaming.deliveryDaily': 'Résumé quotidien',
+    'ui.gaming.digestHour': 'Heure du résumé (UTC)',
+    'ui.gaming.aiSummary': 'Résumer les patchs avec l’IA',
+    'ui.gaming.rolePing': 'Mention de rôle (option.)',
+    'ui.gaming.pin': 'Épingler',
+    'ui.gaming.patchHelpV2':
+      'Choisissez des jeux, GPU/matériel ou actus dans le catalogue (par nom). Chaque entrée peut avoir son canal, sa mention de rôle et son épinglage auto. Le mode « résumé » regroupe les mises à jour une fois par jour.',
     'ui.gaming.priceEnabled': 'Suivi des prix (ITAD) activé',
     'ui.gaming.priceChannelLabel': 'Salon des alertes de promos',
     'ui.gaming.priceHelp':
@@ -11506,6 +11572,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'A cada ~1 h o bot verifica as novidades da Steam dos jogos indicados e anuncia as novas entradas. O appID está no URL da loja Steam (ex. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Adicionar do catálogo (jogos · GPU · notícias)',
+    'ui.gaming.catalogSearchPh': 'Buscar por nome: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Modo de entrega',
+    'ui.gaming.deliveryInstant': 'Imediato',
+    'ui.gaming.deliveryDaily': 'Resumo diário',
+    'ui.gaming.digestHour': 'Hora do resumo (UTC)',
+    'ui.gaming.aiSummary': 'Resumir patches com IA',
+    'ui.gaming.rolePing': 'Menção de cargo (opcional)',
+    'ui.gaming.pin': 'Fixar',
+    'ui.gaming.patchHelpV2':
+      'Escolha jogos, GPU/hardware ou notícias do catálogo (por nome). Cada item pode ter canal, menção de cargo e fixação automática próprios. O modo «resumo» agrupa as novidades uma vez por dia.',
     'ui.gaming.priceEnabled': 'Monitorização de preços (ITAD) ativada',
     'ui.gaming.priceChannelLabel': 'Canal de alertas de promoções',
     'ui.gaming.priceHelp':
@@ -13116,6 +13193,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       '机器人每隔约 1 小时检查所列游戏的 Steam 新闻，并发布新条目。appID 可在 Steam 商店网址中找到（例如 ',
     'ui.gaming.patchHelpPost': ' → CS2）。',
+    'ui.gaming.catalogLabel': '从目录添加（游戏 · GPU · 新闻）',
+    'ui.gaming.catalogSearchPh': '按名称搜索：CS2、艾尔登法环、GPU…',
+    'ui.gaming.deliveryLabel': '推送方式',
+    'ui.gaming.deliveryInstant': '即时',
+    'ui.gaming.deliveryDaily': '每日汇总',
+    'ui.gaming.digestHour': '汇总时间（UTC）',
+    'ui.gaming.aiSummary': '用 AI 总结补丁',
+    'ui.gaming.rolePing': '身份组提及（可选）',
+    'ui.gaming.pin': '置顶',
+    'ui.gaming.patchHelpV2':
+      '从目录按名称选择游戏、GPU/硬件或新闻。每个条目可设置独立频道、身份组提及和自动置顶。「汇总」模式每天合并推送一次。',
     'ui.gaming.priceEnabled': '价格追踪（ITAD）已启用',
     'ui.gaming.priceChannelLabel': '促销提醒频道',
     'ui.gaming.priceHelp':
@@ -14714,6 +14802,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       '봇이 약 1시간마다 지정한 게임의 Steam 소식을 확인하고 새 항목을 공지합니다. appID는 Steam 상점 URL에서 찾을 수 있습니다 (예: ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': '카탈로그에서 추가 (게임 · GPU · 뉴스)',
+    'ui.gaming.catalogSearchPh': '이름으로 검색: CS2, 엘든 링, GPU…',
+    'ui.gaming.deliveryLabel': '전송 방식',
+    'ui.gaming.deliveryInstant': '즉시',
+    'ui.gaming.deliveryDaily': '일일 요약',
+    'ui.gaming.digestHour': '요약 시간 (UTC)',
+    'ui.gaming.aiSummary': 'AI로 패치 요약',
+    'ui.gaming.rolePing': '역할 멘션 (선택)',
+    'ui.gaming.pin': '고정',
+    'ui.gaming.patchHelpV2':
+      '카탈로그에서 게임, GPU/하드웨어 또는 뉴스를 이름으로 선택하세요. 각 항목마다 채널, 역할 멘션, 자동 고정을 지정할 수 있습니다. “요약” 모드는 하루에 한 번 모아서 보냅니다.',
     'ui.gaming.priceEnabled': '가격 추적 (ITAD) 켜짐',
     'ui.gaming.priceChannelLabel': '할인 알림 채널',
     'ui.gaming.priceHelp':
@@ -16341,6 +16440,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Каждый ~1 ч бот проверяет новости Steam для указанных игр и объявляет новые записи. appID найдёте в URL магазина Steam (напр. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Добавить из каталога (игры · GPU · новости)',
+    'ui.gaming.catalogSearchPh': 'Поиск по названию: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Режим доставки',
+    'ui.gaming.deliveryInstant': 'Сразу',
+    'ui.gaming.deliveryDaily': 'Ежедневный дайджест',
+    'ui.gaming.digestHour': 'Час дайджеста (UTC)',
+    'ui.gaming.aiSummary': 'Суммировать патчи через ИИ',
+    'ui.gaming.rolePing': 'Пинг роли (необязательно)',
+    'ui.gaming.pin': 'Закрепить',
+    'ui.gaming.patchHelpV2':
+      'Выбирайте игры, GPU/железо или новости из каталога (по названию). У каждой записи может быть свой канал, пинг роли и авто-закрепление. Режим «дайджест» собирает обновления раз в день.',
     'ui.gaming.priceEnabled': 'Отслеживание цен (ITAD) включено',
     'ui.gaming.priceChannelLabel': 'Канал оповещений о скидках',
     'ui.gaming.priceHelp':
@@ -17978,6 +18088,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Кожну ~1 год бот перевіряє новини Steam для вказаних ігор та оголошує нові записи. appID знайдете в URL магазину Steam (напр. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Додати з каталогу (ігри · GPU · новини)',
+    'ui.gaming.catalogSearchPh': 'Пошук за назвою: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Режим доставки',
+    'ui.gaming.deliveryInstant': 'Одразу',
+    'ui.gaming.deliveryDaily': 'Щоденний дайджест',
+    'ui.gaming.digestHour': 'Година дайджесту (UTC)',
+    'ui.gaming.aiSummary': 'Підсумовувати патчі через ШІ',
+    'ui.gaming.rolePing': 'Пінг ролі (необов’язково)',
+    'ui.gaming.pin': 'Закріпити',
+    'ui.gaming.patchHelpV2':
+      'Обирайте ігри, GPU/залізо або новини з каталогу (за назвою). Кожен запис може мати власний канал, пінг ролі та авто-закріплення. Режим «дайджест» збирає оновлення раз на день.',
     'ui.gaming.priceEnabled': 'Відстеження цін (ITAD) увімкнено',
     'ui.gaming.priceChannelLabel': 'Канал сповіщень про знижки',
     'ui.gaming.priceHelp':
@@ -19623,6 +19744,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'ボットは約 1 時間ごとに指定ゲームの Steam ニュースを確認し、新しいエントリを告知します。appID は Steam ストアの URL で確認できます（例: ',
     'ui.gaming.patchHelpPost': ' → CS2）。',
+    'ui.gaming.catalogLabel': 'カタログから追加（ゲーム · GPU · ニュース）',
+    'ui.gaming.catalogSearchPh': '名前で検索：CS2、エルデンリング、GPU…',
+    'ui.gaming.deliveryLabel': '配信方法',
+    'ui.gaming.deliveryInstant': '即時',
+    'ui.gaming.deliveryDaily': '毎日まとめ',
+    'ui.gaming.digestHour': 'まとめ時刻（UTC）',
+    'ui.gaming.aiSummary': 'AIでパッチを要約',
+    'ui.gaming.rolePing': 'ロールメンション（任意）',
+    'ui.gaming.pin': 'ピン留め',
+    'ui.gaming.patchHelpV2':
+      'カタログからゲーム・GPU/ハードウェア・ニュースを名前で選びます。各項目にチャンネル・ロールメンション・自動ピン留めを設定できます。「まとめ」モードは1日1回まとめて送信します。',
     'ui.gaming.priceEnabled': '価格トラッキング（ITAD）有効',
     'ui.gaming.priceChannelLabel': 'セール通知チャンネル',
     'ui.gaming.priceHelp':
@@ -21248,6 +21380,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'كل ~1 ساعة يتحقق البوت من أخبار Steam للألعاب المدرجة ويعلن الإدخالات الجديدة. تجد appID في رابط متجر Steam (مثل ',
     'ui.gaming.patchHelpPost': ' ← CS2).',
+    'ui.gaming.catalogLabel': 'إضافة من الكتالوج (ألعاب · GPU · أخبار)',
+    'ui.gaming.catalogSearchPh': 'ابحث بالاسم: CS2، إلدن رينغ، GPU…',
+    'ui.gaming.deliveryLabel': 'وضع التسليم',
+    'ui.gaming.deliveryInstant': 'فوري',
+    'ui.gaming.deliveryDaily': 'ملخّص يومي',
+    'ui.gaming.digestHour': 'ساعة الملخّص (UTC)',
+    'ui.gaming.aiSummary': 'تلخيص التحديثات بالذكاء الاصطناعي',
+    'ui.gaming.rolePing': 'منشن الرتبة (اختياري)',
+    'ui.gaming.pin': 'تثبيت',
+    'ui.gaming.patchHelpV2':
+      'اختر الألعاب أو كروت الشاشة/العتاد أو الأخبار من الكتالوج (بالاسم). يمكن لكل عنصر أن يملك قناته ومنشن رتبته والتثبيت التلقائي. وضع «الملخّص» يجمع التحديثات مرة واحدة يوميًا.',
     'ui.gaming.priceEnabled': 'تتبّع الأسعار (ITAD) مفعّل',
     'ui.gaming.priceChannelLabel': 'قناة تنبيهات العروض',
     'ui.gaming.priceHelp':
@@ -22875,6 +23018,17 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.gaming.patchHelpPre':
       'Setiap ~1 jam bot memeriksa berita Steam untuk game yang terdaftar dan mengumumkan entri baru. appID ada di URL toko Steam (mis. ',
     'ui.gaming.patchHelpPost': ' → CS2).',
+    'ui.gaming.catalogLabel': 'Tambah dari katalog (game · GPU · berita)',
+    'ui.gaming.catalogSearchPh': 'Cari berdasarkan nama: CS2, Elden Ring, GPU…',
+    'ui.gaming.deliveryLabel': 'Mode pengiriman',
+    'ui.gaming.deliveryInstant': 'Langsung',
+    'ui.gaming.deliveryDaily': 'Ringkasan harian',
+    'ui.gaming.digestHour': 'Jam ringkasan (UTC)',
+    'ui.gaming.aiSummary': 'Ringkas patch dengan AI',
+    'ui.gaming.rolePing': 'Ping peran (opsional)',
+    'ui.gaming.pin': 'Sematkan',
+    'ui.gaming.patchHelpV2':
+      'Pilih game, GPU/perangkat keras, atau berita dari katalog (berdasarkan nama). Tiap entri bisa punya channel, ping peran, dan auto-pin sendiri. Mode «ringkasan» mengumpulkan pembaruan sekali sehari.',
     'ui.gaming.priceEnabled': 'Pelacakan harga (ITAD) aktif',
     'ui.gaming.priceChannelLabel': 'Saluran peringatan promo',
     'ui.gaming.priceHelp':

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-646-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.576.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-647-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.577.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.577.0] — 🎮 Tryb PatchBot: katalog gier po nazwie + GPU + per-gra routing + AI
+
+- `[#647]` 🎮 **Patch-notes „tryb PatchBot"** — parytet z patchbot.io (i więcej):
+  - **Katalog ~50 źródeł wybieranych PO NAZWIE** (zamiast Steam AppID): ~42 gry Steam + gry z oficjalnych feedów (Path of Exile, Guild Wars 2) + **GPU/sprzęt** (Tom's Hardware, Engadget) + **newsy** (PC Gamer, RPS, Eurogamer, GameSpot, IGN) — z wyszukiwarką w panelu. [`dashboard/lib/gameCatalog.ts`](dashboard/lib/gameCatalog.ts)
+  - **Multi-źródło** w silniku: Steam News API + dowolny RSS/Atom (UA przeglądarkowy anty-403). [`bot/src/gaming/patchnotes.mts`](bot/src/gaming/patchnotes.mts)
+  - **Routing per-wpis**: własny kanał + ping roli + auto-pin; kanały tekstowe, **głosowe i forum** (wątek).
+  - **Tryb dostarczania**: natychmiast lub **dzienny digest** (godzina UTC); opcjonalne **AI-streszczenia** patchy.
+  - Pełna wstecz-kompatybilność (`apps:[{appId,name}]` → migracja do `items`); i18n ×14; walidacja Zod.
+  - **Bramki:** typecheck ×4 · test (bot 831 + dashboard 318) · `sync:check` — exit 0 (Node 26.4.0).
 
 ## [0.576.0] — 📕 Pełna dokumentacja A→Z (PDF: wszystkie komendy + moduły)
 

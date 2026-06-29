@@ -673,9 +673,31 @@ export const freegamesSchema = z.object({
 export type FreeGamesInput = z.infer<typeof freegamesSchema>;
 
 // ── Patch-notes (POST /api/patchnotes) ─────────────────────
+const patchSourceSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('steam'), appId: z.number().int().min(1).max(100_000_000) }),
+  z.object({ kind: z.literal('rss'), url: z.string().url().max(500) }),
+]);
 export const patchnotesSchema = z.object({
   enabled: z.boolean(),
   channelId: z.string().max(40),
+  digest: z.enum(['instant', 'daily']).optional().default('instant'),
+  digestHour: z.number().int().min(0).max(23).optional().default(12),
+  aiSummary: z.boolean().optional().default(false),
+  items: z
+    .array(
+      z.object({
+        slug: z.string().max(60).optional(),
+        name: z.string().min(1).max(80),
+        source: patchSourceSchema,
+        channelId: z.string().max(40).optional(),
+        roleId: z.string().max(40).optional(),
+        pin: z.boolean().optional(),
+        image: z.string().url().max(500).optional(),
+      }),
+    )
+    .max(40)
+    .optional()
+    .default([]),
   apps: z
     .array(
       z.object({
@@ -683,7 +705,9 @@ export const patchnotesSchema = z.object({
         name: z.string().min(1).max(80),
       }),
     )
-    .max(20),
+    .max(20)
+    .optional()
+    .default([]),
 });
 export type PatchNotesInput = z.infer<typeof patchnotesSchema>;
 
