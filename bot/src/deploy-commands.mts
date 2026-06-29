@@ -3,6 +3,7 @@
 import { REST, Routes } from 'discord.js';
 import { contextCommands } from './commands/contextmenu.mts';
 import { commands } from './commands/index.mts';
+import { reportMenuData } from './community/reports.mts';
 import { loadEnv } from './env.mts';
 import { log } from './lib/log.mts';
 
@@ -20,6 +21,7 @@ if (!token || !appId) {
 const body = [
   ...commands.map((c) => c.data.toJSON()),
   ...contextCommands.map((c) => c.data.toJSON()),
+  reportMenuData.toJSON(),
 ];
 const rest = new REST().setToken(token);
 const route = guildId

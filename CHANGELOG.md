@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-660-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.590.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-661-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.591.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.591.0] — 🚩 Zgłaszanie wiadomości (context-menu → kanał recenzji moderacji)
+
+- `[#661]` 🚩 **Zgłaszanie wiadomości** — nowy element menu kontekstowego wiadomości: prawy przycisk → Aplikacje → **„🚩 Zgłoś wiadomość"**. Zgłoszenie (autor, treść, link, zgłaszający) trafia na **kanał recenzji** z przyciskami **„Usuń wiadomość" / „Oddal"** dla moderatora (uprawnienie `ManageMessages`). Odpowiedź zgłaszającemu jest efemeryczna. Bez nowej tabeli.
+  - Bot: [`bot/src/community/reports.mts`](bot/src/community/reports.mts) — context-menu typu Message (`reportMenuData`, rejestracja w `deploy-commands`), `handleReportMenu` + `handleReportButton`; czysta, testowalna `parseReportButton`. Dyspozytor w `index.mts` (`isMessageContextMenuCommand` + gałąź `report:`). Panel: sekcja na `/moderation`.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 873 +`parseReportButton`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+4 klucze).
 
 ## [0.590.0] — 📌 Przypinanie reakcją (delegacja przypinania zaufanym rolom)
 

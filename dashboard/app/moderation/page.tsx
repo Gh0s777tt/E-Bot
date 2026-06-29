@@ -1,6 +1,7 @@
 import {
   ArrowDownAZ,
   Bot,
+  Flag,
   Gauge,
   Gavel,
   Hourglass,
@@ -18,6 +19,7 @@ import DehoistForm from '../../components/DehoistForm';
 import EmptyState from '../../components/EmptyState';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
+import ReportsForm from '../../components/ReportsForm';
 import StatusPill from '../../components/StatusPill';
 import StickyRolesForm from '../../components/StickyRolesForm';
 import {
@@ -27,6 +29,7 @@ import {
   getAutomodStats,
   getAutoslowConfig,
   getDehoistConfig,
+  getReportsConfig,
   getStickyrolesConfig,
 } from '../../lib/community';
 import { getNativeRules } from '../../lib/discordAutomod';
@@ -82,6 +85,7 @@ export default async function ModerationPage() {
     autoslow,
     sticky,
     dehoist,
+    reports,
     guildId,
     lang,
   ] = await Promise.all([
@@ -96,6 +100,7 @@ export default async function ModerationPage() {
     getAutoslowConfig(),
     getStickyrolesConfig(),
     getDehoistConfig(),
+    getReportsConfig(),
     getPrimaryGuildId(),
     getPanelLocale(),
   ]);
@@ -179,6 +184,16 @@ export default async function ModerationPage() {
           </span>
         </h2>
         <DehoistForm initial={dehoist} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Flag size={16} className="text-accent" /> {tp(lang, 'ui.reports.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={reports.enabled} lang={lang} />
+          </span>
+        </h2>
+        <ReportsForm initial={reports} guild={guild} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

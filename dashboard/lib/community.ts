@@ -452,6 +452,22 @@ export async function savePinreactConfig(cfg: PinreactConfig): Promise<void> {
   await setConfigSetting('pinreact_config', JSON.stringify(cfg));
 }
 
+// ── Zgłaszanie wiadomości — context-menu „Zgłoś wiadomość" → kanał recenzji moderacji z przyciskami ──
+export type ReportsConfig = { enabled: boolean; channelId: string };
+export const REPORTS_DEFAULT: ReportsConfig = { enabled: false, channelId: '' };
+export async function getReportsConfig(): Promise<ReportsConfig> {
+  const raw = await getConfigSetting('reports_config');
+  if (!raw) return structuredClone(REPORTS_DEFAULT);
+  try {
+    return { ...REPORTS_DEFAULT, ...(JSON.parse(raw) as Partial<ReportsConfig>) };
+  } catch {
+    return structuredClone(REPORTS_DEFAULT);
+  }
+}
+export async function saveReportsConfig(cfg: ReportsConfig): Promise<void> {
+  await setConfigSetting('reports_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

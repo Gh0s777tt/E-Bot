@@ -394,6 +394,13 @@ export const pinreactSchema = z.object({
 });
 export type PinreactInput = z.infer<typeof pinreactSchema>;
 
+// ── Zgłaszanie wiadomości (POST /api/reports) ──────────────
+export const reportsSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+});
+export type ReportsInput = z.infer<typeof reportsSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

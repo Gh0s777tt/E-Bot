@@ -56,6 +56,7 @@ import { startPinReact } from './community/pinreact.mts';
 import { startPresenceRoles } from './community/presenceRoles.mts';
 import { handleQuestButton, startQuests } from './community/quests.mts';
 import { startQuoteLinks } from './community/quotelink.mts';
+import { handleReportButton, handleReportMenu } from './community/reports.mts';
 import { startResponder } from './community/responder.mts';
 import { handleSuggestionButton } from './community/suggestions.mts';
 import { startClipRelay } from './creator/clips.mts';
@@ -294,7 +295,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
                           ? handleAiServerButton(interaction)
                           : id.startsWith('appeal:')
                             ? handleAppealButton(interaction)
-                            : handleButton(interaction);
+                            : id.startsWith('report:')
+                              ? handleReportButton(interaction)
+                              : handleButton(interaction);
     await h.catch((err) => log.error('button', { err }));
     return;
   }
@@ -325,6 +328,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
   if (interaction.isUserContextMenuCommand()) {
     await handleContextMenu(interaction).catch((err) => log.error('ctx', { err }));
+    return;
+  }
+  if (interaction.isMessageContextMenuCommand()) {
+    await handleReportMenu(interaction).catch((err) => log.error('report-ctx', { err }));
     return;
   }
   if (interaction.isAutocomplete()) {
