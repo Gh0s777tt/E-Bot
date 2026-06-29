@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-650-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.580.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-651-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.581.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.581.0] — ⚖️ System odwołań od bana (publiczny formularz → recenzja moderatora)
+
+- `[#651]` ⚖️ **Odwołania od bana** — banowany (który nie może pisać na serwerze) składa odwołanie przez **publiczny formularz** `/p/appeal?g=<id>`; tożsamość = logowanie Discordem (OSOBNE ciasteczko `ebot_appeal`, zero dostępu do panelu → uid nie do podrobienia). Trafia do kolejki `g:<id>:appeals_queue` (settings, bez nowej tabeli). Bot publikuje zgłoszenia na **kanał recenzji** z przyciskami **„Cofnij ban" / „Odrzuć"**; moderator (uprawnienie `BanMembers`) klika → **unban + DM** lub **DM o odrzuceniu**. Dedup: jeden pending na użytkownika/serwer.
+  - Bot: [`bot/src/community/appeals.mts`](bot/src/community/appeals.mts) (poller 60 s + handler `appeal:*`). Panel: konfiguracja na `/moderation` (włącz + kanał + udostępnialny link), publiczna strona + `POST /api/appeal`. OAuth dostał bezpieczny `next` (tylko ścieżki względne) i osobną „ścieżkę logowania do odwołań".
+  - **Bramki:** typecheck ×4 · Biome · test (bot 836 + dashboard 318, +`pendingUnposted`) · `sync:check` — exit 0. i18n ×14 (+14 kluczy).
 
 ## [0.580.0] — 🤝 Fala 2: cele społeczności + auto-publikacja ogłoszeń
 

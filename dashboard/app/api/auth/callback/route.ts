@@ -29,6 +29,31 @@ export async function GET(request: Request) {
   try {
     const tok = await exchangeCode(origin, code);
     const user = await fetchDiscordUser(tok.access_token);
+
+    // Logowanie WYŁĄCZNIE do odwołań (z /p/appeal): wydaj lekką tożsamość w OSOBNYM ciasteczku
+    // 'ebot_appeal' (podpisana sesja bez roli = zero dostępu do panelu) i wróć na stronę odwołania.
+    // Pomija bramkę ról — banowany zwykły użytkownik też się zidentyfikuje.
+    const nextRaw = cookies['ebot_oauth_next'] ?? '';
+    if (nextRaw.startsWith('/p/appeal')) {
+      const appealTok = await signSession(
+        { uid: user.id, uname: user.global_name || user.username, exp: Date.now() + 3600 * 1000 },
+        authConfig().secret,
+      );
+      const dest =
+        nextRaw.startsWith('/') && !nextRaw.startsWith('//') ? nextRaw.slice(0, 300) : '/';
+      const res = NextResponse.redirect(`${origin}${dest}`);
+      res.cookies.set('ebot_appeal', appealTok, {
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 3600,
+        path: '/',
+        secure: origin.startsWith('https'),
+      });
+      res.cookies.set(STATE_COOKIE, '', { maxAge: 0, path: '/' });
+      res.cookies.set('ebot_oauth_next', '', { maxAge: 0, path: '/' });
+      return res;
+    }
+
     let role = await resolveRole(user.id);
     // M4 — self-serve (env-gated): nie-owner/staff, ale admin serwera z botem → wejście + enrollment.
     if (!role && selfServeEnabled()) {

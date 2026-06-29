@@ -355,6 +355,20 @@ export const autopublishSchema = z.object({
 });
 export type AutopublishInput = z.infer<typeof autopublishSchema>;
 
+// ── Odwołania od bana — konfiguracja admina (POST /api/appeals-config) ──
+export const appealsConfigSchema = z.object({
+  enabled: z.boolean(),
+  channelId: z.string().max(40),
+});
+export type AppealsConfigInput = z.infer<typeof appealsConfigSchema>;
+
+// ── Odwołania od bana — zgłoszenie z publicznego formularza (POST /api/appeal) ──
+export const appealSubmitSchema = z.object({
+  guildId: z.string().regex(/^\d{15,20}$/),
+  reason: z.string().min(10).max(1000),
+});
+export type AppealSubmitInput = z.infer<typeof appealSubmitSchema>;
+
 // ── Reaction roles (POST /api/reaction-roles) ──────────────
 export const reactionRolesSchema = z.object({
   items: z

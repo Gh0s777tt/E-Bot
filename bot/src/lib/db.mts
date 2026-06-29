@@ -174,6 +174,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'milestones_config',
   'goals_config',
   'autopublish_config',
+  'appeals_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

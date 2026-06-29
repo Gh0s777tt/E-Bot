@@ -35,6 +35,7 @@ import { startAfk } from './community/afk.mts';
 import { startAiDigest } from './community/aidigest.mts';
 import { startAiHelp } from './community/aihelp.mts';
 import { startAiMod } from './community/aimod.mts';
+import { handleAppealButton, startAppeals } from './community/appeals.mts';
 import { handleApplicationButton, handleApplicationModal } from './community/applications.mts';
 import { startAutomations } from './community/automations.mts';
 import { startAutoPublish } from './community/autopublish.mts';
@@ -191,6 +192,7 @@ client.once(Events.ClientReady, (c) => {
   startSnipe(c); // Fala 1 — /snipe (podgląd usuniętej/edytowanej wiadomości, in-memory)
   startGoals(c); // Fala 2 — cele społeczności (zbiorowy target wiadomości/miesiąc, poll 30 min)
   startAutoPublish(c); // Fala 2 — auto-publikacja ogłoszeń (crosspost na kanałach typu 5)
+  startAppeals(c); // Odwołania od bana — poller publikuje pending na kanał recenzji (przyciski)
   startAutoThreads(c); // Fala 1 — auto-wątki na wybranych kanałach (config z panelu)
   startMilestones(c); // Fala 1 — kamienie milowe serwera (Nty członek, config z panelu)
   startInvites(c); // Tor 3 — Invite Tracker (śledzenie zaproszeń, config z panelu)
@@ -272,7 +274,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
                         ? handleTempvoiceButton(interaction)
                         : id.startsWith('aiserver:')
                           ? handleAiServerButton(interaction)
-                          : handleButton(interaction);
+                          : id.startsWith('appeal:')
+                            ? handleAppealButton(interaction)
+                            : handleButton(interaction);
     await h.catch((err) => log.error('button', { err }));
     return;
   }

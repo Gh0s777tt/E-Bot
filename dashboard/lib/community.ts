@@ -364,6 +364,22 @@ export async function saveAutopublishConfig(cfg: AutopublishConfig): Promise<voi
   await setConfigSetting('autopublish_config', JSON.stringify(cfg));
 }
 
+// ── Odwołania od bana (publiczny formularz → kolejka → recenzja moderatora) ──
+export type AppealsConfig = { enabled: boolean; channelId: string };
+export const APPEALS_DEFAULT: AppealsConfig = { enabled: false, channelId: '' };
+export async function getAppealsConfig(): Promise<AppealsConfig> {
+  const raw = await getConfigSetting('appeals_config');
+  if (!raw) return structuredClone(APPEALS_DEFAULT);
+  try {
+    return { ...APPEALS_DEFAULT, ...(JSON.parse(raw) as Partial<AppealsConfig>) };
+  } catch {
+    return structuredClone(APPEALS_DEFAULT);
+  }
+}
+export async function saveAppealsConfig(cfg: AppealsConfig): Promise<void> {
+  await setConfigSetting('appeals_config', JSON.stringify(cfg));
+}
+
 // ── Dzienny AI-digest (Tor J) ──
 export type AiDigestConfig = {
   enabled: boolean;

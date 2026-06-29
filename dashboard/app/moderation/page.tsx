@@ -1,15 +1,21 @@
-import { Bot, Gavel, Hourglass, ShieldCheck, Zap } from 'lucide-react';
+import { Bot, Gavel, Hourglass, Inbox, ShieldCheck, Zap } from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
+import AppealsForm from '../../components/AppealsForm';
 import AutomodForm from '../../components/AutomodForm';
 import AutomodStats from '../../components/AutomodStats';
 import EmptyState from '../../components/EmptyState';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
 import StatusPill from '../../components/StatusPill';
-import { getAiModConfig, getAutomodConfig, getAutomodStats } from '../../lib/community';
+import {
+  getAiModConfig,
+  getAppealsConfig,
+  getAutomodConfig,
+  getAutomodStats,
+} from '../../lib/community';
 import { getNativeRules } from '../../lib/discordAutomod';
 import { getModCases, getTempBans } from '../../lib/faza4';
-import { getGuildMeta } from '../../lib/guild';
+import { getGuildMeta, getPrimaryGuildId } from '../../lib/guild';
 import { type PanelLocale, tp } from '../../lib/panelI18n';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
@@ -48,16 +54,19 @@ function remaining(iso: string, lang: PanelLocale): string {
 }
 
 export default async function ModerationPage() {
-  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules, lang] = await Promise.all([
-    getAutomodConfig(),
-    getAiModConfig(),
-    getModCases(30),
-    getTempBans(50),
-    getGuildMeta(),
-    getAutomodStats(),
-    getNativeRules(),
-    getPanelLocale(),
-  ]);
+  const [cfg, aimod, cases, tempbans, guild, stats, nativeRules, appeals, guildId, lang] =
+    await Promise.all([
+      getAutomodConfig(),
+      getAiModConfig(),
+      getModCases(30),
+      getTempBans(50),
+      getGuildMeta(),
+      getAutomodStats(),
+      getNativeRules(),
+      getAppealsConfig(),
+      getPrimaryGuildId(),
+      getPanelLocale(),
+    ]);
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-3">
@@ -98,6 +107,16 @@ export default async function ModerationPage() {
           </span>
         </h2>
         <AiModForm initial={aimod} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Inbox size={16} className="text-accent" /> {tp(lang, 'ui.appeals.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={appeals.enabled} lang={lang} />
+          </span>
+        </h2>
+        <AppealsForm initial={appeals} guild={guild} guildId={guildId} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">
