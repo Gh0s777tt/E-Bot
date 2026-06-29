@@ -355,6 +355,22 @@ export async function saveAutoreactConfig(cfg: AutoreactConfig): Promise<void> {
   await setConfigSetting('autoreact_config', JSON.stringify(cfg));
 }
 
+// ── Dehoisting — auto-czyszczenie nazw windujących na górę listy członków (wiodące !, [, ~, spacja) ──
+export type DehoistConfig = { enabled: boolean; fallback: string };
+export const DEHOIST_DEFAULT: DehoistConfig = { enabled: false, fallback: 'Dehoist' };
+export async function getDehoistConfig(): Promise<DehoistConfig> {
+  const raw = await getConfigSetting('dehoist_config');
+  if (!raw) return structuredClone(DEHOIST_DEFAULT);
+  try {
+    return { ...DEHOIST_DEFAULT, ...(JSON.parse(raw) as Partial<DehoistConfig>) };
+  } catch {
+    return structuredClone(DEHOIST_DEFAULT);
+  }
+}
+export async function saveDehoistConfig(cfg: DehoistConfig): Promise<void> {
+  await setConfigSetting('dehoist_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

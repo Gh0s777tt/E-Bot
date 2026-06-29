@@ -356,6 +356,13 @@ export const autoreactSchema = z.object({
 });
 export type AutoreactInput = z.infer<typeof autoreactSchema>;
 
+// ── Dehoisting (POST /api/dehoist) ─────────────────────────
+export const dehoistSchema = z.object({
+  enabled: z.boolean(),
+  fallback: z.string().max(32),
+});
+export type DehoistInput = z.infer<typeof dehoistSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

@@ -178,6 +178,7 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'autoslow_config',
   'stickyroles_config',
   'autoreact_config',
+  'dehoist_config',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.

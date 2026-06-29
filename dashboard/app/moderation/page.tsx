@@ -1,9 +1,20 @@
-import { Bot, Gauge, Gavel, Hourglass, Inbox, ShieldCheck, UserCog, Zap } from 'lucide-react';
+import {
+  ArrowDownAZ,
+  Bot,
+  Gauge,
+  Gavel,
+  Hourglass,
+  Inbox,
+  ShieldCheck,
+  UserCog,
+  Zap,
+} from 'lucide-react';
 import AiModForm from '../../components/AiModForm';
 import AppealsForm from '../../components/AppealsForm';
 import AutomodForm from '../../components/AutomodForm';
 import AutomodStats from '../../components/AutomodStats';
 import AutoslowForm from '../../components/AutoslowForm';
+import DehoistForm from '../../components/DehoistForm';
 import EmptyState from '../../components/EmptyState';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
 import RegexTester from '../../components/RegexTester';
@@ -15,6 +26,7 @@ import {
   getAutomodConfig,
   getAutomodStats,
   getAutoslowConfig,
+  getDehoistConfig,
   getStickyrolesConfig,
 } from '../../lib/community';
 import { getNativeRules } from '../../lib/discordAutomod';
@@ -69,6 +81,7 @@ export default async function ModerationPage() {
     appeals,
     autoslow,
     sticky,
+    dehoist,
     guildId,
     lang,
   ] = await Promise.all([
@@ -82,6 +95,7 @@ export default async function ModerationPage() {
     getAppealsConfig(),
     getAutoslowConfig(),
     getStickyrolesConfig(),
+    getDehoistConfig(),
     getPrimaryGuildId(),
     getPanelLocale(),
   ]);
@@ -155,6 +169,16 @@ export default async function ModerationPage() {
           </span>
         </h2>
         <StickyRolesForm initial={sticky} guild={guild} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <ArrowDownAZ size={16} className="text-accent" /> {tp(lang, 'ui.dehoist.heading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={dehoist.enabled} lang={lang} />
+          </span>
+        </h2>
+        <DehoistForm initial={dehoist} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

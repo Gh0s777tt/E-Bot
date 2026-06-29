@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-654-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.584.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-655-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.585.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.585.0] — 🔤 Dehoisting (auto-porządkowanie nazw windujących listę członków)
+
+- `[#655]` 🔤 **Dehoisting** — niektórzy zaczynają pseudonim od znaku interpunkcyjnego (`!`, `[`, `~`, spacja), by „windować" się na samą górę listy członków. Bot automatycznie usuwa wiodące znaki, tak aby nick zaczynał się od litery/cyfry — lista wraca do porządku. Działa na wejściu i przy zmianie pseudonimu; gdy nick to same znaki, używa nazwy zastępczej (konfigurowalnej, w razie potrzeby username).
+  - Bot: [`bot/src/security/dehoist.mts`](bot/src/security/dehoist.mts) — `guildMemberAdd` + `guildMemberUpdate`; czysta, testowalna `dehoistName` (Unicode-aware: zachowuje litery niełacińskie, ucina interpunkcję/symbole, limit 32). Wymaga `ManageNicknames`; pomija właściciela i osoby z rolą ≥ bota (brak pętli). Panel: sekcja na `/moderation`.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 851 +`dehoistName`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+5 kluczy).
 
 ## [0.584.0] — 👍 Auto-reakcje (bot reaguje na wybranych kanałach)
 

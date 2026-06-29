@@ -92,6 +92,7 @@ import { startReactionRoles } from './reaction-roles.mts';
 import { startAntiNuke } from './security/antinuke.mts';
 import { startAntiRaid } from './security/antiraid.mts';
 import { startAutoSlowmode } from './security/autoslow.mts';
+import { startDehoist } from './security/dehoist.mts';
 import { startHeat } from './security/heat.mts';
 import { startModeration } from './security/moderation.mts';
 import { startServerLog } from './security/serverlog.mts';
@@ -230,6 +231,7 @@ client.once(Events.ClientReady, (c) => {
   startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
   startWelcome(c); // Faza 6 — powitania + autorole
   startStickyRoles(c); // Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (config z panelu)
+  startDehoist(c); // Dehoisting — auto-czyszczenie nazw windujących na górę listy członków (config z panelu)
   startAutomod(c); // Faza 6 — automoderacja
   startClipRelay(c); // Faza 6 — relay klipów Twitch (config z panelu /creator)
   startSocialFeeds(c); // Faza 8 — powiadomienia o nowych postach social (RSS), config /creator
