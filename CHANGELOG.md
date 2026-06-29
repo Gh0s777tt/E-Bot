@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-658-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.588.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-659-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.589.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.589.0] — 🌐 Tłumaczenie flagą (reakcja flagą kraju → AI tłumaczy wiadomość)
+
+- `[#659]` 🌐 **Tłumaczenie flagą** — dodaj do wiadomości reakcję z flagą kraju (np. 🇬🇧, 🇵🇱, 🇩🇪), a bot odpowie tłumaczeniem jej treści na język tej flagi. Korzysta z istniejącej warstwy AI (`/translate`) i wspólnych limitów `ai_usage`. Mapa pokrywa 14 języków bota + kilka popularnych (NL, TR, SE…). Dedup: to samo tłumaczenie nie jest powtarzane. Bez nowej tabeli.
+  - Bot: [`bot/src/community/flagtranslate.mts`](bot/src/community/flagtranslate.mts) — `messageReactionAdd`; czysta, testowalna `flagToLang` (regional-indicator → ISO-2 → język). Wymaga włączonego AI; respektuje limity (`checkUsage`/`bumpUsage`). Panel: sekcja na `/engagement`.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 867 +`flagToLang`, dashboard 318) · `sync:check` — exit 0. i18n ×14 (+3 klucze).
 
 ## [0.588.0] — ✉️ Powitalny DM (prywatna wiadomość do nowych członków)
 

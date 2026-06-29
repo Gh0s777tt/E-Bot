@@ -420,6 +420,22 @@ export async function saveJoindmConfig(cfg: JoindmConfig): Promise<void> {
   await setConfigSetting('joindm_config', JSON.stringify(cfg));
 }
 
+// ── Tłumaczenie flagą — reakcja z flagą kraju → AI tłumaczy wiadomość (wspólne limity AI) ──
+export type FlagtransConfig = { enabled: boolean };
+export const FLAGTRANS_DEFAULT: FlagtransConfig = { enabled: false };
+export async function getFlagtransConfig(): Promise<FlagtransConfig> {
+  const raw = await getConfigSetting('flagtranslate_config');
+  if (!raw) return structuredClone(FLAGTRANS_DEFAULT);
+  try {
+    return { ...FLAGTRANS_DEFAULT, ...(JSON.parse(raw) as Partial<FlagtransConfig>) };
+  } catch {
+    return structuredClone(FLAGTRANS_DEFAULT);
+  }
+}
+export async function saveFlagtransConfig(cfg: FlagtransConfig): Promise<void> {
+  await setConfigSetting('flagtranslate_config', JSON.stringify(cfg));
+}
+
 // ── Kamienie milowe serwera (Fala 1) — co N-tego członka świętowanie ──
 export type MilestonesConfig = {
   enabled: boolean;

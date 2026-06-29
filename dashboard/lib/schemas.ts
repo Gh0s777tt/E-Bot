@@ -382,6 +382,10 @@ export const joindmSchema = z.object({
 });
 export type JoindmInput = z.infer<typeof joindmSchema>;
 
+// ── Tłumaczenie flagą (POST /api/flagtranslate) ────────────
+export const flagtransSchema = z.object({ enabled: z.boolean() });
+export type FlagtransInput = z.infer<typeof flagtransSchema>;
+
 // ── Kamienie milowe serwera (POST /api/milestones) ─────────
 export const milestonesSchema = z.object({
   enabled: z.boolean(),

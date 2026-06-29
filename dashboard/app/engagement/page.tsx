@@ -1,6 +1,7 @@
 import {
   Gift,
   Hash,
+  Languages,
   Link2,
   Megaphone,
   MessageSquare,
@@ -20,6 +21,7 @@ import AutothreadForm from '../../components/AutothreadForm';
 import ButtonRolesForm from '../../components/ButtonRolesForm';
 import CountingForm from '../../components/CountingForm';
 import EmptyState from '../../components/EmptyState';
+import FlagTranslateForm from '../../components/FlagTranslateForm';
 import GoalsForm from '../../components/GoalsForm';
 import InvitesForm from '../../components/InvitesForm';
 import MilestonesForm from '../../components/MilestonesForm';
@@ -32,6 +34,7 @@ import {
   getAutopublishConfig,
   getAutoreactConfig,
   getAutothreadConfig,
+  getFlagtransConfig,
   getGoalsConfig,
   getMilestonesConfig,
   getQuotelinkConfig,
@@ -69,6 +72,7 @@ export default async function EngagementPage() {
     autoreact,
     autodelete,
     quotelink,
+    flagtrans,
     milestones,
     goals,
     autopub,
@@ -85,6 +89,7 @@ export default async function EngagementPage() {
     getAutoreactConfig(),
     getAutodeleteConfig(),
     getQuotelinkConfig(),
+    getFlagtransConfig(),
     getMilestonesConfig(),
     getGoalsConfig(),
     getAutopublishConfig(),
@@ -192,6 +197,17 @@ export default async function EngagementPage() {
           </span>
         </h2>
         <QuoteLinkForm initial={quotelink} />
+      </section>
+
+      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+          <Languages size={16} className="text-accent" />{' '}
+          {tp(lang, 'ui.engagement.flagtransHeading')}
+          <span className="ms-auto normal-case">
+            <StatusPill on={flagtrans.enabled} lang={lang} />
+          </span>
+        </h2>
+        <FlagTranslateForm initial={flagtrans} />
       </section>
 
       <section className="panel-glow rounded-2xl border border-line bg-card p-5">

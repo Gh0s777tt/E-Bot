@@ -45,6 +45,7 @@ import { startAutoThreads } from './community/autothread.mts';
 import { startBirthdays } from './community/birthdays.mts';
 import { startCounters } from './community/counters.mts';
 import { startCounting } from './community/counting.mts';
+import { startFlagTranslate } from './community/flagtranslate.mts';
 import { startGoals } from './community/goals.mts';
 import { startHighlights } from './community/highlights.mts';
 import { startImageOnly } from './community/imageonly.mts';
@@ -236,6 +237,7 @@ client.once(Events.ClientReady, (c) => {
   startReactionRoles(c); // Faza 4 — role za reakcje (config z panelu)
   startWelcome(c); // Faza 6 — powitania + autorole
   startJoinDm(c); // Powitalny DM — prywatna wiadomość do nowych członków (config z panelu)
+  startFlagTranslate(c); // Tłumaczenie flagą — reakcja z flagą kraju → AI tłumaczy wiadomość (config z panelu)
   startStickyRoles(c); // Trwałe role — snapshot ról przy wyjściu, przywracanie przy powrocie (config z panelu)
   startDehoist(c); // Dehoisting — auto-czyszczenie nazw windujących na górę listy członków (config z panelu)
   startAutomod(c); // Faza 6 — automoderacja
