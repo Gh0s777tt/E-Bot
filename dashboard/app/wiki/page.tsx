@@ -121,26 +121,22 @@ export default async function WikiPage() {
         {/* SPIS TREŚCI */}
         <aside className="hidden lg:block">
           <nav className="sticky top-20 space-y-1 text-sm">
-            <TocLink href="#wprowadzenie" icon={<Info size={14} />} label={t('wiki.intro')} />
-            <TocLink href="#start" icon={<Rocket size={14} />} label={t('wiki.start')} />
-            <TocLink href="#panel" icon={<LayoutDashboard size={14} />} label={t('wiki.panel')} />
-            <div className="px-3 pt-3 text-[11px] uppercase tracking-wider text-muted/60">
-              {t('wiki.modules')}
-            </div>
-            {MODULE_GROUPS.map((g) => (
-              <TocLink key={g.id} href={`#m-${g.id}`} label={g.title} />
-            ))}
-            <div className="px-3 pt-3 text-[11px] uppercase tracking-wider text-muted/60">
-              {t('wiki.rest')}
-            </div>
-            <TocLink href="#komendy" icon={<Terminal size={14} />} label={t('wiki.commands')} />
-            <TocLink href="#premium" icon={<Sparkles size={14} />} label={t('wiki.premium')} />
-            <TocLink href="#faq" icon={<BookOpen size={14} />} label={t('wiki.faq')} />
+            <TocItems t={t} />
           </nav>
         </aside>
 
         {/* TREŚĆ */}
         <main className="min-w-0 space-y-14">
+          {/* Spis treści — mobile (sidebar po lewej jest tylko na lg+) */}
+          <details className="rounded-xl border border-line bg-card p-3 lg:hidden">
+            <summary className="flex cursor-pointer select-none items-center gap-2 font-semibold text-white">
+              <ListChecks size={16} className="text-accent" /> {t('wiki.toc')}
+            </summary>
+            <nav className="mt-2 space-y-1 text-sm">
+              <TocItems t={t} />
+            </nav>
+          </details>
+
           {/* Wprowadzenie */}
           <section id="wprowadzenie" className="scroll-mt-20">
             <H2 icon={<Info size={20} />}>{t('wiki.intro')}</H2>
@@ -358,6 +354,28 @@ export default async function WikiPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function TocItems({ t }: { t: (k: string) => string }) {
+  return (
+    <>
+      <TocLink href="#wprowadzenie" icon={<Info size={14} />} label={t('wiki.intro')} />
+      <TocLink href="#start" icon={<Rocket size={14} />} label={t('wiki.start')} />
+      <TocLink href="#panel" icon={<LayoutDashboard size={14} />} label={t('wiki.panel')} />
+      <div className="px-3 pt-3 text-[11px] uppercase tracking-wider text-muted/60">
+        {t('wiki.modules')}
+      </div>
+      {MODULE_GROUPS.map((g) => (
+        <TocLink key={g.id} href={`#m-${g.id}`} label={g.title} />
+      ))}
+      <div className="px-3 pt-3 text-[11px] uppercase tracking-wider text-muted/60">
+        {t('wiki.rest')}
+      </div>
+      <TocLink href="#komendy" icon={<Terminal size={14} />} label={t('wiki.commands')} />
+      <TocLink href="#premium" icon={<Sparkles size={14} />} label={t('wiki.premium')} />
+      <TocLink href="#faq" icon={<BookOpen size={14} />} label={t('wiki.faq')} />
+    </>
   );
 }
 

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-666-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.596.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-667-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.597.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.597.0] — 📑 Mobilny spis treści w /wiki (skoki na telefonie)
+
+- `[#667]` 📑 **Mobilny spis treści wiki** — na `/wiki` boczny spis treści był `hidden lg:block` (tylko desktop), więc na telefonie długa strona (intro · start · panel · 6 grup modułów · komendy · premium · FAQ) nie miała żadnych skoków. Dodany zwijany „Spis treści" (`<details>`, natywny, **zero JS**) **nad** treścią, widoczny tylko poniżej `lg`; te same kotwice co sidebar (współdzielony `TocItems`) — bez regresji desktopu, SEO ani deep-linków `#…`.
+  - Świadomie **bez** zakładek „Komendy/Moduły" — schowałyby treść za `display:none`, psując kotwice ToC (`#m-…`, `#komendy`) i pogarszając SEO strony publicznej. `/wiki` ma już własną nawigację (ToC); brakowało jej tylko na mobile.
+  - **Bramki:** typecheck ×4 · Biome · test (dashboard 318, parzystość i18n) · `sync:check` — exit 0. i18n ×14 (+1 klucz `wiki.toc`).
 
 ## [0.596.0] — 🗂️ Pod-zakładki też na /stats i /settings (etap 2)
 
