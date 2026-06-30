@@ -1,6 +1,7 @@
 'use client';
 
-import { LogOut, Maximize2, Minimize2, Search, Type, UserPlus } from 'lucide-react';
+import { Gem, LogOut, Maximize2, Minimize2, Search, Type, UserPlus } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { navLabel, tp } from '../lib/panelI18n';
@@ -159,6 +160,13 @@ export default function Topbar({ inviteUrl }: { inviteUrl: string }) {
         >
           <Maximize2 size={13} />
         </button>
+        <Link
+          href="/premium"
+          title="Premium"
+          className="flex items-center gap-1.5 rounded-md border border-amber-400/50 bg-amber-400/10 px-3 py-1 font-semibold uppercase tracking-wide text-amber-300 transition hover:bg-amber-400/20"
+        >
+          <Gem size={13} /> Premium
+        </Link>
         <a
           href={inviteUrl}
           target="_blank"
