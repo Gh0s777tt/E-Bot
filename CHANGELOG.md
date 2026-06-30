@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-663-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.593.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-664-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.594.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.594.0] — 📖 Wiki + PDF: uzupełnienie o 13 nowych modułów (#651–#663)
+
+- `[#664]` 📖 **Wiki znów kompletna** — [`dashboard/lib/wikiData.ts`](dashboard/lib/wikiData.ts) (źródło `/wiki` i „pełnego PDF A→Z") dostała 13 brakujących modułów z funkcji #651–#663: do **Bezpieczeństwa** — odwołania od bana, adaptacyjny slowmode, trwałe role, dehoisting, zgłaszanie wiadomości, harmonogram blokad; do **Zaangażowania** — auto-reakcje, auto-czyszczenie kanałów, podgląd linków, tłumaczenie flagą, przypinanie reakcją, rola głosowa, powitalny DM. Każdy z opisem + konfiguracją krok po kroku — obietnica „wszystkie funkcje A→Z" znów aktualna.
+  - **Bramki:** typecheck ×4 · Biome · test (bot 881 + dashboard 318) · `sync:check` — exit 0.
 
 ## [0.593.0] — 🌙 Harmonogram blokad kanałów (ciche godziny / tryb nocny)
 

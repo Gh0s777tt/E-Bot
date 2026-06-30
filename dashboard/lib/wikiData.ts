@@ -327,6 +327,66 @@ export const MODULE_GROUPS: ModuleGroup[] = [
         ],
         c: '/case',
       },
+      {
+        t: 'Odwołania od bana',
+        p: '/moderation',
+        d: 'Banowany składa odwołanie przez publiczny formularz (logowanie Discordem); trafia na kanał recenzji z przyciskami — moderator cofa ban lub odrzuca (z DM do użytkownika).',
+        steps: [
+          'Włącz moduł i wskaż kanał recenzji odwołań.',
+          'Skopiuj udostępnialny link /p/appeal?g=<id> i podaj go banowanym (np. w opisie serwera).',
+          'Banowany loguje się Discordem i opisuje odwołanie; zgłoszenie pojawia się na kanale.',
+          'Klik „Cofnij ban" → unban + DM; „Odrzuć" → DM o odrzuceniu.',
+        ],
+      },
+      {
+        t: 'Adaptacyjny slowmode',
+        p: '/moderation',
+        d: 'Bot mierzy tempo wiadomości na wybranych kanałach i sam podnosi slowmode w szczycie, a po wyciszeniu go zdejmuje — bez kar i bez moderatora.',
+        steps: [
+          'Włącz i wybierz kanały objęte.',
+          'Ustaw próg (wiadomości w oknie), długość okna (sekundy) i maksymalny slowmode.',
+          'Bot reaguje automatycznie; wymaga uprawnienia „Zarządzanie kanałami".',
+        ],
+      },
+      {
+        t: 'Trwałe role (sticky roles)',
+        p: '/moderation',
+        d: 'Bot zapamiętuje role wychodzącego członka i przywraca je przy powrocie — zapobiega ucieczce od wyciszenia (leave→rejoin) i zachowuje zdobyte role.',
+        steps: [
+          'Włącz moduł.',
+          'Wybierz tryb: zachowuj wszystkie role albo tylko z listy.',
+          'Wymaga „Zarządzanie rolami"; pomija role zarządzane i powyżej roli bota.',
+        ],
+      },
+      {
+        t: 'Dehoisting',
+        p: '/moderation',
+        d: 'Usuwa wiodące znaki interpunkcyjne z pseudonimów, którymi trolle „windują się" na górę listy członków — nick zaczyna się od litery/cyfry.',
+        steps: [
+          'Włącz moduł i ustaw nazwę zastępczą (gdy pseudonim to same znaki).',
+          'Działa na wejściu i przy zmianie nicku; wymaga „Zarządzanie pseudonimami".',
+        ],
+      },
+      {
+        t: 'Zgłaszanie wiadomości',
+        p: '/moderation',
+        d: 'Element menu kontekstowego wiadomości („🚩 Zgłoś wiadomość") wysyła zgłoszenie na kanał recenzji z przyciskami „Usuń wiadomość" / „Oddal" dla moderatora.',
+        steps: [
+          'Włącz moduł i wskaż kanał recenzji zgłoszeń.',
+          'Członek: prawy przycisk na wiadomości → Aplikacje → „🚩 Zgłoś wiadomość".',
+          'Moderator (Zarządzanie wiadomościami) klika „Usuń wiadomość" lub „Oddal".',
+        ],
+        c: 'Menu kontekstowe: 🚩 Zgłoś wiadomość',
+      },
+      {
+        t: 'Harmonogram blokad (ciche godziny)',
+        p: '/moderation',
+        d: 'Blokuje pisanie na wybranych kanałach w zadanym oknie godzin (np. 23→7 = tryb nocny) i odblokowuje poza nim. Okno może przechodzić przez północ.',
+        steps: [
+          'Włącz, ustaw godzinę blokady i odblokowania oraz strefę czasową (offset UTC).',
+          'Wybierz kanały objęte; wymaga „Zarządzanie kanałami".',
+        ],
+      },
     ],
   },
   {
@@ -483,6 +543,69 @@ export const MODULE_GROUPS: ModuleGroup[] = [
           'Urodziny: włącz, wskaż kanał i treść, opcjonalnie rolę urodzinową.',
         ],
         c: '/suggest · /birthday',
+      },
+      {
+        t: 'Auto-reakcje',
+        p: '/engagement',
+        d: 'Na wybranych kanałach bot automatycznie dodaje skonfigurowane reakcje do każdej wiadomości (👍/❤️ na prezentacjach, ⬆️/⬇️ na propozycjach).',
+        steps: [
+          'Włącz i dodaj wiersze: kanał + emoji (oddzielone spacją, maks. 6).',
+          'Wymaga uprawnienia „Dodawanie reakcji".',
+        ],
+      },
+      {
+        t: 'Auto-czyszczenie kanałów',
+        p: '/engagement',
+        d: 'Kasuje wiadomości starsze niż ustawiony czas na wybranych kanałach (np. 60 min na kanale-komendy). Pomija przypięte. Operacja nieodwracalna.',
+        steps: [
+          'Włącz i dodaj wiersze: kanał + czas życia (minuty).',
+          'Wymaga „Zarządzanie wiadomościami"; Discord hurtowo kasuje tylko wiadomości < 14 dni.',
+        ],
+      },
+      {
+        t: 'Podgląd linków do wiadomości',
+        p: '/engagement',
+        d: 'Gdy ktoś wklei link do wiadomości z tego serwera, bot rozwija go w embed (autor, treść, obrazek) z przyciskiem „Skocz".',
+        steps: [
+          'Włącz moduł (jeden przełącznik).',
+          'Anty-wyciek: tylko ten sam serwer i tylko gdy wklejający ma dostęp do kanału źródłowego.',
+        ],
+      },
+      {
+        t: 'Tłumaczenie flagą',
+        p: '/engagement',
+        d: 'Reakcja z flagą kraju (🇬🇧, 🇵🇱…) na wiadomości → bot odpowiada tłumaczeniem jej treści na język tej flagi (przez AI).',
+        steps: [
+          'Włącz moduł; wymaga włączonego AI w panelu (zużywa wspólny limit AI).',
+          'Dodaj reakcję z flagą — bot tłumaczy; to samo tłumaczenie nie jest powtarzane.',
+        ],
+      },
+      {
+        t: 'Przypinanie reakcją',
+        p: '/engagement',
+        d: 'Reakcja 📌 (konfigurowalne emoji) od uprawnionej osoby przypina wiadomość — delegacja przypinania zaufanej roli bez nadawania „Zarządzania wiadomościami".',
+        steps: [
+          'Włącz, ustaw emoji i rolę uprawnioną (puste = wymagane „Zarządzanie wiadomościami").',
+          'Bot potrzebuje „Zarządzanie wiadomościami"; pamiętaj o limicie 50 przypiętych/kanał.',
+        ],
+      },
+      {
+        t: 'Rola w rozmowie głosowej',
+        p: '/engagement',
+        d: 'Dopóki ktoś jest na kanale głosowym, ma przydzieloną rolę (ping aktywnych / dostęp do tekstowego kanału głosu); rola znika po wyjściu.',
+        steps: [
+          'Włącz i wybierz rolę.',
+          'Wymaga „Zarządzanie rolami"; rola musi być poniżej roli bota.',
+        ],
+      },
+      {
+        t: 'Powitalny DM',
+        p: '/welcome',
+        d: 'Przy dołączeniu bot wysyła nowemu członkowi prywatną wiadomość z konfigurowalną treścią (regulamin, pierwsze kroki).',
+        steps: [
+          'Włącz i wpisz treść; placeholdery {user}, {username}, {server}, {memberCount}.',
+          'Jeśli użytkownik ma zamknięte DM, wiadomość jest pomijana.',
+        ],
       },
     ],
   },
