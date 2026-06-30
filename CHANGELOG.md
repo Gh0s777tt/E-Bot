@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-664-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.594.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-665-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.595.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.595.0] — 🗂️ Pod-zakładki na /moderation i /engagement (porządek po 13 funkcjach)
+
+- `[#665]` 🗂️ **Pod-zakładki w panelu** — po dodaniu 13 modułów strony `/moderation` (11 sekcji) i `/engagement` (16 sekcji) zrobiły się przytłaczające. Nowy komponent [`PanelTabs`](dashboard/components/PanelTabs.tsx) (klient) grupuje sekcje w karty z lepkim paskiem zakładek; panele zostają zamontowane (`hidden`), więc stan formularzy i SSR są zachowane (bez ponownego pobierania danych).
+  - `/moderation` → 3 zakładki: **Automod & AI** · **Narzędzia ochrony** · **Rejestr kar**.
+  - `/engagement` → 3 zakładki: **Role, głos i społeczność** · **Automatyzacje** · **Cele i ogłoszenia**.
+  - **Bramki:** typecheck ×4 · Biome · test (dashboard 318, parzystość i18n) · `sync:check` — exit 0. i18n ×14 (+6 etykiet zakładek).
 
 ## [0.594.0] — 📖 Wiki + PDF: uzupełnienie o 13 nowych modułów (#651–#663)
 

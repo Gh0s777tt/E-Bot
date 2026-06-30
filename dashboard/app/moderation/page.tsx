@@ -20,6 +20,7 @@ import DehoistForm from '../../components/DehoistForm';
 import EmptyState from '../../components/EmptyState';
 import LockScheduleForm from '../../components/LockScheduleForm';
 import NativeAutomodForm from '../../components/NativeAutomodForm';
+import PanelTabs from '../../components/PanelTabs';
 import RegexTester from '../../components/RegexTester';
 import ReportsForm from '../../components/ReportsForm';
 import StatusPill from '../../components/StatusPill';
@@ -120,185 +121,219 @@ export default async function ModerationPage() {
         </p>
         <StatusPill on={cfg.enabled} lang={lang} />
       </header>
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <ShieldCheck size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAutomod')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={cfg.enabled} lang={lang} />
-          </span>
-        </h2>
-        <AutomodForm initial={cfg} guild={guild} />
-      </section>
+      <PanelTabs
+        tabs={[
+          {
+            id: 'automod',
+            label: tp(lang, 'ui.modtab.automod'),
+            panel: (
+              <>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <ShieldCheck size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.mod.headingAutomod')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={cfg.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <AutomodForm initial={cfg} guild={guild} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Zap size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingNative')}
-        </h2>
-        <NativeAutomodForm initial={nativeRules} guild={guild} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Zap size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingNative')}
+                  </h2>
+                  <NativeAutomodForm initial={nativeRules} guild={guild} />
+                </section>
 
-      <AutomodStats stats={stats} lang={lang} />
+                <AutomodStats stats={stats} lang={lang} />
 
-      <RegexTester />
+                <RegexTester />
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Bot size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAiMod')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={aimod.enabled} lang={lang} />
-          </span>
-        </h2>
-        <AiModForm initial={aimod} guild={guild} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Bot size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingAiMod')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={aimod.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <AiModForm initial={aimod} guild={guild} />
+                </section>
+              </>
+            ),
+          },
+          {
+            id: 'tools',
+            label: tp(lang, 'ui.modtab.tools'),
+            panel: (
+              <>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Inbox size={16} className="text-accent" /> {tp(lang, 'ui.appeals.heading')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={appeals.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <AppealsForm initial={appeals} guild={guild} guildId={guildId} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Inbox size={16} className="text-accent" /> {tp(lang, 'ui.appeals.heading')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={appeals.enabled} lang={lang} />
-          </span>
-        </h2>
-        <AppealsForm initial={appeals} guild={guild} guildId={guildId} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Gauge size={16} className="text-accent" /> {tp(lang, 'ui.autoslow.heading')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={autoslow.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <AutoslowForm initial={autoslow} guild={guild} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Gauge size={16} className="text-accent" /> {tp(lang, 'ui.autoslow.heading')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={autoslow.enabled} lang={lang} />
-          </span>
-        </h2>
-        <AutoslowForm initial={autoslow} guild={guild} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <UserCog size={16} className="text-accent" /> {tp(lang, 'ui.sticky.heading')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={sticky.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <StickyRolesForm initial={sticky} guild={guild} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <UserCog size={16} className="text-accent" /> {tp(lang, 'ui.sticky.heading')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={sticky.enabled} lang={lang} />
-          </span>
-        </h2>
-        <StickyRolesForm initial={sticky} guild={guild} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <ArrowDownAZ size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.dehoist.heading')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={dehoist.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <DehoistForm initial={dehoist} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <ArrowDownAZ size={16} className="text-accent" /> {tp(lang, 'ui.dehoist.heading')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={dehoist.enabled} lang={lang} />
-          </span>
-        </h2>
-        <DehoistForm initial={dehoist} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Flag size={16} className="text-accent" /> {tp(lang, 'ui.reports.heading')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={reports.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <ReportsForm initial={reports} guild={guild} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Flag size={16} className="text-accent" /> {tp(lang, 'ui.reports.heading')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={reports.enabled} lang={lang} />
-          </span>
-        </h2>
-        <ReportsForm initial={reports} guild={guild} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Lock size={16} className="text-accent" /> {tp(lang, 'ui.lockschedule.heading')}
+                    <span className="ms-auto normal-case">
+                      <StatusPill on={lockschedule.enabled} lang={lang} />
+                    </span>
+                  </h2>
+                  <LockScheduleForm initial={lockschedule} guild={guild} />
+                </section>
+              </>
+            ),
+          },
+          {
+            id: 'cases',
+            label: tp(lang, 'ui.modtab.cases'),
+            panel: (
+              <>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Gavel size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingCases')}
+                  </h2>
+                  {cases.length === 0 ? (
+                    <EmptyState>
+                      {tp(lang, 'ui.mod.casesEmptyPre')}{' '}
+                      <code className="text-accent">/mod warn|timeout|clear</code>{' '}
+                      {tp(lang, 'ui.mod.casesEmptyMid')} <code>mod-cases-schema.sql</code>{' '}
+                      {tp(lang, 'ui.mod.casesEmptyPost')}
+                    </EmptyState>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-start text-sm">
+                        <thead className="text-xs uppercase tracking-wide text-muted">
+                          <tr className="border-b border-line">
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thAction')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thMod')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thReason')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thWhen')}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {cases.map((c) => (
+                            <tr
+                              key={c.id}
+                              className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                            >
+                              <td className="px-3 py-2">
+                                <span
+                                  className={`rounded-md px-2 py-0.5 text-xs font-semibold uppercase ${ACTION_STYLE[c.action] ?? 'bg-line text-muted'}`}
+                                >
+                                  {c.action}
+                                </span>
+                              </td>
+                              <td className="px-3 py-2">{c.username || c.user_id || '—'}</td>
+                              <td className="px-3 py-2 text-muted">{c.moderator_name || '—'}</td>
+                              <td className="px-3 py-2 text-muted">{c.reason || '—'}</td>
+                              <td className="whitespace-nowrap px-3 py-2 text-muted">
+                                {fmt(c.created_at)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Lock size={16} className="text-accent" /> {tp(lang, 'ui.lockschedule.heading')}
-          <span className="ms-auto normal-case">
-            <StatusPill on={lockschedule.enabled} lang={lang} />
-          </span>
-        </h2>
-        <LockScheduleForm initial={lockschedule} guild={guild} />
-      </section>
-
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Gavel size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingCases')}
-        </h2>
-        {cases.length === 0 ? (
-          <EmptyState>
-            {tp(lang, 'ui.mod.casesEmptyPre')}{' '}
-            <code className="text-accent">/mod warn|timeout|clear</code>{' '}
-            {tp(lang, 'ui.mod.casesEmptyMid')} <code>mod-cases-schema.sql</code>{' '}
-            {tp(lang, 'ui.mod.casesEmptyPost')}
-          </EmptyState>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-start text-sm">
-              <thead className="text-xs uppercase tracking-wide text-muted">
-                <tr className="border-b border-line">
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thAction')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thMod')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thReason')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thWhen')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cases.map((c) => (
-                  <tr
-                    key={c.id}
-                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
-                  >
-                    <td className="px-3 py-2">
-                      <span
-                        className={`rounded-md px-2 py-0.5 text-xs font-semibold uppercase ${ACTION_STYLE[c.action] ?? 'bg-line text-muted'}`}
-                      >
-                        {c.action}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2">{c.username || c.user_id || '—'}</td>
-                    <td className="px-3 py-2 text-muted">{c.moderator_name || '—'}</td>
-                    <td className="px-3 py-2 text-muted">{c.reason || '—'}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-muted">{fmt(c.created_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Hourglass size={16} className="text-accent" /> {tp(lang, 'ui.mod.headingTempbans')}
-        </h2>
-        {tempbans.length === 0 ? (
-          <EmptyState>
-            {tp(lang, 'ui.mod.tbEmptyPre')} <code className="text-accent">/mod tempban</code>{' '}
-            {tp(lang, 'ui.mod.tbEmptyMid')} <code>f6-moderation-schema.sql</code>{' '}
-            {tp(lang, 'ui.mod.tbEmptyPost')}
-          </EmptyState>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-start text-sm">
-              <thead className="text-xs uppercase tracking-wide text-muted">
-                <tr className="border-b border-line">
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thReason')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thAutoUnban')}</th>
-                  <th className="px-3 py-2">{tp(lang, 'ui.mod.thRemaining')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tempbans.map((t) => (
-                  <tr
-                    key={t.id}
-                    className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
-                  >
-                    <td className="px-3 py-2">{t.username || t.user_id}</td>
-                    <td className="px-3 py-2 text-muted">{t.reason || '—'}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-muted">{fmt(t.unban_at)}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-muted">
-                      {remaining(t.unban_at, lang)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Hourglass size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.mod.headingTempbans')}
+                  </h2>
+                  {tempbans.length === 0 ? (
+                    <EmptyState>
+                      {tp(lang, 'ui.mod.tbEmptyPre')}{' '}
+                      <code className="text-accent">/mod tempban</code>{' '}
+                      {tp(lang, 'ui.mod.tbEmptyMid')} <code>f6-moderation-schema.sql</code>{' '}
+                      {tp(lang, 'ui.mod.tbEmptyPost')}
+                    </EmptyState>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-start text-sm">
+                        <thead className="text-xs uppercase tracking-wide text-muted">
+                          <tr className="border-b border-line">
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thUser')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thReason')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thAutoUnban')}</th>
+                            <th className="px-3 py-2">{tp(lang, 'ui.mod.thRemaining')}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {tempbans.map((t) => (
+                            <tr
+                              key={t.id}
+                              className="border-b border-line/50 transition-colors hover:bg-white/[0.03]"
+                            >
+                              <td className="px-3 py-2">{t.username || t.user_id}</td>
+                              <td className="px-3 py-2 text-muted">{t.reason || '—'}</td>
+                              <td className="whitespace-nowrap px-3 py-2 text-muted">
+                                {fmt(t.unban_at)}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-2 text-muted">
+                                {remaining(t.unban_at, lang)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+              </>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }
