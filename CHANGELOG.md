@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-668-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.598.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-669-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.599.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.599.0] — 🩹 Fix migracji `ai_usage` (42703) — `_ALL.sql` znów wykonywalny na starych bazach
+
+- `[#669]` 🩹 **Fix `42703` w schemacie** — przy nakładaniu `_ALL.sql` na istniejącą bazę padał `ERROR 42703: column "guild_id" does not exist`. Przyczyna: w starych instalacjach tabela `ai_usage` istnieje **bez** `guild_id`, więc `create table if not exists` ją pomija, a indeks `ai_usage_guild_day on ai_usage(guild_id, day)` stał **przed** blokiem migracji dodającym tę kolumnę (~450 linii niżej) → indeks leciał na nieistniejącej kolumnie i ubijał cały skrypt. Dodany idempotentny `alter table ai_usage add column if not exists guild_id …` **tuż przed** indeksem (w `_ALL.sql` i źródłowym [`faza4-schema.sql`](dashboard/scripts/faza4-schema.sql)). `_ALL.sql` przechodzi teraz od zera i na starszych bazach.
+  - Wykryte audytem przez API (Supabase PostgREST/OpenAPI + Vercel): w bazie brakowało 13 tabel i **wszystkich** funkcji RPC; `ai_usage` bez `guild_id` był pierwszym blokerem ich założenia.
+  - **Bramki:** `schema:check` (49 tabel) · `sync:check` — exit 0. Bez zmian w kodzie aplikacji ani testach.
 
 ## [0.598.0] — 💳 Premium widoczne w panelu + panel właściciela „Subskrypcje"
 

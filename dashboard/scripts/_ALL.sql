@@ -63,6 +63,9 @@ create table if not exists ai_usage (
   requests    integer not null default 0,
   primary key (guild_id, user_id, day)
 );
+-- #669 (fix 42703): stare instalacje mają ai_usage BEZ guild_id, a `create table if not exists` je pomija
+-- → dodaj kolumnę ZANIM użyje jej indeks poniżej (pełna migracja PK jest dalej, też idempotentna).
+alter table ai_usage add column if not exists guild_id text not null default '';
 create index if not exists ai_usage_guild_day on ai_usage (guild_id, day);
 
 alter table user_levels     enable row level security;

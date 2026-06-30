@@ -1,4 +1,4 @@
-<!-- SYNC: v0.598.0 · #668 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.599.0 · #669 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.598.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.599.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.598.0)
+## 🔭 Bieżący tor (v0.599.0)
+
+**🩹 Fix `42703` w `_ALL.sql` (v0.599.0)** — audyt bazy/Vercela przez API wykrył, że stare instalacje mają `ai_usage` bez `guild_id`, przez co indeks (przed blokiem migracji) ubijał cały `_ALL.sql` (`column "guild_id" does not exist`). Kolumna dodawana teraz idempotentnie **przed** indeksem (`_ALL.sql` + `faza4-schema.sql`) → skrypt znów wykonywalny; w bazie audyt pokazał 13 brakujących tabel + wszystkie RPC do założenia.
 
 **💳 Premium w panelu + „Subskrypcje" właściciela (v0.598.0)** — naprawione „nigdzie nie ma przejścia na Premium": zakładka **Premium** w `/settings` (zawsze po zalogowaniu — plan serwera, data końca/„bezterminowo", cechy Free vs Premium, CTA adaptacyjne) + **globalny panel właściciela** „Subskrypcje" na `/diagnostics` (lista wszystkich serwerów Premium: źródło Stripe/ręczne, od kiedy, do kiedy, kto nadał) z **ręcznym nadaniem/odebraniem** (gift bez Stripe). Model: `guilds.premium_*` (wygasanie ręcznych nadań — `isPremiumActive`; Stripe + `subscription.updated`→`premium_until`). Pliki: `lib/billing.ts`, `components/PlanPanel.tsx` + `PremiumAdmin.tsx`, `api/dev/premium`.
 
