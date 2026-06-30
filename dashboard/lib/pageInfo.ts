@@ -5,6 +5,8 @@
 export const PAGE_INFO: Record<string, string> = {
   '/setup':
     'Kreator startowy — od pustego serwera do gotowej konfiguracji w kilku krokach. Najlepsze miejsce, by zacząć.',
+  '/premium':
+    'Premium — plan tego serwera (Free/Premium), co daje Premium i przejście na płatny plan. Płatność przez Stripe nadaje Premium automatycznie; właściciel może też nadać ręcznie.',
   '/modules': 'Centrum sterowania — włącz lub wyłącz wszystkie moduły bota w jednym miejscu.',
   '/stats': 'Statystyki serwera — wzrost liczby członków, aktywność i trendy w czasie.',
   '/diagnostics':

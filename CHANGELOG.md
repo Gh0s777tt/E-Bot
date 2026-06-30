@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-669-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.599.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-670-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.600.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.600.0] — ⭐ Widoczny wpis „Premium" w menu + dedykowana strona /premium
+
+- `[#670]` ⭐ **Premium łatwe do znalezienia** — zgłoszone „nie widać przycisku Premium": CTA „Przejdź na Premium" było tylko w schowanej zakładce `/settings` i na `/marketplace`. Dodany **widoczny wpis „Premium" w bocznym menu** (grupa „Ogólne", ikona 💎, **bez progu trybu** — widać też w trybie Prostym) → nowa strona [`/premium`](dashboard/app/premium/page.tsx): aktualny plan serwera, cechy Free vs Premium i CTA (Stripe Checkout gdy billing włączony; informacja o nadaniu właściciela, gdy uśpiony). Współdzieli `PlanPanel` z zakładką w ustawieniach.
+  - Etykieta „Premium" leci przez `navLabel` z fallbackiem → spójna w 14 językach (marka, bez tłumaczenia). Opis strony w `pageInfo` (PL baza + fallback `pageDesc`).
+  - Kontekst: auto-nadawanie po płatności Stripe jest już wpięte (LIVE webhook + klucze na Vercel) — ten update to wyłącznie **odkrywalność** wejścia do zakupu.
+  - **Bramki:** dashboard `tsc` 0 · `next build` 0 (route `/premium` ✓) · Biome · `sync:check` — exit 0.
 
 ## [0.599.0] — 🩹 Fix migracji `ai_usage` (42703) — `_ALL.sql` znów wykonywalny na starych bazach
 

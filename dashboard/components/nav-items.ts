@@ -11,6 +11,7 @@ import {
   Crown,
   DoorOpen,
   Gamepad2,
+  Gem,
   Gift,
   Heart,
   History,
@@ -55,6 +56,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Ogólne',
     items: [
       { href: '/', label: 'Przegląd', icon: LayoutDashboard },
+      { href: '/premium', label: 'Premium', icon: Gem },
       { href: '/setup', label: 'Kreator startowy', icon: Wand2 },
       { href: '/onboarding', label: 'Onboarding', icon: Rocket, tier: 'adv' },
       { href: '/modules', label: 'Centrum sterowania', icon: SlidersHorizontal },

@@ -1,4 +1,4 @@
-<!-- SYNC: v0.599.0 · #669 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.600.0 · #670 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.599.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.600.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.599.0)
+## 🔭 Bieżący tor (v0.600.0)
+
+**⭐ Premium w menu + strona /premium (v0.600.0)** — zgłoszenie „nie widać przycisku Premium": dodany widoczny wpis „Premium" w bocznym menu (grupa „Ogólne", ikona 💎, bez progu trybu) → strona `/premium` (`PlanPanel`: plan, cechy Free vs Premium, CTA „Przejdź na Premium"). Auto-nadawanie po Stripe było już wpięte (LIVE) — to wyłącznie odkrywalność wejścia do zakupu.
 
 **🩹 Fix `42703` w `_ALL.sql` (v0.599.0)** — audyt bazy/Vercela przez API wykrył, że stare instalacje mają `ai_usage` bez `guild_id`, przez co indeks (przed blokiem migracji) ubijał cały `_ALL.sql` (`column "guild_id" does not exist`). Kolumna dodawana teraz idempotentnie **przed** indeksem (`_ALL.sql` + `faza4-schema.sql`) → skrypt znów wykonywalny; w bazie audyt pokazał 13 brakujących tabel + wszystkie RPC do założenia.
 
