@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-665-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.595.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-666-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.596.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.596.0] — 🗂️ Pod-zakładki też na /stats i /settings (etap 2)
+
+- `[#666]` 🗂️ **Pod-zakładki — etap 2** — `PanelTabs` rozszerzony na kolejne gęste strony panelu (po `/moderation` i `/engagement`):
+  - `/stats` (10 sekcji) → 3 zakładki: **Aktywność i wzrost** · **Społeczność** · **Tickety i biblioteka**. Podsumowanie (karty + wybór zakresu dni) zostaje **nad** zakładkami.
+  - `/settings` (9 sekcji) → 3 zakładki: **Bot** · **Panel i system** · **Dostęp i wdrożenie**.
+  - `/gaming` (4 sekcje) i `/security` (3) celowo pominięte — za mało, by dzielić.
+  - **Bramki:** typecheck ×4 · Biome · test (dashboard 318, parzystość i18n) · `sync:check` — exit 0. i18n ×14 (+6 etykiet zakładek).
 
 ## [0.595.0] — 🗂️ Pod-zakładki na /moderation i /engagement (porządek po 13 funkcjach)
 

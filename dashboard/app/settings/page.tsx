@@ -14,6 +14,7 @@ import BotLanguageForm from '../../components/BotLanguageForm';
 import BotPresenceForm from '../../components/BotPresenceForm';
 import ConfigBackupForm from '../../components/ConfigBackupForm';
 import PanelAccessList from '../../components/PanelAccessList';
+import PanelTabs from '../../components/PanelTabs';
 import PanelUsersForm from '../../components/PanelUsersForm';
 import ThemeSwitcher from '../../components/ThemeSwitcher';
 import { normalizeBotLocale } from '../../lib/botLocales';
@@ -72,93 +73,128 @@ export default async function SettingsPage() {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Bot size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingCustomize')}
-        </h2>
-        <BotCustomizeForm initial={botProfile} />
-      </section>
+      <PanelTabs
+        tabs={[
+          {
+            id: 'bot',
+            label: tp(lang, 'ui.settab.bot'),
+            panel: (
+              <>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Bot size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingCustomize')}
+                  </h2>
+                  <BotCustomizeForm initial={botProfile} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Activity size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingPresence')}
-        </h2>
-        <BotPresenceForm initial={presence} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Activity size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingPresence')}
+                  </h2>
+                  <BotPresenceForm initial={presence} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Languages size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingLanguage')}
-        </h2>
-        <BotLanguageForm initial={botLocale} />
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Languages size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingLanguage')}
+                  </h2>
+                  <BotLanguageForm initial={botLocale} />
+                </section>
+              </>
+            ),
+          },
+          {
+            id: 'system',
+            label: tp(lang, 'ui.settab.system'),
+            panel: (
+              <>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Palette size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingTheme')}
+                  </h2>
+                  <ThemeSwitcher />
+                  <p className="mt-3 text-xs text-muted">{tp(lang, 'ui.settings.themeNote')}</p>
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Palette size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingTheme')}
-        </h2>
-        <ThemeSwitcher />
-        <p className="mt-3 text-xs text-muted">{tp(lang, 'ui.settings.themeNote')}</p>
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Server size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingSystem')}
+                  </h2>
+                  <dl className="space-y-3 text-sm">
+                    {rows.map((r) => (
+                      <div
+                        key={r.label}
+                        className="flex justify-between gap-4 border-b border-line/60 pb-2 last:border-0"
+                      >
+                        <dt className="text-muted">{r.label}</dt>
+                        <dd className="text-end font-medium">{r.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Server size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingSystem')}
-        </h2>
-        <dl className="space-y-3 text-sm">
-          {rows.map((r) => (
-            <div
-              key={r.label}
-              className="flex justify-between gap-4 border-b border-line/60 pb-2 last:border-0"
-            >
-              <dt className="text-muted">{r.label}</dt>
-              <dd className="text-end font-medium">{r.value}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <Archive size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingBackup')}
+                  </h2>
+                  <ConfigBackupForm />
+                </section>
+              </>
+            ),
+          },
+          {
+            id: 'access',
+            label: tp(lang, 'ui.settab.access'),
+            panel: (
+              <>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                  <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                    <UserCheck size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingAccess')}
+                  </h2>
+                  <PanelAccessList entries={access} currentUid={session?.uid} lang={lang} />
+                </section>
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <Archive size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingBackup')}
-        </h2>
-        <ConfigBackupForm />
-      </section>
+                {role === 'admin' && (
+                  <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+                    <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+                      <Users size={16} className="text-accent" />{' '}
+                      {tp(lang, 'ui.settings.headingUsers')}
+                    </h2>
+                    <PanelUsersForm initial={staff} />
+                  </section>
+                )}
 
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-          <UserCheck size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingAccess')}
-        </h2>
-        <PanelAccessList entries={access} currentUid={session?.uid} lang={lang} />
-      </section>
-
-      {role === 'admin' && (
-        <section className="panel-glow rounded-2xl border border-line bg-card p-5">
-          <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
-            <Users size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingUsers')}
-          </h2>
-          <PanelUsersForm initial={staff} />
-        </section>
-      )}
-
-      <section className="panel-glow rounded-2xl border border-line bg-card p-5 text-sm text-muted">
-        <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold tracking-wide text-white">
-          <Cloud size={16} className="text-accent" /> {tp(lang, 'ui.settings.headingDeploy')}
-        </h2>
-        <ol className="list-decimal space-y-1 ps-5">
-          <li>
-            {tp(lang, 'ui.settings.deployStep1Pre')}{' '}
-            <code className="text-accent">supabase/schema.sql</code>{' '}
-            {tp(lang, 'ui.settings.deployStep1Post')}
-          </li>
-          <li>
-            {tp(lang, 'ui.settings.deployStep2Pre')}{' '}
-            <code className="text-accent">npm run seed</code>{' '}
-            {tp(lang, 'ui.settings.deployStep2Post')}
-          </li>
-          <li>{tp(lang, 'ui.settings.deployStep3')}</li>
-        </ol>
-      </section>
+                <section className="panel-glow rounded-2xl border border-line bg-card p-5 text-sm text-muted">
+                  <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold tracking-wide text-white">
+                    <Cloud size={16} className="text-accent" />{' '}
+                    {tp(lang, 'ui.settings.headingDeploy')}
+                  </h2>
+                  <ol className="list-decimal space-y-1 ps-5">
+                    <li>
+                      {tp(lang, 'ui.settings.deployStep1Pre')}{' '}
+                      <code className="text-accent">supabase/schema.sql</code>{' '}
+                      {tp(lang, 'ui.settings.deployStep1Post')}
+                    </li>
+                    <li>
+                      {tp(lang, 'ui.settings.deployStep2Pre')}{' '}
+                      <code className="text-accent">npm run seed</code>{' '}
+                      {tp(lang, 'ui.settings.deployStep2Post')}
+                    </li>
+                    <li>{tp(lang, 'ui.settings.deployStep3')}</li>
+                  </ol>
+                </section>
+              </>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }
