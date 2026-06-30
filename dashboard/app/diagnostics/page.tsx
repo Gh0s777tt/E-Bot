@@ -1,8 +1,10 @@
-import { AlertTriangle, Bot, CheckCircle2, Database, Plug, XCircle } from 'lucide-react';
+import { AlertTriangle, Bot, CheckCircle2, Database, Plug, Sparkles, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import ConnectionTest from '../../components/ConnectionTest';
 import DevReset from '../../components/DevReset';
+import PremiumAdmin from '../../components/PremiumAdmin';
+import { listPremiumGuilds } from '../../lib/billing';
 import { activeSource, getRawSetting, getSetupChecklist } from '../../lib/data';
 import { getPrimaryGuildId } from '../../lib/guild';
 import { getIntegrations } from '../../lib/integrations';
@@ -36,6 +38,7 @@ export default async function DiagnosticsPage() {
   const sess = await currentSession();
   const isDev = !!sess?.uid && isOwner(sess.uid);
   const devGuildId = isDev ? await getPrimaryGuildId() : '';
+  const premiumRows = isDev ? await listPremiumGuilds() : [];
 
   let botOnline = false;
   try {
@@ -197,6 +200,24 @@ export default async function DiagnosticsPage() {
           ))}
         </div>
       </section>
+
+      {/* ===== SUBSKRYPCJE PREMIUM — globalnie (tylko właściciel instancji) ===== */}
+      {isDev && (
+        <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-1 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
+            <Sparkles size={16} className="text-accent" /> Subskrypcje Premium ({premiumRows.length}
+            )
+          </h2>
+          <p className="mb-4 text-sm text-muted">
+            Widoczne tylko dla właściciela instancji. Lista wszystkich serwerów z Premium (Stripe +
+            nadania ręczne) — kto, od kiedy, do kiedy. Nadania ręczne to gifty/współprace/testy bez
+            płatności. Wymaga uruchomionego{' '}
+            <code className="text-accent">dashboard/scripts/_ALL.sql</code> (kolumny{' '}
+            <code className="text-accent">premium_*</code>).
+          </p>
+          <PremiumAdmin rows={premiumRows} />
+        </section>
+      )}
 
       {/* ===== STREFA ZAGROŻENIA — reset bazy (tylko właściciel instancji) ===== */}
       {isDev && (

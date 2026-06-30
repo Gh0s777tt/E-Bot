@@ -11,19 +11,96 @@ export function billingEnabled(): boolean {
   return Boolean(process.env.STRIPE_SECRET_KEY);
 }
 
-// Tier serwera z DB (guilds.tier). Brak chmury/wiersza → 'free'.
+// ── Premium: stan efektywny + wygasanie (czyste, testowalne) ─────────────────
+// Manual-grant z datą końca WYGASA (premium_until < now → free). Stripe trzyma się webhooka
+// (subscription.deleted/updated), więc po dacie go NIE wygaszamy — brak eventu nie ma kasować premium.
+export function isPremiumActive(
+  tier: string | null | undefined,
+  premiumUntil: string | null | undefined,
+  source: string | null | undefined,
+  now: number,
+): boolean {
+  if (tier !== 'premium') return false;
+  if (source === 'manual' && premiumUntil) {
+    const t = Date.parse(premiumUntil);
+    if (Number.isFinite(t) && t < now) return false;
+  }
+  return true;
+}
+
+// Pola wiersza guilds dla ręcznego nadania Premium (gift/współpraca). days≤0/null → bezterminowo.
+export function premiumGrantFields(days: number | null, grantedBy: string, now: number) {
+  return {
+    tier: 'premium' as const,
+    premium_source: 'manual' as const,
+    premium_since: new Date(now).toISOString(),
+    premium_until: days && days > 0 ? new Date(now + days * 86_400_000).toISOString() : null,
+    premium_granted_by: grantedBy,
+  };
+}
+
+export type PremiumInfo = {
+  tier: Tier;
+  source: string | null;
+  since: string | null;
+  until: string | null;
+};
+export type PremiumRow = PremiumInfo & {
+  guildId: string;
+  name: string | null;
+  grantedBy: string | null;
+  active: boolean;
+};
+
+// Tier serwera z DB (z uwzględnieniem wygasania ręcznych nadań). Brak chmury/wiersza → 'free'.
 export async function getGuildTier(guildId: string): Promise<Tier> {
   if (!guildId || !hasSupabase) return 'free';
   try {
     const { data, error } = await supabase()
       .from('guilds')
-      .select('tier')
+      .select('tier, premium_until, premium_source')
       .eq('guild_id', guildId)
       .limit(1);
     if (error || !data || !data.length) return 'free';
-    return (data[0] as { tier?: string | null }).tier === 'premium' ? 'premium' : 'free';
+    const r = data[0] as {
+      tier?: string | null;
+      premium_until?: string | null;
+      premium_source?: string | null;
+    };
+    return isPremiumActive(r.tier, r.premium_until, r.premium_source, Date.now())
+      ? 'premium'
+      : 'free';
   } catch {
     return 'free';
+  }
+}
+
+// Szczegóły Premium bieżącego serwera (sekcja „Plan" w panelu). Brak danych → free/null.
+export async function getPremiumInfo(guildId: string): Promise<PremiumInfo> {
+  const none: PremiumInfo = { tier: 'free', source: null, since: null, until: null };
+  if (!guildId || !hasSupabase) return none;
+  try {
+    const { data, error } = await supabase()
+      .from('guilds')
+      .select('tier, premium_source, premium_since, premium_until')
+      .eq('guild_id', guildId)
+      .limit(1);
+    if (error || !data || !data.length) return none;
+    const r = data[0] as Record<string, unknown>;
+    const active = isPremiumActive(
+      r.tier as string,
+      r.premium_until as string,
+      r.premium_source as string,
+      Date.now(),
+    );
+    return {
+      tier: active ? 'premium' : 'free',
+      source: (r.premium_source as string) ?? null,
+      since: (r.premium_since as string) ?? null,
+      until: (r.premium_until as string) ?? null,
+    };
+  } catch {
+    return none;
   }
 }
 
@@ -41,11 +118,16 @@ export function canUsePlugin(tierRequired: Tier, guildTier: Tier): boolean {
 export async function setGuildTier(
   guildId: string,
   tier: Tier,
-  stripe?: { customerId?: string; subId?: string },
+  stripe?: { customerId?: string; subId?: string; until?: string | null },
 ): Promise<boolean> {
   if (!guildId || !hasSupabase) return false;
   try {
     const row: Record<string, unknown> = { guild_id: guildId, tier };
+    if (tier === 'premium') {
+      row.premium_source = 'stripe';
+      row.premium_since = new Date().toISOString();
+      if (stripe?.until !== undefined) row.premium_until = stripe.until;
+    }
     if (stripe?.customerId) row.stripe_customer_id = stripe.customerId;
     if (stripe?.subId) row.stripe_sub_id = stripe.subId;
     await supabase().from('guilds').upsert([row], { onConflict: 'guild_id' });
@@ -59,10 +141,97 @@ export async function setGuildTier(
 export async function downgradeBySubscription(subId: string): Promise<boolean> {
   if (!subId || !hasSupabase) return false;
   try {
-    await supabase().from('guilds').update({ tier: 'free' }).eq('stripe_sub_id', subId);
+    await supabase()
+      .from('guilds')
+      .update({ tier: 'free', premium_source: null, premium_until: null })
+      .eq('stripe_sub_id', subId);
     return true;
   } catch {
     return false;
+  }
+}
+
+// Aktualizacja daty końca okresu (Stripe subscription.created/updated) — po stripe_sub_id.
+export async function setPremiumUntilBySub(subId: string, until: string | null): Promise<boolean> {
+  if (!subId || !hasSupabase) return false;
+  try {
+    await supabase()
+      .from('guilds')
+      .update({ tier: 'premium', premium_source: 'stripe', premium_until: until })
+      .eq('stripe_sub_id', subId);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Ręczne nadanie Premium (gift/współpraca/test) — owner-only (bramka w /api/dev/premium). Idempotentne.
+export async function grantPremium(
+  guildId: string,
+  days: number | null,
+  grantedBy: string,
+): Promise<boolean> {
+  if (!guildId || !hasSupabase) return false;
+  try {
+    const row = { guild_id: guildId, ...premiumGrantFields(days, grantedBy, Date.now()) };
+    await supabase().from('guilds').upsert([row], { onConflict: 'guild_id' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Odebranie Premium (manual) — czyści pola Premium i wraca na 'free'.
+export async function revokePremium(guildId: string): Promise<boolean> {
+  if (!guildId || !hasSupabase) return false;
+  try {
+    await supabase()
+      .from('guilds')
+      .update({
+        tier: 'free',
+        premium_source: null,
+        premium_since: null,
+        premium_until: null,
+        premium_granted_by: null,
+      })
+      .eq('guild_id', guildId);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Lista wszystkich serwerów Premium (globalny widok właściciela na /diagnostics). Najnowsze pierwsze.
+export async function listPremiumGuilds(): Promise<PremiumRow[]> {
+  if (!hasSupabase) return [];
+  try {
+    const { data, error } = await supabase()
+      .from('guilds')
+      .select(
+        'guild_id, name, tier, premium_source, premium_since, premium_until, premium_granted_by',
+      )
+      .eq('tier', 'premium');
+    if (error || !data) return [];
+    const now = Date.now();
+    return (data as Record<string, unknown>[])
+      .map((r) => ({
+        guildId: String(r.guild_id),
+        name: (r.name as string) ?? null,
+        tier: 'premium' as const,
+        source: (r.premium_source as string) ?? null,
+        since: (r.premium_since as string) ?? null,
+        until: (r.premium_until as string) ?? null,
+        grantedBy: (r.premium_granted_by as string) ?? null,
+        active: isPremiumActive(
+          'premium',
+          r.premium_until as string,
+          r.premium_source as string,
+          now,
+        ),
+      }))
+      .sort((a, b) => (b.since ?? '').localeCompare(a.since ?? ''));
+  } catch {
+    return [];
   }
 }
 

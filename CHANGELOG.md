@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-667-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.597.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-668-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.598.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.598.0] — 💳 Premium widoczne w panelu + panel właściciela „Subskrypcje"
+
+- `[#668]` 💳 **Premium — koniec „przycisku donikąd"** — zgłoszone: po zalogowaniu nigdzie nie widać planu ani jak przejść na Premium, a klik nic nie robił. Przyczyna: jedyny przycisk był w `/marketplace` i **tylko** przy włączonym Stripe (`billingEnabled()`), a checkout bez kluczy zwracał `null`. Dane były też za cienkie na „kto kupił i do kiedy".
+  - **Panel — zakładka „Premium"** ([`/settings`](dashboard/app/settings/page.tsx)) widoczna **zawsze po zalogowaniu**: aktualny plan serwera (Free/Premium), data końca / „bezterminowo", tabela cech Free vs Premium i CTA. CTA adaptuje się: Stripe włączony → okno checkout; uśpiony → notka „Premium nadaje właściciel". Komponent [`PlanPanel`](dashboard/components/PlanPanel.tsx).
+  - **Panel właściciela — „Subskrypcje"** na [`/diagnostics`](dashboard/app/diagnostics/page.tsx) (tylko `DASHBOARD_OWNER_IDS`): **globalna** lista wszystkich serwerów Premium (źródło Stripe/ręczne, od kiedy, do kiedy, status, kto nadał) + **ręczne nadania/odebranie** (gift/współpraca/test) bez Stripe. Komponent [`PremiumAdmin`](dashboard/components/PremiumAdmin.tsx), API [`/api/dev/premium`](dashboard/app/api/dev/premium/route.ts) (bramka właściciela jak `/api/dev/reset`).
+  - **Model danych** — `guilds` + `premium_source`/`premium_since`/`premium_until`/`premium_granted_by` (migracja `alter … if not exists` w `_ALL.sql` + `m1-marketplace-schema.sql`). Ręczne nadania **wygasają** po dacie (`isPremiumActive`); Stripe trzyma się webhooka (dodatkowo `customer.subscription.created/updated` → `premium_until` z `current_period_end`).
+  - **Bramki:** dashboard `tsc` exit 0 · Biome (moje pliki czyste) · test (dashboard **326**, +8 `isPremiumActive`/`premiumGrantFields`, parzystość i18n) · `schema:check` · `env:check` · `sync:check` — exit 0. i18n ×14 (+7 kluczy `ui.plan.*` / `ui.settab.premium`). Widok właściciela hardcoded PL (spójnie z `DevReset`).
 
 ## [0.597.0] — 📑 Mobilny spis treści w /wiki (skoki na telefonie)
 

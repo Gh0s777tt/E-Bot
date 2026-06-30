@@ -1,4 +1,4 @@
-<!-- SYNC: v0.597.0 · #667 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.598.0 · #668 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.597.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.598.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.597.0)
+## 🔭 Bieżący tor (v0.598.0)
+
+**💳 Premium w panelu + „Subskrypcje" właściciela (v0.598.0)** — naprawione „nigdzie nie ma przejścia na Premium": zakładka **Premium** w `/settings` (zawsze po zalogowaniu — plan serwera, data końca/„bezterminowo", cechy Free vs Premium, CTA adaptacyjne) + **globalny panel właściciela** „Subskrypcje" na `/diagnostics` (lista wszystkich serwerów Premium: źródło Stripe/ręczne, od kiedy, do kiedy, kto nadał) z **ręcznym nadaniem/odebraniem** (gift bez Stripe). Model: `guilds.premium_*` (wygasanie ręcznych nadań — `isPremiumActive`; Stripe + `subscription.updated`→`premium_until`). Pliki: `lib/billing.ts`, `components/PlanPanel.tsx` + `PremiumAdmin.tsx`, `api/dev/premium`.
 
 **📑 Mobilny ToC w wiki (v0.597.0)** — `/wiki` dostała zwijany „Spis treści" na telefonie (sidebar był `hidden lg:block`, więc długa strona nie miała skoków na mobile). Te same kotwice co sidebar (`TocItems` współdzielony), `<details>` bez JS. Świadomie **bez** zakładek „Komendy/Moduły" — psułyby kotwice ToC (`#m-…`, `#komendy`) i SEO publicznej strony. Plik: `dashboard/app/wiki/page.tsx`.
 

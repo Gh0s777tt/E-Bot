@@ -550,8 +550,17 @@ create table if not exists guilds (
   tier               text not null default 'free',
   stripe_customer_id text,
   stripe_sub_id      text,
+  premium_source     text,                                -- #668: 'stripe' | 'manual' (nadanie właściciela)
+  premium_since      timestamptz,                         -- #668: od kiedy Premium aktywne
+  premium_until      timestamptz,                         -- #668: do kiedy (manual: wygasa; null = bezterminowo)
+  premium_granted_by text,                                -- #668: Discord uid właściciela, który nadał (manual)
   created_at         timestamptz not null default now()
 );
+-- Migracja istniejących baz (kolumny Premium z #668) — idempotentnie.
+alter table guilds add column if not exists premium_source     text;
+alter table guilds add column if not exists premium_since       timestamptz;
+alter table guilds add column if not exists premium_until       timestamptz;
+alter table guilds add column if not exists premium_granted_by  text;
 
 create table if not exists guild_members (
   guild_id   text not null references guilds(guild_id) on delete cascade,

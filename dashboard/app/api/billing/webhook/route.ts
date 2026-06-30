@@ -1,6 +1,7 @@
 import {
   downgradeBySubscription,
   setGuildTier,
+  setPremiumUntilBySub,
   verifyStripeSignature,
 } from '../../../../lib/billing';
 import { captureError } from '../../../../lib/sentry';
@@ -8,8 +9,9 @@ import { captureError } from '../../../../lib/sentry';
 export const dynamic = 'force-dynamic';
 
 // M5 — webhook Stripe: weryfikacja podpisu (HMAC), potem aktualizacja guilds.tier:
-//  • checkout.session.completed       → premium (+ zapis stripe ids)
-//  • customer.subscription.deleted    → free (po stripe_sub_id)
+//  • checkout.session.completed              → premium (+ zapis stripe ids)
+//  • customer.subscription.created/updated   → zapis premium_until (current_period_end); status nieaktywny → free
+//  • customer.subscription.deleted           → free (po stripe_sub_id)
 // Bez STRIPE_WEBHOOK_SECRET → 400 (billing uśpiony). Zawsze 2xx przy obsłużonym/nieznanym evencie.
 export async function POST(request: Request): Promise<Response> {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -43,6 +45,23 @@ export async function POST(request: Request): Promise<Response> {
           label: 'billing',
         });
       }
+    }
+  } else if (
+    event.type === 'customer.subscription.created' ||
+    event.type === 'customer.subscription.updated'
+  ) {
+    const subId = typeof obj.id === 'string' ? obj.id : '';
+    const status = typeof obj.status === 'string' ? obj.status : '';
+    const periodEnd =
+      typeof obj.current_period_end === 'number'
+        ? new Date(obj.current_period_end * 1000).toISOString()
+        : null;
+    if (subId) {
+      // Aktywna/trial → odśwież datę końca okresu; twardo nieaktywna → downgrade (cancel/unpaid).
+      if (status === 'active' || status === 'trialing')
+        await setPremiumUntilBySub(subId, periodEnd);
+      else if (status === 'canceled' || status === 'unpaid' || status === 'incomplete_expired')
+        await downgradeBySubscription(subId);
     }
   } else if (event.type === 'customer.subscription.deleted') {
     const subId = typeof obj.id === 'string' ? obj.id : '';

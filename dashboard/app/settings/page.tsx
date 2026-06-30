@@ -16,10 +16,13 @@ import ConfigBackupForm from '../../components/ConfigBackupForm';
 import PanelAccessList from '../../components/PanelAccessList';
 import PanelTabs from '../../components/PanelTabs';
 import PanelUsersForm from '../../components/PanelUsersForm';
+import PlanPanel from '../../components/PlanPanel';
 import ThemeSwitcher from '../../components/ThemeSwitcher';
+import { billingEnabled, getPremiumInfo } from '../../lib/billing';
 import { normalizeBotLocale } from '../../lib/botLocales';
 import { getBotProfile } from '../../lib/botProfile';
 import { activeSource, getRawSetting, getStats } from '../../lib/data';
+import { getPrimaryGuildId } from '../../lib/guild';
 import { getPanelAccessList } from '../../lib/panelAccess';
 import { tp } from '../../lib/panelI18n';
 import { currentRole, currentSession, getStaff } from '../../lib/panelRoles';
@@ -43,6 +46,10 @@ export default async function SettingsPage() {
       getPanelLocale(),
     ]);
   const botLocale = normalizeBotLocale(localeRaw);
+
+  // Plan/Premium bieżącego serwera (sekcja „Premium"). getPremiumInfo zwraca też efektywny tier.
+  const premiumInfo = await getPremiumInfo(await getPrimaryGuildId());
+  const billingOn = billingEnabled();
 
   let presence = { status: 'online', type: 'none', text: '', url: '' };
   if (presenceRaw) {
@@ -105,6 +112,11 @@ export default async function SettingsPage() {
                 </section>
               </>
             ),
+          },
+          {
+            id: 'premium',
+            label: tp(lang, 'ui.settab.premium'),
+            panel: <PlanPanel lang={lang} info={premiumInfo} billingOn={billingOn} />,
           },
           {
             id: 'system',

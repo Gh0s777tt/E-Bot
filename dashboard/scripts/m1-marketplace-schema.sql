@@ -15,8 +15,17 @@ create table if not exists guilds (
   tier               text not null default 'free',      -- free | premium (M5 billing)
   stripe_customer_id text,                                -- M5
   stripe_sub_id      text,                                -- M5
+  premium_source     text,                                -- #668: 'stripe' | 'manual' (nadanie właściciela)
+  premium_since      timestamptz,                         -- #668: od kiedy Premium aktywne
+  premium_until      timestamptz,                         -- #668: do kiedy (manual: wygasa; null = bezterminowo)
+  premium_granted_by text,                                -- #668: Discord uid właściciela, który nadał (manual)
   created_at         timestamptz not null default now()
 );
+-- Migracja istniejących baz (kolumny Premium z #668) — idempotentnie.
+alter table guilds add column if not exists premium_source     text;
+alter table guilds add column if not exists premium_since       timestamptz;
+alter table guilds add column if not exists premium_until       timestamptz;
+alter table guilds add column if not exists premium_granted_by  text;
 
 -- Kto administruje którą gildią (multi-tenant auth — M1).
 create table if not exists guild_members (
