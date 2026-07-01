@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { setBotLocaleAction } from '../app/settings/actions';
 import { BOT_LOCALE_OPTIONS, type BotLocale } from '../lib/botLocales';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
@@ -17,12 +18,8 @@ export default function BotLanguageForm({ initial }: { initial: BotLocale }) {
   async function save() {
     setSt('saving');
     try {
-      const r = await fetch('/api/locale', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ locale }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
+      const res = await setBotLocaleAction(locale);
+      setSt(res.ok ? 'ok' : 'err');
     } catch {
       setSt('err');
     }
