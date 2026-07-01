@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { setBotPresenceAction } from '../app/settings/actions';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
 
@@ -29,12 +30,8 @@ export default function BotPresenceForm({ initial }: { initial: Presence }) {
   async function save() {
     setSt('saving');
     try {
-      const r = await fetch('/api/bot/presence', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(p),
-      });
-      setSt(r.ok ? 'ok' : 'err');
+      const res = await setBotPresenceAction(p);
+      setSt(res.ok ? 'ok' : 'err');
     } catch {
       setSt('err');
     }
