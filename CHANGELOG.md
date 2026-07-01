@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-670-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.600.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-671-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.601.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.601.0] — 🚀 Modernizacja fala 1: Server Actions + optymistyczne UI (Premium)
+
+- `[#671]` 🚀 **Modernizacja wzorców (fala 1/N)** — po pytaniu o „najnowocześniejszy" stack: audyt pokazał świeże zależności (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler **ON**), ale klasyczne wzorce (128× `'use client'`, **0** Server Actions, **95×** ręczny `fetch('/api/...')`). Start modernizacji od wzorca referencyjnego:
+  - **`PremiumAdmin` → React 19 Server Actions + `useOptimistic` + `useTransition`**: nadanie/odebranie Premium aktualizuje tabelę **natychmiast** (wiersz pojawia się/znika od razu; rollback przy błędzie), bez klienckiego `fetch`/JSON i bez ręcznego stanu `busy`. Akcje w [`app/diagnostics/actions.ts`](dashboard/app/diagnostics/actions.ts) (bramka właściciela jak wcześniej) + `revalidatePath`.
+  - Usunięta **martwa trasa** `/api/dev/premium` (zastąpiona akcją) — mniej boilerplate'u. To wzorzec dla pozostałych ~95 miejsc do przepisania w kolejnych falach.
+  - **Świadomie falami** — 128 komponentów naraz na żywej produkcji = ryzyko; każda fala z bramkami. Następne: `<img>`→`next/image`, kolejne Server Actions, PPR/Cache Components, View Transitions.
+  - **Bramki:** dashboard `tsc` 0 · `next build` 0 (boundary Server Action ✓) · Biome · `sync:check` 0.
 
 ## [0.600.0] — ⭐ Widoczny wpis „Premium" w menu + dedykowana strona /premium
 

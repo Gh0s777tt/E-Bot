@@ -165,7 +165,7 @@ export async function setPremiumUntilBySub(subId: string, until: string | null):
   }
 }
 
-// Ręczne nadanie Premium (gift/współpraca/test) — owner-only (bramka w /api/dev/premium). Idempotentne.
+// Ręczne nadanie Premium (gift/współpraca/test) — owner-only (bramka w Server Action grantPremiumAction). Idempotentne.
 export async function grantPremium(
   guildId: string,
   days: number | null,

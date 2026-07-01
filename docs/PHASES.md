@@ -1,4 +1,4 @@
-<!-- SYNC: v0.600.0 · #670 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.601.0 · #671 · 2026-06-30 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.600.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.601.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.600.0)
+## 🔭 Bieżący tor (v0.601.0)
+
+**🚀 Modernizacja wzorców — fala 1 (v0.601.0)** — stack już świeży (Next 16 · React 19 · Tailwind 4 · TS 6 · React Compiler ON), modernizujemy WZORCE. Start: `PremiumAdmin` → React 19 **Server Actions + `useOptimistic`** (mutacje natychmiastowe, bez ręcznego `fetch('/api/...')`; martwa trasa usunięta). Wzorzec referencyjny dla ~95 pozostałych miejsc. Kolejne fale: `next/image`, więcej Server Actions, PPR/Cache Components, View Transitions.
 
 **⭐ Premium w menu + strona /premium (v0.600.0)** — zgłoszenie „nie widać przycisku Premium": dodany widoczny wpis „Premium" w bocznym menu (grupa „Ogólne", ikona 💎, bez progu trybu) → strona `/premium` (`PlanPanel`: plan, cechy Free vs Premium, CTA „Przejdź na Premium"). Auto-nadawanie po Stripe było już wpięte (LIVE) — to wyłącznie odkrywalność wejścia do zakupu.
 

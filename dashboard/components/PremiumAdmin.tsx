@@ -1,11 +1,12 @@
 'use client';
 
 // Narzędzie WŁAŚCICIELA — przegląd i zarządzanie subskrypcjami Premium (globalnie, wszystkie serwery).
-// Render tylko dla właściciela instancji (gate w diagnostics/page.tsx + twardy gate w /api/dev/premium).
-// Spójne z DevReset (hardcoded PL — narzędzie dev/owner, nie i18n).
+// Render tylko dla właściciela instancji (gate w diagnostics/page.tsx + twardy gate w Server Action).
+// #671 (modernizacja): Server Actions + useOptimistic — tabela reaguje NATYCHMIAST (rollback przy
+// błędzie), bez ręcznego fetch('/api/...')/JSON. Spójne z DevReset (hardcoded PL — narzędzie owner).
 import { Gift, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useOptimistic, useState, useTransition } from 'react';
+import { grantPremiumAction, revokePremiumAction } from '../app/diagnostics/actions';
 
 type Row = {
   guildId: string;
@@ -17,47 +18,70 @@ type Row = {
   active: boolean;
 };
 
+type Op =
+  | { kind: 'grant'; guildId: string; until: string | null }
+  | { kind: 'revoke'; guildId: string };
+
 const day = (iso: string | null) => (iso ? iso.slice(0, 10) : '—');
+const DAY_MS = 86_400_000;
 
 export default function PremiumAdmin({ rows }: { rows: Row[] }) {
-  const router = useRouter();
   const [guildId, setGuildId] = useState('');
   const [days, setDays] = useState('');
-  const [st, setSt] = useState<'idle' | 'busy' | 'ok' | 'err'>('idle');
-  const [msg, setMsg] = useState('');
+  const [err, setErr] = useState('');
+  const [pending, startTransition] = useTransition();
+
+  // Optymistyczny widok tabeli — zsynchronizuje się z serwerem po revalidatePath w akcji.
+  const [optimisticRows, applyOptimistic] = useOptimistic(rows, (state, op: Op) => {
+    if (op.kind === 'revoke') return state.filter((r) => r.guildId !== op.guildId);
+    const row: Row = {
+      guildId: op.guildId,
+      name: state.find((r) => r.guildId === op.guildId)?.name ?? null,
+      source: 'manual',
+      since: new Date().toISOString(),
+      until: op.until,
+      grantedBy: null,
+      active: true,
+    };
+    return state.some((r) => r.guildId === op.guildId)
+      ? state.map((r) => (r.guildId === op.guildId ? row : r))
+      : [row, ...state];
+  });
 
   const validId = /^\d{15,25}$/.test(guildId.trim());
 
-  async function call(action: 'grant' | 'revoke', gid: string, d?: number) {
-    setSt('busy');
-    setMsg('');
-    try {
-      const r = await fetch('/api/dev/premium', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, guildId: gid, days: d }),
+  function grant() {
+    const gid = guildId.trim();
+    const d = Number(days) || 0;
+    if (!validId || pending) return;
+    setErr('');
+    startTransition(async () => {
+      applyOptimistic({
+        kind: 'grant',
+        guildId: gid,
+        until: d > 0 ? new Date(Date.now() + d * DAY_MS).toISOString() : null,
       });
-      const j = (await r.json()) as { ok?: boolean; error?: string };
-      if (r.ok && j.ok) {
-        setSt('ok');
-        setMsg(
-          action === 'grant'
-            ? `✓ Nadano Premium serwerowi ${gid}.`
-            : `✓ Odebrano Premium serwerowi ${gid}.`,
-        );
-        if (action === 'grant') {
-          setGuildId('');
-          setDays('');
-        }
-        router.refresh();
-      } else {
-        setSt('err');
-        setMsg(j.error || `Błąd ${r.status}`);
+      try {
+        await grantPremiumAction(gid, d);
+        setGuildId('');
+        setDays('');
+      } catch (e) {
+        setErr((e as Error).message);
       }
-    } catch (e) {
-      setSt('err');
-      setMsg((e as Error).message);
-    }
+    });
+  }
+
+  function revoke(gid: string) {
+    if (pending) return;
+    setErr('');
+    startTransition(async () => {
+      applyOptimistic({ kind: 'revoke', guildId: gid });
+      try {
+        await revokePremiumAction(gid);
+      } catch (e) {
+        setErr((e as Error).message);
+      }
+    });
   }
 
   return (
@@ -94,20 +118,18 @@ export default function PremiumAdmin({ rows }: { rows: Row[] }) {
           </label>
           <button
             type="button"
-            onClick={() => call('grant', guildId.trim(), Number(days) || 0)}
-            disabled={!validId || st === 'busy'}
+            onClick={grant}
+            disabled={!validId || pending}
             className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {st === 'busy' ? 'Zapisuję…' : 'Nadaj Premium'}
+            {pending ? 'Zapisuję…' : 'Nadaj Premium'}
           </button>
         </div>
-        {msg && (
-          <p className={`mt-2 text-sm ${st === 'err' ? 'text-accent' : 'text-green-400'}`}>{msg}</p>
-        )}
+        {err && <p className="mt-2 text-sm text-accent">{err}</p>}
       </div>
 
       {/* Lista subskrypcji */}
-      {rows.length === 0 ? (
+      {optimisticRows.length === 0 ? (
         <p className="rounded-xl border border-line bg-bg/40 p-4 text-sm text-muted">
           Brak serwerów Premium. Nadaj ręcznie powyżej albo poczekaj na zakup przez Stripe.
         </p>
@@ -126,7 +148,7 @@ export default function PremiumAdmin({ rows }: { rows: Row[] }) {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {optimisticRows.map((r) => (
                 <tr key={r.guildId} className="border-t border-line/60 align-middle">
                   <td className="px-3 py-2">
                     <div className="font-medium text-white">{r.name || '—'}</div>
@@ -154,8 +176,8 @@ export default function PremiumAdmin({ rows }: { rows: Row[] }) {
                   <td className="px-3 py-2 text-end">
                     <button
                       type="button"
-                      onClick={() => call('revoke', r.guildId)}
-                      disabled={st === 'busy'}
+                      onClick={() => revoke(r.guildId)}
+                      disabled={pending}
                       className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs text-muted transition hover:border-accent/50 hover:text-accent disabled:opacity-40"
                     >
                       <Trash2 size={13} /> Odbierz
