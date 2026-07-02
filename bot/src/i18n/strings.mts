@@ -13,6 +13,7 @@ import { CARDS_STRINGS } from './strings.cards.mts';
 import { CLAN_STRINGS } from './strings.clan.mts';
 import { CTX_STRINGS } from './strings.ctx.mts';
 import { ECO_STRINGS } from './strings.eco.mts';
+import { EMOJI_STRINGS } from './strings.emoji.mts';
 import { ERRORS_STRINGS } from './strings.errors.mts';
 import { FAREWELL_STRINGS } from './strings.farewell.mts';
 import { FUN2_STRINGS } from './strings.fun2.mts';
@@ -430,6 +431,7 @@ for (const l of LOCALES) {
   Object.assign(DICTS[l], CLAN_STRINGS[l]);
   Object.assign(DICTS[l], CTX_STRINGS[l]);
   Object.assign(DICTS[l], ECO_STRINGS[l]);
+  Object.assign(DICTS[l], EMOJI_STRINGS[l]);
   Object.assign(DICTS[l], ERRORS_STRINGS[l]);
   Object.assign(DICTS[l], FAREWELL_STRINGS[l]);
   Object.assign(DICTS[l], FUN2_STRINGS[l]);

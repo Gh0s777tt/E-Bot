@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-671-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.601.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-672-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.602.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.602.0] — 🙂 Komenda /emoji — dodaj/„ukradnij" emoji na serwer
+
+- `[#672]` 🙂 **`/emoji`** — nowa komenda (luka vs Carl-bot: „steal emoji"): dodaje custom emoji na serwer z **wklejonego emoji** (`<:nazwa:id>` — kradzież z innego serwera), **URL-a obrazka** lub **załączonego pliku**; opcjonalna własna `nazwa`. Wymaga „Zarządzania wyrażeniami" (u usera przez default-perms komendy, u bota realnie).
+  - Bot: [`commands/emoji.mts`](bot/src/commands/emoji.mts) — czysty, testowalny rdzeń `resolveEmojiSource` (custom emoji → CDN `png`/`gif` · URL · załącznik; priorytet emoji > URL > plik) + `sanitizeEmojiName` (2–32 znaki `[a-z0-9_]`, dopełnianie/przycinanie). Odpowiedzi i18n ×14 ([`strings.emoji.mts`](bot/src/i18n/strings.emoji.mts)); opis komendy ×14 w `commandDescriptions`; wpis w `/wiki`.
+  - **Bramki:** bot `tsc` 0 · test (bot **893** +`resolveEmojiSource`/`sanitizeEmojiName`, parzystość i18n ×14) · dashboard `tsc` 0 · Biome · `sync:check` — exit 0. Po deployu odśwież komendy (`deploy-commands`), by `/emoji` pojawiło się na Discordzie.
 
 ## [0.601.0] — 🚀 Modernizacja fala 1: Server Actions + optymistyczne UI (Premium)
 

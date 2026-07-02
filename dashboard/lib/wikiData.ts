@@ -222,6 +222,11 @@ export const COMMAND_GROUPS: CommandGroup[] = [
     cmds: [
       { n: '/userinfo', d: 'Informacje o użytkowniku.', s: 'uzytkownik' },
       { n: '/avatar', d: 'Pokaż awatar użytkownika.', s: 'uzytkownik' },
+      {
+        n: '/emoji',
+        d: 'Dodaj/„ukradnij" emoji na serwer (z innego emoji, URL-a obrazka lub pliku).',
+        s: 'emoji · url · plik · nazwa',
+      },
       { n: '/serverinfo', d: 'Informacje o serwerze.' },
       { n: '/ping', d: 'Sprawdź latencję bota.' },
       { n: '/help', d: 'Pomoc — wszystkie komendy pogrupowane.', s: 'szukaj' },

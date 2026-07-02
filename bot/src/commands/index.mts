@@ -25,6 +25,7 @@ import * as describe from './describe.mts';
 import * as dog from './dog.mts';
 import * as donate from './donate.mts';
 import * as economy from './economy.mts';
+import * as emoji from './emoji.mts';
 import * as event from './event.mts';
 import * as farewell from './farewell.mts';
 import * as flip from './flip.mts';
@@ -175,6 +176,7 @@ export const commands: Command[] = [
   search,
   persona,
   avatar,
+  emoji,
   userinfo,
   serverinfo,
   slowmode,
