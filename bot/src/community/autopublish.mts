@@ -9,7 +9,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; channels: string[] };
 const DEFAULT: Cfg = { enabled: false, channels: [] };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['autopublish_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).autopublish_config, DEFAULT);
 }
 
 export function startAutoPublish(client: Client): void {

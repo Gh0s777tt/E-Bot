@@ -61,7 +61,7 @@ async function readCapped(r: Response, max: number): Promise<string> {
 }
 
 export function cfgFor(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['social_feeds_config'];
+  const raw = getGuildSettings(guildId).social_feeds_config;
   try {
     const c = raw ? (JSON.parse(raw) as Partial<Cfg>) : {};
     return { ...DEFAULT, ...c, feeds: Array.isArray(c.feeds) ? c.feeds : [] };

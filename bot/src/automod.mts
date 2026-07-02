@@ -77,7 +77,7 @@ export function isUnsafeRegexPattern(p: unknown): boolean {
 function cfgFor(guildId: string): AutomodCached {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit;
-  const raw = getGuildSettings(guildId)['automod_config'];
+  const raw = getGuildSettings(guildId).automod_config;
   const cfg = raw ? { ...DEFAULT, ...(safeParse(raw) ?? {}) } : { ...DEFAULT };
   const compiled = (cfg.bannedRegex ?? [])
     .map((p) => {

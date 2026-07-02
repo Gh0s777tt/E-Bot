@@ -9,7 +9,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; message: string };
 const DEFAULT: Cfg = { enabled: false, message: '' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['joindm_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).joindm_config, DEFAULT);
 }
 
 // Czysta, testowalna: podstawia placeholdery i przycina do limitu wiadomości DM (2000 znaków).

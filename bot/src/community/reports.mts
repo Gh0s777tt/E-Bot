@@ -20,7 +20,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; channelId: string };
 const DEFAULT: Cfg = { enabled: false, channelId: '' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['reports_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).reports_config, DEFAULT);
 }
 
 // Context-menu „Zgłoś wiadomość" (typ Message) — rejestrowane w deploy-commands obok komend User.

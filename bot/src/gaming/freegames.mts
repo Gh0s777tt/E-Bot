@@ -10,7 +10,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; channelId: string; multiStore?: boolean };
 const DEFAULT: Cfg = { enabled: false, channelId: '', multiStore: false };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['freegames_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).freegames_config, DEFAULT);
 }
 
 const EPIC =

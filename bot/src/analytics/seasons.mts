@@ -19,7 +19,7 @@ const DEFAULT: Cfg = { enabled: false, channelId: '', top: 10, reset: false };
 
 // Etap K — config per-serwer: świeży odczyt (poller miesięczny), fallback global.
 function cfg(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['seasons_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).seasons_config, DEFAULT);
 }
 
 type LevelRow = { user_id: string; username: string | null; xp: number; level: number };

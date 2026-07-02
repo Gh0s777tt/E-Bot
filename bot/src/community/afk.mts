@@ -14,7 +14,7 @@ export function afkEnabled(guildId: string): boolean {
   const e = settingsEpoch();
   const hit = _afkCache.get(guildId);
   if (hit && hit.epoch === e) return hit.v;
-  const raw = getGuildSettings(guildId)['afk_config'];
+  const raw = getGuildSettings(guildId).afk_config;
   let v = false;
   try {
     v = raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;

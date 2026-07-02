@@ -796,3 +796,12 @@ revoke all on function dev_reset_all() from public, anon, authenticated;
 revoke all on function dev_reset_guild(text) from public, anon, authenticated;
 grant execute on function dev_reset_all() to service_role;
 grant execute on function dev_reset_guild(text) to service_role;
+
+-- RLS hardening (#673 audyt): 5 tabel M1 nie miało RLS (reszta ma). Bez polityk = deny-all dla roli
+-- anon (klucz publiczny w bundlu); panel/bot działają przez service_role. Nie włączamy polityk auth.jwt
+-- ze szkicu wyżej — panel używa Discord OAuth, nie Supabase Auth, więc deny-all jest właściwe. Idempotentne.
+alter table guilds enable row level security;
+alter table guild_members enable row level security;
+alter table plugins enable row level security;
+alter table guild_plugins enable row level security;
+alter table plugin_config enable row level security;

@@ -40,7 +40,7 @@ export function parseStarboardConfig(raw: string | undefined): StarboardConfig {
 
 // Etap K — config per-serwer: świeży odczyt (kanał starboardu i tak per-serwer), fallback global.
 function cfg(guildId: string): StarboardConfig {
-  return parseStarboardConfig(getGuildSettings(guildId)['starboard_config']);
+  return parseStarboardConfig(getGuildSettings(guildId).starboard_config);
 }
 
 export function emojiMatches(

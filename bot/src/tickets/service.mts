@@ -49,7 +49,7 @@ export function ticketConfig(guildId: string): TicketsConfig {
     slaHours: 0,
     questions: [],
   };
-  const raw = getGuildSettings(guildId)['tickets_config'];
+  const raw = getGuildSettings(guildId).tickets_config;
   try {
     return raw ? { ...def, ...(JSON.parse(raw) as Partial<TicketsConfig>) } : def;
   } catch {

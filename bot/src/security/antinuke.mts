@@ -106,7 +106,7 @@ const cfgCache = new Map<string, { cfg: AntinukeConfig; at: number }>();
 export function getConfig(guildId: string): AntinukeConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 15_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['antinuke'];
+  const raw = getGuildSettings(guildId).antinuke;
   let cfg = structuredClone(DEFAULT_CONFIG);
   if (raw) {
     try {
@@ -185,7 +185,7 @@ export function startAntiNuke(client: Client): void {
       if (cfg.whitelistUsers.includes(executorId)) return;
 
       const member = await guild.members.fetch(executorId).catch(() => null);
-      if (member && member.roles.cache.some((r) => cfg.whitelistRoles.includes(r.id))) return;
+      if (member?.roles.cache.some((r) => cfg.whitelistRoles.includes(r.id))) return;
 
       const key = `${guild.id}:${executorId}:${prot}`;
       const now = Date.now();
@@ -261,7 +261,7 @@ async function sendLog(
 ): Promise<void> {
   if (!cfg.logChannelId) return;
   const ch = await guild.channels.fetch(cfg.logChannelId).catch(() => null);
-  if (!ch || !ch.isTextBased()) return;
+  if (!ch?.isTextBased()) return;
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
     .setTitle('🛡️ Anti-Nuke — wykryto zagrożenie')
@@ -283,7 +283,7 @@ async function sendBypassLog(
 ): Promise<void> {
   if (!cfg.logChannelId) return;
   const ch = await guild.channels.fetch(cfg.logChannelId).catch(() => null);
-  if (!ch || !ch.isTextBased()) return;
+  if (!ch?.isTextBased()) return;
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
     .setTitle('🛡️ Anti-Nuke — próba zdjęcia kwarantanny')

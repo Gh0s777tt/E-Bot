@@ -32,7 +32,7 @@ const DEF: WelcomeConfig = { enabled: false, channelId: '', message: '', autorol
 // Etap K — config per-serwer: czytany ŚWIEŻO przy każdym wejściu (rzadkie zdarzenie, więc bez
 // cache). getGuildSettings nadpisuje globalny welcome_config override'em serwera (fallback global).
 function loadConfig(guildId: string): WelcomeConfig {
-  const raw = getGuildSettings(guildId)['welcome_config'];
+  const raw = getGuildSettings(guildId).welcome_config;
   if (!raw) return { ...DEF };
   try {
     return { ...DEF, ...(JSON.parse(raw) as Partial<WelcomeConfig>) };

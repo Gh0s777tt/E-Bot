@@ -34,7 +34,7 @@ const DEFAULT: Cfg = {
 let cfg: Cfg = { ...DEFAULT };
 
 function refresh(): void {
-  const raw = getSettings()['eco_season_config'];
+  const raw = getSettings().eco_season_config;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<Cfg>) } : { ...DEFAULT };
   } catch {

@@ -18,7 +18,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; all: boolean; roles: string[] };
 const DEFAULT: Cfg = { enabled: false, all: false, roles: [] };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['stickyroles_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).stickyroles_config, DEFAULT);
 }
 
 type Snap = { u: string; r: string[]; at: number };

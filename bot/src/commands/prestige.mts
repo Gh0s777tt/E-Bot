@@ -10,7 +10,7 @@ import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 
 function prestigeCfg(guildId: string): { enabled: boolean; level: number; roleId: string } {
-  const raw = getGuildSettings(guildId)['leveling_config'];
+  const raw = getGuildSettings(guildId).leveling_config;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {

@@ -12,7 +12,7 @@ import { weekKey } from '../lib/weekKey.mts';
 type Cfg = { on: boolean; channelId: string; aiRecap: boolean };
 // Etap K — config per-serwer: świeży odczyt (poller tygodniowy), fallback global.
 function cfg(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['digest_config'];
+  const raw = getGuildSettings(guildId).digest_config;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return { on: !!c.enabled, channelId: String(c.channelId || ''), aiRecap: !!c.aiRecap };

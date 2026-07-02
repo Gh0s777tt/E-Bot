@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-672-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.602.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-673-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.603.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,17 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.603.0] — 🧹 Remediacja audytu #673 — RLS (12→5), lint, README, coverage, test parytetu landingu
+
+- `[#673]` 🧹 **Remediacja samo-audytu** ([`AUDIT_REPORT.md`](AUDIT_REPORT.md)) — po przejściu read-only wykonano naprawy; **dwa ustalenia skorygowane** (błędy po stronie audytu), reszta domknięta:
+  - **RLS — sprostowanie 12 → 5 tabel.** Regex audytu (pojedyncza spacja) fałszywie oskarżył 7 tabel z wyrównanym `alter table   x   enable rls`; weryfikacja tolerująca białe znaki: `_ALL.sql` = **48 create / 43 z RLS / 5 bez**. Realnie bez RLS było **tylko 5 tabel M1** (`guilds, guild_members, plugins, guild_plugins, plugin_config`) — pozostałe 7 (`user_levels, tickets, ai_usage, reminders, giveaways, economy_shop, birthdays`) miało RLS od początku. Dopisany idempotentny `enable row level security` do [`_ALL.sql`](dashboard/scripts/_ALL.sql) **i** [`m1-marketplace-schema.sql`](dashboard/scripts/m1-marketplace-schema.sql) (deny-all dla `anon`; panel/bot przez `service_role`). **Do uruchomienia w Supabase → SQL Editor** (DDL nie idzie przez PostgREST) — jedyna część po stronie właściciela.
+  - **Lint (#2)** — błędy biome `useLiteralKeys` (`obj['k']`→`obj.k`) + 1× `useOptionalChain` w rdzeniu bota (community/commands/analytics/cloud/security) i 2 plikach panelu — naprawione, `typecheck` ×4 zielony. **Pozostałe błędy biome są WYŁĄCZNIE w `bot/src/setup/`** (empire-hub, ghost-* — osobny tor provisioningu; nie ruszam): właściciel domyka `pnpm exec biome check --write --unsafe bot/src/setup`.
+  - **README (#4)** — „Szybki start" przełączony `npm` → `pnpm` (root `pnpm install` + `pnpm --filter …`); chroni `overrides` postcss/undici.
+  - **Coverage (#7)** — dodany `@vitest/coverage-v8` + skrypt `pnpm test:coverage` + progi-ratchet pod baseline (stmts 34% · br 30% · fn 33% · ln 36%), gate zielony (`coverage/` gitignored).
+  - **Test parytetu landingu (usprawnienie #6)** — nowy [`landingI18n.parity.test.ts`](dashboard/lib/landingI18n.parity.test.ts) (LANDING ×14, 16 asercji) — analogiczny do `panelI18n.parity`; parytet okazał się pełny, teraz zamrożony przed cichą regresją kluczy.
+  - **Fałszywy pozytyw (#9)** — „stray console" w `lib/` to sam sink loggera (`log.mts` — JSON-lines na Railway); nic do naprawy. Higiena: usunięta martwa gałąź `feat/role-dropdowns`, otagowane wydania.
+  - **Bramki:** `typecheck` ×4 · `test` **1239** (+16 parytet landingu) · `schema:check` (49 tabel) · `docs:check` — exit 0.
 
 ## [0.602.0] — 🙂 Komenda /emoji — dodaj/„ukradnij" emoji na serwer
 

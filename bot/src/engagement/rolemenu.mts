@@ -14,7 +14,7 @@ export type RoleMenuConfig = { message: string; placeholder: string; options: Ro
 
 // Etap K — config per-serwer: świeży odczyt (komenda /rolemenu + handler select), fallback global.
 export function roleMenuConfig(guildId: string): RoleMenuConfig {
-  const raw = getGuildSettings(guildId)['rolemenu_config'];
+  const raw = getGuildSettings(guildId).rolemenu_config;
   try {
     const c = raw ? (JSON.parse(raw) as Partial<RoleMenuConfig>) : {};
     return {

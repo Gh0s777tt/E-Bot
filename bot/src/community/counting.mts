@@ -13,7 +13,7 @@ function cfg(guildId: string): Cfg {
   const e = settingsEpoch();
   const hit = _cntCache.get(guildId);
   if (hit && hit.epoch === e) return hit.v;
-  const raw = getGuildSettings(guildId)['counting_config'];
+  const raw = getGuildSettings(guildId).counting_config;
   let v: Cfg;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};

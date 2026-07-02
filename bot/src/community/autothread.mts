@@ -8,7 +8,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; channels: string[]; nameTemplate: string };
 const DEFAULT: Cfg = { enabled: false, channels: [], nameTemplate: '{user} — {date}' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['autothread_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).autothread_config, DEFAULT);
 }
 
 function threadName(template: string, msg: Message): string {

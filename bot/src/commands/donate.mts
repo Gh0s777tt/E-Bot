@@ -21,7 +21,7 @@ export const data = new SlashCommandBuilder()
 
 function cfg(): Cfg {
   try {
-    return JSON.parse(getSettings()['donate_config'] || '{}') as Cfg;
+    return JSON.parse(getSettings().donate_config || '{}') as Cfg;
   } catch {
     return {};
   }

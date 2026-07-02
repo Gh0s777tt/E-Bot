@@ -61,7 +61,7 @@ const DEFAULT: Cfg = {
   apps: [],
 };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['patchnotes_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).patchnotes_config, DEFAULT);
 }
 
 // Znormalizowany feed (z items + legacy apps) gotowy do pobrania i publikacji.

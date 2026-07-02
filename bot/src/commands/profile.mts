@@ -18,7 +18,7 @@ import { getGuildSettings } from '../lib/db.mts';
 const ACCENT = 0xe50914;
 
 function rankStyle(guildId: string): Partial<CardStyle> {
-  const raw = getGuildSettings(guildId)['rankcard_config'];
+  const raw = getGuildSettings(guildId).rankcard_config;
   try {
     return raw ? (JSON.parse(raw) as Partial<CardStyle>) : {};
   } catch {

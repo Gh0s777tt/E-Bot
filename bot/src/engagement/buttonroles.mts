@@ -14,7 +14,7 @@ export type BtnRole = { label: string; roleId: string; emoji?: string };
 
 // Etap K — config per-serwer: świeży odczyt (komenda /buttonpanel), fallback global.
 export function buttonRolesConfig(guildId: string): { message: string; buttons: BtnRole[] } {
-  const raw = getGuildSettings(guildId)['buttonroles_config'];
+  const raw = getGuildSettings(guildId).buttonroles_config;
   try {
     const c = raw ? (JSON.parse(raw) as { message?: string; buttons?: BtnRole[] }) : {};
     return {

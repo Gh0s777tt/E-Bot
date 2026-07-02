@@ -18,7 +18,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean };
 const DEFAULT: Cfg = { enabled: false };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['quotelink_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).quotelink_config, DEFAULT);
 }
 
 export type MsgLink = { guildId: string; channelId: string; messageId: string };

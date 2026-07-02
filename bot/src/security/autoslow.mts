@@ -31,7 +31,7 @@ const DEFAULT: AutoslowCfg = {
 };
 
 function cfgFor(guildId: string): AutoslowCfg {
-  return mergeConfig(getGuildSettings(guildId)['autoslow_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).autoslow_config, DEFAULT);
 }
 
 // Czysta, testowalna: ile slowmode (s) przy `count` wiadomościach w oknie. Skok co krotność progu:

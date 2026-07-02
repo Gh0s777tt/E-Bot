@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     // Logowanie WYŁĄCZNIE do odwołań (z /p/appeal): wydaj lekką tożsamość w OSOBNYM ciasteczku
     // 'ebot_appeal' (podpisana sesja bez roli = zero dostępu do panelu) i wróć na stronę odwołania.
     // Pomija bramkę ról — banowany zwykły użytkownik też się zidentyfikuje.
-    const nextRaw = cookies['ebot_oauth_next'] ?? '';
+    const nextRaw = cookies.ebot_oauth_next ?? '';
     if (nextRaw.startsWith('/p/appeal')) {
       const appealTok = await signSession(
         { uid: user.id, uname: user.global_name || user.username, exp: Date.now() + 3600 * 1000 },

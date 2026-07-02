@@ -32,7 +32,7 @@ const owners = new Map<string, string>(); // channelId -> ownerId
 
 // Etap K — config per-serwer: świeży odczyt (hub-channel ID i tak per-serwer), fallback global.
 function cfg(guildId: string): { on: boolean; hubId: string; categoryId: string; nameTpl: string } {
-  const raw = getGuildSettings(guildId)['tempvoice_config'];
+  const raw = getGuildSettings(guildId).tempvoice_config;
   try {
     const c = raw
       ? (JSON.parse(raw) as {

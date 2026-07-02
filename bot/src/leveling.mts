@@ -78,7 +78,7 @@ const cfgCache = new Map<string, { cfg: LevelingConfig; at: number }>();
 function cfgFor(guildId: string): LevelingConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['leveling_config'];
+  const raw = getGuildSettings(guildId).leveling_config;
   let cfg: LevelingConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<LevelingConfig>) } : { ...DEFAULT };

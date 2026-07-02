@@ -10,7 +10,7 @@ export type AutoreactRule = { channelId: string; emojis: string[] };
 type Cfg = { enabled: boolean; rules: AutoreactRule[] };
 const DEFAULT: Cfg = { enabled: false, rules: [] };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['autoreact_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).autoreact_config, DEFAULT);
 }
 
 // Czysta, testowalna: reakcje skonfigurowane dla kanału (max 6, by nie wpaść w limity reakcji/rate).

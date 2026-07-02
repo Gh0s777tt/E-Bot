@@ -20,12 +20,14 @@
     "sync:check": "node scripts/check-docs-sync.mjs && node scripts/check-schema-sync.mjs && node scripts/check-env-sync.mjs",
     "typecheck": "pnpm -r --if-present run typecheck",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.1",
     "@playwright/test": "^1.61.1",
+    "@vitest/coverage-v8": "4.1.9",
     "vitest": "^4.1.9"
   }
 }

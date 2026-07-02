@@ -10,7 +10,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; channelId: string };
 const DEFAULT: Cfg = { enabled: false, channelId: '' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['pricetracker_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).pricetracker_config, DEFAULT);
 }
 
 const BASE = 'https://api.isthereanydeal.com';

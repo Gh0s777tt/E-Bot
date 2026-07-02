@@ -18,7 +18,7 @@ const DEFAULT: SuggestionsConfig = { enabled: false, channelId: '', anonymous: f
 
 // Etap K — config per-serwer: czytany świeżo dla danego serwera (komenda = niska częstotliwość).
 export function suggestionsConfig(guildId: string): SuggestionsConfig {
-  return mergeConfig(getGuildSettings(guildId)['suggestions_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).suggestions_config, DEFAULT);
 }
 
 export const STATUS = {

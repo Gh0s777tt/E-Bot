@@ -19,7 +19,7 @@ type TicketsConfig = {
 };
 
 function readConfig(guildId: string): TicketsConfig {
-  const raw = getGuildSettings(guildId)['tickets_config'];
+  const raw = getGuildSettings(guildId).tickets_config;
   const def: TicketsConfig = {
     enabled: false,
     supportRoleId: '',

@@ -22,7 +22,7 @@ const DEFAULT: AiConfig = {
 };
 
 export function aiConfig(): AiConfig {
-  const raw = getSettings()['ai_config'];
+  const raw = getSettings().ai_config;
   if (!raw) return DEFAULT;
   try {
     return { ...DEFAULT, ...(JSON.parse(raw) as Partial<AiConfig>) };

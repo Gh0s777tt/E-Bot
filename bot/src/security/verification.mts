@@ -38,7 +38,7 @@ const DEFAULT: VerificationConfig = {
 
 // Etap K — config per-serwer: czytamy świeżo (low-freq: klik/komenda), fallback global.
 export function verifyConfig(guildId: string): VerificationConfig {
-  return mergeConfig(getGuildSettings(guildId)['verification_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).verification_config, DEFAULT);
 }
 
 // Porównanie hasła weryfikacji (tryb 'phrase'): trim + nieczułość na wielkość liter PO OBU STRONACH.

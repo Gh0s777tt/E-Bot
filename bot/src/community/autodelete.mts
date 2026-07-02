@@ -10,7 +10,7 @@ export type AutodeleteRule = { channelId: string; minutes: number };
 type Cfg = { rules: AutodeleteRule[] };
 const DEFAULT: Cfg = { rules: [] };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['autodelete_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).autodelete_config, DEFAULT);
 }
 
 // Discord bulkDelete kasuje hurtem wyłącznie wiadomości młodsze niż 14 dni — starsze pomijamy.

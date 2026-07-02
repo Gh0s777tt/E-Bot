@@ -21,7 +21,7 @@ const cfgCache = new Map<string, { cfg: ResponderConfig; at: number }>();
 function cfgFor(guildId: string): ResponderConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['responder_config'];
+  const raw = getGuildSettings(guildId).responder_config;
   let cfg: ResponderConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ResponderConfig>) } : { ...DEFAULT };

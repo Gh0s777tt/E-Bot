@@ -20,7 +20,7 @@ function rules(guildId: string): Rule[] {
   const e = settingsEpoch();
   const hit = _autoCache.get(guildId);
   if (hit && hit.epoch === e) return hit.v;
-  const raw = getGuildSettings(guildId)['automations_config'];
+  const raw = getGuildSettings(guildId).automations_config;
   let v: Rule[] = [];
   try {
     const c = raw ? (JSON.parse(raw) as { enabled?: boolean; rules?: Rule[] }) : {};

@@ -13,7 +13,7 @@ const DEFAULT: Cfg = {
   message: '🎉 Osiągnęliśmy **{count}** członków! Witaj {user} 🎊',
 };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['milestones_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).milestones_config, DEFAULT);
 }
 
 export function startMilestones(client: Client): void {

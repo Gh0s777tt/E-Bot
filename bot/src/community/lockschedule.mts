@@ -16,7 +16,7 @@ type Cfg = {
 };
 const DEFAULT: Cfg = { enabled: false, channels: [], lockHour: 23, unlockHour: 7, tz: 0 };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['lockschedule_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).lockschedule_config, DEFAULT);
 }
 
 // Czysta, testowalna: czy `hour` mieści się w oknie blokady [lockHour, unlockHour). Obsługuje okno

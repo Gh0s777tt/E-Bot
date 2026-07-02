@@ -7,7 +7,7 @@ let lastAlert = 0;
 
 function alertChannelId(): string {
   const s = getSettings();
-  return s['alert_channel_id'] || s['notify_channel_id'] || '';
+  return s.alert_channel_id || s.notify_channel_id || '';
 }
 
 export async function notifyError(client: Client, label: string, err: unknown): Promise<void> {

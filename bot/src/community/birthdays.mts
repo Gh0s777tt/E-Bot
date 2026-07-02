@@ -16,7 +16,7 @@ const DEFAULT: BirthdayConfig = {
 };
 // Etap K — config per-serwer: czytany świeżo dla danego serwera (poller godzinny = niska częstotliwość).
 function cfgFor(guildId: string): BirthdayConfig {
-  return mergeConfig(getGuildSettings(guildId)['birthday_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).birthday_config, DEFAULT);
 }
 
 async function tick(client: Client): Promise<void> {

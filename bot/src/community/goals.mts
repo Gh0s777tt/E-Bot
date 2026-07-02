@@ -17,7 +17,7 @@ const DEFAULT: Cfg = {
   reward: '',
 };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['goals_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).goals_config, DEFAULT);
 }
 
 // Czysta: cel osiągnięty, gdy target dodatni i suma ≥ target. (Testowalna bez IO.)

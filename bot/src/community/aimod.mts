@@ -47,7 +47,7 @@ const cfgCache = new Map<string, { cfg: AiModConfig; at: number }>();
 function cfgFor(guildId: string): AiModConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['aimod_config'];
+  const raw = getGuildSettings(guildId).aimod_config;
   let cfg: AiModConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<AiModConfig>) } : { ...DEFAULT };

@@ -18,7 +18,7 @@ const STATUS: Record<string, string> = {
 };
 
 function enabled(): boolean {
-  const raw = getSettings()['backlog_config'];
+  const raw = getSettings().backlog_config;
   try {
     return raw ? !!(JSON.parse(raw) as { enabled?: boolean }).enabled : false;
   } catch {

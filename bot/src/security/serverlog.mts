@@ -54,7 +54,7 @@ const cfgCache = new Map<string, { cfg: LoggingConfig; at: number }>();
 export function cfgFor(guildId: string): LoggingConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['logging_config'];
+  const raw = getGuildSettings(guildId).logging_config;
   let cfg: LoggingConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<LoggingConfig>) } : { ...DEFAULT };

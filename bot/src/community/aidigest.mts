@@ -9,7 +9,7 @@ import { log } from '../lib/log.mts';
 
 type Cfg = { on: boolean; sourceId: string; targetId: string; hour: number };
 function cfgFor(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['aidigest_config'];
+  const raw = getGuildSettings(guildId).aidigest_config;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {

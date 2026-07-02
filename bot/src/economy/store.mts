@@ -45,7 +45,7 @@ export const ECO_DEFAULT: EcoConfig = {
 // Etap K — config ekonomii PER-SERWER: czytany świeżo dla danego serwera (komendy = niska
 // częstotliwość). getGuildSettings nadpisuje globalny economy_config override'em serwera (fallback).
 export function ecoConfig(guildId: string): EcoConfig {
-  const raw = getGuildSettings(guildId)['economy_config'];
+  const raw = getGuildSettings(guildId).economy_config;
   try {
     return raw
       ? { ...ECO_DEFAULT, ...(JSON.parse(raw) as Partial<EcoConfig>) }

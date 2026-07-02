@@ -13,7 +13,7 @@ import { cloudSelect, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 
 function rankStyle(guildId: string): Partial<CardStyle> {
-  const raw = getGuildSettings(guildId)['rankcard_config'];
+  const raw = getGuildSettings(guildId).rankcard_config;
   try {
     return raw ? (JSON.parse(raw) as Partial<CardStyle>) : {};
   } catch {

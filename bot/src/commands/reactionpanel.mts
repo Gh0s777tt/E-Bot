@@ -21,7 +21,7 @@ export const data = new SlashCommandBuilder()
 
 function readPanel(): Panel {
   try {
-    return JSON.parse(getSettings()['reaction_role_panel'] || '{}') as Panel;
+    return JSON.parse(getSettings().reaction_role_panel || '{}') as Panel;
   } catch {
     return {};
   }

@@ -17,7 +17,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean };
 const DEFAULT: Cfg = { enabled: false };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['flagtranslate_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).flagtranslate_config, DEFAULT);
 }
 
 // Kraj (ISO-2) → polska nazwa języka docelowego. Pokrywa 14 języków bota + kilka popularnych.

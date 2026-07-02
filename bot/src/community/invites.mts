@@ -19,7 +19,7 @@ type Reward = { count: number; roleId: string };
 type Cfg = { on: boolean; logChannelId: string; fakeMinAgeDays: number; rewards: Reward[] };
 // Etap K — config per-serwer: świeży odczyt (nagrody mają roleId — per-serwer), fallback global.
 function cfg(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['invites_config'];
+  const raw = getGuildSettings(guildId).invites_config;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {

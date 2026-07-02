@@ -35,7 +35,7 @@ type CustomCommand = {
 
 // Etap K — definicje per-serwer: panel rejestruje komendy per-guild i zapisuje pod g:<id>:custom_commands.
 function load(guildId: string): CustomCommand[] {
-  const raw = getGuildSettings(guildId)['custom_commands'];
+  const raw = getGuildSettings(guildId).custom_commands;
   try {
     const a = raw ? (JSON.parse(raw) as CustomCommand[]) : [];
     return Array.isArray(a) ? a : [];
@@ -135,7 +135,7 @@ export async function handleCustomCommand(
   // CC 2.0 — warunek roli + akcje (member pobierany raz, reużywany).
   const member = guild ? await guild.members.fetch(interaction.user.id).catch(() => null) : null;
   if (cmd.requiredRoleId) {
-    if (!member || !member.roles.cache.has(cmd.requiredRoleId)) {
+    if (!member?.roles.cache.has(cmd.requiredRoleId)) {
       await interaction.reply({
         content: `⛔ Ta komenda wymaga roli <@&${cmd.requiredRoleId}>.`,
         flags: MessageFlags.Ephemeral,

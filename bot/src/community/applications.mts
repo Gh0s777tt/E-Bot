@@ -43,7 +43,7 @@ const DEFAULT_QS = ['Dlaczego chcesz dołączyć?', 'Co możesz wnieść?'];
 
 // Etap K — config per-serwer: świeży odczyt (low-freq: klik/komenda), fallback global.
 function cfg(guildId: string): Cfg {
-  const raw = getGuildSettings(guildId)['applications_config'];
+  const raw = getGuildSettings(guildId).applications_config;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
     return {

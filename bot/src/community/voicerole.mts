@@ -9,7 +9,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; roleId: string };
 const DEFAULT: Cfg = { enabled: false, roleId: '' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['voicerole_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).voicerole_config, DEFAULT);
 }
 
 // Czysta, testowalna: akcja na przejściu stanu głosu. Wejście do głosu → 'add', wyjście → 'remove',

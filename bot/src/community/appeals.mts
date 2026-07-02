@@ -23,7 +23,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; channelId: string };
 const DEFAULT: Cfg = { enabled: false, channelId: '' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['appeals_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).appeals_config, DEFAULT);
 }
 
 export type Appeal = {
@@ -125,7 +125,7 @@ export async function handleAppealButton(interaction: ButtonInteraction): Promis
   }
   const q = await loadQueue(guild.id);
   const a = q.find((x) => x.id === id);
-  if (!a || a.status !== 'pending') {
+  if (a?.status !== 'pending') {
     await interaction.reply({
       content: 'To odwołanie zostało już rozpatrzone.',
       flags: MessageFlags.Ephemeral,

@@ -27,7 +27,7 @@ function modmailConfig(guildId: string): ModmailConfig {
   const e = settingsEpoch();
   const hit = _mmCache.get(guildId);
   if (hit && hit.epoch === e) return hit.v;
-  const raw = getGuildSettings(guildId)['modmail_config'];
+  const raw = getGuildSettings(guildId).modmail_config;
   let v: ModmailConfig;
   try {
     v = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<ModmailConfig>) } : { ...DEFAULT };

@@ -13,7 +13,7 @@ const cfgCache = new Map<string, { cfg: Cfg; at: number }>();
 function cfgFor(guildId: string): Cfg {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['aihelp_config'];
+  const raw = getGuildSettings(guildId).aihelp_config;
   let cfg: Cfg;
   try {
     const c = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};

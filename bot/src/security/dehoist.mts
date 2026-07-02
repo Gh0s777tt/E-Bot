@@ -15,7 +15,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; fallback: string };
 const DEFAULT: Cfg = { enabled: false, fallback: 'Dehoist' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['dehoist_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).dehoist_config, DEFAULT);
 }
 
 // Czysta, testowalna: nowy pseudonim po usunięciu wiodących znaków „windujących" (nie-litera/cyfra),

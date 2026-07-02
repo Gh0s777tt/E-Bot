@@ -23,7 +23,7 @@ import { log } from '../lib/log.mts';
 const MAX_TEMPBAN_MS = 365 * 86_400_000; // 1 rok
 
 function modlogChannelId(guildId: string): string {
-  const raw = getGuildSettings(guildId)['automod_config'];
+  const raw = getGuildSettings(guildId).automod_config;
   try {
     return raw ? (JSON.parse(raw) as { modlogChannelId?: string }).modlogChannelId || '' : '';
   } catch {

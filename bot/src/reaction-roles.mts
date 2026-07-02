@@ -24,7 +24,7 @@ let panelExclusive = false;
 let panelMsgId = '';
 
 export function refresh(): void {
-  const raw = getSettings()['reaction_roles'];
+  const raw = getSettings().reaction_roles;
   try {
     const a = raw ? (JSON.parse(raw) as unknown) : [];
     rules = Array.isArray(a) ? (a as RR[]) : [];
@@ -32,7 +32,7 @@ export function refresh(): void {
     rules = [];
   }
   try {
-    const p = JSON.parse(getSettings()['reaction_role_panel'] || '{}') as {
+    const p = JSON.parse(getSettings().reaction_role_panel || '{}') as {
       pairs?: Pair[];
       exclusive?: boolean;
     };
@@ -42,7 +42,7 @@ export function refresh(): void {
     panelPairs = [];
     panelExclusive = false;
   }
-  panelMsgId = getSettings()['reaction_role_panel_msg'] || '';
+  panelMsgId = getSettings().reaction_role_panel_msg || '';
 }
 
 export function emojiMatches(

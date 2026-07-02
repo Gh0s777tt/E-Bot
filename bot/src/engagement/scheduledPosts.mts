@@ -22,7 +22,7 @@ type Post = {
 };
 
 function postsFor(guildId: string): Post[] {
-  const raw = getGuildSettings(guildId)['scheduled_posts'];
+  const raw = getGuildSettings(guildId).scheduled_posts;
   try {
     const arr = raw ? (JSON.parse(raw) as Post[]) : [];
     return Array.isArray(arr) ? arr : [];

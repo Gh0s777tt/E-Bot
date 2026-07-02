@@ -17,7 +17,7 @@ import { mergeConfig } from '../lib/mergeConfig.mts';
 type Cfg = { enabled: boolean; emoji: string; roleId: string };
 const DEFAULT: Cfg = { enabled: false, emoji: '📌', roleId: '' };
 function cfgFor(guildId: string): Cfg {
-  return mergeConfig(getGuildSettings(guildId)['pinreact_config'], DEFAULT);
+  return mergeConfig(getGuildSettings(guildId).pinreact_config, DEFAULT);
 }
 
 // Czysta, testowalna: czy reagujący może przypiąć. Puste `requiredRole` → wymagane „Zarządzanie

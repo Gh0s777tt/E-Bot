@@ -57,7 +57,7 @@ const cfgCache = new Map<string, { cfg: AntiRaidConfig; at: number }>();
 function cfgFor(guildId: string): AntiRaidConfig {
   const hit = cfgCache.get(guildId);
   if (hit && Date.now() - hit.at < 30_000) return hit.cfg;
-  const raw = getGuildSettings(guildId)['antiraid_config'];
+  const raw = getGuildSettings(guildId).antiraid_config;
   let cfg: AntiRaidConfig;
   try {
     cfg = raw ? { ...DEFAULT, ...(JSON.parse(raw) as Partial<AntiRaidConfig>) } : { ...DEFAULT };
