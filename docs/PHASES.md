@@ -1,4 +1,4 @@
-<!-- SYNC: v0.605.0 · #675 · 2026-07-03 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.606.0 · #676 · 2026-07-03 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.605.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.606.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.605.0)
+## 🔭 Bieżący tor (v0.606.0)
+
+**🗂️ Discovery B2 — kokpit statusu funkcji (v0.606.0)** — `/modules` (Centrum sterowania) z listy przełączników → kokpit: kafelki-liczniki Wszystkie/Aktywne/**Wymaga konfiguracji**/Wyłączone (klikalny filtr) + kropka statusu per moduł. „Wymaga konfiguracji" = włączone, ale config bez ustawień poza flagą (`getModuleHealth`/`moduleConfigured`) — pokazuje, co user przełączył, ale nie dokończył (audyt P3). i18n ×14. Następne z rankingu discovery: A3 (domknięcie rebrandu + `/economy`), B1 (prowadzona aktywacja), fale 2 A1/A2.
 
 **💳 Discovery A2 — upsell w miejscu limitu (v0.605.0, fala 1/N)** — z audytu produktowego (problem P2, #1 priorytet biznesowy): limit Free pokazywał się dopiero po Zapisz, jako tekst znikający po 4 s. Nowy `UsageMeter` (`dashboard/components/UsageMeter.tsx`) pokazuje proaktywnie „X / N · Free" + **klikalny** `PremiumDialog` na/blisko limitu (i wyłącza „Dodaj"); reużywa `PLAN_LIMITS` + `PremiumDialog`, bez billingu = `null`. Fala 1: `/custom-commands`; reszta limitowanych (respondery/liczniki/menu ról/zaplanowane/sklep) falami. i18n ×14 (`ui.limit.*`). Następne z rankingu discovery: B1 (prowadzona aktywacja), B2 (kokpit statusu funkcji).
 
@@ -261,4 +263,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑03 · v0.605.0 (#675) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑03 · v0.606.0 (#676) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

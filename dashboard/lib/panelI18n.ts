@@ -2360,6 +2360,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Centrum sterowania — włącz lub wyłącz każdy moduł bota jednym kliknięciem. Szczegółową konfigurację znajdziesz pod „konfig" przy module.',
     'ui.modules.active': 'Aktywne moduły:',
     'ui.modules.config': 'konfig',
+    'ui.modules.stAll': 'Wszystkie',
+    'ui.modules.stActive': 'Aktywne',
+    'ui.modules.stNeedsConfig': 'Wymaga konfiguracji',
+    'ui.modules.stOff': 'Wyłączone',
     'ui.modules.saveNote':
       'Zmiany zapisują się od razu (Supabase) i bot stosuje je na żywo (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -4143,6 +4147,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Control center — turn each bot module on or off with one click. Detailed configuration is under “config” next to each module.',
     'ui.modules.active': 'Active modules:',
     'ui.modules.config': 'config',
+    'ui.modules.stAll': 'All',
+    'ui.modules.stActive': 'Active',
+    'ui.modules.stNeedsConfig': 'Needs setup',
+    'ui.modules.stOff': 'Off',
     'ui.modules.saveNote':
       'Changes save instantly (Supabase) and the bot applies them live (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -5947,6 +5955,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Steuerzentrale — schalte jedes Bot-Modul mit einem Klick ein oder aus. Die detaillierte Konfiguration findest du unter „Konfig“ neben jedem Modul.',
     'ui.modules.active': 'Aktive Module:',
     'ui.modules.config': 'Konfig',
+    'ui.modules.stAll': 'Alle',
+    'ui.modules.stActive': 'Aktiv',
+    'ui.modules.stNeedsConfig': 'Einrichtung nötig',
+    'ui.modules.stOff': 'Aus',
     'ui.modules.saveNote':
       'Änderungen werden sofort gespeichert (Supabase) und der Bot wendet sie live an (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -7751,6 +7763,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Centro de control — activa o desactiva cada módulo del bot con un clic. La configuración detallada está bajo «config» junto a cada módulo.',
     'ui.modules.active': 'Módulos activos:',
     'ui.modules.config': 'config',
+    'ui.modules.stAll': 'Todos',
+    'ui.modules.stActive': 'Activos',
+    'ui.modules.stNeedsConfig': 'Requiere configuración',
+    'ui.modules.stOff': 'Apagados',
     'ui.modules.saveNote':
       'Los cambios se guardan al instante (Supabase) y el bot los aplica en vivo (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -9559,6 +9575,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Centro di controllo — attiva o disattiva ogni modulo del bot con un clic. La configurazione dettagliata è sotto «config» accanto a ogni modulo.',
     'ui.modules.active': 'Moduli attivi:',
     'ui.modules.config': 'config',
+    'ui.modules.stAll': 'Tutti',
+    'ui.modules.stActive': 'Attivi',
+    'ui.modules.stNeedsConfig': 'Da configurare',
+    'ui.modules.stOff': 'Disattivi',
     'ui.modules.saveNote':
       'Le modifiche vengono salvate subito (Supabase) e il bot le applica in tempo reale (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -11365,6 +11385,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Centre de contrôle — activez ou désactivez chaque module du bot d’un seul clic. La configuration détaillée se trouve sous « config » à côté de chaque module.',
     'ui.modules.active': 'Modules actifs :',
     'ui.modules.config': 'config',
+    'ui.modules.stAll': 'Tous',
+    'ui.modules.stActive': 'Actifs',
+    'ui.modules.stNeedsConfig': 'À configurer',
+    'ui.modules.stOff': 'Désactivés',
     'ui.modules.saveNote':
       'Les modifications sont enregistrées immédiatement (Supabase) et le bot les applique en direct (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -13162,6 +13186,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Centro de controlo — liga ou desliga cada módulo do bot com um clique. A configuração detalhada está em «config» junto a cada módulo.',
     'ui.modules.active': 'Módulos ativos:',
     'ui.modules.config': 'config',
+    'ui.modules.stAll': 'Todos',
+    'ui.modules.stActive': 'Ativos',
+    'ui.modules.stNeedsConfig': 'Requer configuração',
+    'ui.modules.stOff': 'Desligados',
     'ui.modules.saveNote':
       'As alterações são guardadas de imediato (Supabase) e o bot aplica-as em direto (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -14894,6 +14922,10 @@ export const UI: Record<PanelLocale, Dict> = {
     'ui.modules.intro': '控制中心——一键开启或关闭每个机器人模块。详细配置请见各模块旁的「配置」。',
     'ui.modules.active': '已启用模块：',
     'ui.modules.config': '配置',
+    'ui.modules.stAll': '全部',
+    'ui.modules.stActive': '已启用',
+    'ui.modules.stNeedsConfig': '需要配置',
+    'ui.modules.stOff': '已关闭',
     'ui.modules.saveNote': '更改即时保存（Supabase），机器人实时应用（settings-sync ~60 s）。',
     'ui.lb.intro':
       '来自 Supabase 的服务器实时排行榜。点击玩家可查看其公开卡片。前三名登上领奖台 🥇🥈🥉。',
@@ -16653,6 +16685,10 @@ export const UI: Record<PanelLocale, Dict> = {
       '컨트롤 센터 — 클릭 한 번으로 각 봇 모듈을 켜거나 끕니다. 자세한 설정은 각 모듈 옆의 「설정」에서 확인하세요.',
     'ui.modules.active': '활성화된 모듈:',
     'ui.modules.config': '설정',
+    'ui.modules.stAll': '전체',
+    'ui.modules.stActive': '활성',
+    'ui.modules.stNeedsConfig': '설정 필요',
+    'ui.modules.stOff': '꺼짐',
     'ui.modules.saveNote':
       '변경 사항은 즉시 저장되며(Supabase) 봇이 실시간으로 적용합니다(settings-sync ~60 s).',
     'ui.lb.intro':
@@ -18439,6 +18475,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Центр управления — включайте или выключайте каждый модуль бота одним кликом. Подробную настройку найдёте под «конфиг» рядом с модулем.',
     'ui.modules.active': 'Активные модули:',
     'ui.modules.config': 'конфиг',
+    'ui.modules.stAll': 'Все',
+    'ui.modules.stActive': 'Активные',
+    'ui.modules.stNeedsConfig': 'Требует настройки',
+    'ui.modules.stOff': 'Выключены',
     'ui.modules.saveNote':
       'Изменения сохраняются сразу (Supabase), и бот применяет их вживую (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -20227,6 +20267,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Центр керування — вмикайте або вимикайте кожен модуль бота одним кліком. Детальне налаштування знайдете під «конфіг» біля модуля.',
     'ui.modules.active': 'Активні модулі:',
     'ui.modules.config': 'конфіг',
+    'ui.modules.stAll': 'Усі',
+    'ui.modules.stActive': 'Активні',
+    'ui.modules.stNeedsConfig': 'Потребує налаштування',
+    'ui.modules.stOff': 'Вимкнені',
     'ui.modules.saveNote':
       'Зміни зберігаються одразу (Supabase), і бот застосовує їх наживо (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -22020,6 +22064,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'コントロールセンター — ワンクリックで各ボットモジュールをオン・オフできます。詳細な設定は各モジュール横の「設定」からご確認ください。',
     'ui.modules.active': '有効なモジュール:',
     'ui.modules.config': '設定',
+    'ui.modules.stAll': 'すべて',
+    'ui.modules.stActive': '有効',
+    'ui.modules.stNeedsConfig': '設定が必要',
+    'ui.modules.stOff': '無効',
     'ui.modules.saveNote':
       '変更は即座に保存され（Supabase）、ボットがリアルタイムで適用します（settings-sync ~60 s）。',
     'ui.lb.intro':
@@ -23783,6 +23831,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'مركز التحكم — فعّل أو عطّل كل وحدة من وحدات البوت بنقرة واحدة. تجد الإعداد التفصيلي تحت «الإعداد» بجانب كل وحدة.',
     'ui.modules.active': 'الوحدات النشطة:',
     'ui.modules.config': 'الإعداد',
+    'ui.modules.stAll': 'الكل',
+    'ui.modules.stActive': 'نشِط',
+    'ui.modules.stNeedsConfig': 'يحتاج إعداد',
+    'ui.modules.stOff': 'مُعطّل',
     'ui.modules.saveNote':
       'تُحفظ التغييرات فوراً (Supabase) ويطبّقها البوت مباشرةً (settings-sync ~60 s).',
     'ui.lb.intro':
@@ -25573,6 +25625,10 @@ export const UI: Record<PanelLocale, Dict> = {
       'Pusat kendali — aktifkan atau nonaktifkan setiap modul bot dengan satu klik. Konfigurasi terperinci ada di bawah “konfig” di samping setiap modul.',
     'ui.modules.active': 'Modul aktif:',
     'ui.modules.config': 'konfig',
+    'ui.modules.stAll': 'Semua',
+    'ui.modules.stActive': 'Aktif',
+    'ui.modules.stNeedsConfig': 'Perlu konfigurasi',
+    'ui.modules.stOff': 'Nonaktif',
     'ui.modules.saveNote':
       'Perubahan tersimpan langsung (Supabase) dan bot menerapkannya secara langsung (settings-sync ~60 s).',
     'ui.lb.intro':

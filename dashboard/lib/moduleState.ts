@@ -44,3 +44,45 @@ export async function setModuleEnabled(
   await setConfigSetting(m.settingsKey, JSON.stringify(cfg));
   return { ok: true };
 }
+
+// ── Discovery B2 (#676) — status funkcji do kokpitu (/modules) ────────────────
+// Czy moduł 'json' jest SKONFIGUROWANY (heurystyka): config ma jakikolwiek klucz POZA flagą włączenia.
+// Świeżo przełączony przez Centrum sterowania ma tylko {enabled:true} → „wymaga konfiguracji" (dokładnie
+// pain z audytu P3: włączone, ale nic się nie dzieje). Moduły 'bool' nie mają configu do wypełnienia →
+// zawsze „configured" (to zwykły włącznik). Czyste, testowalne.
+export function moduleConfigured(kind: 'json' | 'bool', path: string, raw: string | null): boolean {
+  if (kind === 'bool') return true;
+  if (!raw) return false;
+  try {
+    const j = JSON.parse(raw) as Record<string, unknown>;
+    return Object.keys(j).some((k) => k !== path);
+  } catch {
+    return false;
+  }
+}
+
+export type ModuleHealth = { enabled: boolean; configured: boolean };
+
+// Stan każdego modułu do kokpitu: enabled (jak getModuleStates) + configured (heurystyka wyżej).
+// JEDNO batchowe zapytanie (jak getModuleStates — anty-N+1).
+export async function getModuleHealth(): Promise<Record<string, ModuleHealth>> {
+  const out: Record<string, ModuleHealth> = {};
+  const settings = await getConfigSettings(MODULES.map((m) => m.settingsKey));
+  for (const m of MODULES) {
+    const raw = settings.get(m.settingsKey) ?? null;
+    const path = m.path ?? 'enabled';
+    let enabled: boolean;
+    if (m.kind === 'bool') {
+      enabled = raw === null || raw === undefined ? !!m.default : raw === '1' || raw === 'true';
+    } else {
+      try {
+        const j = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+        enabled = !!j[path];
+      } catch {
+        enabled = false;
+      }
+    }
+    out[m.key] = { enabled, configured: moduleConfigured(m.kind, path, raw) };
+  }
+  return out;
+}

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-675-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.605.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-676-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.606.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.606.0] — 🗂️ Discovery B2: kokpit statusu funkcji w Centrum sterowania
+
+- `[#676]` 🗂️ **Kokpit statusu funkcji** (Discovery B2, top-5) — `/modules` (Centrum sterowania) zmienione z listy przełączników w kokpit: kafelki-liczniki **Wszystkie / Aktywne / Wymaga konfiguracji / Wyłączone** (klikalny filtr) + kropka statusu przy każdym module. „Wymaga konfiguracji" = moduł włączony, ale config nie ma ustawień poza flagą (świeżo przełączony, nie dokończony — dokładnie pain z audytu **P3**: „włączyłem, a nic się nie dzieje").
+  - Nowe `getModuleHealth()` + czysta heurystyka `moduleConfigured` w [`moduleState.ts`](dashboard/lib/moduleState.ts) — **jedno** batchowe zapytanie (anty-N+1, jak `getModuleStates`). `ControlCenter` zachowuje optymistyczne przełączniki + linki „konfig".
+  - **i18n ×14:** `ui.modules.stAll` / `stActive` / `stNeedsConfig` / `stOff` (parzystość ×14 pod testem).
+  - **Test:** [`moduleState.test.ts`](dashboard/lib/moduleState.test.ts) — `moduleConfigured` (bool zawsze OK; json bez zapisu / tylko flaga → needsConfig; własna ścieżka flagi; zły JSON). Kontekst: [`DISCOVERY_REPORT.md`](DISCOVERY_REPORT.md) (propozycja B2) + [szkic](sketches/sketch-B2-kokpit-statusu.html).
+  - **Bramki:** typecheck ×4 · test **1260** (+6) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.605.0] — 💳 Discovery A2 (fala 1): licznik użycia + upsell w miejscu limitu Free
 
