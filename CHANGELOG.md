@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-674-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.604.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-675-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.605.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.605.0] — 💳 Discovery A2 (fala 1): licznik użycia + upsell w miejscu limitu Free
+
+- `[#675]` 💳 **Upsell w miejscu tarcia zamiast znikającego tekstu** (Discovery A2, fala 1/N; #1 priorytet biznesowy) — limit Free był widoczny dopiero PO kliknięciu Zapisz (403), jako tekst znikający po 4 s, bez licznika (problem P2). Nowy komponent [`UsageMeter`](dashboard/components/UsageMeter.tsx) pokazuje **proaktywnie** pasek „X / N · Free", a na/blisko limitu renderuje **klikalny** [`PremiumDialog`](dashboard/components/PremiumDialog.tsx) (→ Stripe Checkout) i wyłącza „Dodaj", nim user trafi w błąd.
+  - Reużywa `PLAN_LIMITS`/`planLimit` (liczby liczy strona server-side, z env-override) + istniejący `PremiumDialog`. **Bez billingu** (brak Stripe) = `null` (spójnie z `canUsePlugin` — bez paywalla nie naciskamy na Premium). Grandfathering respektowany (`usageLevel`: `ok`/`near`/`over`).
+  - **Fala 1:** wpięte w `/custom-commands` (flagowy zasób limitowany, Free = 10). Pozostałe limitowane (respondery, liczniki, menu ról, zaplanowane, sklep) w kolejnych falach — komponent gotowy, wpięcie mechaniczne (strona przekazuje `tier`/`freeLimit`/`premiumLimit`/`billingOn`).
+  - **i18n ×14:** nowe klucze `ui.limit.reached` / `ui.limit.approaching` (parzystość ×14 pod testem `panelI18n.parity`); reszta etykiet reużyta (`ui.premium.*`).
+  - **Test:** [`UsageMeter.test.ts`](dashboard/components/UsageMeter.test.ts) — progi `usageLevel` (ok/near/over, grandfathering, limit 0). Kontekst: [`DISCOVERY_REPORT.md`](DISCOVERY_REPORT.md) (problem P2, propozycja A2).
+  - **Bramki:** typecheck ×4 · test **1254** (+6) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.604.0] — 🩹 Discovery A1 (fala 1): prawdziwe komunikaty błędu zapisu w panelu
 

@@ -1,18 +1,22 @@
 import { TerminalSquare } from 'lucide-react';
 import CustomCommandsForm from '../../components/CustomCommandsForm';
+import { billingEnabled, getGuildTier } from '../../lib/billing';
 import { getCustomCommands } from '../../lib/customCommands';
-import { getGuildMeta } from '../../lib/guild';
+import { getGuildMeta, getPrimaryGuildId } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
+import { planLimit } from '../../lib/premiumPlan';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CustomCommandsPage() {
-  const [commands, guild, lang] = await Promise.all([
+  const [commands, guild, lang, tier] = await Promise.all([
     getCustomCommands(),
     getGuildMeta(),
     getPanelLocale(),
+    getPrimaryGuildId().then(getGuildTier),
   ]);
+  const billingOn = billingEnabled();
   return (
     <div className="space-y-6">
       <p className="max-w-3xl text-sm text-muted">
@@ -24,7 +28,14 @@ export default async function CustomCommandsPage() {
         <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <TerminalSquare size={16} className="text-accent" /> {tp(lang, 'ui.cc.heading')}
         </h2>
-        <CustomCommandsForm initial={commands} guild={guild} />
+        <CustomCommandsForm
+          initial={commands}
+          guild={guild}
+          tier={tier}
+          freeLimit={planLimit('customCommands', 'free')}
+          premiumLimit={planLimit('customCommands', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
     </div>
   );

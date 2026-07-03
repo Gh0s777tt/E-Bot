@@ -2,6 +2,7 @@
 
 import { ChevronDown, Plus, TerminalSquare, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { CustomAction, CustomCommand } from '../lib/customCommands';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
@@ -9,6 +10,7 @@ import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { RoleSelect } from './pickers';
+import UsageMeter from './UsageMeter';
 
 const inp =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -26,9 +28,17 @@ function newCmd(): CustomCommand {
 export default function CustomCommandsForm({
   initial,
   guild,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
 }: {
   initial: CustomCommand[];
   guild: GuildMeta;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
 }) {
   const { lang } = useLang();
   const [cmds, setCmds] = useState<CustomCommand[]>(initial);
@@ -471,11 +481,20 @@ export default function CustomCommandsForm({
         );
       })}
 
+      <UsageMeter
+        used={cmds.length}
+        freeLimit={freeLimit}
+        premiumLimit={premiumLimit}
+        tier={tier}
+        billingOn={billingOn}
+      />
+
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"
           onClick={add}
-          className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated"
+          disabled={billingOn && tier === 'free' && cmds.length >= freeLimit}
+          className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated disabled:opacity-40"
         >
           <Plus size={15} /> {tp(lang, 'ui.cc.addCmdBtn')}
         </button>
