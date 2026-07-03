@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-680-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.610.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-681-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.611.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.611.0] — 🩺 Discovery C1 (fala 1): baner „Wymaga uwagi" na Pulpicie
+
+- `[#681]` 🩺 **Proaktywna diagnoza działania serwera** (Discovery C1 — najwyżej oceniona pozycja backlogu; pain „nie działa i nie wiem czemu"): nowy baner [`HealthBanner`](dashboard/components/HealthBanner.tsx) na Pulpicie `/` — lista „N rzeczy wymaga uwagi", każda z akcją **„Napraw →"** do właściwej strony. Fala 1 sprawdza: **bot offline** (heartbeat `bot_status` < 120 s, jak `/diagnostics`), **chmura niepodłączona** (`activeSource() === 'none'`), **martwe kanały/role w configach** włączonych modułów (Powitania — kanał + autorola, Logi, Starboard, Tickety — kategoria/log/rola supportu, Auto-czyszczenie — kanały reguł, Powiadomienia live — wspólny kanał) przez porównanie z żywą listą `getGuildMeta()`, oraz agregat **„{n} włączonych modułów czeka na dokończenie konfiguracji"** (reużyty `getModuleHealth` z B2 #676 → link do kokpitu `/modules`). Zdrowy serwer = baner w ogóle się nie renderuje (zero szumu).
+  - **Rdzeń czysty i testowalny:** [`lib/healthIssues.ts`](dashboard/lib/healthIssues.ts) — `detectHealthIssues()` (wejście → posortowana lista: error → warning → info) + `parseBotOnline()`; zbieracz `getHealthIssues()` fail-open (błąd zbierania = brak banera, nie 500) i **bez fałszywych alarmów** (gdy `GuildMeta.ok === false`, kanały/role nie są oceniane; puste ID pomijane — to „niedokończona konfiguracja", nie „usunięte").
+  - **Świadomie odłożone (fala 2):** check uprawnień bota — panel nie zna bitmapy uprawnień (GuildMeta ma tylko id/name/position ról); wymaga rozszerzenia `getGuildMeta` o `/guilds/{id}/members/@me`.
+  - **i18n ×14:** 7 nowych kluczy `ui.health.*` (parzystość pod testem). **Test:** [`healthIssues.test.ts`](dashboard/lib/healthIssues.test.ts) — 10 asercji (offline/cloud, martwy kanał/rola, puste ID, wyłączone moduły, brak GuildMeta, sortowanie, świeżość heartbeatu).
+  - **Bramki:** typecheck ×4 · test **1270** (+10) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.610.0] — 🩹 A1 fala 3 (KOMPLET 54/54): prawdziwe błędy zapisu w całym panelu
 

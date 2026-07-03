@@ -1,4 +1,4 @@
-<!-- SYNC: v0.610.0 · #680 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.611.0 · #681 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.610.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.611.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.610.0)
+## 🔭 Bieżący tor (v0.611.0)
+
+**🩺 Discovery C1 fala 1 — baner „Wymaga uwagi" (v0.611.0)** — Pulpit `/` dostał proaktywną diagnozę: baner z listą problemów („bot offline", „chmura niepodłączona", „moduł {X} wskazuje na skasowany kanał/rolę", „{n} modułów czeka na dokończenie konfiguracji") — każdy z akcją „Napraw →" do właściwej strony; zdrowy serwer = baner niewidoczny. Rdzeń czysty/testowalny (`lib/healthIssues.ts`, +10 testów), zero fałszywych alarmów (bez świeżej `GuildMeta` kanały/role nie są oceniane), i18n ×14 (`ui.health.*`). **Fala 2 (otwarte):** check uprawnień bota — wymaga rozszerzenia `getGuildMeta` o bitmapę z `/guilds/{id}/members/@me`. Pozostałe z backlogu discovery: B1 (decyzja właściciela), A4–A6, B3–B5, C2–C3.
 
 **🩹 Discovery A1 fala 3 — KOMPLET 54/54 (v0.610.0)** — pozostałe 41 formularzy panelu zmigrowane na `saveConfig` (wzorzec #674/#677: helper → `errMsg` → `<SaveButton errorText>`): **wszystkie 54 formularze pokazują teraz prawdziwy powód nieudanego zapisu** (limit planu / „kanał nie istnieje" / brak uprawnień) zamiast generycznego „Błąd zapisu" — **propozycja A1 z discovery DOMKNIĘTA** (razem z A2 w v0.609.0 to komplet top-5 wykonalnych bez decyzji właściciela: A1 ✓ A2 ✓ B2 ✓). Zero nowych kluczy i18n. Otwarte z rankingu discovery: **B1 nadal wstrzymane do decyzji właściciela** (patrz v0.608.0 niżej), potem A4–A6 / B3–B5 / C1–C3.
 
@@ -271,4 +273,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.610.0 (#680) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.611.0 (#681) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

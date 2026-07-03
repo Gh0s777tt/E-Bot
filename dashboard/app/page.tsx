@@ -1,6 +1,7 @@
 import { Clock, Gamepad2, Layers, Plug, UserPlus } from 'lucide-react';
 import AntiraidAlarm from '../components/AntiraidAlarm';
 import GameCard from '../components/GameCard';
+import HealthBanner from '../components/HealthBanner';
 import HealthScoreCard from '../components/HealthScoreCard';
 import Landing from '../components/Landing';
 import LiveServerTiles from '../components/LiveServerTiles';
@@ -10,6 +11,7 @@ import SetupChecklist from '../components/SetupChecklist';
 import StatCard from '../components/StatCard';
 import { activeSource, getGames, getSetupChecklist, getStats } from '../lib/data';
 import { getServerHealth } from '../lib/health';
+import { getHealthIssues } from '../lib/healthIssues';
 import { getAntiraidState, getServerHistory } from '../lib/insights';
 import { getIntegrations } from '../lib/integrations';
 import { botInviteUrl } from '../lib/invite';
@@ -31,7 +33,7 @@ export default async function OverviewPage() {
   const session = await currentSession();
   if (!session) return <Landing inviteUrl={botInviteUrl()} lang={await getPanelLocale()} />;
 
-  const [stats, games, src, integrations, checklist, history, antiraid, health, lang] =
+  const [stats, games, src, integrations, checklist, history, antiraid, health, lang, issues] =
     await Promise.all([
       getStats(),
       getGames(),
@@ -42,6 +44,7 @@ export default async function OverviewPage() {
       getAntiraidState(),
       getServerHealth(),
       getPanelLocale(),
+      getHealthIssues(),
     ]);
   const recent = games.slice(0, 20);
   const okCount = integrations.filter((i) => i.ok).length;
@@ -143,6 +146,9 @@ export default async function OverviewPage() {
 
       {/* ===== SERWER NA ŻYWO (heartbeat bota) ===== */}
       <LiveServerTiles />
+
+      {/* ===== C1: WYMAGA UWAGI (renderuje się tylko przy problemach) ===== */}
+      <HealthBanner issues={issues} lang={lang} />
 
       {/* ===== PULPIT 2.0: HEALTH-SCORE + SZYBKIE AKCJE ===== */}
       <div className="grid gap-4 lg:grid-cols-2">
