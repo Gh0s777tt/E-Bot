@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { AutothreadConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -28,23 +29,17 @@ export default function AutothreadForm({
     (initial.channels ?? []).map((channelId) => ({ k: `c${idRef.current++}`, channelId })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/autothread', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          enabled,
-          nameTemplate,
-          channels: rows.map((x) => x.channelId).filter(Boolean),
-        }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/autothread', {
+      enabled,
+      nameTemplate,
+      channels: rows.map((x) => x.channelId).filter(Boolean),
+    });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -105,7 +100,7 @@ export default function AutothreadForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.autothread.help')}</p>
     </div>
   );

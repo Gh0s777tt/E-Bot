@@ -4,6 +4,7 @@ import { Radio } from 'lucide-react';
 import { useState } from 'react';
 import type { LiveConfig } from '../lib/live';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
 
@@ -22,20 +23,14 @@ export default function LiveConfigForm({ initial }: { initial: LiveConfig }) {
   const { lang } = useLang();
   const [c, setC] = useState<LiveConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
   const anyOn = Object.values(c).some((v) => v.trim().length > 0);
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/live-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/live-config', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -66,7 +61,7 @@ export default function LiveConfigForm({ initial }: { initial: LiveConfig }) {
         ))}
       </div>
       <div className="mt-4">
-        <SaveButton st={st} onClick={save} />
+        <SaveButton st={st} onClick={save} errorText={errMsg} />
       </div>
     </section>
   );

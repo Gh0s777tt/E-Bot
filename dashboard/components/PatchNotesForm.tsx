@@ -6,6 +6,7 @@ import type { PatchItem, PatchNotesConfig } from '../lib/community';
 import { type CatalogEntry, getCatalogEntry, searchCatalog } from '../lib/gameCatalog';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -46,6 +47,7 @@ export default function PatchNotesForm({
   const [customUrl, setCustomUrl] = useState('');
   const [tests, setTests] = useState<Record<string, TestState>>({});
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   const addedSlugs = useMemo(
     () => new Set(rows.map((r) => r.slug).filter(Boolean) as string[]),
@@ -91,24 +93,17 @@ export default function PatchNotesForm({
 
   async function save() {
     setSt('saving');
-    try {
-      const payload = {
-        enabled,
-        channelId,
-        digest,
-        digestHour,
-        aiSummary,
-        items: rows.map(({ k, ...it }) => it).filter((it) => it.name && it.source),
-      };
-      const r = await fetch('/api/patchnotes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload = {
+      enabled,
+      channelId,
+      digest,
+      digestHour,
+      aiSummary,
+      items: rows.map(({ k, ...it }) => it).filter((it) => it.name && it.source),
+    };
+    const res = await saveConfig('/api/patchnotes', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -313,7 +308,7 @@ export default function PatchNotesForm({
         })}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-muted text-xs">{tp(lang, 'ui.gaming.patchHelpV2')}</p>
     </div>
   );

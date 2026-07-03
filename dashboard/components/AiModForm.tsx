@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { AiModConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -21,19 +22,13 @@ export default function AiModForm({ initial, guild }: { initial: AiModConfig; gu
   const { lang } = useLang();
   const [c, setC] = useState<AiModConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/aimod', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/aimod', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -94,7 +89,7 @@ export default function AiModForm({ initial, guild }: { initial: AiModConfig; gu
         <span className="font-semibold text-white/90">{tp(lang, 'ui.mod.aiScanImages')}</span>
       </label>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.mod.aiFooterPre')} <strong>{tp(lang, 'ui.mod.aiFooterStrong')}</strong>{' '}
         {tp(lang, 'ui.mod.aiFooterMid')} <code>OPENAI_API_KEY</code>{' '}

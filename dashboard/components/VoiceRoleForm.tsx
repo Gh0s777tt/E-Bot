@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { VoiceroleConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -19,19 +20,13 @@ export default function VoiceRoleForm({
   const [enabled, setEnabled] = useState(initial.enabled);
   const [roleId, setRoleId] = useState(initial.roleId);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/voicerole', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled, roleId }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/voicerole', { enabled, roleId });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -57,7 +52,7 @@ export default function VoiceRoleForm({
         />
       </label>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.voicerole.help')}</p>
     </div>
   );

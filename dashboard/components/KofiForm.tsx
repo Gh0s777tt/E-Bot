@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { KofiConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useDashboardOrigin } from '../lib/useDashboardOrigin';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
@@ -16,20 +17,14 @@ export default function KofiForm({ initial, guild }: { initial: KofiConfig; guil
   const { lang } = useLang();
   const [c, setC] = useState<KofiConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
   const WEBHOOK_URL = `${useDashboardOrigin()}/api/kofi`;
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/kofi-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/kofi-config', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -82,7 +77,7 @@ export default function KofiForm({ initial, guild }: { initial: KofiConfig; guil
         />
       </label>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
 
       <div className="rounded-lg border border-line bg-bg/40 p-3 text-xs text-muted">
         <p className="mb-1 font-semibold text-white/90">

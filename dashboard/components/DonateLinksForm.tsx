@@ -4,6 +4,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { DonateConfig } from '../lib/community';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
 
@@ -29,27 +30,21 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
     initial.providers.map((p, i) => ({ id: `d${i}`, label: p.label, url: p.url, emoji: p.emoji })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const payload: DonateConfig = {
-        enabled,
-        title,
-        description,
-        providers: rows
-          .map((r) => ({ label: r.label.trim(), url: r.url.trim(), emoji: r.emoji.trim() }))
-          .filter((p) => p.label && /^https?:\/\//i.test(p.url)),
-      };
-      const r = await fetch('/api/donate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload: DonateConfig = {
+      enabled,
+      title,
+      description,
+      providers: rows
+        .map((r) => ({ label: r.label.trim(), url: r.url.trim(), emoji: r.emoji.trim() }))
+        .filter((p) => p.label && /^https?:\/\//i.test(p.url)),
+    };
+    const res = await saveConfig('/api/donate', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -160,7 +155,7 @@ export default function DonateLinksForm({ initial }: { initial: DonateConfig }) 
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.donations.helpPre')}
         <code className="text-accent">/donate</code>

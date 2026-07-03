@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import type { EconomyConfig } from '../lib/serverEconomy';
 import AdvancedOnly from './AdvancedOnly';
 import Hint from './Hint';
@@ -16,19 +17,13 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
   const { lang } = useLang();
   const [c, setC] = useState<EconomyConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/economy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/economy', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -138,7 +133,7 @@ export default function EconomyForm({ initial }: { initial: EconomyConfig }) {
         </div>
       </AdvancedOnly>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
     </div>
   );
 }

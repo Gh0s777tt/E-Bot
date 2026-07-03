@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
 import type { WebhookRelayConfig } from '../lib/integrations';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useDashboardOrigin } from '../lib/useDashboardOrigin';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
@@ -23,20 +24,14 @@ export default function WebhookRelayForm({
   const { lang } = useLang();
   const [c, setC] = useState<WebhookRelayConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
   const BASE = `${useDashboardOrigin()}/api/hook`;
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/webhook-relay', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/webhook-relay', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -124,7 +119,7 @@ export default function WebhookRelayForm({
           </p>
         </div>
 
-        <SaveButton st={st} onClick={save} />
+        <SaveButton st={st} onClick={save} errorText={errMsg} />
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { LockscheduleConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -30,6 +31,7 @@ export default function LockScheduleForm({
     (initial.channels ?? []).map((channelId) => ({ k: `c${idRef.current++}`, channelId })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   const num = (v: string, fb: number, min: number, max: number) => {
     const n = Number.parseInt(v, 10);
@@ -38,22 +40,15 @@ export default function LockScheduleForm({
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/lockschedule', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          enabled,
-          lockHour,
-          unlockHour,
-          tz,
-          channels: rows.map((x) => x.channelId).filter(Boolean),
-        }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/lockschedule', {
+      enabled,
+      lockHour,
+      unlockHour,
+      tz,
+      channels: rows.map((x) => x.channelId).filter(Boolean),
+    });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -144,7 +139,7 @@ export default function LockScheduleForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.lockschedule.help')}</p>
     </div>
   );

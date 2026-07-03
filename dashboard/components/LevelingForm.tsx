@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { LevelingConfig } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import AdvancedOnly from './AdvancedOnly';
 import Hint from './Hint';
 import { useLang } from './LangContext';
@@ -40,26 +41,20 @@ export default function LevelingForm({
   const [noCh, setNoCh] = useState<string[]>(noXpChannels);
   const [noRo, setNoRo] = useState<string[]>(noXpRoles);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const payload: LevelingConfig = {
-        ...b,
-        rewards: rws.map(({ k, ...r }) => r),
-        multipliers: mults.map(({ k, ...m }) => m).filter((m) => m.roleId),
-        noXpChannels: noCh,
-        noXpRoles: noRo,
-      };
-      const r = await fetch('/api/leveling', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload: LevelingConfig = {
+      ...b,
+      rewards: rws.map(({ k, ...r }) => r),
+      multipliers: mults.map(({ k, ...m }) => m).filter((m) => m.roleId),
+      noXpChannels: noCh,
+      noXpRoles: noRo,
+    };
+    const res = await saveConfig('/api/leveling', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -407,7 +402,7 @@ export default function LevelingForm({
         </div>
       </AdvancedOnly>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.levels.footNote')}</p>
     </div>
   );

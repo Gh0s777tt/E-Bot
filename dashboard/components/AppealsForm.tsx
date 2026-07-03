@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { AppealsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -20,6 +21,7 @@ export default function AppealsForm({
   const { lang } = useLang();
   const [c, setC] = useState<AppealsConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
   // Link składamy po stronie klienta (origin), żeby uniknąć niezgodności hydratacji.
   const [link, setLink] = useState(guildId ? `/p/appeal?g=${guildId}` : '');
   useEffect(() => {
@@ -28,16 +30,9 @@ export default function AppealsForm({
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/appeals-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/appeals-config', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -72,7 +67,7 @@ export default function AppealsForm({
         </div>
       )}
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.appeals.help')}</p>
     </div>
   );

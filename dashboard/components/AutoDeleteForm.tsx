@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { AutodeleteConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -28,22 +29,16 @@ export default function AutoDeleteForm({
     })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const rules = rows
-        .map((x) => ({ channelId: x.channelId, minutes: x.minutes }))
-        .filter((x) => x.channelId && x.minutes > 0);
-      const r = await fetch('/api/autodelete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rules }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const rules = rows
+      .map((x) => ({ channelId: x.channelId, minutes: x.minutes }))
+      .filter((x) => x.channelId && x.minutes > 0);
+    const res = await saveConfig('/api/autodelete', { rules });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -101,7 +96,7 @@ export default function AutoDeleteForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.autodelete.help')}</p>
     </div>
   );

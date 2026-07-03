@@ -6,6 +6,7 @@ import type { Application, ApplicationsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
@@ -66,38 +67,32 @@ export default function ApplicationsForm({
         ],
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const applications: Application[] = apps.map((a) => ({
-        id: a.id,
-        label: a.label.trim() || 'Aplikuj',
-        emoji: a.emoji,
-        style: a.style,
-        reviewChannelId: a.reviewChannelId,
-        acceptRoleId: a.acceptRoleId,
-        questions: a.questions.map((x) => x.q.trim()).filter(Boolean),
-      }));
-      const first = applications[0];
-      const payload: ApplicationsConfig = {
-        enabled,
-        panelMessage: panelSpec.content || initial.panelMessage,
-        panelSpec,
-        applications,
-        reviewChannelId: first?.reviewChannelId ?? '',
-        roleId: first?.acceptRoleId ?? '',
-        questions: first?.questions ?? [],
-      };
-      const r = await fetch('/api/applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const applications: Application[] = apps.map((a) => ({
+      id: a.id,
+      label: a.label.trim() || 'Aplikuj',
+      emoji: a.emoji,
+      style: a.style,
+      reviewChannelId: a.reviewChannelId,
+      acceptRoleId: a.acceptRoleId,
+      questions: a.questions.map((x) => x.q.trim()).filter(Boolean),
+    }));
+    const first = applications[0];
+    const payload: ApplicationsConfig = {
+      enabled,
+      panelMessage: panelSpec.content || initial.panelMessage,
+      panelSpec,
+      applications,
+      reviewChannelId: first?.reviewChannelId ?? '',
+      roleId: first?.acceptRoleId ?? '',
+      questions: first?.questions ?? [],
+    };
+    const res = await saveConfig('/api/applications', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -280,7 +275,7 @@ export default function ApplicationsForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.applications.footerPre')}
         <code className="text-accent">/applypanel</code>

@@ -6,6 +6,7 @@ import type { ReactionPanel } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { normalizeRich, type RichMessage } from '../lib/richMessage';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { RoleSelect } from './pickers';
@@ -31,26 +32,20 @@ export default function ReactionRolePanelForm({
   );
   const [exclusive, setExclusive] = useState<boolean>(initial.exclusive ?? false);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const payload: ReactionPanel = {
-        panelSpec: spec,
-        pairs: pairs
-          .map(({ emoji, roleId }) => ({ emoji: emoji.trim(), roleId }))
-          .filter((p) => p.emoji && p.roleId),
-        exclusive,
-      };
-      const r = await fetch('/api/reaction-roles/panel', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload: ReactionPanel = {
+      panelSpec: spec,
+      pairs: pairs
+        .map(({ emoji, roleId }) => ({ emoji: emoji.trim(), roleId }))
+        .filter((p) => p.emoji && p.roleId),
+      exclusive,
+    };
+    const res = await saveConfig('/api/reaction-roles/panel', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -124,7 +119,7 @@ export default function ReactionRolePanelForm({
         <span className="text-white/90">{tp(lang, 'ui.roles.exclusiveLabel')}</span>
       </label>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.roles.panelHelpPre')}
         <code className="text-accent">/reactionpanel</code>

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { SocialFeedsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -30,25 +31,19 @@ export default function SocialFeedsForm({
     initial.feeds.map((f, i) => ({ id: `f${i}`, url: f.url, label: f.label })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const payload: SocialFeedsConfig = {
-        enabled,
-        channelId,
-        message,
-        feeds: rows.map((r) => ({ url: r.url.trim(), label: r.label.trim() })).filter((f) => f.url),
-      };
-      const r = await fetch('/api/social', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload: SocialFeedsConfig = {
+      enabled,
+      channelId,
+      message,
+      feeds: rows.map((r) => ({ url: r.url.trim(), label: r.label.trim() })).filter((f) => f.url),
+    };
+    const res = await saveConfig('/api/social', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -138,7 +133,7 @@ export default function SocialFeedsForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.creator.socialHelp')}</p>
     </div>
   );

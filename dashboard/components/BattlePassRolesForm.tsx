@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BP_TIERS, type TierRole } from '../lib/battlepassTiers';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -23,24 +24,18 @@ export default function BattlePassRolesForm({
     Object.fromEntries(BP_TIERS.map((t) => [t.tier, initMap.get(t.tier) ?? ''])),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const payload = {
-        roles: BP_TIERS.map((t) => ({ tier: t.tier, roleId: roles[t.tier] ?? '' })).filter(
-          (r) => r.roleId,
-        ),
-      };
-      const r = await fetch('/api/battlepass', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload = {
+      roles: BP_TIERS.map((t) => ({ tier: t.tier, roleId: roles[t.tier] ?? '' })).filter(
+        (r) => r.roleId,
+      ),
+    };
+    const res = await saveConfig('/api/battlepass', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -64,7 +59,7 @@ export default function BattlePassRolesForm({
           </div>
         ))}
       </div>
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.bp.footNote')}</p>
     </div>
   );

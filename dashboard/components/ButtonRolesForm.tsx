@@ -4,6 +4,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -23,20 +24,14 @@ export default function ButtonRolesForm({ initial, guild }: { initial: Cfg; guil
     initial.buttons.map((b) => ({ ...b, k: `b${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const payload: Cfg = { message, buttons: rows.map(({ k, ...b }) => b) };
-      const r = await fetch('/api/buttonroles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload: Cfg = { message, buttons: rows.map(({ k, ...b }) => b) };
+    const res = await saveConfig('/api/buttonroles', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -107,7 +102,7 @@ export default function ButtonRolesForm({ initial, guild }: { initial: Cfg; guil
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.engagement.br.footerPre')} <code className="text-accent">/buttonpanel</code>{' '}
         {tp(lang, 'ui.engagement.br.footerPost')}

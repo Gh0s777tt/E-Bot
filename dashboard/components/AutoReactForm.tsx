@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { AutoreactConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -31,29 +32,23 @@ export default function AutoReactForm({
     })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const rules = rows
-        .map((x) => ({
-          channelId: x.channelId,
-          emojis: x.emojiText
-            .split(/[\s,]+/)
-            .map((e) => e.trim())
-            .filter(Boolean)
-            .slice(0, 6),
-        }))
-        .filter((x) => x.channelId && x.emojis.length);
-      const r = await fetch('/api/autoreact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled, rules }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const rules = rows
+      .map((x) => ({
+        channelId: x.channelId,
+        emojis: x.emojiText
+          .split(/[\s,]+/)
+          .map((e) => e.trim())
+          .filter(Boolean)
+          .slice(0, 6),
+      }))
+      .filter((x) => x.channelId && x.emojis.length);
+    const res = await saveConfig('/api/autoreact', { enabled, rules });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -116,7 +111,7 @@ export default function AutoReactForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.autoreact.help')}</p>
     </div>
   );

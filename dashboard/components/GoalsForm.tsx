@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { GoalsConfig } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -15,19 +16,16 @@ export default function GoalsForm({ initial, guild }: { initial: GoalsConfig; gu
   const { lang } = useLang();
   const [c, setC] = useState<GoalsConfig>(initial);
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/goals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...c, target: Math.max(0, Math.floor(c.target) || 0) }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/goals', {
+      ...c,
+      target: Math.max(0, Math.floor(c.target) || 0),
+    });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -89,7 +87,7 @@ export default function GoalsForm({ initial, guild }: { initial: GoalsConfig; gu
         />
       </label>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.goals.help')}</p>
     </div>
   );

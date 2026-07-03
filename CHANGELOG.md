@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-679-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.609.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-680-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.610.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.610.0] — 🩹 A1 fala 3 (KOMPLET 54/54): prawdziwe błędy zapisu w całym panelu
+
+- `[#680]` 🩹 **Discovery A1 fala 3 — pozostałe 41 formularzy zmigrowane na `saveConfig`** (domyka propozycję A1 z [`DISCOVERY_REPORT.md`](DISCOVERY_REPORT.md); problem P1 — panel gubił konkretny `{ error }` z API): AiConfig, AiDigest, AiHelp, AiMod, Appeals, Applications, AutoDelete, AutoReact, Autopublish, Autoslow, Autothread, BattlePassRoles, ButtonRoles, Counting, Creator, Dehoist, Digest, DonateLinks, EcoSeason, Economy, FlagTranslate, Goals, Invites, JoinDm, Kofi, Leveling, LiveConfig, LockSchedule, Milestones, PatchNotes, PinReact, QuoteLink, RankCard, ReactionRolePanel, Reports, Seasons, SocialFeeds, StickyRoles, TwitchSub, VoiceRole, WebhookRelay. Wzorzec 1:1 z #674/#677: helper `saveConfig` → `errMsg` → `<SaveButton errorText>`; zachowane transformacje payloadów (clampy, slice'y, filtry) i drugie fetche (np. „Testuj feed" w PatchNotes — nieruszony). **54/54 formularzy pokazuje prawdziwy powód błędu (limit planu / „kanał nie istnieje" / brak uprawnień) — A1 KOMPLETNE.** Zero nowych kluczy i18n (komunikat dynamiczny z serwera; fallback `ui.saveError` bez zmian).
+  - **Bramki:** typecheck ×4 · test **1260** · Biome (0 błędów na 41 zmienionych plikach; poza `bot/src/setup/` czysto) · `sync:check` — exit 0.
 
 ## [0.609.0] — 💳 A2 fala 3 (KOMPLET 7/7): liczniki upsellu na wszystkich zasobach limitowanych
 

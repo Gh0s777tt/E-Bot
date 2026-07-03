@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import type { InvitesConfig } from '../lib/engagement';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import { ChannelSelect, RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
@@ -31,6 +32,7 @@ export default function InvitesForm({
     initial.rewards.map((r) => ({ ...r, k: `r${idRef.current++}` })),
   );
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   const setRow = (k: string, patch: Partial<Row>) =>
     setRows(rows.map((r) => (r.k === k ? { ...r, ...patch } : r)));
@@ -39,22 +41,15 @@ export default function InvitesForm({
 
   async function save() {
     setSt('saving');
-    try {
-      const payload: InvitesConfig = {
-        enabled,
-        logChannelId,
-        fakeMinAgeDays,
-        rewards: rows.map(({ k, ...r }) => r),
-      };
-      const r = await fetch('/api/invites', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const payload: InvitesConfig = {
+      enabled,
+      logChannelId,
+      fakeMinAgeDays,
+      rewards: rows.map(({ k, ...r }) => r),
+    };
+    const res = await saveConfig('/api/invites', payload);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -140,7 +135,7 @@ export default function InvitesForm({
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">
         {tp(lang, 'ui.engagement.inv.footerPre')}{' '}
         <em>{tp(lang, 'ui.engagement.inv.footerPerm')}</em>{' '}
