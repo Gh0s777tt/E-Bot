@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-677-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.607.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-678-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.608.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.608.0] — 💳 A2 fala 2 (liczniki upsellu na /counters) + B1 wstrzymane do decyzji
+
+- `[#678]` 💳 **Discovery A2 fala 2 — `UsageMeter` na `/counters`** (zasób limitowany `counters`, Free = 3 — najmniejszy limit, gdzie licznik działa najmocniej): proaktywny pasek „X / 3 · Free" + klikalny `PremiumDialog` na/blisko limitu + wyłączenie „Dodaj licznik" przy limicie. Reużywa `UsageMeter` (#675) — strona przekazuje `tier`/`freeLimit`/`premiumLimit`/`billingOn` przez `getGuildTier` + `planLimit` + `billingEnabled`. Zasoby limitowane z upsellem: **2/7** (`/custom-commands`, `/counters`); reszta (respondery/menu ról/zaplanowane/sklep) falami.
+- `[#678]` ℹ️ **B1 (prowadzona aktywacja) — wstrzymane do decyzji właściciela:** pełna wersja B1 tworzy kanały/role na Discordzie, co nakłada się na **osobny tor provisioningu** właściciela (`bot/src/setup/empire-hub`/`ghost-*`/`eforge-*`, którego nie ruszam). Nie buduję generycznego provisioningu bez zgody (ryzyko dublowania/konfliktu). Do rozstrzygnięcia: pełne B1 w nowych plikach · lekkie B1 (guided next-steps bez tworzenia) · pominąć.
+  - **Bramki:** typecheck ×4 · test **1260** · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.607.0] — 🩹 A1 fala 2 (+7 formularzy) + sprostowanie A3 (fałszywy alarm rebrandu)
 

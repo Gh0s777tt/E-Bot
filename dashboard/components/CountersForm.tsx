@@ -2,12 +2,14 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { CounterItem, CountersConfig, CounterType } from '../lib/community';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
 import { ChannelSelect } from './pickers';
 import SaveButton from './SaveButton';
+import UsageMeter from './UsageMeter';
 
 type Row = CounterItem & { k: string };
 
@@ -54,9 +56,17 @@ const needsArg = (t: CounterType) => ARG_TYPES.has(t);
 export default function CountersForm({
   initial,
   guild,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
 }: {
   initial: CountersConfig;
   guild: GuildMeta;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
 }) {
   const { lang } = useLang();
   const [enabled, setEnabled] = useState(initial.enabled);
@@ -111,6 +121,14 @@ export default function CountersForm({
         <span className="font-semibold text-white/90">{tp(lang, 'ui.counters.enabled')}</span>
       </label>
 
+      <UsageMeter
+        used={rows.length}
+        freeLimit={freeLimit}
+        premiumLimit={premiumLimit}
+        tier={tier}
+        billingOn={billingOn}
+      />
+
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-white/90">
@@ -118,6 +136,7 @@ export default function CountersForm({
           </span>
           <button
             type="button"
+            disabled={billingOn && tier === 'free' && rows.length >= freeLimit}
             onClick={() =>
               setRows([
                 ...rows,
@@ -129,7 +148,7 @@ export default function CountersForm({
                 },
               ])
             }
-            className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
+            className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
             <Plus size={12} /> {tp(lang, 'ui.counters.add')}
           </button>

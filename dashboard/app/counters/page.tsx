@@ -1,19 +1,23 @@
 import { Activity } from 'lucide-react';
 import CountersForm from '../../components/CountersForm';
 import StatusPill from '../../components/StatusPill';
+import { billingEnabled, getGuildTier } from '../../lib/billing';
 import { getCountersConfig } from '../../lib/community';
-import { getGuildMeta } from '../../lib/guild';
+import { getGuildMeta, getPrimaryGuildId } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
+import { planLimit } from '../../lib/premiumPlan';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CountersPage() {
-  const [cfg, guild, lang] = await Promise.all([
+  const [cfg, guild, lang, tier] = await Promise.all([
     getCountersConfig(),
     getGuildMeta(),
     getPanelLocale(),
+    getPrimaryGuildId().then(getGuildTier),
   ]);
+  const billingOn = billingEnabled();
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
@@ -27,7 +31,14 @@ export default async function CountersPage() {
             <StatusPill on={cfg.enabled} lang={lang} />
           </span>
         </h2>
-        <CountersForm initial={cfg} guild={guild} />
+        <CountersForm
+          initial={cfg}
+          guild={guild}
+          tier={tier}
+          freeLimit={planLimit('counters', 'free')}
+          premiumLimit={planLimit('counters', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
     </div>
   );
