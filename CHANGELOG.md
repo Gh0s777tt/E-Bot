@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-676-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.606.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-677-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.607.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.607.0] — 🩹 A1 fala 2 (+7 formularzy) + sprostowanie A3 (fałszywy alarm rebrandu)
+
+- `[#677]` 🩹 **Discovery A1 fala 2 — prawdziwe błędy zapisu na kolejnych 7 formularzach** (helper `saveConfig` z #674): `AntiRaid`, `Suggestions`, `Modmail`, `Birthday`, `Starboard`, `TempVoice`, `PriceTracker`. Łącznie **13/54** formularzy pokazuje już konkretny błąd API (limit / „kanał nie istnieje" / brak uprawnień) zamiast generyku; reszta falami.
+- `[#677]` ⚠️ **Sprostowanie A3 — fałszywy alarm** (jak RLS 12→5 w #673): audyt produktowy wskazał „niedokończony rebrand GH0ST EMPIRE→E‑Forge + `/economy` sprzężone z portalem GHOST" (P4). Weryfikacja: rebrand **już zrobiony w kodzie** — [`community.ts:20`](dashboard/lib/community.ts) (seed powitania = „E‑Forge"), [`Footer.tsx:15`](dashboard/components/Footer.tsx) (stopka = „E‑Forge"). „GH0ST EMPIRE" w zrzutach to **dane własnego serwera właściciela** (jego serwer tak się nazywa) lub zrzuty sprzed rebrandu #640. Marka jest **świadomie zachowana** (nazwa ekosystemu/praw autorskich — decyzja #572, `LICENSE`), `/economy` to realna integracja (`bot/src/empire/*`). **Brak zmiany w kodzie**, P4 = nie‑ustalenie. [`DISCOVERY_REPORT.md`](DISCOVERY_REPORT.md) skorygowany.
+  - **Bramki:** typecheck ×4 · test **1260** · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.606.0] — 🗂️ Discovery B2: kokpit statusu funkcji w Centrum sterowania
 

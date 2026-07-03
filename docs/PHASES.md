@@ -1,4 +1,4 @@
-<!-- SYNC: v0.606.0 · #676 · 2026-07-03 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.607.0 · #677 · 2026-07-03 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.606.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.607.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.606.0)
+## 🔭 Bieżący tor (v0.607.0)
+
+**🩹 Discovery A1 fala 2 + sprostowanie A3 (v0.607.0)** — 7 kolejnych formularzy dostało prawdziwe błędy zapisu przez `saveConfig` (#674): AntiRaid, Suggestions, Modmail, Birthday, Starboard, TempVoice, PriceTracker (łącznie 13/54; reszta falami). **A3 wycofane jako fałszywy alarm** (jak RLS 12→5 w audycie #673): „niedokończony rebrand GH0ST EMPIRE→E‑Forge" nie istnieje — rebrand jest w kodzie (`community.ts:20`, `Footer.tsx:15` = „E‑Forge"), a „GH0ST EMPIRE" to świadoma nazwa ekosystemu/praw właściciela (#572, `LICENSE`); `/economy` to jego realna integracja. `DISCOVERY_REPORT.md` skorygowany. Następne z rankingu: B1 (prowadzona aktywacja), A2 fala 2, A1 fala 3.
 
 **🗂️ Discovery B2 — kokpit statusu funkcji (v0.606.0)** — `/modules` (Centrum sterowania) z listy przełączników → kokpit: kafelki-liczniki Wszystkie/Aktywne/**Wymaga konfiguracji**/Wyłączone (klikalny filtr) + kropka statusu per moduł. „Wymaga konfiguracji" = włączone, ale config bez ustawień poza flagą (`getModuleHealth`/`moduleConfigured`) — pokazuje, co user przełączył, ale nie dokończył (audyt P3). i18n ×14. Następne z rankingu discovery: A3 (domknięcie rebrandu + `/economy`), B1 (prowadzona aktywacja), fale 2 A1/A2.
 
@@ -263,4 +265,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑03 · v0.606.0 (#676) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑03 · v0.607.0 (#677) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
