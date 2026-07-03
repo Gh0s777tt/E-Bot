@@ -1,4 +1,4 @@
-<!-- SYNC: v0.603.0 · #673 · 2026-07-02 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.604.0 · #674 · 2026-07-03 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.603.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.604.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.603.0)
+## 🔭 Bieżący tor (v0.604.0)
+
+**🩹 Discovery A1 — prawdziwe błędy zapisu (v0.604.0, fala 1/N)** — audyt produktowy ([`DISCOVERY_REPORT.md`](../DISCOVERY_REPORT.md)) wykazał, że 46/47 formularzy panelu gubi konkretny błąd API i pokazuje generyczne „Błąd zapisu" (problem P1). Wspólny helper `dashboard/lib/saveConfig.ts` wyciąga prawdziwy powód (limit planu / „kanał nie istnieje" / brak uprawnień) → `SaveButton`. Fala 1: 6 flagowych formularzy (Automod, Welcome, Logging, Tickets, FreeGames, Verification); reszta ~48 falami (helper gotowy). Kolejne z rankingu discovery: A2 (upsell w miejscu limitu + liczniki), B1 (prowadzona aktywacja), B2 (kokpit statusu funkcji).
 
 **🧹 Remediacja audytu #673 (v0.603.0)** — po samo-audycie read-only (`AUDIT_REPORT.md`) przejście naprawcze. **Sprostowanie RLS 12→5**: regex audytu (pojedyncza spacja) fałszywie oskarżył 7 tabel z wyrównanym `alter table   x   enable rls`; realnie bez RLS było **tylko 5 tabel M1** (`guilds, guild_members, plugins, guild_plugins, plugin_config`) — `enable row level security` dopisane do `_ALL.sql` + `m1-marketplace-schema.sql` (do puszczenia w Supabase SQL Editor). Naprawione też: lint rdzenia (`useLiteralKeys` — błędy zostały tylko w torze provisioningu `bot/src/setup/`), README `npm`→`pnpm`, coverage (`pnpm test:coverage` + progi-ratchet), test parytetu `landingI18n` ×14, martwa gałąź `feat/role-dropdowns`. Poza moją mocą: uruchomienie SQL w Supabase, CI/billing, Redis rate-limit.
 
@@ -257,4 +259,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑02 · v0.603.0 (#673) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑03 · v0.604.0 (#674) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

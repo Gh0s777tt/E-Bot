@@ -5,6 +5,7 @@ import { type CardStyle, RANKCARD_DEFAULT } from '../lib/cardStyle';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
+import { saveConfig } from '../lib/saveConfig';
 import CardStyleEditor from './CardStyleEditor';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
@@ -37,19 +38,13 @@ export default function WelcomeForm({
       : fromLegacy(initial.message),
   });
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/welcome', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(c),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/welcome', c);
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -139,7 +134,7 @@ export default function WelcomeForm({
         )}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
     </div>
   );
 }

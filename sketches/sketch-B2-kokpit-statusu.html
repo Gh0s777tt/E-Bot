@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Szkic B2 — kokpit statusu funkcji (Centrum sterowania)</title>
+<style>
+  :root{
+    --bg:#0a0a0b; --card:#141417; --line:#26262b; --red:#E50914;
+    --text:#ececf0; --mut:#9a9aa4; --green:#2fbf71; --amber:#e0a02a; --gray:#5c5c66;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;padding:28px}
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{font-size:20px;margin:0 0 4px} .sub{color:var(--mut);font-size:13px;margin-bottom:20px}
+  .note{background:#121216;border:1px dashed var(--line);border-radius:10px;padding:12px 16px;color:var(--mut);font-size:13px;margin-bottom:22px}
+  .note b{color:var(--text)}
+  /* stat tiles */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;cursor:pointer;transition:border-color .15s}
+  .tile:hover{border-color:#3a3a42}
+  .tile.sel{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
+  .tile .n{font-size:26px;font-weight:800;line-height:1}
+  .tile .l{color:var(--mut);font-size:12px;margin-top:6px;display:flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%}
+  .d-on{background:var(--green)} .d-cfg{background:var(--amber)} .d-off{background:var(--gray)} .d-all{background:var(--red)}
+  @media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  /* group + cards */
+  h2{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:26px 0 10px;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+  .card .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .card .name{font-weight:700}
+  .card .desc{color:var(--mut);font-size:13px;flex:1}
+  .st{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .st.on{color:#8ff0be;background:rgba(47,191,113,.12);border:1px solid rgba(47,191,113,.3)}
+  .st.cfg{color:#f4cd85;background:rgba(224,160,42,.12);border:1px solid rgba(224,160,42,.35)}
+  .st.off{color:#b9b9c2;background:#1b1b20;border:1px solid var(--line)}
+  .act{align-self:flex-start;font-size:13px;font-weight:600;color:#fff;background:var(--red);border:none;border-radius:8px;padding:7px 12px;cursor:pointer;text-decoration:none;display:inline-block}
+  .act.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .hidden{display:none}
+  .cap{color:var(--mut);font-size:12px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Szkic B2 — kokpit statusu funkcji („Centrum sterowania")</h1>
+  <div class="sub">Low‑fi, realne nazwy modułów E‑BOT. Kliknij kafelek u góry, by filtrować. Wzorzec potwierdzony w referencji <code>Screeny Discord/Kokpit.png</code>.</div>
+
+  <div class="note">
+    <b>Problem (P3 + odkrywalność 43 funkcji):</b> dziś stan „co włączone / co wymaga konfiguracji" trzeba wyskanować z 8 grup w Sidebarze. <b>Propozycja:</b> jeden ekran ze statusem per‑funkcja, licznikami i filtrem „Wymaga konfiguracji". Dane o stanie już są (<code>/modules</code> zna master‑toggle; brak kanału/roli wykrywa <code>/diagnostics</code>).
+  </div>
+
+  <div class="tiles">
+    <div class="tile sel" data-f="all"><div class="n">14</div><div class="l"><span class="dot d-all"></span>Wszystkie funkcje</div></div>
+    <div class="tile" data-f="on"><div class="n" style="color:var(--green)">6</div><div class="l"><span class="dot d-on"></span>Włączone</div></div>
+    <div class="tile" data-f="cfg"><div class="n" style="color:var(--amber)">5</div><div class="l"><span class="dot d-cfg"></span>Wymaga konfiguracji</div></div>
+    <div class="tile" data-f="off"><div class="n" style="color:var(--gray)">3</div><div class="l"><span class="dot d-off"></span>Wyłączone</div></div>
+  </div>
+
+  <h2 data-grp>Moderacja</h2>
+  <div class="grid" data-grp-grid>
+    <div class="card" data-st="on"><div class="top"><span class="name">Automod</span><span class="st on">● Aktywne</span></div><div class="desc">Filtr treści: spam, linki, CAPS, anty‑scam, PII.</div><a class="act ghost" href="#">Otwórz ustawienia</a></div>
+    <div class="card" data-st="cfg"><div class="top"><span class="name">Logi serwera</span><span class="st cfg">▲ Ustaw kanał</span></div><div class="desc">Rejestr akcji moderacyjnych — brak wybranego kanału logów.</div><a class="act" href="#">Skonfiguruj →</a></div>
+    <div class="card" data-st="on"><div class="top"><span class="name">Bezpieczeństwo / Anti‑nuke</span><span class="st on">● Aktywne</span></div><div class="desc">Limity masowych akcji + kwarantanna.</div><a class="act ghost" href="#">Otwórz ustawienia</a></div>
+  </div>
+
+  <h2 data-grp>Społeczność</h2>
+  <div class="grid" data-grp-grid>
+    <div class="card" data-st="cfg"><div class="top"><span class="name">Powitania</span><span class="st cfg">▲ Kanał usunięty</span></div><div class="desc">Moduł włączony, ale kanał <code>#powitania</code> nie istnieje — wiadomości nie wychodzą.</div><a class="act" href="#">Napraw →</a></div>
+    <div class="card" data-st="on"><div class="top"><span class="name">Levele / XP</span><span class="st on">● Aktywne</span></div><div class="desc">XP za wiadomości i głos, role za poziom.</div><a class="act ghost" href="#">Otwórz ustawienia</a></div>
+    <div class="card" data-st="cfg"><div class="top"><span class="name">Role reakcji</span><span class="st cfg">▲ Brak paneli</span></div><div class="desc">Włączone, ale nie utworzono żadnego panelu ról.</div><a class="act" href="#">Skonfiguruj →</a></div>
+    <div class="card" data-st="on"><div class="top"><span class="name">Tickety</span><span class="st on">● Aktywne</span></div><div class="desc">Panel zgłoszeń + transkrypty.</div><a class="act ghost" href="#">Otwórz ustawienia</a></div>
+    <div class="card" data-st="off"><div class="top"><span class="name">Urodziny</span><span class="st off">○ Wyłączone</span></div><div class="desc">Życzenia urodzinowe na kanale.</div><a class="act ghost" href="#">Włącz</a></div>
+    <div class="card" data-st="off"><div class="top"><span class="name">Klany</span><span class="st off">○ Wyłączone</span></div><div class="desc">Klany graczy + rankingi.</div><a class="act ghost" href="#">Włącz</a></div>
+  </div>
+
+  <h2 data-grp>Ekonomia &amp; Twórca</h2>
+  <div class="grid" data-grp-grid>
+    <div class="card" data-st="on"><div class="top"><span class="name">Ekonomia serwera</span><span class="st on">● Aktywne</span></div><div class="desc">Waluta, sklep, sezony.</div><a class="act ghost" href="#">Otwórz ustawienia</a></div>
+    <div class="card" data-st="cfg"><div class="top"><span class="name">Powiadomienia live</span><span class="st cfg">▲ Ustaw kanał</span></div><div class="desc">Twitch/YouTube — brak kanału powiadomień.</div><a class="act" href="#">Skonfiguruj →</a></div>
+    <div class="card" data-st="on"><div class="top"><span class="name">Gaming feed</span><span class="st on">● Aktywne</span></div><div class="desc">Patch‑notes + darmowe gry.</div><a class="act ghost" href="#">Otwórz ustawienia</a></div>
+    <div class="card" data-st="off"><div class="top"><span class="name">Donejty</span><span class="st off">○ Wyłączone</span></div><div class="desc">Ko‑fi / powiadomienia o wsparciu.</div><a class="act ghost" href="#">Włącz</a></div>
+  </div>
+
+  <div class="cap">Filtr „Wymaga konfiguracji" pokazuje dokładnie to, co blokuje działanie serwera (kanał usunięty, brak paneli) — pierwszy krok po setupie (spina się z B1 i C1). Klik w kafelek filtruje karty.</div>
+</div>
+
+<script>
+  const tiles = [...document.querySelectorAll('.tile')];
+  const cards = [...document.querySelectorAll('.card')];
+  const groups = [...document.querySelectorAll('[data-grp]')];
+  const grids = [...document.querySelectorAll('[data-grp-grid]')];
+  function apply(f){
+    tiles.forEach(t=>t.classList.toggle('sel', t.dataset.f===f));
+    cards.forEach(c=>c.classList.toggle('hidden', f!=='all' && c.dataset.st!==f));
+    // ukryj puste grupy
+    grids.forEach((g,i)=>{
+      const vis = [...g.querySelectorAll('.card')].some(c=>!c.classList.contains('hidden'));
+      g.classList.toggle('hidden', !vis); groups[i].classList.toggle('hidden', !vis);
+    });
+  }
+  tiles.forEach(t=>t.addEventListener('click',()=>apply(t.dataset.f)));
+</script>
+</body>
+</html>

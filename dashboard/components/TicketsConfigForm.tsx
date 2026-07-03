@@ -6,6 +6,7 @@ import type { TicketCategory } from '../lib/faza4';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { fromLegacy, normalizeRich, type RichMessage } from '../lib/richMessage';
+import { saveConfig } from '../lib/saveConfig';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect, RoleSelect } from './pickers';
@@ -52,23 +53,17 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
     questions: initial.questions ?? [],
   });
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
+  const [errMsg, setErrMsg] = useState('');
 
   async function save() {
     setSt('saving');
-    try {
-      const r = await fetch('/api/tickets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...c,
-          panelMessage: c.panelSpec.content || c.panelMessage,
-          questions: c.questions.map((q) => q.trim()).filter(Boolean),
-        }),
-      });
-      setSt(r.ok ? 'ok' : 'err');
-    } catch {
-      setSt('err');
-    }
+    const res = await saveConfig('/api/tickets', {
+      ...c,
+      panelMessage: c.panelSpec.content || c.panelMessage,
+      questions: c.questions.map((q) => q.trim()).filter(Boolean),
+    });
+    setErrMsg(res.error);
+    setSt(res.ok ? 'ok' : 'err');
     setTimeout(() => setSt('idle'), 2500);
   }
 
@@ -297,7 +292,7 @@ export default function TicketsConfigForm({ initial, guild }: { initial: Init; g
         ))}
       </div>
 
-      <SaveButton st={st} onClick={save} />
+      <SaveButton st={st} onClick={save} errorText={errMsg} />
       <p className="text-xs text-muted">{tp(lang, 'ui.tickets.footNote')}</p>
     </div>
   );

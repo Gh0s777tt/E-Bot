@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-673-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.603.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-674-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.604.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.604.0] — 🩹 Discovery A1 (fala 1): prawdziwe komunikaty błędu zapisu w panelu
+
+- `[#674]` 🩹 **Prawdziwy błąd zapisu zamiast generyku** (Discovery A1, fala 1/N) — panel pokazywał „Błąd zapisu" bez powodu: **46/47 formularzy** gubiło konkretny `{ error }` z API (limit planu / „kanał nie istnieje" / brak uprawnień). Wspólny helper [`saveConfig`](dashboard/lib/saveConfig.ts) wyciąga ten komunikat i podaje go do `SaveButton` (który już umiał go wyświetlić — pole `errorText` było „martwe"). **Zero nowych kluczy i18n** — komunikat jest dynamiczny z serwera (jak w istniejącym `ReactionRolesForm`).
+  - **Migrowane w fali 1 (6 flagowych stron):** `AutomodForm`, `WelcomeForm`, `LoggingForm`, `TicketsConfigForm`, `FreeGamesForm`, `VerificationForm` — moderacja/społeczność/wsparcie/gaming, gdzie błędy „kanał usunięty / brak uprawnień" są najczęstsze. Reszta ~48 formularzy w kolejnych falach (helper gotowy, migracja to 3 linie/formularz).
+  - **Test:** [`saveConfig.test.ts`](dashboard/lib/saveConfig.test.ts) — wyciąganie `error`/`message`, sukces, błąd 403 z komunikatem, błąd sieci → generyk, nie-JSON bez wyjątku (9 asercji, `fetch` wstrzykiwalny).
+  - **Kontekst:** wynika z audytu produktowego [`DISCOVERY_REPORT.md`](DISCOVERY_REPORT.md) (problem P1, propozycja A1 — #2 priorytet; + szkice A2/B2 w [`sketches/`](sketches)).
+  - **Bramki:** typecheck ×4 · test **1248** (+9) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.603.0] — 🧹 Remediacja audytu #673 — RLS (12→5), lint, README, coverage, test parytetu landingu
 

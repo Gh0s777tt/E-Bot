@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Szkic A2 — upsell w miejscu limitu + liczniki użycia</title>
+<style>
+  :root{
+    --bg:#0a0a0b; --card:#141417; --card2:#101013; --line:#26262b;
+    --red:#E50914; --red-dim:#7a1218; --text:#ececf0; --mut:#9a9aa4; --green:#2fbf71; --amber:#e0a02a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;padding:32px}
+  .wrap{max-width:880px;margin:0 auto}
+  .note{background:#121216;border:1px dashed var(--line);border-radius:10px;padding:12px 16px;color:var(--mut);font-size:13px;margin-bottom:24px}
+  .note b{color:var(--text)}
+  h1{font-size:20px;margin:0 0 4px} .sub{color:var(--mut);font-size:13px;margin-bottom:24px}
+  h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:28px 0 10px;font-weight:700}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  /* licznik użycia */
+  .meterrow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:6px}
+  .meterrow .lab{font-weight:600}
+  .badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+  .badge.free{border-color:var(--red-dim);color:#f0a6ab}
+  .bar{height:8px;border-radius:999px;background:#232329;overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--amber),var(--red))}
+  .cmdlist{margin-top:14px;border-top:1px solid var(--line)}
+  .cmd{display:flex;align-items:center;justify-content:space-between;padding:10px 2px;border-bottom:1px solid var(--line);color:var(--text)}
+  .cmd small{color:var(--mut)}
+  .cmd .tag{font:12px ui-monospace,monospace;color:#c9c9d2;background:#1b1b20;border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+  /* upsell card (stan po trafieniu w limit) */
+  .upsell{margin-top:16px;border:1px solid var(--red-dim);background:linear-gradient(180deg,rgba(229,9,20,.10),rgba(229,9,20,.03));border-radius:12px;padding:16px 18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .upsell .txt{flex:1;min-width:240px}
+  .upsell .txt h3{margin:0 0 4px;font-size:15px}
+  .upsell .txt p{margin:0;color:var(--mut);font-size:13px}
+  .btn{background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px 18px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text);font-weight:600}
+  .disabledrow{opacity:.55}
+  .col2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:720px){.col2{grid-template-columns:1fr}}
+  .cap{color:var(--mut);font-size:12px;margin-top:8px}
+  .x{color:#ff6b73} .ok{color:var(--green)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Szkic A2 — upsell w miejscu tarcia + liczniki użycia</h1>
+  <div class="sub">Low‑fi, realne etykiety. Ilustracja propozycji, nie gotowy UI. Kontekst: strona <b>/custom‑commands</b> (Komendy własne), plan Free (limit 10).</div>
+
+  <div class="note">
+    <b>Problem (P2):</b> dziś komunikat limitu pojawia się <b>dopiero po kliknięciu Zapisz</b>, jest zwykłym tekstem i znika po 4 s
+    (<code>CustomCommandsForm:63‑89</code>); brak licznika, więc user nie wie, że dobija do limitu. <b>Propozycja:</b> stały licznik „X/10" + trwała, klikalna karta upsellu (otwiera istniejący <code>PremiumDialog</code>).
+  </div>
+
+  <div class="col2">
+    <!-- PRZED -->
+    <div>
+      <h2>Dziś (stan „err", znika po 4 s)</h2>
+      <div class="panel">
+        <div style="font-weight:600;margin-bottom:10px">Komendy własne</div>
+        <div class="cmd"><span><span class="tag">/regulamin</span></span><small>usuń</small></div>
+        <div class="cmd"><span><span class="tag">/discord</span></span><small>usuń</small></div>
+        <div style="color:var(--mut);font-size:13px;margin:14px 0 12px">…(8 kolejnych)…</div>
+        <button class="btn" style="width:100%">+ Dodaj komendę</button>
+        <div style="margin-top:12px;color:#ff6b73;font-size:13px">⚠ Osiągnięto limit planu Free: maks. 10 komend własnych. Przejdź na Premium, aby zwiększyć limit.</div>
+        <div class="cap">↑ tekst, nie link · auto‑hide 4 s · brak licznika wcześniej</div>
+      </div>
+    </div>
+
+    <!-- PO -->
+    <div>
+      <h2>Propozycja (licznik + klikalny upsell)</h2>
+      <div class="panel">
+        <div class="meterrow">
+          <span class="lab">Komendy własne</span>
+          <span class="badge free">10 / 10 · Free</span>
+        </div>
+        <div class="bar"><i style="width:100%"></i></div>
+
+        <div class="cmdlist">
+          <div class="cmd"><span><span class="tag">/regulamin</span></span><small>usuń</small></div>
+          <div class="cmd"><span><span class="tag">/discord</span></span><small>usuń</small></div>
+          <div class="cmd disabledrow"><span><span class="tag">+ nowa…</span></span><small>zablokowane</small></div>
+        </div>
+
+        <div class="upsell">
+          <div class="txt">
+            <h3>Wykorzystano 10/10 komend Free</h3>
+            <p>Premium podnosi limit do <b>50</b> komend własnych (+ respondery 100, liczniki 20, sklep 150).</p>
+          </div>
+          <button class="btn" onclick="alert('otwiera PremiumDialog (Stripe Checkout) — istniejący komponent')">Przejdź na Premium · 49,99 zł/mc</button>
+        </div>
+        <div class="cap">↑ trwałe, klikalne (otwiera <code>PremiumDialog</code>) · licznik widoczny od 8/10</div>
+      </div>
+
+      <h2 style="margin-top:22px">Wariant „ostrzeżenie" (8/10)</h2>
+      <div class="panel">
+        <div class="meterrow"><span class="lab">Respondery</span><span class="badge free">8 / 10 · Free</span></div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <div class="cap">Zbliżasz się do limitu Free (2 wolne). <a href="#" style="color:#f0a6ab">Zobacz Premium →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Dlaczego to działa</h2>
+  <div class="panel" style="color:var(--mut);font-size:14px">
+    <div><span class="ok">✔</span> Konwersja w <b>miejscu i momencie</b> najwyższej intencji (user właśnie chciał dodać 11. komendę).</div>
+    <div style="margin-top:6px"><span class="ok">✔</span> Reużywa istniejące <code>PLAN_LIMITS</code> (`premiumPlan.ts:42‑83`) i <code>PremiumDialog</code> — koszt S.</div>
+    <div style="margin-top:6px"><span class="x">✘</span> Nie dokłada nowej mechaniki płatności ani nie zmienia egzekucji server‑side.</div>
+  </div>
+</div>
+</body>
+</html>
