@@ -3,22 +3,26 @@ import ReactionRolePanelForm from '../../components/ReactionRolePanelForm';
 import ReactionRolesForm from '../../components/ReactionRolesForm';
 import RoleMenuForm from '../../components/RoleMenuForm';
 import StatusPill from '../../components/StatusPill';
+import { billingEnabled, getGuildTier } from '../../lib/billing';
 import { getRoleMenu } from '../../lib/engagement';
 import { getReactionPanel, getReactionRoles } from '../../lib/faza4';
-import { getGuildMeta } from '../../lib/guild';
+import { getGuildMeta, getPrimaryGuildId } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
+import { planLimit } from '../../lib/premiumPlan';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function RolesPage() {
-  const [items, panel, rolemenu, guild, lang] = await Promise.all([
+  const [items, panel, rolemenu, guild, lang, tier] = await Promise.all([
     getReactionRoles(),
     getReactionPanel(),
     getRoleMenu(),
     getGuildMeta(),
     getPanelLocale(),
+    getPrimaryGuildId().then(getGuildTier),
   ]);
+  const billingOn = billingEnabled();
   const hasRoles = items.length > 0;
 
   return (
@@ -35,7 +39,14 @@ export default async function RolesPage() {
             <StatusPill on={hasRoles} lang={lang} />
           </span>
         </h2>
-        <ReactionRolesForm initial={items} guild={guild} />
+        <ReactionRolesForm
+          initial={items}
+          guild={guild}
+          tier={tier}
+          freeLimit={planLimit('reactionRoles', 'free')}
+          premiumLimit={planLimit('reactionRoles', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
 
       {hasRoles && (
@@ -87,7 +98,14 @@ export default async function RolesPage() {
         <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ListChecks size={16} className="text-accent" /> {tp(lang, 'ui.roles.heading3')}
         </h2>
-        <RoleMenuForm initial={rolemenu} guild={guild} />
+        <RoleMenuForm
+          initial={rolemenu}
+          guild={guild}
+          tier={tier}
+          freeLimit={planLimit('rolemenus', 'free')}
+          premiumLimit={planLimit('rolemenus', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
     </div>
   );

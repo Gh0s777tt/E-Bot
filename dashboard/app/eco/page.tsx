@@ -3,21 +3,25 @@ import EconomyForm from '../../components/EconomyForm';
 import EcoSeasonForm from '../../components/EcoSeasonForm';
 import ShopManager from '../../components/ShopManager';
 import StatusPill from '../../components/StatusPill';
-import { getGuildMeta } from '../../lib/guild';
+import { billingEnabled, getGuildTier } from '../../lib/billing';
+import { getGuildMeta, getPrimaryGuildId } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
+import { planLimit } from '../../lib/premiumPlan';
 import { getEcoSeason, getServerEconomy, getShopItems } from '../../lib/serverEconomy';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function EcoPage() {
-  const [cfg, items, guild, season, lang] = await Promise.all([
+  const [cfg, items, guild, season, lang, tier] = await Promise.all([
     getServerEconomy(),
     getShopItems(),
     getGuildMeta(),
     getEcoSeason(),
     getPanelLocale(),
+    getPrimaryGuildId().then(getGuildTier),
   ]);
+  const billingOn = billingEnabled();
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-3">
@@ -55,7 +59,15 @@ export default async function EcoPage() {
         <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <ShoppingCart size={16} className="text-accent" /> {tp(lang, 'ui.eco.shopHeading')}
         </h2>
-        <ShopManager initial={items} guild={guild} currency={cfg.currency} />
+        <ShopManager
+          initial={items}
+          guild={guild}
+          currency={cfg.currency}
+          tier={tier}
+          freeLimit={planLimit('shopItems', 'free')}
+          premiumLimit={planLimit('shopItems', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
     </div>
   );

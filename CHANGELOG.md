@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-678-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.608.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-679-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.609.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.609.0] — 💳 A2 fala 3 (KOMPLET 7/7): liczniki upsellu na wszystkich zasobach limitowanych
+
+- `[#679]` 💳 **Discovery A2 fala 3 — `UsageMeter` na pozostałych 5 zasobach limitowanych** (domyka propozycję A2 z [`DISCOVERY_REPORT.md`](DISCOVERY_REPORT.md); #1 priorytet biznesowy): `/responder` (autorespondery, Free = 10), `/roles` (**dwa mierniki**: reaction roles Free = 10 + menu ról Free = 5 — w menu ról limit planu składa się z twardym capem 25 opcji selecta Discorda), `/scheduled` (zaplanowane posty, Free = 5), `/eco` (przedmioty sklepu, Free = 15). Każda strona: proaktywny pasek „X / N · Free" + klikalny `PremiumDialog` na/blisko limitu + wyłączenie „Dodaj" przy limicie — dokładnie wzorzec z #675/#678 (strona przekazuje `tier`/`freeLimit`/`premiumLimit`/`billingOn` przez `getGuildTier` + `planLimit` + `billingEnabled`; bez Stripe = brak paywalla, grandfathering respektowany). Zasoby limitowane z upsellem: **7/7 ✓** (`/custom-commands`, `/counters`, `/responder`, `/roles` ×2, `/scheduled`, `/eco`) — **A2 KOMPLETNE**.
+  - **Zero nowych kluczy i18n** — `UsageMeter` reużywa istniejące `ui.limit.*`/`ui.premium.*` (parzystość ×14 bez zmian).
+  - **Bramki:** typecheck ×4 · test **1260** · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.608.0] — 💳 A2 fala 2 (liczniki upsellu na /counters) + B1 wstrzymane do decyzji
 

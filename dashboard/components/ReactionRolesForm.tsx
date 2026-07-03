@@ -2,11 +2,13 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
+import UsageMeter from './UsageMeter';
 
 type RR = { messageId: string; emoji: string; roleId: string };
 type Row = RR & { k: string };
@@ -14,7 +16,21 @@ type Row = RR & { k: string };
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
 
-export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; guild: GuildMeta }) {
+export default function ReactionRolesForm({
+  initial,
+  guild,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
+}: {
+  initial: RR[];
+  guild: GuildMeta;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
+}) {
   const { lang } = useLang();
   const idRef = useRef(0);
   const [rows, setRows] = useState<Row[]>(() =>
@@ -57,12 +73,21 @@ export default function ReactionRolesForm({ initial, guild }: { initial: RR[]; g
         </span>
         <button
           type="button"
+          disabled={billingOn && tier === 'free' && rows.length >= freeLimit}
           onClick={addRow}
-          className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
+          className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
         >
           <Plus size={12} /> {tp(lang, 'ui.roles.addBtn')}
         </button>
       </div>
+
+      <UsageMeter
+        used={rows.length}
+        freeLimit={freeLimit}
+        premiumLimit={premiumLimit}
+        tier={tier}
+        billingOn={billingOn}
+      />
 
       {rows.length === 0 && <p className="text-xs text-muted">{tp(lang, 'ui.roles.noMappings')}</p>}
 

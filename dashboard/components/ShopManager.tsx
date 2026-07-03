@@ -2,12 +2,14 @@
 
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import type { ShopItem } from '../lib/serverEconomy';
 import EmptyState from './EmptyState';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
+import UsageMeter from './UsageMeter';
 
 const inputCls =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -16,10 +18,18 @@ export default function ShopManager({
   initial,
   guild,
   currency,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
 }: {
   initial: ShopItem[];
   guild: GuildMeta;
   currency: string;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
 }) {
   const { lang } = useLang();
   const [items, setItems] = useState<ShopItem[]>(initial);
@@ -79,6 +89,14 @@ export default function ShopManager({
 
   return (
     <div className="space-y-4">
+      <UsageMeter
+        used={items.length}
+        freeLimit={freeLimit}
+        premiumLimit={premiumLimit}
+        tier={tier}
+        billingOn={billingOn}
+      />
+
       <div className="grid gap-3 sm:grid-cols-2">
         <input
           value={name}
@@ -133,7 +151,11 @@ export default function ShopManager({
       <button
         type="button"
         onClick={add}
-        disabled={st === 'saving' || !name.trim()}
+        disabled={
+          st === 'saving' ||
+          !name.trim() ||
+          (billingOn && tier === 'free' && items.length >= freeLimit)
+        }
         className="rounded-md bg-accent px-5 py-2 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
       >
         {st === 'saving' ? tp(lang, 'ui.eco.addingBtn') : tp(lang, 'ui.eco.addBtn')}

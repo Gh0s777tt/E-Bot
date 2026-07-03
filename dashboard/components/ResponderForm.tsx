@@ -2,10 +2,12 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { AutoResponder, ResponderConfig } from '../lib/community';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
 import SaveButton from './SaveButton';
+import UsageMeter from './UsageMeter';
 
 type CmdRow = { name: string; response: string; k: string };
 type AutoRow = AutoResponder & { k: string };
@@ -19,7 +21,19 @@ const MATCH: { v: AutoResponder['match']; key: string }[] = [
   { v: 'starts', key: 'ui.responder.matchStarts' },
 ];
 
-export default function ResponderForm({ initial }: { initial: ResponderConfig }) {
+export default function ResponderForm({
+  initial,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
+}: {
+  initial: ResponderConfig;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
+}) {
   const { lang } = useLang();
   const { commands, autoresponders, ...rest } = initial;
   const [b, setB] = useState(rest);
@@ -136,17 +150,25 @@ export default function ResponderForm({ initial }: { initial: ResponderConfig })
           </span>
           <button
             type="button"
+            disabled={billingOn && tier === 'free' && autos.length >= freeLimit}
             onClick={() =>
               setAutos([
                 ...autos,
                 { trigger: '', response: '', match: 'contains', k: `a${idRef.current++}` },
               ])
             }
-            className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated"
+            className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
             <Plus size={12} /> {tp(lang, 'ui.responder.add')}
           </button>
         </div>
+        <UsageMeter
+          used={autos.length}
+          freeLimit={freeLimit}
+          premiumLimit={premiumLimit}
+          tier={tier}
+          billingOn={billingOn}
+        />
         {autos.map((a) => (
           <div key={a.k} className="flex items-start gap-2">
             <input

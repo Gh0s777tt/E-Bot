@@ -2,6 +2,7 @@
 
 import { CalendarClock, ChevronDown, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { GuildMeta } from '../lib/guild';
 import { type PanelLocale, tp } from '../lib/panelI18n';
 import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
@@ -9,6 +10,7 @@ import type { ScheduledPost } from '../lib/scheduledPosts';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
 import { ChannelSelect } from './pickers';
+import UsageMeter from './UsageMeter';
 
 const inp =
   'w-full rounded-md border border-line bg-elevated px-3 py-2 text-sm outline-none focus:border-accent';
@@ -60,9 +62,17 @@ function summary(p: ScheduledPost, lang: PanelLocale): string {
 export default function ScheduledPostsForm({
   initial,
   guild,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
 }: {
   initial: ScheduledPost[];
   guild: GuildMeta;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
 }) {
   const { lang } = useLang();
   const [posts, setPosts] = useState<ScheduledPost[]>(initial);
@@ -112,6 +122,14 @@ export default function ScheduledPostsForm({
 
   return (
     <div className="space-y-4">
+      <UsageMeter
+        used={posts.length}
+        freeLimit={freeLimit}
+        premiumLimit={premiumLimit}
+        tier={tier}
+        billingOn={billingOn}
+      />
+
       {posts.length === 0 && (
         <p className="rounded-lg border border-dashed border-line bg-bg/30 p-6 text-center text-sm text-muted">
           {tp(lang, 'ui.scheduled.emptyState')}
@@ -272,8 +290,9 @@ export default function ScheduledPostsForm({
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"
+          disabled={billingOn && tier === 'free' && posts.length >= freeLimit}
           onClick={add}
-          className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated"
+          className="flex items-center gap-1.5 rounded-md border border-line px-4 py-2 text-sm font-semibold transition hover:border-accent hover:bg-elevated disabled:opacity-40"
         >
           <Plus size={15} /> {tp(lang, 'ui.scheduled.addPost')}
         </button>

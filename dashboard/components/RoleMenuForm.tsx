@@ -2,12 +2,14 @@
 
 import { Plus, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { Tier } from '../lib/billing';
 import type { RoleMenuConfig } from '../lib/engagement';
 import type { GuildMeta } from '../lib/guild';
 import { tp } from '../lib/panelI18n';
 import { useLang } from './LangContext';
 import { RoleSelect } from './pickers';
 import SaveButton from './SaveButton';
+import UsageMeter from './UsageMeter';
 
 type Opt = { label: string; roleId: string; description: string; emoji: string };
 type Row = Opt & { k: string };
@@ -18,9 +20,17 @@ const inputCls =
 export default function RoleMenuForm({
   initial,
   guild,
+  tier,
+  freeLimit,
+  premiumLimit,
+  billingOn,
 }: {
   initial: RoleMenuConfig;
   guild: GuildMeta;
+  tier: Tier;
+  freeLimit: number;
+  premiumLimit: number;
+  billingOn: boolean;
 }) {
   const { lang } = useLang();
   const [message, setMessage] = useState(initial.message);
@@ -99,12 +109,21 @@ export default function RoleMenuForm({
           <button
             type="button"
             onClick={addRow}
-            disabled={rows.length >= 25}
+            disabled={
+              rows.length >= 25 || (billingOn && tier === 'free' && rows.length >= freeLimit)
+            }
             className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
           >
             <Plus size={12} /> {tp(lang, 'ui.roles.addBtn')}
           </button>
         </div>
+        <UsageMeter
+          used={rows.length}
+          freeLimit={freeLimit}
+          premiumLimit={premiumLimit}
+          tier={tier}
+          billingOn={billingOn}
+        />
         {rows.length === 0 && (
           <p className="text-xs text-muted">{tp(lang, 'ui.roles.noOptions')}</p>
         )}

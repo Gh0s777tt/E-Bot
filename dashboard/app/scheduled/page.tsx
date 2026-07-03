@@ -1,18 +1,22 @@
 import { CalendarClock } from 'lucide-react';
 import ScheduledPostsForm from '../../components/ScheduledPostsForm';
-import { getGuildMeta } from '../../lib/guild';
+import { billingEnabled, getGuildTier } from '../../lib/billing';
+import { getGuildMeta, getPrimaryGuildId } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
+import { planLimit } from '../../lib/premiumPlan';
 import { getScheduledPosts } from '../../lib/scheduledPosts';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ScheduledPage() {
-  const [posts, guild, lang] = await Promise.all([
+  const [posts, guild, lang, tier] = await Promise.all([
     getScheduledPosts(),
     getGuildMeta(),
     getPanelLocale(),
+    getPrimaryGuildId().then(getGuildTier),
   ]);
+  const billingOn = billingEnabled();
   const active = posts.filter((p) => p.enabled).length;
   return (
     <div className="space-y-6">
@@ -30,7 +34,14 @@ export default async function ScheduledPage() {
         <h2 className="mb-5 flex items-center gap-2 font-display text-lg font-semibold tracking-wide">
           <CalendarClock size={16} className="text-accent" /> {tp(lang, 'ui.scheduled.heading')}
         </h2>
-        <ScheduledPostsForm initial={posts} guild={guild} />
+        <ScheduledPostsForm
+          initial={posts}
+          guild={guild}
+          tier={tier}
+          freeLimit={planLimit('scheduledPosts', 'free')}
+          premiumLimit={planLimit('scheduledPosts', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
     </div>
   );

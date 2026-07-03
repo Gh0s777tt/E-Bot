@@ -1,14 +1,22 @@
 import { MessageSquarePlus } from 'lucide-react';
 import ResponderForm from '../../components/ResponderForm';
 import StatusPill from '../../components/StatusPill';
+import { billingEnabled, getGuildTier } from '../../lib/billing';
 import { getResponderConfig } from '../../lib/community';
+import { getPrimaryGuildId } from '../../lib/guild';
 import { tp } from '../../lib/panelI18n';
+import { planLimit } from '../../lib/premiumPlan';
 import { getPanelLocale } from '../../lib/serverPanelLocale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ResponderPage() {
-  const [cfg, lang] = await Promise.all([getResponderConfig(), getPanelLocale()]);
+  const [cfg, lang, tier] = await Promise.all([
+    getResponderConfig(),
+    getPanelLocale(),
+    getPrimaryGuildId().then(getGuildTier),
+  ]);
+  const billingOn = billingEnabled();
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
@@ -22,7 +30,13 @@ export default async function ResponderPage() {
             <StatusPill on={cfg.enabled} lang={lang} />
           </span>
         </h2>
-        <ResponderForm initial={cfg} />
+        <ResponderForm
+          initial={cfg}
+          tier={tier}
+          freeLimit={planLimit('responders', 'free')}
+          premiumLimit={planLimit('responders', 'premium')}
+          billingOn={billingOn}
+        />
       </section>
     </div>
   );

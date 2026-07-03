@@ -1,4 +1,4 @@
-<!-- SYNC: v0.608.0 · #678 · 2026-07-03 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.609.0 · #679 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.608.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.609.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.608.0)
+## 🔭 Bieżący tor (v0.609.0)
+
+**💳 Discovery A2 fala 3 — KOMPLET 7/7 (v0.609.0)** — `UsageMeter` (pasek „X / N · Free" + klikalny `PremiumDialog` + wyłączenie „Dodaj" przy limicie) wpięty w pozostałe 5 zasobów limitowanych: `/responder` (autorespondery), `/roles` (reaction roles + menu ról — dwa mierniki), `/scheduled` (zaplanowane posty), `/eco` (sklep). Razem z `/custom-commands` (#675) i `/counters` (#678) — **wszystkie 7 zasobów z `PLAN_LIMITS` mają upsell w miejscu tarcia; propozycja A2 z discovery DOMKNIĘTA**. Zero nowych kluczy i18n (reużyte `ui.limit.*`). Otwarte z rankingu discovery: **B1 nadal wstrzymane do decyzji właściciela** (patrz v0.608.0 niżej), fale A1 (13/54 formularzy z prawdziwymi błędami — reszta mechanicznie przez `saveConfig`), potem A4–A6 / B3–B5 / C1–C3.
 
 **💳 Discovery A2 fala 2 + B1 wstrzymane (v0.608.0)** — `UsageMeter` (licznik + klikalny upsell) wpięty też w `/counters` (Free=3; 2/7 zasobów limitowanych; reszta falami). **B1 (prowadzona aktywacja) wstrzymane do decyzji właściciela** — jej core (tworzenie kanałów/ról na Discordzie) nakłada się na jego osobny tor provisioningu (`bot/src/setup/empire-hub`/`ghost-*`/`eforge-*`), którego nie ruszam; nie buduję generycznego provisioningu bez zgody. Do rozstrzygnięcia: pełne B1 w nowych plikach · lekkie B1 (guided next-steps) · pominąć. Bezpieczne alternatywy: kolejne fale A1/A2.
 
@@ -267,4 +269,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑03 · v0.608.0 (#678) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.609.0 (#679) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
