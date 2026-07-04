@@ -1,7 +1,9 @@
 // /ai — zapytanie do modelu (DeepSeek/OpenAI) z PAMIĘCIĄ rozmowy (per użytkownik+kanał, in-memory)
 // i TWARDYM dziennym limitem kosztów. Config 'ai_config', zużycie 'ai_usage'. Warstwa: lib/ai.mts.
 import { type ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { aiConfig, bumpUsage, type ChatMsg, callModel, checkUsage } from '../lib/ai.mts';
+import { panelButtonRow } from '../lib/panelLink.mts';
 
 const BASE_SYSTEM = 'Jesteś pomocnym asystentem serwera Discord. Odpowiadaj zwięźle i po polsku.';
 const MEM_TTL = 30 * 60_000; // 30 min bez aktywności = reset
@@ -43,8 +45,10 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const cfg = aiConfig();
   if (!cfg.enabled) {
+    const locale = resolveLocale(interaction);
     await interaction.reply({
-      content: '🤖 Komendy AI są wyłączone (włącz w panelu).',
+      content: t(locale, 'panel.aiOff'),
+      components: panelButtonRow('/ai', t(locale, 'panel.open')),
       flags: MessageFlags.Ephemeral,
     });
     return;

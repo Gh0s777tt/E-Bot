@@ -6,7 +6,9 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { aiConfig, bumpUsage, checkUsage, generateImage } from '../lib/ai.mts';
+import { panelButtonRow } from '../lib/panelLink.mts';
 
 export const data = new SlashCommandBuilder()
   .setName('imagine')
@@ -18,8 +20,10 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
   const cfg = aiConfig();
   if (!cfg.enabled) {
+    const locale = resolveLocale(interaction);
     await interaction.reply({
-      content: '🤖 Komendy AI są wyłączone (włącz w panelu).',
+      content: t(locale, 'panel.aiOff'),
+      components: panelButtonRow('/ai', t(locale, 'panel.open')),
       flags: MessageFlags.Ephemeral,
     });
     return;

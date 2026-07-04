@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-682-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.612.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-683-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.613.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.613.0] — 🔗 Discovery A6: deep-linki bot→panel jako przyciski
+
+- `[#683]` 🔗 **Przycisk „Otwórz w panelu" zamiast martwego tekstu** (Discovery A6, problem P5 — komendy odsyłały do panelu tekstem „włącz w panelu", bez klikalnej drogi): nowy helper [`lib/panelLink.mts`](bot/src/lib/panelLink.mts) (`panelUrl` + `panelButtonRow` — przycisk Link do konkretnej strony panelu z `DASHBOARD_URL`; bez env = brak przycisku, zero breakage). Wpięte w **8 komend-bramek**: `/ai`, `/ask`, `/translate`, `/imagine`, `/rewrite`, `/tldr` → `/ai` w panelu · `/modai` → `/moderation` · `/backlog` → `/gaming`.
+- `[#683]` 🌍 **Przy okazji zlokalizowane same komunikaty bramek** — „Komendy AI są wyłączone…" i „Backlog jest wyłączony…" były zaszyte po polsku na sztywno (zaszłość sprzed i18n bota); teraz `t()` + nowy słownik [`strings.panel.mts`](bot/src/i18n/strings.panel.mts) (3 klucze ×14: `panel.open`/`panel.aiOff`/`panel.backlogOff`, parzystość pod testem).
+  - **Test:** [`panelLink.test.ts`](bot/src/lib/panelLink.test.ts) — sklejanie URL (normalizacja slashy), null przy braku/nie-HTTP `DASHBOARD_URL`.
+  - **Bramki:** typecheck ×4 · test **1274** (+2) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.612.0] — 🩺 C1 fala 2 (KOMPLET): uprawnienia bota w banerze „Wymaga uwagi" + fix autodelete
 

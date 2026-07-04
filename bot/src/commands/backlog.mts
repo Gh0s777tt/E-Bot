@@ -6,9 +6,11 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { cloudDelete, cloudInsert, cloudSelect, cloudUpdate, hasCloud } from '../lib/cloud.mts';
 import { getSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
+import { panelButtonRow } from '../lib/panelLink.mts';
 
 const STATUS: Record<string, string> = {
   todo: '📥 Do ogrania',
@@ -88,8 +90,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
   if (!enabled()) {
+    const locale = resolveLocale(interaction);
     await interaction.reply({
-      content: '🎮 Backlog jest wyłączony (włącz w panelu).',
+      content: t(locale, 'panel.backlogOff'),
+      components: panelButtonRow('/gaming', t(locale, 'panel.open')),
       flags: MessageFlags.Ephemeral,
     });
     return;

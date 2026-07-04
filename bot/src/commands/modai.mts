@@ -7,8 +7,10 @@ import {
   PermissionFlagsBits,
   SlashCommandBuilder,
 } from 'discord.js';
+import { resolveLocale, t } from '../i18n/index.mts';
 import { aiConfig, bumpUsage, callModel, checkUsage } from '../lib/ai.mts';
 import { cloudSelect, hasCloud } from '../lib/cloud.mts';
+import { panelButtonRow } from '../lib/panelLink.mts';
 
 type ModCase = { username?: string; action?: string; reason?: string; created_at?: string };
 
@@ -71,8 +73,10 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
   const cfg = aiConfig();
   if (!cfg.enabled) {
+    const locale = resolveLocale(interaction);
     await interaction.reply({
-      content: '🤖 Komendy AI są wyłączone (włącz w panelu).',
+      content: t(locale, 'panel.aiOff'),
+      components: panelButtonRow('/moderation', t(locale, 'panel.open')),
       flags: MessageFlags.Ephemeral,
     });
     return;
