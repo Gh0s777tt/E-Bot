@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-683-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.613.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-684-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.614.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.614.0] — 📈 Discovery B4: metryki subskrypcji + alert o wygasaniu w panelu właściciela
+
+- `[#684]` 📈 **Kafelki metryk w `PremiumAdmin`** (Discovery B4 — „PremiumAdmin pokazuje stan, ale nie ostrzega ani nie mierzy"): **Aktywne · Wygasają ≤7 dni · Nowe (30 dni) · Wygasłe (30 dni)** — liczone na optymistycznym widoku tabeli (reagują natychmiast na nadanie/odebranie). Czysta logika w [`lib/premiumMetrics.ts`](dashboard/lib/premiumMetrics.ts) (`computePremiumMetrics` + `daysLeft`, okno kroczące 30 dni) + **alert w miejscu danych**: wiersz aktywnej subskrypcji kończącej się ≤7 dni pokazuje „⚠ wygasa za {n} dni" (bursztyn) zamiast neutralnego „aktywna". Narzędzie owner-only (PL, jak reszta `/diagnostics` — bez i18n, zgodnie z konwencją #671).
+  - **Zastrzeżenie w kodzie:** „Wygasłe (30 dni)" liczy tylko wiersze wciąż `tier='premium'` po dacie końca — ręcznie odebrane i skasowane subskrypcje Stripe wracają na `free` i znikają z listy (niedoszacowanie churnu). **Odłożone:** DM do właściciela z bota (wymaga serwisu w bocie + decyzji o kanale powiadomień) — alert w panelu pokrywa potrzebę na dziś.
+  - **Test:** [`premiumMetrics.test.ts`](dashboard/lib/premiumMetrics.test.ts) — `daysLeft` (sufit/min 0/null), pusta lista, bezterminowa vs krótka, okno 30 dni (+4 testy).
+  - **Bramki:** typecheck ×4 · test **1278** (+4) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.613.0] — 🔗 Discovery A6: deep-linki bot→panel jako przyciski
 

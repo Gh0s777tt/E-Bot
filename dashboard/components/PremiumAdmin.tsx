@@ -7,6 +7,7 @@
 import { Gift, Trash2 } from 'lucide-react';
 import { useOptimistic, useState, useTransition } from 'react';
 import { grantPremiumAction, revokePremiumAction } from '../app/diagnostics/actions';
+import { computePremiumMetrics, daysLeft, EXPIRING_DAYS } from '../lib/premiumMetrics';
 
 type Row = {
   guildId: string;
@@ -84,8 +85,36 @@ export default function PremiumAdmin({ rows }: { rows: Row[] }) {
     });
   }
 
+  // B4 (#684): metryki liczone na optymistycznym widoku — kafelki reagują razem z tabelą.
+  const now = Date.now();
+  const metrics = computePremiumMetrics(optimisticRows, now);
+  const tiles = [
+    { label: 'Aktywne', value: metrics.active, cls: 'text-green-400' },
+    {
+      label: `Wygasają ≤${EXPIRING_DAYS} dni`,
+      value: metrics.expiringSoon,
+      cls: metrics.expiringSoon > 0 ? 'text-amber-400' : 'text-muted',
+    },
+    { label: 'Nowe (30 dni)', value: metrics.newLast30d, cls: 'text-sky-300' },
+    {
+      label: 'Wygasłe (30 dni)',
+      value: metrics.endedLast30d,
+      cls: metrics.endedLast30d > 0 ? 'text-accent' : 'text-muted',
+    },
+  ];
+
   return (
     <div className="space-y-5">
+      {/* Metryki subskrypcji (B4) */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {tiles.map((t) => (
+          <div key={t.label} className="rounded-xl border border-line bg-bg/40 p-3">
+            <div className={`text-2xl font-bold tabular-nums ${t.cls}`}>{t.value}</div>
+            <div className="text-xs uppercase tracking-wide text-muted">{t.label}</div>
+          </div>
+        ))}
+      </div>
+
       {/* Nadanie ręczne */}
       <div className="rounded-xl border border-line bg-bg/40 p-4">
         <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
@@ -166,9 +195,22 @@ export default function PremiumAdmin({ rows }: { rows: Row[] }) {
                     {r.until ? day(r.until) : 'bezterminowo'}
                   </td>
                   <td className="px-3 py-2">
-                    <span className={r.active ? 'text-green-400' : 'text-amber-400'}>
-                      {r.active ? 'aktywna' : 'wygasła'}
-                    </span>
+                    {(() => {
+                      // Alert w miejscu danych: aktywna, ale kończy się ≤7 dni → bursztynowe ostrzeżenie.
+                      const left = r.active ? daysLeft(r.until, now) : null;
+                      if (r.active && left !== null && left <= EXPIRING_DAYS) {
+                        return (
+                          <span className="font-semibold text-amber-400">
+                            ⚠ wygasa za {left} {left === 1 ? 'dzień' : 'dni'}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span className={r.active ? 'text-green-400' : 'text-amber-400'}>
+                          {r.active ? 'aktywna' : 'wygasła'}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td className="px-3 py-2 text-xs text-muted">
                     {r.grantedBy ? <code>{r.grantedBy}</code> : '—'}
