@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-688-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.618.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-689-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.619.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,11 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.619.0] — 🌐 Discovery C2: publiczny hub serwera /p/hub
+
+- `[#689]` 🌐 **Publiczny hub `/p/hub`** (Discovery C2, za zgodą właściciela; problem P10 — strony `/p/*` rozłączone, bez wzajemnych linków i CTA, przeciek akwizycji): jedna udostępnialna strona spinająca **ranking · klany · status bota · odwołania od bana** (karta appeal dostaje `?g=<guildId>` automatycznie — koniec z „skąd wziąć ID serwera") + pętla akwizycji: **„Zaproś E-Bota"** (`botInviteUrl`) i **„Panel administratora"** (`/login`). Reużywa istniejące strony i ich tytuły i18n; 6 nowych kluczy `ui.pub.hub*` ×14 (parzystość pod testem).
+  - **Bramki:** typecheck ×4 · test **1291** · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.618.0] — 🏗️ Discovery B1 (pełne, decyzja właściciela): presety realnie konfigurują serwer
 
