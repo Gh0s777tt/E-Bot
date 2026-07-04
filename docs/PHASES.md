@@ -1,4 +1,4 @@
-<!-- SYNC: v0.616.0 · #686 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.617.0 · #687 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.616.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.617.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.616.0)
+## 🔭 Bieżący tor (v0.617.0)
+
+**🔘 Discovery B3 fala 2 — KOMPLET (v0.617.0)** — `RichMessage.buttons` (max 5, action row, tylko linki http(s) — stateless, bez handlera interakcji): sekcja „Przyciski-linki" w `MessageStudio` + podgląd 1:1 + renderer bota `buildButtonRow` (klasyka i V2) + te same reguły w „Wyślij testowo". Działa wszędzie, gdzie RichMessage (powitania/zaplanowane/tickety/respondery). **B3 DOMKNIĘTE** (#686 wyślij teraz + #687 przyciski). Przyciski z akcjami (role/ankiety) = osobna przyszła decyzja (rejestr `custom_id` + authz). Pozostałe: B1 (decyzja właściciela), A4–A5, C2–C3.
 
 **📨 Discovery B3 fala 1 — „Wyślij teraz" (v0.616.0)** — karty postów na `/scheduled` mają przycisk ręcznej wysyłki poza harmonogramem: `POST /api/scheduled-posts/send-now` → żądanie per-serwer `scheduled_send_now` → poller bota (≤60 s) wysyła przez wspólny `sendPost()`. Znacznik `sendnow:<id>` osobny od harmonogramu (ręczna nie zjada planowej — pod testem), i18n ×14. **B3 fala 2 (otwarte):** action rows (przyciski) w `MessageStudio` — wymaga zmiany schematu `RichMessage` + renderera bota. Pozostałe: B1 (decyzja właściciela), A4–A5, C2–C3.
 
@@ -283,4 +285,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.616.0 (#686) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.617.0 (#687) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

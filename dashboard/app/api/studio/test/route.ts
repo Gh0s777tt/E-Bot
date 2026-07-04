@@ -122,6 +122,23 @@ export async function POST(request: Request): Promise<Response> {
     if (msg.useEmbed && msg.embed && embedHasContent(msg.embed))
       payload.embeds = [buildEmbed(msg.embed)];
   }
+  // Przyciski-linki (B3 fala 2) — oba tryby; niepoprawne wpisy pomijane (te same reguły co bot).
+  const btns = (msg.buttons ?? [])
+    .filter((b) => b.label.trim() && /^https?:\/\//i.test(b.url.trim()))
+    .slice(0, 5)
+    .map((b) => ({
+      type: 2,
+      style: 5,
+      label: sub(b.label).slice(0, 80),
+      url: b.url.trim().slice(0, 512),
+      ...(b.emoji.trim() ? { emoji: { name: b.emoji.trim() } } : {}),
+    }));
+  if (btns.length) {
+    payload.components = [
+      ...((payload.components as unknown[]) ?? []),
+      { type: 1, components: btns },
+    ];
+  }
   if (!payload.content && !payload.embeds && !(payload.components as unknown[])?.length) {
     return Response.json({ ok: false, error: 'pusta wiadomość' }, { status: 400 });
   }

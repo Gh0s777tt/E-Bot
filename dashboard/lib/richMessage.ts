@@ -33,12 +33,17 @@ export type V2Spec = {
   blocks: V2Block[];
 };
 
+// Przyciski-linki pod wiadomością (B3 fala 2, #687) — jeden action row, max 5, tylko URL http(s).
+// Stateless (styl Link) = zero handlera interakcji w bocie; emoji wyłącznie unicode.
+export type RichButton = { label: string; url: string; emoji: string };
+
 export type RichMessage = {
   content: string;
   useEmbed: boolean;
   embed: RichEmbed;
   useV2?: boolean;
   v2?: V2Spec;
+  buttons?: RichButton[];
 };
 
 // Limity Discorda (do liczników znaków w UI).
@@ -52,6 +57,8 @@ export const LIMITS = {
   author: 256,
   fields: 25,
   embedTotal: 6000,
+  buttons: 5,
+  buttonLabel: 80,
 } as const;
 
 export const EMPTY_EMBED: RichEmbed = {

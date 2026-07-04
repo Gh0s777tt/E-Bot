@@ -28,12 +28,16 @@ export type V2Block =
   | { kind: 'section'; text: string; thumbnailUrl: string };
 export type V2Spec = { accentColor?: string; blocks: V2Block[] };
 
+// Przyciski-linki pod wiadomością (B3 fala 2, #687) — styl Link (stateless, bez handlera interakcji).
+export type RichButton = { label?: string; url?: string; emoji?: string };
+
 export type RichMessage = {
   content?: string;
   useEmbed?: boolean;
   embed?: RichEmbed;
   useV2?: boolean;
   v2?: V2Spec;
+  buttons?: RichButton[];
 };
 
 function hexToInt(hex?: string): number | undefined {
@@ -192,15 +196,41 @@ export function buildV2Components(spec: RichMessage, vars: Record<string, string
 
 export const FLAG_COMPONENTS_V2 = 1 << 15;
 
+// Action row przycisków-linków (raw: type 1 + przyciski type 2 style 5). Niepoprawne wpisy
+// (pusta etykieta / URL nie-http) pomijane; max 5 (limit Discorda na wiersz); emoji tylko unicode.
+// Czyste, testowalne (richMessage.buttons.test.ts).
+export function buildButtonRow(
+  buttons: RichButton[] | undefined,
+  vars: Record<string, string> = {},
+): unknown | null {
+  const btns = (buttons ?? [])
+    .filter((b) => b.label?.trim() && /^https?:\/\//i.test(b.url?.trim() ?? ''))
+    .slice(0, 5)
+    .map((b) => ({
+      type: 2,
+      style: 5,
+      label: sub(b.label, vars).slice(0, 80),
+      url: (b.url ?? '').trim().slice(0, 512),
+      ...(b.emoji?.trim() ? { emoji: { name: b.emoji.trim() } } : {}),
+    }));
+  return btns.length ? { type: 1, components: btns } : null;
+}
+
 // Gotowe opcje do channel.send(): V2 (components + flaga, bez content/embeds — Discord ich
-// wtedy zabrania) albo klasyka (content + embeds). Caller dokłada allowedMentions/files.
+// wtedy zabrania) albo klasyka (content + embeds). Przyciski-linki doklejane w OBU trybach
+// (action row jest legalny także wśród komponentów V2). Caller dokłada allowedMentions/files.
 export function buildSendOptions(
   spec: RichMessage,
   vars: Record<string, string> = {},
 ): { content?: string; embeds?: APIEmbed[]; components?: unknown[]; flags?: number } {
+  const row = buildButtonRow(spec.buttons, vars);
   if (spec.useV2 && v2HasContent(spec.v2)) {
     const components = buildV2Components(spec, vars);
-    if (components.length) return { components, flags: FLAG_COMPONENTS_V2 };
+    if (components.length) {
+      if (row) components.push(row);
+      return { components, flags: FLAG_COMPONENTS_V2 };
+    }
   }
-  return buildRichMessage(spec, vars);
+  const base = buildRichMessage(spec, vars);
+  return row ? { ...base, components: [row] } : base;
 }

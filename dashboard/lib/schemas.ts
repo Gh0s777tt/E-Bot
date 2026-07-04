@@ -151,6 +151,17 @@ export const richMessageSchema = z.object({
       blocks: z.array(v2BlockSchema).max(10).default([]),
     })
     .optional(),
+  // Przyciski-linki (B3 fala 2) — jeden action row, max 5; walidacja http(s) po stronie renderera bota.
+  buttons: z
+    .array(
+      z.object({
+        label: z.string().max(80),
+        url: z.string().max(512),
+        emoji: z.string().max(32).default(''),
+      }),
+    )
+    .max(5)
+    .optional(),
 });
 export type RichMessageInput = z.infer<typeof richMessageSchema>;
 

@@ -698,6 +698,14 @@ export default function MessageStudio({
   const isV2 = allowV2 && !!value.useV2;
   const v2 = value.v2 ?? EMPTY_V2;
 
+  // Przyciski-linki (B3 fala 2) — działają w obu trybach (klasyka i V2).
+  const buttons = value.buttons ?? [];
+  const setButton = (i: number, patch: Partial<(typeof buttons)[number]>) =>
+    onChange({ ...value, buttons: buttons.map((b, x) => (x === i ? { ...b, ...patch } : b)) });
+  const previewButtons = buttons.filter(
+    (b) => b.label.trim() && /^https?:\/\//i.test(b.url.trim()),
+  );
+
   return (
     <div className="space-y-4">
       {/* Components V2 (Etap I) — tryb blokowy zamiast treść+embed */}
@@ -939,6 +947,65 @@ export default function MessageStudio({
         </div>
       )}
 
+      {/* Przyciski-linki (B3 fala 2, #687) — jeden action row, max 5; tylko URL http(s) */}
+      <div className="space-y-2 rounded-xl border border-line bg-bg/40 p-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-white/90">
+            🔘 Przyciski-linki{' '}
+            <span className="text-xs text-muted">(max {LIMITS.buttons}, pod wiadomością)</span>
+          </span>
+          <button
+            type="button"
+            disabled={buttons.length >= LIMITS.buttons}
+            onClick={() =>
+              onChange({ ...value, buttons: [...buttons, { label: '', url: '', emoji: '' }] })
+            }
+            className="rounded-md border border-line px-2.5 py-1 text-xs transition hover:bg-elevated disabled:opacity-40"
+          >
+            + Dodaj przycisk
+          </button>
+        </div>
+        {buttons.map((b, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: przyciski nie mają ID — kolejność jest tożsamością
+          <div key={`btn-${i}`} className="flex items-start gap-2">
+            <input
+              value={b.emoji}
+              onChange={(e) => setButton(i, { emoji: e.target.value })}
+              placeholder="emoji"
+              className={`${inp} w-16`}
+              maxLength={4}
+            />
+            <input
+              value={b.label}
+              onChange={(e) => setButton(i, { label: e.target.value })}
+              placeholder="etykieta (np. Dołącz)"
+              className={`${inp} w-44`}
+              maxLength={LIMITS.buttonLabel}
+            />
+            <input
+              value={b.url}
+              onChange={(e) => setButton(i, { url: e.target.value })}
+              placeholder="https://…"
+              className={inp}
+            />
+            <button
+              type="button"
+              onClick={() => onChange({ ...value, buttons: buttons.filter((_, x) => x !== i) })}
+              className="rounded-md border border-line px-2 py-2 text-xs text-muted transition hover:border-accent hover:text-accent"
+              title="Usuń przycisk"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+        {buttons.length > 0 && (
+          <p className="text-[11px] text-muted">
+            Tylko linki http(s); emoji wyłącznie standardowe (unicode). Etykieta obsługuje
+            placeholdery ({'{server}'} itd.).
+          </p>
+        )}
+      </div>
+
       {/* Szablony */}
       <div className="flex flex-wrap items-end gap-2 rounded-xl border border-line bg-bg/40 p-3">
         <label className="space-y-1 text-sm">
@@ -1108,6 +1175,21 @@ export default function MessageStudio({
           </div>
         ) : (
           !isV2 && !value.content.trim() && <p className="text-sm text-white/60">— pusto —</p>
+        )}
+        {previewButtons.length > 0 && (
+          <div className="mt-2 flex max-w-lg flex-wrap gap-2">
+            {previewButtons.map((b, i) => (
+              <span
+                // biome-ignore lint/suspicious/noArrayIndexKey: podgląd tylko czyta — kolejność jest tożsamością
+                key={`pbtn-${i}`}
+                className="inline-flex items-center gap-1.5 rounded bg-[#4e5058] px-3 py-1.5 text-sm font-medium text-white"
+              >
+                {b.emoji.trim() && <span>{b.emoji.trim()}</span>}
+                {b.label}
+                <span className="text-xs opacity-70">↗</span>
+              </span>
+            ))}
+          </div>
         )}
       </div>
     </div>

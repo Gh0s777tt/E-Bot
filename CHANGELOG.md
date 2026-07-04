@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-686-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.616.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-687-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.617.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.617.0] — 🔘 B3 fala 2 (KOMPLET): przyciski-linki w Message Studio
+
+- `[#687]` 🔘 **Przyciski pod wiadomością** (domyka Discovery B3 — referencja `Message Builder.png` z folderu benchmarków): `RichMessage` dostał pole `buttons` (max 5, jeden action row) — nowa sekcja **„Przyciski-linki"** w [`MessageStudio`](dashboard/components/MessageStudio.tsx) (emoji + etykieta + URL, licznik, podgląd 1:1 jak Discord z przyciskami) i renderer bota [`buildButtonRow`](bot/src/lib/richMessage.mts) wpięty w `buildSendOptions` — przyciski działają w **obu trybach** (klasyka content+embed ORAZ Components V2 — action row jest legalny wśród komponentów V2) i wszędzie, gdzie używany jest RichMessage (powitania, zaplanowane posty, tickety, respondery…). Etykiety obsługują placeholdery (`{server}`…).
+  - **Świadomy zakres — tylko styl Link (stateless):** zero handlera interakcji w bocie, zero uprawnień, zero stanu; przyciski z akcjami (role/ankiety) to osobna decyzja projektowa (wymaga rejestru `custom_id` + authz). Walidacja: pomijane wpisy bez etykiety / z URL nie-http(s); emoji tylko unicode; Zod `richMessageSchema.buttons` (max 5 × label 80 / url 512).
+  - **Spójność torów wysyłki:** „Wyślij testowo" (`/api/studio/test`) buduje przyciski wg tych samych reguł co bot — test = produkcja.
+  - **Testy:** [`richMessage.buttons.test.ts`](bot/src/lib/richMessage.buttons.test.ts) — action row, filtrowanie niepoprawnych, cap 5, placeholdery, klasyka + V2 (+6). **B3 KOMPLETNE** (wyślij teraz #686 + przyciski #687; harmonogram i wysyłka-gdziekolwiek istniały od Toru F+).
+  - **Bramki:** typecheck ×4 · test **1291** (+6) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.616.0] — 📨 Discovery B3 (fala 1): „Wyślij teraz" w Studiu zaplanowanych wiadomości
 
