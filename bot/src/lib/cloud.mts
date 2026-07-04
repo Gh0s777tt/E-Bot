@@ -155,6 +155,44 @@ export async function cloudDelete(table: string, filterQs: string): Promise<void
   if (!r.ok) throw new Error(`${table} DELETE ${r.status}: ${await r.text().catch(() => '')}`);
 }
 
+/** DELETE zwracający USUNIĘTE wiersze (`return=representation`). Postgres serializuje DELETE na tym
+ *  samym wierszu, więc przy równoległym „claim" tej samej oferty TYLKO jeden wywołujący dostanie
+ *  niepusty wynik — atomowy zamek bez RPC (anty-wyścig market/giełda). Brak chmury → []. */
+export async function cloudDeleteReturning<T = Record<string, unknown>>(
+  table: string,
+  filterQs: string,
+): Promise<T[]> {
+  if (!hasCloud() || !filterQs) return [];
+  const r = await fetch(tableUrl(table, filterQs), {
+    method: 'DELETE',
+    headers: headers({ Prefer: 'return=representation' }),
+    signal: timeout(),
+  });
+  if (!r.ok) throw new Error(`${table} DELETE ${r.status}: ${await r.text().catch(() => '')}`);
+  const text = await r.text();
+  return (text ? JSON.parse(text) : []) as T[];
+}
+
+/** UPDATE zwracający ZMIENIONE wiersze (`return=representation`). Z filtrem porównującym starą wartość
+ *  (compare-and-swap) daje atomowy warunkowy zapis bez RPC: przy równoległej zmianie tylko pierwszy
+ *  PATCH trafi w filtr, reszta dostanie [] (anty-lost-update na pozycjach giełdowych). Brak chmury → []. */
+export async function cloudUpdateReturning<T = Record<string, unknown>>(
+  table: string,
+  filterQs: string,
+  patch: unknown,
+): Promise<T[]> {
+  if (!hasCloud() || !filterQs) return [];
+  const r = await fetch(tableUrl(table, filterQs), {
+    method: 'PATCH',
+    headers: headers({ Prefer: 'return=representation' }),
+    body: JSON.stringify(patch),
+    signal: timeout(),
+  });
+  if (!r.ok) throw new Error(`${table} UPDATE ${r.status}: ${await r.text().catch(() => '')}`);
+  const text = await r.text();
+  return (text ? JSON.parse(text) : []) as T[];
+}
+
 /** Wywołanie funkcji Postgres (PostgREST `/rpc/<fn>`). Zwraca sparsowany wynik (skalar/obiekt/null).
  *  RZUCA przy braku chmury lub błędzie HTTP — by wołający mógł zrobić fallback (np. RPC niewgrane → 404).
  *  Używane do atomowych operacji ekonomii (economy_spend/credit/move) — anty-wyścig na saldach. */

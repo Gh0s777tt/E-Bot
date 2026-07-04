@@ -2,7 +2,14 @@
 // (suma sinusoid z fazami z hasza symbolu): brak workera w tle, cena spójna między odczytami,
 // zawsze dodatnia, łagodnie falująca i wracająca do średniej. Pozycje graczy w Supabase
 // economy_stocks (graceful no-op bez chmury). Time z Date.now() — bot runtime, nie workflow.
-import { cloudDelete, cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import {
+  cloudDelete,
+  cloudDeleteReturning,
+  cloudSelect,
+  cloudUpdateReturning,
+  cloudUpsert,
+  hasCloud,
+} from '../lib/cloud.mts';
 
 export type Stock = { symbol: string; name: string; emoji: string; base: number; vol: number };
 
@@ -95,4 +102,49 @@ export async function adjustHolding(
     [{ guild_id: guildId, user_id: userId, symbol, shares, invested }],
     'guild_id,user_id,symbol',
   );
+}
+
+// Atomowa SPRZEDAŻ pozycji (compare-and-swap): odejmij `shares` TYLKO jeśli w bazie wciąż jest
+// dokładnie `expectedShares` (filtr `shares=eq`). Przy równoległej sprzedaży drugie wywołanie nie
+// trafi w filtr → zwraca false (bez zmiany), więc wołający NIE wypłaca 2× (anty-lost-update, #2).
+// newInvested = docelowa wartość `invested` po sprzedaży. Bez chmury → true (tryb lokalny).
+// deps wstrzykiwalne dla testów (wzorzec saveConfig.fetchImpl) — domyślnie realne funkcje chmury.
+export type SellDeps = {
+  del: (table: string, filter: string) => Promise<unknown[]>;
+  upd: (table: string, filter: string, patch: unknown) => Promise<unknown[]>;
+};
+
+// Czysty rdzeń CAS (bez gatingu chmury — testowalny). Zwraca true, gdy warunkowy zapis trafił
+// (dokładnie `expectedShares` w bazie). left<=0 → kasuje wiersz, inaczej PATCH nowej wartości.
+export async function sellHoldingCASCore(
+  base: string,
+  shares: number,
+  expectedShares: number,
+  newInvested: number,
+  deps: SellDeps,
+): Promise<boolean> {
+  const left = expectedShares - shares;
+  if (left <= 0) {
+    const gone = await deps.del('economy_stocks', base);
+    return gone.length > 0;
+  }
+  const updated = await deps.upd('economy_stocks', base, {
+    shares: left,
+    invested: Math.max(0, Math.round(newInvested)),
+  });
+  return updated.length > 0;
+}
+
+export async function sellHoldingCAS(
+  guildId: string,
+  userId: string,
+  symbol: string,
+  shares: number,
+  expectedShares: number,
+  newInvested: number,
+  deps: SellDeps = { del: cloudDeleteReturning, upd: cloudUpdateReturning },
+): Promise<boolean> {
+  if (!hasCloud()) return true;
+  const base = `guild_id=eq.${guildId}&user_id=eq.${userId}&symbol=eq.${symbol}&shares=eq.${expectedShares}`;
+  return sellHoldingCASCore(base, shares, expectedShares, newInvested, deps);
 }

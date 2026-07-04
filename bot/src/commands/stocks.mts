@@ -14,6 +14,7 @@ import {
   getHoldings,
   priceAt,
   STOCKS,
+  sellHoldingCAS,
 } from '../economy/stocks.mts';
 import {
   creditWallet,
@@ -204,9 +205,30 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   const proceeds = price * shares;
   // Proporcjonalne zmniejszenie zainwestowanego (dla liczenia zysku przy częściowej sprzedaży).
   const investedBack = Math.round((held.invested * shares) / held.shares);
+  // ANTY-DOUBLE-SELL (#2): najpierw ATOMOWO zajmij akcje (compare-and-swap na held.shares), a DOPIERO
+  // potem wypłać. Dawniej: walidacja → credit → RMW pozycji = dwa równoległe /sell tych samych akcji
+  // przechodziły oba i wypłacały 2×. Teraz drugi przegrywa CAS (false) i nie dostaje nic.
+  const sold = await sellHoldingCAS(
+    gid,
+    uid,
+    stock.symbol,
+    shares,
+    held.shares,
+    held.invested - investedBack,
+  );
+  if (!sold) {
+    await interaction.reply(
+      eph(
+        t(locale, 'stocks.notEnoughShares', {
+          owned: String(held.shares),
+          symbol: stock.symbol,
+        }),
+      ),
+    );
+    return;
+  }
   // Atomowy credit (stocks bez withLock) — overwrite saldem zgubiłby równoległy credit/debet.
   const newWallet = await creditWallet(gid, uid, interaction.user.username, proceeds);
-  await adjustHolding(gid, uid, stock.symbol, -shares, -investedBack);
   logTx(gid, uid, proceeds, `stock:sell:${stock.symbol}`);
   const profit = proceeds - investedBack;
   await interaction.reply(

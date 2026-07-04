@@ -4,7 +4,7 @@
 // CC 2.0 (Etap H): warunek requiredRoleId + akcje (addRole/removeRole/giveMoney/giveXp).
 
 import { type ChatInputCommandInteraction, type GuildMember, MessageFlags } from 'discord.js';
-import { ecoConfig, getUser as getEcoUser, saveUser as saveEcoUser } from '../economy/store.mts';
+import { creditWallet, ecoConfig, ensureUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { levelForXp } from '../leveling.mts';
 import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
@@ -65,15 +65,14 @@ async function runActions(
       } else if (a.kind === 'giveMoney' && ecoConfig(gid).enabled && hasCloud()) {
         const amt = Math.max(0, Math.min(Math.floor(Number(a.amount) || 0), MAX_ACTION_AMOUNT));
         if (amt <= 0) continue;
-        const u = await getEcoUser(gid, interaction.user.id);
-        await saveEcoUser({
-          guild_id: gid,
-          user_id: interaction.user.id,
-          username: interaction.user.username,
-          wallet: u.wallet + amt,
-        });
+        // Atomowy credit (RPC economy_credit) zamiast overwrite getUser+saveUser (#3): dawny wzorzec
+        // kasował równoległy pay/rob/daily na to samo konto (lost update). Spójne z market/stocks.
+        await ensureUser(gid, interaction.user.id, interaction.user.username);
+        await creditWallet(gid, interaction.user.id, interaction.user.username, amt);
         logTx(gid, interaction.user.id, amt, `cmd:/${interaction.commandName}`);
       } else if (a.kind === 'giveXp' && hasCloud()) {
+        // Uwaga: XP to wciąż read-modify-write (jak cały leveling — brak atomowego RPC dla xp).
+        // Skutek zbiegu = utrata części XP graczowi, nie nadmiar — nie exploit; do domknięcia z #5.
         const amt = Math.max(0, Math.min(Math.floor(Number(a.amount) || 0), MAX_ACTION_AMOUNT));
         if (amt <= 0) continue;
         const rows = await cloudSelect<{ xp: number }>(

@@ -14,7 +14,13 @@ import {
   getInventory,
   spendWallet,
 } from '../economy/store.mts';
-import { cloudDelete, cloudInsert, cloudSelect, hasCloud } from '../lib/cloud.mts';
+import {
+  cloudDelete,
+  cloudDeleteReturning,
+  cloudInsert,
+  cloudSelect,
+  hasCloud,
+} from '../lib/cloud.mts';
 
 const ACCENT = 0xe50914;
 const eph = (content: string) => ({ content, flags: MessageFlags.Ephemeral as const });
@@ -158,11 +164,23 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await interaction.reply(eph(`Masz za mało (cena ${fmt(listing.price, cur)}).`));
     return;
   }
+  // Atomowy claim: DELETE ... RETURNING zwraca wiersz TYLKO temu, kto pierwszy zdjął ofertę.
+  // Przy równoległym zakupie tej samej oferty drugi dostaje [] (Postgres serializuje DELETE wiersza)
+  // → zwrot debetu i komunikat „już sprzedane", zamiast dawnego double-buy (return=minimal nie
+  // rozróżniał 1 vs 0 usuniętych wierszy).
+  let claimed: unknown[];
   try {
-    await cloudDelete('market_listings', `id=eq.${listing.id}`); // claim oferty
+    claimed = await cloudDeleteReturning('market_listings', `id=eq.${listing.id}`);
   } catch (e) {
     await creditWallet(gid, interaction.user.id, interaction.user.username, listing.price); // zwrot
     throw e;
+  }
+  if (claimed.length === 0) {
+    await creditWallet(gid, interaction.user.id, interaction.user.username, listing.price); // zwrot
+    await interaction.reply(
+      eph('Ta oferta została już sprzedana. Spróbuj innej (`/market browse`).'),
+    );
+    return;
   }
   // Kupno potwierdzone (oferta zdjęta) → wypłata sprzedawcy + przedmiot kupującemu (best-effort).
   await creditWallet(gid, listing.seller_id, listing.seller_name, listing.price);

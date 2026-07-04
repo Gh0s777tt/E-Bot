@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-690-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.620.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-691-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.621.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,15 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.621.0] — 🔒 Audyt: naprawa 3 krytycznych wyścigów ekonomii (market · giełda · no-code)
+
+- `[#691]` 🔒 **Domknięcie atomowości ekonomii poza portfelem** (znaleziska #1–#3 z audytu 2026-07-04 — wcześniej atomowy był tylko portfel przez RPC, reszta to gołe read-modify-write):
+  - **`/market buy` — koniec dup przedmiotów i podwójnej wypłaty:** claim oferty przez nowy `cloudDeleteReturning` (`DELETE … return=representation`) — Postgres serializuje DELETE wiersza, więc przy równoległym zakupie tej samej oferty TYLKO pierwszy dostaje wiersz; drugi dostaje `[]` → zwrot debetu + „już sprzedane". Dawny `cloudDelete` (`return=minimal`) nie rozróżniał 1 vs 0 usuniętych wierszy ([market.mts:171](bot/src/commands/market.mts)).
+  - **`/stocks sell` — koniec podwójnej wypłaty:** odwrócona kolejność (najpierw zajmij akcje, potem wypłać) + atomowy **compare-and-swap** na pozycji (`sellHoldingCAS` — warunkowy `PATCH/DELETE` z filtrem `shares=eq.<oczekiwane>` przez `cloudUpdateReturning`); drugi równoległy `/sell` przegrywa CAS i nie wypłaca ([stocks.mts:211](bot/src/commands/stocks.mts), [economy/stocks.mts](bot/src/economy/stocks.mts)).
+  - **`/…` no-code `giveMoney` — koniec overwrite salda:** atomowy `creditWallet` (RPC `economy_credit`) zamiast `getUser`+`saveUser`, który kasował równoległy `pay`/`rob`/`daily` ([customCommands.mts:65](bot/src/commands/customCommands.mts)). `giveXp` świadomie zostaje RMW (skutek zbiegu = utrata XP graczowi, nie exploit; część większego #5 levelingu).
+  - **Nowe w `lib/cloud.mts`:** `cloudDeleteReturning` + `cloudUpdateReturning` (atomowe zamki bez potrzeby wgrywania RPC). **Test:** [stocks-sell.test.ts](bot/src/economy/stocks-sell.test.ts) — CAS częściowy/całość/przegrany-wyścig/invested (+4, rdzeń `sellHoldingCASCore` wstrzykiwalny).
+  - **Bramki:** typecheck ×4 · test **1298** (+4) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.620.0] — 📊 Discovery C3: lejek aktywacji dla właściciela (agregaty, zero PII)
 
