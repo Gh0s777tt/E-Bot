@@ -173,13 +173,10 @@ function noXpMember(member: GuildMember): boolean {
 // Klucz `guildId:userId` (#4) — inaczej user na 2 serwerach dostaje XP tylko na jednym (wspólny
 // cooldown). Sprzątanie starych wpisów co 30 min (audyt: mapa rosła bez ograniczeń przy dużej flocie).
 const cooldowns = new Map<string, number>();
-setInterval(
-  () => {
-    const cut = Date.now() - 60 * 60_000;
-    for (const [k, t] of cooldowns) if (t < cut) cooldowns.delete(k);
-  },
-  30 * 60_000,
-).unref?.();
+setInterval(() => {
+  const cut = Date.now() - 60 * 60_000;
+  for (const [k, t] of cooldowns) if (t < cut) cooldowns.delete(k);
+}, 30 * 60_000).unref?.();
 
 async function award(
   client: Client,

@@ -4,9 +4,11 @@ import {
   exchangeCode,
   fetchDiscordUser,
   getOrigin,
+  isValidOAuthState,
   parseCookie,
   SESSION_COOKIE,
   STATE_COOKIE,
+  safeNextDest,
   selfServeEnabled,
 } from '../../../../lib/auth';
 import { enrollFromDiscord } from '../../../../lib/enroll';
@@ -23,11 +25,13 @@ export async function GET(request: Request) {
   const state = url.searchParams.get('state');
   const cookies = parseCookie(request.headers.get('cookie'));
 
-  if (!code || !state || state !== cookies[STATE_COOKIE]) {
+  if (!isValidOAuthState(code, state, cookies[STATE_COOKIE])) {
     return NextResponse.redirect(`${origin}/login?e=state`);
   }
+  // isValidOAuthState gwarantuje `!!code` (zwraca false przy pustym), stąd bezpieczna asercja.
+  const authCode = code as string;
   try {
-    const tok = await exchangeCode(origin, code);
+    const tok = await exchangeCode(origin, authCode);
     const user = await fetchDiscordUser(tok.access_token);
 
     // Logowanie WYŁĄCZNIE do odwołań (z /p/appeal): wydaj lekką tożsamość w OSOBNYM ciasteczku
@@ -39,8 +43,7 @@ export async function GET(request: Request) {
         { uid: user.id, uname: user.global_name || user.username, exp: Date.now() + 3600 * 1000 },
         authConfig().secret,
       );
-      const dest =
-        nextRaw.startsWith('/') && !nextRaw.startsWith('//') ? nextRaw.slice(0, 300) : '/';
+      const dest = safeNextDest(nextRaw);
       const res = NextResponse.redirect(`${origin}${dest}`);
       res.cookies.set('ebot_appeal', appealTok, {
         httpOnly: true,

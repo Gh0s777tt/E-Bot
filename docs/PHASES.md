@@ -1,4 +1,4 @@
-<!-- SYNC: v0.622.0 · #692 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.623.0 · #693 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.622.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.623.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -28,6 +28,10 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## 🔭 Bieżący tor (v0.623.0)
+
+**🧪 Audyt — testy bramek bezpieczeństwa + coverage gate w CI (v0.623.0)** — pokryto testami najgrubsze dotąd nietestowane ryzyka: bramka autoryzacji (`lib/authz.ts` wyjęty z proxy.ts, +12), webhook Stripe (podpisy HMAC/replay, +7), guardy OAuth (CSRF + anty-open-redirect, +5). CI naprawiony: `vitest --coverage` (gate egzekwowany), typecheck ×4 (+ingest), Biome +ingest/scripts, `bot/src/setup` wykluczony z lintu. Progi ratchet w górę (fn 31.89→32.14). Zostają z audytu: bundle i18n per-język, batch pollerów O(N), reszta map pamięci; opcja `coverage all:true` (urealnia baseline do ~15%) — decyzja właściciela.
 
 ## 🔭 Bieżący tor (v0.622.0)
 
@@ -299,4 +303,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.622.0 (#692) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.623.0 (#693) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

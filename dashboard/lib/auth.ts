@@ -102,6 +102,24 @@ export function selfServeEnabled(): boolean {
   return v !== '0' && v !== 'false' && v !== 'off';
 }
 
+// CSRF w OAuth: `state` z URL musi istnieć i zgadzać się z ciasteczkiem stanu (oraz `code` obecny).
+// Czysta — testowalna bez handlera (callback/route.ts).
+export function isValidOAuthState(
+  code: string | null,
+  state: string | null,
+  cookieState: string | undefined,
+): boolean {
+  return !!code && !!state && !!cookieState && state === cookieState;
+}
+
+// Anty-open-redirect: dopuszczamy TYLKO ścieżki wewnętrzne zaczynające się od pojedynczego „/”
+// (odrzucamy „//host" i „/\host" — protocol-relative / próby wyjścia na obcy host). Limit długości.
+export function safeNextDest(nextRaw: string | undefined): string {
+  const s = nextRaw ?? '';
+  if (!s.startsWith('/') || s.startsWith('//') || s.startsWith('/\\')) return '/';
+  return s.slice(0, 300);
+}
+
 export const MANAGE_GUILD = 0x20n; // bit uprawnienia „Zarządzanie serwerem" (Manage Guild)
 
 export type UserGuild = { id: string; name: string; owner?: boolean; permissions?: string };

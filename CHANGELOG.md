@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-692-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.622.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-693-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.623.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,16 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.623.0] — 🧪 Audyt: testy bramek bezpieczeństwa + coverage gate w CI
+
+- `[#693]` 🧪 **Siatka pod najgrubsze nietestowane ryzyka** (z audytu 2026-07-04 — dotąd 0 testów na tych ścieżkach): wydzielono czystą logikę i pokryto testami:
+  - **Bramka autoryzacji panelu** → nowy [`lib/authz.ts`](dashboard/lib/authz.ts) (`isPublicPath` + `authorize`) wyjęty z `proxy.ts` (Next), by dało się testować bez frameworka; `proxy.ts` = cienka powłoka. Test [authz.test.ts](dashboard/lib/authz.test.ts) — publiczne vs chronione, regresje EXACT-vs-prefix (`/api/kofi` ≠ `/api/kofi-config`, `/api/hook`, `/api/bot-status`), gating viewer/staff/admin (+12).
+  - **Webhook Stripe** → [billing.stripe-sig.test.ts](dashboard/lib/billing.stripe-sig.test.ts): prawdziwe podpisy HMAC — poprawny/zły sekret/zmienione body/podmieniony v1/anty-replay ±300 s/fail-closed (+7). Chroni nadania Premium.
+  - **OAuth callback** → wydzielone `isValidOAuthState` (CSRF) + `safeNextDest` (anty-open-redirect, wzmocniony o `/\`) w [`lib/auth.ts`](dashboard/lib/auth.ts); test [auth.oauth-guards.test.ts](dashboard/lib/auth.oauth-guards.test.ts) (+5).
+  - **Limity AI** (z #692) domknięte testem [ai.test.ts](bot/src/lib/ai.test.ts).
+- `[#693]` 🚦 **Coverage gate faktycznie egzekwowany w CI** — `vitest run` → `vitest run --coverage` ([ci.yml](.github/workflows/ci.yml)); dotąd progi z `vitest.config.ts` nie działały w CI (a lokalnie `functions` był **czerwony** 31.89% < 32%). Nowe testy podniosły do **32.14%** → progi podbite (ratchet w górę: stmts 34 / br 31 / fn 32 / ln 35). Domknięte też: **typecheck ×4** (dodany `ingest` — dotąd ×3) i **Biome CI szerszy** (`ingest`+`scripts`); `bot/src/setup/` wykluczony z lintu w `biome.json` (osobny tor właściciela — nadal w typecheck/testach), więc CI Biome jest zielony.
+  - **Bramki:** typecheck ×4 · test **1325** (+24) · Biome (923 pliki, 0 błędów) · coverage gate PASS · `sync:check` — exit 0.
 
 ## [0.622.0] — 🛡️ Audyt: izolacja kar per-serwer (#4) + fail-closed limitów AI (#5)
 

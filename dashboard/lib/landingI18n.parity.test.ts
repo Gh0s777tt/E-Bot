@@ -8,7 +8,22 @@ import { LANDING } from './landingI18n';
 
 const BASE = 'pl';
 // 14 języków projektu (PL bazowo). RTL (ar) nie wpływa na keyset.
-const LOCALES = ['pl', 'en', 'de', 'es', 'it', 'fr', 'pt', 'zh', 'ko', 'ru', 'uk', 'ja', 'ar', 'id'] as const;
+const LOCALES = [
+  'pl',
+  'en',
+  'de',
+  'es',
+  'it',
+  'fr',
+  'pt',
+  'zh',
+  'ko',
+  'ru',
+  'uk',
+  'ja',
+  'ar',
+  'id',
+] as const;
 
 describe('Parytet i18n landingu — LANDING (baza: pl, ×14)', () => {
   it('LANDING ma wszystkie 14 locale', () => {

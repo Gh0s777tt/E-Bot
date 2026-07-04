@@ -25,13 +25,15 @@ export default defineConfig({
         'scripts/**',
         'bot/src/setup/**',
       ],
-      // Progi = podłoga tuż pod obecnym baseline (stmts 34% / br 30% / fn 33% / ln 36%), żeby gate
-      // był zielony DZIŚ i chronił przed regresją w dół. Podnosić przy dokładaniu testów.
+      // Progi = podłoga tuż pod obecnym baseline (po #693: stmts 34.2 / br 31.7 / fn 32.1 / ln 35.9),
+      // żeby gate był zielony DZIŚ i chronił przed regresją w dół. Podnosić przy dokładaniu testów.
+      // (Metryka liczy pliki DOTKNIĘTE testami — jakość pokrycia testowanej logiki, nie całego repo;
+      //  przełączenie na `all:true` = osobna decyzja właściciela, bo urealniłoby baseline do ~15%.)
       thresholds: {
-        statements: 33,
-        branches: 29,
+        statements: 34,
+        branches: 31,
         functions: 32,
-        lines: 34,
+        lines: 35,
       },
     },
   },
