@@ -9,28 +9,51 @@ import ServerArchitect from '../../components/ServerArchitect';
 import { tp } from '../../lib/panelI18n';
 import { PRESETS, type PresetId } from '../../lib/setup';
 
+type LogItem = { label: string; ok: boolean; detail?: string };
+
 export default function SetupPage() {
   const { lang } = useLang();
   const [sel, setSel] = useState<PresetId | null>(null);
-  const [st, setSt] = useState<'idle' | 'saving' | 'done' | 'err'>('idle');
+  const [st, setSt] = useState<'idle' | 'saving' | 'building' | 'done' | 'err'>('idle');
   const [enabled, setEnabled] = useState<string[]>([]);
+  // B1 pełne (#688): preset tworzy też strukturę Discorda (istniejący silnik provisioningu).
+  const [provision, setProvision] = useState(true);
+  const [log, setLog] = useState<LogItem[]>([]);
 
   async function apply() {
     if (!sel) return;
     setSt('saving');
+    setLog([]);
     try {
       const r = await fetch('/api/setup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ preset: sel }),
+        body: JSON.stringify({ preset: sel, provision }),
       });
-      const d = (await r.json()) as { ok?: boolean; enabled?: string[] };
-      if (r.ok && d.ok) {
-        setEnabled(d.enabled ?? []);
-        setSt('done');
-      } else {
+      const d = (await r.json()) as { ok?: boolean; enabled?: string[]; id?: string | null };
+      if (!r.ok || !d.ok) {
         setSt('err');
+        return;
       }
+      setEnabled(d.enabled ?? []);
+      if (!d.id) {
+        setSt('done');
+        return;
+      }
+      // Poll wyniku provisioningu (jak Blueprinty): bot odbiera plan co ~4 s i odsyła log.
+      setSt('building');
+      for (let i = 0; i < 40; i++) {
+        await new Promise((res) => setTimeout(res, 2500));
+        const g = (await fetch(`/api/setup/provision?id=${encodeURIComponent(d.id)}`)
+          .then((x) => x.json())
+          .catch(() => ({ done: false }))) as { done?: boolean; log?: LogItem[] };
+        if (g.done) {
+          setLog(g.log ?? []);
+          setSt('done');
+          return;
+        }
+      }
+      setSt('err');
     } catch {
       setSt('err');
     }
@@ -56,6 +79,24 @@ export default function SetupPage() {
               </span>
             ))}
           </div>
+          {log.length > 0 && (
+            <div className="mx-auto mt-4 max-w-md rounded-xl border border-line bg-bg/40 p-3 text-start">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">
+                {tp(lang, 'ui.setup.structHeading')}
+              </p>
+              <ul className="space-y-1 text-sm">
+                {log.map((l) => (
+                  <li key={l.label} className="flex items-center gap-2">
+                    <span className={l.ok ? 'text-green-400' : 'text-accent'}>
+                      {l.ok ? '✓' : '✗'}
+                    </span>
+                    <span className="text-white/85">{l.label}</span>
+                    {l.detail && <span className="text-xs text-muted">· {l.detail}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <p className="mx-auto mt-4 max-w-md text-sm text-muted">
             {tp(lang, 'ui.setup.doneNotePre')}{' '}
             <strong>{tp(lang, 'ui.setup.doneNoteStrong')}</strong>{' '}
@@ -136,15 +177,29 @@ export default function SetupPage() {
         })}
       </div>
 
+      <label className="flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          checked={provision}
+          onChange={(e) => setProvision(e.target.checked)}
+          className="h-4 w-4 accent-accent"
+        />
+        <span className="text-white/90">{tp(lang, 'ui.setup.provisionToggle')}</span>
+      </label>
+
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={apply}
-          disabled={!sel || st === 'saving'}
+          disabled={!sel || st === 'saving' || st === 'building'}
           className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 font-semibold transition hover:bg-accent-hover disabled:opacity-50"
         >
           <Sparkles size={16} />{' '}
-          {st === 'saving' ? tp(lang, 'ui.setup.applying') : tp(lang, 'ui.setup.applyPreset')}
+          {st === 'saving'
+            ? tp(lang, 'ui.setup.applying')
+            : st === 'building'
+              ? tp(lang, 'ui.setup.structWorking')
+              : tp(lang, 'ui.setup.applyPreset')}
         </button>
         {st === 'err' && (
           <span className="text-sm text-accent">{tp(lang, 'ui.setup.errRetry')}</span>

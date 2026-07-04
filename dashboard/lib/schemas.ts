@@ -762,6 +762,8 @@ export type CountersInput = z.infer<typeof countersSchema>;
 // ── Kreator startowy (POST /api/setup) ────────────────────
 export const setupSchema = z.object({
   preset: z.enum(['streamer', 'gaming', 'community']),
+  // B1 pełne (#688): czy przy presecie utworzyć też strukturę Discorda (kanały/role) — domyślnie tak.
+  provision: z.boolean().optional().default(true),
 });
 export type SetupInput = z.infer<typeof setupSchema>;
 

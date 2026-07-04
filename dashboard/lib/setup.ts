@@ -9,6 +9,10 @@ export type Preset = {
   name: string;
   desc: string;
   modules: { key: string; label: string }[];
+  // B1 pełne (#688): bloki struktury Discorda tworzone przy zastosowaniu presetu (opcjonalnie w UI)
+  // — ten sam silnik co Blueprinty/Architekt (plan → 'setup_provision' → bot). Koniec z „włączyłem
+  // preset, a na serwerze nic się nie zmieniło" (pain P3/B1 z audytu).
+  blocks: ProvBlock[];
 };
 
 export const PRESETS: Preset[] = [
@@ -23,6 +27,7 @@ export const PRESETS: Preset[] = [
       { key: 'economy_config', label: 'Ekonomia' },
       { key: 'counters_config', label: 'Liczniki kanałów' },
     ],
+    blocks: ['welcome', 'announce', 'counters', 'levelRoles'],
   },
   {
     id: 'gaming',
@@ -36,6 +41,7 @@ export const PRESETS: Preset[] = [
       { key: 'automod_config', label: 'Automoderacja' },
       { key: 'counters_config', label: 'Liczniki kanałów' },
     ],
+    blocks: ['welcome', 'announce', 'logs', 'counters', 'levelRoles', 'muted'],
   },
   {
     id: 'community',
@@ -49,6 +55,7 @@ export const PRESETS: Preset[] = [
       { key: 'tickets_config', label: 'Tickety' },
       { key: 'verification_config', label: 'Weryfikacja' },
     ],
+    blocks: ['welcome', 'announce', 'logs', 'tickets', 'muted'],
   },
 ];
 

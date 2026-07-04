@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-687-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.617.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-688-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.618.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.618.0] — 🏗️ Discovery B1 (pełne, decyzja właściciela): presety realnie konfigurują serwer
+
+- `[#688]` 🏗️ **Prowadzona aktywacja z prawdziwym provisioningiem** (B1 odblokowane decyzją właściciela — wariant „pełne"; pain P3: „kliknąłem preset, widzę ✅ Włączono, a na serwerze nic się nie zmieniło"): presety kreatora `/setup` dostały bloki struktury (`Preset.blocks`) i przy zastosowaniu **tworzą kanały/role na Discordzie** — Streamer → #powitania/#ogłoszenia/liczniki/role poziomów · Gaming → + #logi-serwera/Muted · Społeczność → + #pomoc-tickety. **Zero nowego silnika:** plan idzie ISTNIEJĄCYM torem Blueprintów (`buildPlan` → klucz `setup_provision` → bot `provision.mts`, idempotentnie — tor właściciela `bot/src/setup/` nietknięty, tylko konsumowany przez jego publiczny kontrakt settings).
+  - **UI:** checkbox „Utwórz też kanały i role na serwerze (zalecane)" (domyślnie ✔ — wyłączalny = stare zachowanie), status „Buduję strukturę serwera…" (poll wyniku jak Blueprinty), ekran „gotowe" pokazuje **log utworzonej struktury** (✓/✗ per kanał/rola). i18n ×14 (3 klucze `ui.setup.*`).
+  - **Bramki:** typecheck ×4 · test **1291** · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.617.0] — 🔘 B3 fala 2 (KOMPLET): przyciski-linki w Message Studio
 
