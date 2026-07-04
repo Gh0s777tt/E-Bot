@@ -220,6 +220,9 @@ export function startAutomod(client: Client): void {
     if (cfg.exemptRoleId && member?.roles.cache.has(cfg.exemptRoleId)) return;
     if (cfg.ignoreChannels?.includes(msg.channelId)) return;
 
+    // Klucz per-SERWER (#4): anty-spam i recydywa muszą być izolowane per guild — inaczej user piszący
+    // na 2 serwerach z botem sumuje „spam" i recydywa z serwera A wywołuje karę na serwerze B.
+    const modKey = `${msg.guild.id}:${msg.author.id}`;
     const content = msg.content || '';
     const nContent = normalizeText(content);
     const scam = cfg.antiScam?.enabled ? scanScam(content, cfg.antiScam.customDomains ?? []) : null;
@@ -250,9 +253,9 @@ export function startAutomod(client: Client): void {
       reason = 'spam spoilerów';
     else if (cfg.antiSpamCount > 0) {
       const now = Date.now();
-      const arr = (recent.get(msg.author.id) ?? []).filter((t) => now - t < cfg.antiSpamSec * 1000);
+      const arr = (recent.get(modKey) ?? []).filter((t) => now - t < cfg.antiSpamSec * 1000);
       arr.push(now);
-      recent.set(msg.author.id, arr);
+      recent.set(modKey, arr);
       if (arr.length > cfg.antiSpamCount) reason = 'spam';
     }
     if (!reason) return;
@@ -271,9 +274,9 @@ export function startAutomod(client: Client): void {
       if (member && cfg.escalation?.enabled) {
         const now = Date.now();
         const winMs = Math.max(1, cfg.escalation.windowMin ?? 10) * 60_000;
-        const arr = (violations.get(msg.author.id) ?? []).filter((t) => now - t < winMs);
+        const arr = (violations.get(modKey) ?? []).filter((t) => now - t < winMs);
         arr.push(now);
-        violations.set(msg.author.id, arr);
+        violations.set(modKey, arr);
         if (arr.length >= Math.max(2, cfg.escalation.threshold ?? 3)) {
           act = cfg.escalation.action ?? 'timeout';
           note = ` (recydywa ${arr.length}×)`;

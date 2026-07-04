@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-691-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.621.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-692-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.622.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.622.0] — 🛡️ Audyt: izolacja kar per-serwer (#4) + fail-closed limitów AI (#5)
+
+- `[#692]` 🛡️ **#4 — anty-spam, recydywa i cooldown XP kluczowane teraz per-SERWER** (`guildId:userId`): dawniej klucz to sam `userId`, więc user piszący na 2 serwerach z botem sumował „spam" między nimi, a recydywa z serwera A mogła wywołać **timeout/kick/ban na serwerze B** ([automod.mts:223](bot/src/automod.mts) — `recent`/`violations`), a XP naliczał się tylko na jednym z serwerów ([leveling.mts:301](bot/src/leveling.mts) — `cooldowns`). Przy okazji: mapa `cooldowns` levelingu dostała sprzątanie (audyt: rosła bez ograniczeń).
+- `[#692]` 💸 **#5 — twarde limity kosztów AI odporne na awarię chmury**: `cloudSelect` przy błędzie (timeout/5xx/rate-limit) zwraca `[]`, więc `checkUsage` widział zużycie 0 → **otwarty kran OpenAI/DeepSeek dokładnie gdy Supabase leży**. Licznik-procesu (in-memory) jest teraz doliczany ZAWSZE i pełni rolę **dolnej granicy**: `checkUsage` bierze `max(chmura, licznik-procesu)`, więc po dobiciu w obrębie procesu limit blokuje mimo padu chmury ([lib/ai.mts:129](bot/src/lib/ai.mts)).
+  - **Test:** [ai.test.ts](bot/src/lib/ai.test.ts) — limit zapytań/tokenów egzekwowany + izolacja per-serwer (+3).
+  - **Bramki:** typecheck ×4 · test **1301** (+3) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.621.0] — 🔒 Audyt: naprawa 3 krytycznych wyścigów ekonomii (market · giełda · no-code)
 

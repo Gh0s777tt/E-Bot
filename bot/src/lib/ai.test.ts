@@ -6,7 +6,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { aiConfig } from './ai.mts';
+import { aiConfig, bumpUsage, checkUsage } from './ai.mts';
 import { closeDb, setSettingLocal } from './db.mts';
 
 const DB = path.join(tmpdir(), `ebot-ai-${process.pid}.db`);
@@ -70,5 +70,47 @@ describe('aiConfig — parser configu AI', () => {
       dailyTokenLimit: 1_000,
       persona: 'Sarkastyczny bot',
     });
+  });
+});
+
+// #5: licznik-procesu (shadow-counter) egzekwuje limit także bez chmury / gdy chmura padnie.
+// W teście brak Supabase → hasCloud()=false, więc mem jest jedynym (i sprawdzanym) źródłem.
+describe('checkUsage/bumpUsage — twarde limity kosztów AI', () => {
+  const CFG = {
+    enabled: true,
+    model: 'deepseek' as const,
+    dailyRequestLimit: 3,
+    dailyTokenLimit: 1_000,
+    persona: '',
+  };
+
+  it('limit ZAPYTAŃ: po dobiciu blokuje kolejne (licznik rośnie w bumpUsage)', async () => {
+    const g = `g${process.pid}a`;
+    const u = 'user1';
+    for (let i = 0; i < 3; i++) {
+      const usage = await checkUsage(u, g, CFG);
+      expect(usage.limited).toBeNull(); // 3 zapytania w limicie
+      await bumpUsage(u, usage, 10);
+    }
+    const blocked = await checkUsage(u, g, CFG);
+    expect(blocked.limited).toContain('limit zapytań');
+  });
+
+  it('limit TOKENÓW: przekroczenie budżetu tokenów blokuje', async () => {
+    const g = `g${process.pid}b`;
+    const u = 'user2';
+    const first = await checkUsage(u, g, CFG);
+    await bumpUsage(u, first, 1_000); // dobija limit tokenów jednym dużym zapytaniem
+    const blocked = await checkUsage(u, g, CFG);
+    expect(blocked.limited).toContain('limit tokenów');
+  });
+
+  it('izolacja PER-SERWER: zużycie na serwerze A nie blokuje serwera B', async () => {
+    const u = 'user3';
+    const a = `g${process.pid}c`;
+    const b = `g${process.pid}d`;
+    for (let i = 0; i < 3; i++) await bumpUsage(u, await checkUsage(u, a, CFG), 10);
+    expect((await checkUsage(u, a, CFG)).limited).toContain('limit'); // A zablokowany
+    expect((await checkUsage(u, b, CFG)).limited).toBeNull(); // B nietknięty
   });
 });

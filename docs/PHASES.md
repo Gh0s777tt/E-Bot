@@ -1,4 +1,4 @@
-<!-- SYNC: v0.621.0 · #691 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.622.0 · #692 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.621.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.622.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -28,6 +28,10 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## 🔭 Bieżący tor (v0.622.0)
+
+**🛡️ Audyt — izolacja kar per-serwer + fail-closed limitów AI (v0.622.0)** — #4: anty-spam/recydywa/cooldown-XP kluczowane `guildId:userId` (kary nie przenoszą się między serwerami; + sprzątanie mapy cooldowns). #5: limity AI biorą `max(chmura, licznik-procesu)` — awaria Supabase nie znosi już limitu kosztów. Zostają z audytu: bundle i18n per-język, coverage gate w CI, batch pollerów O(N)→O(1).
 
 ## 🔭 Bieżący tor (v0.621.0)
 
@@ -295,4 +299,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.621.0 (#691) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.622.0 (#692) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

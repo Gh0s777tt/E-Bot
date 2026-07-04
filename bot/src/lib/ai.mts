@@ -117,31 +117,31 @@ export type Usage = {
   guildId: string;
 };
 
-// Fallback in-memory licznika zużycia AI gdy BRAK chmury (Supabase). Bez tego checkUsage zawsze
-// widzi 0 → twarde limity kosztów nie działają (otwarty kran OpenAI/DeepSeek). Klucz zawiera `day`
-// (auto-reset dzienny); stare dni przycinane przy rozroście mapy (anty-wyciek pamięci).
+// Shadow-counter zużycia AI (per proces). Pełni DWIE role (#5): (1) jedyne źródło bez chmury;
+// (2) DOLNA GRANICA gdy chmura JEST, ale odczyt zawiódł — `cloudSelect` przy błędzie (timeout/5xx/
+// rate-limit) zwraca [] i checkUsage widziałby 0 → otwarty kran OpenAI/DeepSeek. checkUsage bierze
+// max(chmura, pamięć), więc awaria Supabase nie znosi limitu: po dobiciu w obrębie procesu blokuje.
+// Klucz zawiera `day` (auto-reset dzienny); stare dni przycinane przy rozroście mapy.
 const memUsage = new Map<string, { tokens: number; requests: number }>();
 const memKey = (guildId: string, userId: string, day: string): string =>
   `${guildId}:${userId}:${day}`;
 
 /** Sprawdza dzisiejsze zużycie PRZED wywołaniem; `limited` = komunikat gdy limit przekroczony.
- *  Liczone PER-SERWER (Audyt #2): zużycie i dzienny limit są niezależne na każdym serwerze. */
+ *  Liczone PER-SERWER (Audyt #2): zużycie i dzienny limit są niezależne na każdym serwerze.
+ *  Fail-closed na awarię chmury (#5): bierze max(chmura, licznik-procesu). */
 export async function checkUsage(userId: string, guildId: string, cfg: AiConfig): Promise<Usage> {
   const day = new Date().toISOString().slice(0, 10);
-  let usedTokens = 0;
-  let usedReq = 0;
+  const mem = memUsage.get(memKey(guildId, userId, day));
+  let usedTokens = mem?.tokens ?? 0;
+  let usedReq = mem?.requests ?? 0;
   if (hasCloud()) {
     const rows = await cloudSelect<{ tokens_used: number; requests: number }>(
       'ai_usage',
       `select=tokens_used,requests&guild_id=eq.${guildId}&user_id=eq.${userId}&day=eq.${day}`,
     );
-    usedTokens = rows[0]?.tokens_used ?? 0;
-    usedReq = rows[0]?.requests ?? 0;
-  } else {
-    // Bez chmury: zużycie z licznika in-memory (inaczej limit nigdy nie zadziała).
-    const m = memUsage.get(memKey(guildId, userId, day));
-    usedTokens = m?.tokens ?? 0;
-    usedReq = m?.requests ?? 0;
+    // max: gdy chmura żyje → jej wartość rządzi; gdy padła ([]) → dolna granica z licznika procesu.
+    usedTokens = Math.max(usedTokens, rows[0]?.tokens_used ?? 0);
+    usedReq = Math.max(usedReq, rows[0]?.requests ?? 0);
   }
   let limited: string | null = null;
   if (cfg.dailyRequestLimit > 0 && usedReq >= cfg.dailyRequestLimit) {
@@ -153,16 +153,14 @@ export async function checkUsage(userId: string, guildId: string, cfg: AiConfig)
 }
 
 export async function bumpUsage(userId: string, u: Usage, addTokens: number): Promise<void> {
-  if (!hasCloud()) {
-    // Bez chmury: dolicz do licznika in-memory (parzyste z checkUsage powyżej).
-    const k = memKey(u.guildId, userId, u.day);
-    const m = memUsage.get(k) ?? { tokens: 0, requests: 0 };
-    memUsage.set(k, { tokens: m.tokens + addTokens, requests: m.requests + 1 });
-    if (memUsage.size > 5000) {
-      for (const key of memUsage.keys()) if (!key.endsWith(`:${u.day}`)) memUsage.delete(key);
-    }
-    return;
+  // Licznik procesu doliczany ZAWSZE (#5) — jest dolną granicą dla checkUsage, gdy chmura padnie.
+  const k = memKey(u.guildId, userId, u.day);
+  const m = memUsage.get(k) ?? { tokens: 0, requests: 0 };
+  memUsage.set(k, { tokens: m.tokens + addTokens, requests: m.requests + 1 });
+  if (memUsage.size > 5000) {
+    for (const key of memUsage.keys()) if (!key.endsWith(`:${u.day}`)) memUsage.delete(key);
   }
+  if (!hasCloud()) return;
   await cloudUpsert(
     'ai_usage',
     [

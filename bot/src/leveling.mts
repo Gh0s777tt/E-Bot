@@ -170,7 +170,16 @@ function noXpMember(member: GuildMember): boolean {
   return cfgFor(member.guild.id).noXpRoles.some((r) => r && member.roles.cache.has(r));
 }
 
+// Klucz `guildId:userId` (#4) — inaczej user na 2 serwerach dostaje XP tylko na jednym (wspólny
+// cooldown). Sprzątanie starych wpisów co 30 min (audyt: mapa rosła bez ograniczeń przy dużej flocie).
 const cooldowns = new Map<string, number>();
+setInterval(
+  () => {
+    const cut = Date.now() - 60 * 60_000;
+    for (const [k, t] of cooldowns) if (t < cut) cooldowns.delete(k);
+  },
+  30 * 60_000,
+).unref?.();
 
 async function award(
   client: Client,
@@ -298,9 +307,10 @@ export function startLeveling(client: Client): void {
     const member = msg.member;
     if (member && noXpMember(member)) return;
     const now = Date.now();
-    const last = cooldowns.get(msg.author.id) ?? 0;
+    const cdKey = `${msg.guild.id}:${msg.author.id}`;
+    const last = cooldowns.get(cdKey) ?? 0;
     if (now - last < cfg.cooldownSec * 1000) return;
-    cooldowns.set(msg.author.id, now);
+    cooldowns.set(cdKey, now);
     const amount = member ? effectiveXp(member, cfg.xpPerMessage) : cfg.xpPerMessage;
     void award(client, msg.guild.id, msg.author.id, msg.author.username, amount);
   });
