@@ -1,4 +1,4 @@
-<!-- SYNC: v0.611.0 · #681 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.612.0 · #682 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.611.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.612.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -29,7 +29,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## 🔭 Bieżący tor (v0.611.0)
+## 🔭 Bieżący tor (v0.612.0)
+
+**🛡️ Discovery C1 fala 2 — KOMPLET (v0.612.0)** — baner „Wymaga uwagi" sprawdza też **uprawnienia bota**: `getBotPermissions()` (bitmapa z ról bota, Administrator pokrywa wszystko) + mapowanie uprawnienie→moduły (ostrzeżenie tylko, gdy potrzebuje go włączony moduł — zero szumu). Naprawiony martwy check auto-czyszczenia z fali 1 (`autodelete` nie ma wpisu w `MODULES` — aktywność = obecność reguł). **C1 DOMKNIĘTE** — komplet checków z propozycji discovery: bot offline · chmura off · martwe kanały/role · brakujące uprawnienia · niedokończone konfiguracje. Pozostałe z backlogu: B1 (decyzja właściciela), A4–A6, B3–B5, C2–C3.
 
 **🩺 Discovery C1 fala 1 — baner „Wymaga uwagi" (v0.611.0)** — Pulpit `/` dostał proaktywną diagnozę: baner z listą problemów („bot offline", „chmura niepodłączona", „moduł {X} wskazuje na skasowany kanał/rolę", „{n} modułów czeka na dokończenie konfiguracji") — każdy z akcją „Napraw →" do właściwej strony; zdrowy serwer = baner niewidoczny. Rdzeń czysty/testowalny (`lib/healthIssues.ts`, +10 testów), zero fałszywych alarmów (bez świeżej `GuildMeta` kanały/role nie są oceniane), i18n ×14 (`ui.health.*`). **Fala 2 (otwarte):** check uprawnień bota — wymaga rozszerzenia `getGuildMeta` o bitmapę z `/guilds/{id}/members/@me`. Pozostałe z backlogu discovery: B1 (decyzja właściciela), A4–A6, B3–B5, C2–C3.
 
@@ -273,4 +275,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.611.0 (#681) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.612.0 (#682) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

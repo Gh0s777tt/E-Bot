@@ -3,13 +3,14 @@
 // bez dokończonej konfiguracji (pain P3: „włączyłem, a nic się nie dzieje"). Baner zbiera to w jedną
 // listę z akcją „Napraw →" do właściwej strony. Rdzeń (detectHealthIssues) jest czysty i testowalny;
 // getHealthIssues() tylko zbiera wejście (heartbeat + activeSource + GuildMeta + configi modułów).
-// Fala 1 świadomie BEZ checku uprawnień bota — panel nie zna bitmapy uprawnień (GuildMeta ma tylko
-// id/name/position ról); wymaga rozszerzenia getGuildMeta o /guilds/{id}/members/@me (fala 2).
+// Fala 2 (#682) dokłada check uprawnień bota: getBotPermissions() liczy bitmapę z ról bota
+// (/users/@me/guilds/{id}/member + /guilds/{id}/roles) i ostrzega TYLKO, gdy uprawnienia potrzebuje
+// jakiś włączony moduł (zero szumu na serwerach, które danej funkcji nie używają).
 import { getAutodeleteConfig, getLoggingConfig, getWelcomeConfig } from './community';
 import { activeSource, getRawSetting } from './data';
 import { getStarboard } from './engagement';
 import { getTicketsConfig } from './faza4';
-import { getGuildMeta } from './guild';
+import { getGuildMeta, getPrimaryGuildId } from './guild';
 import { getModuleHealth } from './moduleState';
 import { MODULES } from './modules';
 
@@ -32,6 +33,9 @@ export type ModuleRef = {
   roles: string[];
 };
 
+// Uprawnienie wymagane przez moduły: ostrzegamy tylko, gdy jakiś zależny moduł jest włączony.
+export type PermCheck = { bit: bigint; label: string; enabled: boolean };
+
 export type HealthInput = {
   botOnline: boolean;
   cloudOn: boolean;
@@ -40,7 +44,11 @@ export type HealthInput = {
   roleIds: ReadonlySet<string>;
   refs: ModuleRef[];
   needsConfig: number; // ile modułów „włączone, ale niedokończone" (getModuleHealth z B2)
+  botPerms: bigint | null; // bitmapa uprawnień bota; null = nie udało się pobrać → nie oceniamy
+  permChecks: PermCheck[];
 };
+
+const ADMIN = 1n << 3n; // Administrator implikuje wszystko
 
 const RANK = { error: 0, warning: 1, info: 2 } as const;
 
@@ -86,6 +94,19 @@ export function detectHealthIssues(inp: HealthInput): HealthIssue[] {
       }
     }
   }
+  if (inp.botPerms !== null && (inp.botPerms & ADMIN) === 0n) {
+    for (const p of inp.permChecks) {
+      if (p.enabled && (inp.botPerms & p.bit) === 0n) {
+        out.push({
+          id: `perm-missing-${p.bit.toString()}`,
+          severity: 'warning',
+          msgKey: 'ui.health.permMissing',
+          module: p.label,
+          href: '/diagnostics',
+        });
+      }
+    }
+  }
   if (inp.needsConfig > 0) {
     out.push({
       id: 'needs-config',
@@ -112,22 +133,74 @@ export function parseBotOnline(raw: string | null, now: number): boolean {
 const mod = (key: string) => MODULES.find((m) => m.key === key);
 const LIVE_KEYS = ['notifyTwitch', 'notifyKick', 'notifyRumble', 'notifyYoutube'];
 
+// Uprawnienia → moduły, które ich potrzebują (etykiety PL jak w kliencie Discorda; klucze z MODULES).
+const PERM_DEPS: { bit: bigint; label: string; modules: string[] }[] = [
+  { bit: 1n << 28n, label: 'Zarządzaj rolami', modules: ['welcome', 'verification', 'twitchSub'] },
+  { bit: 1n << 4n, label: 'Zarządzaj kanałami', modules: ['tempvoice', 'tickets', 'counters'] },
+  { bit: 1n << 13n, label: 'Zarządzaj wiadomościami', modules: ['automod'] },
+  { bit: 1n << 2n, label: 'Banuj członków', modules: ['antiraid'] },
+  { bit: 1n << 40n, label: 'Wyciszaj członków', modules: ['automod', 'antiraid'] },
+];
+
+// Bitmapa uprawnień bota na serwerze: suma uprawnień @everyone + ról bota
+// (/users/@me/guilds/{id}/member + /guilds/{id}/roles). null = brak tokena/błąd → nie oceniamy.
+export async function getBotPermissions(): Promise<bigint | null> {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  const guildId = await getPrimaryGuildId();
+  if (!token || !guildId) return null;
+  const dget = async <T>(path: string): Promise<T | null> => {
+    const r = await fetch(`https://discord.com/api/v10${path}`, {
+      headers: { Authorization: `Bot ${token}` },
+      next: { revalidate: 60 },
+    }).catch(() => null);
+    return r?.ok ? ((await r.json()) as T) : null;
+  };
+  const [member, roles] = await Promise.all([
+    dget<{ roles: string[] }>(`/users/@me/guilds/${guildId}/member`),
+    dget<{ id: string; permissions: string }[]>(`/guilds/${guildId}/roles`),
+  ]);
+  if (!member || !roles) return null;
+  const mine = new Set([guildId, ...member.roles]); // @everyone (id == guildId) + role bota
+  let perms = 0n;
+  for (const r of roles) {
+    if (!mine.has(r.id)) continue;
+    try {
+      perms |= BigInt(r.permissions);
+    } catch {
+      /* niepoprawna bitmapa roli — pomiń */
+    }
+  }
+  return perms;
+}
+
 // Zbiera wejście detektora z istniejących źródeł (fail-open: błąd zbierania = brak banera, nie 500).
 export async function getHealthIssues(): Promise<HealthIssue[]> {
   try {
-    const [meta, src, beatRaw, health, welcome, logging, starboard, tickets, autodelete, notifyCh] =
-      await Promise.all([
-        getGuildMeta(),
-        activeSource(),
-        getRawSetting('bot_status'),
-        getModuleHealth(),
-        getWelcomeConfig(),
-        getLoggingConfig(),
-        getStarboard(),
-        getTicketsConfig(),
-        getAutodeleteConfig(),
-        getRawSetting('notify_channel_id'),
-      ]);
+    const [
+      meta,
+      src,
+      beatRaw,
+      health,
+      welcome,
+      logging,
+      starboard,
+      tickets,
+      autodelete,
+      notifyCh,
+      botPerms,
+    ] = await Promise.all([
+      getGuildMeta(),
+      activeSource(),
+      getRawSetting('bot_status'),
+      getModuleHealth(),
+      getWelcomeConfig(),
+      getLoggingConfig(),
+      getStarboard(),
+      getTicketsConfig(),
+      getAutodeleteConfig(),
+      getRawSetting('notify_channel_id'),
+      getBotPermissions(),
+    ]);
     const ref = (key: string, channels: string[], roles: string[] = []): ModuleRef => ({
       id: key,
       label: mod(key)?.label ?? key,
@@ -141,10 +214,15 @@ export async function getHealthIssues(): Promise<HealthIssue[]> {
       ref('logging', [logging.channelId]),
       ref('starboard', [starboard.channelId]),
       ref('tickets', [tickets.categoryId, tickets.logChannelId], [tickets.supportRoleId]),
-      ref(
-        'autodelete',
-        autodelete.rules.map((r) => r.channelId),
-      ),
+      // Auto-czyszczenie nie jest w rejestrze MODULES (brak master-toggle) — aktywne, gdy są reguły.
+      {
+        id: 'autodelete',
+        label: 'Auto-czyszczenie kanałów',
+        href: '/engagement',
+        enabled: autodelete.rules.length > 0,
+        channels: autodelete.rules.map((r) => r.channelId),
+        roles: [],
+      },
       // Powiadomienia live: wspólny kanał 4 przełączników platform — aktywny, gdy dowolny włączony.
       {
         id: 'live',
@@ -163,6 +241,12 @@ export async function getHealthIssues(): Promise<HealthIssue[]> {
       roleIds: new Set(meta.roles.map((r) => r.id)),
       refs,
       needsConfig: Object.values(health).filter((h) => h.enabled && !h.configured).length,
+      botPerms,
+      permChecks: PERM_DEPS.map((p) => ({
+        bit: p.bit,
+        label: p.label,
+        enabled: p.modules.some((k) => !!health[k]?.enabled),
+      })),
     });
   } catch {
     return [];

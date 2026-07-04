@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-681-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.611.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-682-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.612.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.612.0] — 🩺 C1 fala 2 (KOMPLET): uprawnienia bota w banerze „Wymaga uwagi" + fix autodelete
+
+- `[#682]` 🛡️ **Check uprawnień bota** (domyka C1 z discovery — „bot nie ma uprawnienia Zarządzaj Rolami"): nowa funkcja [`getBotPermissions()`](dashboard/lib/healthIssues.ts) liczy bitmapę uprawnień bota z jego ról (`/users/@me/guilds/{id}/member` + `/guilds/{id}/roles`, suma z @everyone; Administrator pokrywa wszystko). Baner ostrzega **tylko, gdy uprawnienia potrzebuje jakiś WŁĄCZONY moduł** (zero szumu): Zarządzaj rolami ← Powitania/Weryfikacja/Twitch-sub · Zarządzaj kanałami ← Tempvoice/Tickety/Liczniki · Zarządzaj wiadomościami ← Automod · Banuj członków ← Anti-raid · Wyciszaj członków ← Automod/Anti-raid. Fail-open: brak tokena/błąd API = brak oceny (nie fałszywy alarm).
+- `[#682]` 🩹 **Fix z fali 1: check auto-czyszczenia był martwy** — `autodelete` nie istnieje w rejestrze `MODULES` (brak master-toggle), więc `enabled` zawsze było `false`. Teraz aktywność = istnienie reguł (`rules.length > 0`), poprawna etykieta i link do `/engagement`.
+  - **i18n ×14:** nowy klucz `ui.health.permMissing` (parzystość pod testem). **Testy:** +2 (brak uprawnienia → warning; Administrator/wyłączone moduły/null → cisza).
+  - **Bramki:** typecheck ×4 · test **1272** (+2) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.611.0] — 🩺 Discovery C1 (fala 1): baner „Wymaga uwagi" na Pulpicie
 

@@ -9,7 +9,12 @@ const BASE: HealthInput = {
   roleIds: new Set(['r1']),
   refs: [],
   needsConfig: 0,
+  botPerms: null,
+  permChecks: [],
 };
+
+const MANAGE_ROLES = 1n << 28n;
+const ADMIN = 1n << 3n;
 
 const ref = (over: Partial<HealthInput['refs'][number]>) => ({
   id: 'welcome',
@@ -78,6 +83,35 @@ describe('detectHealthIssues', () => {
         href: '/modules',
       },
     ]);
+  });
+
+  it('brak wymaganego uprawnienia przy włączonym module → warning z etykietą uprawnienia', () => {
+    const out = detectHealthIssues({
+      ...BASE,
+      botPerms: 0n,
+      permChecks: [{ bit: MANAGE_ROLES, label: 'Zarządzaj rolami', enabled: true }],
+    });
+    expect(out).toEqual([
+      {
+        id: `perm-missing-${MANAGE_ROLES.toString()}`,
+        severity: 'warning',
+        msgKey: 'ui.health.permMissing',
+        module: 'Zarządzaj rolami',
+        href: '/diagnostics',
+      },
+    ]);
+  });
+
+  it('uprawnienia: Administrator wszystko pokrywa; wyłączone moduły i botPerms=null pomijane', () => {
+    const check = { bit: MANAGE_ROLES, label: 'Zarządzaj rolami', enabled: true };
+    expect(detectHealthIssues({ ...BASE, botPerms: ADMIN, permChecks: [check] })).toEqual([]);
+    expect(
+      detectHealthIssues({ ...BASE, botPerms: 0n, permChecks: [{ ...check, enabled: false }] }),
+    ).toEqual([]);
+    expect(detectHealthIssues({ ...BASE, botPerms: null, permChecks: [check] })).toEqual([]);
+    expect(detectHealthIssues({ ...BASE, botPerms: MANAGE_ROLES, permChecks: [check] })).toEqual(
+      [],
+    );
   });
 
   it('sortowanie: error przed warning przed info', () => {

@@ -36,6 +36,7 @@ export default function HealthBanner({
               <span className="truncate text-white/85">
                 {tp(lang, i.msgKey)
                   .replace('{module}', i.module ?? '')
+                  .replace('{perm}', i.module ?? '')
                   .replace('{n}', String(i.n ?? ''))}
               </span>
             </span>
