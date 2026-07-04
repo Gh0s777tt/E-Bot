@@ -15,6 +15,7 @@ import { startSeasons } from './analytics/seasons.mts';
 import { startServerHistory } from './analytics/serverHistory.mts';
 import { startAutomod } from './automod.mts';
 import { notifyError } from './cloud/alerts.mts';
+import { startCommandSync } from './cloud/command-sync.mts';
 import { startHeartbeat } from './cloud/heartbeat.mts';
 import { startPluginBridge } from './cloud/plugin-bridge.mts';
 import { startPresenceSync } from './cloud/presence.mts';
@@ -234,6 +235,7 @@ client.once(Events.ClientReady, (c) => {
   startSettingsSync(); // Supabase → lokalny SQLite (antinuke/notify widzą zmiany z panelu)
   startRealtimeSync(); // Tor 5+ — Realtime (WS) → natychmiastowy sync zamiast czekania na poll
   startPluginBridge(c); // M6 most — forward zdarzeń Discorda → panel (auto-trigger pluginów community)
+  startCommandSync(c); // B5 — „Zsynchronizuj komendy" z panelu ('deploy_commands_request' → PUT globalny)
   startLeveling(c); // Faza 4 — XP za czat/voice + role-nagrody (config z panelu, dane → Supabase)
   startTicketSync(c); // Faza 4 — archiwizacja wątków ticketów zamkniętych z panelu
   startTicketSla(c); // Tor D — auto-close ticketów po bezczynności (SLA)

@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { SESSION_COOKIE } from '../../lib/auth';
 import { grantPremium, revokePremium } from '../../lib/billing';
+import { setRawSetting } from '../../lib/data';
 import { getAuthSecret, verifySession } from '../../lib/session';
 import { isOwner } from '../../lib/tenant';
 
@@ -30,5 +31,17 @@ export async function revokePremiumAction(guildId: string): Promise<void> {
   if (!/^\d{15,25}$/.test(guildId)) throw new Error('Złe ID serwera.');
   const ok = await revokePremium(guildId);
   if (!ok) throw new Error('Zapis nie powiódł się.');
+  revalidatePath('/diagnostics');
+}
+
+// B5 (#685): żądanie globalnej rejestracji slash-komend — bot polluje 'deploy_commands_request'
+// (cloud/command-sync.mts) i zapisuje wynik do 'deploy_commands_result'. Klucz GLOBALNY (nie per-guild).
+export async function requestCommandSyncAction(): Promise<void> {
+  const uid = await requireOwnerUid();
+  try {
+    await setRawSetting('deploy_commands_request', JSON.stringify({ ts: Date.now(), by: uid }));
+  } catch {
+    throw new Error('Zapis żądania nie powiódł się (sprawdź połączenie z bazą).');
+  }
   revalidatePath('/diagnostics');
 }

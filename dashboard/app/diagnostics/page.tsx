@@ -1,6 +1,7 @@
 import { AlertTriangle, Bot, CheckCircle2, Database, Plug, Sparkles, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import CommandSyncCard, { type CommandSyncState } from '../../components/CommandSyncCard';
 import ConnectionTest from '../../components/ConnectionTest';
 import DevReset from '../../components/DevReset';
 import PremiumAdmin from '../../components/PremiumAdmin';
@@ -39,6 +40,36 @@ export default async function DiagnosticsPage() {
   const isDev = !!sess?.uid && isOwner(sess.uid);
   const devGuildId = isDev ? await getPrimaryGuildId() : '';
   const premiumRows = isDev ? await listPremiumGuilds() : [];
+
+  // B5 (#685): stan synchronizacji komend (żądanie vs ostatni wynik z bota) — tylko owner.
+  let cmdSync: CommandSyncState = { pending: false, result: null };
+  if (isDev) {
+    try {
+      const [reqRaw, resRaw] = await Promise.all([
+        getRawSetting('deploy_commands_request'),
+        getRawSetting('deploy_commands_result'),
+      ]);
+      const req = reqRaw ? (JSON.parse(reqRaw) as { ts?: number }) : null;
+      const res = resRaw
+        ? (JSON.parse(resRaw) as {
+            ok?: boolean;
+            count?: number;
+            error?: string;
+            requestTs?: number;
+            ts?: number;
+          })
+        : null;
+      const pending =
+        typeof req?.ts === 'number' &&
+        (typeof res?.requestTs !== 'number' || res.requestTs < req.ts);
+      cmdSync = {
+        pending,
+        result: res ? { ok: !!res.ok, count: res.count, error: res.error, ts: res.ts } : null,
+      };
+    } catch {
+      /* zepsute klucze → stan domyślny */
+    }
+  }
 
   let botOnline = false;
   try {
@@ -218,6 +249,9 @@ export default async function DiagnosticsPage() {
           <PremiumAdmin rows={premiumRows} />
         </section>
       )}
+
+      {/* ===== SYNCHRONIZACJA KOMEND — globalny deploy (tylko właściciel instancji, B5) ===== */}
+      {isDev && <CommandSyncCard state={cmdSync} />}
 
       {/* ===== STREFA ZAGROŻENIA — reset bazy (tylko właściciel instancji) ===== */}
       {isDev && (

@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-684-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.614.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-685-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.615.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,13 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.615.0] — 🔄 Discovery B5: „Zsynchronizuj komendy" z panelu (bez terminala)
+
+- `[#685]` 🔄 **Globalna rejestracja slash-komend jednym klikiem** (Discovery B5, problem P8 — rejestracja była wyłącznie ręczna przez `deploy-commands.mts` w terminalu): karta **„Synchronizacja slash-komend"** na `/diagnostics` (owner-only, PL) zapisuje żądanie do klucza settings `deploy_commands_request`; nowy serwis bota [`cloud/command-sync.mts`](bot/src/cloud/command-sync.mts) polluje co 30 s i wykonuje **identyczny** deploy co skrypt (komendy + context-menu + report-menu, PUT globalny), zapisując wynik do `deploy_commands_result` (✅ liczba komend / ❌ błąd + data — panel pokazuje). Architektura jak inne mosty panel→bot (settings + poll; zero nowych env).
+  - **Solidność:** idempotencja po restarcie bota (żądania z `ts` ≤ `requestTs` ostatniego wyniku pomijane — czysta logika [`command-sync.logic.mts`](bot/src/cloud/command-sync.logic.mts), +3 testy); pod shardingiem deploy robi tylko shard 0 (rejestracja globalna jest jedna); bez chmury serwis nieaktywny. UI: przycisk blokuje się na czas „Czekam na bota…" (żądanie nowsze niż wynik).
+  - **Nota:** propagacja globalna Discorda nadal do ~1 h (ograniczenie platformy) — karta o tym informuje; znika za to całe „odpal skrypt z terminala".
+  - **Bramki:** typecheck ×4 · test **1281** (+3) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.614.0] — 📈 Discovery B4: metryki subskrypcji + alert o wygasaniu w panelu właściciela
 
