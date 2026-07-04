@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-689-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.619.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-690-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.620.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.620.0] — 📊 Discovery C3: lejek aktywacji dla właściciela (agregaty, zero PII)
+
+- `[#690]` 📊 **Lejek aktywacji na `/diagnostics`** (Discovery C3, za zgodą właściciela; zamienia hipotezy UX z audytu na dane): karta **Bot dodany → Setup uruchomiony → ≥1 moduł skonfigurowany** (liczby serwerów + %), licząca z [`lib/activation.ts`](dashboard/lib/activation.ts) — `guilds` (count) + klucze settings `g:<gid>:*` (czysta agregacja `summarizeActivation`, +3 testy). **Prywatność by-design:** wyłącznie agregaty per serwer — żadnych ID/nazw adminów; jedyny nowy zapis to bezosobowy znacznik `activation_setup_at` (timestamp per serwer, raz, przy presecie/blueprincie — analityka nie może zepsuć setupu: try/catch). Fail-open: bez chmury karta się nie renderuje.
+  - **Świadomie odłożone:** etap „aktywny po 7 dniach" — wymaga per-guild sygnału aktywności (dziś heartbeat jest globalny); starsze serwery nie mają znacznika setupu (liczony od v0.620 — karta o tym informuje).
+  - **Bramki:** typecheck ×4 · test **1294** (+3) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.619.0] — 🌐 Discovery C2: publiczny hub serwera /p/hub
 

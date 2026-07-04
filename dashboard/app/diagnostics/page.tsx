@@ -5,6 +5,7 @@ import CommandSyncCard, { type CommandSyncState } from '../../components/Command
 import ConnectionTest from '../../components/ConnectionTest';
 import DevReset from '../../components/DevReset';
 import PremiumAdmin from '../../components/PremiumAdmin';
+import { type ActivationFunnel, getActivationFunnel } from '../../lib/activation';
 import { listPremiumGuilds } from '../../lib/billing';
 import { activeSource, getRawSetting, getSetupChecklist } from '../../lib/data';
 import { getPrimaryGuildId } from '../../lib/guild';
@@ -40,6 +41,8 @@ export default async function DiagnosticsPage() {
   const isDev = !!sess?.uid && isOwner(sess.uid);
   const devGuildId = isDev ? await getPrimaryGuildId() : '';
   const premiumRows = isDev ? await listPremiumGuilds() : [];
+  // C3 (#690): lejek aktywacji — agregaty per serwer, zero PII; null = brak chmury (karta znika).
+  const funnel: ActivationFunnel | null = isDev ? await getActivationFunnel() : null;
 
   // B5 (#685): stan synchronizacji komend (żądanie vs ostatni wynik z bota) — tylko owner.
   let cmdSync: CommandSyncState = { pending: false, result: null };
@@ -252,6 +255,37 @@ export default async function DiagnosticsPage() {
 
       {/* ===== SYNCHRONIZACJA KOMEND — globalny deploy (tylko właściciel instancji, B5) ===== */}
       {isDev && <CommandSyncCard state={cmdSync} />}
+
+      {/* ===== LEJEK AKTYWACJI — agregaty per serwer, zero PII (tylko właściciel, C3) ===== */}
+      {isDev && funnel && funnel.guilds > 0 && (
+        <section className="panel-glow rounded-2xl border border-line bg-card p-5">
+          <h2 className="mb-1 font-display text-lg font-semibold tracking-wide">
+            📈 Lejek aktywacji
+          </h2>
+          <p className="mb-4 text-sm text-muted">
+            Ile serwerów przechodzi od dodania bota do skonfigurowania modułu. Wyłącznie agregaty
+            (liczby serwerów) — bez danych o adminach. „Setup" liczony od v0.620 (znacznik przy
+            presecie/blueprincie), więc starsze serwery mogą go nie mieć.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { label: 'Bot dodany', value: funnel.guilds, base: funnel.guilds },
+              { label: 'Setup uruchomiony', value: funnel.setup, base: funnel.guilds },
+              { label: '≥1 moduł skonfigurowany', value: funnel.configured, base: funnel.guilds },
+            ].map((s) => (
+              <div key={s.label} className="rounded-xl border border-line bg-bg/40 p-3">
+                <div className="text-2xl font-bold tabular-nums text-white">
+                  {s.value}
+                  <span className="ms-2 text-sm font-normal text-muted">
+                    {s.base > 0 ? `${Math.round((100 * s.value) / s.base)}%` : ''}
+                  </span>
+                </div>
+                <div className="text-xs uppercase tracking-wide text-muted">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ===== STREFA ZAGROŻENIA — reset bazy (tylko właściciel instancji) ===== */}
       {isDev && (

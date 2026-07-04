@@ -1,6 +1,12 @@
 // Architekt serwera — zastosuj blueprint: włącz moduły (merge enabled:true) + zleć provisioning
 // struktury (bot wykona). Zwraca id zlecenia do pollowania wyniku przez /api/setup/provision.
-import { getAllSettings, saveSettings, setRawSetting } from '../../../../lib/data';
+import {
+  getAllSettings,
+  getGuildRawSetting,
+  saveSettings,
+  setGuildRawSetting,
+  setRawSetting,
+} from '../../../../lib/data';
 import { blueprintSchema, parseBody } from '../../../../lib/schemas';
 import { buildPlan } from '../../../../lib/setup';
 
@@ -35,6 +41,15 @@ export async function POST(request: Request): Promise<Response> {
   if (blocks.length) {
     id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     await setRawSetting('setup_provision', JSON.stringify(buildPlan(blocks, id)));
+  }
+
+  // C3 (#690): bezosobowy znacznik „setup uruchomiony" do lejka aktywacji (raz per serwer).
+  try {
+    if (!(await getGuildRawSetting('activation_setup_at'))) {
+      await setGuildRawSetting('activation_setup_at', String(Date.now()));
+    }
+  } catch {
+    /* analityka nie może zepsuć setupu */
   }
 
   return Response.json({ ok: true, enabled: modules, id });
