@@ -70,10 +70,47 @@ export function dueNow(p: Post, now: Date, lastRun: number | undefined): boolean
   return true;
 }
 
+// „Wyślij teraz" (B3 fala 1, #686): panel zapisuje żądanie do 'g:<id>:scheduled_send_now' ({id, ts}).
+// Nowe, gdy ts > znacznik obsłużenia (klucz stanu 'sendnow:<id>' — OSOBNY od state[postId], żeby
+// ręczna wysyłka nie zjadła dzisiejszej wysyłki planowej). Czysta funkcja — eksport do testów.
+export function sendNowRequest(
+  raw: string | null,
+  state: Record<string, number>,
+): { id: string; ts: number } | null {
+  if (!raw) return null;
+  try {
+    const r = JSON.parse(raw) as { id?: unknown; ts?: unknown };
+    if (typeof r.id !== 'string' || !r.id || typeof r.ts !== 'number' || !Number.isFinite(r.ts))
+      return null;
+    if ((state[`sendnow:${r.id}`] ?? 0) >= r.ts) return null;
+    return { id: r.id, ts: r.ts };
+  } catch {
+    return null;
+  }
+}
+
+// Wysyłka jednego posta na jego kanał (wspólna dla harmonogramu i „Wyślij teraz").
+async function sendPost(guild: Guild, p: Post): Promise<void> {
+  const ch = await guild.channels.fetch(p.channelId).catch(() => null);
+  if (!(ch?.isTextBased() && 'send' in ch)) return;
+  const vars: Record<string, string> = {
+    '{server}': guild.name,
+    '{guild}': guild.name,
+    '{memberCount}': String(guild.memberCount),
+    '{count}': String(guild.memberCount),
+  };
+  if (hasRich(p.message)) {
+    // V2 (components + flaga) albo klasyka (content + embeds) — buildSendOptions decyduje.
+    const payload = buildSendOptions(p.message, vars);
+    await (ch as TextChannel).send(payload as never).catch(() => {});
+  }
+}
+
 // Zaplanowane posty JEDNEGO serwera (lista + state per-serwer; `guild.channels.fetch` = izolacja).
 async function tickForGuild(guild: Guild): Promise<void> {
   const posts = postsFor(guild.id);
-  if (!posts.length) return;
+  const sendRaw = await cloudGetSetting(`g:${guild.id}:scheduled_send_now`).catch(() => null);
+  if (!posts.length && !sendRaw) return;
   const stateKey = `g:${guild.id}:scheduled_posts_state`;
   let state: Record<string, number> = {};
   try {
@@ -84,30 +121,31 @@ async function tickForGuild(guild: Guild): Promise<void> {
   const now = new Date();
   let changed = false;
 
+  // Ręczne „Wyślij teraz" z panelu — poza harmonogramem, działa też dla wyłączonego posta
+  // (user kliknął świadomie). Znacznik zapisujemy zawsze (także gdy post zniknął) — bez pętli.
+  const req = sendNowRequest(sendRaw, state);
+  if (req) {
+    const p = posts.find((x) => x.id === req.id);
+    if (p?.channelId && p.message) await sendPost(guild, p);
+    state[`sendnow:${req.id}`] = req.ts;
+    changed = true;
+  }
+
   for (const p of posts) {
     if (!p.enabled || !p.channelId || !p.message) continue;
     if (!dueNow(p, now, state[p.id])) continue;
-    const ch = await guild.channels.fetch(p.channelId).catch(() => null);
-    if (ch?.isTextBased() && 'send' in ch) {
-      const vars: Record<string, string> = {
-        '{server}': guild.name,
-        '{guild}': guild.name,
-        '{memberCount}': String(guild.memberCount),
-        '{count}': String(guild.memberCount),
-      };
-      if (hasRich(p.message)) {
-        // V2 (components + flaga) albo klasyka (content + embeds) — buildSendOptions decyduje.
-        const payload = buildSendOptions(p.message, vars);
-        await (ch as TextChannel).send(payload as never).catch(() => {});
-      }
-    }
+    await sendPost(guild, p);
     state[p.id] = now.getTime();
     changed = true;
   }
 
   if (changed) {
     const ids = new Set(posts.map((p) => p.id));
-    for (const k of Object.keys(state)) if (!ids.has(k)) delete state[k]; // sprzątanie sierot
+    // Sprzątanie sierot — znaczniki 'sendnow:<id>' żyją tak długo, jak ich post.
+    for (const k of Object.keys(state)) {
+      const id = k.startsWith('sendnow:') ? k.slice('sendnow:'.length) : k;
+      if (!ids.has(id)) delete state[k];
+    }
     await cloudSetSetting(stateKey, JSON.stringify(state)).catch(() => {});
   }
 }

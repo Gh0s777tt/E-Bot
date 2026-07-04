@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-685-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.615.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-686-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.616.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.616.0] — 📨 Discovery B3 (fala 1): „Wyślij teraz" w Studiu zaplanowanych wiadomości
+
+- `[#686]` 📨 **Ręczna wysyłka posta poza harmonogramem** (Discovery B3 — z trzech braków Studia „wyślij teraz / przyciski / scalenie z harmonogramem" harmonogram i wysyłka-gdziekolwiek już istniały na `/scheduled`; to domyka pierwszy brak): przy każdej karcie posta na `/scheduled` przycisk **„Wyślij teraz"** (ikona ✈, aktywny gdy post ma kanał) → `POST /api/scheduled-posts/send-now` zapisuje żądanie per-serwer (`scheduled_send_now` = `{id, ts}`); poller bota ([`engagement/scheduledPosts.mts`](bot/src/engagement/scheduledPosts.mts)) odbiera na najbliższym ticku (≤60 s) i wysyła post na jego kanał **działa też dla posta wyłączonego** (user kliknął świadomie). UI: potwierdzenie „Zlecono — bot wyśle w ciągu minuty" + prawdziwe błędy API (wzorzec A1: „zapisz zmiany przed wysyłką" / „post nie ma kanału").
+  - **Solidność:** znacznik obsłużenia `sendnow:<id>` jest **osobny** od znacznika harmonogramu (`state[postId]`) — ręczna wysyłka nie zjada dzisiejszej planowej (i odwrotnie; pod testem); idempotencja po restarcie; sprzątanie sierot obejmuje oba typy kluczy; wspólny `sendPost()` dla obu torów (bez duplikacji).
+  - **i18n ×14:** `ui.scheduled.sendNow` / `sendNowOk` (parzystość pod testem). **Testy:** [`scheduledPosts.sendnow.test.ts`](bot/src/engagement/scheduledPosts.sendnow.test.ts) — nowe/obsłużone/zepsute żądanie, niezależność od znacznika harmonogramu (+4).
+  - **Zostaje z B3 (fala 2):** interaktywne przyciski (action rows) w `MessageStudio` — wymaga zmiany schematu `RichMessage` + renderera bota.
+  - **Bramki:** typecheck ×4 · test **1285** (+4) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.615.0] — 🔄 Discovery B5: „Zsynchronizuj komendy" z panelu (bez terminala)
 

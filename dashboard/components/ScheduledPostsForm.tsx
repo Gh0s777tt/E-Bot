@@ -1,11 +1,12 @@
 'use client';
 
-import { CalendarClock, ChevronDown, Plus, Trash2 } from 'lucide-react';
+import { CalendarClock, ChevronDown, Plus, Send, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { Tier } from '../lib/billing';
 import type { GuildMeta } from '../lib/guild';
 import { type PanelLocale, tp } from '../lib/panelI18n';
 import { EMPTY_RICH, type RichMessage } from '../lib/richMessage';
+import { saveConfig } from '../lib/saveConfig';
 import type { ScheduledPost } from '../lib/scheduledPosts';
 import { useLang } from './LangContext';
 import MessageStudio from './MessageStudio';
@@ -79,6 +80,24 @@ export default function ScheduledPostsForm({
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [st, setSt] = useState<'idle' | 'saving' | 'ok' | 'err'>('idle');
   const [errMsg, setErrMsg] = useState('');
+  // „Wyślij teraz" (B3 fala 1): per-post status zlecenia ręcznej wysyłki (bot odbiera ≤60 s).
+  const [sendingId, setSendingId] = useState<string | null>(null);
+  const [sentId, setSentId] = useState<string | null>(null);
+  const [sendErr, setSendErr] = useState('');
+
+  async function sendNow(id: string) {
+    if (sendingId) return;
+    setSendingId(id);
+    setSendErr('');
+    const res = await saveConfig('/api/scheduled-posts/send-now', { id });
+    setSendingId(null);
+    if (res.ok) {
+      setSentId(id);
+      setTimeout(() => setSentId((s) => (s === id ? null : s)), 5000);
+    } else {
+      setSendErr(res.error || tp(lang, 'ui.saveError'));
+    }
+  }
 
   function toggleOpen(id: string) {
     setOpen((s) => {
@@ -165,6 +184,23 @@ export default function ScheduledPostsForm({
                   size={15}
                   className={`ms-auto shrink-0 text-muted transition ${isOpen ? 'rotate-180' : ''}`}
                 />
+              </button>
+              <button
+                type="button"
+                onClick={() => sendNow(p.id)}
+                disabled={!p.channelId || sendingId !== null}
+                className={`shrink-0 rounded-md border border-line px-2 py-1.5 transition disabled:opacity-40 ${
+                  sentId === p.id
+                    ? 'border-green-500/50 text-green-400'
+                    : 'text-muted hover:border-accent hover:text-accent'
+                }`}
+                title={
+                  sentId === p.id
+                    ? tp(lang, 'ui.scheduled.sendNowOk')
+                    : tp(lang, 'ui.scheduled.sendNow')
+                }
+              >
+                <Send size={14} className={sendingId === p.id ? 'animate-pulse' : ''} />
               </button>
               <button
                 type="button"
@@ -310,6 +346,8 @@ export default function ScheduledPostsForm({
         )}
       </div>
 
+      {sentId && <p className="text-xs text-green-400">✓ {tp(lang, 'ui.scheduled.sendNowOk')}</p>}
+      {sendErr && <p className="text-xs text-accent">{sendErr}</p>}
       <p className="text-xs text-muted">{tp(lang, 'ui.scheduled.footNote')}</p>
     </div>
   );
