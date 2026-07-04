@@ -7,7 +7,7 @@ import { type ChatInputCommandInteraction, type GuildMember, MessageFlags } from
 import { creditWallet, ecoConfig, ensureUser } from '../economy/store.mts';
 import { logTx } from '../economy/txlog.mts';
 import { levelForXp } from '../leveling.mts';
-import { cloudSelect, cloudUpsert, hasCloud } from '../lib/cloud.mts';
+import { cloudSelect, cloudUpdateReturning, cloudUpsert, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 import { buildRichMessage, type RichMessage } from '../lib/richMessage.mts';
@@ -71,28 +71,35 @@ async function runActions(
         await creditWallet(gid, interaction.user.id, interaction.user.username, amt);
         logTx(gid, interaction.user.id, amt, `cmd:/${interaction.commandName}`);
       } else if (a.kind === 'giveXp' && hasCloud()) {
-        // Uwaga: XP to wciąż read-modify-write (jak cały leveling — brak atomowego RPC dla xp).
-        // Skutek zbiegu = utrata części XP graczowi, nie nadmiar — nie exploit; do domknięcia z #5.
         const amt = Math.max(0, Math.min(Math.floor(Number(a.amount) || 0), MAX_ACTION_AMOUNT));
         if (amt <= 0) continue;
-        const rows = await cloudSelect<{ xp: number }>(
-          'user_levels',
-          `select=xp&guild_id=eq.${gid}&user_id=eq.${interaction.user.id}`,
-        );
-        const newXp = (rows[0]?.xp ?? 0) + amt;
-        await cloudUpsert(
-          'user_levels',
-          [
-            {
-              guild_id: gid,
-              user_id: interaction.user.id,
-              username: interaction.user.username,
-              xp: newXp,
-              level: levelForXp(newXp),
-            },
-          ],
-          'guild_id,user_id',
-        );
+        const uid = interaction.user.id;
+        const uname = interaction.user.username;
+        // Atomowy przyrost XP (compare-and-swap z ponawianiem) zamiast read-modify-write, który przy
+        // zbiegu z message-XP gubił część przyrostu. CAS filtruje po xp=eq.<odczytane>; przy przegranej
+        // pętla ponawia z nowym stanem (do 3×). Brak wiersza → upsert (rzadki wyścig pierwszego XP OK).
+        for (let attempt = 0; attempt < 3; attempt++) {
+          const rows = await cloudSelect<{ xp: number }>(
+            'user_levels',
+            `select=xp&guild_id=eq.${gid}&user_id=eq.${uid}`,
+          );
+          if (rows.length === 0) {
+            await cloudUpsert(
+              'user_levels',
+              [{ guild_id: gid, user_id: uid, username: uname, xp: amt, level: levelForXp(amt) }],
+              'guild_id,user_id',
+            );
+            break;
+          }
+          const oldXp = rows[0]?.xp ?? 0;
+          const newXp = oldXp + amt;
+          const updated = await cloudUpdateReturning(
+            'user_levels',
+            `guild_id=eq.${gid}&user_id=eq.${uid}&xp=eq.${oldXp}`,
+            { xp: newXp, level: levelForXp(newXp), username: uname },
+          );
+          if (updated.length > 0) break; // CAS trafił; inaczej ponów z aktualnym xp
+        }
       }
     } catch (e) {
       log.warn('[custom-cmd] akcja:', { err: e });

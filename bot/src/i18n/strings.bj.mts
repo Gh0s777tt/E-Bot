@@ -19,6 +19,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Remis — zwrot stawki.',
     'bj.lose': '❌ Krupier wygrywa. Tracisz {amount}.',
     'bj.notYours': 'To nie Twoja gra (albo już się zakończyła). Zagraj: `/eco blackjack`.',
+    'bj.active': '⚠️ Masz już aktywną grę w blackjacka — dokończ ją (Dobierz / Pas).',
   },
   en: {
     'bj.title': '🃏 Blackjack',
@@ -34,6 +35,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Push — bet returned.',
     'bj.lose': '❌ Dealer wins. You lose {amount}.',
     'bj.notYours': "This isn't your game (or it already ended). Play: `/eco blackjack`.",
+    'bj.active': '⚠️ You already have an active blackjack game — finish it (Hit / Stand).',
   },
   de: {
     'bj.title': '🃏 Blackjack',
@@ -49,6 +51,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Unentschieden — Einsatz zurück.',
     'bj.lose': '❌ Dealer gewinnt. Du verlierst {amount}.',
     'bj.notYours': 'Das ist nicht dein Spiel (oder es ist schon vorbei). Spiele: `/eco blackjack`.',
+    'bj.active': '⚠️ Du hast bereits ein laufendes Blackjack-Spiel — beende es (Ziehen / Halten).',
   },
   es: {
     'bj.title': '🃏 Blackjack',
@@ -64,6 +67,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Empate — apuesta devuelta.',
     'bj.lose': '❌ Gana el crupier. Pierdes {amount}.',
     'bj.notYours': 'Esta no es tu partida (o ya terminó). Juega: `/eco blackjack`.',
+    'bj.active': '⚠️ Ya tienes una partida de blackjack activa — termínala (Pedir / Plantarse).',
   },
   it: {
     'bj.title': '🃏 Blackjack',
@@ -79,6 +83,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Pareggio — puntata restituita.',
     'bj.lose': '❌ Vince il banco. Perdi {amount}.',
     'bj.notYours': 'Questa non è la tua partita (o è già finita). Gioca: `/eco blackjack`.',
+    'bj.active': '⚠️ Hai già una partita di blackjack attiva — finiscila (Carta / Stai).',
   },
   fr: {
     'bj.title': '🃏 Blackjack',
@@ -94,6 +99,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Égalité — mise rendue.',
     'bj.lose': '❌ Le croupier gagne. Tu perds {amount}.',
     'bj.notYours': "Ce n'est pas ta partie (ou elle est déjà terminée). Joue : `/eco blackjack`.",
+    'bj.active': '⚠️ Tu as déjà une partie de blackjack en cours — termine-la (Tirer / Rester).',
   },
   pt: {
     'bj.title': '🃏 Blackjack',
@@ -109,6 +115,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Empate — aposta devolvida.',
     'bj.lose': '❌ O dealer vence. Você perde {amount}.',
     'bj.notYours': 'Este jogo não é seu (ou já terminou). Jogue: `/eco blackjack`.',
+    'bj.active': '⚠️ Você já tem uma partida de blackjack ativa — termine-a (Pedir / Parar).',
   },
   zh: {
     'bj.title': '🃏 二十一点',
@@ -124,6 +131,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 平局——退还下注。',
     'bj.lose': '❌ 庄家获胜。你输掉 {amount}。',
     'bj.notYours': '这不是你的牌局（或已经结束）。开始游戏：`/eco blackjack`。',
+    'bj.active': '⚠️ 你已有一局进行中的21点——请先完成（要牌 / 停牌）。',
   },
   ko: {
     'bj.title': '🃏 블랙잭',
@@ -139,6 +147,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 푸시 — 베팅 반환.',
     'bj.lose': '❌ 딜러 승리. {amount} 잃음.',
     'bj.notYours': '내 게임이 아닙니다 (또는 이미 종료됨). 플레이: `/eco blackjack`.',
+    'bj.active': '⚠️ 이미 진행 중인 블랙잭 게임이 있습니다 — 먼저 끝내세요 (히트 / 스탠드).',
   },
   ru: {
     'bj.title': '🃏 Блэкджек',
@@ -154,6 +163,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Ничья — ставка возвращена.',
     'bj.lose': '❌ Дилер побеждает. Ты теряешь {amount}.',
     'bj.notYours': 'Это не твоя игра (или она уже закончилась). Сыграй: `/eco blackjack`.',
+    'bj.active': '⚠️ У вас уже есть активная игра в блэкджек — завершите её (Взять / Хватит).',
   },
   uk: {
     'bj.title': '🃏 Блекджек',
@@ -169,6 +179,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Нічия — ставку повернуто.',
     'bj.lose': '❌ Дилер виграє. Втрачаєш {amount}.',
     'bj.notYours': 'Це не твоя гра (або вона вже завершилася). Зіграй: `/eco blackjack`.',
+    'bj.active': '⚠️ У вас уже є активна гра в блекджек — завершіть її (Взяти / Досить).',
   },
   ja: {
     'bj.title': '🃏 ブラックジャック',
@@ -185,6 +196,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.lose': '❌ ディーラーの勝ち。{amount} の負け。',
     'bj.notYours':
       'これはあなたのゲームではありません（またはすでに終了しています）。プレイ：`/eco blackjack`。',
+    'bj.active': '⚠️ 進行中のブラックジャックがあります — 先に終えてください（ヒット / スタンド）。',
   },
   ar: {
     'bj.title': '🃏 بلاك جاك',
@@ -200,6 +212,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 تعادل — تمت إعادة الرهان.',
     'bj.lose': '❌ الموزّع يفوز. تخسر {amount}.',
     'bj.notYours': 'هذه ليست لعبتك (أو أنها انتهت بالفعل). العب: `/eco blackjack`.',
+    'bj.active': '⚠️ لديك لعبة بلاك جاك نشطة بالفعل — أنهِها (سحب / وقوف).',
   },
   id: {
     'bj.title': '🃏 Blackjack',
@@ -215,5 +228,7 @@ export const BJ_STRINGS: Record<Locale, Dict> = {
     'bj.push': '🤝 Seri — taruhan dikembalikan.',
     'bj.lose': '❌ Bandar menang. Kamu kalah {amount}.',
     'bj.notYours': 'Ini bukan gamemu (atau sudah berakhir). Main: `/eco blackjack`.',
+    'bj.active':
+      '⚠️ Kamu sudah punya permainan blackjack aktif — selesaikan dulu (Ambil / Berhenti).',
   },
 };

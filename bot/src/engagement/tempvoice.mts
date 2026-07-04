@@ -23,12 +23,39 @@ import {
   type VoiceChannel,
 } from 'discord.js';
 import { type Locale, resolveGuildLocale, resolveLocale, t } from '../i18n/index.mts';
+import { cloudGetSetting, cloudSetSetting, hasCloud } from '../lib/cloud.mts';
 import { getGuildSettings } from '../lib/db.mts';
 import { log } from '../lib/log.mts';
 
 const ACCENT = 0xe50914;
 const temp = new Set<string>(); // id kanałów utworzonych przez bota
 const owners = new Map<string, string>(); // channelId -> ownerId
+
+// Persystencja stanu (#kategoria C): dawniej temp/owners żyły TYLKO w pamięci → po restarcie panel
+// przestawał działać dla istniejących kanałów, a puste kanały-sieroty nie były sprzątane. Teraz stan
+// idzie do cloud (klucz globalny 'tempvoice_state' = {channelId: ownerId}); na starcie rehydracja +
+// sprzątanie sierot z przestoju. Bez chmury = jak dawniej (single-process, restart rzadki).
+const STATE_KEY = 'tempvoice_state';
+async function persistState(): Promise<void> {
+  if (!hasCloud()) return;
+  await cloudSetSetting(STATE_KEY, JSON.stringify(Object.fromEntries(owners))).catch(() => {});
+}
+
+// Parsowanie zapisanego stanu (czyste/testowalne) — odporne na nie-JSON i zły kształt.
+export function parseTempvoiceState(raw: string | null): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const o = JSON.parse(raw) as unknown;
+    if (!o || typeof o !== 'object' || Array.isArray(o)) return {};
+    const out: Record<string, string> = {};
+    for (const [k, v] of Object.entries(o as Record<string, unknown>)) {
+      if (typeof v === 'string') out[k] = v;
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
 
 // Etap K — config per-serwer: świeży odczyt (hub-channel ID i tak per-serwer), fallback global.
 function cfg(guildId: string): { on: boolean; hubId: string; categoryId: string; nameTpl: string } {
@@ -156,6 +183,7 @@ export async function handleTempvoiceButton(interaction: ButtonInteraction): Pro
       return;
     }
     owners.set(ch.id, interaction.user.id);
+    void persistState();
     await interaction.reply({
       content: t(gLocale, 'tv.claimed', { user: `<@${interaction.user.id}>` }),
     });
@@ -248,6 +276,7 @@ export async function handleTempvoiceSelect(interaction: UserSelectMenuInteracti
 
   // tv:transfersel
   owners.set(ch.id, targetId);
+  void persistState();
   await interaction.update({
     content: t(locale, 'tv.transferred', { user: `<@${targetId}>` }),
     components: [],
@@ -289,8 +318,33 @@ export async function handleTempvoiceModal(interaction: ModalSubmitInteraction):
   }
 }
 
+// Rehydracja po restarcie: wznów śledzenie żywych kanałów, usuń sieroty (puste z przestoju), odrzuć
+// nieistniejące. Jednorazowo na starcie; bez chmury no-op (stan i tak był tylko w pamięci).
+async function rehydrate(client: Client): Promise<void> {
+  if (!hasCloud()) return;
+  const state = parseTempvoiceState(await cloudGetSetting(STATE_KEY).catch(() => null));
+  let changed = false;
+  for (const [chId, ownerId] of Object.entries(state)) {
+    const ch = await client.channels.fetch(chId).catch(() => null);
+    if (!ch || ch.type !== ChannelType.GuildVoice) {
+      changed = true; // kanał już nie istnieje
+      continue;
+    }
+    const vc = ch as VoiceChannel;
+    if (vc.members.size === 0) {
+      await vc.delete().catch(() => {}); // sierota z przestoju — sprzątnij
+      changed = true;
+      continue;
+    }
+    temp.add(chId); // wciąż aktywny — wznów śledzenie + panel działa
+    owners.set(chId, ownerId);
+  }
+  if (changed) await persistState();
+}
+
 export function startTempVoice(client: Client): void {
   log.info('[tempvoice] aktywny 2.0 (panel z przyciskami; config z panelu).');
+  void rehydrate(client);
   client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
     try {
       const c = cfg(newState.guild?.id ?? '');
@@ -307,6 +361,7 @@ export function startTempVoice(client: Client): void {
         if (created) {
           temp.add(created.id);
           owners.set(created.id, newState.member.id);
+          void persistState();
           await newState.member.voice.setChannel(created).catch(() => {});
           await sendPanel(created as VoiceChannel, newState.member.id);
         }
@@ -316,6 +371,7 @@ export function startTempVoice(client: Client): void {
       if (left && temp.has(left.id) && left.members.size === 0) {
         temp.delete(left.id);
         owners.delete(left.id);
+        void persistState();
         await left.delete().catch(() => {});
       }
     } catch (e) {

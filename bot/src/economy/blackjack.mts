@@ -19,10 +19,41 @@ const SUITS = ['♠', '♥', '♦', '♣'];
 const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
 export type Card = { r: string; s: string };
-type Game = { bet: number; deck: Card[]; player: Card[]; dealer: Card[]; uid: string };
+type Game = {
+  bet: number;
+  deck: Card[];
+  player: Card[];
+  dealer: Card[];
+  uid: string;
+  uname: string;
+  gid: string;
+  startedAt: number;
+};
 const games = new Map<string, Game>();
 const key = (g: string, u: string): string => `${g}:${u}`;
 const draw = (d: Card[]): Card => d.pop() as Card;
+
+// Porzucone gry (gracz nie kliknął Dobierz/Pas przez TTL) — klucze do zwrotu stawki. Czyste/testowalne.
+const GAME_TTL_MS = 10 * 60_000;
+export function staleGameKeys(
+  entries: Iterable<[string, { startedAt: number }]>,
+  now: number,
+  ttl = GAME_TTL_MS,
+): string[] {
+  const out: string[] = [];
+  for (const [k, g] of entries) if (now - g.startedAt > ttl) out.push(k);
+  return out;
+}
+
+// Sweeper: co 5 min zwraca stawkę porzuconych gier i je usuwa (inaczej stawka przepadała bez rozliczenia).
+setInterval(() => {
+  const now = Date.now();
+  for (const k of staleGameKeys(games, now)) {
+    const g = games.get(k);
+    games.delete(k);
+    if (g) void creditWallet(g.gid, g.uid, g.uname, g.bet).catch(() => {});
+  }
+}, 5 * 60_000).unref?.();
 
 export function freshDeck(): Card[] {
   const d: Card[] = [];
@@ -95,6 +126,15 @@ export async function startBlackjack(
 ): Promise<void> {
   const locale = resolveLocale(interaction);
   const cur = ecoConfig(gid).currency;
+  // ANTY-NADPISANIE: aktywna gra? Nie pobieraj nowej stawki (dawniej nadpisywało grę i STAROŚĆ stawka
+  // przepadała bez zwrotu). Gracz musi dokończyć bieżącą (Dobierz/Pas) lub poczekać na sweeper.
+  if (games.has(key(gid, interaction.user.id))) {
+    await interaction.reply({
+      content: t(locale, 'bj.active'),
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
   // pobierz stawkę z góry — atomowo (spendWallet). Start jest pod withLock /eco, ale przyciski
   // (hit/stand) już NIE, więc całe saldo przez atomowe spend/credit (anty lost-update cudzego creditu).
   await ensureUser(gid, interaction.user.id, interaction.user.username);
@@ -116,6 +156,9 @@ export async function startBlackjack(
     player: [draw(deck), draw(deck)],
     dealer: [draw(deck), draw(deck)],
     uid: interaction.user.id,
+    uname: interaction.user.username,
+    gid,
+    startedAt: Date.now(),
   };
 
   // natychmiastowy blackjack

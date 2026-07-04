@@ -35,6 +35,18 @@ function cfg(guildId: string): Cfg {
 
 // guildId → (kod → liczba użyć)
 const cache = new Map<string, Map<string, number>>();
+// Serwery z GOTOWYM baseline (#kategoria C): dopóki wstępny snapshot nie ukończy się dla serwera,
+// `before` jest pusty i diff przypisałby PIERWSZE zaproszenie z uses>0 przypadkowej osobie. Bez
+// gotowego baseline NIE atrybuujemy (źródło nieznane) — lepiej „nieznane" niż błędny kredyt/nagroda.
+const baselineReady = new Set<string>();
+
+// Które zaproszenie zyskało użycie między snapshotami (czyste/testowalne).
+export function findUsedInvite(before: Map<string, number>, after: Map<string, number>): string {
+  for (const [code, uses] of after) {
+    if (uses > (before.get(code) ?? 0)) return code;
+  }
+  return '';
+}
 
 async function snapshot(guild: Guild): Promise<Map<string, number>> {
   const m = new Map<string, number>();
@@ -50,9 +62,13 @@ async function snapshot(guild: Guild): Promise<Map<string, number>> {
 export function startInvites(client: Client): void {
   log.info('[invites] aktywny (config z panelu).');
 
-  // wstępny snapshot (startInvites wołane już po ClientReady)
+  // wstępny snapshot (startInvites wołane już po ClientReady); baseline per serwer oznaczany jako
+  // gotowy dopiero PO ukończeniu — do tego czasu dołączenia nie są atrybuowane (anty-błędny kredyt).
   void (async () => {
-    for (const guild of client.guilds.cache.values()) cache.set(guild.id, await snapshot(guild));
+    for (const guild of client.guilds.cache.values()) {
+      cache.set(guild.id, await snapshot(guild));
+      baselineReady.add(guild.id);
+    }
   })();
 
   client.on(Events.InviteCreate, (inv) => {
@@ -69,18 +85,14 @@ export function startInvites(client: Client): void {
     try {
       const c = cfg(member.guild.id);
       if (!c.on) return;
+      const ready = baselineReady.has(member.guild.id);
       const before = cache.get(member.guild.id) ?? new Map<string, number>();
       const after = await snapshot(member.guild);
       cache.set(member.guild.id, after);
+      baselineReady.add(member.guild.id); // od teraz cache jest wiarygodny
 
-      // które zaproszenie zyskało użycie?
-      let usedCode = '';
-      for (const [code, uses] of after) {
-        if (uses > (before.get(code) ?? 0)) {
-          usedCode = code;
-          break;
-        }
-      }
+      // Atrybucja TYLKO gdy mieliśmy wiarygodny baseline — inaczej „nieznane źródło" (bez zgadywania).
+      const usedCode = ready ? findUsedInvite(before, after) : '';
       let inviterId = '';
       if (usedCode) {
         const invites = await member.guild.invites.fetch().catch(() => null);

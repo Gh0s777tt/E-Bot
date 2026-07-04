@@ -1,4 +1,4 @@
-<!-- SYNC: v0.623.0 · #693 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.624.0 · #694 · 2026-07-04 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.623.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.624.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -28,6 +28,10 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## 🔭 Bieżący tor (v0.624.0)
+
+**🩹 Naprawa funkcji wrażliwych na restart (v0.624.0)** — z przeglądu „ukryte/zepsute" domknięto 4 bugi „działa, ale źle": blackjack (guard nadpisania + sweeper zwrotu porzuconych stawek), tempvoice (persystencja stanu + rehydracja/sprzątanie sierot), invite tracker (atrybucja tylko przy gotowym baseline — koniec błędnego kredytu), giveXp (RMW→atomowy CAS). Funkcje ukryte celowo (owner/dev) i env-gated (Twitch/Stripe/marketplace/PRESENCE_INTENT) są poprawne — nie ruszane. +9 testów czystych rdzeni.
 
 ## 🔭 Bieżący tor (v0.623.0)
 
@@ -303,4 +307,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.623.0 (#693) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑04 · v0.624.0 (#694) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

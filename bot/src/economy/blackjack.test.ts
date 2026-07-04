@@ -3,7 +3,7 @@
 // Sercem jest MIĘKKI AS: as liczy się jako 11, ale gdy ręka przekracza 21 — schodzi do 1
 // (i tak dla kolejnych asów). Off-by-one w tej pętli psuje cały bilans gry.
 import { describe, expect, it } from 'vitest';
-import { type Card, freshDeck, val } from './blackjack.mts';
+import { type Card, freshDeck, staleGameKeys, val } from './blackjack.mts';
 
 // Krótki konstruktor ręki: kolor nieistotny dla wartości (val patrzy tylko na rangę).
 const h = (...ranks: string[]): Card[] => ranks.map((r) => ({ r, s: '♠' }));
@@ -69,5 +69,24 @@ describe('blackjack — integralność talii (freshDeck)', () => {
     const deck = freshDeck();
     const sum = deck.reduce((acc, c) => acc + val([c]), 0);
     expect(sum).toBe(380);
+  });
+});
+
+describe('blackjack — sweeper porzuconych gier (staleGameKeys)', () => {
+  it('zwraca klucze gier starszych niż TTL (do zwrotu stawki), pomija świeże', () => {
+    const now = 1_000_000;
+    const entries: [string, { startedAt: number }][] = [
+      ['g:swieza', { startedAt: now - 60_000 }], // 1 min — zostaje
+      ['g:stara', { startedAt: now - 11 * 60_000 }], // 11 min — do zwrotu
+      ['g:granica', { startedAt: now - 10 * 60_000 }], // dokładnie TTL — jeszcze nie
+    ];
+    expect(staleGameKeys(entries, now)).toEqual(['g:stara']);
+  });
+
+  it('pusta mapa → brak kluczy; własny TTL respektowany', () => {
+    expect(staleGameKeys([], Date.now())).toEqual([]);
+    const e: [string, { startedAt: number }][] = [['k', { startedAt: 0 }]];
+    expect(staleGameKeys(e, 100, 50)).toEqual(['k']);
+    expect(staleGameKeys(e, 40, 50)).toEqual([]);
   });
 });

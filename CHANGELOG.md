@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-693-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.623.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-694-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.624.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,17 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.624.0] — 🩹 Naprawa funkcji wrażliwych na restart (kategoria C z przeglądu „ukryte/zepsute")
+
+- `[#694]` 🩹 **Cztery funkcje, które działały z błędami — domknięte** (z przeglądu funkcji ukrytych/zepsutych; wspólny mianownik: stan efemeryczny nie przeżywał restartu):
+  - **Blackjack** ([economy/blackjack.mts](bot/src/economy/blackjack.mts)) — `/blackjack` w trakcie gry pobierał NOWĄ stawkę i nadpisywał starą (przepadek bez zwrotu). Teraz **guard** blokuje nową grę, gdy jest aktywna (i18n `bj.active` ×14) + **sweeper** co 5 min zwraca stawkę porzuconych gier (`staleGameKeys`, TTL 10 min).
+  - **TempVoice** ([engagement/tempvoice.mts](bot/src/engagement/tempvoice.mts)) — `temp`/`owners` żyły tylko w pamięci → po restarcie panel przestawał działać, a puste kanały-sieroty zostawały na zawsze. Teraz **persystencja do chmury** (`tempvoice_state`) + **rehydracja na starcie** ze sprzątaniem sierot z przestoju (`parseTempvoiceState`; bez chmury = jak dawniej).
+  - **Invite tracker** ([community/invites.mts](bot/src/community/invites.mts)) — wstępny snapshot był fire-and-forget → pierwsze dołączenie przed jego ukończeniem przypisywało zaproszenie **przypadkowej osobie**. Teraz atrybucja tylko przy **gotowym baseline** per serwer (`baselineReady`), inaczej „nieznane źródło" (bez zgadywania). Czysty `findUsedInvite` pod testem.
+  - **`giveXp`** (no-code, [commands/customCommands.mts](bot/src/commands/customCommands.mts)) — read-modify-write → **atomowy compare-and-swap z ponawianiem** (do 3×, `cloudUpdateReturning`); domknięcie resztki po #692.
+  - **Testy:** `staleGameKeys` (blackjack, +3), `parseTempvoiceState` (+3), `findUsedInvite` (+4) — wszystkie czyste rdzenie wydzielone do testu.
+  - **Nota:** to były bugi „działa, ale źle" — funkcje ukryte celowo (owner/dev) i uśpione za env (Twitch/Stripe/marketplace/PRESENCE_INTENT) są POPRAWNE, nie ruszane.
+  - **Bramki:** typecheck ×4 · test **1334** (+9) · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.623.0] — 🧪 Audyt: testy bramek bezpieczeństwa + coverage gate w CI
 
