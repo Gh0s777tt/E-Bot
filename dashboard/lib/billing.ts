@@ -2,6 +2,7 @@
 // (wszystkie pluginy dostępne), brak checkoutu — panel działa jak dziś. Tier serwera trzyma
 // kolumna guilds.tier (nadawana przez webhook Stripe w kolejnym przyroście M5). Tier czytany
 // dla AKTUALNEGO serwera (przez chokepoint getPrimaryGuildId). Dependency-free (jak Sentry/Twitch).
+import type { BillingPlan } from './premiumPlan';
 import { hasSupabase, supabase } from './supabase';
 
 export type Tier = 'free' | 'premium';
@@ -236,18 +237,21 @@ export async function listPremiumGuilds(): Promise<PremiumRow[]> {
 }
 
 // Tworzy sesję Stripe Checkout (subskrypcja premium serwera). URL lub null. Surowy POST do API
-// Stripe (form-encoded, bez zależności). Wymaga STRIPE_SECRET_KEY + STRIPE_PRICE_ID. Plan 'year'
-// używa STRIPE_PRICE_ID_YEAR (fallback do miesięcznego, gdy roczny price nieustawiony).
+// Stripe (form-encoded, bez zależności). Wymaga STRIPE_SECRET_KEY + STRIPE_PRICE_ID (miesięczny).
+// Interwały 3/6/12 mies. używają własnych Price ID; brak danego → fallback do miesięcznego.
 export async function createCheckoutSession(
   guildId: string,
   origin: string,
-  plan: 'month' | 'year' = 'month',
+  plan: BillingPlan = 'month',
 ): Promise<string | null> {
   const key = process.env.STRIPE_SECRET_KEY;
-  const price =
-    plan === 'year'
-      ? process.env.STRIPE_PRICE_ID_YEAR || process.env.STRIPE_PRICE_ID
-      : process.env.STRIPE_PRICE_ID;
+  const priceByPlan: Record<BillingPlan, string | undefined> = {
+    month: process.env.STRIPE_PRICE_ID,
+    quarter: process.env.STRIPE_PRICE_ID_QUARTER,
+    half: process.env.STRIPE_PRICE_ID_HALF,
+    year: process.env.STRIPE_PRICE_ID_YEAR,
+  };
+  const price = priceByPlan[plan] || process.env.STRIPE_PRICE_ID;
   if (!key || !price || !guildId) return null;
   try {
     const body = new URLSearchParams({

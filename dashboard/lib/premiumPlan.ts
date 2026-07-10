@@ -4,8 +4,42 @@
 // PLAN_FEATURES, aby zmienić zawartość porównania.
 import type { Tier } from './billing';
 
-export const PREMIUM_PRICE_MONTH = process.env.NEXT_PUBLIC_PREMIUM_PRICE || '19,99 zł';
-export const PREMIUM_PRICE_YEAR = process.env.NEXT_PUBLIC_PREMIUM_PRICE_YEAR || '199 zł';
+// Ceny wyświetlane (env; realne kwoty w STRIPE_PRICE_ID*). Domyślne = drabinka 1/3/6/12 mies.
+// (49 / 129 / 239 / 429 zł) — rok NIE jest już ceną kwartału. Nadpisujesz przez NEXT_PUBLIC_*.
+export const PREMIUM_PRICE_MONTH = process.env.NEXT_PUBLIC_PREMIUM_PRICE || '49 zł';
+export const PREMIUM_PRICE_QUARTER = process.env.NEXT_PUBLIC_PREMIUM_PRICE_QUARTER || '129 zł';
+export const PREMIUM_PRICE_HALF = process.env.NEXT_PUBLIC_PREMIUM_PRICE_HALF || '239 zł';
+export const PREMIUM_PRICE_YEAR = process.env.NEXT_PUBLIC_PREMIUM_PRICE_YEAR || '429 zł';
+
+// Interwały subskrypcji. Rzeczywista długość okresu = interwał ceny Stripe (webhook czyta
+// current_period_end), więc kod nie liczy dat — tu tylko mapowanie na Price ID + prezentacja.
+export type BillingPlan = 'month' | 'quarter' | 'half' | 'year';
+export const BILLING_PLANS: { id: BillingPlan; months: number; price: string }[] = [
+  { id: 'month', months: 1, price: PREMIUM_PRICE_MONTH },
+  { id: 'quarter', months: 3, price: PREMIUM_PRICE_QUARTER },
+  { id: 'half', months: 6, price: PREMIUM_PRICE_HALF },
+  { id: 'year', months: 12, price: PREMIUM_PRICE_YEAR },
+];
+export const BILLING_PLAN_IDS: BillingPlan[] = BILLING_PLANS.map((p) => p.id);
+
+// Wiodąca liczba z ceny ("129 zł" / "19,99 zł") → number; null gdy brak (np. "—"). Czyste/testowalne.
+export function priceNumber(s: string): number | null {
+  const m = s.replace(/\s/g, '').match(/(\d+(?:[.,]\d+)?)/);
+  return m ? Number(m[1].replace(',', '.')) : null;
+}
+
+// Oszczędność % vs płacenie miesięczne (miesięczna × liczba miesięcy). null gdy nie da się policzyć
+// albo plan miesięczny (months≤1) lub brak oszczędności. Zaokrąglone w dół (uczciwie, nie zawyża).
+export function planSavePct(
+  plan: { months: number; price: string },
+  monthly: string,
+): number | null {
+  const p = priceNumber(plan.price);
+  const m = priceNumber(monthly);
+  if (p === null || m === null || m <= 0 || plan.months <= 1) return null;
+  const pct = Math.floor((1 - p / (m * plan.months)) * 100);
+  return pct > 0 ? pct : null;
+}
 
 export type PlanFeature = { key: string; free: boolean; pro: boolean };
 

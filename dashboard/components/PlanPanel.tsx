@@ -5,7 +5,7 @@
 import { Check, Minus, Sparkles } from 'lucide-react';
 import type { PremiumInfo } from '../lib/billing';
 import { type PanelLocale, tp } from '../lib/panelI18n';
-import { PLAN_FEATURES, PREMIUM_PRICE_MONTH, PREMIUM_PRICE_YEAR } from '../lib/premiumPlan';
+import { BILLING_PLANS, PLAN_FEATURES } from '../lib/premiumPlan';
 import PremiumDialog from './PremiumDialog';
 
 const day = (iso: string | null) => (iso ? iso.slice(0, 10) : null);
@@ -78,15 +78,16 @@ export default function PlanPanel({
           <div className="flex items-center gap-1.5 text-sm font-semibold text-accent">
             <Sparkles size={14} /> {tp(lang, 'ui.premium.pro')}
           </div>
-          <div className="mt-1 font-display text-xl text-white">
-            {PREMIUM_PRICE_MONTH}
-            <span className="ms-1 text-sm font-normal text-muted">
-              {tp(lang, 'ui.premium.month')}
-            </span>{' '}
-            · {PREMIUM_PRICE_YEAR}
-            <span className="ms-1 text-sm font-normal text-muted">
-              {tp(lang, 'ui.premium.perYear')}
-            </span>
+          <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 font-display text-white">
+            {BILLING_PLANS.map((p, i) => (
+              <span key={p.id} className="whitespace-nowrap">
+                {i > 0 && <span className="me-2 text-muted/50">·</span>}
+                <span className="text-lg">{p.price}</span>
+                <span className="ms-1 text-xs font-normal text-muted">
+                  / {p.months} {tp(lang, 'ui.premium.moShort')}
+                </span>
+              </span>
+            ))}
           </div>
           <ul className="mt-3 space-y-2 text-sm">
             {PLAN_FEATURES.map((f) => (

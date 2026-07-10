@@ -1,4 +1,4 @@
-<!-- SYNC: v0.625.0 · #695 · 2026-07-05 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.626.0 · #696 · 2026-07-05 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.625.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.626.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -28,6 +28,10 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## 🔭 Bieżący tor (v0.626.0)
+
+**💳 Premium: plany 3- i 6-miesięczne (v0.626.0)** — drabinka 1/3/6/12 mies. = 49/129/239/429 zł (koniec „rok w cenie kwartału"; rabaty 12/18/27%). `BillingPlan` = month|quarter|half|year, `BILLING_PLANS` jedno źródło prawdy, checkout mapuje na `STRIPE_PRICE_ID_*`, długość okresu z `current_period_end` Stripe (zero matematyki dat). UI: przełącznik 4 interwałów + plakietka „−N%" liczona z cen. Aktywacja: utwórz w Stripe ceny 3/6-mc + env (fallback do miesięcznej bez nich).
 
 ## 🔭 Bieżący tor (v0.625.0)
 
@@ -311,4 +315,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑05 · v0.625.0 (#695) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑05 · v0.626.0 (#696) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

@@ -21,9 +21,12 @@
 
 ## 🔧 Kroki aktywacji
 
-1. **Produkt + 2 ceny** — Stripe Dashboard → Products → utwórz produkt „Premium", dodaj **dwie ceny recurring**:
-   - **miesięczną** (np. 19,99 zł / mc) → `STRIPE_PRICE_ID`,
-   - **roczną** (np. 199 zł / rok) → `STRIPE_PRICE_ID_YEAR` *(opcjonalna — bez niej plan roczny użyje ceny miesięcznej)*.
+1. **Produkt + do 4 cen recurring** — Stripe Dashboard → Products → utwórz produkt „Premium", dodaj ceny (drabinka 1/3/6/12 mies. — dłuższy okres tańszy za miesiąc):
+   - **miesięczną** (49 zł / mc, `interval=month`) → `STRIPE_PRICE_ID` *(wymagana)*,
+   - **3-miesięczną** (129 zł, `interval=month, interval_count=3`) → `STRIPE_PRICE_ID_QUARTER` *(opcjonalna)*,
+   - **6-miesięczną** (239 zł, `interval=month, interval_count=6`) → `STRIPE_PRICE_ID_HALF` *(opcjonalna)*,
+   - **roczną** (429 zł, `interval=year`) → `STRIPE_PRICE_ID_YEAR` *(opcjonalna)*.
+   - Brak którejś opcjonalnej ceny → ten plan w checkoutcie użyje ceny miesięcznej (fallback). Długość okresu premium bierze się z `current_period_end` Stripe — kod nie liczy dat.
 2. **Klucz sekretny** — Developers → API keys → `sk_...` → `STRIPE_SECRET_KEY` *(bezpieczniejszy: klucz restricted `rk_...` z uprawnieniem Checkout)*.
 3. **Webhook** — Developers → Webhooks → Add endpoint:
    - URL: `https://<twój-panel>/api/billing/webhook`
@@ -31,8 +34,8 @@
    - Skopiuj **Signing secret** (`whsec_...`) → `STRIPE_WEBHOOK_SECRET`.
 4. **Env w Vercel** — Project → Settings → Environment Variables, następnie Redeploy:
    - **Wymagane:** `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET`.
-   - **Plan roczny:** `STRIPE_PRICE_ID_YEAR`.
-   - **Ceny wyświetlane** (opcjonalne; domyślnie `19,99 zł` / `199 zł`): `NEXT_PUBLIC_PREMIUM_PRICE`, `NEXT_PUBLIC_PREMIUM_PRICE_YEAR`.
+   - **Dłuższe plany (opcjonalne):** `STRIPE_PRICE_ID_QUARTER`, `STRIPE_PRICE_ID_HALF`, `STRIPE_PRICE_ID_YEAR`.
+   - **Ceny wyświetlane** (opcjonalne; domyślnie `49/129/239/429 zł`): `NEXT_PUBLIC_PREMIUM_PRICE`, `NEXT_PUBLIC_PREMIUM_PRICE_QUARTER`, `NEXT_PUBLIC_PREMIUM_PRICE_HALF`, `NEXT_PUBLIC_PREMIUM_PRICE_YEAR`.
 5. **Schemat** — upewnij się, że uruchomiony jest [`m1-marketplace-schema.sql`](../dashboard/scripts/m1-marketplace-schema.sql) (tabela `guilds` z kolumnami `tier`/`stripe_customer_id`/`stripe_sub_id`).
 
 ## 🔄 Jak to działa

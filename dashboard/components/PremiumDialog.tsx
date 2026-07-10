@@ -1,20 +1,29 @@
 'use client';
 
 // Okno porównania planów Free vs Premium (M5/billing). Przycisk „Przejdź na Premium" → modal z dwiema
-// kartami (cechy ✓/✗) + przełącznik miesięczny/roczny (roczny polecany, z plakietką oszczędności) →
-// „Subskrybuj" startuje Stripe Checkout (/api/billing/checkout, plan w body). Gating w miejscu użycia.
+// kartami (cechy ✓/✗) + przełącznik 4 interwałów (1/3/6/12 mies.; dłuższy = taniej za miesiąc, plakietka
+// oszczędności liczona z cen) → „Subskrybuj" startuje Stripe Checkout (/api/billing/checkout, plan w body).
 import { Check, Minus, Sparkles, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { tp } from '../lib/panelI18n';
-import { PLAN_FEATURES, PREMIUM_PRICE_MONTH, PREMIUM_PRICE_YEAR } from '../lib/premiumPlan';
+import {
+  BILLING_PLANS,
+  type BillingPlan,
+  PLAN_FEATURES,
+  PREMIUM_PRICE_MONTH,
+  planSavePct,
+} from '../lib/premiumPlan';
 import { useLang } from './LangContext';
 
 export default function PremiumDialog({ guildTier = 'free' }: { guildTier?: 'free' | 'premium' }) {
   const { lang } = useLang();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [plan, setPlan] = useState<'month' | 'year'>('year'); // roczny domyślnie (polecany)
+  const [plan, setPlan] = useState<BillingPlan>('year'); // roczny domyślnie (najlepsza wartość)
   const isPremium = guildTier === 'premium';
+  const sel = BILLING_PLANS.find((p) => p.id === plan) ?? BILLING_PLANS[0];
+  const savePct = planSavePct(sel, PREMIUM_PRICE_MONTH);
+  const moShort = tp(lang, 'ui.premium.moShort');
 
   useEffect(() => {
     if (!open) return;
@@ -48,8 +57,9 @@ export default function PremiumDialog({ guildTier = 'free' }: { guildTier?: 'fre
       <Minus size={15} className="text-muted/50" aria-hidden />
     );
 
-  const segBtn = (p: 'month' | 'year', label: string) => (
+  const segBtn = (p: BillingPlan, label: string) => (
     <button
+      key={p}
       type="button"
       onClick={() => setPlan(p)}
       className={`rounded-md px-3 py-1 text-xs font-semibold transition ${plan === p ? 'bg-accent text-white' : 'text-muted hover:text-white'}`}
@@ -94,13 +104,16 @@ export default function PremiumDialog({ guildTier = 'free' }: { guildTier?: 'fre
             <h2 className="font-display text-2xl text-white">{tp(lang, 'ui.premium.title')}</h2>
             <p className="mt-1 text-sm text-muted">{tp(lang, 'ui.premium.subtitle')}</p>
 
-            {/* Przełącznik planu — wpływa na cenę i przycisk po stronie Premium. */}
-            <div className="mt-4 inline-flex items-center gap-1 rounded-lg border border-line bg-bg/40 p-1">
-              {segBtn('month', tp(lang, 'ui.premium.monthly'))}
-              {segBtn('year', tp(lang, 'ui.premium.yearly'))}
-              <span className="ms-1 rounded-md bg-accent/15 px-2 py-0.5 text-[11px] font-semibold text-accent">
-                {tp(lang, 'ui.premium.yearSave')}
-              </span>
+            {/* Przełącznik 4 interwałów — wpływa na cenę i plakietkę oszczędności po stronie Premium. */}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line bg-bg/40 p-1">
+                {BILLING_PLANS.map((p) => segBtn(p.id, `${p.months} ${moShort}`))}
+              </div>
+              {savePct !== null && (
+                <span className="rounded-md bg-accent/15 px-2 py-0.5 text-[11px] font-semibold text-accent">
+                  −{savePct}% {tp(lang, 'ui.premium.yearSave')}
+                </span>
+              )}
             </div>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -130,11 +143,9 @@ export default function PremiumDialog({ guildTier = 'free' }: { guildTier?: 'fre
                   <Sparkles size={14} /> {tp(lang, 'ui.premium.pro')}
                 </div>
                 <div className="mt-1 font-display text-2xl text-white">
-                  {plan === 'year' ? PREMIUM_PRICE_YEAR : PREMIUM_PRICE_MONTH}
+                  {sel.price}
                   <span className="ms-1 text-sm font-normal text-muted">
-                    {plan === 'year'
-                      ? tp(lang, 'ui.premium.perYear')
-                      : tp(lang, 'ui.premium.month')}
+                    {sel.months === 1 ? tp(lang, 'ui.premium.month') : `/ ${sel.months} ${moShort}`}
                   </span>
                 </div>
                 <ul className="mt-4 space-y-2 text-sm">

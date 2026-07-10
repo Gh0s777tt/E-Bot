@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-695-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.625.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-696-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.626.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,14 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.626.0] — 💳 Premium: plany 3- i 6-miesięczne (drabinka 1/3/6/12 mies., 49/129/239/429)
+
+- `[#696]` 💳 **Dwa nowe interwały subskrypcji + zdrowa drabinka cen** — było tylko `month`/`year`, a rok (149) kosztował tyle co kwartał (3×49=147), czyli 9 miesięcy za darmo. Teraz **1/3/6/12 mies. = 49/129/239/429 zł** (rabaty rosnące: ~12%/18%/27%; rok = 3,3× kwartał). Typ [`BillingPlan`](dashboard/lib/premiumPlan.ts) rozszerzony na `month|quarter|half|year`; `BILLING_PLANS` = jedno źródło prawdy (interwał + cena wyświetlana); `createCheckoutSession` mapuje plan na `STRIPE_PRICE_ID`/`_QUARTER`/`_HALF`/`_YEAR` (fallback do miesięcznego). **Zero matematyki dat** — długość okresu bierze się z `current_period_end` Stripe (webhook), więc dowolny interwał działa automatycznie.
+  - **UI:** `PremiumDialog` — przełącznik 4 interwałów (1/3/6/12 mc) + **plakietka oszczędności liczona z cen** (`planSavePct`, „−N%"); `PlanPanel` pokazuje pełną drabinkę. i18n: 1 klucz `ui.premium.moShort` ×14 (jednostka „mc/mo/…").
+  - **Do aktywacji (właściciel):** utwórz w Stripe ceny 3-mies. (`interval_count=3`) i 6-mies. (`=6`), ustaw `STRIPE_PRICE_ID_QUARTER/_HALF` + `NEXT_PUBLIC_PREMIUM_PRICE_*` — przewodnik [`AKTYWACJA-STRIPE.md`](docs/AKTYWACJA-STRIPE.md). Bez nich plany 3/6-mc chowają się do ceny miesięcznej (fallback).
+  - **Test:** [premiumPlan.pricing.test.ts](dashboard/lib/premiumPlan.pricing.test.ts) — `priceNumber`, `planSavePct` (rabaty 12/18/27%), model planów (+5).
+  - **Bramki:** typecheck ×4 · test **1339** (+5) · Biome (0 błędów poza `bot/src/setup/`) · env:check (80 zmiennych) · `sync:check` — exit 0.
 
 ## [0.625.0] — 🔑 Poprawka recenzji App Directory: /lock i /unlock wymagają ManageRoles, nie ManageChannels
 

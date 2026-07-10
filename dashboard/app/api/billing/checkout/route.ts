@@ -1,6 +1,7 @@
 import { getOrigin, parseCookie, SESSION_COOKIE } from '../../../../lib/auth';
 import { createCheckoutSession } from '../../../../lib/billing';
 import { getPrimaryGuildId } from '../../../../lib/guild';
+import { BILLING_PLAN_IDS, type BillingPlan } from '../../../../lib/premiumPlan';
 import { getAuthSecret, verifySession } from '../../../../lib/session';
 
 export const dynamic = 'force-dynamic';
@@ -16,11 +17,13 @@ export async function POST(request: Request): Promise<Response> {
   const guildId = await getPrimaryGuildId();
   if (!guildId) return Response.json({ ok: false, error: 'brak serwera' }, { status: 400 });
 
-  // Plan z body (domyślnie miesięczny); 'year' → roczny price w Stripe.
-  let plan: 'month' | 'year' = 'month';
+  // Plan z body (domyślnie miesięczny); dozwolone: month/quarter/half/year → odpowiedni price w Stripe.
+  let plan: BillingPlan = 'month';
   try {
     const body = (await request.json()) as { plan?: string };
-    if (body?.plan === 'year') plan = 'year';
+    if (body?.plan && (BILLING_PLAN_IDS as string[]).includes(body.plan)) {
+      plan = body.plan as BillingPlan;
+    }
   } catch {
     /* brak/zły body → miesięczny */
   }
