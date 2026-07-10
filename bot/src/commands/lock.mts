@@ -1,4 +1,6 @@
-// /lock — zablokuj pisanie na kanale (@everyone: SendMessages = false). Perm: ManageChannels.
+// /lock — zablokuj pisanie na kanale (@everyone: SendMessages = false). Perm: ManageRoles —
+// edycja permission-overwrites kanału wymaga w Discordzie „Zarządzania rolami", NIE „Zarządzania
+// kanałami" (odzwierciedla realny wymóg API; zgłoszenie recenzji App Directory).
 import {
   ChannelType,
   type ChatInputCommandInteraction,
@@ -11,7 +13,7 @@ import { resolveLocale, t } from '../i18n/index.mts';
 export const data = new SlashCommandBuilder()
   .setName('lock')
   .setDescription('Zablokuj pisanie na kanale.')
-  .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
   .addChannelOption((o) =>
     o
       .setName('kanal')

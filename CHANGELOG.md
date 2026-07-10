@@ -2,8 +2,8 @@
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
 
-![Updaty](https://img.shields.io/badge/updaty-694-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.624.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Updaty](https://img.shields.io/badge/updaty-695-E50914?style=for-the-badge&labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.625.0-E50914?style=for-the-badge&labelColor=0a0a0a)
 
 </div>
 
@@ -13,6 +13,12 @@ Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## [0.625.0] — 🔑 Poprawka recenzji App Directory: /lock i /unlock wymagają ManageRoles, nie ManageChannels
+
+- `[#695]` 🔑 **`/lock` i `/unlock` deklarują teraz uprawnienie „Zarządzanie rolami"** (było: „Zarządzanie kanałami") — zgłoszenie recenzji Discord App Directory: edycja permission-overwrites kanału (`SendMessages` na @everyone) wymaga w Discordzie **ManageRoles**, nie ManageChannels. `setDefaultMemberPermissions` zmienione w [`commands/lock.mts`](bot/src/commands/lock.mts) i [`commands/unlock.mts`](bot/src/commands/unlock.mts) (parzyście — obie robią ten sam overwrite). `/lockdown` (ManageGuild) i `/panic` (Administrator) zostają — to celowo wyżej-uprzywilejowane komendy masowe, nie ten przypadek.
+  - **Wdrożenie:** po deployu bota wymaga `deploy-commands` (albo panel „Zsynchronizuj komendy") — nowe uprawnienie widoczne w Discordzie po propagacji.
+  - **Bramki:** typecheck ×4 · test **1334** · Biome (0 błędów poza `bot/src/setup/`) · `sync:check` — exit 0.
 
 ## [0.624.0] — 🩹 Naprawa funkcji wrażliwych na restart (kategoria C z przeglądu „ukryte/zepsute")
 

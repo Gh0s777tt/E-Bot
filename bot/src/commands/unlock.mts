@@ -1,4 +1,5 @@
-// /unlock — odblokuj pisanie na kanale (@everyone: SendMessages = null/dziedzicz). Perm: ManageChannels.
+// /unlock — odblokuj pisanie na kanale (@everyone: SendMessages = null/dziedzicz). Perm: ManageRoles —
+// edycja permission-overwrites wymaga „Zarządzania rolami", nie „Zarządzania kanałami" (parzyste z /lock).
 import {
   ChannelType,
   type ChatInputCommandInteraction,
@@ -11,7 +12,7 @@ import { resolveLocale, t } from '../i18n/index.mts';
 export const data = new SlashCommandBuilder()
   .setName('unlock')
   .setDescription('Odblokuj pisanie na kanale.')
-  .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
   .addChannelOption((o) =>
     o
       .setName('kanal')
