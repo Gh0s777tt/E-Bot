@@ -5,10 +5,10 @@
 import { existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import type { MessageReaction } from 'discord.js';
+import type { Client, MessageReaction } from 'discord.js';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { closeDb, setSettingLocal } from './lib/db.mts';
-import { emojiMatches, matchRole, refreshGuild } from './reaction-roles.mts';
+import { emojiMatches, matchRole, refresh, refreshGuild } from './reaction-roles.mts';
 
 const DB = path.join(tmpdir(), `ebot-rr-${process.pid}.db`);
 // Config globalny (setSettingLocal) jest widziany per-serwer przez fallback getGuildSettings.
@@ -95,5 +95,29 @@ describe('matchRole — fallback panelu', () => {
     setSettingLocal('reaction_role_panel_msg', 'PANEL');
     refreshGuild(G);
     expect(matchRole(G, 'INNA', react({ name: '🔔' }))).toBeUndefined();
+  });
+});
+
+describe('izolacja per-serwer (audyt C-1)', () => {
+  it('config serwera A NIE wycieka do serwera B (override g:<id>:* na tej samej wiadomości)', () => {
+    setSettingLocal(
+      'g:A:reaction_roles',
+      JSON.stringify([{ messageId: 'M', emoji: '🎮', roleId: 'rA' }]),
+    );
+    setSettingLocal(
+      'g:B:reaction_roles',
+      JSON.stringify([{ messageId: 'M', emoji: '🎮', roleId: 'rB' }]),
+    );
+    const client = {
+      guilds: {
+        cache: new Map([
+          ['A', { id: 'A' }],
+          ['B', { id: 'B' }],
+        ]),
+      },
+    } as unknown as Client;
+    refresh(client); // ładuje WSZYSTKIE serwery bota
+    expect(matchRole('A', 'M', react({ name: '🎮' }))).toBe('rA');
+    expect(matchRole('B', 'M', react({ name: '🎮' }))).toBe('rB'); // nie 'rA' — brak cross-tenant
   });
 });
