@@ -3,9 +3,13 @@
 // języka zobaczy fallback (zła flaga w panelu) albo martwy klucz. Dotąd pilnował tego tylko ręczny audyt
 // (parzystość była pełna — ten test ją zamraża przed regresją). NAV/GROUPS celowo Partial → poza zakresem.
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_PANEL_LOCALE, MODES, PANEL_LOCALES, UI } from './panelI18n';
+import { DEFAULT_PANEL_LOCALE, MODES, PANEL_LOCALES, UI_PL } from './panelI18n';
+import { UI_DATA } from './panelI18nData';
 
 type Dict = Record<string, string>;
+
+// UI rozbite (audyt B-1): pl inline + reszta w panelI18nData; do parytetu składamy pełny obraz.
+const UI = { pl: UI_PL, ...UI_DATA } as Record<string, Dict>;
 
 function parityOf(name: string, dict: Record<string, Dict>) {
   const baseKeys = Object.keys(dict[DEFAULT_PANEL_LOCALE]);

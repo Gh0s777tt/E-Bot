@@ -9,6 +9,7 @@ import { createContext, type ReactNode, useContext, useEffect, useState } from '
 import {
   DEFAULT_PANEL_LOCALE,
   detectBrowserLocale,
+  ensurePanelLocale,
   isPanelLocale,
   type PanelLocale,
 } from '../lib/panelI18n';
@@ -23,17 +24,17 @@ export function LangProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
+    let target: PanelLocale = DEFAULT_PANEL_LOCALE;
     try {
       const saved = localStorage.getItem('panelLang');
-      if (isPanelLocale(saved)) {
-        setLangState(saved);
-        return;
-      }
+      target = isPanelLocale(saved) ? saved : detectBrowserLocale();
     } catch {
-      /* brak localStorage */
+      target = detectBrowserLocale();
     }
-    const detected = detectBrowserLocale();
-    if (detected !== DEFAULT_PANEL_LOCALE) setLangState(detected);
+    if (target === DEFAULT_PANEL_LOCALE) return;
+    // Doładuj słownik locale (dynamiczny chunk) ZANIM przełączysz stan — komponenty renderują
+    // dopiero z gotowymi danymi, bez migania kluczy (audyt B-1).
+    void ensurePanelLocale(target).then(() => setLangState(target));
   }, []);
 
   // Kierunek pisma na <html>: arabski = RTL, reszta LTR. Ustawiane klient-side, by zmiana języka
@@ -44,7 +45,6 @@ export function LangProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   function setLang(l: PanelLocale): void {
-    setLangState(l);
     try {
       localStorage.setItem('panelLang', l);
       // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API nie działa w Firefox/Safari; prosty zapis wystarcza
@@ -52,9 +52,12 @@ export function LangProvider({ children }: { children: ReactNode }) {
     } catch {
       /* brak localStorage/cookies */
     }
-    // Odśwież komponenty serwerowe (page.tsx czyta `panel_lang` przez getPanelLocale), żeby ich
-    // teksty zmieniły język natychmiast — bez pełnego reloadu, zachowując stan klienta (formularze).
-    router.refresh();
+    // Doładuj słownik locale (chunk) PRZED przełączeniem stanu — bez migania kluczy (audyt B-1).
+    // Potem odśwież komponenty serwerowe (czytają `panel_lang` przez getPanelLocale).
+    void ensurePanelLocale(l).then(() => {
+      setLangState(l);
+      router.refresh();
+    });
   }
 
   return <Ctx.Provider value={{ lang, setLang }}>{children}</Ctx.Provider>;

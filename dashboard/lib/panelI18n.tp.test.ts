@@ -2,10 +2,18 @@
 // Łańcuch fallbacku: język żądany → PL (baza) → sam klucz. KLUCZ: NIGDY nie zwraca undefined (inaczej
 // w UI pojawia się „undefined"); nieznany język spada na PL; brakujący klucz oddaje sam klucz.
 // Lustro bota (t(), #370), prostsza wersja (bez interpolacji). Klucze bierzemy z realnego UI (anti-drift).
-import { describe, expect, it } from 'vitest';
-import { tp, UI } from './panelI18n';
+import { beforeAll, describe, expect, it } from 'vitest';
+import { ensurePanelLocale, tp, UI_PL } from './panelI18n';
+import { UI_DATA } from './panelI18nData';
 
+// UI rozbite (audyt B-1): pl inline + reszta dynamicznie. Do asercji składamy pełny obraz.
+const UI = { pl: UI_PL, ...UI_DATA } as Record<string, Record<string, string>>;
 const sampleKey = Object.keys(UI.pl)[0];
+
+// tp('en', …) czyta z cache — najpierw doładuj słownik en (to też testuje loader).
+beforeAll(async () => {
+  await ensurePanelLocale('en');
+});
 
 describe('tp — tłumaczenie etykiety panelu (fallback locale→pl→klucz)', () => {
   it('zwraca tłumaczenie z żądanego języka dla istniejącego klucza', () => {
