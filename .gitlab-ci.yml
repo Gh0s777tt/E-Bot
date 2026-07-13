@@ -19,8 +19,10 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
 
-# Domyślny obraz + cache pnpm + instalacja (frozen lockfile) dla jobów kodu.
-default:
+# Szablon jobów Node — obraz + cache pnpm + instalacja (frozen lockfile).
+# UWAGA: NIE w `default`, bo joby SAST/Secret Detection mają własne obrazy (bez corepack)
+# i dziedziczyłyby ten before_script → błąd. Kod-joby wciągają go przez `extends: .node`.
+.node:
   image: node:24
   cache:
     key:
@@ -44,6 +46,7 @@ workflow:
 # Zero-dependency skrypty Node → bez instalacji, szybka bramka na wejściu.
 sync:check:
   stage: sync
+  image: node:24
   before_script: []
   script:
     - node scripts/check-docs-sync.mjs
@@ -52,11 +55,13 @@ sync:check:
 
 # ── QUALITY ──────────────────────────────────────────────────────────────────
 lint:
+  extends: .node
   stage: quality
   script:
     - pnpm exec biome ci dashboard web bot ingest scripts
 
 typecheck:
+  extends: .node
   stage: quality
   script:
     - pnpm --filter bot-dc-dashboard exec tsc --noEmit
@@ -65,6 +70,7 @@ typecheck:
     - pnpm --filter bot-dc-ingest exec tsc --noEmit
 
 audit:deps:
+  extends: .node
   stage: quality
   script:
     - pnpm audit --audit-level moderate
@@ -72,6 +78,7 @@ audit:deps:
 
 # ── TEST ─────────────────────────────────────────────────────────────────────
 unit:
+  extends: .node
   stage: test
   script:
     - pnpm exec vitest run --coverage
@@ -87,12 +94,14 @@ unit:
     expire_in: 1 week
 
 build:
+  extends: .node
   stage: test
   script:
     - pnpm --filter bot-dc-dashboard build
     - pnpm --filter bot-dc-web build
 
 e2e:
+  extends: .node
   stage: test
   script:
     - pnpm exec playwright install --with-deps chromium
