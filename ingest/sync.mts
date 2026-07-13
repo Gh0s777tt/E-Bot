@@ -19,40 +19,45 @@ async function main(): Promise<void> {
   const igdbSecret = process.env.IGDB_CLIENT_SECRET;
 
   if (steamKey && steamId) {
-    console.log('[steam] pobieram bibliotekę...');
-    const games = await getOwnedGames(steamKey, steamId);
-    console.log(`[steam] znaleziono ${games.length} gier`);
+    try {
+      console.log('[steam] pobieram bibliotekę...');
+      const games = await getOwnedGames(steamKey, steamId);
+      console.log(`[steam] znaleziono ${games.length} gier`);
 
-    let meta = new Map<string, IgdbMeta>();
-    if (igdbId && igdbSecret) {
-      try {
-        meta = await enrichSteam(
-          games.map((g) => String(g.appid)),
-          igdbId,
-          igdbSecret,
-        );
-        console.log(`[igdb]  dopasowano metadane/okładki dla ${meta.size}/${games.length} gier`);
-      } catch (e) {
-        console.warn('[igdb]  pominięto enrichment:', (e as Error).message);
+      let meta = new Map<string, IgdbMeta>();
+      if (igdbId && igdbSecret) {
+        try {
+          meta = await enrichSteam(
+            games.map((g) => String(g.appid)),
+            igdbId,
+            igdbSecret,
+          );
+          console.log(`[igdb]  dopasowano metadane/okładki dla ${meta.size}/${games.length} gier`);
+        } catch (e) {
+          console.warn('[igdb]  pominięto enrichment:', (e as Error).message);
+        }
       }
-    }
 
-    for (const g of games) {
-      const m = meta.get(String(g.appid));
-      const cover = m?.cover_image_id ? igdbCover(m.cover_image_id) : steamCover(g.appid);
-      upsertGame(db, {
-        platform: 'steam',
-        platform_app_id: String(g.appid),
-        title: g.name,
-        igdb_id: m?.igdb_id ?? null,
-        release_year: m?.year ?? null,
-        genres: m ? JSON.stringify(m.genres) : null,
-        summary: m?.summary ?? null,
-        cover_url: cover,
-        playtime_min: g.playtime_forever ?? 0,
-        last_played: g.rtime_last_played ?? null,
-      });
-      total++;
+      for (const g of games) {
+        const m = meta.get(String(g.appid));
+        const cover = m?.cover_image_id ? igdbCover(m.cover_image_id) : steamCover(g.appid);
+        upsertGame(db, {
+          platform: 'steam',
+          platform_app_id: String(g.appid),
+          title: g.name,
+          igdb_id: m?.igdb_id ?? null,
+          release_year: m?.year ?? null,
+          genres: m ? JSON.stringify(m.genres) : null,
+          summary: m?.summary ?? null,
+          cover_url: cover,
+          playtime_min: g.playtime_forever ?? 0,
+          last_played: g.rtime_last_played ?? null,
+        });
+        total++;
+      }
+    } catch (e) {
+      // Izolacja źródła: błąd Steam Web API nie może wywrócić PSN/GOG (audyt B-4).
+      console.warn('[steam] pominięto źródło:', (e as Error).message);
     }
   } else {
     console.warn('[steam] brak STEAM_WEB_API_KEY lub STEAM_ID64 — pomijam');
@@ -96,36 +101,41 @@ async function main(): Promise<void> {
   }
 
   // ── GOG (lokalna baza Galaxy 2.0, jeśli jest) ──
-  const gog = getGogGames();
-  if (gog.length) {
-    console.log(`[gog] znaleziono ${gog.length} gier (Galaxy)`);
-    let meta = new Map<string, IgdbMeta>();
-    if (igdbId && igdbSecret) {
-      meta = await enrichByNames(
-        gog.map((g) => g.title),
-        igdbId,
-        igdbSecret,
-      );
-      console.log(`[igdb]  dopasowano ${meta.size}/${gog.length} (GOG)`);
+  try {
+    const gog = getGogGames();
+    if (gog.length) {
+      console.log(`[gog] znaleziono ${gog.length} gier (Galaxy)`);
+      let meta = new Map<string, IgdbMeta>();
+      if (igdbId && igdbSecret) {
+        meta = await enrichByNames(
+          gog.map((g) => g.title),
+          igdbId,
+          igdbSecret,
+        );
+        console.log(`[igdb]  dopasowano ${meta.size}/${gog.length} (GOG)`);
+      }
+      for (const g of gog) {
+        const m = meta.get(g.title);
+        upsertGame(db, {
+          platform: 'gog',
+          platform_app_id: g.id,
+          title: g.title,
+          igdb_id: m?.igdb_id ?? null,
+          release_year: m?.year ?? null,
+          genres: m ? JSON.stringify(m.genres) : null,
+          summary: m?.summary ?? null,
+          cover_url: m?.cover_image_id ? igdbCover(m.cover_image_id) : null,
+          playtime_min: 0,
+          last_played: null,
+        });
+        total++;
+      }
+    } else {
+      console.log('[gog] brak gier/bazy Galaxy — pomijam (zainstaluj GOG Galaxy, by włączyć)');
     }
-    for (const g of gog) {
-      const m = meta.get(g.title);
-      upsertGame(db, {
-        platform: 'gog',
-        platform_app_id: g.id,
-        title: g.title,
-        igdb_id: m?.igdb_id ?? null,
-        release_year: m?.year ?? null,
-        genres: m ? JSON.stringify(m.genres) : null,
-        summary: m?.summary ?? null,
-        cover_url: m?.cover_image_id ? igdbCover(m.cover_image_id) : null,
-        playtime_min: 0,
-        last_played: null,
-      });
-      total++;
-    }
-  } else {
-    console.log('[gog] brak gier/bazy Galaxy — pomijam (zainstaluj GOG Galaxy, by włączyć)');
+  } catch (e) {
+    // Izolacja źródła: błąd bazy Galaxy / enrichment GOG nie wywraca całego sync (audyt B-4).
+    console.warn('[gog]  pominięto źródło:', (e as Error).message);
   }
 
   const count = (db.prepare('SELECT COUNT(*) AS c FROM games').get() as any).c;
