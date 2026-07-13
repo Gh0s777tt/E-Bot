@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function SettingsPage() {
   const lang = await getServerLocale();
-  const settings = getSettings();
+  const settings = await getSettings();
 
   return (
     <main className="min-h-screen bg-bg pb-24">

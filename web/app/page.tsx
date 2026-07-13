@@ -32,7 +32,7 @@ const PLATFORM_LABEL: Record<string, string> = {
 
 export default async function Page() {
   const lang = await getServerLocale();
-  const games = getGames();
+  const games = await getGames();
 
   const byPlaytime = [...games].sort((a, b) => b.playtime_min - a.playtime_min);
   const featured = byPlaytime[0];
