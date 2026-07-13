@@ -51,7 +51,11 @@ function Modal({ game, onClose }: { game: Game; onClose: () => void }) {
         <div className="space-y-4 p-5">
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             {game.release_year && <span>{game.release_year}</span>}
-            <span className="rounded bg-white/10 px-2 py-0.5 capitalize">{game.platform}</span>
+            {(game.platforms ?? [game.platform]).map((p) => (
+              <span key={p} className="rounded bg-white/10 px-2 py-0.5 capitalize">
+                {p}
+              </span>
+            ))}
             <span>
               {hours(game.playtime_min)} {tt('game.played')}
             </span>

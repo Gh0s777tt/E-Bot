@@ -2,6 +2,7 @@ import Hero from '../components/Hero';
 import Row from '../components/Row';
 import TopNav from '../components/TopNav';
 import { getGames } from '../lib/db';
+import { dedupeByIgdb } from '../lib/games';
 import { t } from '../lib/i18n';
 import { getServerLocale } from '../lib/serverLocale';
 import type { Game, Shelf } from '../lib/types';
@@ -33,11 +34,14 @@ const PLATFORM_LABEL: Record<string, string> = {
 export default async function Page() {
   const lang = await getServerLocale();
   const games = await getGames();
+  // Shelfy cross-platform (najczęściej grane / ostatnio / gatunki) scalają tę samą grę z wielu
+  // platform w jeden wpis (audyt B-6); shelfy per-platforma używają surowej listy.
+  const merged = dedupeByIgdb(games);
 
-  const byPlaytime = [...games].sort((a, b) => b.playtime_min - a.playtime_min);
+  const byPlaytime = [...merged].sort((a, b) => b.playtime_min - a.playtime_min);
   const featured = byPlaytime[0];
 
-  const recentlyPlayed = [...games]
+  const recentlyPlayed = [...merged]
     .filter((g) => g.last_played)
     .sort((a, b) => (b.last_played ?? 0) - (a.last_played ?? 0));
 
@@ -50,7 +54,7 @@ export default async function Page() {
       title: PLATFORM_LABEL[p] ?? p,
       items: games.filter((g) => g.platform === p),
     })),
-    ...shelvesByGenre(games),
+    ...shelvesByGenre(merged),
   ].filter((s): s is Shelf => s !== null && s.items.length > 0);
 
   return (

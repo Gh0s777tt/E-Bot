@@ -10,6 +10,7 @@ export type Game = {
   cover_url: string | null;
   playtime_min: number;
   last_played: number | null;
+  platforms?: string[]; // wypełniane przy dedupie cross-platform (B-6): lista platform danego tytułu
 };
 
 export type Shelf = {
