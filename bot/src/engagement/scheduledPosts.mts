@@ -109,8 +109,10 @@ async function sendPost(guild: Guild, p: Post): Promise<void> {
 // Zaplanowane posty JEDNEGO serwera (lista + state per-serwer; `guild.channels.fetch` = izolacja).
 async function tickForGuild(guild: Guild): Promise<void> {
   const posts = postsFor(guild.id);
+  // Bramka lokalna PRZED odpytaniem chmury (audyt B-7): brak postów = brak pracy, bo „Wyślij
+  // teraz" i tak celuje w istniejący post. Oszczędza N zapytań/min dla serwerów bez postów.
+  if (!posts.length) return;
   const sendRaw = await cloudGetSetting(`g:${guild.id}:scheduled_send_now`).catch(() => null);
-  if (!posts.length && !sendRaw) return;
   const stateKey = `g:${guild.id}:scheduled_posts_state`;
   let state: Record<string, number> = {};
   try {
