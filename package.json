@@ -27,7 +27,15 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.1",
     "@playwright/test": "^1.61.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/gitlab": "^13.3.3",
+    "@semantic-release/release-notes-generator": "^14.1.1",
     "@vitest/coverage-v8": "4.1.9",
+    "conventional-changelog-conventionalcommits": "^10.2.1",
+    "semantic-release": "^25.0.6",
     "vitest": "^4.1.9"
   }
 }

@@ -12,6 +12,7 @@ stages:
   - sync
   - quality
   - test
+  - release
   - deploy
 
 # Skan bezpieczeństwa GitLab (joby lądują w stage `test`).
@@ -112,6 +113,25 @@ e2e:
     paths:
       - playwright-report/
     expire_in: 1 week
+
+# ── RELEASE ──────────────────────────────────────────────────────────────────
+# semantic-release: liczy wersję z Conventional Commits → tag vX.Y.Z, wpis w CHANGELOG,
+# bump markerów SYNC (scripts/bump-sync-markers.mjs) i GitLab Release.
+# BRAMKA BEZPIECZEŃSTWA: uruchamiany TYLKO RĘCZNIE (when: manual) i tylko gdy ustawiono
+# zmienną CI/CD `GL_RELEASE_TOKEN` (Project Access Token: scope `api` + `write_repository`,
+# rola Maintainer — by móc pushować na chronioną `main`). Bez tokena job się nie pojawia.
+release:
+  extends: .node
+  stage: release
+  variables:
+    GITLAB_TOKEN: $GL_RELEASE_TOKEN
+    GIT_DEPTH: 0 # semantic-release potrzebuje pełnej historii + tagów
+  script:
+    - npx semantic-release
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $GL_RELEASE_TOKEN'
+      when: manual
+      allow_failure: true
 
 # ── DEPLOY ───────────────────────────────────────────────────────────────────
 # Publikacja dokumentacji na GitLab Pages (MkDocs Material).
