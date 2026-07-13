@@ -11,3 +11,11 @@ node scripts/check-docs-sync.mjs \
   echo "  → Albo pomiń awaryjnie: git commit --no-verify" >&2
   exit 1
 }
+
+# Szybki lint TYLKO plików w indeksie (Biome --staged, bez zapisu — nie zmienia commitu w locie).
+pnpm exec biome check --staged --no-errors-on-unmatched || {
+  echo "" >&2
+  echo "✗ pre-commit: Biome zgłasza błędy w plikach do commitu." >&2
+  echo "  → Napraw: pnpm check   (auto-fix)   albo pomiń awaryjnie: git commit --no-verify" >&2
+  exit 1
+}

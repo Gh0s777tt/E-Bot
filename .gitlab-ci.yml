@@ -1,18 +1,114 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # GitLab CI/CD — E-Bot (GitLab = źródło prawdy).
 #
-# ETAP 3 (docs-as-code): job `pages` buduje MkDocs Material → GitLab Pages.
-# ETAP 4 dołoży pełny pipeline (lint · typecheck · test · docs:check) — tu celowo
-# tylko dokumentacja, żeby nie mieszać etapów.
+# Wierny port dawnego .github/workflows/ci.yml (GitHub Actions niedostępne) +
+# skan bezpieczeństwa GitLab (SAST · Secret Detection) + publikacja dokumentacji
+# (MkDocs Material → GitLab Pages).
+#
+# Etapy: sync → quality → test → deploy
 # ─────────────────────────────────────────────────────────────────────────────
 
 stages:
-  - docs
+  - sync
+  - quality
+  - test
+  - deploy
 
-# Publikacja dokumentacji na GitLab Pages.
-# URL: https://gh0s777tt.gitlab.io/e-bot
+# Skan bezpieczeństwa GitLab (joby lądują w stage `test`).
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+# Domyślny obraz + cache pnpm + instalacja (frozen lockfile) dla jobów kodu.
+default:
+  image: node:24
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@11.5.2 --activate
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+# ── SYNC ─────────────────────────────────────────────────────────────────────
+# Strażnicy synchronizacji (docs↔CHANGELOG, _ALL.sql↔schematy, .env.example↔env).
+# Zero-dependency skrypty Node → bez instalacji, szybka bramka na wejściu.
+sync:check:
+  stage: sync
+  before_script: []
+  script:
+    - node scripts/check-docs-sync.mjs
+    - node scripts/check-schema-sync.mjs
+    - node scripts/check-env-sync.mjs
+
+# ── QUALITY ──────────────────────────────────────────────────────────────────
+lint:
+  stage: quality
+  script:
+    - pnpm exec biome ci dashboard web bot ingest scripts
+
+typecheck:
+  stage: quality
+  script:
+    - pnpm --filter bot-dc-dashboard exec tsc --noEmit
+    - pnpm --filter bot-dc-web exec tsc --noEmit
+    - pnpm --filter bot-dc-bot exec tsc --noEmit
+    - pnpm --filter bot-dc-ingest exec tsc --noEmit
+
+audit:deps:
+  stage: quality
+  script:
+    - pnpm audit --audit-level moderate
+  allow_failure: true # informacyjnie — nie blokuje pipeline
+
+# ── TEST ─────────────────────────────────────────────────────────────────────
+unit:
+  stage: test
+  script:
+    - pnpm exec vitest run --coverage
+  coverage: '/All files\s*\|\s*([\d.]+)/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - coverage/
+    expire_in: 1 week
+
+build:
+  stage: test
+  script:
+    - pnpm --filter bot-dc-dashboard build
+    - pnpm --filter bot-dc-web build
+
+e2e:
+  stage: test
+  script:
+    - pnpm exec playwright install --with-deps chromium
+    - pnpm exec playwright test
+  allow_failure: true # E2E wymaga serwera panelu — do promocji na wymagany po stabilizacji w CI
+  artifacts:
+    when: on_failure
+    paths:
+      - playwright-report/
+    expire_in: 1 week
+
+# ── DEPLOY ───────────────────────────────────────────────────────────────────
+# Publikacja dokumentacji na GitLab Pages (MkDocs Material).
+# URL: https://e-bot-f6d472.gitlab.io
 pages:
-  stage: docs
+  stage: deploy
   image: python:3.12-slim
   cache:
     key: mkdocs-pip
@@ -23,16 +119,9 @@ pages:
   before_script:
     - pip install --disable-pip-version-check -r requirements.txt
   script:
-    # MkDocs buduje do site_dir=site; GitLab Pages wymaga artefaktu w public/.
     - mkdocs build --strict --site-dir public
   artifacts:
     paths:
       - public
   rules:
-    # Publikuj tylko z gałęzi domyślnej (main), gdy zmienia się dokumentacja lub konfiguracja.
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      changes:
-        - docs/**/*
-        - mkdocs.yml
-        - requirements.txt
-        - .gitlab-ci.yml
