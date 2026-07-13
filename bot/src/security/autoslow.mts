@@ -102,4 +102,20 @@ async function decayTick(client: Client): Promise<void> {
       if (throttleable(ch)) await applySlow(ch, desired);
     }
   }
+
+  // Sprzątanie map (audyt B-8): kanały spoza aktywnego configu oraz wyciszone do zera
+  // (brak aktywności ~1 h i applied=0) nie zostają w pamięci na zawsze.
+  const active = new Set<string>();
+  for (const guild of client.guilds.cache.values()) {
+    const c = cfgFor(guild.id);
+    if (c.enabled) for (const id of c.channels) active.add(id);
+  }
+  for (const chId of new Set([...windows.keys(), ...applied.keys()])) {
+    const arr = windows.get(chId);
+    const idle = !arr || arr.every((t) => now - t >= 3_600_000);
+    if (!active.has(chId) || (idle && (applied.get(chId) ?? 0) === 0)) {
+      windows.delete(chId);
+      applied.delete(chId);
+    }
+  }
 }

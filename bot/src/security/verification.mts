@@ -186,9 +186,13 @@ export async function handleVerifyButton(interaction: ButtonInteraction): Promis
 
   if (cfg.mode === 'captcha') {
     const code = generateCaptchaCode(5);
+    const nowMs = Date.now();
+    // Sweep wygasłych PRZED zapisem — ogranicza mapę do aktywnych weryfikacji (audyt B-8);
+    // bez pętli modułowej, więc nic nie odpala się w testach/imporcie.
+    for (const [k, e] of captchaStore) if (e.exp < nowMs) captchaStore.delete(k);
     captchaStore.set(`${interaction.guild.id}:${interaction.user.id}`, {
       code,
-      exp: Date.now() + CAPTCHA_TTL,
+      exp: nowMs + CAPTCHA_TTL,
     });
     const file = new AttachmentBuilder(renderCaptcha(code), { name: 'captcha.png' });
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
