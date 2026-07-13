@@ -8,8 +8,9 @@ import {
   SlashCommandBuilder,
   type TextChannel,
 } from 'discord.js';
-import { getSettings, setSetting } from '../lib/db.mts';
+import { getGuildSettings, setGuildSetting } from '../lib/db.mts';
 import { buildRichMessage, hasRich, type RichMessage } from '../lib/richMessage.mts';
+import { refreshGuild } from '../reaction-roles.mts';
 
 type Pair = { emoji: string; roleId: string };
 type Panel = { panelSpec?: RichMessage; pairs?: Pair[] };
@@ -19,9 +20,10 @@ export const data = new SlashCommandBuilder()
   .setDescription('Opublikuj panel reaction-role (embed z panelu) + auto-reakcje.')
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
-function readPanel(): Panel {
+// Config panelu PER-SERWER (audyt C-1) — override g:<id>:* → fallback global.
+function readPanel(guildId: string): Panel {
   try {
-    return JSON.parse(getSettings().reaction_role_panel || '{}') as Panel;
+    return JSON.parse(getGuildSettings(guildId).reaction_role_panel || '{}') as Panel;
   } catch {
     return {};
   }
@@ -34,7 +36,12 @@ function emojiForReact(raw: string): string {
 }
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
-  const panel = readPanel();
+  const guildId = interaction.guildId;
+  if (!guildId) {
+    await interaction.reply({ content: 'Tylko na serwerze.', flags: MessageFlags.Ephemeral });
+    return;
+  }
+  const panel = readPanel(guildId);
   const pairs = (panel.pairs ?? []).filter((p) => p.emoji && p.roleId);
   const ch = interaction.channel as TextChannel | null;
   if (!ch || !('send' in ch)) {
@@ -63,7 +70,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     for (const p of pairs) {
       await msg.react(emojiForReact(p.emoji)).catch(() => {});
     }
-    setSetting('reaction_role_panel_msg', msg.id);
+    setGuildSetting(guildId, 'reaction_role_panel_msg', msg.id);
+    refreshGuild(guildId); // natychmiast aktywuj panel dla tego serwera (bez czekania na poller)
     await interaction.reply({
       content: `✅ Panel opublikowany (reakcje: ${pairs.length}). Zapisano jako aktywny panel reaction-role.`,
       flags: MessageFlags.Ephemeral,

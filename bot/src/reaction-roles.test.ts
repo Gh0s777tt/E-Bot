@@ -8,9 +8,11 @@ import path from 'node:path';
 import type { MessageReaction } from 'discord.js';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { closeDb, setSettingLocal } from './lib/db.mts';
-import { emojiMatches, matchRole, refresh } from './reaction-roles.mts';
+import { emojiMatches, matchRole, refreshGuild } from './reaction-roles.mts';
 
 const DB = path.join(tmpdir(), `ebot-rr-${process.pid}.db`);
+// Config globalny (setSettingLocal) jest widziany per-serwer przez fallback getGuildSettings.
+const G = 'G1';
 const react = (e: { name?: string | null; id?: string | null; str?: string }): MessageReaction =>
   ({
     emoji: { name: e.name ?? null, id: e.id ?? null, toString: () => e.str ?? e.name ?? '' },
@@ -28,7 +30,7 @@ afterAll(() => {
 beforeEach(() => {
   for (const k of ['reaction_roles', 'reaction_role_panel', 'reaction_role_panel_msg'])
     setSettingLocal(k, '');
-  refresh(); // czysty stan
+  refreshGuild(G); // czysty stan
 });
 
 describe('emojiMatches — dopasowanie emoji do konfiguracji', () => {
@@ -54,8 +56,8 @@ describe('matchRole — reguły per-wiadomość', () => {
       'reaction_roles',
       JSON.stringify([{ messageId: 'M1', emoji: '🎮', roleId: 'rGamer' }]),
     );
-    refresh();
-    expect(matchRole('M1', react({ name: '🎮' }))).toBe('rGamer');
+    refreshGuild(G);
+    expect(matchRole(G, 'M1', react({ name: '🎮' }))).toBe('rGamer');
   });
 
   it('RYGIEL izolacji wiadomości: ta sama reakcja na INNEJ wiadomości → undefined', () => {
@@ -63,14 +65,14 @@ describe('matchRole — reguły per-wiadomość', () => {
       'reaction_roles',
       JSON.stringify([{ messageId: 'M1', emoji: '🎮', roleId: 'rGamer' }]),
     );
-    refresh();
-    expect(matchRole('INNA', react({ name: '🎮' }))).toBeUndefined();
+    refreshGuild(G);
+    expect(matchRole(G, 'INNA', react({ name: '🎮' }))).toBeUndefined();
   });
 
   it('uszkodzony JSON reguł → brak dopasowania (fail-safe, nie rzuca)', () => {
     setSettingLocal('reaction_roles', '{nie-json');
-    expect(() => refresh()).not.toThrow();
-    expect(matchRole('M1', react({ name: '🎮' }))).toBeUndefined();
+    expect(() => refreshGuild(G)).not.toThrow();
+    expect(matchRole(G, 'M1', react({ name: '🎮' }))).toBeUndefined();
   });
 });
 
@@ -81,8 +83,8 @@ describe('matchRole — fallback panelu', () => {
       JSON.stringify({ pairs: [{ emoji: '🔔', roleId: 'rPing' }] }),
     );
     setSettingLocal('reaction_role_panel_msg', 'PANEL');
-    refresh();
-    expect(matchRole('PANEL', react({ name: '🔔' }))).toBe('rPing');
+    refreshGuild(G);
+    expect(matchRole(G, 'PANEL', react({ name: '🔔' }))).toBe('rPing');
   });
 
   it('para panelu, ale to NIE wiadomość panelu → undefined', () => {
@@ -91,7 +93,7 @@ describe('matchRole — fallback panelu', () => {
       JSON.stringify({ pairs: [{ emoji: '🔔', roleId: 'rPing' }] }),
     );
     setSettingLocal('reaction_role_panel_msg', 'PANEL');
-    refresh();
-    expect(matchRole('INNA', react({ name: '🔔' }))).toBeUndefined();
+    refreshGuild(G);
+    expect(matchRole(G, 'INNA', react({ name: '🔔' }))).toBeUndefined();
   });
 });

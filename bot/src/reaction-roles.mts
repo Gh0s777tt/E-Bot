@@ -12,37 +12,50 @@ import {
   type PartialUser,
   type User,
 } from 'discord.js';
-import { getSettings } from './lib/db.mts';
+import { getGuildSettings } from './lib/db.mts';
 import { log } from './lib/log.mts';
 
 type RR = { messageId: string; emoji: string; roleId: string };
 type Pair = { emoji: string; roleId: string };
+type GuildRR = { rules: RR[]; panelPairs: Pair[]; panelExclusive: boolean; panelMsgId: string };
 
-let rules: RR[] = [];
-let panelPairs: Pair[] = [];
-let panelExclusive = false;
-let panelMsgId = '';
+// Stan PER-SERWER (audyt C-1): wcześniej moduł trzymał JEDEN globalny zestaw z getSettings(), więc
+// panel serwera B nadpisywał config serwera A (last-writer-wins) i matchRole nie był scope'owany.
+// getGuildSettings robi override `g:<id>:*` → fallback global — serwer właściciela/empire (config
+// pisany globalnie przez tor ghost-empire) czyta go dalej przez fallback, bez zmian w tamtym torze.
+const byGuild = new Map<string, GuildRR>();
 
-export function refresh(): void {
-  const raw = getSettings().reaction_roles;
+function loadGuild(guildId: string): GuildRR {
+  const s = getGuildSettings(guildId);
+  let rules: RR[] = [];
   try {
-    const a = raw ? (JSON.parse(raw) as unknown) : [];
+    const a = s.reaction_roles ? (JSON.parse(s.reaction_roles) as unknown) : [];
     rules = Array.isArray(a) ? (a as RR[]) : [];
   } catch {
     rules = [];
   }
+  let panelPairs: Pair[] = [];
+  let panelExclusive = false;
   try {
-    const p = JSON.parse(getSettings().reaction_role_panel || '{}') as {
-      pairs?: Pair[];
-      exclusive?: boolean;
-    };
+    const p = JSON.parse(s.reaction_role_panel || '{}') as { pairs?: Pair[]; exclusive?: boolean };
     panelPairs = Array.isArray(p.pairs) ? p.pairs : [];
     panelExclusive = p.exclusive === true;
   } catch {
     panelPairs = [];
     panelExclusive = false;
   }
-  panelMsgId = getSettings().reaction_role_panel_msg || '';
+  return { rules, panelPairs, panelExclusive, panelMsgId: s.reaction_role_panel_msg || '' };
+}
+
+// Odśwież stan JEDNEGO serwera (eksport dla testów + komendy /reactionpanel po zapisie).
+export function refreshGuild(guildId: string): void {
+  byGuild.set(guildId, loadGuild(guildId));
+}
+
+// Odśwież wszystkie serwery bota (poller).
+export function refresh(client: Client): void {
+  byGuild.clear();
+  for (const g of client.guilds.cache.values()) byGuild.set(g.id, loadGuild(g.id));
 }
 
 export function emojiMatches(
@@ -54,13 +67,16 @@ export function emojiMatches(
 }
 
 export function matchRole(
+  guildId: string,
   messageId: string,
   reaction: MessageReaction | PartialMessageReaction,
 ): string | undefined {
-  const item = rules.find((r) => r.messageId === messageId && emojiMatches(r.emoji, reaction));
+  const st = byGuild.get(guildId);
+  if (!st) return undefined;
+  const item = st.rules.find((r) => r.messageId === messageId && emojiMatches(r.emoji, reaction));
   if (item) return item.roleId;
-  if (panelMsgId && messageId === panelMsgId) {
-    const p = panelPairs.find((x) => emojiMatches(x.emoji, reaction));
+  if (st.panelMsgId && messageId === st.panelMsgId) {
+    const p = st.panelPairs.find((x) => emojiMatches(x.emoji, reaction));
     if (p) return p.roleId;
   }
   return undefined;
@@ -74,17 +90,19 @@ async function apply(
   if (user.bot) return;
   try {
     if (reaction.partial) await reaction.fetch();
-    const roleId = matchRole(reaction.message.id, reaction);
-    if (!roleId) return;
     const guild = reaction.message.guild;
     if (!guild) return;
+    const st = byGuild.get(guild.id);
+    if (!st) return;
+    const roleId = matchRole(guild.id, reaction.message.id, reaction);
+    if (!roleId) return;
     const member = await guild.members.fetch(user.id).catch(() => null);
     if (!member) return;
     if (add) {
       await member.roles.add(roleId).catch(() => {});
       // Tryb „wybierz jedną" (exclusive) — zostaw tylko wybraną rolę z panelu, zdejmij resztę.
-      if (panelExclusive && reaction.message.id === panelMsgId) {
-        for (const p of panelPairs) {
+      if (st.panelExclusive && reaction.message.id === st.panelMsgId) {
+        for (const p of st.panelPairs) {
           if (p.roleId === roleId) continue;
           if (member.roles.cache.has(p.roleId)) await member.roles.remove(p.roleId).catch(() => {});
           const other = reaction.message.reactions.cache.find((rr) => emojiMatches(p.emoji, rr));
@@ -100,9 +118,9 @@ async function apply(
 }
 
 export function startReactionRoles(client: Client): void {
-  refresh();
-  setInterval(refresh, 30_000);
+  refresh(client);
+  setInterval(() => refresh(client), 30_000);
   client.on(Events.MessageReactionAdd, (reaction, user) => void apply(reaction, user, true));
   client.on(Events.MessageReactionRemove, (reaction, user) => void apply(reaction, user, false));
-  log.info('[reaction-roles] aktywny (role za reakcje + panel; config z panelu).');
+  log.info('[reaction-roles] aktywny per-serwer (role za reakcje + panel; config z panelu).');
 }

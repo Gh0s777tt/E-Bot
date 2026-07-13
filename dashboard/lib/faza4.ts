@@ -1,7 +1,14 @@
 // Faza 4 — warstwa danych panelu (leveling + tickety).
 // Config trzymamy w tabeli `settings` (JSON, jak antinuke/presence) — działa od razu.
 // Dane (ranking, tickety) czytamy z nowych tabel (faza4-schema.sql); brak tabeli → pusto.
-import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
+import {
+  getConfigSetting,
+  getGuildRawSetting,
+  getRawSetting,
+  setConfigSetting,
+  setGuildRawSetting,
+  setRawSetting,
+} from './data';
 import { getPrimaryGuildId } from './guild';
 import type { RichMessage } from './richMessage';
 import { hasSupabase, supabase } from './supabase';
@@ -268,7 +275,7 @@ export async function getAiUsageToday(): Promise<{
 export type ReactionRole = { messageId: string; emoji: string; roleId: string };
 
 export async function getReactionRoles(): Promise<ReactionRole[]> {
-  const raw = await getRawSetting('reaction_roles');
+  const raw = await getGuildRawSetting('reaction_roles'); // per-serwer (audyt C-1)
   if (!raw) return [];
   try {
     const arr = JSON.parse(raw) as unknown;
@@ -279,7 +286,7 @@ export async function getReactionRoles(): Promise<ReactionRole[]> {
 }
 
 export async function saveReactionRoles(list: ReactionRole[]): Promise<void> {
-  await setRawSetting('reaction_roles', JSON.stringify(list));
+  await setGuildRawSetting('reaction_roles', JSON.stringify(list)); // per-serwer (audyt C-1)
 }
 
 // Panel reaction-role utworzony przez bota (Faza 8): embed (Message Studio) + pary emoji→rola.
@@ -289,7 +296,7 @@ export type ReactionPanel = {
   exclusive?: boolean; // „wybierz jedną" — reakcja zostawia tylko jedną rolę z panelu
 };
 export async function getReactionPanel(): Promise<ReactionPanel> {
-  const raw = await getRawSetting('reaction_role_panel');
+  const raw = await getGuildRawSetting('reaction_role_panel'); // per-serwer (audyt C-1)
   if (!raw) return { pairs: [] };
   try {
     const o = JSON.parse(raw) as Partial<ReactionPanel>;
@@ -303,7 +310,7 @@ export async function getReactionPanel(): Promise<ReactionPanel> {
   }
 }
 export async function saveReactionPanel(p: ReactionPanel): Promise<void> {
-  await setRawSetting('reaction_role_panel', JSON.stringify(p));
+  await setGuildRawSetting('reaction_role_panel', JSON.stringify(p)); // per-serwer (audyt C-1)
 }
 
 // ───────────────────────── 📊 Statystyki ─────────────────────────
