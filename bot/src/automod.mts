@@ -164,8 +164,11 @@ setInterval(() => {
 
 // ── Statystyki moderacji (cloud 'automod_stats': { 'YYYY-MM-DD': { kategoria: liczba } }) ──
 type ModStats = Record<string, Record<string, number>>;
-let stats: ModStats = {};
-let statsDirty = false;
+// Per-serwer (audyt C-2): wcześniej jeden globalny 'automod_stats' MIESZAŁ dane wszystkich
+// tenantów (panel jednego serwera widział cudze liczby). Teraz klucz g:<guildId>:automod_stats.
+const statsByGuild = new Map<string, ModStats>();
+const dirtyGuilds = new Set<string>();
+const loadedGuilds = new Set<string>();
 
 function categoryOf(reason: string): string {
   if (reason.startsWith('scam')) return 'scam';
@@ -180,35 +183,46 @@ function categoryOf(reason: string): string {
   if (reason === 'spam') return 'spam';
   return 'inne';
 }
-function bumpStat(reason: string): void {
+// Leniwe wczytanie statystyk serwera z chmury (raz na proces) — MUSI poprzedzać bumpStat,
+// inaczej wczytanie nadpisałoby świeżo zliczone naruszenia.
+async function ensureStatsLoaded(guildId: string): Promise<void> {
+  if (loadedGuilds.has(guildId) || !hasCloud()) return;
+  loadedGuilds.add(guildId);
+  try {
+    const raw = await cloudGetSetting(`g:${guildId}:automod_stats`);
+    statsByGuild.set(guildId, (JSON.parse(raw || '{}') as ModStats) || {});
+  } catch {
+    statsByGuild.set(guildId, {});
+  }
+}
+function bumpStat(guildId: string, reason: string): void {
   const day = new Date().toISOString().slice(0, 10);
+  const stats = statsByGuild.get(guildId) ?? {};
+  statsByGuild.set(guildId, stats);
   const bucket = stats[day] ?? {};
   stats[day] = bucket;
   const cat = categoryOf(reason);
   bucket[cat] = (bucket[cat] ?? 0) + 1;
-  statsDirty = true;
-}
-async function loadStats(): Promise<void> {
-  if (!hasCloud()) return;
-  try {
-    stats = (JSON.parse((await cloudGetSetting('automod_stats')) || '{}') as ModStats) || {};
-  } catch {
-    stats = {};
-  }
+  dirtyGuilds.add(guildId);
 }
 async function flushStats(): Promise<void> {
-  if (!statsDirty || !hasCloud()) return;
-  statsDirty = false;
-  const days = Object.keys(stats).sort();
-  while (days.length > 30) {
-    const oldest = days.shift();
-    if (oldest) delete stats[oldest];
+  if (!hasCloud() || dirtyGuilds.size === 0) return;
+  const guilds = [...dirtyGuilds];
+  dirtyGuilds.clear();
+  for (const guildId of guilds) {
+    const stats = statsByGuild.get(guildId);
+    if (!stats) continue;
+    const days = Object.keys(stats).sort();
+    while (days.length > 30) {
+      const oldest = days.shift();
+      if (oldest) delete stats[oldest];
+    }
+    await cloudSetSetting(`g:${guildId}:automod_stats`, JSON.stringify(stats)).catch(() => {});
   }
-  await cloudSetSetting('automod_stats', JSON.stringify(stats)).catch(() => {});
 }
 
 export function startAutomod(client: Client): void {
-  void loadStats();
+  // Statystyki wczytywane leniwie per-serwer (ensureStatsLoaded) — brak globalnego preloadu.
   setInterval(() => void flushStats(), 120_000);
 
   client.on(Events.MessageCreate, async (msg: Message) => {
@@ -265,7 +279,8 @@ export function startAutomod(client: Client): void {
 
     try {
       await msg.delete().catch(() => {});
-      bumpStat(reason);
+      await ensureStatsLoaded(msg.guild.id);
+      bumpStat(msg.guild.id, reason);
 
       // Akcja bazowa (delete/timeout/kick/ban) + eskalacja recydywy: po N naruszeniach w oknie
       // czasowym automatycznie mocniejsza akcja, nawet gdy bazowa to samo „usuń".

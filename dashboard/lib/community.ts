@@ -1,6 +1,12 @@
 // Faza 6 — config powitań/autorole + automod (w tabeli settings, bez nowej tabeli).
 import { type CardStyle, RANKCARD_DEFAULT } from './cardStyle';
-import { getConfigSetting, getRawSetting, setConfigSetting, setRawSetting } from './data';
+import {
+  getConfigSetting,
+  getGuildRawSetting,
+  getRawSetting,
+  setConfigSetting,
+  setRawSetting,
+} from './data';
 import type { RichMessage } from './richMessage';
 
 // ── Powitania + autorole (+ baner-grafika Faza 7/F2) ──
@@ -114,10 +120,11 @@ export async function saveAutomodConfig(cfg: AutomodConfig): Promise<void> {
   await setConfigSetting('automod_config', JSON.stringify(cfg));
 }
 
-// Statystyki automoda zliczane przez bota (cloud 'automod_stats': { 'YYYY-MM-DD': { kat: liczba } }).
+// Statystyki automoda zliczane przez bota per-serwer (cloud g:<id>:automod_stats — audyt C-2).
+// getGuildRawSetting: override serwera → fallback global (wstecznie zgodne dla starych danych).
 export type AutomodStats = Record<string, Record<string, number>>;
 export async function getAutomodStats(): Promise<AutomodStats> {
-  const raw = await getRawSetting('automod_stats');
+  const raw = await getGuildRawSetting('automod_stats');
   if (!raw) return {};
   try {
     const o = JSON.parse(raw) as AutomodStats;
