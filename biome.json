@@ -18,7 +18,8 @@
       "!bot/src/setup",
       "!**/*.md",
       "!**/*.css",
-      "!**/*.html"
+      "!**/*.html",
+      "!**/*.svg"
     ]
   },
   "formatter": {
