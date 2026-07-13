@@ -34,6 +34,7 @@ export function openDb(path: string): DatabaseSync {
       playtime_min    INTEGER DEFAULT 0,
       last_played     INTEGER,
       updated_at      INTEGER,
+      manual_lock     INTEGER DEFAULT 0, -- 1 = ręcznie skuratorowany tytuł/okładka; sync ich NIE nadpisuje
       UNIQUE(platform, platform_app_id)
     );
     CREATE INDEX IF NOT EXISTS idx_games_igdb ON games(igdb_id);
@@ -44,6 +45,11 @@ export function openDb(path: string): DatabaseSync {
       value TEXT
     );
   `);
+  // Migracja starych baz: dodaj manual_lock jeśli brak (ALTER rzuca gdy kolumna istnieje).
+  const cols = db.prepare('PRAGMA table_info(games)').all() as Array<{ name: string }>;
+  if (!cols.some((c) => c.name === 'manual_lock')) {
+    db.exec('ALTER TABLE games ADD COLUMN manual_lock INTEGER DEFAULT 0');
+  }
   return db;
 }
 
@@ -53,12 +59,14 @@ export function upsertGame(db: DatabaseSync, g: GameRow): void {
       (platform, platform_app_id, title, igdb_id, release_year, genres, summary, cover_url, playtime_min, last_played, updated_at)
     VALUES (?,?,?,?,?,?,?,?,?,?, unixepoch())
     ON CONFLICT(platform, platform_app_id) DO UPDATE SET
-      title        = excluded.title,
+      -- Ręcznie skuratorowane pola (manual_lock=1) zostają nietknięte przez sync (audyt B-5).
+      title        = CASE WHEN games.manual_lock = 1 THEN games.title ELSE excluded.title END,
       igdb_id      = COALESCE(excluded.igdb_id, games.igdb_id),
       release_year = COALESCE(excluded.release_year, games.release_year),
       genres       = COALESCE(excluded.genres, games.genres),
       summary      = COALESCE(excluded.summary, games.summary),
-      cover_url    = COALESCE(excluded.cover_url, games.cover_url),
+      cover_url    = CASE WHEN games.manual_lock = 1 THEN games.cover_url
+                          ELSE COALESCE(excluded.cover_url, games.cover_url) END,
       playtime_min = excluded.playtime_min,
       last_played  = COALESCE(excluded.last_played, games.last_played),
       updated_at   = unixepoch()
