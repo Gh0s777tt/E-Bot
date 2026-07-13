@@ -1,20 +1,31 @@
+# 📜 CHANGELOG · E‑BOT
+
+> Format: [Keep a Changelog](https://keepachangelog.com) · [SemVer](https://semver.org) · najnowsze na górze. Wpisy od v0.627.0 generowane automatycznie (semantic-release); starsze — kurowane ręcznie `[#NNN]`.
+
 ## [0.627.0](https://gitlab.com/Gh0s777tt/e-bot/compare/v0.626.0...v0.627.0) (2026-07-13)
 
-<div align="center">
+### ✨ Nowe funkcje
 
-# 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
+* **web:** dedup cross-platform gier po `igdb_id` w shelfach (audyt B-6)
 
-![Updaty](https://img.shields.io/badge/updaty-696-E50914?style=for-the-badge&labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.626.0-E50914?style=for-the-badge&labelColor=0a0a0a)
+### ⚡ Wydajność
 
-</div>
+* **dashboard:** i18n — leniwy import słowników, pl nie pobiera ~1.4 MB (audyt B-1)
+* **bot:** scheduledPosts — bramka lokalna przed odpytaniem chmury (audyt B-7)
 
-Format wg [Keep a Changelog](https://keepachangelog.com) + **numeracja updatów** `[#NNN]`.
-Wersjonowanie: [SemVer](https://semver.org). Najnowsze na górze.
+### 🐛 Poprawki
 
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
+* **web:** czytaj/zapisuj przez Supabase zamiast lokalnego SQLite (audyt B-2/B-3, krytyczne)
+* **reaction-roles:** stan per-serwer — koniec cross-tenant overwrite (audyt C-1)
+* **automod:** statystyki per-serwer — koniec wycieku danych między tenantami (audyt C-2)
+* **web:** proxy obrazków — anty-SSRF (redirect manual) + limity (audyt C-3)
+* **bot:** sweepery pamięci — captcha + autoslow (audyt B-8)
+* **ingest:** flaga `manual_lock` chroni ręczne okładki/tytuły (audyt B-5)
+* **ingest:** izoluj źródła — błąd jednego nie wywraca całego sync (audyt B-4)
+* **biome:** wyłącz `.svg` ze skanu — koniec fałszywych błędów a11y (audyt A-1)
+* **ci:** napraw pierwsze uruchomienie GitLab CI (SAST + coverage)
+
+> _Do 0.626.0 wpisy są kurowane ręcznie w oryginalnym, bogatszym formacie `[#NNN]`._
 
 ## [0.626.0] — 💳 Premium: plany 3- i 6-miesięczne (drabinka 1/3/6/12 mies., 49/129/239/429)
 
