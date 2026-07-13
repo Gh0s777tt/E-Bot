@@ -29,6 +29,12 @@ data/cache/
 *.sqlite
 *.sqlite3
 
+# ── Dokumentacja (MkDocs) ─────────────────────────────────
+site/
+public/
+.venv/
+.cache/
+
 # ── Logi ──────────────────────────────────────────────────
 logs/
 *.log

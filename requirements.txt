@@ -1,0 +1,4 @@
+# Dokumentacja docs-as-code (MkDocs Material). Osobny toolchain Pythona — NIE miesza się z pnpm.
+# Lokalnie:  python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+#            .venv/bin/mkdocs serve
+mkdocs-material==9.5.44

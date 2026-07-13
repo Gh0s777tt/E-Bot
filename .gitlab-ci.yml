@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# GitLab CI/CD — E-Bot (GitLab = źródło prawdy).
+#
+# ETAP 3 (docs-as-code): job `pages` buduje MkDocs Material → GitLab Pages.
+# ETAP 4 dołoży pełny pipeline (lint · typecheck · test · docs:check) — tu celowo
+# tylko dokumentacja, żeby nie mieszać etapów.
+# ─────────────────────────────────────────────────────────────────────────────
+
+stages:
+  - docs
+
+# Publikacja dokumentacji na GitLab Pages.
+# URL: https://gh0s777tt.gitlab.io/e-bot
+pages:
+  stage: docs
+  image: python:3.12-slim
+  cache:
+    key: mkdocs-pip
+    paths:
+      - .cache/pip
+  variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  before_script:
+    - pip install --disable-pip-version-check -r requirements.txt
+  script:
+    # MkDocs buduje do site_dir=site; GitLab Pages wymaga artefaktu w public/.
+    - mkdocs build --strict --site-dir public
+  artifacts:
+    paths:
+      - public
+  rules:
+    # Publikuj tylko z gałęzi domyślnej (main), gdy zmienia się dokumentacja lub konfiguracja.
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - docs/**/*
+        - mkdocs.yml
+        - requirements.txt
+        - .gitlab-ci.yml
