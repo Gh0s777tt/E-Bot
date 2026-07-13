@@ -103,6 +103,7 @@ not_in_nav: |
 
 nav:
   - Start: index.md
+  - Utrzymanie (operacje): MAINTENANCE.md
   - Architektura i plan:
       - Architektura: ARCHITECTURE.md
       - Roadmapa: ROADMAP.md
