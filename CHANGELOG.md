@@ -1,3 +1,5 @@
+## [0.627.0](https://gitlab.com/Gh0s777tt/e-bot/compare/v0.626.0...v0.627.0) (2026-07-13)
+
 <div align="center">
 
 # 📜 CHANGELOG &nbsp;·&nbsp; E‑BOT
