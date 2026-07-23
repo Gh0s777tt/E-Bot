@@ -805,3 +805,46 @@ alter table guild_members enable row level security;
 alter table plugins enable row level security;
 alter table guild_plugins enable row level security;
 alter table plugin_config enable row level security;
+
+-- ── Security Advisors hardening (2026-07-13) ─────────────────────────────────────────────────
+-- Domknięcie Supabase Advisorów (Security + wybrane Performance). Idempotentne. Rozszerza sekcję
+-- RLS #673: jawne polityki DENY (zamiast polegać na braku polityk), przypięty search_path funkcji
+-- ekonomii (anty-injection) oraz indeksy pokrywające klucze obce.
+
+-- 1) function_search_path_mutable (WARN): przypnij search_path (public pierwszy → funkcje działają).
+do $$
+declare r record;
+begin
+  for r in
+    select p.oid::regprocedure as sig
+    from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public'
+      and p.proname in ('economy_spend','economy_credit','economy_move','economy_ensure')
+  loop
+    execute format('alter function %s set search_path = public, pg_temp', r.sig);
+  end loop;
+end $$;
+
+-- 2) rls_enabled_no_policy (INFO): jawna polityka DENY dla anon/authenticated na KAŻDEJ tabeli public
+--    z RLS włączonym i bez polityk (backend-only; service_role omija RLS). Nie zmienia zachowania.
+do $$
+declare r record;
+begin
+  for r in
+    select c.relname
+    from pg_class c join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public' and c.relkind = 'r' and c.relrowsecurity = true
+      and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
+  loop
+    execute format('drop policy if exists %I on public.%I', 'deny_client_access', r.relname);
+    execute format(
+      'create policy %I on public.%I as permissive for all to anon, authenticated using (false) with check (false)',
+      'deny_client_access', r.relname
+    );
+  end loop;
+end $$;
+
+-- 3) unindexed_foreign_keys (INFO/wydajność): indeksy pokrywające FK (przyśpieszają joiny + kaskady).
+create index if not exists idx_guild_plugins_plugin_key on public.guild_plugins (plugin_key);
+create index if not exists idx_plugin_config_plugin_key on public.plugin_config (plugin_key);
+create index if not exists idx_ticket_messages_ticket_id on public.ticket_messages (ticket_id);
