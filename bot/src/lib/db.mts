@@ -187,6 +187,21 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'reports_config',
   'voicerole_config',
   'lockschedule_config',
+  // ── Klucze STANU per-serwer (nie formularze panelu) — domknięcie findingu cross-tenant: jeden
+  // globalny slot na całego bota powodował, że `/backup create` na serwerze B kasował snapshot A,
+  // `/backup info|restore` na A pokazywał i ODTWARZAŁ strukturę B (role z surowymi bitfieldami
+  // uprawnień), a `/undo` na A niszczył rekord cofnięcia B.
+  // Ta sama ścieżka migracji co 45 kluczy wyżej (`g:<guildId>:<key>`), ale z JEDNĄ różnicą:
+  // backup.mts/undo.mts czytają je bezpośrednio przez `guildKey()`, BEZ globalnego fallbacku
+  // z getGuildSettings — odtworzenie lub skasowanie cudzej struktury jest destrukcyjne, więc brak
+  // nadpisania ma znaczyć „brak backupu", nigdy „cudzy backup".
+  // Lustro w panelu (dashboard/lib/data.ts) trzymać w sync — pilnuje tego migrated-keys-consistency.test.ts.
+  // UWAGA: w komentarzach WEWNĄTRZ tego bloku nie używamy apostrofów ani tekstu w apostrofach —
+  // ekstraktor w migrated-keys-consistency.test.ts wyłuskuje klucze regexem po parach apostrofów,
+  // więc samotny apostrof (choćby w polskiej odmianie) skleja się z następnym i wstrzykuje
+  // śmieciowy „klucz", a cytat w apostrofach zostaje policzony jako prawdziwy klucz.
+  'server_backup',
+  'provision_undo',
 ]);
 
 // Klucz do ZAPISU configu dla serwera: per-serwer (g:<id>:<key>) gdy zmigrowany, inaczej globalny.
