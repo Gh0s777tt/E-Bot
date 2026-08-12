@@ -1,0 +1,14 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CODEOWNERS — deklaracja własności recenzji (GitLab czyta ten plik z korzenia repo).
+#
+# ZAMKNIĘCIE audytu 2026-08 #5 („bus factor = 1 / self-review"): audyt wymagał, by polityka
+# recenzji była JAWNIE zapisana. Ten plik ją zapisuje — właściciel jest domyślnym recenzentem
+# całego drzewa, więc każdy MR ma przypisanego Code Ownera zamiast dorozumianego self-merge.
+#
+# UWAGA: to NIE dodaje drugiego człowieka do przeglądu. Dopisanie drugiego maintainera (realny
+# bus factor > 1) to decyzja organizacyjna właściciela — gdy pojawi się druga osoba, wystarczy
+# dopisać ją do reguły `*` poniżej (i wymusić „required approvals" w ustawieniach repo).
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Domyślny właściciel całego repozytorium.
+* dzierzawskii98.dam@gmail.com
