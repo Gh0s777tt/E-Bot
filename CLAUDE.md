@@ -27,6 +27,26 @@ Konwencja CHANGELOG: najnowsze na górze · `## [wersja] — tytuł` · punkty `
 
 ---
 
+## 🔄 ZASADA #2 — zawsze wypchnięte, zero backlogów
+
+Właściciel nie chce backlogów ani braków. Praca jest „gotowa" dopiero, gdy **kod + testy + docs są
+zielone, zacommitowane I wypchnięte**:
+
+1. **Nic niezacommitowanego** na koniec sesji; celowo odłożone rzeczy są śledzone (`docs/ROADMAP.md`
+   / `docs/PHASES.md`), nie porzucone po cichu.
+2. **Docs na bieżąco** (ZASADA #1): CHANGELOG + `docs/PHASES.md` + `docs/ROADMAP.md` + README +
+   dotknięte `docs/*.md`, w tym samym podejściu co zmiana. Otwórz MR dla wypchniętej gałęzi.
+3. **Wypchnięte na źródło prawdy.** GitLab = źródło prawdy (CI, `sync:check`, `pages`); GitHub =
+   mirror tylko-do-odczytu (Vercel/Railway deployują z niego). Push idzie na GitLab; mirror
+   podchwytuje. Na koniec zweryfikuj `HEAD == <remote>/<branch>`; zero commitów ponad remote. Jeśli
+   remote nie da się zautoryzować, powiedz to WPROST i zostaw komendę do pushu.
+4. **Bez martwych gałęzi** — po mergu skasuj gałąź.
+
+Zasada nadrzędna: **jeśli po pracy zostaje brak — niezacommitowany plik, niewypchnięty commit,
+nieaktualny doc, nieotwarty MR, martwa gałąź — praca NIE jest skończona.**
+
+---
+
 ## ✅ Bramki jakości (zanim powiesz „gotowe")
 
 - `pnpm check` (Biome) · `pnpm typecheck` · **`pnpm docs:check`** · **`pnpm schema:check`** (`_ALL.sql` ↔ pliki per‑feature) · **`pnpm env:check`** (`.env.example` ↔ `process.env`) — zbiorczo: **`pnpm sync:check`**
