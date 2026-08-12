@@ -16,6 +16,10 @@ stages:
   - deploy
 
 # Skan bezpieczeństwa GitLab (joby lądują w stage `test`).
+# UWAGA (audyt 2026-08 #5): joby analizatorów z tych szablonów są DOMYŚLNIE `allow_failure` —
+# raportują znaleziska w MR/pipeline, ale go NIE blokują. To zachowanie szablonów GitLaba,
+# zostawione świadomie (twarde blokowanie na SAST = pipeline czerwony od false-positives);
+# w zamian raporty security w MR trzeba realnie przeglądać (docs/MAINTENANCE.md §8).
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
@@ -37,6 +41,10 @@ include:
     - pnpm config set store-dir .pnpm-store
     - pnpm install --frozen-lockfile
 
+# Pipeline TYLKO dla MR i `main` — push na gałąź tematyczną BEZ otwartego MR nie dostaje
+# pipeline'u. Świadoma oszczędność minut runnerów w projekcie jednoosobowym (audyt 2026-08 #5:
+# odnotowane jako luka — bramką jest otwarcie MR; rozszerzenie na wszystkie gałęzie = decyzja
+# kosztowa właściciela, nie zmieniać mimochodem).
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -75,7 +83,10 @@ audit:deps:
   stage: quality
   script:
     - pnpm audit --audit-level moderate
-  allow_failure: true # informacyjnie — nie blokuje pipeline
+  # informacyjnie — nie blokuje pipeline. Świadomie (audyt 2026-08 #5): świeży CVE w zależności
+  # nie może wstrzymywać niezwiązanych MR-ów; podatności domyka Renovate (`vulnerabilityAlerts`
+  # w renovate.json, osobne MR z etykietą „bezpieczeństwo") + przegląd tego raportu w MR.
+  allow_failure: true
 
 # ── TEST ─────────────────────────────────────────────────────────────────────
 unit:

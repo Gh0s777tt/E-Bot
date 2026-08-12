@@ -24,7 +24,7 @@
    - Railway → projekt bota → **Variables** → `TOPGG_TOKEN=<token>` → redeploy.
 7. **Zarejestruj `/vote`**: po deployu bota uruchom rejestrację slash‑komend:
    ```bash
-   cd bot && npm run deploy   # deploy-commands.mts — rejestruje m.in. /vote
+   cd bot && pnpm run deploy   # deploy-commands.mts — rejestruje m.in. /vote (pnpm, nie npm — audyt: npm install psuje overrides workspace)
    ```
 8. **Gotowe.** Bot zacznie raportować liczbę serwerów co 30 min (log `[topgg] zaraportowano N serwerów.`), a `/vote` poda link do głosowania.
 
@@ -125,7 +125,7 @@ Endpoint [`dashboard/app/api/topgg/webhook/route.ts`](../dashboard/app/api/topgg
 
 ## 🤖 Komendy (Commands)
 
-Na top.gg → **Commands** kliknij **Import** — zaciągnie komendy **automatycznie z Discorda** (warunek: globalna rejestracja `npm run deploy`, bez `DISCORD_DEV_GUILD_ID`; propagacja do ~1 h). Gdyby Import nie zadziałał, masz **gotową listę 1:1 z botem** (97 komend, EN+PL):
+Na top.gg → **Commands** kliknij **Import** — zaciągnie komendy **automatycznie z Discorda** (warunek: globalna rejestracja `pnpm run deploy`, bez `DISCORD_DEV_GUILD_ID`; propagacja do ~1 h). Gdyby Import nie zadziałał, masz **gotową listę 1:1 z botem** (97 komend, EN+PL):
 - [`commands.md`](topgg/commands.md) — tabela do podglądu / ręcznego wklejenia,
 - [`commands.json`](topgg/commands.json) — `name → description` (EN).
 
@@ -142,7 +142,7 @@ Na top.gg → **Commands** kliknij **Import** — zaciągnie komendy **automatyc
 - [ ] Treść wklejona (krótki + długi opis, tagi, linki, prefix `/`)
 - [ ] Wpis zaakceptowany przez moderację
 - [ ] `TOPGG_TOKEN` ustawiony w env **bota** (Railway) + redeploy
-- [ ] `npm run deploy` (rejestracja `/vote`)
+- [ ] `pnpm run deploy` w `bot/` (rejestracja `/vote`)
 - [ ] W logach bota: `[topgg] zaraportowano N serwerów.`
 - [ ] (opcjonalnie) nagrody za głos: `TOPGG_WEBHOOK_AUTH` (Vercel + top.gg Webhooks) + `_ALL.sql` + `TOPGG_VOTE_REWARD`
 - [ ] (opcjonalnie) baner/ikona wpisu, support server

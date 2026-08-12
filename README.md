@@ -139,14 +139,14 @@ Zanim zmiana jest „gotowa", muszą przejść (zbiorczo: **`pnpm sync:check`**)
 
 | Bramka | Co pilnuje |
 |:--|:--|
-| `pnpm check` | Biome — lint + format |
+| `pnpm lint` | Biome — lint + format (bez zapisu; `pnpm check` = wariant `--write`, auto‑naprawa — NIE bramka) |
 | `pnpm typecheck` | `tsc --noEmit` w 4 pakietach |
-| `pnpm docs:check` | marker `<!-- SYNC: vX.Y.Z -->` w README/PHASES/ROADMAP = najnowsza wersja z CHANGELOG |
+| `pnpm docs:check` | marker `<!-- SYNC: vX.Y.Z -->` **+ badge wersji** w README/PHASES/ROADMAP **+ blurb „📜 Najnowsze"** w README = najnowsza wersja z CHANGELOG |
 | `pnpm schema:check` | `_ALL.sql` ↔ pliki SQL per‑feature |
 | `pnpm env:check` | `.env.example` ↔ `process.env` |
 | `pnpm test` (coverage) | Vitest + próg pokrycia (ratchet) |
 
-Egzekwowane w warstwach: **git pre‑commit** (`scripts/hooks/` — aktywacja: `git config core.hooksPath scripts/hooks`) · **CI pipeline** · **hook Claude Code (Stop)** w `.claude/settings.json`.
+Egzekwowane w warstwach: **git pre‑commit** (`scripts/hooks/` — aktywacja: `git config core.hooksPath scripts/hooks`) · **GitLab CI** (`.gitlab-ci.yml` — na Merge Request i na `main`) · **hook Claude Code (Stop)** w `.claude/settings.json`.
 
 <br/>
 
@@ -223,7 +223,9 @@ flowchart LR
 
 - **GitLab** = źródło prawdy (rozwój, push, CI/CD). **GitHub** = mirror tylko‑do‑odczytu (aktualizowany automatycznie przez push mirror).
 - Wdrożenia wyzwalane z GitHuba: **Vercel** (`dashboard/`), **Railway** (`bot/`).
-- Migracja pipeline'u CI do **GitLab CI** oraz automatyzacji (semantic‑release, Renovate, skany bezpieczeństwa) — **w toku**.
+- Pipeline CI działa w **GitLab CI** (`.gitlab-ci.yml`: `sync → quality → test → release → deploy`, + SAST i Secret Detection z szablonów GitLaba, + GitLab Pages z MkDocs). `.github/workflows/` **nie istnieje** — na mirrorze nic się nie wykonuje.
+- **semantic‑release** uzbrojony i użyty (v0.627.0 to pierwsze wydanie wygenerowane automatycznie); job `release` jest `when: manual` — świadoma bramka, patrz [`docs/MAINTENANCE.md`](docs/MAINTENANCE.md) §4.
+- **Renovate** (`renovate.json`) skonfigurowany; wymaga aktywnej aplikacji Mend Renovate na projekcie GitLab.
 
 <br/>
 
@@ -239,7 +241,7 @@ Zgłaszanie podatności → [`.github/SECURITY.md`](.github/SECURITY.md).
 
 ## 📜 Najnowsze
 
-**v0.626.0** — 💳 Premium: plany **3‑ i 6‑miesięczne** (drabinka 1/3/6/12 mies. — 49/129/239/429 zł, rabaty 12/18/27 %, przełącznik 4 interwałów) · **v0.625.0** — 🔑 recenzja App Directory: `/lock` i `/unlock` wymagają `ManageRoles` · **v0.624.0** — 🩹 naprawa funkcji wrażliwych na restart (blackjack · tempvoice · invites · giveXp) · **v0.623.0** — 🧪 testy bramek bezpieczeństwa + coverage gate w CI.
+**v0.627.0** — 🛡️ audyt: `web/` przez **Supabase** zamiast lokalnego SQLite (B‑2/B‑3), reaction‑roles i statystyki automod **per‑serwer** (C‑1/C‑2), dedup gier po `igdb_id`, leniwy i18n panelu · **v0.626.0** — 💳 Premium: plany **3‑ i 6‑miesięczne** (drabinka 1/3/6/12 mies. — 49/129/239/429 zł, rabaty 12/18/27 %, przełącznik 4 interwałów) · **v0.625.0** — 🔑 recenzja App Directory: `/lock` i `/unlock` wymagają `ManageRoles` · **v0.624.0** — 🩹 naprawa funkcji wrażliwych na restart (blackjack · tempvoice · invites · giveXp).
 
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 

@@ -37,7 +37,7 @@ flowchart LR
 ```bash
 git switch -c feat/moja-zmiana          # gałąź tematyczna
 # … praca …
-pnpm sync:check && pnpm check && pnpm typecheck && pnpm test   # bramki lokalnie
+pnpm sync:check && pnpm lint && pnpm typecheck && pnpm test    # bramki lokalnie
 git commit -m "feat(bot): opis"         # pre-commit: sync + biome --staged
 git push gitlab feat/moja-zmiana        # → otwórz Merge Request do main
 ```
@@ -50,14 +50,16 @@ git push gitlab feat/moja-zmiana        # → otwórz Merge Request do main
 
 | Komenda | Pilnuje | Gdzie egzekwowane |
 |:--|:--|:--|
-| `pnpm check` | Biome — lint + format (2 sp., lineWidth 100) | pre‑commit (`--staged`) · CI `lint` |
+| `pnpm lint` | Biome — lint + format (2 sp., lineWidth 100), **bez zapisu** | pre‑commit (`--staged`) · CI `lint` |
 | `pnpm typecheck` | `tsc --noEmit` ×4 pakiety | CI `typecheck` |
-| `pnpm docs:check` | markery `SYNC` w README/PHASES/ROADMAP = wersja CHANGELOG | pre‑commit · CI `sync:check` · hook Stop |
+| `pnpm docs:check` | marker `SYNC` **+ badge wersji** w README/PHASES/ROADMAP **+ blurb „📜 Najnowsze"** w README = wersja CHANGELOG | pre‑commit · CI `sync:check` · hook Stop |
 | `pnpm schema:check` | `_ALL.sql` ↔ schematy per‑feature | pre‑commit · CI |
 | `pnpm env:check` | `.env.example` ↔ `process.env` | pre‑commit · CI |
 | `pnpm test` / `test:coverage` | Vitest + próg pokrycia (ratchet) | CI `unit` |
 
 Zbiorczo: **`pnpm sync:check`**. Awaryjne pominięcie hooka: `git commit --no-verify`.
+
+> ⚠️ **Bramką jest `pnpm lint`, NIE `pnpm check`** (audyt 2026‑08, low). `pnpm check` = `biome check --write` — **auto‑naprawia i przepisuje pliki**, więc jego „zielono" oznacza „zielono PO cichych edycjach drzewa roboczego", a CI (`biome ci`) niczego nie zapisuje. Używaj `check` świadomie jako narzędzia naprawczego, a stan bramki odczytuj z `lint`.
 
 > **Próg pokrycia** (`vitest.config.ts`): stmts 34 / br 31 / **fn 31** / ln 35 — podłoga tuż pod baseline. **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31).
 
@@ -78,18 +80,22 @@ sync:check lint       unit      release     pages
 
 ## 4. Wydania (semantic-release)
 
-Skonfigurowany (`.releaserc.json`), **uśpiony** — job `release` jest `when: manual` i pojawia się **tylko** gdy ustawiono zmienną `GL_RELEASE_TOKEN`.
+Skonfigurowany (`.releaserc.json`) i **uzbrojony** — pierwsze automatyczne wydanie to **v0.627.0** (commit `chore(release): v0.627.0 [skip ci]` autorstwa `semantic-release-bot`). Job `release` pozostaje `when: manual` i pojawia się **tylko** gdy ustawiono zmienną `GL_RELEASE_TOKEN` — to świadoma bramka, nie niedoróbka: push na chronioną `main` wymaga tokena o roli Maintainer, więc wydanie ma być decyzją człowieka, a nie skutkiem ubocznym merge'a.
 
-**Uzbrojenie (jednorazowo):**
+**Uzbrojenie (jednorazowo — zrobione, opis dla odtworzenia/rotacji):**
 1. Settings → Access Tokens → **Project Access Token**, rola **Maintainer**, scope **`api` + `write_repository`**.
 2. Settings → CI/CD → Variables → **`GL_RELEASE_TOKEN`** = token (masked + protected).
 3. W pipeline `main` pojawi się job **`release`** → ▶ ręcznie.
 
-**Co robi run:** Conventional Commits → wersja → wpis w `CHANGELOG.md` → `scripts/bump-sync-markers.mjs` podbija markery SYNC + badge (docs:check zielony) → commit `[skip ci]` → tag `vX.Y.Z` → GitLab Release.
+**Co robi run:** Conventional Commits → wersja → wpis w `CHANGELOG.md` → `scripts/bump-sync-markers.mjs` podbija markery SYNC + badge wersji we wszystkich trzech plikach docs → commit `[skip ci]` → tag `vX.Y.Z` → GitLab Release.
 
-> ⚠️ Pierwszy run **zmienia styl CHANGELOG** na auto‑generowany z commitów (koniec ręcznie kurowanych, polskich blurbów dla NOWYCH wersji; stara historia zostaje). Jeśli wolisz „auto‑tag + zachowany kurowany CHANGELOG" — zmień plugin chain w `.releaserc.json` (usuń `@semantic-release/changelog`, zostaw tag+release).
+> ⚠️ **Po release'ie `pnpm docs:check` jest CZERWONY — i tak ma być.** Automat podbija tylko stringi wersji (marker, badge). Blurbu **„📜 Najnowsze"** w README nie tknie, bo to zdanie pisane przez człowieka. Dopisz je (jedno zdanie o tym, co realnie wyszło) w pierwszym commicie po wydaniu — dopiero wtedy bramka jest zielona. Gdyby automat pisał też blurb, `docs:check` byłby pieczątką zieloną z definicji (znalezisko audytowe „docs:check to rubber stamp").
 
-**Alternatywa manualna** (dopóki nie uzbroisz): dopisz wpis `## [x.y.z]` na górze CHANGELOG i podbij markery SYNC (`node scripts/bump-sync-markers.mjs x.y.z`), zgodnie z ZASADĄ #1 z `CLAUDE.md`.
+> ⚠️ Od pierwszego runu **styl CHANGELOG jest auto‑generowany z commitów** (koniec ręcznie kurowanych, polskich blurbów dla NOWYCH wersji; stara historia < v0.627.0 zostaje bez zmian). Jeśli wolisz „auto‑tag + zachowany kurowany CHANGELOG" — zmień plugin chain w `.releaserc.json` (usuń `@semantic-release/changelog`, zostaw tag+release).
+
+**Alternatywa manualna** (gdy nie chcesz odpalać joba `release`): dopisz wpis `## [x.y.z]` na górze CHANGELOG i podbij markery SYNC (`node scripts/bump-sync-markers.mjs x.y.z`), zgodnie z ZASADĄ #1 z `CLAUDE.md`.
+
+> ℹ️ **Pola `version` w `package.json` celowo zostają `0.1.0`** (root · bot · dashboard · web · ingest — audyt 2026‑08, low). Łańcuch pluginów `.releaserc.json` nie zawiera `@semantic-release/npm`, więc release nigdy nie podbija manifestów; źródłem prawdy wersji jest **tag gita + nagłówek CHANGELOG** (badge/markery podbija `bump-sync-markers.mjs`). Pakiety są prywatne i niepublikowane, a jednorazowa ręczna synchronizacja bez automatu rozjechałaby się przy pierwszym kolejnym wydaniu — dlatego NIE synchronizujemy ich ręcznie. Chcesz wersji w manifestach? Dodaj `@semantic-release/npm` (`npmPublish: false`) do `.releaserc.json` — wtedy podbija je release, nie człowiek.
 
 ## 5. Zależności (Renovate)
 
@@ -122,17 +128,19 @@ W trakcie prac konfiguracyjnych używano **żywych poświadczeń**. **Zrotuj je*
 - [ ] **GitHub PAT** (w tym token mirrora `ghp_…`) → Settings → Developer settings → revoke + nowy → **zaktualizuj wpis mirrora w GitLab**.
 - [ ] **GitLab** token(y) → Settings → Access Tokens → revoke; dla release utwórz świeży `GL_RELEASE_TOKEN`.
 
-> Skan potwierdził **0 sekretów w historii gita** — dobrze. Utrzymuj to: sekrety tylko w `.env*` (gitignored) i zmiennych CI. SAST + Secret Detection w CI wychwycą przypadkowe wycieki.
+> Skan potwierdził **0 sekretów w historii gita** — dobrze. Utrzymuj to: sekrety tylko w `.env*` (gitignored) i zmiennych CI. SAST + Secret Detection w CI **zaraportują** przypadkowe wycieki (joby z szablonów GitLaba są `allow_failure` — alarmują w pipeline, ale go nie blokują; audyt 2026‑08), więc raporty security w MR trzeba realnie przeglądać.
 
 ## 9. Stan po audycie (ETAP 1)
 
-Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń `bot`+`dashboard`: **0 krytycznych**. Otwarte priorytety do napraw (osobny tor, poza tymi 5 etapami):
+Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń `bot`+`dashboard`: **0 krytycznych**.
 
-1. **`web/`** czyta lokalny SQLite → na Vercel pusto (2× krytyczny) — przełącz na źródło sieciowe.
-2. **`reaction-roles`** globalny stan (cross‑tenant overwrite) — per‑guild.
-3. **`ingest`** izolacja źródeł (`try/catch` Steam/GOG) + koniec nadpisywania okładek.
-4. **i18n 1.69 MB** w bundlu klienta — podział per‑język.
-5. **A‑1**: zakres Biome na `docs/**/*.svg` (lokalne `pnpm check` czerwone).
+**Naprawione w v0.627.0** (ta sekcja wcześniej wciąż wymieniała je jako otwarte — audyt 2026‑08): `web/` → Supabase (B‑2/B‑3), reaction‑roles + statystyki automod per‑serwer (C‑1/C‑2), izolacja źródeł `ingest` + `manual_lock` (B‑4/B‑5), leniwy i18n panelu (B‑1), zakres Biome bez `.svg` (A‑1) — szczegóły w CHANGELOG i sekcji 0a raportu.
+
+**Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
+
+1. **A‑2** — testy kontraktowe tras mutujących (~109/116 `route.ts` bez testu żądanie→odpowiedź) — iteracyjnie.
+2. **C‑4** — `ingest`: sekrety z query stringu + escape IGDB.
+3. **A‑4 + D‑3** — sprzątanie roota (raporty `AUDIT_REPORT`/`DISCOVERY_REPORT`/`TEST_REPORT`/`REDESIGN_NOTES`, `mockups/`, `sketches/`).
 
 ## 10. Checklist operacyjny
 

@@ -43,9 +43,10 @@ Dane lądują w `data/bot.db` (SQLite, **gitignored**).
 ## 4️⃣ Dashboard lokalnie
 
 ```bash
-cd dashboard
-npm install
-npm run dev        # http://localhost:3000
+# Zależności instaluj RAZ w rootcie i WYŁĄCZNIE pnpm — `npm install` ignoruje
+# workspace + `overrides` bezpieczeństwa (postcss/undici) z pnpm-workspace.yaml.
+pnpm install
+pnpm --filter dashboard dev   # http://localhost:3001
 ```
 
 Adapter danych (`lib/data.ts`) najpierw próbuje **Supabase**, a przy błędzie wraca do lokalnego **SQLite**.

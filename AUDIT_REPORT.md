@@ -18,7 +18,7 @@ _Raport zapisywany przyrostowo po każdej fazie. Sekcje formalne (Podsumowanie, 
 
 **Naprawione w #673 (zweryfikowane lokalnie):**
 - **#2 lint** — wszystkie błędy `useLiteralKeys`/`useOptionalChain` w plikach **w moim zakresie** (community/commands/analytics/cloud/security + 2 pliki panelu) naprawione (`['k']`→`.k`, `a||!a.b`→`!a?.b`). `typecheck` ×4 zielony. **Pozostałe 12 błędów biome są WYŁĄCZNIE w `bot/src/setup/` (empire‑hub, ghost‑*)** — osobny tor provisioningu właściciela, którego nie modyfikuję ani nie commituję; właściciel domyka je sam: `pnpm exec biome check --write --unsafe bot/src/setup`.
-- **#4 README** — „Szybki start" przełączony `npm` → `pnpm` (root `pnpm install` + `pnpm --filter …`), chroni `overrides` postcss/undici.
+- **#4 README** — „Szybki start" przełączony `npm` → `pnpm` (root `pnpm install` + `pnpm --filter …`), chroni `overrides` postcss/undici. **Korekta zakresu (audyt 2026‑08):** „FIXED" dotyczyło TYLKO root README — ta sama klasa defektu żyła dalej w `docs/wiki/Getting-Started.md`, `docs/ARCHITECTURE.md` i `docs/TOPGG.md` (poprawione 2026‑08) oraz w `dashboard/README.md` i `bot/README.md` (**wciąż `npm` — otwarte**, tor pakietów).
 - **#5 martwa gałąź** — `feat/role-dropdowns` usunięta (`git branch -d`).
 - **#7 coverage** — dodany provider `@vitest/coverage-v8`, konfiguracja + skrypt `pnpm test:coverage` + progi‑ratchet pod baseline (stmts 34% / br 30% / fn 33% / ln 36%), gate zielony.
 - **Usprawnienie #6** — dodany test parzystości `landingI18n` (LANDING ×14, 16 asercji zielonych) — analogiczny do `panelI18n.parity.test.ts`; parytet okazał się pełny, teraz zamrożony.

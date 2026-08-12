@@ -55,7 +55,7 @@ flowchart LR
   I -->|okładka · gatunek · rok| M[(model games)]
   N --> M
   M --> SQ[(SQLite bot.db)]
-  M -->|npm run sync:cloud| SUP[(Supabase games)]
+  M -->|pnpm run sync:cloud| SUP[(Supabase games)]
   SUP --> DB[Dashboard /library]
 ```
 
