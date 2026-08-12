@@ -5,21 +5,32 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
-
-const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
+import { ghostUrl } from '../empire/config.mts';
 
 export const data = new SlashCommandBuilder()
   .setName('portal')
   .setDescription('Portal E-Forge + jak zarabiać Ghost Tokens na Discordzie.');
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  // Bez GHOST_API_URL nie ma portalu do pokazania — dawny fallback reklamował członkom cudzy
+  // deployment Vercel jako „nasz" portal (i wysyłał ich tam z kodem /link). Ten sam komunikat
+  // „nie jest skonfigurowana" co w /link — żadnego nowego klucza i18n.
+  const base = ghostUrl();
+  if (!base) {
+    await interaction.reply({
+      content: '⚠️ Integracja E-Forge nie jest skonfigurowana (brak `GHOST_API_URL`).',
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
+
   const embed = new EmbedBuilder()
     .setColor(0xe50914)
     .setTitle('🌐 E-Forge')
-    .setURL(GHOST_URL)
+    .setURL(base)
     .setDescription(
       [
-        `Portal: ${GHOST_URL}`,
+        `Portal: ${base}`,
         '',
         '**Jak zdobywać Ghost Tokens (GT) na Discordzie:**',
         '▸ Pisz na czacie i siedź na voice — GT lecą automatycznie.',

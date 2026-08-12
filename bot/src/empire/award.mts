@@ -3,7 +3,10 @@
 // the same portal endpoint the old ghost-empire-bot used (now superseded by E-Bot). The GT
 // balance lives in the portal's Postgres — E-Bot only calls the API (no local economy state).
 // Reuses GHOST_API_URL / GHOST_BOT_SECRET (already set for the /link command).
-const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
+// Adres portalu bierzemy WYŁĄCZNIE z ghostUrl() — jednej bramki w config.mts. Dawny fallback na
+// zaszytą domenę powodował, że przy pustym GHOST_API_URL (udokumentowany stan „wyłączone") bot
+// słał `Bearer <sekret>` + discordId każdego członka do cudzego deploymentu przy KAŻDYM GT.
+import { ghostUrl } from './config.mts';
 
 export type AwardResponse =
   | { ok: true; awarded: number; newBalance: number }
@@ -18,10 +21,12 @@ export async function awardTokens(params: {
   reason: string;
   multiplier?: number;
 }): Promise<AwardResponse> {
+  const base = ghostUrl();
   const secret = process.env.GHOST_BOT_SECRET;
+  if (!base) return { error: 'no_portal_url' }; // integracja wyłączona — cicho, jak przy no_secret
   if (!secret) return { error: 'no_secret' };
   try {
-    const res = await fetch(`${GHOST_URL}/api/internal/award`, {
+    const res = await fetch(`${base}/api/internal/award`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
       body: JSON.stringify(params),
