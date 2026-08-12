@@ -21,6 +21,18 @@ type WSLike = {
 const WSCtor = (globalThis as { WebSocket?: new (url: string) => WSLike }).WebSocket;
 
 // Do połączenia preferuj anon (apikey), do RLS preferuj service_role (access_token).
+//
+// Audyt 2026-08 (#3) — dlaczego apikey jedzie w query stringu URL-a, a nie w nagłówku:
+// (a) natywny WebSocket (WHATWG, Node ≥22/undici) świadomie NIE pozwala na własne nagłówki HTTP
+//     przy handshake'u — nagłówek wymagałby pakietu `ws` (nowa zależność, moduł celowo zero-dep);
+// (b) protokół Supabase Realtime uwierzytelnia gniazdo przez `?apikey=` w URL — tak samo robi
+//     oficjalny @supabase/realtime-js (ograniczenie przeglądarkowego WS); token RLS idzie już
+//     bezpiecznie in-band (`access_token` w phx_join niżej), nie w URL-u.
+// Realna mitygacja: fallback `anon || svc` bierze service_role TYLKO gdy deployment nie ma
+// SUPABASE_ANON_KEY. Anon key jest publiczny z założenia (RLS pilnuje danych), więc z ustawionym
+// anonem do URL-a (logi proxy, error-stringi) nigdy nie trafia sekret. W deploymentach z samym
+// service_role: ustaw SUPABASE_ANON_KEY, albo świadomie akceptuj ryzyko — usunięcie fallbacku
+// wyłączałoby realtime u obecnych użytkowników (graceful poll jest, ale to decyzja właściciela).
 function realtimeKeys(): { apikey: string; token: string } {
   const anon = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
   const svc = process.env.SUPABASE_SERVICE_ROLE_KEY || '';

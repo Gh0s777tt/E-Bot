@@ -31,11 +31,15 @@ export default defineConfig({
       // fn: 32→31 (2026-07-13) — billing/premium (#694–#696) dodał nietestowane funkcje, realne
       // pokrycie fn spadło do ~31.9%; podłoga wyrównana do faktu (dług testowy = audyt A-2, ratchet w górę
       // po dołożeniu testów billingu).
+      // Audyt 2026-08 (#5): podłoga leżała PONIŻEJ baseline'u (i fn był ratchetowany w dół) — gate
+      // nie łapał regresji. Zmierzone `pnpm test:coverage` 2026-08-12: st 34.38 / br 31.86 /
+      // fn 32.29 / ln 36.08 → progi podniesione tuż pod pomiar (margines ~0.2 p.p. na szum
+      // z równoległych zmian). Zasada: progów NIE obniżamy — dokładamy testy.
       thresholds: {
-        statements: 34,
-        branches: 31,
-        functions: 31,
-        lines: 35,
+        statements: 34.2,
+        branches: 31.7,
+        functions: 32.1,
+        lines: 35.9,
       },
     },
   },

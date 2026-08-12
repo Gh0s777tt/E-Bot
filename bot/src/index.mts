@@ -1,9 +1,11 @@
 import {
+  type ButtonInteraction,
   Client,
   Collection,
   Events,
   GatewayIntentBits,
   MessageFlags,
+  type ModalSubmitInteraction,
   Options,
   Partials,
 } from 'discord.js';
@@ -274,47 +276,62 @@ client.once(Events.ClientReady, (c) => {
   }
 });
 
+// Audyt 2026-08 (#7): dispatch przycisków/modali był ręcznie utrzymywanym, 14-poziomowym ternarem
+// bez ochrony przed kolizją prefiksów — nowy moduł mógł po cichu przejąć cudze customId (np.
+// wszystko od 'app:' należy do applications.mts). Deklaratywna tabela prefiks→handler zachowuje
+// DOKŁADNIE dawną kolejność dopasowania (pierwszy wygrywa), a guard niżej wywala start, gdy ktoś
+// doda prefiks kolidujący z już zajętym (duplikat lub przesłanianie się prefiksów).
+const BUTTON_ROUTES: ReadonlyArray<readonly [string, (i: ButtonInteraction) => Promise<unknown>]> =
+  [
+    ['ticket:', handleTicketButton],
+    ['verify:', handleVerifyButton],
+    ['sug:', handleSuggestionButton],
+    ['bj:', handleBlackjackButton],
+    ['quest:', handleQuestButton],
+    ['app:', handleApplicationButton],
+    ['tut:', handleTutorialButton],
+    ['marry:', handleMarryButton],
+    ['ttt:', handleTttButton],
+    ['tv:', handleTempvoiceButton],
+    ['aiserver:', handleAiServerButton],
+    ['appeal:', handleAppealButton],
+    ['report:', handleReportButton],
+  ];
+
+// Modale: fallbackiem pozostaje handleTicketModal (bez zmiany zachowania) — historyczne modale
+// ticketów nie mają wspólnego prefiksu customId, więc terminalny else to ich jedyny router.
+const MODAL_ROUTES: ReadonlyArray<
+  readonly [string, (i: ModalSubmitInteraction) => Promise<unknown>]
+> = [
+  ['verify:', handleVerifyModal],
+  ['app:', handleApplicationModal],
+  ['tv:', handleTempvoiceModal],
+];
+
+// Anty-kolizja prefiksów (fail-fast przy starcie, zanim jakikolwiek klik trafi w złego handlera).
+for (const routes of [BUTTON_ROUTES, MODAL_ROUTES] as const) {
+  for (let i = 0; i < routes.length; i++) {
+    for (let j = i + 1; j < routes.length; j++) {
+      const [a] = routes[i];
+      const [b] = routes[j];
+      if (a.startsWith(b) || b.startsWith(a))
+        throw new Error(`Kolizja prefiksów customId w routerze interakcji: '${a}' ↔ '${b}'`);
+    }
+  }
+}
+
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isButton()) {
     const id = interaction.customId;
-    const h = id.startsWith('ticket:')
-      ? handleTicketButton(interaction)
-      : id.startsWith('verify:')
-        ? handleVerifyButton(interaction)
-        : id.startsWith('sug:')
-          ? handleSuggestionButton(interaction)
-          : id.startsWith('bj:')
-            ? handleBlackjackButton(interaction)
-            : id.startsWith('quest:')
-              ? handleQuestButton(interaction)
-              : id.startsWith('app:')
-                ? handleApplicationButton(interaction)
-                : id.startsWith('tut:')
-                  ? handleTutorialButton(interaction)
-                  : id.startsWith('marry:')
-                    ? handleMarryButton(interaction)
-                    : id.startsWith('ttt:')
-                      ? handleTttButton(interaction)
-                      : id.startsWith('tv:')
-                        ? handleTempvoiceButton(interaction)
-                        : id.startsWith('aiserver:')
-                          ? handleAiServerButton(interaction)
-                          : id.startsWith('appeal:')
-                            ? handleAppealButton(interaction)
-                            : id.startsWith('report:')
-                              ? handleReportButton(interaction)
-                              : handleButton(interaction);
+    const route = BUTTON_ROUTES.find(([prefix]) => id.startsWith(prefix));
+    const h = route ? route[1](interaction) : handleButton(interaction);
     await h.catch((err) => log.error('button', { err }));
     return;
   }
   if (interaction.isModalSubmit()) {
-    const h = interaction.customId.startsWith('verify:')
-      ? handleVerifyModal(interaction)
-      : interaction.customId.startsWith('app:')
-        ? handleApplicationModal(interaction)
-        : interaction.customId.startsWith('tv:')
-          ? handleTempvoiceModal(interaction)
-          : handleTicketModal(interaction);
+    const id = interaction.customId;
+    const route = MODAL_ROUTES.find(([prefix]) => id.startsWith(prefix));
+    const h = route ? route[1](interaction) : handleTicketModal(interaction);
     await h.catch((err) => log.error('modal', { err }));
     return;
   }

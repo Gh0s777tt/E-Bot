@@ -1,7 +1,7 @@
 # CLAUDE.md — E‑BOT (E-Forge)
 
 Monorepo **pnpm**. Pakiety:
-- `bot/` — Discord (discord.js v14), ~95 slash‑komend, 59 usług w tle, **i18n 14 języków**, SQLite.
+- `bot/` — Discord (discord.js v14), 102 slash‑komendy, 76 usług w tle, **i18n 14 języków**, SQLite.
 - `dashboard/` — panel Next.js (React 19 / Tailwind 4 / TS 6) → Vercel + Supabase.
 - `web/` — „GameVault" (Netflix dla gier), osobny Next.js.
 - `ingest/` — kolektory Steam · PSN · GOG · IGDB → SQLite/Supabase.
@@ -21,7 +21,7 @@ Marker `<!-- SYNC: v… -->` na górze obu plików **musi równać się** najnow
 
 **Przed zakończeniem pracy uruchom `pnpm docs:check`** — musi zwrócić exit 0. Skrypt: [`scripts/check-docs-sync.mjs`](scripts/check-docs-sync.mjs) (pilnuje też badge'a wersji + blurbu „Najnowsze" w README).
 
-Egzekwowane automatycznie w **3 warstwach**: **CI** (`.github/workflows/ci.yml`, na push/PR) · **git pre‑commit** (`scripts/hooks/`, aktywacja na klon: `git config core.hooksPath scripts/hooks`) · **hook Claude Code (Stop)** w `.claude/settings.json`.
+Egzekwowane automatycznie w **3 warstwach**: **CI** (`.gitlab-ci.yml`, job `sync:check` w stage `sync` — na Merge Request i na `main`; GitLab = źródło prawdy, GitHub to mirror tylko‑do‑odczytu bez workflowów) · **git pre‑commit** (`scripts/hooks/`, aktywacja na klon: `git config core.hooksPath scripts/hooks`) · **hook Claude Code (Stop)** w `.claude/settings.json`.
 
 Konwencja CHANGELOG: najnowsze na górze · `## [wersja] — tytuł` · punkty `[#NNN]` · SemVer · badge `updaty`/`wersja` u góry pliku.
 
