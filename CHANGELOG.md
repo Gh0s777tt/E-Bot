@@ -2,6 +2,25 @@
 
 > Format: [Keep a Changelog](https://keepachangelog.com) · [SemVer](https://semver.org) · najnowsze na górze. Wpisy od v0.627.0 generowane automatycznie (semantic-release); starsze — kurowane ręcznie `[#NNN]`.
 
+## [0.627.1](https://gitlab.com/Gh0s777tt/e-bot/compare/v0.627.0...v0.627.1) (2026-08-14)
+
+### 🐛 Poprawki
+
+* **apps:** web/img liczy realne bajty + rate limit, ingest bez sekretów w URL, głośna degradacja settings ([5f3dcd8](https://gitlab.com/Gh0s777tt/e-bot/commit/5f3dcd87fa1086812ad53be4d191ecf96bb20d68))
+* **backup:** /backup i /undo trzymały stan KAŻDEGO serwera w jednym globalnym slocie ([03af553](https://gitlab.com/Gh0s777tt/e-bot/commit/03af553f0ac0999437f7d12b1fd7505dfb01959d))
+* **bot:** /library czyta z Supabase zamiast lokalnego SQLite (audyt B-2, ten sam błąd co web/) ([3ac760c](https://gitlab.com/Gh0s777tt/e-bot/commit/3ac760c9d9feb128e9b470873e87393f3a3119dd))
+* **bot:** timeout na awardTokens, reminder done-po-wysyłce, 3 lokalizowane opisy komend + guard ([e449233](https://gitlab.com/Gh0s777tt/e-bot/commit/e449233b97fad9a63f43e0d1adfb50168533ec62))
+* **ci:** puste notatki semantic-release — presetConfig.types + changelogTitle ([b526d9a](https://gitlab.com/Gh0s777tt/e-bot/commit/b526d9a63fe060e36370255dbf2e8e5ac22b66f1))
+* **dashboard:** anty-SSRF z audytu C-3 objęło tylko web/, a publiczne proxy było w dashboard/ ([fbdc6f1](https://gitlab.com/Gh0s777tt/e-bot/commit/fbdc6f1afcc6e8dc4a3999263d947a53983ac5c3))
+* **deps:** 17 podatności produkcyjnych → 0 (Next.js middleware bypass, sharp, nanoid, postcss) ([c81d644](https://gitlab.com/Gh0s777tt/e-bot/commit/c81d6444331c35432568e3ee94c1f80bdb30b975))
+* **docs:** docs:check faktycznie sprawdza badge+blurb, SECURITY.md bez martwych kontroli ([85c807f](https://gitlab.com/Gh0s777tt/e-bot/commit/85c807f869e64dcd96511fdf1742a765d121d40d)), closes [#4](https://gitlab.com/Gh0s777tt/e-bot/issues/4)
+* **empire:** puste GHOST_API_URL nie wyłączało integracji — sekret leciał na zaszytą cudzą domenę ([f99660c](https://gitlab.com/Gh0s777tt/e-bot/commit/f99660c0fbadef6082e4bcd6683d8a719e223341))
+* **repo:** public/ w .gitignore zjadało assety, a _ALL.sql nie miał tabel, od których zależy B-2/B-3 ([5dc0e3f](https://gitlab.com/Gh0s777tt/e-bot/commit/5dc0e3fc442fe1fd66aab5acec722f15c415f94f))
+
+### 📚 Dokumentacja
+
+* **claude:** ZASADA [#2](https://gitlab.com/Gh0s777tt/e-bot/issues/2) — zawsze wypchnięte, zero backlogów (na życzenie właściciela) ([16282ca](https://gitlab.com/Gh0s777tt/e-bot/commit/16282cae18bfb0c080d82b5452829f76fb1ed07e))
+
 ## [0.627.0](https://gitlab.com/Gh0s777tt/e-bot/compare/v0.626.0...v0.627.0) (2026-07-13)
 
 ### ✨ Nowe funkcje
