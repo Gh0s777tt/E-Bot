@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.626.0-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.627.0-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -28,6 +28,10 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## 🔭 Bieżący tor (v0.627.0)
+
+**🛡️ Audyt 2026‑07‑13 — pierwsza tura poprawek (v0.627.0)** — `web/` czyta i zapisuje przez Supabase zamiast lokalnego SQLite (B‑2/B‑3, krytyczne — na Vercelu pliku po prostu nie ma), stan reaction‑roles i statystyki automod rozdzielone per‑serwer (C‑1/C‑2 — koniec nadpisywania i wycieku między tenantami), dedup gier cross‑platform po `igdb_id` w shelfach (B‑6), leniwy import słowników i18n w panelu (B‑1, PL nie pobiera ~1.4 MB), lokalna bramka przed odpytaniem chmury w `scheduledPosts` (B‑7). Pierwszy wpis wygenerowany przez semantic‑release.
 
 ## 🔭 Bieżący tor (v0.626.0)
 
@@ -315,4 +319,4 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑05 · v0.626.0 (#696) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>
+<div align="center"><sub>Ostatnia aktualizacja: 2026‑07‑13 · v0.627.0 (#696) · powiązane: <a href="ROADMAP.md">ROADMAP</a> · <a href="../CHANGELOG.md">CHANGELOG</a> · weryfikacja sync: <code>pnpm docs:check</code></sub></div>

@@ -2,6 +2,17 @@
 // (etykiety pozycji po href + nazwy grup po polskim labelu) i wspólne teksty UI.
 // pl = fallback (oryginalne stringi w komponentach), więc słownik pl trzyma tylko klucze ui.*.
 // Wybór języka: localStorage 'panelLang' + cookie 'panel_lang' (na przyszłe fale server-side).
+//
+// STAN NAPRAWY B-1 (audyt, świadomie częściowy — reszta = otwarte A-3, decyzja właściciela):
+// UI_DATA (1 554 818 B, 13 locale) wyjechało do panelI18nData.ts za dynamic importem
+// (ensurePanelLocale) — użytkownik pl NIE pobiera tych słowników. W bundlu domyślnym zostaje
+// jednak ~490 KB: ten plik (133 399 B — NAV 13 locale + MODES 14 + LOCALE_NAMES; importowany
+// statycznie przez ~105 komponentów 'use client') oraz cztery słowniki wpięte w komponenty
+// klienckie: howItWorksI18n.ts (256 571 B), pageInfo.i18n.ts (60 149 B), tourI18n.ts (28 784 B),
+// assistantI18n.ts (16 429 B). landingI18n.ts (149 883 B) NIE liczy się do bundla — wszyscy
+// importerzy są serwerowi. Dokończenie = wyniesienie NAV/MODES per-locale + dynamic import
+// w 4 komponentach: dotyka ~105 plików i ścieżek hydracji, więc NIE robimy tego „przy okazji"
+// w ramach domykania audytu (ryzyko regresji > zysk transferu).
 
 export const PANEL_LOCALES = [
   'pl',

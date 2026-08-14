@@ -1,7 +1,10 @@
 // Proxy/cache okładek: przeglądarka pobiera z origin (Next), serwer ściąga z CDN — działa też tam,
 // gdzie przeglądarka nie ma dostępu do CDN. Whitelist hostów = ochrona przed SSRF. Cache na BRZEGU
 // Vercela (s-maxage per unikalny `?u=`) + stale-while-revalidate → mniej uderzeń w CDN gier.
-export const runtime = 'nodejs';
+// Kształt pliku trzymamy 1:1 z dashboard/app/api/img/route.ts (ten sam hardening po obu stronach).
+import { clientIp, rateLimited } from '../../../lib/rateLimit';
+
+export const runtime = 'nodejs'; // deterministyczne redirect:'manual' + AbortSignal (audyt C-3)
 
 const ALLOW = new Set([
   'cdn.cloudflare.steamstatic.com',
@@ -15,6 +18,10 @@ const ALLOW = new Set([
 const TIMEOUT_MS = 8000;
 const MAX_BYTES = 12 * 1024 * 1024; // okładki są małe; limit anty-nadużycie (open-relay)
 const MAX_REDIRECTS = 3;
+// Trasa jest PUBLICZNA i pobiera z sieci, więc druga połowa naprawy C-3 („rate-limit per-IP") ląduje
+// tutaj. Limit dobrany pod realny ruch: jeden ekran biblioteki to ~60 okładek, a po pierwszym
+// wyświetleniu odpowiada cache przeglądarki/brzegu — 240/min zostawia zapas ~4 pełnych ekranów.
+const RATE_LIMIT = 240;
 
 // SSRF: https + host z whitelisty. Sprawdzane na KAŻDYM skoku przekierowania.
 function allowed(url: URL): boolean {
@@ -22,6 +29,11 @@ function allowed(url: URL): boolean {
 }
 
 export async function GET(request: Request): Promise<Response> {
+  // Audyt: helper był importowany, ale NIGDY nie wywołany — trasa realnie nie miała limitu.
+  // 429 przed jakimkolwiek fetchem do CDN → proxy nie da się użyć jako darmowy relay/amplifikator.
+  if (rateLimited(`img:${clientIp(request)}`, RATE_LIMIT)) {
+    return new Response('rate limited', { status: 429, headers: { 'Retry-After': '60' } });
+  }
   const u = new URL(request.url).searchParams.get('u');
   if (!u) return new Response('missing u', { status: 400 });
 
@@ -71,7 +83,25 @@ export async function GET(request: Request): Promise<Response> {
       return new Response('too large', { status: 413 });
     }
 
-    return new Response(upstream.body, {
+    // Content-Length to deklaracja CDN-u, nie fakt (brak nagłówka / chunked / kłamstwo → limit
+    // wyżej nic nie łapie). Trasa jest publiczna, więc liczymy bajty W LOCIE i zrywamy strumień
+    // po przekroczeniu MAX_BYTES — anty open-relay/amplifikacja (audyt C-3, lustro dashboard/).
+    let seen = 0;
+    const capped = upstream.body.pipeThrough(
+      new TransformStream<Uint8Array, Uint8Array>({
+        transform(chunk, controller) {
+          seen += chunk.byteLength;
+          if (seen > MAX_BYTES) {
+            // Błąd strumienia = przerwane ciało odpowiedzi + anulowany pobór z CDN (pipeThrough).
+            controller.error(new Error('image too large'));
+            return;
+          }
+          controller.enqueue(chunk);
+        },
+      }),
+    );
+
+    return new Response(capped, {
       status: 200,
       headers: {
         'Content-Type': ctype || 'image/jpeg',

@@ -40,6 +40,13 @@ db.close();
 
 console.log(`Wysyłam ${games.length} gier i ${settings.length} ustawień do Supabase...`);
 
+// ZNANY DŁUG (audyt, B-5 cloud-side): `manual_lock` chroni kurację TYLKO w lokalnym SQLite
+// (ingest/db.mts — CASE przy upsercie). Chmurowa tabela `games` nie ma tej kolumny, a poniższy
+// upsert jest ślepy — tytuł/okładka wyedytowane przez panel (lib/wishlist.ts → Supabase) na wierszu
+// o tym samym (platform,platform_app_id) zostaną NADPISANE przy następnym `pnpm sync:cloud`.
+// Pełna naprawa = kolumna `manual_lock` w Supabase + merge warunkowy; to zmiana schematu ŻYWEJ bazy
+// (poza torem tego skryptu — decyzja właściciela). Wiersze dodane w panelu pod NOWYM kluczem
+// konfliktu są bezpieczne (upsert ich nie dotyka).
 for (let i = 0; i < games.length; i += 200) {
   const chunk = games.slice(i, i + 200);
   const { error } = await sb

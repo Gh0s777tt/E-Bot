@@ -16,6 +16,10 @@ stages:
   - deploy
 
 # Skan bezpieczeństwa GitLab (joby lądują w stage `test`).
+# UWAGA (audyt 2026-08 #5): joby analizatorów z tych szablonów są DOMYŚLNIE `allow_failure` —
+# raportują znaleziska w MR/pipeline, ale go NIE blokują. To zachowanie szablonów GitLaba,
+# zostawione świadomie (twarde blokowanie na SAST = pipeline czerwony od false-positives);
+# w zamian raporty security w MR trzeba realnie przeglądać (docs/MAINTENANCE.md §8).
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
@@ -37,10 +41,21 @@ include:
     - pnpm config set store-dir .pnpm-store
     - pnpm install --frozen-lockfile
 
+# Pipeline dla MR, `main` ORAZ pushy na gałęzie tematyczne (bez otwartego MR).
+# ZAMKNIĘCIE audytu 2026-08 #5 („tylko 5 z 9 jobów blokuje, a gałęzie tematyczne w ogóle nie
+# dostają pipeline'u"): właściciel autoryzował poniesienie kosztu minut runnerów, więc każdy push
+# na gałąź uruchamia teraz bramki blokujące (sync:check · lint · typecheck · unit · build) —
+# nie trzeba już czekać na otwarcie MR, by złapać regresję. Joby deploy/release/pages mają WŁASNE
+# reguły (`$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH` [+ token przy release]), więc na gałęziach
+# tematycznych się NIE odpalą. Joby doradcze (audit:deps, e2e) pozostają `allow_failure` — biegną,
+# ale nie blokują.
 workflow:
   rules:
+    # Bez podwójnego pipeline'u: gdy gałąź ma już otwarty MR, pomiń pipeline „push" (MR-owy wystarcza).
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
+      when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH'
 
 # ── SYNC ─────────────────────────────────────────────────────────────────────
 # Strażnicy synchronizacji (docs↔CHANGELOG, _ALL.sql↔schematy, .env.example↔env).
@@ -75,7 +90,10 @@ audit:deps:
   stage: quality
   script:
     - pnpm audit --audit-level moderate
-  allow_failure: true # informacyjnie — nie blokuje pipeline
+  # informacyjnie — nie blokuje pipeline. Świadomie (audyt 2026-08 #5): świeży CVE w zależności
+  # nie może wstrzymywać niezwiązanych MR-ów; podatności domyka Renovate (`vulnerabilityAlerts`
+  # w renovate.json, osobne MR z etykietą „bezpieczeństwo") + przegląd tego raportu w MR.
+  allow_failure: true
 
 # ── TEST ─────────────────────────────────────────────────────────────────────
 unit:

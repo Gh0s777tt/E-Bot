@@ -13,14 +13,16 @@ hostowany na **Vercel**, dane w **Supabase** (z lokalnym fallbackiem na SQLite d
 
 ## Dev (lokalnie)
 ```bash
-npm install
-npm run dev   # http://localhost:3001
+# Monorepo jest pnpm-only — instalacja zawsze z ROOTA repo. Nazwa pakietu (do --filter) to
+# `bot-dc-dashboard` (nazwa katalogu NIE zadziała — pnpm filtruje po nazwach pakietów).
+pnpm install
+pnpm --filter bot-dc-dashboard dev   # http://localhost:3001
 ```
 Bez kluczy Supabase czyta lokalną bazę `../data/bot.db` (179 gier). Z kluczami → Supabase.
 
 ## Wdrożenie (Supabase + Vercel)
 1. **Tabele:** wklej `supabase/schema.sql` w Supabase → SQL Editor → Run.
-2. **Seed:** `npm run seed` (wysyła bibliotekę z `../data/bot.db` do Supabase).
+2. **Seed:** `pnpm --filter bot-dc-dashboard seed` (wysyła bibliotekę z `../data/bot.db` do Supabase).
 3. **Vercel:** ustaw env `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, następnie deploy.
 
 ## Env (`.env.local`)

@@ -1,4 +1,5 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
+import { clientIp, rateLimited } from '../../../lib/rateLimit';
 import { getSettings, saveSettings } from '../../../lib/settings';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +21,15 @@ export async function GET(): Promise<Response> {
   return Response.json(await getSettings());
 }
 
+// Audyt: jedyną bramką zapisu jest JEDEN współdzielony sekret instancji — bez limitu dawał się
+// brute-force'ować bez żadnego oporu. 10/min per IP wystarcza operatorowi (formularz zapisuje raz),
+// a atak słownikowy na `x-admin-secret` robi się bezużyteczny. Limit PRZED porównaniem sekretu.
+const POST_RATE_LIMIT = 10;
+
 export async function POST(request: Request): Promise<Response> {
+  if (rateLimited(`settings:${clientIp(request)}`, POST_RATE_LIMIT)) {
+    return Response.json({ ok: false, error: 'rate limited' }, { status: 429 });
+  }
   if (!authorized(request)) {
     return Response.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }

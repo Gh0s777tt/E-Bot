@@ -1,9 +1,9 @@
 // Backup struktury serwera (role + kanały + uprawnienia) — Architekt/Security (Etap G).
-// Snapshot w settings 'server_backup' (JSON, mirror do chmury). Restore jest ADDYTYWNY:
-// odtwarza tylko BRAKUJĄCE role/kanały (dopasowanie po nazwie), niczego nie usuwa —
+// Snapshot w settings PER-SERWER `g:<guildId>:server_backup` (JSON, mirror do chmury). Restore jest
+// ADDYTYWNY: odtwarza tylko BRAKUJĄCE role/kanały (dopasowanie po nazwie), niczego nie usuwa —
 // bezpieczny do odbudowy po nuke'u, nie zrobi katastrofy na zdrowym serwerze.
 import { ChannelType, type Guild, type GuildChannelCreateOptions } from 'discord.js';
-import { getSettings, setSetting } from './db.mts';
+import { getSettings, guildKey, setSetting } from './db.mts';
 
 type SnapRole = {
   name: string;
@@ -34,8 +34,26 @@ const TYPES = new Set<number>([
   ChannelType.GuildAnnouncement,
 ]);
 
-export function readBackup(): Snapshot | null {
-  const raw = getSettings().server_backup;
+// ── Domknięcie findingu cross-tenant (jeden globalny slot 'server_backup' na CAŁEGO bota) ─────────
+// Było: readBackup/saveBackup nie znały guildId i szły przez globalne getSettings().server_backup.
+// Skutek na współdzielonej instancji: `/backup create` na serwerze B NADPISYWAŁ snapshot serwera A
+// (utrata backupu), `/backup info` na A pokazywał liczby ról/kanałów B, a `/backup restore` na A
+// odtwarzał role B RAZEM z ich surowymi bitfieldami uprawnień (captureGuild → r.permissions.bitfield)
+// oraz nazwy kanałów i overwrite'y B — czyli ujawnienie struktury obcego serwera + trwała modyfikacja
+// tego, na którym wykonano komendę. Teraz klucz jest ZAWSZE per-serwer: `g:<guildId>:server_backup`
+// (konwencja z db.mts → guildKey, ta sama co dla 45 pozostałych zmigrowanych kluczy).
+//
+// ŚWIADOMIE BEZ fallbacku do klucza globalnego (inaczej niż getGuildSettings dla zwykłych configów):
+// stary, pojedynczy blob 'server_backup' należy do serwera, który zapisał go OSTATNI — nie da się
+// ustalić do którego, a restore cudzej struktury jest DESTRUKCYJNY i nieodwracalny addytywnym
+// mechanizmem. Cichy fallback = ryzyko odtworzenia obcych ról z uprawnieniami; brak fallbacku =
+// najwyżej 'backup.none' i jedno ponowne `/backup create`. Wybieramy utratę wygody, nie danych.
+function backupKey(guildId: string): string {
+  return guildKey(guildId, KEY);
+}
+
+export function readBackup(guildId: string): Snapshot | null {
+  const raw = getSettings()[backupKey(guildId)];
   if (!raw) return null;
   try {
     const s = JSON.parse(raw) as Partial<Snapshot>;
@@ -110,8 +128,9 @@ export function captureGuild(guild: Guild): Snapshot {
   return { at: Date.now(), roles, channels };
 }
 
-export function saveBackup(snap: Snapshot): void {
-  setSetting(KEY, JSON.stringify(snap));
+// guildId JEST wymagany — bez niego zapis trafiłby w globalny slot i znów mieszał serwery.
+export function saveBackup(guildId: string, snap: Snapshot): void {
+  setSetting(backupKey(guildId), JSON.stringify(snap));
 }
 
 // Addytywny restore — zwraca liczbę utworzonych ról i kanałów. Pomija istniejące (po nazwie;

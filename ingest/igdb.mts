@@ -10,8 +10,17 @@ export type IgdbMeta = {
 type TokenResp = { access_token: string };
 
 async function getToken(clientId: string, clientSecret: string): Promise<string> {
-  const url = `https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`;
-  const r = await fetch(url, { method: 'POST' });
+  // Audyt C-4: sekret był w query stringu URL-a → lądował w logach proxy/access-logach po drodze.
+  // Twitch przyjmuje te same parametry w BODY (form-urlencoded) — URL zostaje czysty, semantyka ta sama.
+  const r = await fetch('https://id.twitch.tv/oauth2/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: 'client_credentials',
+    }),
+  });
   if (!r.ok) throw new Error(`IGDB token ${r.status}: ${await r.text()}`);
   return ((await r.json()) as TokenResp).access_token;
 }
@@ -111,6 +120,9 @@ export async function enrichByNames(
   const out = new Map<string, IgdbMeta>();
   for (const raw of names) {
     const name = raw
+      // Audyt C-4: nazwa jest interpolowana do `search "${name}";` (APICALYPSE). Backslash też trzeba
+      // usunąć — `\` przed usuniętym cudzysłowem (albo `\"` w tytule) potrafi wyłamać się z cytatu.
+      .replace(/\\/g, '')
       .replace(/["“”]/g, '')
       .replace(/[®™]/g, '')
       .replace(/:\s*PlayStation.*Edition$/i, '')

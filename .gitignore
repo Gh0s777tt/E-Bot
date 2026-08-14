@@ -31,7 +31,12 @@ data/cache/
 
 # ── Dokumentacja (MkDocs) ─────────────────────────────────
 site/
-public/
+# UWAGA: wiodący `/` jest OBOWIĄZKOWY — to wyjście `mkdocs build --site-dir public` w KORZENIU repo.
+# Bez kotwicy wzorzec łapie na KAŻDEJ głębokości: `dashboard/public/`, `web/public/` → nowy favicon,
+# logo czy obrazek OG jest niewidoczny dla `git add .`, commit wychodzi „czysty", a na Vercelu plik
+# daje 404. Śledzone dziś pliki w dashboard/public/ przeżyły tylko dlatego, że git nie ignoruje
+# już-śledzonych. NIE odkotwiczaj (zgłoszenie: logo/favicon E-Forge → dashboard/public/ghost-skull.png).
+/public/
 .venv/
 .cache/
 

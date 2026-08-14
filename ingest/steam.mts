@@ -8,6 +8,9 @@ export type SteamGame = {
 };
 
 export async function getOwnedGames(key: string, steamId: string): Promise<SteamGame[]> {
+  // Audyt C-4: klucz w query stringu to ogólnie antywzorzec (logi proxy), ale Steam Web API przyjmuje
+  // `key` WYŁĄCZNIE jako parametr query (brak wariantu nagłówkowego) — to ograniczenie API, nie wybór.
+  // Mitygacja: żądanie idzie bezpośrednio po HTTPS do api.steampowered.com, bez własnych proxy po drodze.
   const url =
     `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/` +
     `?key=${key}&steamid=${steamId}&include_appinfo=1&include_played_free_games=1&format=json`;

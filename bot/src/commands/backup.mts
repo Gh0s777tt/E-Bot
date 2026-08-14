@@ -1,6 +1,11 @@
 // /backup — snapshot struktury serwera (role+kanały+uprawnienia) i ADDYTYWNY restore
-// (odtwarza tylko brakujące — bezpieczny po nuke'u). Snapshot w settings 'server_backup'.
-// Perm: Administrator (restore tworzy role z uprawnieniami).
+// (odtwarza tylko brakujące — bezpieczny po nuke'u). Snapshot w settings PER-SERWER
+// `g:<guildId>:server_backup`. Perm: Administrator (restore tworzy role z uprawnieniami).
+// Domknięcie findingu cross-tenant: każde wywołanie przekazuje guild.id do backup.mts — wcześniej
+// wszystkie serwery dzieliły JEDEN globalny slot, więc `create` na B kasował backup A, a `info`/
+// `restore` na A pokazywały i odtwarzały strukturę B (z bitfieldami uprawnień jej ról).
+// Brak guild (DM) jest już odcięty niżej istniejącym 'sticky.guildOnly' — bez niego nie ma czym
+// zaadresować snapshotu, więc ten guard jest teraz również ryglem izolacji, nie tylko UX.
 import {
   type ChatInputCommandInteraction,
   MessageFlags,
@@ -36,7 +41,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     try {
       const snap = captureGuild(guild);
-      saveBackup(snap);
+      saveBackup(guild.id, snap);
       await interaction.editReply({
         content: t(locale, 'backup.created', {
           roles: String(snap.roles.length),
@@ -50,7 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   }
 
   if (sub === 'info') {
-    const snap = readBackup();
+    const snap = readBackup(guild.id);
     if (!snap) {
       await interaction.reply({ content: t(locale, 'backup.none'), flags: MessageFlags.Ephemeral });
       return;
@@ -66,8 +71,8 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
     return;
   }
 
-  // restore
-  const snap = readBackup();
+  // restore — snapshot TEGO serwera (brak override'u = 'backup.none', nigdy cudzy blob globalny)
+  const snap = readBackup(guild.id);
   if (!snap) {
     await interaction.reply({ content: t(locale, 'backup.none'), flags: MessageFlags.Ephemeral });
     return;

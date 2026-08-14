@@ -1663,6 +1663,83 @@ const SSYNC_DESC: Record<Locale, Record<string, string>> = {
   id: { streamsync: 'Jadwal Twitch → event Discord.' },
 };
 
+// Opisy /clan /help /tutorial — audyt 2026-08 (#2): jedyne 3 komendy rejestru bez wpisu w
+// COMMAND_DESC — applyCommandLocalizations() po cichu je pomijał i 13 nie-polskich locale
+// widziało surowy polski opis buildera. Parytet rejestr↔COMMAND_DESC pilnuje odtąd
+// i18n/parity.test.ts. Dołożone do COMMAND_DESC niżej.
+const CORE_NAV_DESC: Record<Locale, Record<string, string>> = {
+  pl: {
+    clan: 'Klany / gildie — załóż klan, dołączaj, dotuj wspólny bank i rywalizuj w rankingu.',
+    help: 'Pomoc — wszystkie komendy bota pogrupowane w kategorie.',
+    tutorial: 'Interaktywny samouczek — poznaj bota krok po kroku.',
+  },
+  en: {
+    clan: 'Clans / guilds — create a clan, join, donate to the shared bank and compete in the ranking.',
+    help: 'Help — all bot commands grouped into categories.',
+    tutorial: 'Interactive tutorial — learn the bot step by step.',
+  },
+  de: {
+    clan: 'Clans / Gilden — gründe einen Clan, tritt bei, spende in die Clanbank und kämpfe im Ranking.',
+    help: 'Hilfe — alle Bot-Befehle nach Kategorien gruppiert.',
+    tutorial: 'Interaktives Tutorial — lerne den Bot Schritt für Schritt kennen.',
+  },
+  es: {
+    clan: 'Clanes / gremios — crea un clan, únete, dona al banco común y compite en el ranking.',
+    help: 'Ayuda — todos los comandos del bot agrupados por categorías.',
+    tutorial: 'Tutorial interactivo — conoce el bot paso a paso.',
+  },
+  it: {
+    clan: 'Clan / gilde — crea un clan, unisciti, dona alla banca comune e competi in classifica.',
+    help: 'Aiuto — tutti i comandi del bot raggruppati per categorie.',
+    tutorial: 'Tutorial interattivo — impara il bot passo dopo passo.',
+  },
+  fr: {
+    clan: 'Clans / guildes — crée un clan, rejoins, alimente la banque commune et grimpe au classement.',
+    help: 'Aide — toutes les commandes du bot regroupées par catégories.',
+    tutorial: 'Tutoriel interactif — découvre le bot pas à pas.',
+  },
+  pt: {
+    clan: 'Clãs / guildas — crie um clã, entre, doe ao banco comum e dispute o ranking.',
+    help: 'Ajuda — todos os comandos do bot agrupados em categorias.',
+    tutorial: 'Tutorial interativo — conheça o bot passo a passo.',
+  },
+  zh: {
+    clan: '战队/公会 — 创建战队、加入、捐助公共银行并参与排行竞争。',
+    help: '帮助 — 机器人全部命令按类别分组。',
+    tutorial: '交互式教程 — 一步步了解机器人。',
+  },
+  ko: {
+    clan: '클랜/길드 — 클랜을 만들고, 가입하고, 공동 은행에 기부하며 랭킹에서 경쟁하세요.',
+    help: '도움말 — 봇의 모든 명령어를 카테고리별로 정리.',
+    tutorial: '인터랙티브 튜토리얼 — 봇을 단계별로 배우기.',
+  },
+  ru: {
+    clan: 'Кланы / гильдии — создай клан, вступай, пополняй общий банк и соревнуйся в рейтинге.',
+    help: 'Помощь — все команды бота, сгруппированные по категориям.',
+    tutorial: 'Интерактивное обучение — познакомься с ботом шаг за шагом.',
+  },
+  uk: {
+    clan: 'Клани / гільдії — створи клан, приєднуйся, поповнюй спільний банк і змагайся в рейтингу.',
+    help: 'Довідка — усі команди бота, згруповані за категоріями.',
+    tutorial: 'Інтерактивний посібник — познайомся з ботом крок за кроком.',
+  },
+  ja: {
+    clan: 'クラン/ギルド — クランを作成・参加し、共同銀行に寄付してランキングで競おう。',
+    help: 'ヘルプ — ボットの全コマンドをカテゴリ別に表示。',
+    tutorial: 'インタラクティブなチュートリアル — ボットをステップごとに学ぼう。',
+  },
+  ar: {
+    clan: 'العشائر / النقابات — أنشئ عشيرة وانضم وتبرّع للبنك المشترك ونافس في الترتيب.',
+    help: 'المساعدة — كل أوامر البوت مجمّعة في فئات.',
+    tutorial: 'درس تفاعلي — تعرّف على البوت خطوة بخطوة.',
+  },
+  id: {
+    clan: 'Klan / guild — buat klan, bergabung, sumbang bank bersama, dan bersaing di peringkat.',
+    help: 'Bantuan — semua perintah bot dikelompokkan per kategori.',
+    tutorial: 'Tutorial interaktif — kenali bot langkah demi langkah.',
+  },
+};
+
 for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], FUN2_DESC[l]);
   Object.assign(COMMAND_DESC[l], STICKY_DESC[l]);
@@ -1694,6 +1771,7 @@ for (const l of LOCALES) {
   Object.assign(COMMAND_DESC[l], PET_DESC[l]);
   Object.assign(COMMAND_DESC[l], CARDS_DESC[l]);
   Object.assign(COMMAND_DESC[l], MEME_DESC[l]);
+  Object.assign(COMMAND_DESC[l], CORE_NAV_DESC[l]);
 }
 
 // Builder slash-komendy z metodą setDescriptionLocalizations (feature-detect — typ Command

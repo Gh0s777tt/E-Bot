@@ -12,8 +12,15 @@ npm run smoke    # test: loguje się, potwierdza i wychodzi
 ```
 
 ## Komendy
-- `/ping` — latencja (API + WebSocket)
-- `/library [szukaj]` — Twoja biblioteka gier z bazy (Steam + IGDB), embed w czerwieni Netflix
+Bot rejestruje **102 slash-komendy** + **4 komendy menu kontekstowego** (audyt 2026-08: sekcja
+wymieniała 2 komendy ze 102 — pełna lista żyje w kodzie, nie w README). Źródło prawdy:
+- rejestr slash-komend: [`src/commands/index.mts`](src/commands/index.mts) (opisy ×14 języków: `src/i18n/commandDescriptions.mts`)
+- menu kontekstowe: [`src/commands/contextmenu.mts`](src/commands/contextmenu.mts)
+- na Discordzie: `/help` (kategorie + wyszukiwarka) i `/tutorial` (samouczek krok po kroku)
+
+Przykłady: `/ping` (latencja), `/library [szukaj]` (biblioteka gier Steam + IGDB), `/rank`, `/eco`,
+`/ticket`, `/giveaway`, `/ai`… Duża część konfiguracji (automod, powitania, reaction-role, poziomy)
+jest sterowana z panelu (`dashboard/`), nie komendami.
 
 ## Zaproszenie bota na serwer
 Otwórz (uprawnienia: widok kanałów, wysyłanie, embedy, załączniki, historia, wzmianki + anti-nuke: audit-log, ban, kick, timeout, zarządzanie rolami):

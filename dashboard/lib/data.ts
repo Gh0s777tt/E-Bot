@@ -366,6 +366,13 @@ export const MIGRATED_GUILD_KEYS = new Set<string>([
   'reports_config',
   'voicerole_config',
   'lockschedule_config',
+  // ── Klucze STANU per-serwer (nie formularze panelu). Lustro bloku z bot/src/lib/db.mts —
+  // niezmiennik „zbiór bota ⊆ zbiór panelu" pilnuje migrated-keys-consistency.test.ts, więc
+  // dopisanie klucza po stronie bota BEZ tego lustra czerwieni testy. Powód migracji: jeden
+  // globalny slot na całego bota sprawiał, że /backup create na serwerze B kasował snapshot A,
+  // a /backup restore na A odtwarzał role serwera B razem z ich bitfieldami uprawnień.
+  'server_backup',
+  'provision_undo',
 ]);
 
 export async function getConfigSetting(key: string): Promise<string | null> {

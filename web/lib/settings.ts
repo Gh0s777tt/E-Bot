@@ -59,10 +59,25 @@ function fromPairs(m: Map<string, string>): Settings {
 export async function getSettings(): Promise<Settings> {
   // Produkcja: Supabase (współdzielone z botem); lokalny plik na Vercelu jest efemeryczny (audyt B-3).
   if (supabaseEnabled()) {
+    // Audyt: `settings` ma włączone RLS BEZ żadnej polityki — deploy na kluczu anon dostaje z
+    // PostgREST **200 i zero wierszy** (RLS filtruje, nie błądzi), więc strona po cichu renderowała
+    // DOMYŚLNE wartości, które nie mają nic wspólnego z realną konfiguracją bota. Degradacja zostaje
+    // (strona ma się wyświetlić), ale GŁOŚNA: operator widzi w logach dokładny powód zamiast
+    // „działa, tylko dziwnie". Bez wartości sekretów w logu.
     try {
       const rows = await sbSelect<{ key: string; value: string }>('settings?select=key,value');
+      if (rows.length === 0) {
+        console.error(
+          '[web/settings] Supabase zwrócił 0 wierszy `settings` — to prawie na pewno klucz anon + ' +
+            'RLS bez polityki select na `settings` (użyj SUPABASE_SERVICE_ROLE_KEY). Renderuję DOMYŚLNE.',
+        );
+      }
       return fromPairs(new Map(rows.map((r) => [r.key, r.value])));
-    } catch {
+    } catch (e) {
+      console.error(
+        '[web/settings] Supabase settings READ nieudany — renderuję DOMYŚLNE:',
+        (e as Error).message,
+      );
       return { ...DEFAULTS };
     }
   }
@@ -84,6 +99,11 @@ export async function saveSettings(input: Record<string, string>): Promise<void>
   if (!pairs.length) return;
 
   // Produkcja: zapis do Supabase (bot to odczyta); lokalny zapis na Vercelu i tak by zniknął (audyt B-3).
+  // UWAGA (audyt, multi-tenant): klucze idą CELOWO bez prefiksu `g:<guildId>:` — notifier bota czyta
+  // notify_* wyłącznie GLOBALNIE (bot/src/live/notifier.mts) i nie ma ich w MIGRATED_GUILD_KEYS,
+  // więc zapis per-serwer po cichu WYŁĄCZYŁBY ogłoszenia live. To config „ownerowy" całej instancji
+  // (tak samo pisze go panel); migracja na per-serwer wymaga NAJPIERW odczytu per-serwer w bocie.
+  // Do tego czasu bramką jest WEB_ADMIN_SECRET + rate-limit w app/api/settings/route.ts.
   if (supabaseEnabled()) {
     await sbUpsert(
       'settings',

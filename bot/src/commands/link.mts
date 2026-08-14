@@ -7,8 +7,7 @@ import {
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
-
-const GHOST_URL = process.env.GHOST_API_URL || 'https://ghost-empire-web.vercel.app';
+import { ghostUrl } from '../empire/config.mts';
 
 export const data = new SlashCommandBuilder()
   .setName('link')
@@ -23,10 +22,16 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  // Bramka: adres portalu ORAZ sekret. Puste GHOST_API_URL to udokumentowany stan „integracja
+  // wyłączona" — bez tego warunku kod leciał na zaszyty fallback i wysyłał `Bearer <sekret>`
+  // razem z discordId/username użytkownika do cudzego deploymentu Vercel. Ten sam komunikat co
+  // dotąd (żadnego nowego klucza i18n), tylko nazwa brakującej zmiennej jest prawdziwa.
+  const base = ghostUrl();
   const secret = process.env.GHOST_BOT_SECRET;
-  if (!secret) {
+  if (!base || !secret) {
+    const missing = base ? 'GHOST_BOT_SECRET' : 'GHOST_API_URL';
     await interaction.reply({
-      content: '⚠️ Integracja E-Forge nie jest skonfigurowana (brak `GHOST_BOT_SECRET`).',
+      content: `⚠️ Integracja E-Forge nie jest skonfigurowana (brak \`${missing}\`).`,
       flags: MessageFlags.Ephemeral,
     });
     return;
@@ -36,7 +41,7 @@ export async function execute(interaction: ChatInputCommandInteraction): Promise
   await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
   try {
-    const r = await fetch(`${GHOST_URL}/api/internal/link-discord`, {
+    const r = await fetch(`${base}/api/internal/link-discord`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
       body: JSON.stringify({
