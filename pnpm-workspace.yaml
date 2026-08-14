@@ -5,13 +5,23 @@ packages:
   - 'ingest'
 overrides:
   # Force Next.js' transitive postcss off the vulnerable 8.4.31 (GHSA XSS in CSS
-  # stringify, fixed in 8.5.10). Dedupes onto 8.5.15, already used directly by
+  # stringify, fixed in 8.5.10). Dedupes onto the version used directly by
   # dashboard/web. pnpm 11 reads overrides here, not in package.json.
-  postcss: '^8.5.15'
+  # Podniesione do 8.5.23: path traversal w auto-loaderze source map (high) +
+  # niepełna łatka GHSA-6g55-p6wh-862q (moderate).
+  postcss: '^8.5.23'
   # Force discord.js' transitive undici off 6.24.1 (4 GHSA: WebSocket DoS high,
   # Set-Cookie header injection medium + 2 low; fixed in 6.27.0). Ten sam major 6
   # → zgodne z @discordjs/rest.
-  undici: '^6.27.0'
+  # Podniesione do 6.28.0: desynchronizacja odpowiedzi, CRLF injection w body,
+  # cookie attribute injection (3× moderate).
+  undici: '^6.28.0'
+  # Next.js ciągnie nanoid 3.x tranzytywnie; 3.3.15 ma 2 GHSA high (generatory
+  # wpadające w nieskończoną pętlę przy niedodatnim `size`). Łatka w 3.3.18.
+  nanoid: '^3.3.18'
+  # Tylko dev (semantic-release > cosmiconfig): kwadratowy koszt CPU przy `!!omap`
+  # (high, łatka 4.3.1). Ten sam major 4 → zgodne z cosmiconfig.
+  js-yaml: '^4.3.1'
 allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
