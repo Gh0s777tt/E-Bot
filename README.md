@@ -241,7 +241,7 @@ Zgłaszanie podatności → [`.github/SECURITY.md`](.github/SECURITY.md).
 
 ## 📜 Najnowsze
 
-**v0.627.0** — 🛡️ audyt: `web/` przez **Supabase** zamiast lokalnego SQLite (B‑2/B‑3), reaction‑roles i statystyki automod **per‑serwer** (C‑1/C‑2), dedup gier po `igdb_id`, leniwy i18n panelu · **v0.626.0** — 💳 Premium: plany **3‑ i 6‑miesięczne** (drabinka 1/3/6/12 mies. — 49/129/239/429 zł, rabaty 12/18/27 %, przełącznik 4 interwałów) · **v0.625.0** — 🔑 recenzja App Directory: `/lock` i `/unlock` wymagają `ManageRoles` · **v0.624.0** — 🩹 naprawa funkcji wrażliwych na restart (blackjack · tempvoice · invites · giveXp).
+**v0.627.1** — 🛡️ audyt 2026‑08: `/backup` i `/undo` **per‑serwer** (koniec wycieku cross‑tenant), puste `GHOST_API_URL` nie wypuszcza już sekretu, anty‑SSRF domknięty też w `dashboard/`, `/library` z Supabase · 🔒 **17 podatności produkcyjnych → 0** (Next.js middleware/proxy bypass, `sharp`, `nanoid`, `postcss`) · **v0.627.0** — 🛡️ audyt: `web/` przez **Supabase** zamiast lokalnego SQLite (B‑2/B‑3), reaction‑roles i statystyki automod **per‑serwer** (C‑1/C‑2), dedup gier po `igdb_id`, leniwy i18n panelu · **v0.626.0** — 💳 Premium: plany **3‑ i 6‑miesięczne** (drabinka 1/3/6/12 mies. — 49/129/239/429 zł, rabaty 12/18/27 %, przełącznik 4 interwałów) · **v0.625.0** — 🔑 recenzja App Directory: `/lock` i `/unlock` wymagają `ManageRoles`.
 
 Pełna, numerowana historia → [`CHANGELOG.md`](CHANGELOG.md).
 

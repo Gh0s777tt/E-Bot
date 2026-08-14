@@ -48,6 +48,10 @@ pnpm-debug.log*
 
 # ── OS / IDE / agent ──────────────────────────────────────
 .DS_Store
+# AppleDouble: macOS zapisuje resource forki obok plików na woluminach nie-HFS
+# (repo bywa trzymane na dysku współdzielonym z Windowsem) — jeden `git checkout`
+# potrafi wysypać kilkadziesiąt takich `._*`.
+._*
 Thumbs.db
 .idea/
 .vscode/*

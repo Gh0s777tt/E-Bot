@@ -29,6 +29,10 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+## 🔭 Bieżący tor (v0.627.1)
+
+**🛡️ Audyt 2026‑08 + zerowanie podatności produkcyjnych (v0.627.1)** — druga tura audytu bota: `/backup` i `/undo` trzymały stan KAŻDEGO serwera w jednym globalnym slocie (wyciek i utrata danych cross‑tenant) → stan per‑guild; puste `GHOST_API_URL` nie wyłączało integracji, więc sekret leciał na zaszytą cudzą domenę; anty‑SSRF z C‑3 objął tylko `web/`, a publiczne proxy w `dashboard/` zostało dziurawe → doprowadzone do tego samego standardu; `/library` czyta z Supabase zamiast pustego na Railway SQLite (ten sam błąd co B‑2); `public/` w `.gitignore` zjadało assety, a `_ALL.sql` nie miał tabel, od których zależy B‑2/B‑3. Bramki: `docs:check` faktycznie sprawdza badge + blurb (był pieczątką), feature‑branche dostają pipeline, doszedł `CODEOWNERS`. Osobno: `pnpm audit --prod` **17 → 0** — Next.js 16.2.9 → 16.3.1 (middleware/proxy bypass trafiał wprost w `proxy.ts`, do tego SSRF ×2 i DoS), `sharp`, `nanoid`, `postcss`, `undici`, `js-yaml`; `audit:deps` w CI przestał być stałą czerwienią. Pierwsze wydanie odpalone ręcznym jobem `release` (semantic‑release).
+
 ## 🔭 Bieżący tor (v0.627.0)
 
 **🛡️ Audyt 2026‑07‑13 — pierwsza tura poprawek (v0.627.0)** — `web/` czyta i zapisuje przez Supabase zamiast lokalnego SQLite (B‑2/B‑3, krytyczne — na Vercelu pliku po prostu nie ma), stan reaction‑roles i statystyki automod rozdzielone per‑serwer (C‑1/C‑2 — koniec nadpisywania i wycieku między tenantami), dedup gier cross‑platform po `igdb_id` w shelfach (B‑6), leniwy import słowników i18n w panelu (B‑1, PL nie pobiera ~1.4 MB), lokalna bramka przed odpytaniem chmury w `scheduledPosts` (B‑7). Pierwszy wpis wygenerowany przez semantic‑release.
