@@ -1,4 +1,4 @@
-// QA — testy regresyjne odsłaniające DEFEKTY znalezione podczas przeglądu (patrz TEST_REPORT.md).
+// QA — testy regresyjne odsłaniające DEFEKTY znalezione podczas przeglądu (patrz docs/archive/TEST_REPORT.md).
 // Każdy `it.fails` PADA na obecnym kodzie (dokumentuje buga) → cały zestaw pozostaje ZIELONY, a po
 // naprawie kodu produkcyjnego `it.fails` zacznie alarmować ("expected to fail but passed"), wymuszając
 // zdjęcie znacznika. Kontrole pozytywne (zwykłe `it`) dowodzą, że defekt jest specyficzny dla brzegu,

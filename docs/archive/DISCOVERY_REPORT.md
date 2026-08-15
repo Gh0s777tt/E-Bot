@@ -223,8 +223,8 @@ Grupuję po powierzchniach (analiza 95 komend po kolei = lista życzeń; skupiam
 ## 9. Szkice (Faza 5)
 
 Low‑fi, na realnych etykietach — ilustrują pomysł, nie wdrożenie. W [`./sketches`](sketches):
-- [`sketch-A2-upsell-liczniki.html`](sketches/sketch-A2-upsell-liczniki.html) — licznik „8/10" + karta upsellu w miejscu limitu (propozycja A2).
-- [`sketch-B2-kokpit-statusu.html`](sketches/sketch-B2-kokpit-statusu.html) — kokpit statusu funkcji z filtrem „Wymaga konfiguracji" (propozycja B2).
+- [`sketch-A2-upsell-liczniki.html`](../design/sketches/sketch-A2-upsell-liczniki.html) — licznik „8/10" + karta upsellu w miejscu limitu (propozycja A2).
+- [`sketch-B2-kokpit-statusu.html`](../design/sketches/sketch-B2-kokpit-statusu.html) — kokpit statusu funkcji z filtrem „Wymaga konfiguracji" (propozycja B2).
 
 ---
 _Discovery zakończone. Bez zmian w kodzie produktu (poza tym raportem i szkicami). Wdrożenie = osobna decyzja._
