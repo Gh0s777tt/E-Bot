@@ -11,7 +11,13 @@ test.describe('Bramka logowania (proxy)', () => {
 
   test('/login renderuje markę i przycisk logowania Discord', async ({ page }) => {
     await page.goto('/login');
-    await expect(page.getByRole('heading', { name: /E-?BOT/i })).toBeVisible();
+    // Marka „E-BOT" to znak graficzny w <span> (LoginSplit), NIE nagłówek — nagłówki tego ekranu
+    // biorą się z i18n (`login.brandTitle` + `cta.login`), więc szukanie w nich marki nigdy nie
+    // trafi. Ekran ma dwa znaki marki (panel desktopowy `lg:flex` + blok mobilny `lg:hidden`),
+    // dlatego liczymy tylko widoczny — asercja jest wtedy niezależna od szerokości viewportu.
+    await expect(page.getByText(/E-\s*BOT/).filter({ visible: true })).toHaveCount(1);
+    // Tytuł formularza (h1) — sama widoczność, bez treści: jest tłumaczony na 14 języków.
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     const loginLink = page.getByRole('link', { name: /Zaloguj przez Discord/i });
     await expect(loginLink).toBeVisible();
     await expect(loginLink).toHaveAttribute('href', '/api/auth/login');
