@@ -39,13 +39,14 @@ export default defineConfig({
       // fn 32.29 / ln 36.08 → progi podniesione tuż pod pomiar (margines ~0.2 p.p. na szum
       // z równoległych zmian). Zasada: progów NIE obniżamy — dokładamy testy.
       // Audyt A-2, fala 1 (2026-08-15): testy kontraktowe billingu (checkout + webhook, +34)
-      // podniosły pomiar do st 34.75 / br 32.41 / fn 32.36 / ln 36.46 → progi za nim, z tym samym
-      // marginesem ~0.2 p.p. co poprzednio.
+      // podniosły pomiar do st 34.75 / br 32.41 / fn 32.36 / ln 36.46.
+      // Fala 2 (2026-08-15): trasy globalne (ai-config + integrations, +28) → st 34.99 / br 32.62 /
+      // fn 32.56 / ln 36.74. Progi za pomiarem, margines ~0.2 p.p. jak poprzednio.
       thresholds: {
-        statements: 34.5,
-        branches: 32.2,
-        functions: 32.15,
-        lines: 36.25,
+        statements: 34.75,
+        branches: 32.4,
+        functions: 32.35,
+        lines: 36.5,
       },
     },
   },

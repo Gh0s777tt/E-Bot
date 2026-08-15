@@ -61,7 +61,7 @@ Zbiorczo: **`pnpm sync:check`**. Awaryjne pominięcie hooka: `git commit --no-ve
 
 > ⚠️ **Bramką jest `pnpm lint`, NIE `pnpm check`** (audyt 2026‑08, low). `pnpm check` = `biome check --write` — **auto‑naprawia i przepisuje pliki**, więc jego „zielono" oznacza „zielono PO cichych edycjach drzewa roboczego", a CI (`biome ci`) niczego nie zapisuje. Używaj `check` świadomie jako narzędzia naprawczego, a stan bramki odczytuj z `lint`.
 
-> **Próg pokrycia** (`vitest.config.ts`): stmts 34 / br 31 / **fn 31** / ln 35 — podłoga tuż pod baseline. **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31).
+> **Próg pokrycia** (`vitest.config.ts`): stmts 34.75 / br 32.4 / **fn 32.35** / ln 36.5 — podłoga tuż pod baseline (stan po fali 2 audytu A‑2). **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31). Aktualne wartości czytaj zawsze z `vitest.config.ts` — ta tabela bywa o wydanie do tyłu.
 
 ## 3. Pipeline CI/CD (`.gitlab-ci.yml`)
 
@@ -70,12 +70,13 @@ sync ──▶ quality ──▶ test ──▶ release ──▶ deploy
  │         │           │         │           │
 sync:check lint       unit      release     pages
            typecheck  build     (manual)    (GitLab Pages)
-           audit:deps e2e*      
+           audit:deps e2e       
                       SAST · Secret Detection
 ```
 
 - Joby Node dziedziczą obraz+instalację przez `extends: .node` (NIE globalny `default` — inaczej obrazy SAST dostają `corepack` i padają).
-- `audit:deps`, `e2e` = `allow_failure` (informacyjne / do stabilizacji). **e2e** wymaga serwera panelu + env — do promocji na wymagany po skonfigurowaniu.
+- `audit:deps` = `allow_failure` (informacyjny — świeży CVE nie wstrzymuje niezwiązanych MR‑ów; podatności domyka Renovate). Od v0.627.1 jest **zielony**, więc jego czerwień znów coś znaczy — przeglądaj raport w MR.
+- **`e2e` jest WYMAGANY** (od 2026‑08‑15). Wisiał na `allow_failure` „do stabilizacji", a przez ~7 tygodni czerwień brała się z jednej zestarzałej asercji (marka `/login` szukana wśród nagłówków po przeprojektowaniu ekranu), nie z flaka. `playwright.config.ts` ma `retries: 1` pod CI. Gdyby okazał się niestabilny — powrót to `allow_failure: true` w `.gitlab-ci.yml`.
 - Coverage raportowany jako **cobertura** (widoczny w MR).
 
 ## 4. Wydania (semantic-release)
@@ -142,7 +143,7 @@ Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń 
 
 **Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
 
-1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1 zrobiona:** billing (`checkout` +15, `webhook` +19). Zostaje ~107 tras; następne w kolejce: trasy globalne (`ai-config`, `integrations`) i konfiguracyjne per‑serwer.
+1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1:** billing (`checkout` +15, `webhook` +19). **Fala 2:** trasy globalne za instance‑admin (`ai-config` +13, `integrations` +15). Zostaje ~105 tras; następne w kolejce: konfiguracyjne per‑serwer (powtarzalny kontrakt `parseBody` → zapis → audyt).
 
 ## 10. Checklist operacyjny
 
