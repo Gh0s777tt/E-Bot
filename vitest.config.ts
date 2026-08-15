@@ -4,7 +4,10 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     include: ['**/*.test.{ts,mts}'],
-    exclude: ['**/node_modules/**', '**/.next/**', '**/dist/**', '**/.pnpm/**'],
+    // `**/._*` — AppleDouble: na woluminach nie-HFS macOS zapisuje resource fork obok pliku, więc
+    // obok `route.test.ts` powstaje `._route.test.ts`, które `include` łapie jako test i wywala
+    // przebieg na PARSE_ERROR. W CI (świeży klon) ich nie ma — to ochrona lokalnych `pnpm test`.
+    exclude: ['**/node_modules/**', '**/.next/**', '**/dist/**', '**/.pnpm/**', '**/._*'],
     // Pomiar pokrycia (#673 audyt): `pnpm test:coverage`. Provider v8 liczy TYLKO pliki dotknięte
     // testami (all:false) — metryka mówi o jakości pokrycia testowanej logiki, nie całego repo
     // (bot ma 305 .mts, większość to usługi Discord bez czystej logiki do unit-testu). Progi
@@ -35,11 +38,14 @@ export default defineConfig({
       // nie łapał regresji. Zmierzone `pnpm test:coverage` 2026-08-12: st 34.38 / br 31.86 /
       // fn 32.29 / ln 36.08 → progi podniesione tuż pod pomiar (margines ~0.2 p.p. na szum
       // z równoległych zmian). Zasada: progów NIE obniżamy — dokładamy testy.
+      // Audyt A-2, fala 1 (2026-08-15): testy kontraktowe billingu (checkout + webhook, +34)
+      // podniosły pomiar do st 34.75 / br 32.41 / fn 32.36 / ln 36.46 → progi za nim, z tym samym
+      // marginesem ~0.2 p.p. co poprzednio.
       thresholds: {
-        statements: 34.2,
-        branches: 31.7,
-        functions: 32.1,
-        lines: 35.9,
+        statements: 34.5,
+        branches: 32.2,
+        functions: 32.15,
+        lines: 36.25,
       },
     },
   },
