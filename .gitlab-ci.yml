@@ -125,7 +125,11 @@ e2e:
   script:
     - pnpm exec playwright install --with-deps chromium
     - pnpm exec playwright test
-  allow_failure: true # E2E wymaga serwera panelu — do promocji na wymagany po stabilizacji w CI
+  # Promocja na wymagany (audyt 2026-08): job wisiał na `allow_failure` „do stabilizacji", a przez
+  # ~7 tygodni czerwień brała się z JEDNEJ zestarzałej asercji (marka szukana wśród nagłówków po
+  # przeprojektowaniu /login), nie z flaka. Reszta suite przechodziła 4/4 w każdym przebiegu.
+  # CI ma `retries: 1` (playwright.config.ts), więc pojedyncze potknięcie nie wywali pipeline'u.
+  # Gdyby jednak okazał się niestabilny — przywrócenie to `allow_failure: true` w tej linii.
   artifacts:
     when: on_failure
     paths:
