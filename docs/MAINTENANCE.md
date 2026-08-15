@@ -143,7 +143,7 @@ Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń 
 
 **Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
 
-1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1:** billing (`checkout` +15, `webhook` +19). **Fala 2:** trasy globalne za instance‑admin (`ai-config` +13, `integrations` +15). Zostaje ~105 tras; następne w kolejce: konfiguracyjne per‑serwer (powtarzalny kontrakt `parseBody` → zapis → audyt).
+1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1:** billing (`checkout` +15, `webhook` +19). **Fala 2:** trasy globalne za instance‑admin (`ai-config` +13, `integrations` +15). **Fala 3:** configi bezpieczeństwa per‑serwer (`antinuke` +14, `automod` +14). Zostaje ~103 trasy — wzorzec `parseBody` → zapis → `recordAudit` powtarza się w większości, więc kolejne fale idą szybciej.
 
 ## 10. Checklist operacyjny
 
