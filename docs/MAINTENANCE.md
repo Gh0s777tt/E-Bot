@@ -142,7 +142,7 @@ Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń 
 
 **Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
 
-1. **A‑2** — testy kontraktowe tras mutujących (~109/116 `route.ts` bez testu żądanie→odpowiedź) — iteracyjnie.
+1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1 zrobiona:** billing (`checkout` +15, `webhook` +19). Zostaje ~107 tras; następne w kolejce: trasy globalne (`ai-config`, `integrations`) i konfiguracyjne per‑serwer.
 
 ## 10. Checklist operacyjny
 
