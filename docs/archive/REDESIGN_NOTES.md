@@ -98,7 +98,7 @@ nawigacja (sidebar z grupami + aktywny „rail"), modal, toast, oraz spójne **s
 
 ## D. Mockupy — ⏸️ DO WYBORU (czekam na decyzję)
 
-3 wyraźnie różne kierunki w `./mockups/` (samodzielne HTML, otwórz w przeglądarce). Każdy: pulpit,
+3 wyraźnie różne kierunki w `../design/mockups/` (samodzielne HTML, otwórz w przeglądarce). Każdy: pulpit,
 gęsty widok (automod), formularz (leveling) + stany pusty/ładowanie/błąd. Realne etykiety z naszego panelu.
 **Nie wdrażam nic na całość przed Twoim wyborem.**
 

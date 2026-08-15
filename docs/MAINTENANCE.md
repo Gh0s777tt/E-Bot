@@ -136,11 +136,13 @@ Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń 
 
 **Naprawione w v0.627.0** (ta sekcja wcześniej wciąż wymieniała je jako otwarte — audyt 2026‑08): `web/` → Supabase (B‑2/B‑3), reaction‑roles + statystyki automod per‑serwer (C‑1/C‑2), izolacja źródeł `ingest` + `manual_lock` (B‑4/B‑5), leniwy i18n panelu (B‑1), zakres Biome bez `.svg` (A‑1) — szczegóły w CHANGELOG i sekcji 0a raportu.
 
+**Naprawione w v0.627.1:** `/backup` i `/undo` per‑serwer, `GHOST_API_URL` bez wycieku sekretu, anty‑SSRF domknięty w `dashboard/`, `/library` z Supabase, **C‑4** (`ingest`: sekrety z query stringu do nagłówków + escape IGDB) oraz **17 podatności produkcyjnych → 0** (Next.js middleware/proxy bypass, `sharp`, `nanoid`, `postcss`).
+
+**Naprawione po v0.627.1:** **A‑4 + D‑3** — root wyczyszczony: raporty jednorazowe → [`archive/`](archive/), makiety i szkice → `design/`.
+
 **Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
 
 1. **A‑2** — testy kontraktowe tras mutujących (~109/116 `route.ts` bez testu żądanie→odpowiedź) — iteracyjnie.
-2. **C‑4** — `ingest`: sekrety z query stringu + escape IGDB.
-3. **A‑4 + D‑3** — sprzątanie roota (raporty `AUDIT_REPORT`/`DISCOVERY_REPORT`/`TEST_REPORT`/`REDESIGN_NOTES`, `mockups/`, `sketches/`).
 
 ## 10. Checklist operacyjny
 
