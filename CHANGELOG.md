@@ -2,6 +2,14 @@
 
 > Format: [Keep a Changelog](https://keepachangelog.com) · [SemVer](https://semver.org) · najnowsze na górze. Wpisy od v0.627.0 generowane automatycznie (semantic-release); starsze — kurowane ręcznie `[#NNN]`.
 
+## [0.627.2](https://gitlab.com/Gh0s777tt/e-bot/compare/v0.627.1...v0.627.2) (2026-08-16)
+
+### 🐛 Poprawki
+
+* **api:** recordAudit na trasach konfiguracyjnych — 10 → 72 (audyt A-2, rozjazd 1) ([59255f2](https://gitlab.com/Gh0s777tt/e-bot/commit/59255f20a92a926bb46199ab0a9734a0a1a66fa3))
+* **dashboard:** odwrócony przedział pracy w ekonomii przechodził walidację ([b9b47ee](https://gitlab.com/Gh0s777tt/e-bot/commit/b9b47ee4b22557312d6690bdb2dcdcc61f340282))
+* **e2e:** /login — marka jest w <span>, nie w nagłówku; job e2e wraca na wymagany ([b72e611](https://gitlab.com/Gh0s777tt/e-bot/commit/b72e611680c7324d7272594e7ec6df6603c01d36))
+
 ## [0.627.1](https://gitlab.com/Gh0s777tt/e-bot/compare/v0.627.0...v0.627.1) (2026-08-14)
 
 ### 🐛 Poprawki

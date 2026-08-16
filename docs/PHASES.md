@@ -1,4 +1,4 @@
-<!-- SYNC: v0.627.1 · #696 · 2026-08-14 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
+<!-- SYNC: v0.627.2 · #696 · 2026-08-16 — utrzymywane przez `pnpm docs:check` (NIE edytuj ręcznie wersji bez aktualizacji statusu) -->
 <div align="center">
 
 # 🧩 FAZY PROJEKTU &nbsp;·&nbsp; E‑BOT
@@ -18,7 +18,7 @@
 ![Multi-serwer](https://img.shields.io/badge/Config_multi--serwer-✅-E50914?labelColor=0a0a0a)
 ![i18n bota](https://img.shields.io/badge/i18n_bota_14_jęz.-✅-E50914?labelColor=0a0a0a)
 ![i18n panelu](https://img.shields.io/badge/i18n_panelu_39%2F39-✅-E50914?labelColor=0a0a0a)
-![Wersja](https://img.shields.io/badge/wersja-0.627.1-E50914?labelColor=0a0a0a)
+![Wersja](https://img.shields.io/badge/wersja-0.627.2-E50914?labelColor=0a0a0a)
 
 </div>
 
@@ -28,6 +28,10 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## 🔭 Bieżący tor (v0.627.2)
+
+**🧪 Audyt A‑2 — testy kontraktowe tras + domknięcie `recordAudit` (v0.627.2)** — siedem fal testów kontraktowych na trasach mutujących panelu: billing (`checkout`/`webhook`), configi globalne za instance‑admin (`ai-config`/`integrations`), bezpieczeństwo per‑serwer (`antinuke`/`automod`/`antiraid`), ekonomia (`economy`/`eco-season`), limity planu (`counters`/`custom-commands`), leveling oraz **uprawnienia** (`panel-staff`, `config/import`). Suite **1380 → 1622**, progi pokrycia podniesione siedmiokrotnie (st 34.20 → 35.50, fn 32.10 → 33.10) — zasada „progów nie obniżamy, dokładamy testy". Przy pisaniu testów wyszły dwa rozjazdy, oba naprawione: **`recordAudit` domknięty na trasach konfiguracyjnych (10 → 72)** i **odwrócony przedział pracy** (`workMin > workMax`) przestał przechodzić walidację. Bramka `e2e` wróciła do statusu **wymaganej** — jej 7‑tygodniowa czerwień brała się z jednej zestarzałej asercji (marka `/login` szukana wśród nagłówków po przeprojektowaniu ekranu), nie z flaka. Root repo wyczyszczony (raporty jednorazowe → `docs/archive/`, makiety → `docs/design/`), przez co audyt 2026‑07‑13 zamknął pozycję 14/16.
 
 ## 🔭 Bieżący tor (v0.627.1)
 
