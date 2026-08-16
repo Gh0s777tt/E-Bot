@@ -1,5 +1,6 @@
 // No-code komendy slash — GET listy + POST zapis (settings 'custom_commands' + rejestracja w Discord).
 // Chronione sesją przez proxy.
+import { recordAudit } from '../../../lib/audit';
 import {
   type CustomCommand,
   getCustomCommands,
@@ -21,6 +22,7 @@ export async function POST(request: Request): Promise<Response> {
   const gate = await guardLimit('customCommands', parsed.data.commands.length, current);
   if (!gate.ok) return Response.json({ ok: false, error: gate.error }, { status: 403 });
   const res = await saveCustomCommands(parsed.data.commands as CustomCommand[]);
+  if (res.ok) await recordAudit(request, 'custom-commands');
   return Response.json(
     {
       ok: res.ok,

@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   getTwitchSubConfig,
   saveTwitchSubConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, twitchSubSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveTwitchSubConfig(parsed.data as TwitchSubConfig);
+  await recordAudit(request, 'twitchsub');
   return Response.json({ ok: true, config: await getTwitchSubConfig() });
 }

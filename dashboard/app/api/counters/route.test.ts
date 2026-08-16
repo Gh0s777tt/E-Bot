@@ -11,7 +11,9 @@ vi.mock('../../../lib/community', () => ({
   saveCountersConfig: vi.fn(),
 }));
 vi.mock('../../../lib/planLimits', () => ({ guardLimit: vi.fn() }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getCountersConfig, saveCountersConfig } from '../../../lib/community';
 import { guardLimit } from '../../../lib/planLimits';
 import { GET, POST } from './route';
@@ -19,6 +21,7 @@ import { GET, POST } from './route';
 const load = vi.mocked(getCountersConfig);
 const save = vi.mocked(saveCountersConfig);
 const gate = vi.mocked(guardLimit);
+const audit = vi.mocked(recordAudit);
 
 const licznik = (channelId = '1') => ({
   channelId,
@@ -39,6 +42,7 @@ beforeEach(() => {
   load.mockResolvedValue(POPRAWNY as never);
   save.mockResolvedValue(undefined as never);
   gate.mockResolvedValue({ ok: true } as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('POST /api/counters — bramka limitu planu', () => {
@@ -51,6 +55,8 @@ describe('POST /api/counters — bramka limitu planu', () => {
       error: 'Plan Free: maks. 3 liczniki',
     });
     expect(save).not.toHaveBeenCalled();
+    // Odbicie na limicie to nie zmiana configu — dziennik ma zostać czysty.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('bramka dostaje ILE BĘDZIE i ILE JEST — bez tego nie ma grandfatheringu', async () => {
@@ -88,10 +94,11 @@ describe('POST /api/counters — walidacja', () => {
     ['id kanału ponad 40 znaków', { items: [{ ...licznik(), channelId: '1'.repeat(41) }] }],
     ['ponad 20 liczników', { items: Array.from({ length: 21 }, (_, i) => licznik(`${i}`)) }],
     ['`enabled` jako string', { enabled: 'tak' }],
-  ])('%s → 400 bez zapisu', async (_opis, body) => {
+  ])('%s → 400, zero zapisu i ZERO wpisu w audycie', async (_opis, body) => {
     const res = await POST(req({ ...POPRAWNY, ...body }));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('brak `items` w body → 400 (pole wymagane, nie domyślnie puste)', async () => {
@@ -108,11 +115,12 @@ describe('POST /api/counters — walidacja', () => {
     expect(save).toHaveBeenCalledTimes(1);
   });
 
-  it('poprawny zapis → 200 { ok: true, config } odczytany PO zapisie', async () => {
+  it('poprawny zapis → 200 { ok: true, config } odczytany PO zapisie + wpis audytowy', async () => {
     load.mockResolvedValue({ enabled: false, items: [] } as never);
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual({ ok: true, config: { enabled: false, items: [] } });
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'counters');
   });
 
   it('body nie będące JSON-em → 400 bez zapisu', async () => {

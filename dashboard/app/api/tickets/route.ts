@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getTicketsConfig, saveTicketsConfig, type TicketsConfig } from '../../../lib/faza4';
 import { parseBody, ticketsConfigSchema } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, ticketsConfigSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveTicketsConfig(parsed.data as TicketsConfig);
+  await recordAudit(request, 'tickets');
   return Response.json({ ok: true, config: await getTicketsConfig() });
 }

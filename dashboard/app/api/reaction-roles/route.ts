@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getReactionRoles, saveReactionRoles } from '../../../lib/faza4';
 import { guardLimit } from '../../../lib/planLimits';
 import { parseBody, reactionRolesSchema } from '../../../lib/schemas';
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const gate = await guardLimit('reactionRoles', parsed.data.items.length, current);
   if (!gate.ok) return Response.json({ ok: false, error: gate.error }, { status: 403 });
   await saveReactionRoles(parsed.data.items);
+  await recordAudit(request, 'reaction-roles');
   return Response.json({ ok: true, items: await getReactionRoles() });
 }

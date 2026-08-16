@@ -61,7 +61,7 @@ Zbiorczo: **`pnpm sync:check`**. Awaryjne pominięcie hooka: `git commit --no-ve
 
 > ⚠️ **Bramką jest `pnpm lint`, NIE `pnpm check`** (audyt 2026‑08, low). `pnpm check` = `biome check --write` — **auto‑naprawia i przepisuje pliki**, więc jego „zielono" oznacza „zielono PO cichych edycjach drzewa roboczego", a CI (`biome ci`) niczego nie zapisuje. Używaj `check` świadomie jako narzędzia naprawczego, a stan bramki odczytuj z `lint`.
 
-> **Próg pokrycia** (`vitest.config.ts`): stmts 35.25 / br 32.65 / **fn 32.9** / ln 37.0 — podłoga tuż pod baseline (stan po fali 6 audytu A‑2). **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31). Aktualne wartości czytaj zawsze z `vitest.config.ts` — ta tabela bywa o wydanie do tyłu.
+> **Próg pokrycia** (`vitest.config.ts`): stmts 35.32 / br 32.69 / **fn 32.97** / ln 37.07 — podłoga tuż pod baseline (stan po domknięciu `recordAudit` w audycie A‑2). **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31). Aktualne wartości czytaj zawsze z `vitest.config.ts` — ta tabela bywa o wydanie do tyłu.
 
 ## 3. Pipeline CI/CD (`.gitlab-ci.yml`)
 
@@ -144,6 +144,7 @@ Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń 
 **Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
 
 1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1:** billing (`checkout` +15, `webhook` +19). **Fala 2:** trasy globalne za instance‑admin (`ai-config` +13, `integrations` +15). **Fala 3:** configi bezpieczeństwa per‑serwer (`antinuke` +14, `automod` +14). **Fala 4:** ekonomia (`economy` +19, `eco-season` +15). **Fala 5:** trasy z bramką limitu planu (`counters` +16, `custom-commands` +21). **Fala 6:** `antiraid` +19, `leveling` +25. Zostaje ~97 tras — wzorzec `parseBody` → zapis → `recordAudit` powtarza się w większości, więc kolejne fale idą szybciej.
+   **Domknięte po drodze (2026‑08‑16):** `recordAudit` brakowało nie tylko w `economy`/`eco-season` — wołało go 10 tras na 116, a 62 zapisywały config bez śladu w `settings_audit` (teraz audytuje 72). Wpis dołożony wszystkim trasom utrwalającym konfigurację, zawsze po UDANYM zapisie (400/403 dziennika nie ruszają). Świadomie pominięte: webhooki i `internal/*` (brak sesji), zgłoszenia użytkowników, podglądy/testy, dane GameVault, akcje moderacyjne. Do decyzji właściciela: `dev/reset`, `automod-native`, `bot/profile`. Szczegóły: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md) § A‑2.
 
 ## 10. Checklist operacyjny
 

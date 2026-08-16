@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getWelcomeConfig, saveWelcomeConfig, type WelcomeConfig } from '../../../lib/community';
 import { parseBody, welcomeSchema } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, welcomeSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveWelcomeConfig(parsed.data as WelcomeConfig);
+  await recordAudit(request, 'welcome');
   return Response.json({ ok: true, config: await getWelcomeConfig() });
 }

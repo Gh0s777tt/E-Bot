@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   getPatchNotesConfig,
   type PatchNotesConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, patchnotesSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await savePatchNotesConfig(parsed.data as PatchNotesConfig);
+  await recordAudit(request, 'patchnotes');
   return Response.json({ ok: true, config: await getPatchNotesConfig() });
 }

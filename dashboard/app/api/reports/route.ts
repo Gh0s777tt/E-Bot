@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getReportsConfig, type ReportsConfig, saveReportsConfig } from '../../../lib/community';
 import { parseBody, reportsSchema } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, reportsSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveReportsConfig(parsed.data as ReportsConfig);
+  await recordAudit(request, 'reports');
   return Response.json({ ok: true, config: await getReportsConfig() });
 }

@@ -10,7 +10,9 @@ vi.mock('../../../lib/customCommands', () => ({
   saveCustomCommands: vi.fn(),
 }));
 vi.mock('../../../lib/planLimits', () => ({ guardLimit: vi.fn() }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getCustomCommands, saveCustomCommands } from '../../../lib/customCommands';
 import { guardLimit } from '../../../lib/planLimits';
 import { GET, POST } from './route';
@@ -18,6 +20,7 @@ import { GET, POST } from './route';
 const load = vi.mocked(getCustomCommands);
 const save = vi.mocked(saveCustomCommands);
 const gate = vi.mocked(guardLimit);
+const audit = vi.mocked(recordAudit);
 
 const komenda = (name = 'powitanie') => ({
   name,
@@ -38,13 +41,15 @@ beforeEach(() => {
   load.mockResolvedValue([komenda()] as never);
   save.mockResolvedValue({ ok: true, registered: 1 } as never);
   gate.mockResolvedValue({ ok: true } as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('POST /api/custom-commands — wynik rejestracji w Discordzie', () => {
-  it('udana rejestracja → 200 { ok: true, registered }', async () => {
+  it('udana rejestracja → 200 { ok: true, registered } + wpis audytowy', async () => {
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toMatchObject({ ok: true, registered: 1 });
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'custom-commands');
   });
 
   it('NIEUDANA rejestracja → 400 z powodem, nie ciche „ok"', async () => {
@@ -55,6 +60,8 @@ describe('POST /api/custom-commands — wynik rejestracji w Discordzie', () => {
       ok: false,
       error: 'Discord odrzucił: brak uprawnień',
     });
+    // Komendy nie weszły do Discorda → nie ma zmiany do zapisania w dzienniku.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('odpowiedź zawsze niesie AKTUALNĄ listę komend — panel odświeża się z prawdy', async () => {
@@ -72,6 +79,8 @@ describe('POST /api/custom-commands — bramka limitu planu', () => {
     expect(res.status).toBe(403);
     await expect(res.json()).resolves.toEqual({ ok: false, error: 'Plan Free: maks. 5 komend' });
     expect(save).not.toHaveBeenCalled();
+    // Odbicie na limicie to nie zmiana configu — dziennik ma zostać czysty.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('bramka dostaje ILE BĘDZIE i ILE JEST', async () => {
@@ -100,10 +109,11 @@ describe('POST /api/custom-commands — walidacja nazw i kształtu', () => {
     ['nieznany typ komendy', { type: 'teleportacja' }],
     ['cooldown ponad dobę', { cooldownSec: 86_401 }],
     ['cooldown ujemny', { cooldownSec: -1 }],
-  ])('%s → 400 bez zapisu', async (_opis, patch) => {
+  ])('%s → 400, zero zapisu i ZERO wpisu w audycie', async (_opis, patch) => {
     const res = await POST(req({ commands: [{ ...komenda(), ...patch }] }));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('ponad 50 komend → 400 (cap techniczny poniżej limitu guild-komend Discorda)', async () => {

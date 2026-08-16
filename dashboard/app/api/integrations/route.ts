@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { recordAudit } from '../../../lib/audit';
 import { getIntegrationConfig, saveIntegrationConfig } from '../../../lib/integrations';
 import { isInstanceAdminRequest } from '../../../lib/panelRoles';
 
@@ -33,6 +34,7 @@ export async function POST(request: Request): Promise<Response> {
       aiProvider: parsed.data.aiProvider ?? '',
       aiModel: parsed.data.aiModel ?? '',
     });
+    await recordAudit(request, 'integrations');
     return Response.json({ ok: true, config: await getIntegrationConfig() });
   } catch (e) {
     return Response.json({ ok: false, error: (e as Error).message }, { status: 400 });

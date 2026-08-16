@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   getMilestonesConfig,
   type MilestonesConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, milestonesSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveMilestonesConfig(parsed.data as MilestonesConfig);
+  await recordAudit(request, 'milestones');
   return Response.json({ ok: true, config: await getMilestonesConfig() });
 }

@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   type AutomationsConfig,
   getAutomationsConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, automationsSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveAutomationsConfig(parsed.data as AutomationsConfig);
+  await recordAudit(request, 'automations');
   return Response.json({ ok: true, config: await getAutomationsConfig() });
 }

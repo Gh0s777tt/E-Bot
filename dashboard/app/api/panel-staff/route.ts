@@ -1,6 +1,8 @@
 // Użytkownicy panelu / role — GET listy + POST zapis (settings 'panel_staff').
 // INSTANCE-GLOBAL: wymaga admina INSTANCJI (właściciel/staff-admin), nie samej roli sesji —
 // inaczej tenant-admin self-serve (role='admin') mógłby przejąć staff. Patrz isInstanceAdminRequest.
+
+import { recordAudit } from '../../../lib/audit';
 import {
   getStaff,
   isInstanceAdminRequest,
@@ -23,5 +25,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, panelStaffSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveStaff(parsed.data.staff as StaffEntry[]);
+  await recordAudit(request, 'panel-staff');
   return Response.json({ ok: true, staff: await getStaff() });
 }

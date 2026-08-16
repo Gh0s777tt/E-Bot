@@ -1,6 +1,7 @@
 // Config donejtów Ko-fi (GLOBALNY, single-instance). Webhook jest osobno w /api/kofi (publiczny).
 // Bramka isInstanceAdminRequest: w self-serve tenant-admin (session.role='admin', resolveRole=null)
 // NIE może odczytać sekretu `verificationToken` (GET) ani nadpisać globalnej konfiguracji (POST).
+import { recordAudit } from '../../../lib/audit';
 import { getKofiConfig, type KofiConfig, saveKofiConfig } from '../../../lib/community';
 import { isInstanceAdminRequest } from '../../../lib/panelRoles';
 import { kofiSchema, parseBody } from '../../../lib/schemas';
@@ -21,5 +22,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, kofiSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveKofiConfig(parsed.data as KofiConfig);
+  await recordAudit(request, 'kofi-config');
   return Response.json({ ok: true, config: await getKofiConfig() });
 }

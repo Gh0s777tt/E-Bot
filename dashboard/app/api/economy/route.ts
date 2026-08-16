@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { economySchema, parseBody } from '../../../lib/schemas';
 import {
   type EconomyConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, economySchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveServerEconomy(parsed.data as EconomyConfig);
+  await recordAudit(request, 'economy');
   return Response.json({ ok: true, config: await getServerEconomy() });
 }

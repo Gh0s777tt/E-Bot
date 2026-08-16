@@ -9,7 +9,9 @@ vi.mock('../../../lib/integrations', () => ({
   getIntegrationConfig: vi.fn(),
   saveIntegrationConfig: vi.fn(),
 }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getIntegrationConfig, saveIntegrationConfig } from '../../../lib/integrations';
 import { isInstanceAdminRequest } from '../../../lib/panelRoles';
 import { GET, POST } from './route';
@@ -17,6 +19,7 @@ import { GET, POST } from './route';
 const isAdmin = vi.mocked(isInstanceAdminRequest);
 const load = vi.mocked(getIntegrationConfig);
 const save = vi.mocked(saveIntegrationConfig);
+const audit = vi.mocked(recordAudit);
 
 const ZAPISANY = { enabled: { twitch: true }, aiProvider: 'deepseek', aiModel: 'deepseek-chat' };
 
@@ -36,6 +39,7 @@ beforeEach(() => {
   isAdmin.mockResolvedValue(true);
   load.mockResolvedValue(ZAPISANY as never);
   save.mockResolvedValue(undefined as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('GET /api/integrations — odczyt', () => {
@@ -63,11 +67,18 @@ describe('POST /api/integrations — bramka instance-admin', () => {
     expect(save).not.toHaveBeenCalled();
   });
 
-  it('admin z poprawnym body → 200 { ok: true, config }', async () => {
+  it('admin z poprawnym body → 200 { ok: true, config } + wpis audytowy', async () => {
     const res = await POST(req(ZAPISANY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual({ ok: true, config: ZAPISANY });
     expect(save).toHaveBeenCalledTimes(1);
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'integrations');
+  });
+
+  it('403 nie-admina nie zostawia śladu w audycie — to nie była zmiana', async () => {
+    isAdmin.mockResolvedValue(false);
+    await POST(req(ZAPISANY));
+    expect(audit).not.toHaveBeenCalled();
   });
 });
 
@@ -100,11 +111,13 @@ describe('POST /api/integrations — walidacja i błędy', () => {
     ['klucz flagi ponad 64 znaki', { enabled: { ['a'.repeat(65)]: true } }],
     ['aiProvider ponad 32 znaki', { aiProvider: 'a'.repeat(33) }],
     ['aiModel ponad 120 znaków', { aiModel: 'a'.repeat(121) }],
-  ])('%s → 400 invalid_body', async (_opis, patch) => {
+  ])('%s → 400 invalid_body, zero zapisu i ZERO wpisu w audycie', async (_opis, patch) => {
     const res = await POST(req({ ...ZAPISANY, ...patch }));
     expect(res.status).toBe(400);
     await expect(bladZ(res)).resolves.toBe('invalid_body');
     expect(save).not.toHaveBeenCalled();
+    // Audyt to dziennik REALNYCH zmian — odrzucone żądanie nie ma prawa go zaśmiecać.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('body nie będące JSON-em → 400 (bez 500 — wyjątek złapany)', async () => {
@@ -118,5 +131,7 @@ describe('POST /api/integrations — walidacja i błędy', () => {
     const res = await POST(req(ZAPISANY));
     expect(res.status).toBe(400);
     await expect(bladZ(res)).resolves.toBe('supabase nie odpowiada');
+    // Zapis padł → nie ma czego audytować; wpis powstaje PO udanym zapisie.
+    expect(audit).not.toHaveBeenCalled();
   });
 });

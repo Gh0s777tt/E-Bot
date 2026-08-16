@@ -1,20 +1,23 @@
 // Test kontraktowy trasy (audyt A-2, fala 4): ekonomia serwera. Tu zły zapis nie psuje ekranu —
 // przestawia wypłaty, napiwki i limity hazardu dla wszystkich na serwerze naraz, a skutek widać
 // dopiero po fakcie, w saldach. Kontrakt trzyma więc granice liczbowe schematu.
-// Uwaga: ta trasa (w odróżnieniu od `automod`/`antinuke`) NIE woła `recordAudit` — testy poniżej
-// utrwalają stan FAKTYCZNY, nie postulowany; rozjazd jest zgłoszony osobno.
+// Zapis zostawia ślad w dzienniku (`recordAudit`), tak samo jak w `automod`/`antinuke`: przy zmianie,
+// której skutek widać dopiero w saldach, „kto i kiedy" musi być odtwarzalne po fakcie.
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../../lib/serverEconomy', () => ({
   getServerEconomy: vi.fn(),
   saveServerEconomy: vi.fn(),
 }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getServerEconomy, saveServerEconomy } from '../../../lib/serverEconomy';
 import { GET, POST } from './route';
 
 const load = vi.mocked(getServerEconomy);
 const save = vi.mocked(saveServerEconomy);
+const audit = vi.mocked(recordAudit);
 
 const POPRAWNY = {
   enabled: true,
@@ -48,14 +51,16 @@ beforeEach(() => {
   vi.clearAllMocks();
   load.mockResolvedValue(POPRAWNY as never);
   save.mockResolvedValue(undefined as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('POST /api/economy — ścieżka zapisu', () => {
-  it('poprawny config → 200 { ok: true, config } + zapis', async () => {
+  it('poprawny config → 200 { ok: true, config } + zapis + wpis audytowy', async () => {
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual({ ok: true, config: POPRAWNY });
     expect(save).toHaveBeenCalledTimes(1);
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'economy');
   });
 
   it('pola opcjonalne pominięte w body → zapisane jako 0, nie `undefined`', async () => {
@@ -93,10 +98,12 @@ describe('POST /api/economy — granice kwot i procentów', () => {
     ['odsetki bankowe ponad 100%', { bankInterestPct: 101 }],
     ['pusta nazwa waluty', { currency: '' }],
     ['nazwa waluty ponad 40 znaków', { currency: 'x'.repeat(41) }],
-  ])('%s → 400 bez zapisu', async (_opis, patch) => {
+  ])('%s → 400, zero zapisu i ZERO wpisu w audycie', async (_opis, patch) => {
     const res = await POST(req({ ...POPRAWNY, ...patch }));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    // Audyt to dziennik REALNYCH zmian — odrzucone żądanie nie ma prawa go zaśmiecać.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('wartości brzegowe (0 i maksimum) przechodzą — granica jest inkluzywna', async () => {
@@ -114,16 +121,18 @@ describe('POST /api/economy — granice kwot i procentów', () => {
     expect(save).toHaveBeenCalledTimes(1);
   });
 
-  it('body nie będące JSON-em → 400 bez zapisu', async () => {
+  it('body nie będące JSON-em → 400 bez zapisu i bez audytu', async () => {
     const res = await POST(req('{nie-json'));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('puste body → 400, a nie zapis samych domyślnych', async () => {
     const res = await POST(req({}));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('odwrócony przedział pracy (workMin > workMax) → 400 bez zapisu', async () => {
@@ -145,9 +154,10 @@ describe('POST /api/economy — granice kwot i procentów', () => {
 });
 
 describe('GET /api/economy', () => {
-  it('zwraca zapisany config', async () => {
+  it('zwraca zapisany config bez wpisu w audycie (odczyt to nie zmiana)', async () => {
     const res = await GET();
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual(POPRAWNY);
+    expect(audit).not.toHaveBeenCalled();
   });
 });

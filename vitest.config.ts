@@ -49,12 +49,14 @@ export default defineConfig({
       // Fala 5 (2026-08-16): trasy z bramką limitu planu (counters + custom-commands, +37) →
       // st 35.35 / br 32.83 / fn 32.99 / ln 37.10.
       // Fala 6 (2026-08-16): antiraid + leveling (+44) → st 35.46 / br 32.87 / fn 33.13 / ln 37.20.
-      // Progi za pomiarem, margines ~0.2 p.p.
+      // Audyt A-2 (2026-08-16): domknięcie `recordAudit` na trasach konfiguracyjnych (10 → 72) —
+      // asercje audytu w 7 istniejących plikach testowych (+1 przypadek) → st 35.52 / br 32.89 /
+      // fn 33.17 / ln 37.27. Progi za pomiarem, margines ~0.2 p.p.
       thresholds: {
-        statements: 35.25,
-        branches: 32.65,
-        functions: 32.9,
-        lines: 37.0,
+        statements: 35.32,
+        branches: 32.69,
+        functions: 32.97,
+        lines: 37.07,
       },
     },
   },

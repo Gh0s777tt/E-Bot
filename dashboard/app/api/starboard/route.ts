@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getStarboard, type StarboardConfig, saveStarboard } from '../../../lib/engagement';
 import { parseBody, starboardSchema } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, starboardSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveStarboard(parsed.data as StarboardConfig);
+  await recordAudit(request, 'starboard');
   return Response.json({ ok: true, config: await getStarboard() });
 }

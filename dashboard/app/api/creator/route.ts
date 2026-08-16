@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type CreatorConfig, getCreatorConfig, saveCreatorConfig } from '../../../lib/creator';
 import { creatorSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, creatorSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveCreatorConfig(parsed.data as CreatorConfig);
+  await recordAudit(request, 'creator');
   return Response.json({ ok: true, config: await getCreatorConfig() });
 }

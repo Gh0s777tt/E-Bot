@@ -7,7 +7,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../../lib/panelRoles', () => ({ isInstanceAdminRequest: vi.fn() }));
 vi.mock('../../../lib/faza4', () => ({ getAiConfig: vi.fn(), saveAiConfig: vi.fn() }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getAiConfig, saveAiConfig } from '../../../lib/faza4';
 import { isInstanceAdminRequest } from '../../../lib/panelRoles';
 import { GET, POST } from './route';
@@ -15,6 +17,7 @@ import { GET, POST } from './route';
 const isAdmin = vi.mocked(isInstanceAdminRequest);
 const load = vi.mocked(getAiConfig);
 const save = vi.mocked(saveAiConfig);
+const audit = vi.mocked(recordAudit);
 
 const POPRAWNY = {
   enabled: true,
@@ -39,6 +42,7 @@ beforeEach(() => {
   isAdmin.mockResolvedValue(true);
   load.mockResolvedValue({ ...POPRAWNY, persona: '' } as never);
   save.mockResolvedValue(undefined as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('GET /api/ai-config — odczyt', () => {
@@ -51,12 +55,13 @@ describe('GET /api/ai-config — odczyt', () => {
 });
 
 describe('POST /api/ai-config — bramka instance-admin', () => {
-  it('nie-admin → 403 i zero zapisu do globalnego configu', async () => {
+  it('nie-admin → 403, zero zapisu do globalnego configu i ZERO wpisu w audycie', async () => {
     isAdmin.mockResolvedValue(false);
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(403);
     await expect(bladZ(res)).resolves.toBe('forbidden');
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('bramka JEST PRZED walidacją — nie-admin ze złym body dostaje 403, nie 400', async () => {
@@ -66,7 +71,7 @@ describe('POST /api/ai-config — bramka instance-admin', () => {
     expect(save).not.toHaveBeenCalled();
   });
 
-  it('admin z poprawnym body → 200 { ok: true, config } i zapis', async () => {
+  it('admin z poprawnym body → 200 { ok: true, config }, zapis i wpis audytowy', async () => {
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual({
@@ -74,6 +79,7 @@ describe('POST /api/ai-config — bramka instance-admin', () => {
       config: { ...POPRAWNY, persona: '' },
     });
     expect(save).toHaveBeenCalledTimes(1);
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'ai-config');
   });
 
   it('odpowiedź zwraca config ODCZYTANY PO zapisie, nie echo wejścia', async () => {
@@ -107,6 +113,8 @@ describe('POST /api/ai-config — walidacja (400 z konkretnym powodem)', () => {
     const res = await POST(req({ ...POPRAWNY, ...patch }));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    // Audyt to dziennik REALNYCH zmian — odrzucone żądanie nie ma prawa go zaśmiecać.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('persona ponad 1000 znaków → 400', async () => {

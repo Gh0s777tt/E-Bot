@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type AiConfig, getAiConfig, saveAiConfig } from '../../../lib/faza4';
 import { isInstanceAdminRequest } from '../../../lib/panelRoles';
 import { aiConfigSchema, parseBody } from '../../../lib/schemas';
@@ -16,5 +17,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, aiConfigSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveAiConfig(parsed.data as AiConfig);
+  await recordAudit(request, 'ai-config');
   return Response.json({ ok: true, config: await getAiConfig() });
 }

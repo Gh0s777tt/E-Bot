@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../../lib/audit';
 import { guardLimit } from '../../../../lib/planLimits';
 import { parseBody, shopItemSchema } from '../../../../lib/schemas';
 import { addShopItem, getShopItems, removeShopItem } from '../../../../lib/serverEconomy';
@@ -16,6 +17,7 @@ export async function POST(request: Request): Promise<Response> {
   if (!gate.ok) return Response.json({ ok: false, error: gate.error }, { status: 403 });
   const res = await addShopItem(parsed.data);
   if (!res.ok) return Response.json(res, { status: 500 });
+  await recordAudit(request, 'economy-shop', `+${parsed.data.name}`);
   return Response.json({ ok: true, items: await getShopItems() });
 }
 
@@ -23,5 +25,6 @@ export async function DELETE(request: Request): Promise<Response> {
   const id = new URL(request.url).searchParams.get('id') ?? '';
   if (!id) return Response.json({ ok: false, error: 'brak id' }, { status: 400 });
   const res = await removeShopItem(id);
+  if (res.ok) await recordAudit(request, 'economy-shop', `-${id}`);
   return Response.json(res, { status: res.ok ? 200 : 500 });
 }

@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getInvitesConfig, type InvitesConfig, saveInvitesConfig } from '../../../lib/engagement';
 import { invitesSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, invitesSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveInvitesConfig(parsed.data as InvitesConfig);
+  await recordAudit(request, 'invites');
   return Response.json({ ok: true, config: await getInvitesConfig() });
 }
