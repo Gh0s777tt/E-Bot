@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { creatorSchema, starboardSchema, wishlistAddSchema } from './schemas';
+import { creatorSchema, economySchema, starboardSchema, wishlistAddSchema } from './schemas';
 
 describe('wishlistAddSchema', () => {
   it('akceptuje minimalny wpis', () => {
@@ -37,5 +37,35 @@ describe('creatorSchema', () => {
     expect(creatorSchema.safeParse({ ...base, pollMin: 10 }).success).toBe(true);
     expect(creatorSchema.safeParse({ ...base, pollMin: 1 }).success).toBe(false);
     expect(creatorSchema.safeParse({ ...base, pollMin: 999 }).success).toBe(false);
+  });
+});
+
+describe('economySchema — zakres wypłaty za pracę', () => {
+  const base = {
+    enabled: true,
+    currency: 'dukaty',
+    startBalance: 100,
+    dailyAmount: 50,
+    dailyStreakBonus: 10,
+    workMin: 10,
+    workMax: 100,
+    workCooldownMin: 60,
+    robEnabled: true,
+    robChance: 30,
+    robCooldownMin: 120,
+    robMaxPercent: 20,
+    gambleEnabled: true,
+    gambleMax: 1000,
+  };
+
+  it('przedział rosnący i jednopunktowy przechodzą', () => {
+    expect(economySchema.safeParse(base).success).toBe(true);
+    expect(economySchema.safeParse({ ...base, workMin: 100, workMax: 100 }).success).toBe(true);
+  });
+
+  it('odwrócony przedział jest odrzucany na ścieżce `workMax`', () => {
+    const r = economySchema.safeParse({ ...base, workMin: 500, workMax: 10 });
+    expect(r.success).toBe(false);
+    expect(r.error?.issues[0]?.path).toEqual(['workMax']);
   });
 });
