@@ -43,12 +43,14 @@ export default defineConfig({
       // Fala 2 (2026-08-15): trasy globalne (ai-config + integrations, +28) → st 34.99 / br 32.62 /
       // fn 32.56 / ln 36.74.
       // Fala 3 (2026-08-15): configi bezpieczeństwa per-serwer (antinuke + automod, +28) →
-      // st 35.10 / br 32.66 / fn 32.70 / ln 36.85. Progi za pomiarem, margines ~0.2 p.p.
+      // st 35.10 / br 32.66 / fn 32.70 / ln 36.85.
+      // Fala 4 (2026-08-15): ekonomia (economy + eco-season, +34) → st 35.20 / br 32.70 /
+      // fn 32.85 / ln 36.95. Progi za pomiarem, margines ~0.2 p.p.
       thresholds: {
-        statements: 34.85,
-        branches: 32.45,
-        functions: 32.5,
-        lines: 36.6,
+        statements: 35.0,
+        branches: 32.5,
+        functions: 32.65,
+        lines: 36.75,
       },
     },
   },
