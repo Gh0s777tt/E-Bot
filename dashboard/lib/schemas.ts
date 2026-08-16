@@ -496,25 +496,35 @@ export const reactionPanelSchema = z.object({
 export type ReactionPanelInput = z.infer<typeof reactionPanelSchema>;
 
 // ── Ekonomia serwera (Faza 7/F3) ───────────────────────────
-export const economySchema = z.object({
-  enabled: z.boolean(),
-  currency: z.string().min(1).max(40),
-  startBalance: z.number().int().min(0).max(1_000_000),
-  dailyAmount: z.number().int().min(0).max(1_000_000),
-  dailyStreakBonus: z.number().int().min(0).max(100_000),
-  workMin: z.number().int().min(0).max(1_000_000),
-  workMax: z.number().int().min(0).max(1_000_000),
-  workCooldownMin: z.number().int().min(0).max(10_080),
-  robEnabled: z.boolean(),
-  robChance: z.number().int().min(0).max(100),
-  robCooldownMin: z.number().int().min(0).max(10_080),
-  robMaxPercent: z.number().int().min(1).max(100),
-  gambleEnabled: z.boolean(),
-  gambleMax: z.number().int().min(1).max(100_000_000),
-  bankInterestPct: z.number().min(0).max(100).optional().default(0),
-  payTaxPct: z.number().min(0).max(50).optional().default(0),
-  levelUpMoney: z.number().int().min(0).max(1_000_000).optional().default(0),
-});
+export const economySchema = z
+  .object({
+    enabled: z.boolean(),
+    currency: z.string().min(1).max(40),
+    startBalance: z.number().int().min(0).max(1_000_000),
+    dailyAmount: z.number().int().min(0).max(1_000_000),
+    dailyStreakBonus: z.number().int().min(0).max(100_000),
+    workMin: z.number().int().min(0).max(1_000_000),
+    workMax: z.number().int().min(0).max(1_000_000),
+    workCooldownMin: z.number().int().min(0).max(10_080),
+    robEnabled: z.boolean(),
+    robChance: z.number().int().min(0).max(100),
+    robCooldownMin: z.number().int().min(0).max(10_080),
+    robMaxPercent: z.number().int().min(1).max(100),
+    gambleEnabled: z.boolean(),
+    gambleMax: z.number().int().min(1).max(100_000_000),
+    bankInterestPct: z.number().min(0).max(100).optional().default(0),
+    payTaxPct: z.number().min(0).max(50).optional().default(0),
+    levelUpMoney: z.number().int().min(0).max(1_000_000).optional().default(0),
+  })
+  // Granice per-pole nie widzą siebie nawzajem, więc odwrócony przedział przechodził do bota, a tam
+  // losowanie `/eco work` liczy `workMin + rand(max(1, workMax - workMin + 1))` — przy min > max
+  // szerokość zakresu zjada `max(1, …)` i KAŻDA wypłata to dokładnie `workMin`, czyli górna granica
+  // przestaje cokolwiek znaczyć. `path` celuje w `workMax` (pole edytowane jako drugie), żeby panel
+  // podświetlił to, które admin faktycznie poprawia.
+  .refine((d) => d.workMin <= d.workMax, {
+    message: 'Dolna granica pracy nie może przekraczać górnej (workMin ≤ workMax)',
+    path: ['workMax'],
+  });
 export type EconomyInput = z.infer<typeof economySchema>;
 
 // ── Sezon ekonomii (POST /api/eco-season) ─────────────────

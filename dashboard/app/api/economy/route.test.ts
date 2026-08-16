@@ -40,6 +40,10 @@ function req(body: unknown): Request {
   });
 }
 
+async function bladZ(res: Response): Promise<string> {
+  return ((await res.json()) as { error: string }).error;
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
   load.mockResolvedValue(POPRAWNY as never);
@@ -122,13 +126,21 @@ describe('POST /api/economy — granice kwot i procentów', () => {
     expect(save).not.toHaveBeenCalled();
   });
 
-  // ⚠️ Stan FAKTYCZNY, nie docelowy: schemat sprawdza każde pole osobno, więc odwrócony przedział
-  // pracy (min > max) przechodzi walidację i ląduje w configu bota. Test jest tu po to, żeby zmiana
-  // tego zachowania była świadoma (czerwony test), a nie przypadkowa.
-  it('odwrócony przedział pracy (workMin > workMax) NIE jest łapany — brak walidacji międzypolowej', async () => {
+  it('odwrócony przedział pracy (workMin > workMax) → 400 bez zapisu', async () => {
     const res = await POST(req({ ...POPRAWNY, workMin: 500, workMax: 10 }));
+    expect(res.status).toBe(400);
+    expect(save).not.toHaveBeenCalled();
+  });
+
+  it('błąd odwróconego przedziału wskazuje pole `workMax` — panel ma co podświetlić', async () => {
+    const res = await POST(req({ ...POPRAWNY, workMin: 500, workMax: 10 }));
+    await expect(bladZ(res)).resolves.toMatch(/^workMax: /);
+  });
+
+  it('przedział jednopunktowy (workMin === workMax) przechodzi — stała wypłata jest legalna', async () => {
+    const res = await POST(req({ ...POPRAWNY, workMin: 100, workMax: 100 }));
     expect(res.status).toBe(200);
-    expect(save).toHaveBeenCalledWith(expect.objectContaining({ workMin: 500, workMax: 10 }));
+    expect(save).toHaveBeenCalledTimes(1);
   });
 });
 
