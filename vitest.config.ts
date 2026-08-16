@@ -52,11 +52,14 @@ export default defineConfig({
       // Audyt A-2 (2026-08-16): domknięcie `recordAudit` na trasach konfiguracyjnych (10 → 72) —
       // asercje audytu w 7 istniejących plikach testowych (+1 przypadek) → st 35.52 / br 32.89 /
       // fn 33.17 / ln 37.27. Progi za pomiarem, margines ~0.2 p.p.
+      // Fala 7 (2026-08-16): trasy o najwyższej stawce uprawnieniowej — panel-staff (kto ma klucze
+      // do panelu) i config/import (nadpisuje settings CAŁEJ instancji), +32 → st 35.73 / br 33.11 /
+      // fn 33.29 / ln 37.48. Progi za pomiarem, margines ~0.2 p.p.
       thresholds: {
-        statements: 35.32,
-        branches: 32.69,
-        functions: 32.97,
-        lines: 37.07,
+        statements: 35.5,
+        branches: 32.9,
+        functions: 33.1,
+        lines: 37.28,
       },
     },
   },
