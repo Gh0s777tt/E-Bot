@@ -61,7 +61,7 @@ Zbiorczo: **`pnpm sync:check`**. Awaryjne pominięcie hooka: `git commit --no-ve
 
 > ⚠️ **Bramką jest `pnpm lint`, NIE `pnpm check`** (audyt 2026‑08, low). `pnpm check` = `biome check --write` — **auto‑naprawia i przepisuje pliki**, więc jego „zielono" oznacza „zielono PO cichych edycjach drzewa roboczego", a CI (`biome ci`) niczego nie zapisuje. Używaj `check` świadomie jako narzędzia naprawczego, a stan bramki odczytuj z `lint`.
 
-> **Próg pokrycia** (`vitest.config.ts`): stmts 34.75 / br 32.4 / **fn 32.35** / ln 36.5 — podłoga tuż pod baseline (stan po fali 2 audytu A‑2). **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31). Aktualne wartości czytaj zawsze z `vitest.config.ts` — ta tabela bywa o wydanie do tyłu.
+> **Próg pokrycia** (`vitest.config.ts`): stmts 35.0 / br 32.5 / **fn 32.65** / ln 36.75 — podłoga tuż pod baseline (stan po fali 4 audytu A‑2). **Podnoś przy dokładaniu testów**; nie obniżaj, chyba że nowy, świadomie nietestowany kod obniża realny baseline (jak billing #694–#696 → fn 32→31). Aktualne wartości czytaj zawsze z `vitest.config.ts` — ta tabela bywa o wydanie do tyłu.
 
 ## 3. Pipeline CI/CD (`.gitlab-ci.yml`)
 
@@ -143,7 +143,7 @@ Pełny raport: [`audit/AUDIT-2026-07-13.md`](audit/AUDIT-2026-07-13.md). Rdzeń 
 
 **Otwarte priorytety** (osobny tor, poza tymi 5 etapami):
 
-1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1:** billing (`checkout` +15, `webhook` +19). **Fala 2:** trasy globalne za instance‑admin (`ai-config` +13, `integrations` +15). **Fala 3:** configi bezpieczeństwa per‑serwer (`antinuke` +14, `automod` +14). Zostaje ~103 trasy — wzorzec `parseBody` → zapis → `recordAudit` powtarza się w większości, więc kolejne fale idą szybciej.
+1. **A‑2** — testy kontraktowe tras mutujących — iteracyjnie, falami. **Fala 1:** billing (`checkout` +15, `webhook` +19). **Fala 2:** trasy globalne za instance‑admin (`ai-config` +13, `integrations` +15). **Fala 3:** configi bezpieczeństwa per‑serwer (`antinuke` +14, `automod` +14). **Fala 4:** ekonomia (`economy` +19, `eco-season` +15). Zostaje ~101 tras — wzorzec `parseBody` → zapis → `recordAudit` powtarza się w większości, więc kolejne fale idą szybciej.
 
 ## 10. Checklist operacyjny
 
