@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   getAllSettings,
   getGuildRawSetting,
@@ -52,5 +53,6 @@ export async function POST(request: Request): Promise<Response> {
     /* analityka nie może zepsuć setupu */
   }
 
+  await recordAudit(request, 'setup');
   return Response.json({ ok: true, enabled: preset.modules.map((m) => m.label), id });
 }

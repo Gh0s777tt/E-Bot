@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { recordAudit } from '../../../../lib/audit';
 import { getCommunityPlugin, setGuildPluginEnabled } from '../../../../lib/communityPlugins';
 import { getPrimaryGuildId } from '../../../../lib/guild';
 import { parseBody } from '../../../../lib/schemas';
@@ -21,5 +22,11 @@ export async function POST(request: Request): Promise<Response> {
   if (!plugin) return Response.json({ ok: false, error: 'plugin niedostępny' }, { status: 400 });
 
   const ok = await setGuildPluginEnabled(guildId, parsed.data.pluginKey, parsed.data.enabled);
+  if (ok)
+    await recordAudit(
+      request,
+      'community-toggle',
+      `${parsed.data.pluginKey}=${parsed.data.enabled ? 'on' : 'off'}`,
+    );
   return Response.json({ ok }, { status: ok ? 200 : 400 });
 }

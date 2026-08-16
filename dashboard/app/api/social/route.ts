@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   getSocialFeedsConfig,
   type SocialFeedsConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, socialFeedsSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveSocialFeedsConfig(parsed.data as SocialFeedsConfig);
+  await recordAudit(request, 'social');
   return Response.json({ ok: true, config: await getSocialFeedsConfig() });
 }

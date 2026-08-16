@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getSeasonsConfig, type SeasonsConfig, saveSeasonsConfig } from '../../../lib/community';
 import { parseBody, seasonsSchema } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, seasonsSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveSeasonsConfig(parsed.data as SeasonsConfig);
+  await recordAudit(request, 'seasons');
   return Response.json({ ok: true, config: await getSeasonsConfig() });
 }

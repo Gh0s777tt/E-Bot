@@ -1,6 +1,7 @@
 // Pulpit 2.0 — przełącznik raidmode z panelu. PER-SERWER: flaga w settings wybranego serwera
 // (g:<id>:raidmode, '1'/''); bot czyta ją świeżo przy każdym wejściu i wyrzuca nowe wejścia.
 import { z } from 'zod';
+import { recordAudit } from '../../../lib/audit';
 import { getGuildRawSetting, setGuildRawSetting } from '../../../lib/data';
 import { parseBody } from '../../../lib/schemas';
 
@@ -17,5 +18,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, schema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await setGuildRawSetting('raidmode', parsed.data.on ? '1' : '');
+  await recordAudit(request, 'raidmode');
   return Response.json({ ok: true, on: parsed.data.on });
 }

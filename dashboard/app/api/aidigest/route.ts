@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type AiDigestConfig, getAiDigestConfig, saveAiDigestConfig } from '../../../lib/community';
 import { aidigestSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, aidigestSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveAiDigestConfig(parsed.data as AiDigestConfig);
+  await recordAudit(request, 'aidigest');
   return Response.json({ ok: true, config: await getAiDigestConfig() });
 }

@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   type AutodeleteConfig,
   getAutodeleteConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, autodeleteSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveAutodeleteConfig(parsed.data as AutodeleteConfig);
+  await recordAudit(request, 'autodelete');
   return Response.json({ ok: true, config: await getAutodeleteConfig() });
 }

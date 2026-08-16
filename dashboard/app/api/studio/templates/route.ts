@@ -1,5 +1,6 @@
 // Szablony Message Studio — współdzielone (settings 'studio_templates'). GET listy + POST zapisu.
 // Chronione sesją przez proxy.
+import { recordAudit } from '../../../../lib/audit';
 import { getRawSetting, setRawSetting } from '../../../../lib/data';
 import { parseBody, studioTemplatesSchema } from '../../../../lib/schemas';
 
@@ -20,5 +21,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, studioTemplatesSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await setRawSetting('studio_templates', JSON.stringify(parsed.data.templates));
+  await recordAudit(request, 'studio-templates');
   return Response.json({ ok: true });
 }

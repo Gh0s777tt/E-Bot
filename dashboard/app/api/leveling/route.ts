@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getLevelingConfig, type LevelingConfig, saveLevelingConfig } from '../../../lib/faza4';
 import { levelingSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, levelingSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveLevelingConfig(parsed.data as LevelingConfig);
+  await recordAudit(request, 'leveling');
   return Response.json({ ok: true, config: await getLevelingConfig() });
 }

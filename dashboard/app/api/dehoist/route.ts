@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type DehoistConfig, getDehoistConfig, saveDehoistConfig } from '../../../lib/community';
 import { dehoistSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, dehoistSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveDehoistConfig(parsed.data as DehoistConfig);
+  await recordAudit(request, 'dehoist');
   return Response.json({ ok: true, config: await getDehoistConfig() });
 }

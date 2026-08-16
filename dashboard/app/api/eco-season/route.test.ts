@@ -1,16 +1,20 @@
 // Test kontraktowy trasy (audyt A-2, fala 4): sezon ekonomii. Wyróżnik tej trasy to pole `reset` —
 // zwykły boolean w configu, który dla graczy oznacza wyzerowanie sezonu. Kontrakt pilnuje, żeby
 // przechodziło ono do zapisu DOKŁADNIE takie, jakie przyszło: ani domyślnie włączone (przypadkowy
-// reset), ani cicho gubione (reset, który nie zadziałał).
+// reset), ani cicho gubione (reset, który nie zadziałał). Reset kasuje dorobek graczy, więc zapis
+// musi też zostawić wpis w dzienniku (`recordAudit`) — jak w `automod`/`antinuke`.
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../../lib/serverEconomy', () => ({ getEcoSeason: vi.fn(), saveEcoSeason: vi.fn() }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getEcoSeason, saveEcoSeason } from '../../../lib/serverEconomy';
 import { GET, POST } from './route';
 
 const load = vi.mocked(getEcoSeason);
 const save = vi.mocked(saveEcoSeason);
+const audit = vi.mocked(recordAudit);
 
 const POPRAWNY = {
   enabled: true,
@@ -32,14 +36,16 @@ beforeEach(() => {
   vi.clearAllMocks();
   load.mockResolvedValue(POPRAWNY as never);
   save.mockResolvedValue(undefined as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('POST /api/eco-season', () => {
-  it('poprawny config → 200 { ok: true, config } + zapis', async () => {
+  it('poprawny config → 200 { ok: true, config } + zapis + wpis audytowy', async () => {
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual({ ok: true, config: POPRAWNY });
     expect(save).toHaveBeenCalledTimes(1);
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'eco-season');
   });
 
   it.each([false, true])('`reset: %s` trafia do zapisu bez zmiany', async (reset) => {
@@ -52,6 +58,7 @@ describe('POST /api/eco-season', () => {
     const res = await POST(req(bezResetu));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -60,10 +67,12 @@ describe('POST /api/eco-season', () => {
     ['nagroda ułamkowa', { reward2: 10.5 }],
     ['id kanału ponad 40 znaków', { channelId: '1'.repeat(41) }],
     ['`reset` jako string zamiast boolean', { reset: 'tak' }],
-  ])('%s → 400 bez zapisu', async (_opis, patch) => {
+  ])('%s → 400, zero zapisu i ZERO wpisu w audycie', async (_opis, patch) => {
     const res = await POST(req({ ...POPRAWNY, ...patch }));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    // Audyt to dziennik REALNYCH zmian — odrzucone żądanie nie ma prawa go zaśmiecać.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('zerowe nagrody przechodzą — sezon bez puli to poprawna konfiguracja', async () => {
@@ -72,10 +81,11 @@ describe('POST /api/eco-season', () => {
     expect(save).toHaveBeenCalledTimes(1);
   });
 
-  it('body nie będące JSON-em → 400 bez zapisu', async () => {
+  it('body nie będące JSON-em → 400 bez zapisu i bez audytu', async () => {
     const res = await POST(req('{nie-json'));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('odpowiedź zwraca config ODCZYTANY PO zapisie, nie echo wejścia', async () => {
@@ -86,9 +96,10 @@ describe('POST /api/eco-season', () => {
 });
 
 describe('GET /api/eco-season', () => {
-  it('zwraca zapisany config', async () => {
+  it('zwraca zapisany config bez wpisu w audycie (odczyt to nie zmiana)', async () => {
     const res = await GET();
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual(POPRAWNY);
+    expect(audit).not.toHaveBeenCalled();
   });
 });

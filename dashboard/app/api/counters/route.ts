@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type CountersConfig, getCountersConfig, saveCountersConfig } from '../../../lib/community';
 import { guardLimit } from '../../../lib/planLimits';
 import { countersSchema, parseBody } from '../../../lib/schemas';
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const gate = await guardLimit('counters', parsed.data.items.length, current);
   if (!gate.ok) return Response.json({ ok: false, error: gate.error }, { status: 403 });
   await saveCountersConfig(parsed.data as CountersConfig);
+  await recordAudit(request, 'counters');
   return Response.json({ ok: true, config: await getCountersConfig() });
 }

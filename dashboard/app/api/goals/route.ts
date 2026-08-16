@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type GoalsConfig, getGoalsConfig, saveGoalsConfig } from '../../../lib/community';
 import { goalsSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, goalsSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveGoalsConfig(parsed.data as GoalsConfig);
+  await recordAudit(request, 'goals');
   return Response.json({ ok: true, config: await getGoalsConfig() });
 }

@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import {
   getSuggestionsConfig,
   type SuggestionsConfig,
@@ -15,5 +16,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, suggestionsSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveSuggestionsConfig(parsed.data as SuggestionsConfig);
+  await recordAudit(request, 'suggestions');
   return Response.json({ ok: true, config: await getSuggestionsConfig() });
 }

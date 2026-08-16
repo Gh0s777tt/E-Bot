@@ -1,5 +1,7 @@
 // Architekt serwera — zastosuj blueprint: włącz moduły (merge enabled:true) + zleć provisioning
 // struktury (bot wykona). Zwraca id zlecenia do pollowania wyniku przez /api/setup/provision.
+
+import { recordAudit } from '../../../../lib/audit';
 import {
   getAllSettings,
   getGuildRawSetting,
@@ -52,5 +54,6 @@ export async function POST(request: Request): Promise<Response> {
     /* analityka nie może zepsuć setupu */
   }
 
+  await recordAudit(request, 'setup-blueprint');
   return Response.json({ ok: true, enabled: modules, id });
 }

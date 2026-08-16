@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../../lib/audit';
 import { getReactionPanel, type ReactionPanel, saveReactionPanel } from '../../../../lib/faza4';
 import { parseBody, reactionPanelSchema } from '../../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, reactionPanelSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveReactionPanel(parsed.data as ReactionPanel);
+  await recordAudit(request, 'reaction-roles-panel');
   return Response.json({ ok: true, panel: await getReactionPanel() });
 }

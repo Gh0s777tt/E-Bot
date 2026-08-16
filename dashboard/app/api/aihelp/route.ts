@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { type AiHelpConfig, getAiHelpConfig, saveAiHelpConfig } from '../../../lib/community';
 import { aihelpSchema, parseBody } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, aihelpSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveAiHelpConfig(parsed.data as AiHelpConfig);
+  await recordAudit(request, 'aihelp');
   return Response.json({ ok: true, config: await getAiHelpConfig() });
 }

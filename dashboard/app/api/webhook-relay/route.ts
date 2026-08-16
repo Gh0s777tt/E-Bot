@@ -1,6 +1,8 @@
 // Relay generic-webhooka (GLOBALNY, single-instance: token + kanał docelowy). Bramka
 // isInstanceAdminRequest: w self-serve tenant-admin NIE może odczytać tokenu (GET) ani przejąć
 // kanału przez nadpisanie token/channelId (POST). Trasa publiczna /api/hook strzela w TEN kanał.
+
+import { recordAudit } from '../../../lib/audit';
 import {
   getWebhookRelay,
   saveWebhookRelay,
@@ -25,5 +27,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, webhookRelaySchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveWebhookRelay(parsed.data as WebhookRelayConfig);
+  await recordAudit(request, 'webhook-relay');
   return Response.json({ ok: true, config: await getWebhookRelay() });
 }

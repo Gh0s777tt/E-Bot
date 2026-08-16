@@ -3,20 +3,22 @@
 // przestawia tempo zdobywania rang wszystkim naraz. Kontrakt trzyma granice liczbowe i limity list
 // (mnożniki × role, nagrody × poziomy), bo to one chronią przed configiem, który bot musi
 // przeliczać przy KAŻDEJ wiadomości i minucie na kanale głosowym.
-// Uwaga: ta trasa — inaczej niż `antiraid`/`automod`/`antinuke` — NIE woła `recordAudit`. Testy
-// utrwalają stan FAKTYCZNY; rozjazd zgłoszony osobno razem z ekonomią.
+// Zapis zostawia ślad w dzienniku (`recordAudit`) — tak samo jak `antiraid`/`automod`/`antinuke`.
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../../lib/faza4', () => ({
   getLevelingConfig: vi.fn(),
   saveLevelingConfig: vi.fn(),
 }));
+vi.mock('../../../lib/audit', () => ({ recordAudit: vi.fn() }));
 
+import { recordAudit } from '../../../lib/audit';
 import { getLevelingConfig, saveLevelingConfig } from '../../../lib/faza4';
 import { GET, POST } from './route';
 
 const load = vi.mocked(getLevelingConfig);
 const save = vi.mocked(saveLevelingConfig);
+const audit = vi.mocked(recordAudit);
 
 const POPRAWNY = {
   enabled: true,
@@ -48,14 +50,16 @@ beforeEach(() => {
   vi.clearAllMocks();
   load.mockResolvedValue(POPRAWNY as never);
   save.mockResolvedValue(undefined as never);
+  audit.mockResolvedValue(undefined as never);
 });
 
 describe('POST /api/leveling — ścieżka zapisu', () => {
-  it('poprawny config → 200 { ok: true, config } + zapis', async () => {
+  it('poprawny config → 200 { ok: true, config } + zapis + wpis audytowy', async () => {
     const res = await POST(req(POPRAWNY));
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toEqual({ ok: true, config: POPRAWNY });
     expect(save).toHaveBeenCalledTimes(1);
+    expect(audit).toHaveBeenCalledWith(expect.any(Request), 'leveling');
   });
 
   it('pola opcjonalne pominięte → domyślne `false`, nie `undefined`', async () => {
@@ -102,10 +106,12 @@ describe('POST /api/leveling — granice XP i mnożników', () => {
     ],
     ['ponad 100 kanałów bez XP', { noXpChannels: Array.from({ length: 101 }, () => '1') }],
     ['wiadomość awansu ponad 1000 znaków', { levelUpMessage: 'x'.repeat(1001) }],
-  ])('%s → 400 bez zapisu', async (_opis, patch) => {
+  ])('%s → 400, zero zapisu i ZERO wpisu w audycie', async (_opis, patch) => {
     const res = await POST(req({ ...POPRAWNY, ...patch }));
     expect(res.status).toBe(400);
     expect(save).not.toHaveBeenCalled();
+    // Audyt to dziennik REALNYCH zmian — odrzucone żądanie nie ma prawa go zaśmiecać.
+    expect(audit).not.toHaveBeenCalled();
   });
 
   it('zerowe XP przechodzi — to sposób na wyłączenie zdobywania bez wyłączania modułu', async () => {

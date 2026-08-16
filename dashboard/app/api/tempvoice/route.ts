@@ -1,3 +1,4 @@
+import { recordAudit } from '../../../lib/audit';
 import { getTempVoice, saveTempVoice, type TempVoiceConfig } from '../../../lib/engagement';
 import { parseBody, tempvoiceSchema } from '../../../lib/schemas';
 
@@ -11,5 +12,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await parseBody(request, tempvoiceSchema);
   if (!parsed.ok) return Response.json({ ok: false, error: parsed.error }, { status: 400 });
   await saveTempVoice(parsed.data as TempVoiceConfig);
+  await recordAudit(request, 'tempvoice');
   return Response.json({ ok: true, config: await getTempVoice() });
 }
